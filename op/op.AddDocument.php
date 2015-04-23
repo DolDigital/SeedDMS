@@ -306,7 +306,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 			if($index) {
 				SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
+				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->converters['fulltext']) ? $settings->converters['fulltext'] : null, true));
 			}
 		}
 
@@ -315,7 +315,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$res = $document->addNotify($user->getID(), true);
 		}
 		/* Check if additional notification shall be added */
-		if($_POST['notification_users']) {
+		if(!empty($_POST['notification_users'])) {
 			foreach($_POST['notification_users'] as $notuserid) {
 				$notuser = $dms->getUser($notuserid);
 				if($notuser) {
@@ -324,7 +324,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				}
 			}
 		}
-		if($_POST['notification_groups']) {
+		if(!empty($_POST['notification_groups'])) {
 			foreach($_POST['notification_groups'] as $notgroupid) {
 				$notgroup = $dms->getGroup($notgroupid);
 				if($notgroup) {
