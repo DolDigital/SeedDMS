@@ -24,7 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-clean workflow log when a document version was deleted
+- classes can be overloaded
+- clean workflow log when a document version was deleted
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
