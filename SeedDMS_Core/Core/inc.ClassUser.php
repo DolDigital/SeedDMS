@@ -700,7 +700,7 @@ class SeedDMS_Core_User {
 		$revisionStatus = $this->getRevisionStatus();
 		foreach ($revisionStatus["indstatus"] as $ri) {
 			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["revisionID"] ."', '-2', 'Reviser removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $ri["revisionID"] ."', '-2', 'Revisor removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -1193,56 +1193,62 @@ class SeedDMS_Core_User {
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        revisions
 	 * @param int $version optional version of the document
-	 * @return array list of all revisions
+	 * @return array list of all revisions. If the result array has no elements,
+	 * then the user was not a revisor. If there elements for 'indstatus' or
+	 * 'grpstatus' then the revision hasn't been started.
 	 */
 	function getRevisionStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$status = array("indstatus"=>array(), "grpstatus"=>array());
+		$status = array();
 
-		// See if the user is assigned as an individual reviser.
-		$queryStr = "SELECT `tblDocumentRevisers`.*, `tblDocumentRevisionLog`.`status`, ".
+		// See if the user is assigned as an individual revisor.
+		$queryStr = "SELECT `tblDocumentRevisors`.*, `tblDocumentRevisionLog`.`status`, ".
 			"`tblDocumentRevisionLog`.`comment`, `tblDocumentRevisionLog`.`date`, ".
 			"`tblDocumentRevisionLog`.`userID` ".
-			"FROM `tblDocumentRevisers` ".
+			"FROM `tblDocumentRevisors` ".
 			"LEFT JOIN `tblDocumentRevisionLog` USING (`revisionID`) ".
-			"WHERE `tblDocumentRevisers`.`type`='0' ".
-			($documentID==null ? "" : "AND `tblDocumentRevisers`.`documentID` = '". (int) $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentRevisers`.`version` = '". (int) $version ."' ").
-			"AND `tblDocumentRevisers`.`required`='". $this->_id ."' ".
+			"WHERE `tblDocumentRevisors`.`type`='0' ".
+			($documentID==null ? "" : "AND `tblDocumentRevisors`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentRevisors`.`version` = '". (int) $version ."' ").
+			"AND `tblDocumentRevisors`.`required`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentRevisionLog`.`revisionLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
+			$status['indstatus'] = array();
 			foreach ($resArr as $res) {
-				if(isset($status["indstatus"][$res['documentID']])) {
-					if($status["indstatus"][$res['documentID']]['date'] < $res['date']) {
+				if($res['date']) {
+					if(isset($status["indstatus"][$res['documentID']])) {
+						if($status["indstatus"][$res['documentID']]['date'] < $res['date']) {
+							$status["indstatus"][$res['documentID']] = $res;
+						}
+					} else {
 						$status["indstatus"][$res['documentID']] = $res;
 					}
-				} else {
-					$status["indstatus"][$res['documentID']] = $res;
 				}
 			}
 		}
 
 		// See if the user is the member of a group that has been assigned to
 		// revision the document version.
-		$queryStr = "SELECT `tblDocumentRevisers`.*, `tblDocumentRevisionLog`.`status`, ".
+		$queryStr = "SELECT `tblDocumentRevisors`.*, `tblDocumentRevisionLog`.`status`, ".
 			"`tblDocumentRevisionLog`.`comment`, `tblDocumentRevisionLog`.`date`, ".
 			"`tblDocumentRevisionLog`.`userID` ".
-			"FROM `tblDocumentRevisers` ".
+			"FROM `tblDocumentRevisors` ".
 			"LEFT JOIN `tblDocumentRevisionLog` USING (`revisionID`) ".
-			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentRevisers`.`required` ".
-			"WHERE `tblDocumentRevisers`.`type`='1' ".
-			($documentID==null ? "" : "AND `tblDocumentRevisers`.`documentID` = '". (int) $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentRevisers`.`version` = '". (int) $version ."' ").
+			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentRevisors`.`required` ".
+			"WHERE `tblDocumentRevisors`.`type`='1' ".
+			($documentID==null ? "" : "AND `tblDocumentRevisors`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentRevisors`.`version` = '". (int) $version ."' ").
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentRevisionLog`.`revisionLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
+			$status['grpstatus'] = array();
 			foreach ($resArr as $res) {
 				if(isset($status["grpstatus"][$res['documentID']])) {
 					if($status["grpstatus"][$res['documentID']]['date'] < $res['date']) {

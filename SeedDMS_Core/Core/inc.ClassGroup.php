@@ -326,7 +326,7 @@ class SeedDMS_Core_Group {
 		$revisionStatus = $this->getRevisionStatus();
 		foreach ($revisionStatus as $r) {
 			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $r["revisionID"] ."', '-2', 'Revisers group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $r["revisionID"] ."', '-2', 'Revisors group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -439,27 +439,30 @@ class SeedDMS_Core_Group {
 
 		$status = array();
 
-		// See if the group is assigned as a reviser.
-		$queryStr = "SELECT `tblDocumentRevisers`.*, `tblDocumentRevisionLog`.`status`, ".
+		// See if the group is assigned as a revisor.
+		$queryStr = "SELECT `tblDocumentRevisors`.*, `tblDocumentRevisionLog`.`status`, ".
 			"`tblDocumentRevisionLog`.`comment`, `tblDocumentRevisionLog`.`date`, ".
 			"`tblDocumentRevisionLog`.`userID` ".
-			"FROM `tblDocumentRevisers` ".
+			"FROM `tblDocumentRevisors` ".
 			"LEFT JOIN `tblDocumentRevisionLog` USING (`revisionID`) ".
-			"WHERE `tblDocumentRevisers`.`type`='1' ".
-			($documentID==null ? "" : "AND `tblDocumentRevisers`.`documentID` = '". (int) $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentRevisers`.`version` = '". (int) $version ."' ").
-			"AND `tblDocumentRevisers`.`required`='". $this->_id ."' ";
+			"WHERE `tblDocumentRevisors`.`type`='1' ".
+			($documentID==null ? "" : "AND `tblDocumentRevisors`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentRevisors`.`version` = '". (int) $version ."' ").
+			"AND `tblDocumentRevisors`.`required`='". $this->_id ."' ";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr)>0) {
+			$status['status'] = array();
 			foreach ($resArr as $res) {
-				if(isset($status["status"][$res['documentID']])) {
-					if($status["status"][$res['documentID']]['date'] < $res['date']) {
+				if($res['date']) {
+					if(isset($status["status"][$res['documentID']])) {
+						if($status["status"][$res['documentID']]['date'] < $res['date']) {
+							$status["status"][$res['documentID']] = $res;
+						}
+					} else {
 						$status["status"][$res['documentID']] = $res;
 					}
-				} else {
-					$status["status"][$res['documentID']] = $res;
 				}
 			}
 		}

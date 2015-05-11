@@ -65,6 +65,41 @@ define("S_OBSOLETE", -2);
 define("S_EXPIRED",  -3);
 
 /**
+ * The different states a workflow log can be in. This is used in
+ * all tables tblDocumentXXXLog
+ */
+/*
+ * workflow is in a neutral status waiting for action of user
+ */
+define("S_LOG_WAITING",  0);
+
+/*
+ * workflow has been successful ended. The document content has been
+ * approved, reviewed, aknowledged or revised
+ */
+define("S_LOG_ACCEPTED",  1);
+
+/*
+ * workflow has been unsuccessful ended. The document content has been
+ * rejected
+ */
+define("S_LOG_REJECTED",  -1);
+
+/*
+ * user has been removed from workflow. This can be for different reasons
+ * 1. the user has been actively removed from the workflow, 2. the user has
+ * been deleted.
+ */
+define("S_LOG_USER_REMOVED",  -2);
+
+/*
+ * workflow is sleeping until reactivation. The workflow has been set up
+ * but not started. This is only valid for the revision workflow, which
+ * may run over and over again.
+ */
+define("S_LOG_SLEEPING",  -3);
+
+/**
  * Class to represent a document in the document management system
  *
  * A document in SeedDMS is similar to files in a regular file system.
@@ -591,7 +626,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if($lc) {
 			$st=$lc->getStatus();
 
-			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW || $st["status"]==S_RELEASED) && $this->hasExpired()){
+			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW || $st["status"]==S_RELEASED || $st["status"]==S_IN_REVISION) && $this->hasExpired()){
 				return $lc->setStatus(S_EXPIRED,"", $this->getOwner());
 			}
 			elseif ($st["status"]==S_EXPIRED && !$this->hasExpired() ){
@@ -1620,7 +1655,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 			$this->_content = array();
 			foreach ($resArr as $row)
-				array_push($this->_content, new SeedDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']));
+				array_push($this->_content, new SeedDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum'], $row['reviѕiondate']));
 		}
 
 		return $this->_content;
@@ -1652,7 +1687,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$resArr = $resArr[0];
-		return new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
+		return new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum'], $resArr['revisiondate']);
 	} /* }}} */
 
 	function getLatestContent() { /* {{{ */
@@ -1666,7 +1701,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 
 			$resArr = $resArr[0];
-			$this->_latestContent = new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
+			$this->_latestContent = new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum'], $resArr['revisiondate']);
 		}
 		return $this->_latestContent;
 	} /* }}} */
@@ -2374,15 +2409,27 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				}
 			}
 		}
+		$pendingRevision=false;
+		unset($this->_revisionStatus);  // force to be reloaded from DB
+		$revsisionStatus=$this->getRevisionStatus();
+		if (is_array($revsisionStatus) && count($revsisionStatus)>0) {
+			foreach ($revsisionStatus as $a){
+				if ($a["status"]==0){
+					$pendingRevision=true;
+					break;
+				}
+			}
+		}
 
 		unset($this->_workflow); // force to be reloaded from DB
 		if ($this->getWorkflow()) $this->setStatus(S_IN_WORKFLOW,$msg,$user);
 		elseif ($pendingReview) $this->setStatus(S_DRAFT_REV,$msg,$user);
 		elseif ($pendingApproval) $this->setStatus(S_DRAFT_APP,$msg,$user);
+		elseif ($pendingRevision) $this->setStatus(S_IN_REVISION,$msg,$user);
 		else $this->setStatus(S_RELEASED,$msg,$user);
 	} /* }}} */
 
-	function SeedDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0, $checksum='') { /* {{{ */
+	function SeedDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0, $checksum='', $revisionDate=null) { /* {{{ */
 		parent::__construct($id);
 		$this->_document = $document;
 		$this->_version = (int) $version;
@@ -2402,6 +2449,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$this->_checksum = $checksum;
 		$this->_workflow = null;
 		$this->_workflowState = null;
+		$this->_revisionDate = $revisionDate;
 	} /* }}} */
 
 	function getVersion() { return $this->_version; }
@@ -2412,6 +2460,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function getFileName(){ return $this->_version . $this->_fileType; }
 	function getDir() { return $this->_dir; }
 	function getMimeType() { return $this->_mimeType; }
+	function getRevisionDate() { return $this->_revisionDate; }
 	function getDocument() { return $this->_document; }
 
 	function getUser() { /* {{{ */
@@ -2421,6 +2470,21 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
+
+	function setRevisionDate($date = false) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$date)
+			$date = date('Y-m-d');
+
+		$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->qstr($date)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_revisionDate = $date;
+
+		return true;
+	} /* }}} */
 
 	function setDate($date = false) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -2566,6 +2630,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * S_DRAFT_APP, 1
 	 * S_RELEASED, 2
 	 * S_IN_WORKFLOW, 3
+	 * S_IN_REVISION, 4
 	 * S_REJECTED, -1
 	 * S_OBSOLETE, -2
 	 * S_EXPIRED, -3
@@ -2892,7 +2957,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (1 || !isset($this->_revisionStatus)) {
 			/* First get a list of all revisions for this document content */
 			$queryStr=
-				"SELECT revisionID FROM tblDocumentRevisers WHERE `version`='".$this->_version
+				"SELECT revisionID FROM tblDocumentRevisors WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
@@ -2901,16 +2966,16 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if($recs) {
 				foreach($recs as $rec) {
 					$queryStr=
-						"SELECT `tblDocumentRevisers`.*, `tblDocumentRevisionLog`.`revisionLogID`, ".
+						"SELECT `tblDocumentRevisors`.*, `tblDocumentRevisionLog`.`revisionLogID`, ".
 						"`tblDocumentRevisionLog`.`status`, ".
 						"`tblDocumentRevisionLog`.`comment`, ".
 						"`tblDocumentRevisionLog`.`date`, ".
 						"`tblDocumentRevisionLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
-						"FROM `tblDocumentRevisers` ".
+						"FROM `tblDocumentRevisors` ".
 						"LEFT JOIN `tblDocumentRevisionLog` USING (`revisionID`) ".
-						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentRevisers`.`required` ".
-						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentRevisers`.`required` ".
-						"WHERE `tblDocumentRevisers`.`revisionID` = '". $rec['revisionID'] ."' ".
+						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentRevisors`.`required` ".
+						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentRevisors`.`required` ".
+						"WHERE `tblDocumentRevisors`.`revisionID` = '". $rec['revisionID'] ."' ".
 						"ORDER BY `tblDocumentRevisionLog`.`revisionLogID` DESC LIMIT ".(int) $limit;
 
 					$res = $db->getResultArray($queryStr);
@@ -2925,7 +2990,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_revisionStatus;
 	} /* }}} */
 
-	function addIndReviewer($user, $requestUser, $listadmin=false) { /* {{{ */
+	function addIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -2934,21 +2999,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($this->_document->getAccessMode($user) < M_READ) {
 			return -2;
 		}
-		/*
-		if (!isset($this->_readAccessList)) {
-			$this->_readAccessList = $this->_document->getReadAccessList($listadmin);
-		}
-		$approved = false;
-		foreach ($this->_readAccessList["users"] as $appUser) {
-			if ($userID == $appUser->getID()) {
-				$approved = true;
-				break;
-			}
-		}
-		if (!$approved) {
-			return -2;
-		}
-		*/
 
 		// Check to see if the user has already been added to the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
@@ -3155,7 +3205,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
  } /* }}} */
 
-	function addIndApprover($user, $requestUser, $listadmin=false) { /* {{{ */
+	function addIndApprover($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3164,19 +3214,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($this->_document->getAccessMode($user) < M_READ) {
 			return -2;
 		}
-		/*
-		$readAccessList = $this->_document->getReadAccessList($listadmin);
-		$approved = false;
-		foreach ($readAccessList["users"] as $appUser) {
-			if ($userID == $appUser->getID()) {
-				$approved = true;
-				break;
-			}
-		}
-		if (!$approved) {
-			return -2;
-		}
-		*/
 
 		// Check to see if the user has already been added to the approvers list.
 		$approvalStatus = $user->getApprovalStatus($this->_document->getID(), $this->_version);
@@ -3373,7 +3410,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
  } /* }}} */
 
-	function addIndRecipient($user, $requestUser, $listadmin=false) { /* {{{ */
+	function addIndRecipient($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3483,46 +3520,85 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function addIndReviser($user, $requestUser, $listadmin=false) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
+	/**
+	 * Add an individual revisor to the document content
+	 *
+	 * This function adds a user as a revisor but doesn't start the
+	 * revision workflow by default. This behaviour is different from all
+	 * other workflows (approval, review, receipt), because it doesn't add
+	 * the initial entry in the revision log, which starts the workflow.
+	 * It just adds the revisors to the content. The workflow is started
+	 * at a later point in time by adding the first entry in the revision log.
+	 *
+	 * @param object $user user to be added as a revisor
+	 * @param object $requestUser user requesting the addition
+	 * @return integer 0 if successful otherwise a value < 0
+	 */
+	function addRevisor($object, $requestUser) { /* {{{ */
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
 
-		$userID = $user->getID();
+		/* getRevisionStatus() returns an array with either an element
+		 * 'indstatus' (user) or 'status' (group) containing the revision log
+		 */
+		if(get_class($object) == $dms->getClassname('user')) {
+			$field = 'indstatus';
+			$type = 0;
 
-		// Get the list of users and groups with read access to this document.
-		if($this->_document->getAccessMode($user) < M_READ) {
-			return -2;
+			// Get the list of users and groups with read access to this document.
+			if($this->_document->getAccessMode($object) < M_READ) {
+				return -2;
+			}
+		} elseif(get_class($object) == $dms->getClassname('group')) {
+			$field = 'status';
+			$type = 1;
+
+			// Get the list of users and groups with read access to this document.
+			if($this->_document->getGroupAccessMode($object) < M_READ) {
+				return -2;
+			}
+		} else {
+			return -1;
 		}
 
-		// Check to see if the user has already been added to the reviser list.
-		$revisionStatus = $user->getRevisionStatus($this->_document->getID(), $this->_version);
+		// Check to see if the user has already been added to the revisor list.
+		$revisionStatus = $object->getRevisionStatus($this->_document->getID(), $this->_version);
 		if (is_bool($revisionStatus) && !$revisionStatus) {
 			return -1;
 		}
+
+		/* There are two cases: 1. the user has not been added at all or 2.
+		 * the user was added before but has been removed later. In both
+		 * cases the user may be added. In case 2. 'indstatus' will be set
+		 * and the last status is -2. If it is not -2, then the user is still
+		 * in the process and cannot be added again.
+		 */
 		$indstatus = false;
-		if (count($revisionStatus["indstatus"]) > 0) {
-			$indstatus = array_pop($revisionStatus["indstatus"]);
-			if($indstatus["status"]!=-2) {
-				// User is already on the list of recipients; return an error.
-				return -3;
+		if(isset($revisionStatus[$field])) {
+			if (count($revisionStatus[$field]) > 0) {
+				$indstatus = array_pop($revisionStatus[$field]);
+				if($indstatus["status"] != S_LOG_USER_REMOVED) {
+					// User is already on the list of recipients; return an error.
+					return -3;
+				}
 			}
 		}
 
-		// Add the user into the revisers database.
-		if (!$indstatus || ($indstatus && $indstatus["status"]!=-2)) {
-			$queryStr = "INSERT INTO `tblDocumentRevisers` (`documentID`, `version`, `type`, `required`) ".
-				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '0', '". $userID ."')";
+		// Add the user into the revisors database.
+		if (!$indstatus) {
+			$queryStr = "INSERT INTO `tblDocumentRevisors` (`documentID`, `version`, `type`, `required`) ".
+				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '". $type ."', '". $object->getID() ."')";
 			$res = $db->getResult($queryStr);
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
 			$revisionID = $db->getInsertID();
-		}
-		else {
+		} else {
 			$revisionID = isset($indstatus["revisionID"]) ? $indstatus["revisionID"] : NULL;
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $revisionID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $revisionID ."', '".S_LOG_SLEEPING."', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3531,63 +3607,12 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function addGrpReviser($group, $requestUser) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
+	function addIndRevisor($user, $requestUser, $donotstart=true) { /* {{{ */
+		return self::addRevisor($user, $requestUser, $donotstart);
+	} /* }}} */
 
-		$groupID = $group->getID();
-
-		// Get the list of users and groups with read access to this document.
-		if (!isset($this->_readAccessList)) {
-			// TODO: error checking.
-			$this->_readAccessList = $this->_document->getReadAccessList();
-		}
-		$approved = false;
-		foreach ($this->_readAccessList["groups"] as $appGroup) {
-			if ($groupID == $appGroup->getID()) {
-				$approved = true;
-				break;
-			}
-		}
-		if (!$approved) {
-			return -2;
-		}
-
-		// Check to see if the group has already been added to the review list.
-		$revisionStatus = $group->getRevisionStatus($this->_document->getID(), $this->_version);
-		if (is_bool($revisionStatus) && !$revisionStatus) {
-			return -1;
-		}
-		$status = false;
-		if (count($revisionStatus["status"]) > 0) {
-			$status = array_pop($revisionStatus["status"]);
-			if($status["status"]!=-2) {
-				// User is already on the list of recipients; return an error.
-				return -3;
-			}
-		}
-
-		// Add the group into the recipients database.
-		if (!$status || ($status && $status["status"]!=-2)) {
-			$queryStr = "INSERT INTO `tblDocumentRevisers` (`documentID`, `version`, `type`, `required`) ".
-				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '1', '". $groupID ."')";
-			$res = $db->getResult($queryStr);
-			if (is_bool($res) && !$res) {
-				return -1;
-			}
-			$revisionID = $db->getInsertID();
-		}
-		else {
-			$revisionID = isset($status["revisionID"]) ? $status["revisionID"] : NULL;
-		}
-
-		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $revisionID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
-		$res = $db->getResult($queryStr);
-		if (is_bool($res) && !$res) {
-			return -1;
-		}
-
-		return 0;
+	function addGrpRevisor($group, $requestUser, $donotstart=true) { /* {{{ */
+		return self::addRevisor($group, $requestUser, $donotstart);
 	} /* }}} */
 
 	/**
@@ -3595,19 +3620,20 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 *
 	 * This method will add an entry to the table tblDocumentReceiptLog.
 	 * It will first check if the user is ment to receipt the document version.
-	 * It not the return value is -3.
-	 * Next it will check if the users has been removed from the list of
+	 * If not the return value is -3.
+	 * Next it will check if the user has been removed from the list of
 	 * recipients. In that case -4 will be returned.
 	 * If the given receipt has been set by the user before, it cannot
-	 * be set again and 0 will be returned. Іf the review could be succesfully
-	 * added, the review log id will be returned.
+	 * be set again and 0 will be returned. Іf the receipt could be succesfully
+	 * added, the receiptview log id will be returned.
 	 *
 	 * @see SeedDMS_Core_DocumentContent::setApprovalByInd()
 	 * @param object $user user doing the receipt
 	 * @param object $requestUser user asking for the receipt, this is mostly
 	 * @param integer $status the status of the receipt, possible values are
-	 *        0=unprocessed (maybe used to reset a status)
+	 *        0=unprocessed (may be used to reset a status)
 	 *        1=received,
+	 *       -1=rejected,
 	 *       -2=user is deleted (use {link
 	 *       SeedDMS_Core_DocumentContent::delIndRecipient} instead)
 	 * the user currently logged in.
@@ -3627,7 +3653,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return -3;
 		}
 		$indstatus = array_pop($receiptStatus["indstatus"]);
-		if ($indstatus["status"]==-2) {
+		if ($indstatus["status"] == S_LOG_USER_REMOVED) {
 			// User has been deleted from recipients
 			return -4;
 		}
@@ -3702,39 +3728,62 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 *
 	 * This method will add an entry to the table tblDocumentRevisionLog.
 	 * It will first check if the user is ment to revision the document version.
-	 * It not the return value is -3.
-	 * Next it will check if the users has been removed from the list of
+	 * If not the return value is -3.
+	 * Next it will check if the user has been removed from the list of
 	 * recipients. In that case -4 will be returned.
 	 * If the given revision has been set by the user before, it cannot
-	 * be set again and 0 will be returned. Іf the review could be succesfully
-	 * added, the review log id will be returned.
+	 * be set again and 0 will be returned. Іf the revision could be succesfully
+	 * added, the revision log id will be returned.
 	 *
 	 * @see SeedDMS_Core_DocumentContent::setApprovalByInd()
 	 * @param object $user user doing the revision
 	 * @param object $requestUser user asking for the revision, this is mostly
+	 * the user currently logged in.
 	 * @param integer $status the status of the revision, possible values are
-	 *        0=unprocessed (maybe used to reset a status)
+	 *        0=unprocessed (may be used to reset a status)
 	 *        1=received,
 	 *       -2=user is deleted (use {link
 	 *       SeedDMS_Core_DocumentContent::delIndRecipient} instead)
-	 * the user currently logged in.
-	 * @return integer new revision log id
+	 *       -3=workflow revision is sleeping
+	 * @return integer new revision log id, 0, or a value < 0. 0 means the
+	 * status has not changed because the new status is equal the current
+	 * status. A value < 0 indicate
+	 * an error. -1: internal error, -3: user may not revise this document
+	 * -4: the user has been removed from the list of revisors,
+	 * -5: the revision has not been started at all.
 	 */
-	function setRevisionByInd($user, $requestUser, $status, $comment) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
+	function setRevision($object, $requestUser, $status, $comment) { /* {{{ */
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
 
-		// Check to see if the user can be removed from the review list.
-		$revisionStatus = $user->getRevisionStatus($this->_document->getID(), $this->_version);
+		/* getRevisionStatus() returns an array with either an element
+		 * 'indstatus' (user) or 'status' (group) containing the revision log
+		 */
+		if(get_class($object) == $dms->getClassname('user')) {
+			$field = 'indstatus';
+		} elseif(get_class($object) == $dms->getClassname('group')) {
+			$field = 'status';
+		} else {
+			return -1;
+		}
+
+		// Check to see if the user/group can be removed from the review list.
+		$revisionStatus = $object->getRevisionStatus($this->_document->getID(), $this->_version);
 		if (is_bool($revisionStatus) && !$revisionStatus) {
 			return -1;
 		}
-		if (count($revisionStatus["indstatus"])==0) {
+		if (!isset($revisionStatus[$field])) {
 			// User is not assigned to revision this document. No action required.
 			// Return an error.
 			return -3;
 		}
-		$indstatus = array_pop($revisionStatus["indstatus"]);
-		if ($indstatus["status"]==-2) {
+		$indstatus = array_pop($revisionStatus[$field]);
+
+		/* check if revision workflow has been started already */
+		if($indstatusi['status'] == S_LOG_SLEEPING && ($status == S_LOG_REJECTED || $status == S_LOG_ACCEPTED))
+			return -5;
+
+		if ($indstatus["status"] == -2) {
 			// User has been deleted from recipients
 			return -4;
 		}
@@ -3743,7 +3792,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
-  	  `comment`, `date`, `userID`) ".
+			`comment`, `date`, `userID`) ".
 			"VALUES ('". $indstatus["revisionID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
@@ -3756,53 +3805,13 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
  } /* }}} */
 
-	/**
-	 * Add a revision to the document content
-	 *
-	 * This method is similar to
-	 * {@see SeedDMS_Core_DocumentContent::setRevisionByInd()} but adds a revision
-	 * for a group instead of a user.
-	 *
-	 * @param object $group group doing the revision
-	 * @param object $requestUser user asking for the revision, this is mostly
-	 * the user currently logged in.
-	 * @return integer new revision log id
-	 */
+	function setRevisionByInd($user, $requestUser, $status, $comment) { /* {{{ */
+		return self::setRevision($user, $requestUser, $status, $comment);
+	} /* }}} */
+
 	function setRevisionByGrp($group, $requestUser, $status, $comment) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
-
-		// Check to see if the user can be removed from the recipient list.
-		$revisionStatus = $group->getRevisionStatus($this->_document->getID(), $this->_version);
-		if (is_bool($revisionStatus) && !$revisionStatus) {
-			return -1;
-		}
-		if (count($revisionStatus)==0) {
-			// User is not assigned to revision this document. No action required.
-			// Return an error.
-			return -3;
-		}
-		if ($revisionStatus[0]["status"]==-2) {
-			// Group has been deleted from recipients
-			return -4;
-		}
-
-		// Check if the status is really different from the current status
-		if ($revisionStatus[0]["status"] == $status)
-			return 0;
-
-		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`recipientsID`, `status`,
-  	  `comment`, `date`, `userID`) ".
-			"VALUES ('". $revisionStatus[0]["recipientsID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
-			$requestUser->getID() ."')";
-		$res=$db->getResult($queryStr);
-		if (is_bool($res) && !$res)
-			return -1;
-		else {
-			$revisionLogID = $db->getInsertID();
-			return $revisionLogID;
-		}
- } /* }}} */
+		return self::setRevision($group, $requestUser, $status, $comment);
+	} /* }}} */
 
 	function delIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -3817,7 +3826,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus["indstatus"])==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($reviewStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3849,7 +3858,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus)==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($reviewStatus[0]["status"]!=0) {
 			// User has already submitted a review or has already been deleted;
@@ -3880,7 +3889,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus["indstatus"])==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($approvalStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3912,7 +3921,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus)==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($approvalStatus[0]["status"]!=0) {
 			// User has already submitted an approval or has already been deleted;
@@ -3943,7 +3952,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($receiptStatus["indstatus"])==0) {
 			// User is not assigned to receipt this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($receiptStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3975,7 +3984,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($receiptStatus["status"])==0) {
 			// User is not assigned to receipt this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$status = array_pop($receiptStatus["status"]);
 		if ($tatus["status"]!=0) {
@@ -3994,68 +4003,133 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delIndReviser($user, $requestUser) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
+	/**
+	 * Removes a user from the revision workflow
+	 *
+	 * This methods behaves differently from one in the other workflows, e.g.
+	 * {@see SeedDMS_Core_DocumentContent::delIndReviewer}, because it
+	 * also takes into account if the workflow has been started already.
+	 * A workflow has been started, when there are entries in the revision log.
+	 * If the revision workflow has not been started, then the user will
+	 * be silently removed from the list of revisors. If the workflow has
+	 * started already, then log entry will indicated the removal of the
+	 * user (just as it is done with the other workflows)
+	 *
+	 * @param object $object user/group which is to be removed
+	 * @param object $requestUser user requesting the removal
+	 * @return integer 0 if removal was successfull, -1 if an internal error
+	 * occured, -3 if the user is not in the list of revisors
+	 *
+	 */
+	function delRevisor($object, $requestUser, $msg='') { /* {{{ */
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
 
-		$userID = $user->getID();
+		/* getRevisionStatus() returns an array with either an element
+		 * 'indstatus' (user) or 'status' (group) containing the revision log
+		 */
+		if(get_class($object) == $dms->getClassname('user')) {
+			$field = 'indstatus';
+			$type = 0;
+		} elseif(get_class($object) == $dms->getClassname('group')) {
+			$field = 'status';
+			$type = 1;
+		} else {
+			return -1;
+		}
 
-		// Check to see if the user can be removed from the reviser list.
-		$revisionStatus = $user->getRevisionStatus($this->_document->getID(), $this->_version);
+		// Check to see if the user/group can be removed from the revisor list.
+		$revisionStatus = $object->getRevisionStatus($this->_document->getID(), $this->_version);
 		if (is_bool($revisionStatus) && !$revisionStatus) {
 			return -1;
 		}
-		if (count($revisionStatus["indstatus"])==0) {
+
+		if (!isset($revisionStatus[$field])) {
 			// User is not assigned to revision this document. No action required.
 			// Return an error.
-			return -3;
-		}
-		$indstatus = array_pop($revisionStatus["indstatus"]);
-		if ($indstatus["status"]!=0) {
-			// User has already submitted a revision or has already been deleted;
-			// return an error.
-			return -3;
+			return -2;
 		}
 
-		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["revisionID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
-		$res = $db->getResult($queryStr);
-		if (is_bool($res) && !$res) {
-			return -1;
+		/* If the revision log doesn't contain an entry yet, then remove the
+		 * user/group from the list of revisors. The first case should not happen.
+		 */
+		if(count($revisionStatus[$field]) == 0) {
+			$queryStr = "DELETE from tblDocumentRevisors WHERE `documentID` = ". $this->_document->getID() ." AND `version` = ".$this->_version." AND `type` = ". $type ." AND `required` = ".$object->getID();
+			echo $queryStr;
+			if (!$db->getResult($queryStr)) {
+				return -1;
+			}
+		} else {
+			$indstatus = array_pop($revisionStatus[$field]);
+			if ($indstatus["status"] != S_LOG_WAITING && $indstatus["status"] != S_LOG_SLEEPING) {
+				// User has already submitted a revision or has already been deleted;
+				// return an error.
+				return -3;
+			}
+
+			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
+				"VALUES ('". $indstatus["revisionID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			$res = $db->getResult($queryStr);
+			if (is_bool($res) && !$res) {
+				return -1;
+			}
 		}
 
 		return 0;
 	} /* }}} */
 
-	function delGrpReviser($group, $requestUser) { /* {{{ */
-		$db = $this->_document->_dms->getDB();
+	function delIndRevisor($user, $requestUser, $msg='') { /* {{{ */
+		return self::delRevisor($user, $requestUser, $msg);
+	} /* }}} */
 
-		$groupID = $group->getID();
+	function delGrpRevisor($group, $requestUser, $msg='') { /* {{{ */
+		return self::delRevisor($group, $requestUser, $msg);
+	} /* }}} */
 
-		// Check to see if the user can be removed from the reviser list.
-		$revisionStatus = $group->getRevisionStatus($this->_document->getID(), $this->_version);
-		if (is_bool($revisionStatus) && !$revisionStatus) {
-			return -1;
-		}
-		if (count($revisionStatus["status"])==0) {
-			// User is not assigned to revision this document. No action required.
-			// Return an error.
-			return -3;
-		}
-		$status = array_pop($revisionStatus["status"]);
-		if ($tatus["status"]!=0) {
-			// User has already submitted a revision or has already been deleted;
-			// return an error.
-			return -3;
+	/**
+	 * Start a new revision workflow
+	 *
+	 * This function starts a new revision unless there are users/groups
+	 * having finished the previous revision. This means the log status
+	 * must be S_LOG_SLEEPING or the user/group was removed (S_LOG_USER_REMOVED)
+	 *
+	 * @param object $requestUser user requesting the revision start
+	 * @param string $msg message saved for the initial log message
+	 */
+	function startRevision($requestUser, $msg='') { /* {{{ */
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
+
+		$revisionStatus = self::getRevisionStatus();
+		if(!$revisionStatus)
+			return false;
+
+		/* A new revision may only be started if we are not in the middle of
+		 * revision or the user/group has been removed from the workflow
+		 */
+		foreach($revisionStatus as $status) {
+			if($status['status'] != S_LOG_SLEEPING && $status['status'] != S_LOG_USER_REMOVED)
+				return false;
 		}
 
-		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $status["revisionID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
-		$res = $db->getResult($queryStr);
-		if (is_bool($res) && !$res) {
-			return -1;
+		$db->startTransaction();
+		foreach($revisionStatus as $status) {
+			if($status['status'] == S_LOG_SLEEPING) {
+				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
+					`comment`, `date`, `userID`) ".
+					"VALUES ('". $status["revisionID"] ."', ".
+					S_LOG_WAITING.", ".$db->qstr($msg).", CURRENT_TIMESTAMP, '".
+					$requestUser->getID() ."')";
+				$res=$db->getResult($queryStr);
+				if (is_bool($res) && !$res) {
+					$db->rollbackTransaction();
+					return false;
+				}
+			}
 		}
+		$db->commitTransaction();
+		return true;
 
-		return 0;
 	} /* }}} */
 
 	/**
@@ -4881,6 +4955,11 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	protected $_mimeType;
 
 	/**
+	 * @var string date when revision starts
+	 */
+	protected $_revisionDate;
+
+	/**
 	 * @var string name of the file that was originally uploaded
 	 */
 	protected $_orgFileName;
@@ -4963,12 +5042,13 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	} /* }}} */
 
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($reviewer) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
 		}
 		if (!strcasecmp($type, "i")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_User")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("user"))) {
 				return false;
 			}
 			if ($this->_indReviewers == null) {
@@ -4977,7 +5057,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_indReviewers[$status][] = $reviewer;
 		}
 		if (!strcasecmp($type, "g")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_Group")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("group"))) {
 				return false;
 			}
 			if ($this->_grpReviewers == null) {
@@ -4989,12 +5069,13 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	} /* }}} */
 
 	function addApprover($approver, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($approver) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
 		}
 		if (!strcasecmp($type, "i")) {
-			if (strcasecmp(get_class($approver), "SeedDMS_Core_User")) {
+			if (strcasecmp(get_class($approver), $dms->getClassname("user"))) {
 				return false;
 			}
 			if ($this->_indApprovers == null) {
@@ -5003,7 +5084,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_indApprovers[$status][] = $approver;
 		}
 		if (!strcasecmp($type, "g")) {
-			if (strcasecmp(get_class($approver), "SeedDMS_Core_Group")) {
+			if (strcasecmp(get_class($approver), $dms->getClassname("group"))) {
 				return false;
 			}
 			if ($this->_grpApprovers == null) {
