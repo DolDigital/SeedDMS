@@ -250,6 +250,7 @@ CREATE TABLE `tblDocumentContent` (
   `mimeType` varchar(100) NOT NULL default '',
   `fileSize` BIGINT,
   `checksum` char(32),
+  `revsiondate` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)
@@ -418,10 +419,10 @@ CREATE TABLE `tblDocumentReceiptLog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblDocumentRevisers`
+-- Table structure for table `tblDocumentRevisors`
 -- 
 
-CREATE TABLE `tblDocumentRevisers` (
+CREATE TABLE `tblDocumentRevisors` (
   `revisionID` int(11) NOT NULL auto_increment,
   `documentID` int(11) NOT NULL default '0',
   `version` smallint(5) unsigned NOT NULL default '0',
@@ -430,7 +431,7 @@ CREATE TABLE `tblDocumentRevisers` (
   `startdate` datetime default NULL,
   PRIMARY KEY  (`revisionID`),
   UNIQUE KEY `documentID` (`documentID`,`version`,`type`,`required`),
-  CONSTRAINT `tblDocumentRevisers_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentRevisors_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -447,7 +448,7 @@ CREATE TABLE `tblDocumentRevisionLog` (
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`revisionLogID`),
-  CONSTRAINT `tblDocumentRevisionLog_revision` FOREIGN KEY (`revisionID`) REFERENCES `tblDocumentRevisers` (`revisionID`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentRevisionLog_revision` FOREIGN KEY (`revisionID`) REFERENCES `tblDocumentRevisors` (`revisionID`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentRevisionLog_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

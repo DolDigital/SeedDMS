@@ -223,6 +223,7 @@ CREATE TABLE `tblDocumentContent` (
   `mimeType` varchar(70) NOT NULL default '',
   `fileSize` INTEGER,
   `checksum` char(32),
+  `revsiondate` INTEGER default NULL,
   UNIQUE (`document`,`version`)
 ) ;
 
@@ -367,7 +368,7 @@ CREATE TABLE `tblDocumentRecipients` (
 
 CREATE TABLE `tblDocumentRevisionLog` (
   `revisionLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `revisionID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentRevisers` (`revisionID`) ON DELETE CASCADE,
+  `revisionID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentRevisors` (`revisionID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default 0,
   `comment` TEXT NOT NULL,
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
@@ -377,10 +378,10 @@ CREATE TABLE `tblDocumentRevisionLog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblDocumentRevisers`
+-- Table structure for table `tblDocumentRevisors`
 -- 
 
-CREATE TABLE `tblDocumentRevisers` (
+CREATE TABLE `tblDocumentRevisors` (
   `revisionID` INTEGER PRIMARY KEY AUTOINCREMENT,
   `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` INTEGER unsigned NOT NULL default '0',
