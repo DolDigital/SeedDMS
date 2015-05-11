@@ -126,15 +126,15 @@ class SeedDMS_AccessOperation {
 	} /* }}} */
 
 	/**
-	 * Check if revisers may be edited
+	 * Check if revisors may be edited
 	 *
 	 * This check can only be done for documents. Setting the document
-	 * revisers is only allowed if version modification is turned on
+	 * revisors is only allowed if version modification is turned on
 	 * in the settings.  The
-	 * admin may even set revisers if is disallowed in the
+	 * admin may even set revisors if is disallowed in the
 	 * settings.
 	 */
-	function maySetRevisers() { /* {{{ */
+	function maySetRevisors() { /* {{{ */
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
@@ -264,5 +264,24 @@ class SeedDMS_AccessOperation {
 		}
 		return false;
 	} /* }}} */
+
+	/**
+	 * Check if document content may be revised
+	 *
+	 * Revising a document content is only allowed if the document was not
+	 * obsoleted. There are other requirements which are not taken into
+	 * account here.
+	 */
+	function mayRevise() { /* {{{ */
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			$latestContent = $this->obj->getLatestContent();
+			$status = $latestContent->getStatus();
+			if ($status["status"]!=S_OBSOLETE) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
 }
 ?>

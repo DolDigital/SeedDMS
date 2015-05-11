@@ -56,6 +56,14 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+if (isset($_POST["startdate"])) {
+	$startdate = $_POST["startdate"];
+} else {
+	$startdate = date('Y-m-d');
+}
+
+$content->setRevisionDate($startdate);
+
 $folder = $document->getFolder();
 
 // Retrieve a list of all users and groups that have read rights.
@@ -87,8 +95,8 @@ foreach ($revisionStatus as $i=>$rs) {
 }
 
 // Get the list of proposed recipients, stripping out any duplicates.
-$pIndRev = (isset($_POST["indRevisers"]) ? array_values(array_unique($_POST["indRevisers"])) : array());
-$pGrpRev = (isset($_POST["grpRevisers"]) ? array_values(array_unique($_POST["grpRevisers"])) : array());
+$pIndRev = (isset($_POST["indRevisors"]) ? array_values(array_unique($_POST["indRevisors"])) : array());
+$pGrpRev = (isset($_POST["grpRevisors"]) ? array_values(array_unique($_POST["grpRevisors"])) : array());
 foreach ($pIndRev as $p) {
 	if (is_numeric($p)) {
 		if (isset($accessIndex["i"][$p])) {
@@ -96,7 +104,7 @@ foreach ($pIndRev as $p) {
 			if (!isset($revisionIndex["i"][$p])) {
 				// Proposed recipient is not a current recipient, so add as a new
 				// recipient.
-				$res = $content->addIndReviser($accessIndex["i"][$p], $user);
+				$res = $content->addIndRevisor($accessIndex["i"][$p], $user);
 				$unm = $accessIndex["i"][$p]->getFullName();
 				$uml = $accessIndex["i"][$p]->getEmail();
 				
@@ -147,17 +155,20 @@ foreach ($pIndRev as $p) {
 }
 if (count($revisionIndex["i"]) > 0) {
 	foreach ($revisionIndex["i"] as $rx=>$rv) {
-		if ($rv["status"] == 0) {
+	//	if ($rv["status"] == 0) {
 			// User is to be removed from the recipients list.
 			if (!isset($accessIndex["i"][$rx])) {
 				// User does not have any revision privileges for this document
 				// revision or does not exist.
+				/* Take this out for now 
 				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $revisionStatus[$rv["idx"]]["revisionID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+				 */
+				$res = $content->delIndRevisor($dms->getUser($rx), $user, getMLText("removed_recipient"));
 			}
 			else {
-				$res = $content->delIndReviser($accessIndex["i"][$rx], $user);
+				$res = $content->delIndRevisor($accessIndex["i"][$rx], $user);
 				$unm = $accessIndex["i"][$rx]->getFullName();
 				$uml = $accessIndex["i"][$rx]->getEmail();
 				switch ($res) {
@@ -195,7 +206,7 @@ if (count($revisionIndex["i"]) > 0) {
 						break;
 				}
 			}
-		}
+//		}
 	}
 }
 foreach ($pGrpRev as $p) {
@@ -205,7 +216,7 @@ foreach ($pGrpRev as $p) {
 			if (!isset($revisionIndex["g"][$p])) {
 				// Proposed recipient is not a current recipient, so add as a new
 				// recipient.
-				$res = $content->addGrpReviser($accessIndex["g"][$p], $user);
+				$res = $content->addGrpRevisor($accessIndex["g"][$p], $user);
 				$gnm = $accessIndex["g"][$p]->getName();
 				switch ($res) {
 					case 0:
@@ -251,17 +262,20 @@ foreach ($pGrpRev as $p) {
 }
 if (count($revisionIndex["g"]) > 0) {
 	foreach ($revisionIndex["g"] as $rx=>$rv) {
-		if ($rv["status"] == 0) {
+//		if ($rv["status"] == 0) {
 			// Group is to be removed from the recipientist.
 			if (!isset($accessIndex["g"][$rx])) {
 				// Group does not have any revision privileges for this document
 				// revision or does not exist.
+				/*
 				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $revisionStatus[$rv["idx"]]["revisionID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+*/
+				$res = $content->delGrpRevisor($dms->getGroup($rx), $user, getMLText("removed_recipient"));
 			}
 			else {
-				$res = $content->delGrpReviser($accessIndex["g"][$rx], $user);
+				$res = $content->delGrpRevisor($accessIndex["g"][$rx], $user);
 				$gnm = $accessIndex["g"][$rx]->getName();
 				switch ($res) {
 					case 0:
@@ -298,7 +312,7 @@ if (count($revisionIndex["g"]) > 0) {
 						break;
 				}
 			}
-		}
+//		}
 	}
 }
 

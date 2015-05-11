@@ -1,6 +1,6 @@
 <?php
 /**
- * Implementation of SetRevisers view
+ * Implementation of SetRevisors view
  *
  * @category   DMS
  * @package    SeedDMS
@@ -19,7 +19,7 @@
 require_once("class.Bootstrap.php");
 
 /**
- * Class which outputs the html page for SetRevisers view
+ * Class which outputs the html page for SetRevisors view
  *
  * @category   DMS
  * @package    SeedDMS
@@ -29,7 +29,7 @@ require_once("class.Bootstrap.php");
  *             2010-2015 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_View_SetRevisers extends SeedDMS_Bootstrap_Style {
+class SeedDMS_View_SetRevisors extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -49,12 +49,15 @@ class SeedDMS_View_SetRevisers extends SeedDMS_Bootstrap_Style {
 		// Retrieve a list of all users and groups that have revision privileges.
 		$docAccess = $document->getReadAccessList();
 
-		// Retrieve list of currently assigned revisers, along with
+		// Retrieve list of currently assigned revisors, along with
 		// their latest status.
 		$revisionStatus = $content->getRevisionStatus();
-		$startdate = '2015-05-23';
+		echo "<pre>";
+		print_r($revisionStatus);
+		echo "</pre>";
+		$startdate = substr($content->getRevisionDate(), 0, 10);
 
-		// Index the revision results for easy cross-reference with the reviser list.
+		// Index the revision results for easy cross-reference with the revisor list.
 		$revisionIndex = array("i"=>array(), "g"=>array());
 		foreach ($revisionStatus as $i=>$rs) {
 			if ($rs["type"]==0) {
@@ -67,27 +70,28 @@ class SeedDMS_View_SetRevisers extends SeedDMS_Bootstrap_Style {
 
 <?php $this->contentContainerStart(); ?>
 
-<form action="../op/op.SetRevisers.php" method="post" name="form1">
+<form action="../op/op.SetRevisors.php" method="post" name="form1">
 
-<?php $this->contentSubHeading(getMLText("update_revisers"));?>
+<?php $this->contentSubHeading(getMLText("update_revisors"));?>
 
-  <span class="input-append date" style="display: inline;" id="revisionstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-    <input class="span4" size="16" name="startdate" type="text" value="<?php if($startdate) echo $startdate; else echo date('d-m-Y'); ?>">
+  <span class="input-append date" style="display: inline;" id="revisionstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+    <input class="span4" size="16" name="startdate" type="text" value="<?php if($startdate) echo $startdate; else echo date('Y-m-d'); ?>">
     <span class="add-on"><i class="icon-calendar"></i></span>
   </span>
 
   <div class="cbSelectTitle"><?php printMLText("individuals")?>:</div>
-  <select class="chzn-select span9" name="indRevisers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_revisers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+  <select class="chzn-select span9" name="indRevisors[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_revisors'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 
 		foreach ($docAccess["users"] as $usr) {
 			if (isset($revisionIndex["i"][$usr->getID()])) {
 
 				switch ($revisionIndex["i"][$usr->getID()]["status"]) {
-					case 0:
+					case S_LOG_WAITING:
+					case S_LOG_SLEEPING:
 						print "<option value='". $usr->getID() ."' selected='selected'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 						break;
-					case -2:
+					case S_LOG_USER_REMOVED:
 						print "<option value='". $usr->getID() ."'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 						break;
 					default:
@@ -102,19 +106,20 @@ class SeedDMS_View_SetRevisers extends SeedDMS_Bootstrap_Style {
   </select>
 
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
-  <select class="chzn-select span9" name="grpRevisers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_revisers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
+  <select class="chzn-select span9" name="grpRevisors[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_revisors'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 		foreach ($docAccess["groups"] as $group) {
 			if (isset($revisionIndex["g"][$group->getID()])) {
 				switch ($revisionIndex["g"][$group->getID()]["status"]) {
-					case 0:
+					case S_LOG_WAITING:
+					case S_LOG_SLEEPING:
 						print "<option value='". $group->getID() ."' selected='selected'>".htmlspecialchars($group->getName())."</option>";
 						break;
-					case -2:
+					case S_LOG_USER_REMOVED:
 						print "<option value='". $group->getID() ."'>".htmlspecialchars($group->getName())."</option>";
 						break;
 					default:
-						print "<option id='recGrp".$group->getID()."' type='checkbox' name='grpRevisers[]' value='". $group->getID() ."' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
+						print "<option id='recGrp".$group->getID()."' type='checkbox' name='grpRevisors[]' value='". $group->getID() ."' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 						break;
 				}
 			} else {
