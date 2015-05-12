@@ -62,7 +62,9 @@ if (isset($_POST["startdate"])) {
 	$startdate = date('Y-m-d');
 }
 
-$content->setRevisionDate($startdate);
+if(!$content->setRevisionDate($startdate)) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+}
 
 $folder = $document->getFolder();
 
