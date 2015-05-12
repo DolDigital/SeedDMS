@@ -110,6 +110,93 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	
 	} /* }}} */
 
+	/**
+	 * Output a protocol
+	 *
+	 * @param object $attribute attribute
+	 */
+	protected function printProtocol($latestContent, $type="") { /* {{{ */
+		$dms = $this->params['dms'];
+?>
+		<legend><?php printMLText($type.'_log'); ?></legend>
+		<table class="table condensed">
+			<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
+<?php
+		switch($type) {
+		case "review":
+			$statusList = $latestContent->getReviewStatus(10);
+			break;
+		case "approval":
+			$statusList = $latestContent->getApprovalStatus(10);
+			break;
+		case "revision":
+			$statusList = $latestContent->getRevisionStatus(10);
+			break;
+		case "receipt":
+			$statusList = $latestContent->getReceiptStatus(10);
+			break;
+		default:
+			$statusList = array();
+		}
+		foreach($statusList as $rec) {
+			echo "<tr>";
+			echo "<td>";
+			switch ($rec["type"]) {
+				case 0: // individual.
+					$required = $dms->getUser($rec["required"]);
+					if (!is_object($required)) {
+						$reqName = getMLText("unknown_user")." '".$rec["required"]."'";
+					} else {
+						$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+					}
+					break;
+				case 1: // Approver is a group.
+					$required = $dms->getGroup($rec["required"]);
+					if (!is_object($required)) {
+						$reqName = getMLText("unknown_group")." '".$rec["required"]."'";
+					}
+					else {
+						$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+					}
+					break;
+			}
+			echo $reqName;
+			echo "</td>";
+			echo "<td>";
+			echo "<i style=\"font-size: 80%;\">".$rec['date']." - ";
+			$updateuser = $dms->getUser($rec["userID"]);
+			if(!is_object($required))
+				echo getMLText("unknown_user");
+			else
+				echo htmlspecialchars($updateuser->getFullName()." (".$updateuser->getLogin().")");
+			echo "</i>";
+			if($rec['comment'])
+				echo "<br />".htmlspecialchars($rec['comment']);
+			echo "</td>";
+			echo "<td>";
+			switch($type) {
+			case "review":
+				echo getReviewStatusText($rec["status"]);
+				break;
+			case "approval":
+				echo getApprovalStatusText($rec["status"]);
+				break;
+			case "revision":
+				echo getRevisionStatusText($rec["status"]);
+				break;
+			case "receipt":
+				echo getReceiptStatusText($rec["status"]);
+				break;
+			default:
+			}
+			echo "</td>";
+			echo "</tr>";
+		}
+?>
+				</table>
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		parent::show();
 		$dms = $this->params['dms'];
@@ -335,7 +422,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 			if(is_array($revisionStatus) && count($revisionStatus)>0) {
 ?>
-		  <li><a data-target="#revision" data-toggle="tab"><?php echo getMLText('revise document'); ?></a></li>
+		  <li><a data-target="#revision" data-toggle="tab"><?php echo getMLText('revise_document'); ?></a></li>
 <?php
 			}
 ?>
@@ -669,120 +756,27 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		print "</table>\n";
+		$this->contentContainerEnd();
+
 		if($user->isAdmin()) {
-			$this->contentContainerEnd();
 ?>
 			<div class="row-fluid">
 <?php
 			if($workflowmode != 'traditional_only_approval') {
 ?>
 				<div class="span6">
-				<legend><?php printMLText('review_log'); ?></legend>
-				<table class="table condensed">
-					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
-<?php
-					$reviewStatusList = $latestContent->getReviewStatus(10);
-					foreach($reviewStatusList as $rec) {
-						echo "<tr>";
-						echo "<td>";
-						switch ($rec["type"]) {
-							case 0: // Approver is an individual.
-								$required = $dms->getUser($rec["required"]);
-								if (!is_object($required)) {
-									$reqName = getMLText("unknown_user")." '".$rec["required"]."'";
-								}
-								else {
-									$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
-								}
-								break;
-							case 1: // Approver is a group.
-								$required = $dms->getGroup($rec["required"]);
-								if (!is_object($required)) {
-									$reqName = getMLText("unknown_group")." '".$rec["required"]."'";
-								}
-								else {
-									$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
-								}
-								break;
-						}
-						echo $reqName;
-						echo "</td>";
-						echo "<td>";
-						echo "<i style=\"font-size: 80%;\">".$rec['date']." - ";
-						$updateuser = $dms->getUser($rec["userID"]);
-						if(!is_object($required))
-							echo getMLText("unknown_user");
-						else
-							echo htmlspecialchars($updateuser->getFullName()." (".$updateuser->getLogin().")");
-						echo "</i>";
-						if($rec['comment'])
-							echo "<br />".htmlspecialchars($rec['comment']);
-						echo "</td>";
-						echo "<td>";
-						echo getApprovalStatusText($rec["status"]);
-						echo "</td>";
-						echo "</tr>";
-					}
-?>
-					</table>
-				</div>
-<?php
-				}
-?>
-				<div class="span6">
-				<legend><?php printMLText('approval_log'); ?></legend>
-				<table class="table condensed">
-					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
-<?php
-					$approvalStatusList = $latestContent->getApprovalStatus(10);
-					foreach($approvalStatusList as $rec) {
-						echo "<tr>";
-						echo "<td>";
-						switch ($rec["type"]) {
-							case 0: // Approver is an individual.
-								$required = $dms->getUser($rec["required"]);
-								if (!is_object($required)) {
-									$reqName = getMLText("unknown_user")." '".$rec["required"]."'";
-								}
-								else {
-									$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
-								}
-								break;
-							case 1: // Approver is a group.
-								$required = $dms->getGroup($rec["required"]);
-								if (!is_object($required)) {
-									$reqName = getMLText("unknown_group")." '".$rec["required"]."'";
-								}
-								else {
-									$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
-								}
-								break;
-						}
-						echo $reqName;
-						echo "</td>";
-						echo "<td>";
-						echo "<i style=\"font-size: 80%;\">".$rec['date']." - ";
-						$updateuser = $dms->getUser($rec["userID"]);
-						if(!is_object($required))
-							echo getMLText("unknown_user");
-						else
-							echo htmlspecialchars($updateuser->getFullName()." (".$updateuser->getLogin().")");
-						echo "</i>";
-						if($rec['comment'])
-							echo "<br />".htmlspecialchars($rec['comment']);
-						echo "</td>";
-						echo "<td>";
-						echo getApprovalStatusText($rec["status"]);
-						echo "</td>";
-						echo "</tr>";
-					}
-?>
-				</table>
+				<?php $this->printProtocol($latestContent, 'review'); ?>
 				</div>
 <?php
 			}
 ?>
+				<div class="span6">
+				<?php $this->printProtocol($latestContent, 'approval'); ?>
+				</div>
 			</div>
+<?php
+		}
+?>
 		  </div>
 <?php
 		}
@@ -1040,14 +1034,40 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 
 			$this->contentContainerEnd();
+			if($user->isAdmin()) {
+?>
+			<div class="row-fluid">
+			<div class="span12">
+<?php
+				$this->printProtocol($latestContent, 'receipt');
+?>
+			</div>
+			</div>
+<?php
+			}
 ?>
 		  </div>
 <?php
 		}
 		if(is_array($revisionStatus) && count($revisionStatus)>0) {
 ?>
-		  <div class="tab-pane" id="revision">
+			<div class="tab-pane" id="revision">
 <?php
+			if($status['status'] == S_RELEASED) {
+				if($latestContent->getRevisionDate()) {
+?>
+				<div class="alert alert-warning">
+<?php
+				print getMLText('revise_document_on', array('date' => substr($latestContent->getRevisionDate(), 0, 10)));
+?>
+				</div>
+<?php
+				}
+			} elseif($status['status'] != S_IN_REVISION) {
+?>
+				<div class="alert alert-info"><?= getMLText('no_revision_planed') ?></div>
+<?php
+			}
 			$this->contentContainerStart();
 			print "<table class=\"table-condensed\">\n";
 
@@ -1093,18 +1113,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<tr>\n";
 				print "<td>".$reqName."</td>\n";
 				print "<td><ul class=\"unstyled\"><li>".$r["date"]."</li>";
-				/* $updateUser is the user who has done the receipt */
+				/* $updateUser is the user who has done the revision */
 				$updateUser = $dms->getUser($r["userID"]);
 				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
 				print "<td>".htmlspecialchars($r["comment"])."</td>\n";
-				print "<td>".getReceiptStatusText($r["status"])."</td>\n";
+				print "<td>".getRevisionStatusText($r["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
 
-				if($accessop->mayReview()) {
+				if($accessop->mayRevise()) {
 					if ($is_recipient && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&receiptid=".$r['receiptID']."\" class=\"btn btn-mini\">".getMLText("add_receipt")."</a></li>";
-					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&receiptid=".$r['receiptID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&revisionid=".$r['revisionID']."\" class=\"btn btn-mini\">".getMLText("add_revision")."</a></li>";
+					} elseif (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
+						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&revisionid=".$r['revisionID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
 					}
 				}
 
@@ -1114,10 +1134,20 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		</table>
 <?php
-
-			$this->contentContainerEnd();
+		$this->contentContainerEnd();
+		if($user->isAdmin()) {
 ?>
-		  </div>
+			<div class="row-fluid">
+			<div class="span12">
+<?php
+			$this->printProtocol($latestContent, 'revision');
+?>
+			</div>
+			</div>
+<?php
+		}
+?>
+		</div>
 <?php
 		}
 		if (count($versions)>1) {
