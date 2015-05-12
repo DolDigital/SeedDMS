@@ -176,13 +176,45 @@ function getReceiptStatusText($status, $date=0) { /* {{{ */
 				return getMLText("status_recipient_removed");
 				break;
 			case -1:
-				return getMLText("status_recipient_rejected").($date !=0 ? " ".$date : "");
+				return getMLText("status_receipt_rejected").($date !=0 ? " ".$date : "");
 				break;
 			case 0:
 				return getMLText("status_not_receipted");
 				break;
 			case 1:
 				return getMLText("status_receipted").($date !=0 ? " ".$date : "");
+				break;
+			default:
+				return getMLText("status_unknown");
+				break;
+		}
+	}
+} /* }}} */
+
+function printRevisionStatusText($status, $date=0) { /* {{{ */
+	print getRevisionStatusText($status, $date);
+} /* }}} */
+
+function getRevisionStatusText($status, $date=0) { /* {{{ */
+	if (is_null($status)) {
+		return getMLText("status_unknown");
+	}
+	else {
+		switch ($status) {
+			case -3:
+				return getMLText("status_revision_sleeping");
+				break;
+			case -2:
+				return getMLText("status_revisor_removed");
+				break;
+			case -1:
+				return getMLText("status_revision_rejected").($date !=0 ? " ".$date : "");
+				break;
+			case 0:
+				return getMLText("status_not_revised");
+				break;
+			case 1:
+				return getMLText("status_revised").($date !=0 ? " ".$date : "");
 				break;
 			default:
 				return getMLText("status_unknown");
@@ -271,6 +303,9 @@ function getOverallStatusText($status) { /* {{{ */
 				break;
 			case S_EXPIRED:
 				return getMLText("expired");
+				break;
+			case S_IN_REVISION:
+				return getMLText("in_revision");
 				break;
 			default:
 				return getMLText("status_unknown");
