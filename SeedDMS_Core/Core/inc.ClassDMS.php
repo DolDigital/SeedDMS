@@ -691,7 +691,7 @@ class SeedDMS_Core_DMS {
 				$queryStr = '';
 			}
 			break;
-		case 'ReiptByMe': // Documents I have to receipt
+		case 'ReceiptByMe': // Documents I have to receipt
 			$user = $param1;
 			// Get document list for the current user.
 			$receiptStatus = $user->getReceiptStatus();
@@ -705,6 +705,36 @@ class SeedDMS_Core_DMS {
 				}
 			}
 			foreach ($receiptStatus["grpstatus"] as $st) {
+				if (!in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+			
+			if (strlen($docCSV)>0) {
+				$queryStr .= "AND `tblDocuments`.`id` IN (" . $docCSV . ") ".
+							"ORDER BY `statusDate` DESC";
+			} else {
+				$queryStr = '';
+			}
+			break;
+		case 'ReviseByMe': // Documents I have to receipt
+			$user = $param1;
+			// Get document list for the current user.
+			$revisionStatus = $user->getRevisionStatus();
+			
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			$dList = array();
+			foreach ($revisionStatus["indstatus"] as $st) {
+				if (!in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($revisionStatus["grpstatus"] as $st) {
 				if (!in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
