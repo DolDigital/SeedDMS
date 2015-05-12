@@ -52,9 +52,6 @@ class SeedDMS_View_SetRevisors extends SeedDMS_Bootstrap_Style {
 		// Retrieve list of currently assigned revisors, along with
 		// their latest status.
 		$revisionStatus = $content->getRevisionStatus();
-		echo "<pre>";
-		print_r($revisionStatus);
-		echo "</pre>";
 		$startdate = substr($content->getRevisionDate(), 0, 10);
 
 		// Index the revision results for easy cross-reference with the revisor list.
@@ -74,6 +71,7 @@ class SeedDMS_View_SetRevisors extends SeedDMS_Bootstrap_Style {
 
 <?php $this->contentSubHeading(getMLText("update_revisors"));?>
 
+  <div class="cbSelectTitle"><?php printMLText("revision_date")?>:</div>
   <span class="input-append date" style="display: inline;" id="revisionstartdate" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
     <input class="span4" size="16" name="startdate" type="text" value="<?php if($startdate) echo $startdate; else echo date('Y-m-d'); ?>">
     <span class="add-on"><i class="icon-calendar"></i></span>
