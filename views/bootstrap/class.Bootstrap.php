@@ -259,6 +259,7 @@ $(document).ready(function () {
 			if (!$this->params['user']->isGuest()) {
 				echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
 				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
+				echo "    <li><a href=\"../out/out.TransmittalMgr.php\">".getMLText("my_transmittals")."</a></li>\n";
 				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
@@ -1524,24 +1525,27 @@ $('#delete-folder-btn-".$folderid."').popover({
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				}
-				$content .= "</a></td>";
+				$content .= "</a>";
 			} else
-				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-			
-			$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+				$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			$content .= "</td>";
+
+			$content .= "<td>";	
+			$content .= "<a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
 			$content .= "</td>\n";
-//				$content .= "<td>".htmlspecialchars($owner->getFullName())."</td>";
+
 			$content .= "<td nowrap>";
 			$attentionstr = '';
 			if ( $document->isLocked() ) {
@@ -1557,8 +1561,9 @@ $('#delete-folder-btn-".$folderid."').popover({
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small></td>";
-//				$content .= "<td>".$version."</td>";
+			$content .= getOverallStatusText($status["status"])."</small>";
+			$content .= "</td>\n";
+
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
 			if($document->getAccessMode($user) >= M_ALL) {
