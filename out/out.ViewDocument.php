@@ -65,6 +65,13 @@ if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
 }
 
+/* Recalculate the status of a document and reload the page if the status
+ * has changed. A status change may occur if a revision workflow is due
+ */
+if ($document->checkForDueRevisionWorkflow($user)){
+	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
+}
+
 if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
