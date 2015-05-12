@@ -638,6 +638,39 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Check if latest content of the document has a schedult
+	 * revision workflow.
+	 * The method will update the document status log database table
+	 * if needed.
+	 *
+	 * @param object $user user requesting the possible automatic change
+	 * @param string $next next date for review
+	 * @return boolean true if status has changed
+	 */
+	function checkForDueRevisionWorkflow($user, $next=''){ /* {{{ */
+		$lc=$this->getLatestContent();
+		if($lc) {
+			$st=$lc->getStatus();
+
+			if($st["status"] == S_RELEASED) {
+				if($lc->getRevisionDate() && $lc->getRevisionDate() <= date('Y-m-d 00:00:00')) {
+					if($lc->startRevision($user, 'Automatic start of revision workflow')) {
+						if($next) {
+							$tmp = explode('-', substr($next, 0, 10));
+							if(checkdate($tmp[1], $tmp[2], $tmp[0]))
+								$lc->setRevisionDate($next);
+						} else {
+							$lc->setRevisionDate(false);
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
 	 * Check if document is locked
 	 *
 	 * @return boolean true if locked otherwise false
@@ -2475,9 +2508,12 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		if(!$date)
-			$date = date('Y-m-d');
-
-		$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->qstr($date)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+			$queryStr = "UPDATE tblDocumentContent SET revisiondate = null WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		elseif($date == 'now')
+			$queryStr = "UPDATE tblDocumentContent SET revisiondate = CURRENT_TIMESTAMP WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		else
+			$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->qstr($date)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		echo $queryStr;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -2733,7 +2769,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		// If the supplied value lies outside of the accepted range, return an
 		// error.
-		if ($status < -3 || $status > 3) {
+		if ($status < -3 || $status > 4) {
 			return false;
 		}
 
@@ -2892,6 +2928,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * Get the current receipt status of the document content
 	 * The receipt status is a list of receipts
 	 *
+	 * @param integer $limit maximum number of status changes per receiver
 	 * @return array list of receipts
 	 */
 	function getReceiptStatus($limit=1) { /* {{{ */
@@ -2943,6 +2980,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * Get the current revision status of the document content
 	 * The revision status is a list of revisions
 	 *
+	 * @param integer $limit maximum number of records per revisor
 	 * @return array list of revisions
 	 */
 	function getRevisionStatus($limit=1) { /* {{{ */
@@ -4112,6 +4150,11 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 		}
 
+		/* Make sure all Logs will be set to the right status, in order to
+		 * prevent inconsistent states. Actually it could be a feature to
+		 * force only some users/groups to revise the document, but for now
+		 * this may not be possible.
+		 */
 		$db->startTransaction();
 		foreach($revisionStatus as $status) {
 			if($status['status'] == S_LOG_SLEEPING) {
@@ -4126,6 +4169,67 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					return false;
 				}
 			}
+		}
+		if(!$this->setStatus(S_IN_REVISION, "Started revision", $requestUser)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+
+	} /* }}} */
+
+	/**
+	 * Finish a revision workflow
+	 *
+	 * This function ends a revision This means the log status
+	 * is set back S_LOG_SLEEPING and the document status is set as
+	 * passed to the method. The function doesn't not check if all
+	 * users/groups has made it vote already.
+	 *
+	 * @param object $requestUser user requesting the revision start
+	 * @param integer $docstatus document status
+	 * @param string $msg message saved in revision log
+	 * @param string $msg message saved in document status log
+	 */
+	function finishRevision($requestUser, $docstatus, $msg='', $docmsg='') { /* {{{ */
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
+
+		$revisionStatus = self::getRevisionStatus();
+		if(!$revisionStatus)
+			return false;
+
+		/* A revision may only be finished if it wasn't finished already
+		 */
+		foreach($revisionStatus as $status) {
+			if($status['status'] == S_LOG_SLEEPING)
+				return false;
+		}
+
+		/* Make sure all Logs will be set to the right status, in order to
+		 * prevent inconsistent states. Actually it could be a feature to
+		 * end only some users/groups to revise the document, but for now
+		 * this may not be possible.
+		 */
+		$db->startTransaction();
+		foreach($revisionStatus as $status) {
+			if($status['status'] != S_LOG_SLEEPING && $status['status'] != S_LOG_USER_REMOVED) {
+				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
+					`comment`, `date`, `userID`) ".
+					"VALUES ('". $status["revisionID"] ."', ".
+					S_LOG_SLEEPING.", ".$db->qstr($msg).", CURRENT_TIMESTAMP, '".
+					$requestUser->getID() ."')";
+				$res=$db->getResult($queryStr);
+				if (is_bool($res) && !$res) {
+					$db->rollbackTransaction();
+					return false;
+				}
+			}
+		}
+		if(!$this->setStatus($docstatus, $docmsg, $requestUser)) {
+			$db->rollbackTransaction();
+			return false;
 		}
 		$db->commitTransaction();
 		return true;
