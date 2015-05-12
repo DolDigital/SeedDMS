@@ -191,6 +191,8 @@ class SeedDMS_Core_Transmittal {
 		return true;
 	} /* }}} */
 
+	function getUser() { return $this->_user; }
+
 	function getItems() { /* {{{ */
 		$db = $this->_dms->getDB();
 
