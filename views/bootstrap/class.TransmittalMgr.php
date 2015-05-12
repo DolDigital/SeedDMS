@@ -130,29 +130,25 @@ class SeedDMS_View_TransmittalMgr extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		$this->showTransmittalForm($seltransmittal);
 		$this->contentContainerEnd();
+
 		if($seltransmittal) {
 			$items = $seltransmittal->getItems();
 			if($items) {
 				print "<table class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
-				print "<th>".getMLText("document")."</th>\n";
-				print "<th>".getMLText("version")."</th>\n";
 				print "<th></th>\n";
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 				foreach($items as $item) {
-					print "<tr>";
-					print "<td>";
 					$content = $item->getContent();
 					$document = $content->getDocument();
-					print $content->getVersion();
-					print "</td>";
-					print "<td>";
-					echo $this->documentListRow($document, $previewer, false, $content->getVersion());
-					print $item->getDate();
-					print "</td>";
-					print "</tr>";
+					if ($document->getAccessMode($user) >= M_READ)
+						echo $this->documentListRow($document, $previewer, false, $content->getVersion());
 				}
 				print "</tbody>\n</table>\n";
+				print "<a class=\"btn btn-default\" href=\"../op/op.TransmittalDownload.php?transmittalid=".$seltransmittal->getID()."\">".getMLText('download')."</a>";
 			}
 		}
 ?>
