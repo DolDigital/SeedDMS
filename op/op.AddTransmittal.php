@@ -40,7 +40,7 @@ $comment = $_POST["comment"];
 $transmittal = $dms->addTransmittal($name, $comment, $user);
 
 if (!is_object($transmittal)) {
-	UI::exitError(getMLText("my_document"), getMLText("error_occured"));
+	UI::exitError(getMLText("my_documents"), getMLText("error_occured"));
 }
 
 add_log_line("?name=".$name);
