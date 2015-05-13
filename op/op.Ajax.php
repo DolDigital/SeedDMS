@@ -646,6 +646,74 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'removetransmittalitem': /* {{{ */
+		if($user) {
+			if(!checkFormKey('removetransmittalitem', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$item = SeedDMS_Core_TransmittalItem::getInstance((int) $_REQUEST['id'], $dms);
+				if($item) {
+					$transmittal = $item->getTransmittal();
+					if($transmittal) {
+						if ($transmittal->getUser()->getID() == $user->getID()) {
+							if($item->remove()) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error removing transmittal item', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No transmittal', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No transmittal item', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
+	case 'updatetransmittalitem': /* {{{ */
+		if($user) {
+			if(!checkFormKey('updatetransmittalitem', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$item = SeedDMS_Core_TransmittalItem::getInstance((int) $_REQUEST['id'], $dms);
+				if($item) {
+					$transmittal = $item->getTransmittal();
+					if($transmittal) {
+						if ($transmittal->getUser()->getID() == $user->getID()) {
+							if($item->updateContent()) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error removing transmittal item', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No transmittal', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No transmittal item', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
 }
 add_log_line();
 ?>
