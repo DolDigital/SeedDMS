@@ -237,7 +237,7 @@ $('#delete-transmittalitem-btn-".$itemid."').popover({
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("comment")."</th>\n";
-			print "<th>#</th>\n";
+			print "<th>".getMLText("size")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 			foreach($transmittals as $transmittal) {
