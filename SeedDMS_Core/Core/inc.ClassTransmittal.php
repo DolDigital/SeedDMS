@@ -101,6 +101,9 @@ class SeedDMS_Core_Transmittal {
 	 * @return object instance of class SeedDMS_Core_Transmittal
 	 */
 	public static function getInstance($id, $dms, $by='') { /* {{{ */
+		if(!$dms || get_class($dms) != 'SeedDMS_Core_DMS')
+			return false;
+
 		$db = $dms->getDB();
 
 		switch($by) {
@@ -217,6 +220,21 @@ class SeedDMS_Core_Transmittal {
 		return $this->_items;
 	} /* }}} */
 
+	function getSize() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if (!$this->_items) {
+			self::getItems();
+		}
+
+		$size = 0;
+		foreach ($this->_items as $item) {
+			$content = $item->getContent();
+			$size += $content->getFileSize();
+		}
+		return $size;
+	} /* }}} */
+
 	/**
 	 * Add an item to the transmittal
 	 *
@@ -240,6 +258,7 @@ class SeedDMS_Core_Transmittal {
 
 		return SeedDMS_Core_TransmittalItem::getInstance($itemID);
 	} /* }}} */
+
 }
 
 /**
@@ -290,6 +309,9 @@ class SeedDMS_Core_TransmittalItem {
 	}
 
 	public static function getInstance($id, $dms) { /* {{{ */
+		if(!$dms || get_class($dms) != 'SeedDMS_Core_DMS')
+			return false;
+
 		$db = $dms->getDB();
 
 		$queryStr = "SELECT * FROM tblTransmittalItems WHERE id = " . (int) $id;
@@ -303,7 +325,7 @@ class SeedDMS_Core_TransmittalItem {
 		$transmittal = SeedDMS_Core_Transmittal::getInstance($resArr['transmittal'], $dms);
 		$dclassname = $dms->getClassname('document');
 		$document = $dclassname::getInstance($resArr['document'], $dms);
-		$content = $document->getVersion($resArr['version']);
+		$content = $document->getContentByVersion((int) $resArr['version']);
 
 		$item = new self($resArr["id"], $transmittal, $content, $resArr["date"]);
 		$item->setDMS($dms);
@@ -315,6 +337,8 @@ class SeedDMS_Core_TransmittalItem {
 	}
 
 	function getID() { return $this->_id; }
+
+	function getTransmittal() { return $this->_transmittal; }
 
 	function getContent() { return $this->_content; }
 
@@ -330,6 +354,33 @@ class SeedDMS_Core_TransmittalItem {
 		}
 
 		return true;
+	} /* }}} */
+
+	/**
+	 * Check if the content referenzed by the transmittal item is unequal
+	 * to the latest content of the document.
+	 *
+	 * This function updateѕ always to the latest version of the document,
+	 * even if the version in the item is higher. This can happen if a
+	 * version has been removed.
+	 *
+	 * @return boolean/integer false in case of an error, otherwise the new
+	 * version.
+	 */
+	function updateContent() { /* {{{ */
+		$db = $this->_dms->getDB();
+		$transmittal = $this->_transmittal;
+
+		$document = $this->_content->getDocument();
+		$latestcontent = $document->getLatestContent();
+		if($latestcontent->getVersion() != $this->_content->getVersion()) {
+			$queryStr = "UPDATE tblTransmittalItems set version = ".$latestcontent->getVersion()." WHERE id = " . $this->_id;
+			if (!$db->getResult($queryStr)) {
+				return false;
+			}
+		}
+
+		return $latestcontent->getVersion();
 	} /* }}} */
 }
 ?>
