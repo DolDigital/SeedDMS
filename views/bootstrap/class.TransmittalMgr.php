@@ -31,6 +31,137 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_TransmittalMgr extends SeedDMS_Bootstrap_Style {
 
+	/**
+	 * Add some javascript at the bottom of the page
+	 */
+	function addAdditionalJS(){ /* {{{ */
+		$this->addFooterJS("
+	$('body').on('click', 'button.removetransmittalitem', function(ev){
+		ev.preventDefault();
+		var element = $(this);
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'removetransmittalitem', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#table-row-transmittalitem-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+	$('body').on('click', 'button.updatetransmittalitem', function(ev){
+		ev.preventDefault();
+		var element = $(this);
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'updatetransmittalitem', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#update-transmittalitem-btn-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+		$('#update-transmittalitem-btn-'+id).popover('hide');
+	});
+");
+	} /* }}} */
+
+	/**
+	 * Print button for updating the transmittal item to the newest version
+	 *
+	 * @param object $item
+	 * @param string $msg message shown in case of successful update
+	 */
+	function printUpdateItemButton($item, $msg, $return=false){ /* {{{ */
+		$itemid = $item->getID();
+		$content = '';
+    $content .= '<a id="update-transmittalitem-btn-'.$itemid.'" rel="'.$itemid.'" msg="'.htmlspecialchars($msg, ENT_QUOTES).'"><i class="icon-refresh"></i></a>';
+		$this->addFooterJS("
+$('#update-transmittalitem-btn-".$itemid."').popover({
+	title: '".getMLText("update_transmittalitem")."',
+	placement: 'left',
+	html: true,
+	content: \"<div>".htmlspecialchars(getMLText("confirm_update_transmittalitem"), ENT_QUOTES)."</div><div><button class='btn btn-danger updatetransmittalitem' style='float: right; margin:10px 0px;' rel='".$itemid."' msg='".htmlspecialchars($msg, ENT_QUOTES)."' formtoken='".createFormKey('updatetransmittalitem')."' id='confirm-update-transmittalitem-btn-".$itemid."'><i class='icon-refresh'></i> ".getMLText("update_transmittalitem")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#update-transmittalitem-btn-".$itemid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
+");
+		if($return)
+			return $content;
+		else
+			echo $content;
+		return '';
+	} /* }}} */
+
+	/**
+	 * Print button with link for deleting a transmittal item
+	 *
+	 * This button works just like the printDeleteDocumentButton()
+	 *
+	 * @param object $item transmittal item to be deleted
+	 * @param string $msg message shown in case of successful deletion
+	 * @param boolean $return return html instead of printing it
+	 * @return string html content if $return is true, otherwise an empty string
+	 */
+	function printDeleteItemButton($item, $msg, $return=false){ /* {{{ */
+		$itemid = $item->getID();
+		$content = '';
+    $content .= '<a id="delete-transmittalitem-btn-'.$itemid.'" rel="'.$itemid.'" msg="'.getMLText($msg).'"><i class="icon-remove"></i></a>';
+		$this->addFooterJS("
+$('#delete-transmittalitem-btn-".$itemid."').popover({
+	title: '".getMLText("rm_transmittalitem")."',
+	placement: 'left',
+	html: true,
+	content: \"<div>".htmlspecialchars(getMLText("confirm_rm_transmittalitem"), ENT_QUOTES)."</div><div><button class='btn btn-danger removetransmittalitem' style='float: right; margin:10px 0px;' rel='".$itemid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removetransmittalitem')."' id='confirm-delete-transmittalitem-btn-".$itemid."'><i class='icon-remove'></i> ".getMLText("rm_transmittalitem")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-transmittalitem-btn-".$itemid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
+");
+		if($return)
+			return $content;
+		else
+			echo $content;
+		return '';
+	} /* }}} */
+
 	function showTransmittalForm($transmittal) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -106,12 +237,15 @@ class SeedDMS_View_TransmittalMgr extends SeedDMS_Bootstrap_Style {
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("comment")."</th>\n";
+			print "<th>#</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 			foreach($transmittals as $transmittal) {
 				print "<tr>\n";
 				print "<td>".$transmittal->getName()."</td>";
 				print "<td>".$transmittal->getComment()."</td>";
+				$items = $transmittal->getItems();
+				print "<td>".count($items)." <em>(".SeedDMS_Core_File::format_filesize($transmittal->getSize()).")</em></td>";
 				print "<td>";
 				print "<div class=\"list-action\">";
 				print "<a href=\"../out/out.TransmittalMgr.php?transmittalid=".$transmittal->getID()."\" title=\"".getMLText("edit_transmittal_props")."\"><i class=\"icon-edit\"></i></a>";
@@ -134,18 +268,29 @@ class SeedDMS_View_TransmittalMgr extends SeedDMS_Bootstrap_Style {
 		if($seltransmittal) {
 			$items = $seltransmittal->getItems();
 			if($items) {
+				$this->addAdditionalJS();
 				print "<table class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";
 				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("document")."</th>\n";
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 				foreach($items as $item) {
 					$content = $item->getContent();
 					$document = $content->getDocument();
-					if ($document->getAccessMode($user) >= M_READ)
-						echo $this->documentListRow($document, $previewer, false, $content->getVersion());
+					$latestcontent = $document->getLatestContent();
+					if ($document->getAccessMode($user) >= M_READ) {
+						echo "<tr id=\"table-row-transmittalitem-".$item->getID()."\">";
+						echo $this->documentListRow($document, $previewer, true, $content->getVersion());
+						echo "<td><div class=\"list-action\">";
+						$this->printDeleteItemButton($item, '');
+						if($latestcontent->getVersion() != $content->getVersion())
+							$this->printUpdateItemButton($item, getMLText('transmittalitem_updated', array('prevversion'=>$content->getVersion(), 'newversion'=>$latestcontent->getVersion())));
+						echo "</div></td>";
+						echo "</tr>";
+					}
 				}
 				print "</tbody>\n</table>\n";
 				print "<a class=\"btn btn-default\" href=\"../op/op.TransmittalDownload.php?transmittalid=".$seltransmittal->getID()."\">".getMLText('download')."</a>";
