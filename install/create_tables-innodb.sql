@@ -250,7 +250,7 @@ CREATE TABLE `tblDocumentContent` (
   `mimeType` varchar(100) NOT NULL default '',
   `fileSize` BIGINT,
   `checksum` char(32),
-  `revsiondate` datetime NOT NULL default '0000-00-00 00:00:00',
+  `revsiondate` datetime default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)
