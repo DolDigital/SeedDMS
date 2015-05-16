@@ -147,13 +147,13 @@ $('#update-transmittalitem-btn-".$itemid."').popover({
 	function printDeleteItemButton($item, $msg, $return=false){ /* {{{ */
 		$itemid = $item->getID();
 		$content = '';
-    $content .= '<a id="delete-transmittalitem-btn-'.$itemid.'" rel="'.$itemid.'" msg="'.getMLText($msg).'"><i class="icon-remove"></i></a>';
+    $content .= '<a id="delete-transmittalitem-btn-'.$itemid.'" rel="'.$itemid.'" msg="'.htmlspecialchars($msg, ENT_QUOTES).'"><i class="icon-remove"></i></a>';
 		$this->addFooterJS("
 $('#delete-transmittalitem-btn-".$itemid."').popover({
 	title: '".getMLText("rm_transmittalitem")."',
 	placement: 'left',
 	html: true,
-	content: \"<div>".htmlspecialchars(getMLText("confirm_rm_transmittalitem"), ENT_QUOTES)."</div><div><button class='btn btn-danger removetransmittalitem' style='float: right; margin:10px 0px;' rel='".$itemid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removetransmittalitem')."' id='confirm-delete-transmittalitem-btn-".$itemid."'><i class='icon-remove'></i> ".getMLText("rm_transmittalitem")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-transmittalitem-btn-".$itemid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
+	content: \"<div>".htmlspecialchars(getMLText("confirm_rm_transmittalitem"), ENT_QUOTES)."</div><div><button class='btn btn-danger removetransmittalitem' style='float: right; margin:10px 0px;' rel='".$itemid."' msg='".htmlspecialchars($msg, ENT_QUOTES)."' formtoken='".createFormKey('removetransmittalitem')."' id='confirm-delete-transmittalitem-btn-".$itemid."'><i class='icon-remove'></i> ".getMLText("rm_transmittalitem")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-transmittalitem-btn-".$itemid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
 ");
 		if($return)
 			return $content;
@@ -237,7 +237,7 @@ $('#delete-transmittalitem-btn-".$itemid."').popover({
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("comment")."</th>\n";
-			print "<th>".getMLText("size")."</th>\n";
+			print "<th>".getMLText("transmittal_size")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 			foreach($transmittals as $transmittal) {
@@ -285,7 +285,7 @@ $('#delete-transmittalitem-btn-".$itemid."').popover({
 						echo "<tr id=\"table-row-transmittalitem-".$item->getID()."\">";
 						echo $this->documentListRow($document, $previewer, true, $content->getVersion());
 						echo "<td><div class=\"list-action\">";
-						$this->printDeleteItemButton($item, '');
+						$this->printDeleteItemButton($item, getMLText('transmittalitem_removed'));
 						if($latestcontent->getVersion() != $content->getVersion())
 							$this->printUpdateItemButton($item, getMLText('transmittalitem_updated', array('prevversion'=>$content->getVersion(), 'newversion'=>$latestcontent->getVersion())));
 						echo "</div></td>";
