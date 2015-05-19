@@ -63,7 +63,21 @@ CREATE TABLE `tblUsers` (
   `disabled` INTEGER NOT NULL default '0',
   `quota` INTEGER,
   `homefolder` INTEGER default '0',
+  `homefolder` INTEGER default '0',
   UNIQUE (`login`)
+);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblUserSubstitutes`
+-- 
+
+CREATE TABLE `tblUserSubstitutes` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `user` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+  `substitute` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+  UNIQUE (`user`, `substitute`)
 );
 
 -- --------------------------------------------------------
@@ -359,6 +373,38 @@ CREATE TABLE `tblDocumentRecipients` (
   `required` INTEGER NOT NULL default '0',
   UNIQUE (`documentID`,`version`,`type`,`required`)
 ) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentRevisionLog`
+-- 
+
+CREATE TABLE `tblDocumentRevisionLog` (
+  `revisionLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `revisionID` INTEGER NOT NULL default '0',
+  `status` INTEGER NOT NULL default '0',
+  `comment` TEXT NOT NULL,
+  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentRevisors`
+-- 
+
+CREATE TABLE `tblDocumentRevisors` (
+  `revisionID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  `version` INTEGER unsigned NOT NULL default '0',
+  `type` INTEGER NOT NULL default '0',
+  `required` INTEGER NOT NULL default '0',
+  `startdate` TEXT default NULL,
+  UNIQUE KEY `documentID` (`documentID`,`version`,`type`,`required`),
+  CONSTRAINT `tblDocumentRevisors_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
+);
 
 -- --------------------------------------------------------
 
@@ -703,6 +749,43 @@ CREATE TABLE `tblTransmittalItems` (
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
   UNIQUE (document, version)
 );
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for access request objects
+-- 
+
+CREATE TABLE `tblAros` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `model` TEXT NOT NULL,
+	`foreignid` INTEGER NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ;
+
+
+-- 
+-- Table structure for access control objects
+-- 
+
+CREATE TABLE `tblAcos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `model` TEXT NOT NULL,
+	`foreignid` INTEGER NOT NULL DEFAULT '0'
+) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for acos/aros relation
+-- 
+
+CREATE TABLE `tblArosAcos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+	`aro` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAros` (`id`) ON DELETE CASCADE,
+	`aco` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  UNIQUE (aco, aro),
+) ;
 
 -- --------------------------------------------------------
 

@@ -73,6 +73,22 @@ CREATE TABLE `tblUsers` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblUserSubstitutes`
+-- 
+
+CREATE TABLE `tblUserSubstitutes` (
+  `id` int(11) NOT NULL auto_increment,
+  `user` int(11) default null,
+  `substitute` int(11) default null,
+  PRIMARY KEY (`id`),
+  UNIQUE (`user`, `substitute`),
+  CONSTRAINT `tblUserSubstitutes_user` FOREIGN KEY (`user`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblUserSubstitutes_substitute` FOREIGN KEY (`user`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+);
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblUserPasswordRequest`
 -- 
 
@@ -811,6 +827,47 @@ CREATE TABLE `tblTransmittalItems` (
   UNIQUE (document, version),
   CONSTRAINT `tblTransmittalItems_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblTransmittalItem_transmittal` FOREIGN KEY (`transmittal`) REFERENCES `tblTransmittals` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for access request objects
+-- 
+
+CREATE TABLE `tblAros` (
+  `id` int(11) NOT NULL auto_increment,
+  `model` text NOT NULL,
+	`foreignid` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 
+-- Table structure for access control objects
+-- 
+
+CREATE TABLE `tblAcos` (
+  `id` int(11) NOT NULL auto_increment,
+  `model` text NOT NULL,
+	`foreignid` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for acos/aros relation
+-- 
+
+CREATE TABLE `tblArosAcos` (
+  `id` int(11) NOT NULL auto_increment,
+	`aro` int(11) NOT NULL DEFAULT '0',
+	`aco` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE (aco, aro),
+  CONSTRAINT `tblArosAcos_acos` FOREIGN KEY (`aco`) REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblArosAcos_aros` FOREIGN KEY (`aro`) REFERENCES `tblAros` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
