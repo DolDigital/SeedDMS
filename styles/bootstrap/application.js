@@ -22,7 +22,7 @@ $(document).ready( function() {
 		});
 
 	$(".chzn-select").chosen({width: "95%"});
-	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+	$(".chzn-select-deselect").chosen({width: "95%", allow_single_deselect:true});
 
 	/* change the color and length of the bar graph showing the password
 	 * strength on each change to the passwod field.
