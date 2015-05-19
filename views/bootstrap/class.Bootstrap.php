@@ -280,9 +280,17 @@ $(document).ready(function () {
 				echo "     </ul>\n";
 				echo "    </li>\n";
 			}
-			if($this->params['user']->isAdmin()) {
-				$showdivider = true;
-				echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+			if(!$this->params['session']->getSu()) {
+				if($this->params['user']->isAdmin()) {
+					$showdivider = true;
+					echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+				} elseif($substitutes = $this->params['user']->getReverseSubstitutes()) {
+					if(count($substitutes) == 1) {
+						echo "    <li><a href=\"../op/op.SubstituteUser.php?userid=".$substitutes[0]->getID()."&formtoken=".createFormKey('substituteuser')."\">".getMLText("substitute_to_user", array('username'=>$substitutes[0]->getFullName()))."</a></li>\n";
+					} else {
+						echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+					}
+				}
 			}
 			if($showdivider)
 				echo "    <li class=\"divider\"></li>\n";

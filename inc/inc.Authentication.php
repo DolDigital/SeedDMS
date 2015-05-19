@@ -41,9 +41,13 @@ $session->updateAccess($dms_session);
 /* Load user data */
 
 $user = $dms->getUser($resArr["userID"]);
-if($user->isAdmin()) {
-	if($resArr["su"]) {
-		$user = $dms->getUser($resArr["su"]);
+/* Check if user was substituted */
+if($resArr["su"] && $su = $dms->getUser($resArr["su"])) {
+	/* Admin may always substitute the user, but regular users are*/
+	if($user->isAdmin() || $user->maySwitchToUser($su)) {
+		$user = $su;
+	} else {
+		$session->resetSu();
 	}
 }
 if (!is_object($user)) {

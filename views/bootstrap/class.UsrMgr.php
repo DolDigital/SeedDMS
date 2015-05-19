@@ -193,10 +193,10 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td>
-				<div class="cbSelectTitle"><?php printMLText("substitute_user");?>:</div>
+				<div class="cbSelectTitle"><?php printMLText("possible_substitutes");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select-deselect" name="substitute[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+        <select class="chzn-select" name="substitute[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 		if($currUser) {
 			$substitutes = $currUser->getSubstitutes();
@@ -204,7 +204,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 			$substitutes = array();
 		}
 		foreach ($users as $usr) {
-			if ($usr->isGuest() || ($currUser && $usr->getID() == $currUser->getID()))
+			if ($usr->isGuest() || ($currUser && !$usr->isAdmin() && $currUser->isAdmin()) || ($currUser && $usr->getID() == $currUser->getID()))
 				continue;
 			$checked=false;
 			foreach ($substitutes as $r) if ($r->getID()==$usr->getID()) $checked=true;
