@@ -95,6 +95,14 @@ if ($action == "adduser") {
 				$group->addUser($newUser);
 			}
 		}
+
+		/* Set substitute user if set */
+		if(isset($_POST["substitute"]) && $_POST["substitute"]) {
+			foreach($_POST["substitute"] as $substitute) {
+				$subsuser = $dms->getUser($substitute);
+				$newUser->addSubstitute($subsuser);
+			}
+		}
 	}
 	else UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	
@@ -314,6 +322,26 @@ else if ($action == "edituser") {
 	foreach($delgroups as $groupid) {
 		$group = $dms->getGroup($groupid);
 		$group->removeUser($editedUser);
+	}
+
+	/* Set substitute user if set */
+	if(isset($_POST["substitute"]) && $_POST["substitute"]) 
+		$newsubs = $_POST['substitute'];
+	else
+		$newsubs = array();
+	$oldsubs = array();
+	foreach($editedUser->getSubstitutes() as $k)
+		$oldsubs[] = $k->getID();
+
+	$addsubs = array_diff($newsubs, $oldsubs);
+	foreach($addsubs as $subid) {
+		$subsuser = $dms->getUser($subid);
+		$editedUser->addSubstitute($subsuser);
+	}
+	$delsubs = array_diff($oldsubs, $newsubs);
+	foreach($delsubs as $subid) {
+		$subsuser = $dms->getUser($subid);
+		$editedUser->removeSubstitute($subsuser);
 	}
 
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_user')));

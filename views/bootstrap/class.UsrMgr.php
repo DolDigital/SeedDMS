@@ -35,6 +35,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$seluser = $this->params['seluser'];
+		$users = $this->params['allusers'];
 		$groups = $this->params['allgroups'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$passwordexpiration = $this->params['passwordexpiration'];
@@ -189,6 +190,32 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 <?php
 		}
+?>
+		<tr>
+			<td>
+				<div class="cbSelectTitle"><?php printMLText("substitute_user");?>:</div>
+			</td>
+			<td>
+        <select class="chzn-select-deselect" name="substitute[]" multiple data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<?php
+		if($currUser) {
+			$substitutes = $currUser->getSubstitutes();
+		} else {
+			$substitutes = array();
+		}
+		foreach ($users as $usr) {
+			if ($usr->isGuest() || ($currUser && $usr->getID() == $currUser->getID()))
+				continue;
+			$checked=false;
+			foreach ($substitutes as $r) if ($r->getID()==$usr->getID()) $checked=true;
+
+			print "<option value=\"".$usr->getID()."\" ".($checked?"selected='selected' ":"").">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
+		}
+?>
+				</select>
+			</td>
+		</tr>
+<?php
 		if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
 		if($workflowmode == "traditional") {
 ?>
