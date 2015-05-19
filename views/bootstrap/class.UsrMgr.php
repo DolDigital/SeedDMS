@@ -196,7 +196,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 				<div class="cbSelectTitle"><?php printMLText("substitute_user");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select-deselect" name="substitute[]" multiple data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+        <select class="chzn-select-deselect" name="substitute[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 		if($currUser) {
 			$substitutes = $currUser->getSubstitutes();
@@ -228,7 +228,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="usrReviewers[]" multiple="multiple">
+        <select class="chzn-select" name="usrReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
 <?php
 
 				if($currUser)
