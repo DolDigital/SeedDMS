@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1174), dgrutsch (3), netixw (14)
+//    Translators: Admin (1178), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -704,6 +704,7 @@ If you have still problems to login, then please contact your administrator.',
 'password_wrong' => 'Wrong password',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
+'possible_substitutes' => 'Substitutes',
 'previous_state' => 'Previous state',
 'previous_versions' => 'Previous versions',
 'pt_BR' => 'Portugese (BR)',
@@ -906,6 +907,8 @@ URL: [url]',
 'settings_cookieLifetime_desc' => 'The life time of a cookie in seconds. If set to 0 the cookie will be removed when the browser is closed.',
 'settings_coreDir' => 'Core SeedDMS directory',
 'settings_coreDir_desc' => 'Path to SeedDMS_Core (optional). Leave this empty if you have installed SeedDMS_Core at a place where it can be found by PHP, e.g. Extra PHP Include-Path',
+'settings_createCheckOutDir' => 'Check out directory',
+'settings_createCheckOutDir_desc' => 'Document version will be copied in this directory, when a document is checked out.',
 'settings_createdatabase' => 'Create database tables',
 'settings_createdirectory' => 'Create directory',
 'settings_currentvalue' => 'Current value',
@@ -1190,6 +1193,7 @@ URL: [url]',
 'submit_receipt' => 'Submit receipt',
 'submit_review' => 'Submit review',
 'submit_userinfo' => 'Submit info',
+'substitute_to_user' => 'Switch to \'[username]\'',
 'substitute_user' => 'Substitute User',
 'sunday' => 'Sunday',
 'sunday_abbr' => 'Su',

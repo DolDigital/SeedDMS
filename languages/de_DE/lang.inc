@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2045), dgrutsch (18)
+//    Translators: Admin (2049), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -704,6 +704,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_wrong' => 'Falsches Passwort',
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
+'possible_substitutes' => 'Vertreter',
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',
 'pt_BR' => 'Portugiesisch (BR)',
@@ -899,6 +900,8 @@ URL: [url]',
 'settings_cookieLifetime_desc' => 'Die Lebensdauer des Cookies für die Sitzungsverwaltung. Wenn dieser Wert auf 0 gesetzt wird, dann wird der Cookie beim Schließen des Browsers gelöscht.',
 'settings_coreDir' => 'Core SeedDMS Verzeichnis',
 'settings_coreDir_desc' => 'Pfad zum PEAR-Paket SeedDMS_Core (optional). Lassen Sie diese Einstellung leer, wenn SeedDMS_Core ohnehin von PHP gefunden wird, weil es beispielweise im \'Extra PHP Include-Path\' installiert ist.',
+'settings_createCheckOutDir' => 'Check out Verzeichnis',
+'settings_createCheckOutDir_desc' => 'Dokumentenversionen werden hierhin kopiert, wenn ein Dokument ausgecheckt wird.',
 'settings_createdatabase' => 'Datenbank erzeugen',
 'settings_createdirectory' => 'Verzeichnis erzeugen',
 'settings_currentvalue' => 'Aktueller Wert',
@@ -1183,6 +1186,7 @@ URL: [url]',
 'submit_receipt' => 'Empfang bestätigen',
 'submit_review' => 'Überprüfung hinzufügen',
 'submit_userinfo' => 'Daten setzen',
+'substitute_to_user' => 'Wechsel zu \'[username]\'',
 'substitute_user' => 'Benutzer wechseln',
 'sunday' => 'Sonntag',
 'sunday_abbr' => 'So',
