@@ -22,7 +22,7 @@
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Core_User {
+class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * @var integer id of user
 	 *
@@ -67,9 +67,7 @@ class SeedDMS_Core_User {
 
 	/**
 	 * @var string prefered language of user
-	 *      possible values are 'English', 'German', 'Chinese_ZH_TW', 'Czech'
-	 *      'Francais', 'Hungarian', 'Italian', 'Portuguese_BR', 'Slovak', 
-	 *      'Spanish'
+	 *      possible values are subdirectories within the language directory
 	 *
 	 * @access protected
 	 */
@@ -124,6 +122,13 @@ class SeedDMS_Core_User {
 	 * @access protected
 	 */
 	var $_homeFolder;
+
+	/**
+	 * @var array list of users this user can substitute
+	 *
+	 * @access protected
+	 */
+	var $_substitutes;
 
 	/**
 	 * @var object reference to the dms instance this user belongs to
@@ -1488,5 +1493,129 @@ class SeedDMS_Core_User {
 		return true;
 	} /* }}} */
 
-}
+	/**
+	 * Get all substitutes of the user
+	 *
+	 * These users are substitutes of the current user
+	 *
+	 * @return array list of users
+	 */
+	function getSubstitutes() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if (!isset($this->_substitutes)) {
+			$queryStr = "SELECT `tblUsers`.* FROM `tblUserSubstitutes` ".
+				"LEFT JOIN `tblUsers` ON `tblUserSubstitutes`.`substitute` = `tblUsers`.`id` ".
+				"WHERE `tblUserSubstitutes`.`user`='". $this->_id ."'";
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && $resArr == false)
+				return false;
+
+			$this->_substitutes = array();
+			$classname = $this->_dms->getClassname('user');
+			foreach ($resArr as $row) {
+				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row["hidden"], $row["disabled"], $row["pwdExpiration"], $row["loginfailures"], $row["quota"], $row["homefolder"]);
+				$user->setDMS($this->_dms);
+				array_push($this->_substitutes, $user);
+			}
+		}
+		return $this->_substitutes;
+	} /* }}} */
+
+	/**
+	 * Get all users this user is a substitute of
+	 *
+	 * @return array list of users
+	 */
+	function getReverseSubstitutes() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if (!isset($this->_substitutes))
+		{
+			$queryStr = "SELECT tblUsers`.* FROM `tblUserSubstitutes` ".
+				"LEFT JOIN `tblUsers` ON `tblUserSubstitutes`.`user` = `tblUsers`.`userID` ".
+				"WHERE `tblUserSubstitutes`.`substitute`='". $this->_id ."'";
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && $resArr == false)
+				return false;
+
+			$this->_substitutes = array();
+			$classname = $this->_dms->getClassname('user');
+			foreach ($resArr as $row) {
+				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row["hidden"], $row["disabled"], $row["pwdExpiration"], $row["loginfailures"], $row["quota"], $row["homefolder"]);
+				$user->setDMS($this->_dms);
+				array_push($this->_substitutes, $user);
+			}
+		}
+		return $this->_substitutes;
+	} /* }}} */
+
+	/**
+	 * Add a substitute to the user
+	 *
+	 * @return boolean true if successful otherwise false
+	 */
+	function addSubstitute($substitute) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(get_class($substitute) != $this->_dms->getClassname('user'))
+			return false;
+
+		$queryStr = "SELECT * FROM tblUserSubstitutes WHERE user=" . $this->_id . " AND substitute=".$substitute->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) == 1) return true;
+
+		$queryStr = "INSERT INTO tblUserSubstitutes (user, substitute) VALUES (" . $this->_id . ", ".$substitute->getID().")";
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_substitutes = null;
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove a substitute from the user
+	 *
+	 * @return boolean true if successful otherwise false
+	 */
+	function removeSubstitute($substitute) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(get_class($substitute) != $this->_dms->getClassname('user'))
+			return false;
+
+		$queryStr = "SELECT * FROM tblUserSubstitutes WHERE user=" . $this->_id . " AND substitute=".$substitute->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) == 0) return true;
+
+		$queryStr = "DELETE FROM tblUserSubstitutes WHERE user=" . $this->_id . " AND substitute=".$substitute->getID();
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_substitutes = null;
+		return true;
+	}
+
+	/**
+	 * Check if user is a substitute of the current user
+	 *
+	 * @return boolean true if successful otherwise false
+	 */
+	function isSubstitute($substitute) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(get_class($substitute) != $this->_dms->getClassname('user'))
+			return false;
+
+		$queryStr = "SELECT * FROM tblUserSubstitutes WHERE user=" . $this->_id . " AND substitute=".$substitute->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) == 1) return true;
+
+		return false;
+	} /* }}} */
+
+} /* }}} */
 ?>
