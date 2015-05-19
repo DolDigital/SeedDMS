@@ -131,6 +131,13 @@ class SeedDMS_Core_User { /* {{{ */
 	var $_substitutes;
 
 	/**
+	 * @var array reverse list of users this user can substitute
+	 *
+	 * @access protected
+	 */
+	var $_rev_substitutes;
+
+	/**
 	 * @var object reference to the dms instance this user belongs to
 	 *
 	 * @access protected
@@ -157,6 +164,8 @@ class SeedDMS_Core_User { /* {{{ */
 		$this->_loginFailures = $loginFailures;
 		$this->_quota = $quota;
 		$this->_homeFolder = $homeFolder;
+		$this->_substitutes = null;
+		$this->_rev_substitutes = null;
 		$this->_dms = null;
 	}
 
@@ -1530,24 +1539,28 @@ class SeedDMS_Core_User { /* {{{ */
 	function getReverseSubstitutes() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		if (!isset($this->_substitutes))
-		{
-			$queryStr = "SELECT tblUsers`.* FROM `tblUserSubstitutes` ".
-				"LEFT JOIN `tblUsers` ON `tblUserSubstitutes`.`user` = `tblUsers`.`userID` ".
+		if (!isset($this->_rev_substitutes)) {
+			$queryStr = "SELECT `tblUsers`.* FROM `tblUserSubstitutes` ".
+				"LEFT JOIN `tblUsers` ON `tblUserSubstitutes`.`user` = `tblUsers`.`id` ".
 				"WHERE `tblUserSubstitutes`.`substitute`='". $this->_id ."'";
+			/* None admins can only be substitutes for regular users, otherwise
+			 * regular users can become admin
+			 */
+			if(!$this->isAdmin())
+				$queryStr .= " AND `tblUsers`.`role` = ".SeedDMS_Core_User::role_user;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && $resArr == false)
 				return false;
 
-			$this->_substitutes = array();
+			$this->_rev_substitutes = array();
 			$classname = $this->_dms->getClassname('user');
 			foreach ($resArr as $row) {
 				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row["hidden"], $row["disabled"], $row["pwdExpiration"], $row["loginfailures"], $row["quota"], $row["homefolder"]);
 				$user->setDMS($this->_dms);
-				array_push($this->_substitutes, $user);
+				array_push($this->_rev_substitutes, $user);
 			}
 		}
-		return $this->_substitutes;
+		return $this->_rev_substitutes;
 	} /* }}} */
 
 	/**
@@ -1596,7 +1609,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 		$this->_substitutes = null;
 		return true;
-	}
+	} /* }}} */
 
 	/**
 	 * Check if user is a substitute of the current user
@@ -1610,6 +1623,34 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 
 		$queryStr = "SELECT * FROM tblUserSubstitutes WHERE user=" . $this->_id . " AND substitute=".$substitute->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) == 1) return true;
+
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if user may switch to the given user
+	 *
+	 * Switching to the given user is only allowed if the given user
+	 * is a substitute for the current user.
+	 *
+	 * @return boolean true if successful otherwise false
+	 */
+	function maySwitchToUser($touser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(get_class($touser) != $this->_dms->getClassname('user'))
+			return false;
+
+		/* switching to an admin account is always forbitten, unless the
+		 * current user is admin itself
+		 */
+		if(!$this->isAdmin() && $touser->isAdmin())
+			return false;
+
+		$queryStr = "SELECT * FROM tblUserSubstitutes WHERE substitute=" . $this->_id . " AND user=".$touser->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false) return false;
 		if (count($resArr) == 1) return true;
