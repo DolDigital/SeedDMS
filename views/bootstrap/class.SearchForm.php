@@ -139,6 +139,7 @@ function checkForm()
 <?php } ?>
 <label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1"><?php printOverallStatusText(S_RELEASED);?></label>
 <label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1"><?php printOverallStatusText(S_REJECTED);?></label>
+<label class="checkbox" for='inrevision'><input type="checkbox" id="inrevision" name="inrevision" value="1"><?php printOverallStatusText(S_IN_REVISION);?></label>
 <label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1"><?php printOverallStatusText(S_OBSOLETE);?></label>
 <label class="checkbox" for='expired'><input type="checkbox" id="expired" name="expired" value="1"><?php printOverallStatusText(S_EXPIRED);?></label>
 </td>

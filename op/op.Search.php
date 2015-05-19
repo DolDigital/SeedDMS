@@ -329,6 +329,9 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	if (isset($_GET["rejected"])){
 		$status[] = S_REJECTED;
 	}
+	if (isset($_GET["inrevision"])){
+		$status[] = S_IN_REVISION;
+	}
 	if (isset($_GET["obsolete"])){
 		$status[] = S_OBSOLETE;
 	}
