@@ -541,10 +541,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-align-justify\"></i>".getMLText("change_status")."</a></li>";
 		}
 		if($accessop->maySetRecipients()) {
-			print "<li><a href='../out/out.SetRecipients.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-edit\"></i>".getMLText("change_recipients")."</a></li>";
+			print "<li><a href='../out/out.SetRecipients.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-check\"></i>".getMLText("change_recipients")."</a></li>";
 		}
 		if($accessop->maySetRevisors()) {
-			print "<li><a href='../out/out.SetRevisors.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-edit\"></i>".getMLText("change_revisors")."</a></li>";
+			print "<li><a href='../out/out.SetRevisors.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-refresh\"></i>".getMLText("change_revisors")."</a></li>";
 		}
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 			// Allow changing reviewers/approvals only if not reviewed
@@ -564,7 +564,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		 */
 		if($dms->getAllTransmittals($user)) {
-			print "<li><a href=\"out.AddToTransmittal.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("add_to_transmittal")."</a></li>";
+			print "<li><a href=\"out.AddToTransmittal.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-list\"></i>".getMLText("add_to_transmittal")."</a></li>";
 		}
 		if($accessop->mayEditComment()) {
 			print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
