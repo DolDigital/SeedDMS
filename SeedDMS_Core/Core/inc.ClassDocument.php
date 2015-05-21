@@ -1497,6 +1497,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
+		$docResultSet->setDMS($this->_dms);
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
@@ -1688,7 +1689,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 			$this->_content = array();
 			foreach ($resArr as $row)
-				array_push($this->_content, new SeedDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum'], $row['reviѕiondate']));
+				array_push($this->_content, new SeedDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum'], $row['revisiondate']));
 		}
 
 		return $this->_content;
@@ -5136,6 +5137,11 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	protected $_content;
 	protected $_status;
 
+	/**
+	 * @var object back reference to document management system
+	 */
+	protected $_dms;
+
 	function SeedDMS_Core_AddContentResultSet($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
@@ -5143,6 +5149,21 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		$this->_indApprovers = null;
 		$this->_grpApprovers = null;
 		$this->_status = null;
+		$this->_dms = null;
+	} /* }}} */
+
+	/*
+	 * Set dms this object belongs to.
+	 *
+	 * Each object needs a reference to the dms it belongs to. It will be
+	 * set when the object is created.
+	 * The dms has a references to the currently logged in user
+	 * and the database connection.
+	 *
+	 * @param object $dms reference to dms
+	 */
+	function setDMS($dms) { /* {{{ */
+		$this->_dms = $dms;
 	} /* }}} */
 
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
