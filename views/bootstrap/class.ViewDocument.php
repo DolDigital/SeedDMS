@@ -120,7 +120,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		<legend><?php printMLText($type.'_log'); ?></legend>
 		<table class="table condensed">
-			<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
+			<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>, <?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
 <?php
 		switch($type) {
 		case "review":
