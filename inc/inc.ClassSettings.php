@@ -83,6 +83,8 @@ class Settings { /* {{{ */
 	var $_luceneDir = null;
 	// Where the drop folders are located
 	var $_dropFolderDir = null;
+	// Where the library folder is located
+	var $_libraryFolder = 1;
 	// Where the checked out files are located
 	var $_checkOutDir = null;
 	// Create checkout dir if it doesn't exists
@@ -358,6 +360,7 @@ class Settings { /* {{{ */
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
+		$this->_libraryFolder = intval($tab["libraryFolder"]);
 
 		// XML Path: /configuration/site/calendar
 		$node = $xml->xpath('/configuration/site/calendar');
@@ -645,6 +648,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
     $this->setXMLAttributValue($node, "sortFoldersDefault", $this->_sortFoldersDefault);
+    $this->setXMLAttributValue($node, "libraryFolder", $this->_libraryFolder);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');

@@ -220,6 +220,10 @@ if(!is_writeable($settings->_configFilePath)) {
             <OPTION VALUE="n" <?php if ($settings->_sortFoldersDefault=='n') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_name");?></OPTION>
           </SELECT>
       </tr>
+      <tr title="<?php printMLText("settings_libraryFolder_desc");?>">
+        <td><?php printMLText("settings_libraryFolder");?>:</td>
+				<td><?php $this->printFolderChooser("form1", M_READWRITE, -1, $dms->getFolder($settings->_libraryFolder), 'libraryFolder');?></td>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - CALENDAR
