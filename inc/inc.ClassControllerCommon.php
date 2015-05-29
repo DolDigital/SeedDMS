@@ -115,6 +115,7 @@ class SeedDMS_Controller_Common {
 	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])])) {
+			$result = null;
 			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					switch(func_num_args()) {
@@ -130,7 +131,7 @@ class SeedDMS_Controller_Common {
 					}
 				}
 			}
-			return true;
+			return $result;
 		}
 		return null;
 	} /* }}} */
