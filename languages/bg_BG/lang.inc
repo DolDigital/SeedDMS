@@ -218,6 +218,7 @@ $text = array(
 'confirm_update_transmittalitem' => '',
 'content' => 'Съдържание',
 'continue' => 'Продължи',
+'copied_to_checkout_as' => '',
 'create_fulltext_index' => 'Създай пълнотекстов индекс',
 'create_fulltext_index_warning' => 'Вие искате да пресъздадете пълнотекстов индекс. Това ще отнеме време и ще понижи производителността. Да продолжа ли?',
 'creation_date' => 'Създаден',

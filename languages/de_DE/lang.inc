@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2049), dgrutsch (18)
+//    Translators: Admin (2051), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -194,7 +194,7 @@ URL: [url]',
 'change_password' => 'Passwort ändern',
 'change_password_message' => 'Ihr Passwort wurde geändert.',
 'change_recipients' => 'Empfängerliste ändern',
-'change_revisors' => 'Wiedervorlage ändern',
+'change_revisors' => 'Wiederholungsprüfung ändern',
 'change_status' => 'Status ändern',
 'charts' => 'Diagramme',
 'chart_docsaccumulated_title' => 'Anzahl Dokumente',
@@ -245,6 +245,7 @@ URL: [url]',
 'confirm_update_transmittalitem' => 'Aktualisierung bestätigen',
 'content' => 'Inhalt',
 'continue' => 'fortführen',
+'copied_to_checkout_as' => 'Datei in den Checkout-Space als \'[filename]\' kopiert.',
 'create_fulltext_index' => 'Erzeuge Volltextindex',
 'create_fulltext_index_warning' => 'Sie möchten den Volltextindex neu erzeugen. Dies kann beträchtlich Zeit in Anspruch nehmen und Gesamtleistung Ihres System beeinträchtigen. Bestätigen Sie bitte diese Operation.',
 'creation_date' => 'Erstellt am',

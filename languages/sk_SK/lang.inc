@@ -218,6 +218,7 @@ $text = array(
 'confirm_update_transmittalitem' => '',
 'content' => 'Obsah',
 'continue' => 'Pokračovať',
+'copied_to_checkout_as' => '',
 'create_fulltext_index' => '',
 'create_fulltext_index_warning' => '',
 'creation_date' => 'Vytvorené',

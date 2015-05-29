@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1250)
+//    Translators: Admin (1251)
 
 $text = array(
 'accept' => 'Принять',
@@ -158,7 +158,7 @@ URL: [url]',
 'backup_remove' => 'Удалить резервную копию',
 'backup_tools' => 'Резервные копии',
 'between' => 'между',
-'bg_BG' => '',
+'bg_BG' => 'Болгарский',
 'browse' => 'Выбрать',
 'calendar' => 'Календарь',
 'calendar_week' => 'Неделя',
@@ -233,6 +233,7 @@ URL: [url]',
 'confirm_update_transmittalitem' => '',
 'content' => 'Содержимое',
 'continue' => 'Продолжить',
+'copied_to_checkout_as' => '',
 'create_fulltext_index' => 'Создать полнотекстовый индекс',
 'create_fulltext_index_warning' => 'Вы хотите пересоздать полнотекстовый индекс. Это займёт какое-то время и снизит производительность. Продолжить?',
 'creation_date' => 'Создан',
