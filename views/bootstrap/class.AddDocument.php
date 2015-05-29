@@ -41,6 +41,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$enableselfrevapp = $this->params['enableselfrevapp'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$libraryfolder = $this->params['libraryfolder'];
 		$workflowmode = $this->params['workflowmode'];
 		$presetexpiration = $this->params['presetexpiration'];
 		$sortusersinlist = $this->params['sortusersinlist'];
@@ -213,6 +214,12 @@ $(document).ready(function() {
 		<tr>
 			<td><?php printMLText("dropfolder_file");?>:</td>
 			<td><?php $this->printDropFolderChooser("form1");?></td>
+		</tr>
+<?php } ?>
+<?php if($libraryfolder) { ?>
+		<tr>
+			<td><?php printMLText("librarydoc");?>:</td>
+			<td><?php $this->printDocumentChooser("form1", M_READ, -1, null, 'librarydoc', $libraryfolder, 1);?></td>
 		</tr>
 <?php } ?>
 		<tr>
