@@ -36,10 +36,11 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$form = $this->params['form'];
+		$partialtree = $this->params['partialtree'];
 
 		$this->htmlStartPage(getMLText("choose_target_document"));
 		$this->contentContainerStart();
-		$this->printNewTreeNavigation($folder->getID(), M_READ, 1, $form);
+		$this->printNewTreeNavigation($folder->getID(), M_READ, 1, $form, 0, '', $partialtree);
 		$this->contentContainerEnd();
 		echo "</body>\n</html>\n";
 	} /* }}} */

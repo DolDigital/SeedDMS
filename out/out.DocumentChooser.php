@@ -29,10 +29,15 @@ include("../inc/inc.Authentication.php");
 $folderid = intval($_GET["folderid"]);
 $form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 
+if(isset($_GET['partialtree'])) {
+	$partialtree = intval($_GET['partialtree']);
+} else {
+	$partialtree = 0;
+}
 $folder = $dms->getFolder($folderid);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'form'=>$form));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'form'=>$form, 'partialtree'=>$partialtree));
 if($view) {
 	$view->show();
 	exit;
