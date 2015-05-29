@@ -84,6 +84,7 @@ if($view) {
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('checkOutDir', $settings->_checkOutDir);
 	$view->show();
 	exit;
 }
