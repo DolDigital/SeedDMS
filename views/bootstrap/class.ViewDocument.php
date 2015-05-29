@@ -210,6 +210,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$checkoutdir = $this->params['checkOutDir'];
 		$documentid = $document->getId();
 
 		$versions = $document->getContent();
@@ -272,6 +273,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <div class="span3">
 <?php
 		$this->contentHeading(getMLText("document_infos"));
+		if($document->isCheckedOut()) {
+			echo "<div class=\"alert alert-info\">";
+			$checkoutpath = sprintf($checkoutdir, preg_replace('/[^A-Za-z0-9_-]/', '', $user->getLogin()));
+			echo "<a href=\"file://".$checkoutpath.urldecode($latestContent->getOriginalFileName())."\">".getMLText('copied_to_checkout_as', array('filename'=>$latestContent->getOriginalFileName()))."</a>";
+			echo "</div>";
+		}
 		$this->contentContainerStart();
 		$txt = $this->callHook('documentInfos', $document);
 		if(is_string($txt))
@@ -501,7 +508,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$attributes = $latestContent->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
-				$arr = $this->callHook('showDocumentContentAttribute', $latestcontent, $attribute);
+				$arr = $this->callHook('showDocumentContentAttribute', $latestContent, $attribute);
 				if(is_array($arr)) {
 					print "<li>".$arr[0].": ".$arr[1]."</li>\n";
 				} else {
