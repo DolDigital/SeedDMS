@@ -903,14 +903,21 @@ $(document).ready(function () {
 		print "</select>";
 	} /* }}} */
 	
-	function printDocumentChooser($formName) { /* {{{ */
-		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
+	function printDocumentChooser($form, $accessMode=M_READ, $exclude = -1, $default = false, $formname = '', $folder='', $partialtree=0) { /* {{{ */
+		$formid = "docid".$form;
+		if(!$formname)
+			$formname = "docid";
+		if(!$folder)
+			$folderid = $this->params['rootfolderid'];
+		else
+			$folderid = $folder->getID();
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#docChooser".$formName."\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$form."\" data-provide=\"typeahead\" name=\"docname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<a data-target=\"#docChooser".$form."\" href=\"out.DocumentChooser.php?form=".$form."&folderid=".$folderid."&partialtree=".$partialtree."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+<div class="modal hide" id="docChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
@@ -923,13 +930,13 @@ $(document).ready(function () {
   </div>
 </div>
 		<script language="JavaScript">
-modalDocChooser<?php echo $formName ?> = $('#docChooser<?php echo $formName ?>');
-function documentSelected<?php echo $formName ?>(id, name) {
-	$('#docid<?php echo $formName ?>').val(id);
+modalDocChooser<?php echo $form ?> = $('#docChooser<?php echo $form ?>');
+function documentSelected<?php echo $form ?>(id, name) {
+	$('#docid<?php echo $form ?>').val(id);
 	$('#choosedocsearch').val(name);
-	modalDocChooser<?php echo $formName ?>.modal('hide');
+	modalDocChooser<?php echo $form ?>.modal('hide');
 }
-function folderSelected<?php echo $formName ?>(id, name) {
+function folderSelected<?php echo $form ?>(id, name) {
 }
 		</script>
 <?php
@@ -1182,7 +1189,7 @@ function clearFilename<?php print $formName ?>() {
 	 * @param boolean $showdocs set to true if tree shall contain documents
 	 *   as well.
 	 */
-	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='', $partialtree=false) { /* {{{ */
 		function jqtree($path, $folder, $user, $accessmode, $showdocs=1, $expandtree=0, $orderby='') {
 			if($path || $expandtree) {
 				if($path)
@@ -1222,11 +1229,21 @@ function clearFilename<?php print $formName ?>() {
 		if($folderid) {
 			$folder = $this->params['dms']->getFolder($folderid);
 			$path = $folder->getPath();
-			$folder = array_shift($path);
+			if(!$partialtree) {
+				$folder = array_shift($path);
+			}
 			$node = array('label'=>$folder->getName(), 'id'=>$folder->getID(), 'load_on_demand'=>true, 'is_folder'=>true);
 			if(!$folder->hasSubFolders()) {
 				$node['load_on_demand'] = false;
 				$node['children'] = array();
+				if($showdocs) {
+					$documents = $folder->getDocuments($orderby);
+					$documents = SeedDMS_Core_DMS::filterAccess($documents, $this->params['user'], $accessmode);
+					foreach($documents as $document) {
+						$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
+						$node['children'][] = $node2;
+					}
+				}
 			} else {
 				$node['children'] = jqtree($path, $folder, $this->params['user'], $accessmode, $showdocs, $expandtree, $orderby);
 			}
