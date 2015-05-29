@@ -28,6 +28,10 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('adddocument')) {
@@ -65,6 +69,13 @@ if($version_comment == "" && isset($_POST["use_comment"]))
 
 $keywords = $_POST["keywords"];
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
+$cats = array();
+if($categories) {
+	foreach($categories as $catid) {
+		$cats[] = $dms->getDocumentCategory($catid);
+	}
+}
+
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
@@ -217,10 +228,13 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 	}
 }
 
+$docsource = 'upload';
+
 if($settings->_dropFolderDir) {
 	if(isset($_POST["dropfolderfileform1"]) && $_POST["dropfolderfileform1"]) {
 		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
 		if(file_exists($fullfile)) {
+			$docsource = 'dropfolder';
 			/* Check if a local file is uploaded as well */
 			if(isset($_FILES["userfile"]['error'][0])) {
 				if($_FILES["userfile"]['error'][0] != 0)
@@ -233,6 +247,64 @@ if($settings->_dropFolderDir) {
 			$_FILES["userfile"]['name'][] = $_POST["dropfolderfileform1"];
 			$_FILES["userfile"]['size'][] = filesize($fullfile);
 			$_FILES["userfile"]['error'][] = 0;
+		}
+	}
+}
+
+if($settings->_libraryFolder) {
+	if(isset($_POST["librarydoc"]) && $_POST["librarydoc"]) {
+		if($clonedoc = $dms->getDocument($_POST["librarydoc"])) {
+			if($content = $clonedoc->getLatestContent()) {
+				$docsource = 'library';
+				$fullfile = tempnam('', '');
+				if(SeedDMS_Core_File::copyFile($dms->contentDir . $content->getPath(), $fullfile)) {
+					/* Check if a local file is uploaded as well */
+					if(isset($_FILES["userfile"]['error'][0])) {
+						if($_FILES["userfile"]['error'][0] != 0)
+							$_FILES["userfile"] = array();
+					}
+					$_FILES["userfile"]['tmp_name'][] = $fullfile;
+					$_FILES["userfile"]['type'][] = $content->getMimeType();
+					$_FILES["userfile"]['name'][] = $content->getOriginalFileName();
+					$_FILES["userfile"]['size'][] = $content->getFileSize();
+					$_FILES["userfile"]['error'][] = 0;
+				}
+			}
+		}
+	}
+}
+
+$index = null;
+if($settings->_enableFullSearch) {
+	if(!empty($settings->_luceneClassDir))
+		require_once($settings->_luceneClassDir.'/Lucene.php');
+	else
+		require_once('SeedDMS/Lucene.php');
+
+	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+	if($index) {
+		SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+	}
+}
+
+/* Check if additional notification shall be added */
+$notusers = array();
+if(!empty($_POST['notification_users'])) {
+	foreach($_POST['notification_users'] as $notuserid) {
+		$notuser = $dms->getUser($notuserid);
+		if($notuser) {
+			if($document->getAccessMode($user) >= M_READ)
+				$notusers[] = $notuser;
+		}
+	}
+}
+$notgroups = array();
+if(!empty($_POST['notification_groups'])) {
+	foreach($_POST['notification_groups'] as $notgroupid) {
+		$notgroup = $dms->getGroup($notgroupid);
+		if($notgroup) {
+			if($document->getGroupAccessMode($notgroup) >= M_READ)
+				$notgroups[] = $notgroup;
 		}
 	}
 }
@@ -265,75 +337,32 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		}
 	}
 
-	$cats = array();
-	if($categories) {
-		foreach($categories as $catid) {
-			$cats[] = $dms->getDocumentCategory($catid);
-		}
-	}
+	$controller->setParam('documentsource', $docsource);
+	$controller->setParam('folder', $folder);
+	$controller->setParam('index', $index);
+	$controller->setParam('name', $name);
+	$controller->setParam('comment', $comment);
+	$controller->setParam('expires', $expires);
+	$controller->setParam('keywords', $keywords);
+	$controller->setParam('categories', $cats);
+	$controller->setParam('userfiletmp', $userfiletmp);
+	$controller->setParam('userfilename', $userfilename);
+	$controller->setParam('filetype', $fileType);
+	$controller->setParam('userfiletype', $userfiletype);
+	$controller->setParam('sequence', $sequence);
+	$controller->setParam('reviewers', $reviewers);
+	$controller->setParam('approvers', $approvers);
+	$controller->setParam('reqversion', $reqversion);
+	$controller->setParam('versioncomment', $version_comment);
+	$controller->setParam('attributes', $attributes);
+	$controller->setParam('attributesversion', $attributes_version);
+	$controller->setParam('workflow', $workflow);
+	$controller->setParam('notificationgroups', $notgroups);
+	$controller->setParam('notificationusers', $notusers);
 
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-			if (method_exists($hookObj, 'pretAddDocument')) {
-				$hookObj->preAddDocument(array('name'=>&$name, 'comment'=>&$comment));
-			}
-		}
-	}
-
-	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
-															$cats, $userfiletmp, basename($userfilename),
-	                            $fileType, $userfiletype, $sequence,
-	                            $reviewers, $approvers, $reqversion,
-	                            $version_comment, $attributes, $attributes_version, $workflow);
-
-	if (is_bool($res) && !$res) {
-		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	if(!$document = $controller->run()) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText($controller->getErrorMsg()));
 	} else {
-		$document = $res[0];
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-				if (method_exists($hookObj, 'postAddDocument')) {
-					$hookObj->postAddDocument($document);
-				}
-			}
-		}
-		if($settings->_enableFullSearch) {
-			if(!empty($settings->_luceneClassDir))
-				require_once($settings->_luceneClassDir.'/Lucene.php');
-			else
-				require_once('SeedDMS/Lucene.php');
-
-			$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
-			if($index) {
-				SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
-			}
-		}
-
-		/* Add a default notification for the owner of the document */
-		if($settings->_enableOwnerNotification) {
-			$res = $document->addNotify($user->getID(), true);
-		}
-		/* Check if additional notification shall be added */
-		if(!empty($_POST['notification_users'])) {
-			foreach($_POST['notification_users'] as $notuserid) {
-				$notuser = $dms->getUser($notuserid);
-				if($notuser) {
-					if($document->getAccessMode($user) >= M_READ)
-						$res = $document->addNotify($notuserid, true);
-				}
-			}
-		}
-		if(!empty($_POST['notification_groups'])) {
-			foreach($_POST['notification_groups'] as $notgroupid) {
-				$notgroup = $dms->getGroup($notgroupid);
-				if($notgroup) {
-					if($document->getGroupAccessMode($notgroup) >= M_READ)
-						$res = $document->addNotify($notgroupid, false);
-				}
-			}
-		}
-
 		// Send notification to subscribers of folder.
 		if($notifier) {
 			$notifyList = $folder->getNotifyList();
