@@ -74,6 +74,7 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+$olddocstatus = $content->getStatus();
 // verify if document has expired
 if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -83,6 +84,7 @@ if (!isset($_POST["approvalStatus"]) || !is_numeric($_POST["approvalStatus"]) ||
 		(intval($_POST["approvalStatus"])!=1 && intval($_POST["approvalStatus"])!=-1)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_approval_status"));
 }
+
 
 $controller->setParam('document', $document);
 $controller->setParam('content', $latestContent);
@@ -99,20 +101,39 @@ if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
 }
 
-/*
-if ($_POST["approvalType"] == "ind") {
-	$comment = $_POST["comment"];
-	if(0 > $latestContent->setApprovalByInd($user, $user, $_POST["approvalStatus"], $comment)) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));
+//
+// Check to see if the overall status for the document version needs to be
+// updated.
+//
+
+/* If document was rejected, set the document status to S_REJECTED right away */
+if ($_POST["approvalStatus"]==-1){
+	if($content->setStatus(S_REJECTED,$comment,$user)) {
 	}
-} elseif ($_POST["approvalType"] == "grp") {
-	$comment = $_POST["comment"];
-	$group = $dms->getGroup($_POST['approvalGroup']);
-	if(0 > $latestContent->setApprovalByGrp($group, $user, $_POST["approvalStatus"], $comment)) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));
+} else {
+	$docApprovalStatus = $content->getApprovalStatus();
+	if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
+	}
+	$approvalCT = 0;
+	$approvalTotal = 0;
+	foreach ($docApprovalStatus as $drstat) {
+		if ($drstat["status"] == 1) {
+			$approvalCT++;
+		}
+		if ($drstat["status"] != -2) {
+			$approvalTotal++;
+		}
+	}
+	// If all approvals have been received and there are no rejections, retrieve a
+	// count of the approvals required for this document.
+	if ($approvalCT == $approvalTotal) {
+		// Change the status to released.
+		$newStatus=S_RELEASED;
+		if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
+		}
 	}
 }
- */
 
 if ($_POST["approvalType"] == "ind" || $_POST["approvalType"] == "grp") {
 	// Send an email notification to the document updater.
@@ -141,44 +162,9 @@ if ($_POST["approvalType"] == "ind" || $_POST["approvalType"] == "grp") {
 	}
 }
 
-//
-// Check to see if the overall status for the document version needs to be
-// updated.
-//
-
-$sendnotification = false;
-/* If document was rejected, set the document status to S_REJECTED right away */
-if ($_POST["approvalStatus"]==-1){
-	if($content->setStatus(S_REJECTED,$comment,$user)) {
-		$sendnotification = true;
-	}
-} else {
-	$docApprovalStatus = $content->getApprovalStatus();
-	if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
-	}
-	$approvalCT = 0;
-	$approvalTotal = 0;
-	foreach ($docApprovalStatus as $drstat) {
-		if ($drstat["status"] == 1) {
-			$approvalCT++;
-		}
-		if ($drstat["status"] != -2) {
-			$approvalTotal++;
-		}
-	}
-	// If all approvals have been received and there are no rejections, retrieve a
-	// count of the approvals required for this document.
-	if ($approvalCT == $approvalTotal) {
-		// Change the status to released.
-		$newStatus=S_RELEASED;
-		if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
-			$sendnotification = true;
-		}
-	}
-}
-
-if($sendnotification) {
+/* Send notification about status change only if status has actually changed */
+$newdocstatus = $content->getStatus();
+if($olddocstatus['status'] != $newdocstatus['status']) {
 	// Send notification to subscribers.
 	if($notifier) {
 		$nl=$document->getNotifyList();
