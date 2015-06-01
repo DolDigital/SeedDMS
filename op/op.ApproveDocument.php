@@ -51,7 +51,6 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -85,7 +84,6 @@ if (!isset($_POST["approvalStatus"]) || !is_numeric($_POST["approvalStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_approval_status"));
 }
 
-
 $controller->setParam('document', $document);
 $controller->setParam('content', $latestContent);
 $controller->setParam('approvalstatus', $_POST["approvalStatus"]);
@@ -99,40 +97,6 @@ $controller->setParam('group', $group);
 $controller->setParam('comment', $_POST["comment"]);
 if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
-}
-
-//
-// Check to see if the overall status for the document version needs to be
-// updated.
-//
-
-/* If document was rejected, set the document status to S_REJECTED right away */
-if ($_POST["approvalStatus"]==-1){
-	if($content->setStatus(S_REJECTED,$comment,$user)) {
-	}
-} else {
-	$docApprovalStatus = $content->getApprovalStatus();
-	if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
-	}
-	$approvalCT = 0;
-	$approvalTotal = 0;
-	foreach ($docApprovalStatus as $drstat) {
-		if ($drstat["status"] == 1) {
-			$approvalCT++;
-		}
-		if ($drstat["status"] != -2) {
-			$approvalTotal++;
-		}
-	}
-	// If all approvals have been received and there are no rejections, retrieve a
-	// count of the approvals required for this document.
-	if ($approvalCT == $approvalTotal) {
-		// Change the status to released.
-		$newStatus=S_RELEASED;
-		if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
-		}
-	}
 }
 
 if ($_POST["approvalType"] == "ind" || $_POST["approvalType"] == "grp") {

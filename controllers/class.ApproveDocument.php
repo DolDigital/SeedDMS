@@ -55,8 +55,46 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 					return false;
 				}
 			}
-			if(!$this->callHook('postApproveDocument', $document)) {
+		}
+
+		/* Check to see if the overall status for the document version needs to be
+		 * updated.
+		 */
+		$result = $this->callHook('approveUpdateDocumentStatus', $document);
+		if($result === null) {
+			/* If document was rejected, set the document status to S_REJECTED right away */
+			if ($approvalstatus == -1){
+				if($content->setStatus(S_REJECTED,$comment,$user)) {
+				}
+			} else {
+				$docApprovalStatus = $content->getApprovalStatus();
+				if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
+					$this->error = 1;
+					$this->errormsg = "cannot_retrieve_approval_snapshot";
+					return false;
+				}
+				$approvalCT = 0;
+				$approvalTotal = 0;
+				foreach ($docApprovalStatus as $drstat) {
+					if ($drstat["status"] == 1) {
+						$approvalCT++;
+					}
+					if ($drstat["status"] != -2) {
+						$approvalTotal++;
+					}
+				}
+				// If all approvals have been received and there are no rejections, retrieve a
+				// count of the approvals required for this document.
+				if ($approvalCT == $approvalTotal) {
+					// Change the status to released.
+					$newStatus=S_RELEASED;
+					if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
+					}
+				}
 			}
+		}
+
+		if(!$this->callHook('postApproveDocument', $document)) {
 		}
 
 		return true;
