@@ -2514,7 +2514,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$queryStr = "UPDATE tblDocumentContent SET revisiondate = CURRENT_TIMESTAMP WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		else
 			$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->qstr($date)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
-		echo $queryStr;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -2675,8 +2674,10 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * then its status is set to S_RELEASED immediately. Any change of
 	 * the status is monitored in the table tblDocumentStatusLog. This
 	 * function will always return the latest entry for the content.
+	 *
+	 * @return array latest record from tblDocumentStatusLog
 	 */
-	function getStatus($limit=1) { /* {{{ */
+	function getStatus() { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		if (!is_numeric($limit)) return false;
@@ -2684,20 +2685,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		// Retrieve the current overall status of the content represented by
 		// this object.
 		if (!isset($this->_status)) {
-		/*
-			if (!$db->createTemporaryTable("ttstatid", $forceTemporaryTable)) {
-				return false;
-			}
-			$queryStr="SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
-				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
-				"`tblDocumentStatusLog`.`userID` ".
-				"FROM `tblDocumentStatus` ".
-				"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
-				"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-				"AND `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ";
-		*/
 			$queryStr=
 				"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
@@ -2706,7 +2693,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
 				"WHERE `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
 				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ".
-				"ORDER BY `tblDocumentStatusLog`.`statusLogID` DESC LIMIT ".(int) $limit;
+				"ORDER BY `tblDocumentStatusLog`.`statusLogID` DESC LIMIT 1";
 
 			$res = $db->getResultArray($queryStr);
 			if (is_bool($res) && !$res)
