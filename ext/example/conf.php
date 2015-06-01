@@ -2,7 +2,7 @@
 $EXT_CONF['example'] = array(
 	'title' => 'Example Extension',
 	'description' => 'This sample extension demonstrate the use of various hooks',
-	'disable' => false,
+	'disable' => true,
 	'version' => '1.0.0',
 	'releasedate' => '2013-05-03',
 	'author' => array('name'=>'Uwe Steinmann', 'email'=>'uwe@steinmann.cx', 'company'=>'MMK GmbH'),
