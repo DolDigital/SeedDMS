@@ -3820,7 +3820,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$indstatus = array_pop($revisionStatus[$field]);
 
 		/* check if revision workflow has been started already */
-		if($indstatusi['status'] == S_LOG_SLEEPING && ($status == S_LOG_REJECTED || $status == S_LOG_ACCEPTED))
+		if($indstatus['status'] == S_LOG_SLEEPING && ($status == S_LOG_REJECTED || $status == S_LOG_ACCEPTED))
 			return -5;
 
 		if ($indstatus["status"] == -2) {
