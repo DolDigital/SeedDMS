@@ -248,7 +248,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			if(is_string($txt))
 				echo $txt;
 			else {
-				print "<table id=\"viewfolder-table\" class=\"table\">";
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
 				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
