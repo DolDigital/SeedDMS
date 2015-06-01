@@ -37,10 +37,10 @@ class SeedDMS_Controller_ReceiptDocument extends SeedDMS_Controller_Common {
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
-		if(!$this->callHook('preReceiptDocument', $document)) {
+		if(!$this->callHook('preReceiptDocument', $content)) {
 		}
 
-		$result = $this->callHook('receiptDocument', $document);
+		$result = $this->callHook('receiptDocument', $content);
 		if($result === null) {
 
 			if ($receipttype == "ind") {
@@ -58,7 +58,7 @@ class SeedDMS_Controller_ReceiptDocument extends SeedDMS_Controller_Common {
 			}
 		}
 
-		if(!$this->callHook('postReceiptDocument', $document)) {
+		if(!$this->callHook('postReceiptDocument', $content)) {
 		}
 
 		return true;

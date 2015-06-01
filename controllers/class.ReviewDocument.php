@@ -37,10 +37,10 @@ class SeedDMS_Controller_ReviewDocument extends SeedDMS_Controller_Common {
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
-		if(!$this->callHook('preReviewDocument', $document)) {
+		if(!$this->callHook('preReviewDocument', $content)) {
 		}
 
-		$result = $this->callHook('reviewDocument', $document);
+		$result = $this->callHook('reviewDocument', $content);
 		if($result === null) {
 
 			if ($reviewtype == "ind") {
@@ -61,7 +61,7 @@ class SeedDMS_Controller_ReviewDocument extends SeedDMS_Controller_Common {
 		/* Check to see if the overall status for the document version needs to be
 		 * updated.
 		 */
-		$result = $this->callHook('reviewUpdateDocumentStatus', $document);
+		$result = $this->callHook('reviewUpdateDocumentStatus', $content);
 		if($result === null) {
 			if ($reviewstatus == -1){
 				if($content->setStatus(S_REJECTED,$comment,$user)) {
@@ -119,7 +119,7 @@ class SeedDMS_Controller_ReviewDocument extends SeedDMS_Controller_Common {
 			}
 		}
 
-		if(!$this->callHook('postReviewDocument', $document)) {
+		if(!$this->callHook('postReviewDocument', $content)) {
 		}
 
 		return true;

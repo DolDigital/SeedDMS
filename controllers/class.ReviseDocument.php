@@ -37,10 +37,10 @@ class SeedDMS_Controller_ReviseDocument extends SeedDMS_Controller_Common {
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
-		if(!$this->callHook('preReviseDocument', $document)) {
+		if(!$this->callHook('preReviseDocument', $content)) {
 		}
 
-		$result = $this->callHook('reviseDocument', $document);
+		$result = $this->callHook('reviseDocument', $content);
 		if($result === null) {
 
 			if ($revisiontype == "ind") {
@@ -61,7 +61,7 @@ class SeedDMS_Controller_ReviseDocument extends SeedDMS_Controller_Common {
 		/* Check to see if the overall status for the document version needs to be
 		 * updated.
 		 */
-		$result = $this->callHook('reviseUpdateDocumentStatus', $document);
+		$result = $this->callHook('reviseUpdateDocumentStatus', $content);
 		if($result === null) {
 			if ($revisionstatus == -1){
 				if($content->setStatus(S_REJECTED,$comment,$user)) {
@@ -103,7 +103,7 @@ class SeedDMS_Controller_ReviseDocument extends SeedDMS_Controller_Common {
 			}
 		}
 
-		if(!$this->callHook('postReviseDocument', $document)) {
+		if(!$this->callHook('postReviseDocument', $content)) {
 		}
 
 		return true;

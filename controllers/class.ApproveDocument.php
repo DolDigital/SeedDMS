@@ -37,10 +37,10 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
-		if(!$this->callHook('preApproveDocument', $document)) {
+		if(!$this->callHook('preApproveDocument', $content)) {
 		}
 
-		$result = $this->callHook('approveDocument', $document);
+		$result = $this->callHook('approveDocument', $content);
 		if($result === null) {
 			if ($approvaltype == "ind") {
 				if(0 > $content->setApprovalByInd($user, $user, $approvalstatus, $comment)) {
@@ -60,7 +60,7 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 		/* Check to see if the overall status for the document version needs to be
 		 * updated.
 		 */
-		$result = $this->callHook('approveUpdateDocumentStatus', $document);
+		$result = $this->callHook('approveUpdateDocumentStatus', $content);
 		if($result === null) {
 			/* If document was rejected, set the document status to S_REJECTED right away */
 			if ($approvalstatus == -1){
@@ -94,7 +94,7 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 			}
 		}
 
-		if(!$this->callHook('postApproveDocument', $document)) {
+		if(!$this->callHook('postApproveDocument', $content)) {
 		}
 
 		return true;
