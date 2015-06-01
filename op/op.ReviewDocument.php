@@ -110,6 +110,7 @@ if ($_POST["reviewType"] == "ind" || $_POST["reviewType"] == "grp") {
 		$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
 		$params['comment'] = strip_tags($_POST['comment']);
 		$params['username'] = $user->getFullName();
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;
 		$notifier->toList($user, $nl["users"], $subject, $message, $params);
@@ -133,6 +134,7 @@ if($olddocstatus['status'] != $newdocstatus['status']) {
 		$params['folder_path'] = $folder->getFolderPathPlain();
 		$params['status'] = getReviewStatusText(S_REJECTED);
 		$params['username'] = $user->getFullName();
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;
 		$notifier->toList($user, $nl["users"], $subject, $message, $params);
