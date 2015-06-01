@@ -114,23 +114,6 @@ class SeedDMS_Email extends SeedDMS_Notify {
 			return true;
 		}
 
-/*
-		$headers   = array();
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/plain; charset=utf-8";
-		//$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
-		$headers[] = "From: ". $settings->_smtpSendFrom;
-		$headers[] = "Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">";
-
-		$lang = $recipient->getLanguage();
-		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
-		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
-
-		$subject = "=?UTF-8?B?".base64_encode(getMLText($subject, $params, "", $lang))."?=";
-		mail($recipient->getEmail(), $subject, $message, implode("\r\n", $headers));
-
-		return true;
-*/
 	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
