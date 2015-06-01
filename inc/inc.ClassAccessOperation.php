@@ -138,7 +138,7 @@ class SeedDMS_AccessOperation {
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_EXPIRED)) {
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
 				return true;
 			}
 		}
