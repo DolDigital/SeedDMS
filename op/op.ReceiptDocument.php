@@ -28,6 +28,10 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('receiptdocument')) {
@@ -44,6 +48,8 @@ $document = $dms->getDocument($documentid);
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
+
+$folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -76,20 +82,19 @@ if (!isset($_POST["receiptStatus"]) || !is_numeric($_POST["receiptStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_receipt_status"));
 }
 
-if ($_POST["receiptType"] == "ind") {
-
-	$comment = $_POST["comment"];
-	$receiptLogID = $latestContent->setReceiptByInd($user, $user, $_POST["receiptStatus"], $comment);
-	if(0 > $receiptLogID) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("receipt_update_failed"));
-	}
-} elseif ($_POST["receiptType"] == "grp") {
-	$comment = $_POST["comment"];
+$controller->setParam('document', $document);
+$controller->setParam('content', $latestContent);
+$controller->setParam('receiptstatus', $_POST["receiptStatus"]);
+$controller->setParam('receipttype', $_POST["receiptType"]);
+if ($_POST["receiptType"] == "grp") {
 	$group = $dms->getGroup($_POST['receiptGroup']);
-	$receiptLogID = $latestContent->setReceiptByGrp($group, $user, $_POST["receiptStatus"], $comment);
-	if(0 > $receiptLogID) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("receipt_update_failed"));
-	}
+} else {
+	$group = null;
+}
+$controller->setParam('group', $group);
+$controller->setParam('comment', $_POST["comment"]);
+if(!$controller->run()) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
 }
 
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
