@@ -109,7 +109,7 @@ if ($_POST["approvalType"] == "ind" || $_POST["approvalType"] == "grp") {
 		$params['version'] = $version;
 		$params['folder_path'] = $folder->getFolderPathPlain();
 		$params['status'] = getApprovalStatusText($_POST["approvalStatus"]);
-		$params['comment'] = $_POST['comment'];
+		$params['comment'] = strip_tags($_POST['comment']);
 		$params['username'] = $user->getFullName();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;

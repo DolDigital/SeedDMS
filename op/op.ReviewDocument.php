@@ -108,7 +108,7 @@ if ($_POST["reviewType"] == "ind" || $_POST["reviewType"] == "grp") {
 		$params['version'] = $version;
 		$params['folder_path'] = $folder->getFolderPathPlain();
 		$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
-		$params['comment'] = $comment;
+		$params['comment'] = strip_tags($_POST['comment']);
 		$params['username'] = $user->getFullName();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;
