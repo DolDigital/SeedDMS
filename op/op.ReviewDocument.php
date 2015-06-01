@@ -28,6 +28,10 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('reviewdocument')) {
@@ -44,6 +48,8 @@ $document = $dms->getDocument($documentid);
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
+
+$folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -66,6 +72,7 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+$olddocstatus = $content->getStatus();
 // verify if document has expired
 if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -76,271 +83,91 @@ if (!isset($_POST["reviewStatus"]) || !is_numeric($_POST["reviewStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_review_status"));
 }
 
-if ($_POST["reviewType"] == "ind") {
-
-	$comment = $_POST["comment"];
-	$reviewLogID = $latestContent->setReviewByInd($user, $user, $_POST["reviewStatus"], $comment);
-	if(0 > $reviewLogID) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
-	}
-	else {
-		// Send an email notification to the document updater.
-		if($notifier) {
-			$nl=$document->getNotifyList();
-			$folder = $document->getFolder();
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("review_submit_email");
-			$message = getMLText("review_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getReviewStatusText($_POST["reviewStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
-
-			// Send notification to subscribers.
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
-			$subject = "review_submit_email_subject";
-			$message = "review_submit_email_body";
-			$params = array();
-			$params['name'] = $document->getName();
-			$params['version'] = $version;
-			$params['folder_path'] = $folder->getFolderPathPlain();
-			$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
-			$params['comment'] = $comment;
-			$params['username'] = $user->getFullName();
-			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
-			$params['sitename'] = $settings->_siteName;
-			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $nl["users"], $subject, $message, $params);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message, $params);
-			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
-		}
-	}
-}
-else if ($_POST["reviewType"] == "grp") {
-	$comment = $_POST["comment"];
+$controller->setParam('document', $document);
+$controller->setParam('content', $latestContent);
+$controller->setParam('reviewstatus', $_POST["reviewStatus"]);
+$controller->setParam('reviewtype', $_POST["reviewType"]);
+if ($_POST["reviewType"] == "grp") {
 	$group = $dms->getGroup($_POST['reviewGroup']);
-	$reviewLogID = $latestContent->setReviewByGrp($group, $user, $_POST["reviewStatus"], $comment);
-	if(0 > $reviewLogID) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
-	}
-	else {
-		// Send an email notification to the document updater.
-		if($notifier) {
-			$nl=$document->getNotifyList();
-			$folder = $document->getFolder();
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("review_submit_email");
-			$message = getMLText("review_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("status").": ".getReviewStatusText($_POST["reviewStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
+} else {
+	$group = null;
+}
+$controller->setParam('group', $group);
+$controller->setParam('comment', $_POST["comment"]);
+if(!$controller->run()) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
+}
 
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
-
-			// Send notification to subscribers.
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-			$subject = "review_submit_email_subject";
-			$message = "review_submit_email_body";
-			$params = array();
-			$params['name'] = $document->getName();
-			$params['version'] = $version;
-			$params['folder_path'] = $folder->getFolderPathPlain();
-			$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
-			$params['comment'] = $comment;
-			$params['username'] = $user->getFullName();
-			$params['sitename'] = $settings->_siteName;
-			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $nl["users"], $subject, $message, $params);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message, $params);
-			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+if ($_POST["reviewType"] == "ind" || $_POST["reviewType"] == "grp") {
+	if($notifier) {
+		$nl=$document->getNotifyList();
+		$subject = "review_submit_email_subject";
+		$message = "review_submit_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['version'] = $version;
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
+		$params['comment'] = $comment;
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
+		$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 	}
 }
 
-//
-// Check to see if the overall status for the document version needs to be
-// updated.
-//
-
-if ($_POST["reviewStatus"]==-1){
-
-	if($content->setStatus(S_REJECTED,$comment,$user)) {
-		// Send notification to subscribers.
-		if($notifier) {
-			$nl=$document->getNotifyList();
-			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-			$message = getMLText("document_status_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("status").": ".getOverallStatusText(S_REJECTED)."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-			$subject = "document_status_changed_email_subject";
-			$message = "document_status_changed_email_body";
-			$params = array();
-			$params['name'] = $document->getName();
-			$params['folder_path'] = $folder->getFolderPathPlain();
-			$params['status'] = getReviewStatusText(S_REJECTED);
-			$params['username'] = $user->getFullName();
-			$params['sitename'] = $settings->_siteName;
-			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $nl["users"], $subject, $message, $params);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message, $params);
-			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+/* Send notification about status change only if status has actually changed */
+$newdocstatus = $content->getStatus();
+if($olddocstatus['status'] != $newdocstatus['status']) {
+	// Send notification to subscribers.
+	if($notifier) {
+		$nl=$document->getNotifyList();
+		$subject = "document_status_changed_email_subject";
+		$message = "document_status_changed_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['status'] = getReviewStatusText(S_REJECTED);
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
+		$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 	}
+}
 
-}else{
+// Notify approvers, if necessary.
+if ($newStatus == S_DRAFT_APP) {
+	$requestUser = $document->getOwner();
 
-	$docReviewStatus = $content->getReviewStatus();
-	if (is_bool($docReviewStatus) && !$docReviewStatus) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_review_snapshot"));
-	}
-	$reviewCT = 0;
-	$reviewTotal = 0;
-	foreach ($docReviewStatus as $drstat) {
-		if ($drstat["status"] == 1) {
-			$reviewCT++;
-		}
-		if ($drstat["status"] != -2) {
-			$reviewTotal++;
-		}
-	}
-	// If all reviews have been received and there are no rejections, retrieve a
-	// count of the approvals required for this document.
-	if ($reviewCT == $reviewTotal) {
-		$docApprovalStatus = $content->getApprovalStatus();
-		if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
-			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
-		}
-		$approvalCT = 0;
-		$approvalTotal = 0;
+	if($notifier) {
+		$subject = "approval_request_email_subject";
+		$message = "approval_request_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['version'] = $version;
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
 		foreach ($docApprovalStatus as $dastat) {
-			if ($dastat["status"] == 1) {
-				$approvalCT++;
-			}
-			if ($dastat["status"] != -2) {
-				$approvalTotal++;
-			}
-		}
-		// If the approvals received is less than the approvals total, then
-		// change status to pending approval.
-		if ($approvalCT<$approvalTotal) {
-			$newStatus=S_DRAFT_APP;
-		}
-		else {
-			// Otherwise, change the status to released.
-			$newStatus=S_RELEASED;
-		}
-		if ($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
-			// Send notification to subscribers.
-			if($notifier) {
-				$nl=$document->getNotifyList();
-				$folder = $document->getFolder();
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-				$message = getMLText("document_status_changed_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
+		
+			if ($dastat["status"] == 0) {
+				if ($dastat["type"] == 0) {
 
-//				$subject=mydmsDecodeString($subject);
-//				$message=mydmsDecodeString($message);
+					$approver = $dms->getUser($dastat["required"]);
+					$notifier->toIndividual($document->getOwner(), $approver, $subject, $message, $params);
+				} elseif ($dastat["type"] == 1) {
 				
-				$notifier->toList($user, $nl["users"], $subject, $message);
-				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
-				}
-*/
-				$subject = "document_status_changed_email_subject";
-				$message = "document_status_changed_email_body";
-				$params = array();
-				$params['name'] = $document->getName();
-				$params['folder_path'] = $folder->getFolderPathPlain();
-				$params['status'] = getReviewStatusText($newStatus);
-				$params['username'] = $user->getFullName();
-				$params['sitename'] = $settings->_siteName;
-				$params['http_root'] = $settings->_httpRoot;
-				$notifier->toList($user, $nl["users"], $subject, $message, $params);
-				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message, $params);
-				}
-			}
-			
-			// TODO: if user os not owner send notification to owner
-
-			// Notify approvers, if necessary.
-			if ($newStatus == S_DRAFT_APP) {
-				$requestUser = $document->getOwner();
-
-				if($notifier) {
-/*
-					$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_request_email");
-					$message = getMLText("approval_request_email")."\r\n";
-					$message .= 
-						getMLText("name").": ".$content->getOriginalFileName()."\r\n".
-						getMLText("version").": ".$version."\r\n".
-						getMLText("comment").": ".$content->getComment()."\r\n".
-						"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."&version=".$version."\r\n";
-*/
-					$subject = "approval_request_email_subject";
-					$message = "approval_request_email_body";
-					$params = array();
-					$params['name'] = $document->getName();
-					$params['folder_path'] = $folder->getFolderPathPlain();
-					$params['version'] = $version;
-					$params['username'] = $user->getFullName();
-					$params['sitename'] = $settings->_siteName;
-					$params['http_root'] = $settings->_httpRoot;
-					foreach ($docApprovalStatus as $dastat) {
-					
-						if ($dastat["status"] == 0) {
-							if ($dastat["type"] == 0) {
-	
-								$approver = $dms->getUser($dastat["required"]);
-								$notifier->toIndividual($document->getOwner(), $approver, $subject, $message, $params);
-							} elseif ($dastat["type"] == 1) {
-							
-								$group = $dms->getGroup($dastat["required"]);
-								$notifier->toGroup($document->getOwner(), $group, $subject, $message, $params);
-							}
-						}
-					}
+					$group = $dms->getGroup($dastat["required"]);
+					$notifier->toGroup($document->getOwner(), $group, $subject, $message, $params);
 				}
 			}
 		}
