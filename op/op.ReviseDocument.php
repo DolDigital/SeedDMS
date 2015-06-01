@@ -28,6 +28,10 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('revisedocument')) {
@@ -44,6 +48,8 @@ $document = $dms->getDocument($documentid);
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
+
+$folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -66,6 +72,7 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+$olddocstatus = $content->getStatus();
 // verify if document has expired
 if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -76,23 +83,24 @@ if (!isset($_POST["revisionStatus"]) || !is_numeric($_POST["revisionStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_revision_status"));
 }
 
-if ($_POST["revisionType"] == "ind") {
-	$comment = $_POST["comment"];
-	$revisionLogID = $latestContent->setRevision($user, $user, $_POST["revisionStatus"], $comment);
-} elseif ($_POST["revisionType"] == "grp") {
-	$comment = $_POST["comment"];
+$controller->setParam('document', $document);
+$controller->setParam('content', $latestContent);
+$controller->setParam('revisionstatus', $_POST["revisionStatus"]);
+$controller->setParam('revisiontype', $_POST["revisionType"]);
+if ($_POST["revisionType"] == "grp") {
 	$group = $dms->getGroup($_POST['revisionGroup']);
-	$revisionLogID = $latestContent->setRevision($group, $user, $_POST["revisionStatus"], $comment);
+} else {
+	$group = null;
+}
+$controller->setParam('group', $group);
+$controller->setParam('comment', $_POST["comment"]);
+if(!$controller->run()) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
 }
 
-if(0 > $revisionLogID) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("revision_update_failed"));
-} else {
-	// Send an email notification to the document updater.
+if ($_POST["revisionType"] == "ind" || $_POST["revisionType"] == "grp") {
 	if($notifier) {
 		$nl=$document->getNotifyList();
-		$folder = $document->getFolder();
-
 		$subject = "revision_submit_email_subject";
 		$message = "revision_submit_email_body";
 		$params = array();
@@ -100,7 +108,7 @@ if(0 > $revisionLogID) {
 		$params['version'] = $version;
 		$params['folder_path'] = $folder->getFolderPathPlain();
 		$params['status'] = getRevisionStatusText($_POST["revisionStatus"]);
-		$params['comment'] = $comment;
+		$params['comment'] = strip_tags($_POST['comment']);
 		$params['username'] = $user->getFullName();
 		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 		$params['sitename'] = $settings->_siteName;
@@ -113,102 +121,27 @@ if(0 > $revisionLogID) {
 	}
 }
 
-/* Check to see if the overall status for the document version needs
- * to be updated.
- */
-if ($_POST["revisionStatus"] == -1){
-
-	if($content->setStatus(S_REJECTED,$comment,$user)) {
-		// Send notification to subscribers.
-		if($notifier) {
-			$nl=$document->getNotifyList();
-			$folder = $document->getFolder();
-			$subject = "document_status_changed_email_subject";
-			$message = "document_status_changed_email_body";
-			$params = array();
-			$params['name'] = $document->getName();
-			$params['folder_path'] = $folder->getFolderPathPlain();
-			$params['status'] = getRevisionStatusText(S_REJECTED);
-			$params['username'] = $user->getFullName();
-			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
-			$params['sitename'] = $settings->_siteName;
-			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $nl["users"], $subject, $message, $params);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message, $params);
-			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+/* Send notification about status change only if status has actually changed */
+$newdocstatus = $content->getStatus();
+if($olddocstatus['status'] != $newdocstatus['status']) {
+	// Send notification to subscribers.
+	if($notifier) {
+		$nl=$document->getNotifyList();
+		$subject = "document_status_changed_email_subject";
+		$message = "document_status_changed_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['status'] = getRevisionStatusText(S_REJECTED);
+		$params['username'] = $user->getFullName();
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
-	}
-
-} else {
-
-	$docRevisionStatus = $content->getRevisionStatus();
-	if (is_bool($docRevisionStatus) && !$docRevisionStatus) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_revision_snapshot"));
-	}
-	$revisionCT = 0;
-	$revisionTotal = 0;
-	foreach ($docRevisionStatus as $drstat) {
-		if ($drstat["status"] == 1) {
-			$revisionCT++;
-		}
-		if ($drstat["status"] != -2) {
-			$revisionTotal++;
-		}
-	}
-	// If all revisions have been received and there are no rejections,
-	// then release the document otherwise put it back into revision workflow
-	if ($revisionCT == $revisionTotal) {
-		$newStatus=S_RELEASED;
-		if ($content->finishRevision($user, $newStatus, '', getMLText("automatic_status_update"))) {
-			// Send notification to subscribers.
-			if($notifier) {
-				$nl=$document->getNotifyList();
-				$folder = $document->getFolder();
-				$subject = "document_status_changed_email_subject";
-				$message = "document_status_changed_email_body";
-				$params = array();
-				$params['name'] = $document->getName();
-				$params['folder_path'] = $folder->getFolderPathPlain();
-				$params['status'] = getRevisionStatusText($newStatus);
-				$params['username'] = $user->getFullName();
-				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
-				$params['sitename'] = $settings->_siteName;
-				$params['http_root'] = $settings->_httpRoot;
-				$notifier->toList($user, $nl["users"], $subject, $message, $params);
-				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message, $params);
-				}
-			}
-		}
-	} else {
-		/* Setting the status to S_IN_REVISION though it is already in that
-		 * status doesn't harm, as setStatus() will catch it.
-		 */
-		$newStatus=S_IN_REVISION;
-		if($content->setStatus($newStatus,$comment,$user)) {
-			// Send notification to subscribers.
-			if($notifier) {
-				$nl=$document->getNotifyList();
-				$folder = $document->getFolder();
-				$subject = "document_status_changed_email_subject";
-				$message = "document_status_changed_email_body";
-				$params = array();
-				$params['name'] = $document->getName();
-				$params['folder_path'] = $folder->getFolderPathPlain();
-				$params['status'] = getRevisionStatusText($newStatus);
-				$params['username'] = $user->getFullName();
-				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
-				$params['sitename'] = $settings->_siteName;
-				$params['http_root'] = $settings->_httpRoot;
-				$notifier->toList($user, $nl["users"], $subject, $message, $params);
-				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message, $params);
-				}
-				$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
-			}
-		}
+		$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 	}
 }
 
