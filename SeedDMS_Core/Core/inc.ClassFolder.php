@@ -751,11 +751,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *        must be the id of the attribute definition.
 	 * @param array $version_attributes list of document version attributes.
 	 *        The element key must be the id of the attribute definition.
+	 * @param object $workflow
+	 * @param integer $initstate initial document state (only S_RELEASED and
+	 *        S_DRAFT are allowed)
 	 * @return array/boolean false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
 	 *        second one is the result set returned when inserting the content.
 	 */
-	function addDocument($name, $comment, $expires, $owner, $keywords, $categories, $tmpFile, $orgFileName, $fileType, $mimeType, $sequence, $reviewers=array(), $approvers=array(),$reqversion=0,$version_comment="", $attributes=array(), $version_attributes=array(), $workflow=null) { /* {{{ */
+	function addDocument($name, $comment, $expires, $owner, $keywords, $categories, $tmpFile, $orgFileName, $fileType, $mimeType, $sequence, $reviewers=array(), $approvers=array(),$reqversion=0,$version_comment="", $attributes=array(), $version_attributes=array(), $workflow=null, $initstate=S_RELEASED) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$expires = (!$expires) ? 0 : $expires;
@@ -782,7 +785,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$document = $this->_dms->getDocument($db->getInsertID());
 
 //		if ($version_comment!="")
-			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers, $reqversion, $version_attributes, $workflow);
+			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers, $reqversion, $version_attributes, $workflow, $initstate);
 //		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
 
 		if (is_bool($res) && !$res) {
