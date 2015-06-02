@@ -359,6 +359,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$controller->setParam('workflow', $workflow);
 	$controller->setParam('notificationgroups', $notgroups);
 	$controller->setParam('notificationusers', $notusers);
+	$controller->setParam('initialdocumentstatus', $settings->_initialDocumentStatus);
 
 	if(!$document = $controller->run()) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText($controller->getErrorMsg()));
