@@ -87,8 +87,9 @@ function checkForm()
 <option value=''></option>
 <?php
 
-		if ($overallStatus["status"] == S_OBSOLETE) echo "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
-		if ($overallStatus["status"] == S_RELEASED) echo "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
+		if ($overallStatus["status"] != S_RELEASED) echo "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
+		if ($overallStatus["status"] != S_OBSOLETE) echo "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
+		if ($overallStatus["status"] != S_DRAFT) echo "<option value='".S_DRAFT."'>".getOverallStatusText(S_DRAFT)."</option>";
 
 ?>
 </select>

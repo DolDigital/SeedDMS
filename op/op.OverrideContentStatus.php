@@ -54,7 +54,7 @@ if (!is_object($content)) {
 }
 
 if (!isset($_POST["overrideStatus"]) || !is_numeric($_POST["overrideStatus"]) ||
-		(intval($_POST["overrideStatus"])<-3 && intval($_POST["overrideStatus"])>2)) {
+		(intval($_POST["overrideStatus"]) != S_RELEASED && intval($_POST["overrideStatus"]) != S_OBSOLETE && intval($_POST["overrideStatus"]) != S_DRAFT)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_status"));
 }
 
