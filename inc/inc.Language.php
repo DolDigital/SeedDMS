@@ -307,6 +307,9 @@ function getOverallStatusText($status) { /* {{{ */
 			case S_IN_REVISION:
 				return getMLText("in_revision");
 				break;
+			case S_DRAFT:
+				return getMLText("draft");
+				break;
 			default:
 				return getMLText("status_unknown");
 				break;
