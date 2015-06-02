@@ -47,6 +47,14 @@ define("S_IN_WORKFLOW",  3);
 define("S_IN_REVISION",  4);
 
 /*
+ * Document is in draft status. Being in draft means that the document
+ * is still worked on. This status is mainly for uploading documents
+ * which aren't fully complete but needs to accessible for the public,
+ * e.g. in order to colaborate on them.
+ */
+define("S_DRAFT",  5);
+
+/*
  * Document was rejected. A document is in rejected state when
  * the review failed or approval was not given.
  */
@@ -1443,7 +1451,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param object $workflow
 	 * @return bool/array false in case of an error or a result set
 	 */
-	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null) { /* {{{ */
+	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null, $initstate=S_RELEASED) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		// the doc path is id/version.filetype
@@ -1573,6 +1581,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		elseif($workflow) {
 			$status = S_IN_WORKFLOW;
 			$comment = ", workflow: ".$workflow->getName();
+		} elseif($initstate == S_DRAFT) {
+			$status = $initstate;
+			$comment = "";
 		} else {
 			$status = S_RELEASED;
 			$comment = "";
@@ -2680,8 +2691,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function getStatus() { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
-		if (!is_numeric($limit)) return false;
-
 		// Retrieve the current overall status of the content represented by
 		// this object.
 		if (!isset($this->_status)) {
@@ -2757,7 +2766,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		// If the supplied value lies outside of the accepted range, return an
 		// error.
-		if ($status < -3 || $status > 4) {
+		if ($status < -3 || $status > 5) {
 			return false;
 		}
 
