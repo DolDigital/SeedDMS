@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2067), dgrutsch (18)
+//    Translators: Admin (2071), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -847,11 +847,15 @@ URL: [url]',
 'search_fulltext' => 'Suche im Volltext',
 'search_in' => 'Suchen in',
 'search_mode_and' => 'alle Begriffe',
+'search_mode_documents' => 'Nur Dokumente',
+'search_mode_folders' => 'Nur Ordner',
 'search_mode_or' => 'min. ein Begriff',
 'search_no_results' => 'Die Suche lieferte leider keine Treffer.',
 'search_query' => 'Suchbegriffe',
 'search_report' => 'Die Suche lieferte [doccount] Dokumente und [foldercount] Ordner in [searchtime] Sek.',
 'search_report_fulltext' => 'Die Suche lieferte [doccount] Dokumente',
+'search_resultmode' => 'Ergebnis',
+'search_resultmode_both' => 'Dokumente und Ordner',
 'search_results' => 'Suchergebnis',
 'search_results_access_filtered' => 'Suchresultate können Inhalte enthalten, zu welchen der Zugang verweigert wurde.',
 'search_time' => 'Dauer: [time] sek.',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1195), dgrutsch (3), netixw (14)
+//    Translators: Admin (1199), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -854,11 +854,15 @@ URL: [url]',
 'search_fulltext' => 'Search in fulltext',
 'search_in' => 'Search in',
 'search_mode_and' => 'all words',
+'search_mode_documents' => 'Documents only',
+'search_mode_folders' => 'Folders only',
 'search_mode_or' => 'at least one word',
 'search_no_results' => 'There are no documents that match your search',
 'search_query' => 'Search for',
 'search_report' => 'Found [doccount] documents and [foldercount] folders in [searchtime] sec.',
 'search_report_fulltext' => 'Found [doccount] documents',
+'search_resultmode' => 'Search result',
+'search_resultmode_both' => 'Documents and folders',
 'search_results' => 'Search results',
 'search_results_access_filtered' => 'Search results may contain content to which access has been denied.',
 'search_time' => 'Elapsed time: [time] sec.',

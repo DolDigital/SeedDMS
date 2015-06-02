@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (576), fengjohn (5)
+//    Translators: Admin (578), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -174,10 +174,10 @@ URL: [url]',
 'change_revisors' => '',
 'change_status' => '变更状态',
 'charts' => '图表',
-'chart_docsaccumulated_title' => '',
+'chart_docsaccumulated_title' => '文档数量',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
-'chart_docspermonth_title' => '',
+'chart_docspermonth_title' => '每月创建的新文档',
 'chart_docsperstatus_title' => '',
 'chart_docsperuser_title' => '',
 'chart_selection' => '',
@@ -689,11 +689,15 @@ URL: [url]',
 'search_fulltext' => '',
 'search_in' => '搜索于',
 'search_mode_and' => '与模式',
+'search_mode_documents' => '',
+'search_mode_folders' => '',
 'search_mode_or' => '或模式',
 'search_no_results' => '没有找到与您搜索添加相匹配的文件',
 'search_query' => '搜索',
 'search_report' => '找到 [count] 个文档',
 'search_report_fulltext' => '',
+'search_resultmode' => '',
+'search_resultmode_both' => '',
 'search_results' => '搜索结果',
 'search_results_access_filtered' => '搜索到得结果中可能包含受限访问的文档',
 'search_time' => '耗时:[time]秒',
