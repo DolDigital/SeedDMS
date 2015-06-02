@@ -512,6 +512,15 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_presetExpirationDate");?>:</td>
         <td><input name="presetExpirationDate" type="text" value="<?php echo $settings->_presetExpirationDate; ?>" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_initialDocumentStatus_desc");?>">
+        <td><?php printMLText("settings_initialDocumentStatus");?>:</td>
+				<td>
+					<select name="initialDocumentStatus" value="<?php echo $settings->_initialDocumentStatus; ?>" />
+						<option value="<?php echo S_RELEASED; ?>" <?php if ($settings->_initialDocumentStatus==S_RELEASED) echo "selected" ?>><?php printMLText("settings_initialDocumentStatus_released");?></option>
+						<option value="<?php echo S_DRAFT; ?>" <?php if ($settings->_initialDocumentStatus==S_DRAFT) echo "selected" ?>><?php printMLText("settings_initialDocumentStatus_draft");?></option>
+					</select>
+				</td>
+      </tr>
       <tr title="<?php printMLText("settings_enableAdminRevApp_desc");?>">
         <td><?php printMLText("settings_enableAdminRevApp");?>:</td>
         <td><input name="enableAdminRevApp" type="checkbox" <?php if ($settings->_enableAdminRevApp) echo "checked" ?> /></td>

@@ -148,6 +148,7 @@ if ($action == "saveSettings")
   // SETTINGS - ADVANCED - EDITION
   $settings->_versioningFileName = $_POST["versioningFileName"];
   $settings->_presetExpirationDate = $_POST["presetExpirationDate"];
+  $settings->_initialDocumentStatus = $_POST["initialDocumentStatus"];
   $settings->_workflowMode = $_POST["workflowMode"];
   $settings->_enableAcknowledgeWorkflow = $_POST["enableAcknowledgeWorkflow"];
   $settings->_enableRevisionWorkflow = $_POST["enableRevisionWorkflow"];

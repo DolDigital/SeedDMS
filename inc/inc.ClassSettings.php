@@ -136,6 +136,8 @@ class Settings { /* {{{ */
 	var $_enableNotificationWorkflow = false;
 	// preset expiration date
 	var $_presetExpirationDate = "";
+	// initial document status
+	var $_initialDocumentStatus = S_RELEASED;
 	// the name of the versioning info file created by the backup tool
 	var $_versioningFileName = "versioning_info.txt";
 	// the mode of workflow
@@ -499,6 +501,7 @@ class Settings { /* {{{ */
 		$this->_enableOwnerRevApp = Settings::boolval($tab["enableOwnerRevApp"]);
 		$this->_enableSelfRevApp = Settings::boolval($tab["enableSelfRevApp"]);
 		$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
+		$this->_initialDocumentStatus = intval($tab["initialDocumentStatus"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
 		$this->_workflowMode = strval($tab["workflowMode"]);
 		$this->_enableAcknowledgeWorkflow = strval($tab["enableAcknowledgeWorkflow"]);
@@ -774,8 +777,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableOwnerRevApp", $this->_enableOwnerRevApp);
     $this->setXMLAttributValue($node, "enableSelfRevApp", $this->_enableSelfRevApp);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
+    $this->setXMLAttributValue($node, "initialDocumentStatus", $this->_initialDocumentStatus);
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
-    $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
     $this->setXMLAttributValue($node, "workflowMode", $this->_workflowMode);
     $this->setXMLAttributValue($node, "enableAcknowledgeWorkflow", $this->_enableAcknowledgeWorkflow);
     $this->setXMLAttributValue($node, "enableRevisionWorkflow", $this->_enableRevisionWorkflow);
