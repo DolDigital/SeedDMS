@@ -414,6 +414,27 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			}
 		}
 	}
+	if($_GET['export']) {
+		include("../inc/inc.ClassDownloadMgr.php");
+		$downmgr = new SeedDMS_Download_Mgr();
+		foreach($entries as $entry) {
+			if(get_class($entry) == $dms->getClassname('document')) {
+				$downmgr->addItem($entry->getLatestContent());
+			}
+		}
+		$filename = tempnam('/tmp', '');
+		$downmgr->createArchive($filename);
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: " . filesize($filename));
+		header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".zip\"");
+		header("Content-Type: application/zip");
+		header("Cache-Control: must-revalidate");
+
+		readfile($filename);
+		unlink($filename);
+		exit;
+	}
+
 	$totalPages = (int) (count($entries)/$limit);
 	if(count($entries)%$limit)
 		$totalPages++;
