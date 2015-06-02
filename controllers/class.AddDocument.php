@@ -56,6 +56,7 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 		$workflow = $this->getParam('workflow');
 		$notificationgroups = $this->getParam('notificationgroups');
 		$notificationusers = $this->getParam('notificationusers');
+		$initialdocumentstatus = $this->getParam('initialdocumentstatus');
 
 		$result = $this->callHook('addDocument');
 		if($result === null) {
@@ -63,7 +64,7 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 															$cats, $userfiletmp, basename($userfilename),
 	                            $filetype, $userfiletype, $sequence,
 	                            $reviewers, $approvers, $reqversion,
-	                            $version_comment, $attributes, $attributes_version, $workflow);
+	                            $version_comment, $attributes, $attributes_version, $workflow, $initialdocumentstatus);
 
 			if (is_bool($res) && !$res) {
 				$this->errormsg = "error_occured";
