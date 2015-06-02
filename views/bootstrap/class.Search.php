@@ -192,7 +192,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button> <?php if($totaldocs): ?><a class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a><?php endif; ?></td>
 </tr>
 
 </table>
@@ -406,6 +406,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 <td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
+			";
 </tr>
 </table>
 
