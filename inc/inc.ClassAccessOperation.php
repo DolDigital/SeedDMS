@@ -74,11 +74,11 @@ class SeedDMS_AccessOperation {
 	 * The admin may even modify the status
 	 * even if is disallowed in the settings.
 	 */
-	function mayOverwriteStatus() { /* {{{ */
+	function mayOverrideStatus() { /* {{{ */
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE )) {
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT || $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE)) {
 				return true;
 			}
 		}

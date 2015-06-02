@@ -544,7 +544,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($accessop->mayRemoveVersion()) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
 		}
-		if($accessop->mayOverwriteStatus()) {
+		if($accessop->mayOverrideStatus()) {
 			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-align-justify\"></i>".getMLText("change_status")."</a></li>";
 		}
 		if($accessop->maySetRecipients()) {
