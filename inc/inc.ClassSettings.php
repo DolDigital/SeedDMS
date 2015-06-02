@@ -137,7 +137,7 @@ class Settings { /* {{{ */
 	// preset expiration date
 	var $_presetExpirationDate = "";
 	// initial document status
-	var $_initialDocumentStatus = S_RELEASED;
+	var $_initialDocumentStatus = 2; //S_RELEASED;
 	// the name of the versioning info file created by the backup tool
 	var $_versioningFileName = "versioning_info.txt";
 	// the mode of workflow
