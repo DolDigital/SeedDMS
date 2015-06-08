@@ -85,7 +85,7 @@ class SeedDMS_Download_Mgr {
 			$reviewStatus = $item->getReviewStatus();
 			$approvalStatus = $item->getApprovalStatus();
 
-			$zip->addFile($dms->contentDir.$item->getPath(), $prefixdir."/".$document->getID()."-".$item->getOriginalFileName());
+			$zip->addFile($dms->contentDir.$item->getPath(), utf8_decode($prefixdir."/".$document->getID()."-".$item->getOriginalFileName()));
 			$sheet->setCellValueByColumnAndRow(0, $i, $document->getID());
 			$sheet->setCellValueByColumnAndRow(1, $i, $document->getID()."-".$item->getOriginalFileName());
 			$sheet->setCellValueByColumnAndRow(2, $i, getOverallStatusText($status['status']));
