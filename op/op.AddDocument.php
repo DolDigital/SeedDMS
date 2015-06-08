@@ -256,7 +256,7 @@ if($settings->_libraryFolder) {
 		if($clonedoc = $dms->getDocument($_POST["librarydoc"])) {
 			if($content = $clonedoc->getLatestContent()) {
 				$docsource = 'library';
-				$fullfile = tempnam('', '');
+				$fullfile = tempnam('/tmp', '');
 				if(SeedDMS_Core_File::copyFile($dms->contentDir . $content->getPath(), $fullfile)) {
 					/* Check if a local file is uploaded as well */
 					if(isset($_FILES["userfile"]['error'][0])) {
