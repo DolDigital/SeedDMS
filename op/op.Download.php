@@ -100,19 +100,9 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_file_id"));
 	}
 
-	header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
-	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
-	header("Content-Disposition: attachment; filename=\"" . $file->getOriginalFileName() . "\"");
-	//header("Expires: 0");
-	header("Content-Type: " . $file->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
-	header("Cache-Control: must-revalidate");
-	//header("Pragma: no-cache");
-
-	ob_clean();
-	readfile($dms->contentDir . $file->getPath());
-
+	$controller->setParam('file', $file);
+	$controller->setParam('type', 'file');
+	$controller->run();
 } elseif (isset($_GET["arkname"])) {
 	$filename = basename($_GET["arkname"]);
 
