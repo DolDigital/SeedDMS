@@ -414,7 +414,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			}
 		}
 	}
-	if($_GET['export']) {
+	if(isset($_GET['export']) && $_GET['export']) {
 		include("../inc/inc.ClassDownloadMgr.php");
 		$downmgr = new SeedDMS_Download_Mgr();
 		foreach($entries as $entry) {
@@ -462,6 +462,7 @@ if(count($entries) == 1) {
 		$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
 		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"]) ? true : false);
 		$view->setParam('mode', isset($mode) ? $mode : '');
+		$view->setParam('resultmode', isset($resultmode) ? $resultmode : '');
 		$view->setParam('searchin', isset($searchin) ? $searchin : array());
 		$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
 		$view->setParam('owner', $owner);
