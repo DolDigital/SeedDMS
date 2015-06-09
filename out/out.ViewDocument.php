@@ -85,6 +85,7 @@ if($view) {
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
 	$view->setParam('checkOutDir', $settings->_checkOutDir);
+	$view->setParam('currenttab', isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : '');
 	$view->show();
 	exit;
 }

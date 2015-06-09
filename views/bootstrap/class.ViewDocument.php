@@ -212,6 +212,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$previewwidthdetail = $this->params['previewWidthDetail'];
 		$checkoutdir = $this->params['checkOutDir'];
 		$documentid = $document->getId();
+		$currenttab = $this->params['currenttab'];
 
 		$versions = $document->getContent();
 
@@ -403,41 +404,41 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 </div>
 <div class="span9">
     <ul class="nav nav-tabs" id="docinfotab">
-		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
+		  <li class="<?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
-		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
+		  <li class="<?php if($currenttab == 'previous') echo 'active'; ?>"><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
 <?php
 			}
 			if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
 					(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
-		  <li><a data-target="#revapp" data-toggle="tab"><?php if($workflowmode == 'traditional') echo getMLText('reviewers')."/"; echo getMLText('approvers'); ?></a></li>
+		  <li class="<?php if($currenttab == 'revapp') echo 'active'; ?>"><a data-target="#revapp" data-toggle="tab"><?php if($workflowmode == 'traditional') echo getMLText('reviewers')."/"; echo getMLText('approvers'); ?></a></li>
 <?php
 				}
 			} else {
 				if($workflow) {
 ?>
-		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
+		  <li class="<?php if($currenttab == 'workflow') echo 'active'; ?>"><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
 <?php
 				}
 			}
 			if(is_array($receiptStatus) && count($receiptStatus)>0) {
 ?>
-		  <li><a data-target="#recipients" data-toggle="tab"><?php echo getMLText('recipients'); ?></a></li>
+		  <li class="<?php if($currenttab == 'recipients') echo 'active'; ?>"><a data-target="#recipients" data-toggle="tab"><?php echo getMLText('recipients'); ?></a></li>
 <?php
 			}
 			if(is_array($revisionStatus) && count($revisionStatus)>0) {
 ?>
-		  <li><a data-target="#revision" data-toggle="tab"><?php echo getMLText('revise_document'); ?></a></li>
+		  <li class="<?php if($currenttab == 'revision') echo 'active'; ?>"><a data-target="#revision" data-toggle="tab"><?php echo getMLText('revise_document'); ?></a></li>
 <?php
 			}
 ?>
-		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+		  <li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
-		  <div class="tab-pane active" id="docinfo">
+		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
 <?php
 		if(!$latestContent) {
 			$this->contentContainerStart();
@@ -631,7 +632,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			if((is_array($reviewStatus) && count($reviewStatus)>0) ||
 				(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
-		  <div class="tab-pane" id="revapp">
+		  <div class="tab-pane <?php if($currenttab == 'revapp') echo 'active'; ?>" id="revapp">
 <?php
 		$this->contentContainerstart();
 		print "<table class=\"table-condensed\">\n";
@@ -802,7 +803,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		} else {
 			if($workflow) {
 ?>
-		  <div class="tab-pane" id="workflow">
+		  <div class="tab-pane <?php if($currenttab == 'workflow') echo 'active'; ?>" id="workflow">
 <?php
 			$this->contentContainerStart();
 			if($user->isAdmin()) {
@@ -983,7 +984,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		if(is_array($receiptStatus) && count($receiptStatus)>0) {
 ?>
-		  <div class="tab-pane" id="recipients">
+		  <div class="tab-pane <?php if($currenttab == 'recipients') echo 'active'; ?>" id="recipients">
 <?php
 			$this->contentContainerStart();
 			print "<table class=\"table-condensed\">\n";
@@ -1070,7 +1071,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		if(is_array($revisionStatus) && count($revisionStatus)>0) {
 ?>
-			<div class="tab-pane" id="revision">
+			<div class="tab-pane <?php if($currenttab == 'revision') echo 'active'; ?>" id="revision">
 <?php
 			if($status['status'] == S_RELEASED) {
 				if($latestContent->getRevisionDate()) {
@@ -1171,7 +1172,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		if (count($versions)>1) {
 ?>
-		  <div class="tab-pane" id="previous">
+		  <div class="tab-pane <?php if($currenttab == 'previous') echo 'active'; ?>" id="previous">
 <?php
 			$this->contentContainerStart();
 
@@ -1269,7 +1270,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 ?>
-		  <div class="tab-pane" id="attachments">
+		  <div class="tab-pane <?php if($currenttab == 'attachments') echo 'active'; ?>" id="attachments">
 <?php
 
 		$this->contentContainerStart();
@@ -1345,7 +1346,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 ?>
 		  </div>
-		  <div class="tab-pane" id="links">
+		  <div class="tab-pane <?php if($currenttab == 'links') echo 'active'; ?>" id="links">
 <?php
 		$this->contentContainerStart();
 		if (count($links) > 0) {
