@@ -832,6 +832,22 @@ CREATE TABLE `tblTransmittalItems` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for cached read access
+-- 
+
+CREATE TABLE `tblCachedAccess` (
+  `id` int(11) NOT NULL auto_increment,
+  `document` int(11) default NULL,
+  `user` int(11) default null,
+  `mode` tinyint(4) NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `tblCachedAccess_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblCachedAccess_user` FOREIGN KEY (`user`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for access request objects
 -- 
 
@@ -842,6 +858,7 @@ CREATE TABLE `tblAros` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
 
 -- 
 -- Table structure for access control objects
