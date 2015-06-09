@@ -48,20 +48,9 @@ class SeedDMS_Download_Mgr {
 		$this->items[$item->getID()] = $item;
 	} /* }}} */
 
-	public function createArchive($filename) { /* {{{ */
-		if(!$this->items) {
-			return false;
-		}
-
-		$zip = new ZipArchive();
-		$prefixdir = date('Y-m-d', time());
-
-		if($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
-			return false;
-		}
-
+	public function createToc($file, $items) { /* {{{ */
 		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->getProperties()->setCreator("MMK GmbH, Hagen, Germany")->setTitle("Metadata");
+		$objPHPExcel->getProperties()->setCreator("SeedDMS")->setTitle("Metadata");
 		$sheet = $objPHPExcel->setActiveSheetIndex(0);
 
 		$i = 1;
@@ -78,14 +67,13 @@ class SeedDMS_Download_Mgr {
 		$sheet->setCellValueByColumnAndRow(10, $i, 'Freigabekommentar');
 		$sheet->setCellValueByColumnAndRow(11, $i, 'Freigabestatus');
 		$i++;
-		foreach($this->items as $item) {
+		foreach($items as $item) {
 			$document = $item->getDocument();
 			$dms = $document->_dms;
 			$status = $item->getStatus();
 			$reviewStatus = $item->getReviewStatus();
 			$approvalStatus = $item->getApprovalStatus();
 
-			$zip->addFile($dms->contentDir.$item->getPath(), utf8_decode($prefixdir."/".$document->getID()."-".$item->getOriginalFileName()));
 			$sheet->setCellValueByColumnAndRow(0, $i, $document->getID());
 			$sheet->setCellValueByColumnAndRow(1, $i, $document->getID()."-".$item->getOriginalFileName());
 			$sheet->setCellValueByColumnAndRow(2, $i, getOverallStatusText($status['status']));
@@ -113,7 +101,7 @@ class SeedDMS_Download_Mgr {
 							break;
 					}
 					$sheet->setCellValueByColumnAndRow(4, $l, $reqName);
-					$sheet->setCellValueByColumnAndRow(5, $l, $r['date']);
+					$sheet->setCellValueByColumnAndRow(5, $l, ($r['status']==1 || $r['status']==-1) ? $r['date'] : "");
 					$sheet->setCellValueByColumnAndRow(6, $l, $r['comment']);
 					$sheet->setCellValueByColumnAndRow(7, $l, getReviewStatusText($r["status"]));
 					$l++;
@@ -141,7 +129,7 @@ class SeedDMS_Download_Mgr {
 							break;
 					}
 					$sheet->setCellValueByColumnAndRow(8, $k, $reqName);
-					$sheet->setCellValueByColumnAndRow(9, $k, $r['date']);
+					$sheet->setCellValueByColumnAndRow(9, $k, ($r['status']==1 || $r['status']==-1) ?$r['date'] : "");
 					$sheet->setCellValueByColumnAndRow(10, $k, $r['comment']);
 					$sheet->setCellValueByColumnAndRow(11, $k, getReviewStatusText($r["status"]));
 					$k++;
@@ -153,8 +141,32 @@ class SeedDMS_Download_Mgr {
 		}
 
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$file = tempnam("/tmp", "export-list-");
 		$objWriter->save($file);
+
+		return true;
+	} /* }}} */
+
+	public function createArchive($filename) { /* {{{ */
+		if(!$this->items) {
+			return false;
+		}
+
+		$file = tempnam("/tmp", "export-list-");
+		$this->createToc($file, $this->items);
+
+		$zip = new ZipArchive();
+		$prefixdir = date('Y-m-d', time());
+
+		if($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
+			return false;
+		}
+
+		foreach($this->items as $item) {
+			$document = $item->getDocument();
+			$dms = $document->_dms;
+			$zip->addFile($dms->contentDir.$item->getPath(), utf8_decode($prefixdir."/".$document->getID()."-".$item->getOriginalFileName()));
+		}
+
 		$zip->addFile($file, $prefixdir."/metadata.xls");
 		$zip->close();
 		unlink($file);
