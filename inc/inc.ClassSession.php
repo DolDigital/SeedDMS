@@ -285,10 +285,11 @@ class SeedDMS_Session {
 	function addToClipboard($object) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			if(get_class($object) == 'SeedDMS_Core_Document') {
+			$dms = $object->_dms;
+			if(get_class($object) == $dms->getClassname('document')) {
 				if(!in_array($object->getID(), $this->data['clipboard']['docs']))
 					array_push($this->data['clipboard']['docs'], $object->getID());
-			} elseif(get_class($object) == 'SeedDMS_Core_Folder') {
+			} elseif(get_class($object) == $dms->getClassname('folder')) {
 				if(!in_array($object->getID(), $this->data['clipboard']['folders']))
 					array_push($this->data['clipboard']['folders'], $object->getID());
 			}
@@ -307,11 +308,12 @@ class SeedDMS_Session {
 	function removeFromClipboard($object) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			if(get_class($object) == 'SeedDMS_Core_Document') {
+			$dms = $object->_dms;
+			if(get_class($object) == $dms->getClassname('document')) {
 				$key = array_search($object->getID(), $this->data['clipboard']['docs']);
 				if($key !== false)
 					unset($this->data['clipboard']['docs'][$key]);
-			} elseif(get_class($object) == 'SeedDMS_Core_Folder') {
+			} elseif(get_class($object) == $dms->getClassname('folder')) {
 				$key = array_search($object->getID(), $this->data['clipboard']['folders']);
 				if($key !== false)
 					unset($this->data['clipboard']['folders'][$key]);
