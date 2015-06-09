@@ -581,7 +581,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 		}
 
-		print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
+		// print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
 
 		print "</ul>";
 		echo "</td>";
@@ -1083,11 +1083,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				</div>
 <?php
 				}
-			} elseif($status['status'] != S_IN_REVISION) {
+			} /*elseif($status['status'] != S_IN_REVISION) {
 ?>
 				<div class="alert alert-info"><?= getMLText('no_revision_planed') ?></div>
 <?php
-			}
+				} */
 			$this->contentContainerStart();
 			print "<table class=\"table-condensed\">\n";
 
