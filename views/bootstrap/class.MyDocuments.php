@@ -119,7 +119,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								}
 								print "</a></td>";
-								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 								print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 								print "<td>".$st["version"]."</td>";
 								print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
@@ -156,7 +156,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								}
 								print "</a></td>";
-								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 								print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 								print "<td>".$st["version"]."</td>";
 								print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
@@ -205,7 +205,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 							print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 							print "<td>".$st["version"]."</td>";
 							print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
@@ -239,7 +239,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 							print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 							print "<td>".$st["version"]."</td>";				
 							print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
@@ -424,7 +424,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						}
 						print "</a></td>";
-						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 						print "<td>".getOverallStatusText($res["status"])."</td>";
 						print "<td>".$res["version"]."</td>";
 						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
