@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2075), dgrutsch (18)
+//    Translators: Admin (2076), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -1004,7 +1004,7 @@ URL: [url]',
 'settings_httpRoot' => 'HTTP Wurzelverzeichnis',
 'settings_httpRoot_desc' => 'Der relative Pfad in der URL nach der Domain, also ohne http:// und den hostnamen. z.B. wenn die komplette URL http://www.example.com/seeddms/ ist, dann setzen Sie diesen Wert auf \'/seeddms/\'. Wenn die URL http://www.example.com/ ist, tragen Sie \'/\' ein.',
 'settings_initialDocumentStatus' => 'Initialer Dokumentenstatus',
-'settings_initialDocumentStatus_desc' => '',
+'settings_initialDocumentStatus_desc' => 'Dieser STatus wird bei Dokumenten gesetzt, die neu hinzugefügt wurden.',
 'settings_initialDocumentStatus_draft' => 'Entwurf',
 'settings_initialDocumentStatus_released' => 'freigegeben',
 'settings_installADOdb' => 'Installieren Sie ADOdb',

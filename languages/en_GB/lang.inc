@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1203), dgrutsch (3), netixw (14)
+//    Translators: Admin (1204), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -1011,7 +1011,7 @@ URL: [url]',
 'settings_httpRoot' => 'Http Root',
 'settings_httpRoot_desc' => 'The relative path in the URL, after the domain part. Do not include the http:// prefix or the web host name. e.g. If the full URL is http://www.example.com/seeddms/, set \'/seeddms/\'. If the URL is http://www.example.com/, set \'/\'',
 'settings_initialDocumentStatus' => 'Initial document status',
-'settings_initialDocumentStatus_desc' => '',
+'settings_initialDocumentStatus_desc' => 'This status will be set when a document is added.',
 'settings_initialDocumentStatus_draft' => 'Draft',
 'settings_initialDocumentStatus_released' => 'released',
 'settings_installADOdb' => 'Install ADOdb',
