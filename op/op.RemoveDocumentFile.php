@@ -95,6 +95,6 @@ if (!$document->removeDocumentFile($fileid)) {
 
 add_log_line("?documentid=".$documentid."&fileid=".$fileid);
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=attachments");
 
 ?>

@@ -176,6 +176,6 @@ if ($newStatus == S_DRAFT_APP) {
 	}
 }
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=revapp");
 
 ?>

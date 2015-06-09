@@ -66,6 +66,6 @@ if (!$document->addDocumentLink($docid, $user->getID(), $public)){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 }
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=links");
 
 ?>

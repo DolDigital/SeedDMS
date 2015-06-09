@@ -154,6 +154,6 @@ if($olddocstatus['status'] != $newdocstatus['status']) {
 	// TODO: if user os not owner send notification to owner
 }
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=revapp");
 
 ?>

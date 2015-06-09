@@ -70,6 +70,6 @@ if (!$document->removeDocumentLink($linkid)) {
 
 add_log_line("?documentid=".$documentid."&linkid=".$linkid);
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=links");
 
 ?>
