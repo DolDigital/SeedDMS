@@ -83,6 +83,12 @@ if (!isset($_POST["reviewStatus"]) || !is_numeric($_POST["reviewStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_review_status"));
 }
 
+if($_FILES["reviewfile"]["tmp_name"]) {
+	if (is_uploaded_file($_FILES["reviewfile"]["tmp_name"]) && $_FILES['reviewfile']['error']!=0){
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_failed"));
+	}
+}
+
 $controller->setParam('document', $document);
 $controller->setParam('content', $latestContent);
 $controller->setParam('reviewstatus', $_POST["reviewStatus"]);
@@ -92,8 +98,13 @@ if ($_POST["reviewType"] == "grp") {
 } else {
 	$group = null;
 }
+if($_FILES["reviewfile"]["tmp_name"])
+	$file = $_FILES["reviewfile"]["tmp_name"];
+else
+	$file = '';
 $controller->setParam('group', $group);
 $controller->setParam('comment', $_POST["comment"]);
+$controller->setParam('file', $file);
 if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
 }

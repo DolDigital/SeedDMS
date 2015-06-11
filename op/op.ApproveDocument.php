@@ -84,6 +84,12 @@ if (!isset($_POST["approvalStatus"]) || !is_numeric($_POST["approvalStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_approval_status"));
 }
 
+if($_FILES["approvalfile"]["tmp_name"]) {
+	if (is_uploaded_file($_FILES["approvalfile"]["tmp_name"]) && $_FILES['approvalfile']['error']!=0){
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_failed"));
+	}
+}
+
 $controller->setParam('document', $document);
 $controller->setParam('content', $latestContent);
 $controller->setParam('approvalstatus', $_POST["approvalStatus"]);
@@ -93,8 +99,13 @@ if ($_POST["approvalType"] == "grp") {
 } else {
 	$group = null;
 }
+if($_FILES["approvalfile"]["tmp_name"])
+	$file = $_FILES["approvalfile"]["tmp_name"];
+else
+	$file = '';
 $controller->setParam('group', $group);
 $controller->setParam('comment', $_POST["comment"]);
+$controller->setParam('file', $file);
 if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
 }
