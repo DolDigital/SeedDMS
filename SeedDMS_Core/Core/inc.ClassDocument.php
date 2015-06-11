@@ -1794,6 +1794,17 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$stList = "";
 		foreach ($status as $st) {
 			$stList .= (strlen($stList)==0 ? "" : ", "). "'".$st["reviewID"]."'";
+			$queryStr = "SELECT * FROM tblDocumentReviewLog WHERE reviewID = " . $st['reviewID'];
+			$resArr = $db->getResultArray($queryStr);
+			if ((is_bool($resArr) && !$resArr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			foreach($resArr as $res) {
+				$file = $this->_dms->contentDir . $this->getDir().'r'.$res['reviewLogID'];
+				if(file_exists($file))
+					SeedDMS_Core_File::removeFile($file);
+			}
 			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
 				$emailList[] = $st["required"];
 			}
@@ -1815,10 +1826,22 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$stList = "";
 		foreach ($status as $st) {
 			$stList .= (strlen($stList)==0 ? "" : ", "). "'".$st["approveID"]."'";
+			$queryStr = "SELECT * FROM tblDocumentApproveLog WHERE approveID = " . $st['approveID'];
+			$resArr = $db->getResultArray($queryStr);
+			if ((is_bool($resArr) && !$resArr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			foreach($resArr as $res) {
+				$file = $this->_dms->contentDir . $this->getDir().'a'.$res['approveLogID'];
+				if(file_exists($file))
+					SeedDMS_Core_File::removeFile($file);
+			}
 			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
 				$emailList[] = $st["required"];
 			}
 		}
+
 		if (strlen($stList)>0) {
 			$queryStr = "DELETE FROM `tblDocumentApproveLog` WHERE `tblDocumentApproveLog`.`approveID` IN (".$stList.")";
 			if (!$db->getResult($queryStr)) {
@@ -2865,6 +2888,13 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 						unset($this->_reviewStatus);
 						return false;
 					}
+					foreach($res as &$t) {
+						$filename = $this->_dms->contentDir . $this->_document->getDir().'r'.$t['reviewLogID'];
+						if(file_exists($filename))
+							$t['file'] = $filename;
+						else
+							$t['file'] = '';
+					}
 					$this->_reviewStatus = array_merge($this->_reviewStatus, $res);
 				}
 			}
@@ -2900,7 +2930,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if($recs) {
 				foreach($recs as $rec) {
 					$queryStr=
-						"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+						"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`approveLogId`, `tblDocumentApproveLog`.`status`, ".
 						"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 						"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
 						"FROM `tblDocumentApprovers` ".
@@ -2914,6 +2944,13 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					if (is_bool($res) && !$res) {
 						unset($this->_approvalStatus);
 						return false;
+					}
+					foreach($res as &$t) {
+						$filename = $this->_dms->contentDir . $this->_document->getDir().'a'.$t['approveLogId'];
+						if(file_exists($filename))
+							$t['file'] = $filename;
+						else
+							$t['file'] = '';
 					}
 					$this->_approvalStatus = array_merge($this->_approvalStatus, $res);
 				}
@@ -3155,7 +3192,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * @param string $comment comment for review
 	 * @return integer new review log id
 	 */
-	function setReviewByInd($user, $requestUser, $status, $comment) { /* {{{ */
+	function setReviewByInd($user, $requestUser, $status, $comment, $file='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Check to see if the user can be removed from the review list.
@@ -3185,10 +3222,12 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return -1;
-		else {
-			$reviewLogID = $db->getInsertID();
-			return $reviewLogID;
+
+		$reviewLogID = $db->getInsertID();
+		if($file) {
+			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 		}
+		return $reviewLogID;
  } /* }}} */
 
 	/**
@@ -3205,7 +3244,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * @param string $comment comment for review
 	 * @return integer new review log id
 	 */
-	function setReviewByGrp($group, $requestUser, $status, $comment) { /* {{{ */
+	function setReviewByGrp($group, $requestUser, $status, $comment, $file='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Check to see if the user can be removed from the review list.
@@ -3237,6 +3276,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return -1;
 		else {
 			$reviewLogID = $db->getInsertID();
+			if($file) {
+				SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
+			}
 			return $reviewLogID;
 		}
  } /* }}} */
@@ -3372,7 +3414,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * @param string $comment approval comment
 	 * @return integer 0 on success, < 0 in case of an error
 	 */
-	function setApprovalByInd($user, $requestUser, $status, $comment) { /* {{{ */
+	function setApprovalByInd($user, $requestUser, $status, $comment, $file='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Check to see if the user can be removed from the approval list.
@@ -3402,8 +3444,12 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return -1;
-		else
-			return 0;
+
+		$approveLogID = $db->getInsertID();
+		if($file) {
+			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
+		}
+		return $approveLogId;
  } /* }}} */
 
 	/**
@@ -3412,7 +3458,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * {link SeedDMS_Core_DocumentContent::setApprovalByInd} but does it for
 	 * group instead of a user
 	 */
-	function setApprovalByGrp($group, $requestUser, $status, $comment) { /* {{{ */
+	function setApprovalByGrp($group, $requestUser, $status, $comment, $file='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Check to see if the user can be removed from the approval list.
@@ -3442,8 +3488,12 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return -1;
-		else
-			return 0;
+
+		$approveLogID = $db->getInsertID();
+		if($file) {
+			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
+		}
+		return $approveLogId;
  } /* }}} */
 
 	function addIndRecipient($user, $requestUser) { /* {{{ */
