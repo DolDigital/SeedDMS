@@ -172,6 +172,20 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "</i>";
 			if($rec['comment'])
 				echo "<br />".htmlspecialchars($rec['comment']);
+			switch($type) {
+			case "review":
+				if($rec['file']) {
+					echo "<br />";
+					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&reviewlogid=".$rec['reviewLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+				}
+				break;
+			case "approval":
+				if($rec['file']) {
+					echo "<br />";
+					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&approvelogid=".$rec['approveLogId']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+				}
+				break;
+			}
 			echo "</td>";
 			echo "<td>";
 			switch($type) {
@@ -688,7 +702,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				/* $updateUser is the user who has done the review */
 				$updateUser = $dms->getUser($r["userID"]);
 				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
-				print "<td>".htmlspecialchars($r["comment"])."</td>\n";
+				print "<td>".htmlspecialchars($r["comment"]);
+				if($r['file']) {
+					echo "<br />";
+					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&reviewlogid=".$r['reviewLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+				}
+				print "</td>\n";
 				print "<td>".getReviewStatusText($r["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
 
@@ -752,7 +771,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				/* $updateUser is the user who has done the approval */
 				$updateUser = $dms->getUser($a["userID"]);
 				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
-				print "<td>".htmlspecialchars($a["comment"])."</td>\n";
+				print "<td>".htmlspecialchars($a["comment"]);
+				if($a['file']) {
+					echo "<br />";
+					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&approvelogid=".$a['approveLogId']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
+				}
+				echo "</td>\n";
 				print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
 
