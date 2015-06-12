@@ -32,6 +32,7 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 		$approvaltype = $this->params['approvaltype'];
 		$group = $this->params['group'];
 		$comment = $this->params['comment'];
+		$file = $this->params['file'];
 
 		/* Get the document id and name before removing the document */
 		$docname = $document->getName();
@@ -43,13 +44,13 @@ class SeedDMS_Controller_ApproveDocument extends SeedDMS_Controller_Common {
 		$result = $this->callHook('approveDocument', $content);
 		if($result === null) {
 			if ($approvaltype == "ind") {
-				if(0 > $content->setApprovalByInd($user, $user, $approvalstatus, $comment)) {
+				if(0 > $content->setApprovalByInd($user, $user, $approvalstatus, $comment, $file)) {
 					$this->error = 1;
 					$this->errormsg = "approval_update_failed";
 					return false;
 				}
 			} elseif ($approvaltype == "grp") {
-				if(0 > $content->setApprovalByGrp($group, $user, $approvalstatus, $comment)) {
+				if(0 > $content->setApprovalByGrp($group, $user, $approvalstatus, $comment, $file)) {
 					$this->error = 1;
 					$this->errormsg = "approval_update_failed";
 					return false;

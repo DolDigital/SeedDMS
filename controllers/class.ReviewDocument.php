@@ -32,6 +32,7 @@ class SeedDMS_Controller_ReviewDocument extends SeedDMS_Controller_Common {
 		$reviewtype = $this->params['reviewtype'];
 		$group = $this->params['group'];
 		$comment = $this->params['comment'];
+		$file = $this->params['file'];
 
 		/* Get the document id and name before removing the document */
 		$docname = $document->getName();
@@ -44,13 +45,13 @@ class SeedDMS_Controller_ReviewDocument extends SeedDMS_Controller_Common {
 		if($result === null) {
 
 			if ($reviewtype == "ind") {
-				if(0 > $content->setReviewByInd($user, $user, $reviewstatus, $comment)) {
+				if(0 > $content->setReviewByInd($user, $user, $reviewstatus, $comment, $file)) {
 					$this->error = 1;
 					$this->errormsg = "review_update_failed";
 					return false;
 				}
 			} elseif ($reviewtype == "grp") {
-				if(0 > $content->setReviewByGrp($group, $user, $reviewstatus, $comment)) {
+				if(0 > $content->setReviewByGrp($group, $user, $reviewstatus, $comment, $file)) {
 					$this->error = 1;
 					$this->errormsg = "review_update_failed";
 					return false;
