@@ -2587,7 +2587,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if($recs) {
 				foreach($recs as $rec) {
 					$queryStr=
-						"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`approveLogId`, `tblDocumentApproveLog`.`status`, ".
+						"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`approveLogID`, `tblDocumentApproveLog`.`status`, ".
 						"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 						"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
 						"FROM `tblDocumentApprovers` ".
@@ -2595,7 +2595,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
 						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
 						"WHERE `tblDocumentApprovers`.`approveID` = '". $rec['approveID'] ."' ".
-						"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".(int) $limit;
+						"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT ".(int) $limit;
 
 					$res = $db->getResultArray($queryStr);
 					if (is_bool($res) && !$res) {
@@ -2603,7 +2603,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 						return false;
 					}
 					foreach($res as &$t) {
-						$filename = $this->_dms->contentDir . $this->_document->getDir().'a'.$t['approveLogId'];
+						$filename = $this->_dms->contentDir . $this->_document->getDir().'a'.$t['approveLogID'];
 						if(file_exists($filename))
 							$t['file'] = $filename;
 						else
@@ -3030,7 +3030,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}
-		return $approveLogId;
+		return $approveLogID;
  } /* }}} */
 
 	/**
@@ -3074,7 +3074,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}
-		return $approveLogId;
+		return $approveLogID;
  } /* }}} */
 
 	function delIndReviewer($user, $requestUser) { /* {{{ */
