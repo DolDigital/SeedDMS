@@ -133,7 +133,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$statusList = $latestContent->getRevisionStatus(10);
 			break;
 		case "receipt":
-			$statusList = $latestContent->getReceiptStatus(10);
+			$statusList = $latestContent->getReceiptStatus(1);
 			break;
 		default:
 			$statusList = array();
@@ -1062,7 +1062,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td>".getReceiptStatusText($r["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
 
-				if($accessop->mayReview()) {
+				if($accessop->mayReceipt()) {
 					if ($is_recipient && $r["status"]==0) {
 						print "<li><a href=\"../out/out.ReceiptDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&receiptid=".$r['receiptID']."\" class=\"btn btn-mini\">".getMLText("add_receipt")."</a></li>";
 					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
