@@ -72,9 +72,12 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+/* Create object for checking access to certain operations */
+$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+
 $olddocstatus = $content->getStatus();
-// verify if document has expired
-if ($document->hasExpired()){
+// verify if document may be reviewed
+if ($accessop->mayReview()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
