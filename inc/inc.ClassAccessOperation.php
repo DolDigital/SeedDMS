@@ -138,7 +138,7 @@ class SeedDMS_AccessOperation {
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)) {
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) /* && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)*/) {
 				return true;
 			}
 		}
@@ -260,6 +260,24 @@ class SeedDMS_AccessOperation {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if document content may be receipted
+	 *
+	 * Reviewing a document content is only allowed if the document was not
+	 * obsoleted. There are other requirements which are not taken into
+	 * account here.
+	 */
+	function mayReceipt() { /* {{{ */
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			$latestContent = $this->obj->getLatestContent();
+			$status = $latestContent->getStatus();
+			if ($status["status"]!=S_OBSOLETE) {
 				return true;
 			}
 		}
