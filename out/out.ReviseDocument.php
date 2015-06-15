@@ -58,8 +58,12 @@ $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
-// verify if document has expired
-if ($document->hasExpired()){
+
+/* Create object for checking access to certain operations */
+$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+
+// verify if document maybe revised
+if (!$document->mayRevise()){
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
@@ -67,9 +71,6 @@ $revisions = $content->getRevisionStatus();
 if(!$revisions) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_action"));
 }
-
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$content, 'revisionid'=>(int) $_GET['revisionid']));

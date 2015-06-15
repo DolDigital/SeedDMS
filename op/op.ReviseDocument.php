@@ -26,6 +26,7 @@ include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassController.php");
@@ -72,9 +73,12 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+/* Create object for checking access to certain operations */
+$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+
 $olddocstatus = $content->getStatus();
-// verify if document has expired
-if ($document->hasExpired()){
+// verify if document maybe revised
+if (!$document->mayRevise()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
