@@ -193,14 +193,38 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button> <?php if($totaldocs): ?><a class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a><?php endif; ?></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
 <?php
 		$this->contentContainerEnd();
 // }}}
-
+?>
+<?php if($totaldocs): ?>
+<div class="accordion" id="accordion1">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFolder">
+        <?php printMLText('export'); ?>
+      </a>
+    </div>
+    <div id="collapseFolder" class="accordion-body <?php if(!$openfilterdlg) echo "collapse";?>" style="_height: 0px;">
+      <div class="accordion-inner">
+<table class="table-condensed">
+<tr>
+<td><?= getMLText('content') ?></td><td><input type="checkbox" name="includecontent"> <?php printMLText("include_content"); ?></td>
+</tr>
+<tr>
+<td></td><td><a class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a></td>
+</tr>
+</table>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+<?php
 		/* First check if any of the folder filters are set. If it is,
 		 * open the accordion.
 		 */
