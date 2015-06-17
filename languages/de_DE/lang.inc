@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2076), dgrutsch (18)
+//    Translators: Admin (2080), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -89,6 +89,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'approval_deletion_email_subject' => '[sitename]: [name] - Freigabeaufforderung gelöscht',
+'approval_file' => 'Datei',
 'approval_group' => 'Berechtigungsgruppe',
 'approval_log' => 'Freigabeprotokoll',
 'approval_request_email' => 'Aufforderung zur Freigabe',
@@ -398,6 +399,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Ablaufdatum geändert',
+'export' => 'Export',
 'extension_manager' => 'Erweiterungen verwalten',
 'february' => 'Februar',
 'file' => 'Datei',
@@ -476,6 +478,7 @@ URL: [url]',
 'hu_HU' => 'Ungarisch',
 'id' => 'ID',
 'identical_version' => 'Neue Version ist identisch zu aktueller Version.',
+'include_content' => 'Inhalte mit exportieren',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
 'index_converters' => 'Index Dokumentenumwandlung',
@@ -769,6 +772,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'review_deletion_email_subject' => '[sitename]: [name] - Prüfungsaufforderung gelöscht',
+'review_file' => 'Datei',
 'review_group' => 'Gruppe: prüfen',
 'review_log' => 'Prüfungsprotokoll',
 'review_request_email' => 'Aufforderung zur Prüfung',

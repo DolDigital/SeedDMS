@@ -89,6 +89,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'approval_deletion_email_subject' => '[sitename]: [name] - Cerere aprobare stearsa',
+'approval_file' => '',
 'approval_group' => 'Grup aprobare',
 'approval_log' => 'Log aprobare',
 'approval_request_email' => 'Cerere aprobare',
@@ -398,6 +399,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Data de expirare schimbată',
+'export' => '',
 'extension_manager' => 'Gestionați extensiile',
 'february' => 'Februarie',
 'file' => 'Fișier',
@@ -476,6 +478,7 @@ URL: [url]',
 'hu_HU' => 'Ungureste',
 'id' => 'ID',
 'identical_version' => 'Noua versiune este identică cu versiunea curentă.',
+'include_content' => '',
 'include_documents' => 'Include documente',
 'include_subdirectories' => 'Include subfoldere',
 'index_converters' => 'Indexare conversie documente',
@@ -777,6 +780,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'review_deletion_email_subject' => '[sitename]: [name] - Cerere de revizuire eliminata',
+'review_file' => '',
 'review_group' => 'Grup revizuire',
 'review_log' => 'Log revizuire',
 'review_request_email' => 'Cerere de revizuire',

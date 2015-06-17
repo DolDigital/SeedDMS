@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (940), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (942), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -84,6 +84,7 @@ URL: [url]',
 'approval_deletion_email' => 'Petición de aprobación eliminada',
 'approval_deletion_email_body' => '',
 'approval_deletion_email_subject' => '',
+'approval_file' => '',
 'approval_group' => 'Grupo aprobador',
 'approval_log' => 'Traza de aprovación',
 'approval_request_email' => 'Petición de aprobación',
@@ -393,6 +394,7 @@ Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Fecha de caducidad modificada',
+'export' => '',
 'extension_manager' => 'Administrar extensiones',
 'february' => 'Febrero',
 'file' => 'Fichero',
@@ -471,6 +473,7 @@ URL: [url]',
 'hu_HU' => 'Hungaro',
 'id' => 'ID',
 'identical_version' => 'La nueva versión es idéntica a la actual.',
+'include_content' => '',
 'include_documents' => 'Incluir documentos',
 'include_subdirectories' => 'Incluir subcarpetas',
 'index_converters' => 'Conversión de índice de documentos',
@@ -760,6 +763,7 @@ nURL: [url]',
 'review_deletion_email' => 'Petición de revisión eliminada',
 'review_deletion_email_body' => '',
 'review_deletion_email_subject' => '',
+'review_file' => '',
 'review_group' => 'Grupo de revisión',
 'review_log' => 'Traza de revisión',
 'review_request_email' => 'Petición de revisión',
@@ -946,8 +950,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Si se habilita, la carga de ficheros también estará disponible a través de un applet java llamado jumploader, sin límite de tamaño de fichero fijado por el navegador. También permite la carga de múltiples ficheros de una sola vez.',
 'settings_enableNotificationAppRev' => 'Habilitar notificación a revisor/aprobador',
 'settings_enableNotificationAppRev_desc' => 'Habilitar para enviar notificación a revisor/aprobador cuando se añade una nueva versión de documento',
-'settings_enableNotificationWorkflow' => '',
-'settings_enableNotificationWorkflow_desc' => '',
+'settings_enableNotificationWorkflow' => 'Enviar notificación a los usuarios en la siguiente transacción del flujo.',
+'settings_enableNotificationWorkflow_desc' => 'Si esta opción esta activa, los usuarios y grupos  que deban tomar una acción en la siguiente transacción del flujo, serán notificados. Incluso si ellos no han adicionado una notificación al documento.',
 'settings_enableOwnerNotification' => 'Habilitar notificación al propietario por defecto',
 'settings_enableOwnerNotification_desc' => 'Marcar para añadir una notificación al propietario del documento cuando es añadido.',
 'settings_enableOwnerRevApp' => 'Permitir al propietario revisar/aprobar',

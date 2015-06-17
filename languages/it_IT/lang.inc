@@ -89,6 +89,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'approval_deletion_email_subject' => '[sitename]: [name] - Richiesta di approvazione cancellata',
+'approval_file' => '',
 'approval_group' => 'Gruppo di approvazione',
 'approval_log' => 'Registro delle approvazioni',
 'approval_request_email' => 'Richiesta di approvazione',
@@ -398,6 +399,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Scadenza cambiata',
+'export' => '',
 'extension_manager' => 'Gestisci le estensioni dei files',
 'february' => 'Febbraio',
 'file' => 'File',
@@ -476,6 +478,7 @@ URL: [url]',
 'hu_HU' => 'Ungherese',
 'id' => 'ID',
 'identical_version' => 'La nuova versione è identica a quella attuale.',
+'include_content' => '',
 'include_documents' => 'Includi documenti',
 'include_subdirectories' => 'Includi sottocartelle',
 'index_converters' => 'Indice di conversione documenti',
@@ -777,6 +780,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'review_deletion_email_subject' => '[sitename]: [name] - Richiesta di revisione cancellata',
+'review_file' => '',
 'review_group' => 'Gruppo revisori',
 'review_log' => 'Rivedi log',
 'review_request_email' => 'Richiesta di revisione',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1003), aydin (83)
+//    Translators: Admin (1004), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -83,6 +83,7 @@ URL: [url]',
 'approval_deletion_email' => 'Onay talebi silindi',
 'approval_deletion_email_body' => '',
 'approval_deletion_email_subject' => '',
+'approval_file' => '',
 'approval_group' => 'Onay Grubu',
 'approval_log' => 'Onay Kayıtları',
 'approval_request_email' => 'Onay talebi',
@@ -164,7 +165,7 @@ URL: [url]',
 'backup_remove' => 'Yedek dosyasını sil',
 'backup_tools' => 'Yedekleme araçları',
 'between' => 'arasında',
-'bg_BG' => '',
+'bg_BG' => 'Bulgarca',
 'browse' => 'Tara',
 'calendar' => 'Takvim',
 'calendar_week' => 'Takvim haftası',
@@ -392,6 +393,7 @@ Doküman: [name]
 Kullanıcı: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Bitiş tarihi değişti',
+'export' => '',
 'extension_manager' => 'Uzantıları düzenle',
 'february' => 'Şubat',
 'file' => 'Dosya',
@@ -470,6 +472,7 @@ URL: [url]',
 'hu_HU' => 'Macarca',
 'id' => 'ID',
 'identical_version' => 'Yeni versiyon güncel versiyonla aynı.',
+'include_content' => '',
 'include_documents' => 'Dokümanları kapsa',
 'include_subdirectories' => 'Alt klasörleri kapsa',
 'index_converters' => 'Doküman dönüştürmeyi indeksle',
@@ -761,6 +764,7 @@ URL: [url]',
 'review_deletion_email' => 'Kontrol talebi silindi',
 'review_deletion_email_body' => '',
 'review_deletion_email_subject' => '',
+'review_file' => '',
 'review_group' => 'Kontrol grubu',
 'review_log' => 'Kontrol kayıtları',
 'review_request_email' => 'Kontrol talebi',

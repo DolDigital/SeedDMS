@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1204), dgrutsch (3), netixw (14)
+//    Translators: Admin (1208), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -89,6 +89,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'approval_deletion_email_subject' => '[sitename]: [name] - Approval request deleted',
+'approval_file' => 'File',
 'approval_group' => 'Approval Group',
 'approval_log' => 'Approval Log',
 'approval_request_email' => 'Approval request',
@@ -398,6 +399,7 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Expiry date changed',
+'export' => 'Export',
 'extension_manager' => 'Manage extensions',
 'february' => 'February',
 'file' => 'File',
@@ -476,6 +478,7 @@ URL: [url]',
 'hu_HU' => 'Hungarian',
 'id' => 'ID',
 'identical_version' => 'New version is identical to current version.',
+'include_content' => 'Include content',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
 'index_converters' => 'Index document conversion',
@@ -776,6 +779,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'review_deletion_email_subject' => '[sitename]: [name] - Review request deleted',
+'review_file' => 'File',
 'review_group' => 'Review group',
 'review_log' => 'Review log',
 'review_request_email' => 'Review request',
