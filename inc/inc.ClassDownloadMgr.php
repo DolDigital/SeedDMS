@@ -48,24 +48,27 @@ class SeedDMS_Download_Mgr {
 		$this->items[$item->getID()] = $item;
 	} /* }}} */
 
-	public function createToc($file, $items) { /* {{{ */
+	public function createToc($file) { /* {{{ */
+		$items = $this->items;
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getProperties()->setCreator("SeedDMS")->setTitle("Metadata");
 		$sheet = $objPHPExcel->setActiveSheetIndex(0);
 
 		$i = 1;
-		$sheet->setCellValueByColumnAndRow(0, $i, 'Dokumenten-Nr.');
-		$sheet->setCellValueByColumnAndRow(1, $i, 'Dateiname');
-		$sheet->setCellValueByColumnAndRow(2, $i, 'Status');
-		$sheet->setCellValueByColumnAndRow(3, $i, 'Int. Version');
-		$sheet->setCellValueByColumnAndRow(4, $i, 'Prüfer');
-		$sheet->setCellValueByColumnAndRow(5, $i, 'Prüfdatum');
-		$sheet->setCellValueByColumnAndRow(6, $i, 'Prüfkommentar');
-		$sheet->setCellValueByColumnAndRow(7, $i, 'Prüfstatus');
-		$sheet->setCellValueByColumnAndRow(8, $i, 'Freigeber');
-		$sheet->setCellValueByColumnAndRow(9, $i, 'Freigabedatum');
-		$sheet->setCellValueByColumnAndRow(10, $i, 'Freigabekommentar');
-		$sheet->setCellValueByColumnAndRow(11, $i, 'Freigabestatus');
+		$col = 0;
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dokumenten-Nr.');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dokumentenname');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dateiname');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Status');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Int. Version');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfer');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfdatum');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfkommentar');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfstatus');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigeber');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabedatum');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabekommentar');
+		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabestatus');
 		$i++;
 		foreach($items as $item) {
 			$document = $item->getDocument();
@@ -74,10 +77,12 @@ class SeedDMS_Download_Mgr {
 			$reviewStatus = $item->getReviewStatus();
 			$approvalStatus = $item->getApprovalStatus();
 
-			$sheet->setCellValueByColumnAndRow(0, $i, $document->getID());
-			$sheet->setCellValueByColumnAndRow(1, $i, $document->getID()."-".$item->getOriginalFileName());
-			$sheet->setCellValueByColumnAndRow(2, $i, getOverallStatusText($status['status']));
-			$sheet->setCellValueByColumnAndRow(3, $i, $item->getVersion());
+			$col = 0;
+			$sheet->setCellValueByColumnAndRow($col++, $i, $document->getID());
+			$sheet->setCellValueByColumnAndRow($col++, $i, $document->getName());
+			$sheet->setCellValueByColumnAndRow($col++, $i, $document->getID()."-".$item->getOriginalFileName());
+			$sheet->setCellValueByColumnAndRow($col++, $i, getOverallStatusText($status['status']));
+			$sheet->setCellValueByColumnAndRow($col++, $i, $item->getVersion());
 			$l = $i;
 			$k = $i;
 			if($reviewStatus) {
@@ -100,12 +105,14 @@ class SeedDMS_Download_Mgr {
 							}
 							break;
 					}
-					$sheet->setCellValueByColumnAndRow(4, $l, $reqName);
-					$sheet->setCellValueByColumnAndRow(5, $l, ($r['status']==1 || $r['status']==-1) ? $r['date'] : "");
-					$sheet->setCellValueByColumnAndRow(6, $l, $r['comment']);
-					$sheet->setCellValueByColumnAndRow(7, $l, getReviewStatusText($r["status"]));
+					$tcol = $col;
+					$sheet->setCellValueByColumnAndRow($tcol++, $l, $reqName);
+					$sheet->setCellValueByColumnAndRow($tcol++, $l, ($r['status']==1 || $r['status']==-1) ? $r['date'] : "");
+					$sheet->setCellValueByColumnAndRow($tcol++, $l, $r['comment']);
+					$sheet->setCellValueByColumnAndRow($tcol++, $l, getReviewStatusText($r["status"]));
 					$l++;
 				}
+				$col = $tcol;
 				$l--;
 			}
 			if($approvalStatus) {
@@ -128,12 +135,14 @@ class SeedDMS_Download_Mgr {
 							}
 							break;
 					}
-					$sheet->setCellValueByColumnAndRow(8, $k, $reqName);
-					$sheet->setCellValueByColumnAndRow(9, $k, ($r['status']==1 || $r['status']==-1) ?$r['date'] : "");
-					$sheet->setCellValueByColumnAndRow(10, $k, $r['comment']);
-					$sheet->setCellValueByColumnAndRow(11, $k, getReviewStatusText($r["status"]));
+					$tcol = $col;
+					$sheet->setCellValueByColumnAndRow($tcol++, $k, $reqName);
+					$sheet->setCellValueByColumnAndRow($tcol++, $k, ($r['status']==1 || $r['status']==-1) ?$r['date'] : "");
+					$sheet->setCellValueByColumnAndRow($tcol++, $k, $r['comment']);
+					$sheet->setCellValueByColumnAndRow($tcol++, $k, getApprovalStatusText($r["status"]));
 					$k++;
 				}
+				$col = $tcol;
 				$k--;
 			}
 			$i = max($l, $k);
@@ -152,7 +161,7 @@ class SeedDMS_Download_Mgr {
 		}
 
 		$file = tempnam("/tmp", "export-list-");
-		$this->createToc($file, $this->items);
+		$this->createToc($file);
 
 		$zip = new ZipArchive();
 		$prefixdir = date('Y-m-d', time());
