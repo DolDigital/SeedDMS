@@ -1214,7 +1214,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getRevisionStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$status = array();
+		$status = array("indstatus"=>array(), "grpstatus"=>array());
 
 		// See if the user is assigned as an individual revisor.
 		$queryStr = "SELECT `tblDocumentRevisors`.*, `tblDocumentRevisionLog`.`status`, ".
@@ -1231,7 +1231,6 @@ class SeedDMS_Core_User { /* {{{ */
 		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
-			$status['indstatus'] = array();
 			foreach ($resArr as $res) {
 				if($res['date']) {
 					if(isset($status["indstatus"][$res['documentID']])) {
@@ -1262,7 +1261,6 @@ class SeedDMS_Core_User { /* {{{ */
 		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
-			$status['grpstatus'] = array();
 			foreach ($resArr as $res) {
 				if(isset($status["grpstatus"][$res['documentID']])) {
 					if($status["grpstatus"][$res['documentID']]['date'] < $res['date']) {
