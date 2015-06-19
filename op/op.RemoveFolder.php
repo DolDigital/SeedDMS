@@ -81,7 +81,7 @@ if ($notifier) {
 	}
 }
 
-add_log_line();
+add_log_line("?folderid=".$folderid."&name=".$foldername);
 
 header("Location:../out/out.ViewFolder.php?folderid=".$parent->getID()."&showtree=".$_POST["showtree"]);
 
