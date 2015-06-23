@@ -431,7 +431,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 <td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
-			";
 </tr>
 </table>
 
