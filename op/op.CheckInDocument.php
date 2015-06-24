@@ -201,7 +201,7 @@ else
 		$attributes = array();
 	}
 
-	$contentResult=$document->checkIn($comment, $user, $reviewers, $approvers, $version=0, $attributes, $workflow);
+	$contentResult=$document->checkIn($comment, $user, $reviewers, $approvers, $version=0, $attributes, $workflow, $settings->_initialDocumentStatus);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} elseif (is_bool($contentResult) && $contentResult) {
