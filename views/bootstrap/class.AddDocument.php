@@ -219,7 +219,7 @@ $(document).ready(function() {
 <?php if($libraryfolder) { ?>
 		<tr>
 			<td><?php printMLText("librarydoc");?>:</td>
-			<td><?php $this->printDocumentChooser("form1", M_READ, -1, null, 'librarydoc', $libraryfolder, 1);?></td>
+			<td><?php $this->printDocumentChooser("form1", M_READ, -1, null, 'librarydoc', $libraryfolder->getID(), 1);?></td>
 		</tr>
 <?php } ?>
 		<tr>

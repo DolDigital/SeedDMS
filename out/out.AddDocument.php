@@ -47,8 +47,18 @@ if($settings->_quota > 0) {
 	}
 }
 
+$folderid = $_GET["folderid"];
+$libfolder = $dms->getFolder($settings->_libraryFolder);
+if (!is_object($libfolder)) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
+}
+
+if ($libfolder->getAccessMode($user) < M_READ) {
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($libfolder->getName()))), getMLText("access_denied"));
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'libraryfolder'=>$dms->getFolder($settings->_libraryFolder), 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate, 'sortusersinlist'=>$settings->_sortUsersInList, 'orderby'=>$settings->_sortFoldersDefault));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'libraryfolder'=>$dms->getFolder($libfolder), 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate, 'sortusersinlist'=>$settings->_sortUsersInList, 'orderby'=>$settings->_sortFoldersDefault));
 if($view) {
 	$view->show();
 	exit;
