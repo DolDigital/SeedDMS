@@ -367,14 +367,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		print "<table class=\"table\">";
 		print "<thead>\n<tr>\n";
-		print "<th width='*'></th>\n";
+		print "<th style=\"width:".$previewwidthdetail."px;\"></th>\n";
 		print "<th width='*'>".getMLText("file")."</th>\n";
 		print "<th width='25%'>".getMLText("comment")."</th>\n";
 		print "<th width='15%'>".getMLText("status")."</th>\n";
-		print "<th width='20%'></th>\n";
+		print "<th width='25%'></th>\n";
 		print "</tr></thead><tbody>\n";
 		print "<tr>\n";
-		print "<td>";
+		print "<td style=\"width:".$previewwidthdetail."px;\">";
 		/*
 		print "<ul class=\"actions unstyled\">";
 
