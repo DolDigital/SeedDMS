@@ -173,8 +173,24 @@ if ($action == "saveSettings")
   $settings->_updateNotifyTime = intval($_POST["updateNotifyTime"]);
   $settings->_maxExecutionTime = intval($_POST["maxExecutionTime"]);
 
-  // SETTINGS - ADVANCED - INDEX CMD
-  $settings->_converters['fulltext'] = $_POST["converters"];
+	// SETTINGS - ADVANCED - INDEX CMD
+	if(isset($_POST["converters"]["fulltext"]))
+		$settings->_converters['fulltext'] = $_POST["converters"]["fulltext"];
+	else
+		$settings->_converters['fulltext'] = $_POST["converters"];
+	if(trim($settings->_converters['fulltext']['newmimetype']) &&
+		trim($settings->_converters['fulltext']['newcmd']))
+		$settings->_converters['fulltext'][$settings->_converters['fulltext']['newmimetype']] = trim($settings->_converters['fulltext']['newcmd']);
+	unset($settings->_converters['fulltext']['newmimetype']);
+	unset($settings->_converters['fulltext']['newcmd']);
+
+	if(isset($_POST["converters"]["preview"]))
+		$settings->_converters['preview'] = $_POST["converters"]["preview"];
+	if(trim($settings->_converters['preview']['newmimetype']) &&
+		trim($settings->_converters['preview']['newcmd']))
+		$settings->_converters['preview'][$settings->_converters['preview']['newmimetype']] = trim($settings->_converters['preview']['newcmd']);
+	unset($settings->_converters['preview']['newmimetype']);
+	unset($settings->_converters['preview']['newcmd']);
 
   // SETTINGS - EXTENSIONS
   $settings->_extensions = $_POST["extensions"];

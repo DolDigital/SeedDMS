@@ -606,14 +606,29 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><input type="text" name="converters[<?php echo $mimetype;?>]" value="<?php echo htmlspecialchars($cmd) ?>" size="100" /></td>
+        <td><input type="text" name="converters[fulltext][<?php echo $mimetype;?>]" value="<?php echo htmlspecialchars($cmd) ?>" size="100" /></td>
       </tr>
 <?php
 	}
 ?>
       <tr title="">
-        <td><input type="text" name="converters_newmimetype" value="" />:</td>
-        <td><input type="text" name="converters_newcmd" value="" /></td>
+			<td><input type="text" name="converters[fulltext][newmimetype]" value="" placeholder="<?= getMLText('converter_new_mimetype') ?>"/>:</td>
+			<td><input type="text" name="converters[fulltext][newcmd]" value="" placeholder="<?= getMLText('converter_new_cmd') ?>"/></td>
+      </tr>
+      <tr ><td><b> <?php printMLText("preview_converters");?></b></td> </tr>
+<?php
+	foreach($settings->_converters['preview'] as $mimetype=>$cmd) {
+?>
+      <tr title="<?php echo $mimetype;?>">
+        <td><?php echo $mimetype;?>:</td>
+        <td><input type="text" name="converters[preview][<?php echo $mimetype;?>]" value="<?php echo htmlspecialchars($cmd) ?>" size="100" /></td>
+      </tr>
+<?php
+	}
+?>
+      <tr title="">
+			<td><input type="text" name="converters[preview][newmimetype]" value="" placeholder="<?= getMLText('converter_new_mimetype') ?>"/>:</td>
+			<td><input type="text" name="converters[preview][newcmd]" value="" placeholder="<?= getMLText('converter_new_cmd') ?>"/></td>
       </tr>
     </table>
 <?php		$this->contentContainerEnd(); ?>

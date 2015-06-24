@@ -537,6 +537,21 @@ class Settings { /* {{{ */
 			$this->_maxExecutionTime = ini_get("max_execution_time");
 
 		// XML Path: /configuration/system/advanced/converters
+		$convertergroups = $xml->xpath('/configuration/advanced/converters');
+		$this->_converters = array();
+		foreach($convertergroups as $convertergroup) {
+			$tabgroup = $convertergroup->attributes();
+			if(strval($tabgroup['target']))
+				$target = strval($tabgroup['target']);
+			else
+				$target = 'fulltext';
+			foreach($convertergroup as $converter) {
+				$tab = $converter->attributes();
+				$this->_converters[$target][trim(strval($tab['mimeType']))] = trim(strval($converter));
+			}
+		}
+
+		/*
 		$converters = $xml->xpath('/configuration/advanced/converters/converter');
 		$this->_converters = array();
 		foreach($converters as $converter) {
@@ -546,6 +561,7 @@ class Settings { /* {{{ */
 			else
 				$this->_converters[trim(strval($tab['target']))][trim(strval($tab['mimeType']))] = trim(strval($converter));
 		}
+		*/
 
 		// XML Path: /configuration/extensions
 		$extensions = $xml->xpath('/configuration/extensions/extension');
@@ -806,30 +822,31 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "updateNotifyTime", $this->_updateNotifyTime);
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
 
-    // XML Path: /configuration/advanced/converters
-    foreach($this->_converters['fulltext'] as $mimeType => $cmd)
-    {
-      // search XML node
-      $node = $xml->xpath('/configuration/advanced/converters/converter[@mimeType="'. $mimeType .'"]');
+		// XML Path: /configuration/advanced/converters
+		foreach($this->_converters as $type=>$converters) {
+			foreach($this->_converters[$type] as $mimeType => $cmd) {
+				// search XML node
+				$node = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]/converter[@mimeType="'. $mimeType .'"]');
 
-      if (isset($node))
-      {
-        if (count($node)>0)
-        {
-          $node = $node[0];
-        }
-        else
-        {
-          $nodeParent = $xml->xpath('/configuration/advanced/converters');
-          $node = $nodeParent[0]->addChild("converter");
-        }
-
-				$node[0] = $cmd;
-        $this->setXMLAttributValue($node, 'mimeType', $mimeType);
-
-      } // isset($node)
-
-    } // foreach
+				if (count($node)>0) {
+					if(trim($cmd)) {
+						$node = $node[0];
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					} else {
+						$node = $node[0];
+						unset($node[0]);
+					}
+				} else {
+					if(trim($cmd)) {
+						$nodeParent = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]');
+						$node = $nodeParent[0]->addChild("converter");
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					}
+				}
+			} // foreach
+		} // foreach
 
 
     // XML Path: /configuration/extensions
