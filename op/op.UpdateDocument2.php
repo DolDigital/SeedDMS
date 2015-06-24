@@ -154,7 +154,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		}
 
 
-		$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers);
+		$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, null, null, $settings->_initialDocumentStatus);
 		unlink($userfiletmp);
 		if (is_bool($contentResult) && !$contentResult) {
 			echo getMLText("error_occured");
