@@ -808,13 +808,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param integer $version
 	 * @param array $attributes
 	 * @param object $workflow
+	 * @param integer $initstate intial document status
 	 * @return boolean|object false in case of error, true if no error occurs but
 	 * the document remains unchanged (because the checked out file has not
 	 * changed or it has disappeared and couldnt't be checked in), or
 	 * an instance of class SeedDMS_Core_AddContentResultSet if the document
 	 * was updated.
 	 */
-	function checkIn($comment, $user, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null) { /* {{{ */
+	function checkIn($comment, $user, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null, $initstate=S_RELEASED) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$info = self::getCheckOutInfo();
@@ -840,7 +841,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Do not create a new version if the file was unchanged */
 		$checksum = SeedDMS_Core_File::checksum($info['filename']);
 		if($checksum != $lc->getChecksum()) {
-			$content = $this->addContent($comment, $user, $info['filename'], $lc->getOriginalFileName(), $lc->getFileType(), $lc->getMimeType(), $reviewers, $approvers, $version, $attributes, $workflow);
+			$content = $this->addContent($comment, $user, $info['filename'], $lc->getOriginalFileName(), $lc->getFileType(), $lc->getMimeType(), $reviewers, $approvers, $version, $attributes, $workflow, $initstate);
 			if($content) {
 				if(!$this->_dms->forceRename) {
 					SeedDMS_Core_File::removeFile($info['filename']);
@@ -1463,6 +1464,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param array $attributes list of version attributes. The element key
 	 *        must be the id of the attribute definition.
 	 * @param object $workflow
+	 * @param integer $initstate intial document status
 	 * @return bool/array false in case of an error or a result set
 	 */
 	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null, $initstate=S_RELEASED) { /* {{{ */
