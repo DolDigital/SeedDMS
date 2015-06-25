@@ -229,8 +229,9 @@ class SeedDMS_Core_Transmittal {
 
 		$size = 0;
 		foreach ($this->_items as $item) {
-			$content = $item->getContent();
-			$size += $content->getFileSize();
+			if($content = $item->getContent()) {
+				$size += $content->getFileSize();
+			}
 		}
 		return $size;
 	} /* }}} */
