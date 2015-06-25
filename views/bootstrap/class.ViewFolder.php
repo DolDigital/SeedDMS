@@ -86,6 +86,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 		$previewwidth = $this->params['previewWidthList'];
+		$previewconverters = $this->params['previewconverters'];
 
 		$folderid = $folder->getId();
 
@@ -101,6 +102,9 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		else {
 			$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 		}
+
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer->setConverters($previewconverters);
 
 		echo $this->callHook('preContent');
 
@@ -140,7 +144,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 			echo $this->callHook('leftContent');
 
-			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard(), $previewer);
 
 			echo "</div>\n";
 		}
@@ -271,8 +275,6 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 		}
 
-
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 		foreach($documents as $document) {
 			$txt = $this->callHook('documentListItem', $document, $previewer);
 			if(is_string($txt))

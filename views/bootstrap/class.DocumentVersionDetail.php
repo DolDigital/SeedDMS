@@ -41,6 +41,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$enableversionmodification = $this->params['enableversionmodification'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidthdetail = $this->params['previewwidthdetail'];
+		$previewconverters = $this->params['previewconverters'];
 
 		$latestContent = $document->getLatestContent();
 		$status = $version->getStatus();
@@ -148,6 +149,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 
 		print "</ul>";
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+		$previewer->setConverters($previewconverters);
 		$previewer->createPreview($version);
 		if($previewer->hasPreview($version)) {
 			print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($version->getMimeType())."\">");

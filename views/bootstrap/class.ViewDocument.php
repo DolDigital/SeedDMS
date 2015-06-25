@@ -123,6 +123,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$previewconverters = $this->params['previewConverters'];
 		$checkoutdir = $this->params['checkOutDir'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
@@ -387,6 +388,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</ul>";
 		*/
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+		$previewer->setConverters($previewconverters);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {

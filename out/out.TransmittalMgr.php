@@ -42,7 +42,7 @@ if(isset($_GET['transmittalid']) && $_GET['transmittalid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seltransmittal'=>$seltransmittal,  'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seltransmittal'=>$seltransmittal,  'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList, 'previewconverters'=>$settings->_converters['preview']));
 if($view) {
 	$view->show();
 	exit;

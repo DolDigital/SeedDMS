@@ -1334,7 +1334,7 @@ $(function() {
 	 * @param array clipboard
 	 * @return string rendered html content
 	 */
-	function mainClipboard($clipboard){ /* {{{ */
+	function mainClipboard($clipboard, $previewer){ /* {{{ */
 		$dms = $this->params['dms'];
 		$content = '';
 		$foldercount = $doccount = 0;
@@ -1359,7 +1359,6 @@ $(function() {
 				}
 			}
 		}
-		$previewer = new SeedDMS_Preview_Previewer($this->params['cachedir'], 40);
 		if($clipboard['docs']) {
 			foreach($clipboard['docs'] as $docid) {
 				/* FIXME: check for access rights, which could have changed after adding the document to the clipboard */
@@ -1416,10 +1415,10 @@ $(function() {
 	 *
 	 * @param array clipboard
 	 */
-	function printClipboard($clipboard){ /* {{{ */
+	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
-		echo $this->mainClipboard($clipboard);
+		echo $this->mainClipboard($clipboard, $previewer);
 		echo "</div>\n";
 	} /* }}} */
 

@@ -425,13 +425,16 @@ switch($command) {
 				$content = $view->menuClipboard($session->getClipboard());
 				break;
 			case 'mainclipboard':
-				$content = $view->mainClipboard($session->getClipboard());
+				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+				$previewer->setConverters($settings->_converters['preview']);
+				$content = $view->mainClipboard($session->getClipboard(), $previewer);
 				break;
 			case 'documentlistrow':
 				$document = $dms->getDocument($_REQUEST['id']);
 				if($document) {
 					if ($document->getAccessMode($user) >= M_READ) {
 						$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+						$previewer->setConverters($settings->_converters['preview']);
 						$view->setParam('previewWidthList', $settings->_previewWidthList);
 						$view->setParam('showtree', showtree());
 						$content = $view->documentListRow($document, $previewer, true);

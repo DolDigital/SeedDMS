@@ -105,6 +105,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		}
 		else {
 			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth);
+			$previewer->setConverters($this->previewconverters);
 
 			print "<table class=\"table-condensed\">";
 			print "<thead>\n<tr>\n";
@@ -153,6 +154,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->user = $this->params['user'];
 		$this->cachedir = $this->params['cachedir'];
 		$this->previewwidth = $this->params['previewWidthList'];
+		$this->previewconverters = $this->params['previewconverters'];
 		$this->db = $this->dms->getDB();
 
 		$this->htmlStartPage(getMLText("my_account"));

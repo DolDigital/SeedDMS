@@ -81,6 +81,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$searchin = $this->params['searchin'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$previewconverters = $this->params['previewconverters'];
 
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation();
@@ -468,6 +469,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+			$previewer->setConverters($previewconverters);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == $dms->getClassname('document')) {
 					$txt = $this->callHook('documentListItem', $entry, $previewer);

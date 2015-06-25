@@ -36,6 +36,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$previewconverters = $this->params['previewconverters'];
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
@@ -49,6 +50,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		$workflowStatus = $user->getWorkflowStatus();
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer->setConverters($previewconverters);
 
 		$printheader=true;
 		$iRev = array();

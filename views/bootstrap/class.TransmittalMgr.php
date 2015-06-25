@@ -215,9 +215,11 @@ $('#delete-transmittalitem-btn-".$itemid."').popover({
 		$seltransmittal = $this->params['seltransmittal'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$previewconverters = $this->params['previewconverters'];
 
 		$db = $dms->getDB();
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer->setConverters($previewconverters);
 
 		$this->htmlStartPage(getMLText("my_transmittals"));
 		$this->globalNavigation();
@@ -278,17 +280,22 @@ $('#delete-transmittalitem-btn-".$itemid."').popover({
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 				foreach($items as $item) {
-					$content = $item->getContent();
-					$document = $content->getDocument();
-					$latestcontent = $document->getLatestContent();
-					if ($document->getAccessMode($user) >= M_READ) {
+					if($content = $item->getContent()) {
+						$document = $content->getDocument();
+						$latestcontent = $document->getLatestContent();
+						if ($document->getAccessMode($user) >= M_READ) {
+							echo "<tr id=\"table-row-transmittalitem-".$item->getID()."\">";
+							echo $this->documentListRow($document, $previewer, true, $content->getVersion());
+							echo "<td><div class=\"list-action\">";
+							$this->printDeleteItemButton($item, getMLText('transmittalitem_removed'));
+							if($latestcontent->getVersion() != $content->getVersion())
+								$this->printUpdateItemButton($item, getMLText('transmittalitem_updated', array('prevversion'=>$content->getVersion(), 'newversion'=>$latestcontent->getVersion())));
+							echo "</div></td>";
+							echo "</tr>";
+						}
+					} else {
 						echo "<tr id=\"table-row-transmittalitem-".$item->getID()."\">";
-						echo $this->documentListRow($document, $previewer, true, $content->getVersion());
-						echo "<td><div class=\"list-action\">";
-						$this->printDeleteItemButton($item, getMLText('transmittalitem_removed'));
-						if($latestcontent->getVersion() != $content->getVersion())
-							$this->printUpdateItemButton($item, getMLText('transmittalitem_updated', array('prevversion'=>$content->getVersion(), 'newversion'=>$latestcontent->getVersion())));
-						echo "</div></td>";
+						echo "<td colspan=\"5\">content ist weg</td>";
 						echo "</tr>";
 					}
 				}
