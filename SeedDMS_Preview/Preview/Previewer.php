@@ -37,6 +37,13 @@ class SeedDMS_Preview_Previewer {
 	 */
 	protected $width;
 
+	/**
+	 * @var array $converters list of mimetypes and commands for converting
+	 * file into preview image
+	 * @access protected
+	 */
+	protected $converters;
+
 	function __construct($previewDir, $width=40) {
 		if(!is_dir($previewDir)) {
 			if (!SeedDMS_Core_File::makeDir($previewDir)) {
@@ -48,7 +55,28 @@ class SeedDMS_Preview_Previewer {
 			$this->previewDir = $previewDir;
 		}
 		$this->width = intval($width);
+		$this->converters = array(
+			'image/png' => "convert -resize %wx '%f' '%o'",
+			'image/gif' => "convert -resize %wx '%f' '%o'",
+			'image/jpg' => "convert -resize %wx '%f' '%o'",
+			'image/jpeg' => "convert -resize %wx '%f' '%o'",
+			'image/svg+xml' => "convert -resize %wx '%f' '%o'",
+			'text/plain' => "convert -resize %wx '%f' '%o'",
+			'application/pdf' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/postscript' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
+		);
 	}
+
+	/**
+	 * Set a list of converters
+	 *
+	 * @param array list of converters. The key of the array contains the mimetype
+	 * and the value is the command to be called for creating the preview
+	 */
+	function setConverters($arr) { /* {{{ */
+		$this->converters = array_merge($arr, $this->converters);
+	} /* }}} */
 
 	/**
 	 * Retrieve the physical filename of the preview image on disk
@@ -57,7 +85,7 @@ class SeedDMS_Preview_Previewer {
 	 * @param integer $width width of preview image
 	 * @return string file name of preview image
 	 */
-	protected function getFileName($object, $width) { /* }}} */
+	protected function getFileName($object, $width) { /* {{{ */
 		$document = $object->getDocument();
 		$dir = $this->previewDir.'/'.$document->getDir();
 		switch(get_class($object)) {
@@ -93,6 +121,10 @@ class SeedDMS_Preview_Previewer {
 		$target = $this->getFileName($object, $width);
 		if($target !== false && (!file_exists($target) || filectime($target) < $object->getDate())) {
 			$cmd = '';
+			if(isset($this->converters[$object->getMimeType()])) {
+				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $file, $target), $this->converters[$object->getMimeType()]);
+			}
+			/*
 			switch($object->getMimeType()) {
 				case "image/png":
 				case "image/gif":
@@ -112,6 +144,7 @@ class SeedDMS_Preview_Previewer {
 					$cmd = 'tar tzvf '.$file.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target;
 					break;
 			}
+			 */
 			if($cmd) {
 				exec($cmd);
 			}
