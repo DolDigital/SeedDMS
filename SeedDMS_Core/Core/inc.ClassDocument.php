@@ -1770,9 +1770,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function removeContent($version) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$emailList = array();
-		$emailList[] = $version->_userID;
-
 		if (file_exists( $this->_dms->contentDir.$version->getPath() ))
 			if (!SeedDMS_Core_File::removeFile( $this->_dms->contentDir.$version->getPath() ))
 				return false;
@@ -1789,6 +1786,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content = " . $version->getId();
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "DELETE FROM `tblTransmittalItems` WHERE `document` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1821,9 +1824,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
 			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
-			}
 		}
 
 		if (strlen($stList)>0) {
@@ -1853,9 +1853,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
 			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
-			}
 		}
 
 		if (strlen($stList)>0) {
@@ -1869,6 +1866,64 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
+		}
+
+		/* Remove all receipts of document version.
+		 * This implmentation is different from the above for removing approvals
+		 * and reviews. It doesn't use getReceiptStatus() but reads the database
+		 */
+		$queryStr = "SELECT * FROM tblDocumentRecipients WHERE documentID = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
+		$resArr = $db->getResultArray($queryStr);
+		if ((is_bool($resArr) && !$resArr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$stList = array();
+		foreach($resArr as $res) {
+			$stList[] = $res['receiptID'];
+		}
+
+		if ($stList) {
+			$queryStr = "DELETE FROM `tblDocumentReceiptLog` WHERE `receiptID` IN (".implode(',', $stList).")";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			$queryStr = "DELETE FROM `tblDocumentRecipients` WHERE `receiptID` IN (".implode(',', $stList).")";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+		}
+
+		/* Remove all revisions of document version.
+		 * This implmentation is different from the above for removing approvals
+		 * and reviews. It doesn't use getRevisionStatus() but reads the database
+		 */
+		$queryStr = "SELECT * FROM tblDocumentRevisors WHERE documentID = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
+		$resArr = $db->getResultArray($queryStr);
+		if ((is_bool($resArr) && !$resArr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$stList = array();
+		foreach($resArr as $res) {
+			$stList[] = $res['revisionID'];
+		}
+
+		if ($stList) {
+			$queryStr = "DELETE FROM `tblDocumentRevisionLog` WHERE `revisionID` IN (".implode(',', $stList).")";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			$queryStr = "DELETE FROM `tblDocumentRevisors` WHERE `revisionID` IN (".implode(',', $stList).")";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
 
 		$queryStr = "DELETE FROM `tblWorkflowDocumentContent` WHERE `document` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
