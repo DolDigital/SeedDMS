@@ -915,7 +915,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * 
 	 * @param integer $mode access mode (defaults to M_ANY)
 	 * @param integer $op operation (defaults to O_EQ)
-	 * @return array multi dimensional array
+	 * @return array multi dimensional array or false in case of an error
 	 */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -923,7 +923,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if ($this->inheritsAccess()) {
 			$res = $this->getParent();
 			if (!$res) return false;
-			return $this->_parent->getAccessList($mode, $op);
+			$pacl = $res->getAccessList($mode, $op);
+			return $pacl;
+		} else {
+			$pacl = array("groups" => array(), "users" => array());
 		}
 
 		if (!isset($this->_accessList[$mode])) {
@@ -950,6 +953,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 
 		return $this->_accessList[$mode];
+		return SeedDMS_Core_DMS::mergeAccessLists($pacl, $this->_accessList[$mode]);
 	} /* }}} */
 
 	/**
