@@ -111,7 +111,7 @@ if (($oldname = $document->getName()) != $name) {
 
 			// if user is not owner send notification to owner
 			if ($user->getID() != $document->getOwner()->getID() &&
-				!SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
+				false === SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
 				$notifyList['users'][] = $document->getOwner();
 			}
 			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
@@ -165,7 +165,7 @@ if (($oldcomment = $document->getComment()) != $comment) {
 
 			// if user is not owner send notification to owner
 			if ($user->getID() != $document->getOwner()->getID() &&
-				!SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
+				false === SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
 				$notifyList['users'][] = $document->getOwner();
 			}
 			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
@@ -207,7 +207,7 @@ if ($expires != $document->getExpires()) {
 
 			// if user is not owner send notification to owner
 			if ($user->getID() != $document->getOwner()->getID() &&
-				!SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
+				false === SeedDMS_Core_DMS::inList($document->getOwner(), $notifyList['users'])) {
 				$notifyList['users'][] = $document->getOwner();
 			}
 			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
