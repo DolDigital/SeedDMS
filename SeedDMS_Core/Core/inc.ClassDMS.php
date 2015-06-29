@@ -196,18 +196,23 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Checks if a list of objects contains a single object 
 	 *
-	 * The regular php check done by '==' compares all attributes of
+	 * This function is only applicable on list containing objects which have
+	 * a method getID() because it is used to check if two objects are equal.
+	 * The regular php check on objects done by '==' compares all attributes of
 	 * two objects, which isn't required. The method will first check
 	 * if the objects are instances of the same class.
 	 *
+	 * The result of the function can be 0 which happens if the first element
+	 * of an indexed array matches.
+	 *
 	 * @param object $object1 object to look for (needle)
 	 * @param array $list list of objects (haystack)
-	 * @return boolean true if object was found, otherwise false
+	 * @return boolean/integer index in array if object was found, otherwise false
 	 */
 	static function inList($object, $list) { /* {{{ */
-		foreach($list as $item) {
+		foreach($list as $i=>$item) {
 			if(get_class($item) == get_class($object) && $item->getID() == $object->getID())
-				return true;
+				return $i;
 		}
 		return false;
 	} /* }}} */
@@ -258,13 +263,68 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
-	 * @return filtered list of links
+	 * @return array filtered list of links
 	 */
 	static function filterDocumentLinks($user, $links) { /* {{{ */
 		$tmp = array();
 		foreach ($links as $link)
 			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
 				array_push($tmp, $link);
+		return $tmp;
+	} /* }}} */
+
+	/**
+	 * Merge access lists
+	 *
+	 * Merges two access lists. Objects of the second list will override objects
+	 * in the first list.
+	 *
+	 * @param array $first list of access rights as returned by
+	 * SeedDMS_Core_Document:: getAccessList() or SeedDMS_Core_Folder::getAccessList()
+	 * @param array $secont list of access rights
+	 * @return array merged list
+	 */
+	static function mergeAccessLists($first, $second) { /* {{{ */
+		if($first && !$second)
+			return $first;
+		if(!$first && $second)
+			return $second;
+
+		$tmp = array('users'=>array(), 'groups'=>array());
+		if(!isset($first['users']) || !isset($first['groups']) ||
+			!isset($second['users']) || !isset($second['groups']))
+			return false;
+
+		foreach ($first['users'] as $f) {
+			$new = $f;
+			foreach ($second['users'] as $i=>$s) {
+				if($f->getUserID() == $s->getUserID()) {
+					$new = $s;
+					unset($second['users'][$i]);
+					break;
+				}
+			}
+			array_push($tmp['users'], $new);
+		}
+		foreach ($seconf['users'] as $f) {
+			array_push($tmp['users'], $f);
+		}
+
+		foreach ($first['groups'] as $f) {
+			$new = $f;
+			foreach ($second['groups'] as $i=>$s) {
+				if($f->getGroupID() == $s->getGroupID()) {
+					$new = $s;
+					unset($second['groups'][$i]);
+					break;
+				}
+			}
+			array_push($tmp['groups'], $new);
+		}
+		foreach ($second['groups'] as $f) {
+			array_push($tmp['groups'], $f);
+		}
+
 		return $tmp;
 	} /* }}} */
 
