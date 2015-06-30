@@ -47,7 +47,7 @@ if(isset($GLOBALS['SEEDDMS_HOOKS']['initDMS'])) {
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
-if(!$dms->checkVersion()) {
+if(!$settings->_doNotCheckDBVersion && !$dms->checkVersion()) {
 	echo "Database update needed.";
 	exit;
 }
