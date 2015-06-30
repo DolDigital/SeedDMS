@@ -1,11 +1,28 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.19
+--------------------------------------------------------------------------------
+- end date in search form actually ends at the end of the day
+- allow context sensitive help
+- document chooser shows docs in root folder again
+- fixed regression from 4.3.18. Documents can not be approved if
+  review is still pending
+- polish page for document version details, add review/approval log
+- take out remaining link to old version info file
+- new configuration parameter for overriding the mimetype delivered
+  by the browser (Closes #195)
+- new option -c to force recreation of index (Closes #219)
+- username can be passed to utils/adddoc.php (Closes #214)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.18
 --------------------------------------------------------------------------------
 - utils/indexer.php uses propper converter settings
 - search result can be restricted to folders or documents only
 - documents still in review can still be reviewed even if the workflow
   mode changes to traditional_only_approval
+- approvals can be submitted, even if document was released/rejected
 - check for duplicate content on document/folder check page
+- open tab on ViewDocument page as specified in URL
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.17
@@ -19,6 +36,7 @@
 - fix take over of reviewers/approvers from previos version
 - fix calculation of quota in user list
 - do not show hidden users in select box of search form
+- notifier can be set when new document is uploaded
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.16

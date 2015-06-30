@@ -57,7 +57,7 @@ if(!$settings->_enableVersionModification) {
 }
 
 $overallStatus = $content->getStatus();
-if ($overallStatus["status"]==S_REJECTED || $overallStatus["status"]==S_OBSOLETE ) {
+if ($overallStatus["status"]!=S_DRAFT_REV && $overallStatus["status"]!=S_DRAFT_APP) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_assign_invalid_state"));
 }
 
