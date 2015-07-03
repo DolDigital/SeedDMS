@@ -817,6 +817,12 @@ class SeedDMS_Core_DMS {
 				"AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.") ".
 				"ORDER BY `statusDate` DESC";
 			break;
+		case 'RejectOwner': // Documents that has been rejected and I'm owning
+			$user = $param1;
+			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+				"AND `tblDocumentStatusLog`.`status` IN (".S_REJECTED.") ".
+				"ORDER BY `statusDate` DESC";
+			break;
 		case 'LockedByMe': // Documents locked by me
 			$user = $param1;
 			$queryStr .= "AND `tblDocumentLocks`.`userID` = '".$user->getID()."' ".

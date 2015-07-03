@@ -441,6 +441,63 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				$this->contentContainerEnd();
 			}
 
+			/* Get list of documents owned by current user that has
+			 * been rejected.
+			 */
+			$resArr = $dms->getDocumentList('RejectOwner', $user);
+			if (is_bool($resArr) && !$resArr) {
+				$this->contentHeading(getMLText("warning"));
+				$this->contentContainer(getMLText("internal_error_exit"));
+				$this->htmlEndPage();
+				exit;
+			}
+
+			if (count($resArr)>0) {
+				$this->contentHeading(getMLText("documents_user_rejected"));
+				$this->contentContainerStart();
+
+				print "<table class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>";
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("version")."</th>\n";
+				print "<th>".getMLText("last_update")."</th>\n";
+				print "<th>".getMLText("expires")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+
+				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["documentID"]);
+				
+					// verify expiry
+					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
+						if  ( $res["status"]==S_DRAFT_APP || $res["status"]==S_DRAFT_REV ){
+							$res["status"]=S_EXPIRED;
+						}
+					}
+				
+					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
+					print "<td>".getOverallStatusText($res["status"])."</td>";
+					print "<td>".$res["version"]."</td>";
+					print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
+					print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
+					print "</tr>\n";
+				}		
+				print "</tbody></table>";	
+				
+				$this->contentContainerEnd();
+			}
+
 			$receiptStatus = $user->getReceiptStatus();
 			$resArr = $dms->getDocumentList('ReceiptByMe', $user);
 			if (is_bool($resArr) && !$resArr) {
