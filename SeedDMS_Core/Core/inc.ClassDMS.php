@@ -717,24 +717,25 @@ class SeedDMS_Core_DMS {
 			
 			// Create a comma separated list of all the documentIDs whose information is
 			// required.
+			// Take only those documents into account which hasn't be touched by the user
 			$dList = array();
 			foreach ($reviewStatus["indstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($reviewStatus["grpstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($approvalStatus["indstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($approvalStatus["grpstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
