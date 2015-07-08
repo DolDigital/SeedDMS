@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (462)
+//    Translators: Admin (465)
 
 $text = array(
 'accept' => 'Prijať',
@@ -254,6 +254,7 @@ $text = array(
 'documents_to_receipt' => '',
 'documents_to_review' => 'Dokumenty čakajúce na kontrolu používateľa',
 'documents_to_revise' => '',
+'documents_user_rejected' => '',
 'documents_user_requiring_attention' => 'Dokumenty, ktoré používateľ vlastní a vyžadujú pozornosť',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Tento dokument je už zamknutý',
@@ -297,12 +298,13 @@ $text = array(
 'draft_pending_review' => 'Návrh - čaká na kontrolu',
 'drag_icon_here' => 'Sem myšou pretiahnite ikonu, zložku alebo dokument',
 'dropfolder_file' => '',
-'dropupload' => '',
+'dropupload' => 'Rýchlo nahraj',
 'drop_files_here' => 'Sem vložte súbory!',
 'dump_creation' => 'Vytvorenie výstupu DB',
 'dump_creation_warning' => 'Touto akciou môžete vytvoriť výstup obsahu Vašej databázy. Po vytvorení bude výstup uložený v dátovej zložke vášho servera.',
 'dump_list' => 'Existujúce výstupy',
 'dump_remove' => 'Odstrániť vystup',
+'duplicate_content' => '',
 'edit' => 'upraviť',
 'edit_attributes' => '',
 'edit_comment' => 'Upraviť komentár',
@@ -558,7 +560,9 @@ $text = array(
 'no_group_members' => 'Táto skupina nemá žiadnych členov',
 'no_linked_files' => 'No linked files',
 'no_previous_versions' => 'Neboli nájdené žiadne iné verzie',
+'no_receipt_needed' => '',
 'no_review_needed' => 'No review pending.',
+'no_revision_needed' => '',
 'no_revision_planed' => '',
 'no_update_cause_locked' => 'Preto nemôžete aktualizovať tento dokument. Prosím, kontaktujte používateľa, ktorý ho zamkol.',
 'no_user_image' => 'nebol nájdený žiadny obrázok',
@@ -705,7 +709,7 @@ $text = array(
 'search_time' => 'Uplynulý čas: [time] sek',
 'seconds' => '',
 'selection' => 'Výber',
-'select_category' => '',
+'select_category' => 'Vyber kategóriu',
 'select_groups' => '',
 'select_grp_approvers' => '',
 'select_grp_notification' => '',
@@ -883,6 +887,8 @@ $text = array(
 'settings_Notification' => '',
 'settings_notwritable' => '',
 'settings_no_content_dir' => '',
+'settings_overrideMimeType' => '',
+'settings_overrideMimeType_desc' => '',
 'settings_partitionSize' => '',
 'settings_partitionSize_desc' => '',
 'settings_passwordExpiration' => '',
@@ -1056,6 +1062,7 @@ $text = array(
 'takeOverGrpReviewer' => '',
 'takeOverIndApprover' => '',
 'takeOverIndReviewer' => '',
+'tasks' => '',
 'testmail_body' => '',
 'testmail_subject' => '',
 'theme' => 'Vzhľad',
@@ -1082,7 +1089,7 @@ $text = array(
 'under_folder' => 'V zložke',
 'unknown_attrdef' => '',
 'unknown_command' => 'Príkaz nebol rozpoznaný.',
-'unknown_document_category' => '',
+'unknown_document_category' => 'Neznáma kategória',
 'unknown_group' => 'Neznámy ID skupiny',
 'unknown_id' => 'Neznáme ID',
 'unknown_keyword_category' => 'Neznáma kategória',
