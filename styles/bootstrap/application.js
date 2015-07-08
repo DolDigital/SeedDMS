@@ -693,5 +693,12 @@ $(document).ready(function() {
 		e.stopPropagation();
 		e.preventDefault();
 	});
- 
+
+	var checkTasks = function() {
+		$("#menu-tasks > ul > li").html('Loading').hide().load('../op/op.Ajax.php?command=view&view=menutasks').fadeIn('500')
+		timeOutId = setTimeout(checkTasks, 10000);
+	}
+//	timeOutId = setTimeout(checkTasks, 30000);
+	checkTasks();
+
 }); 
