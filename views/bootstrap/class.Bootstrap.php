@@ -256,13 +256,27 @@ $(document).ready(function () {
 //		$content .= "    <li class=\"dropdown\">\n";
 		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).") <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if($tasks['review']) {
+		$content .= "      <li class=\"dropdown-submenu\">\n";
+		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_review")."</a>\n";
+		$content .= "       <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($tasks['review'] as $t) {
 			$doc = $dms->getDocument($t);
-			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+			$content .= "      <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
 		}
+		$content .= "       </ul>\n";
+		$content .= "      </li>\n";
+		}
+		if($tasks['approval']) {
+		$content .= "      <li class=\"dropdown-submenu\">\n";
+		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_approve")."</a>\n";
+		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($tasks['approval'] as $t) {
 			$doc = $dms->getDocument($t);
 			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+		}
+		$content .= "       </ul>\n";
+		$content .= "      </li>\n";
 		}
 		$content .= "    <li class=\"divider\"></li>\n";
 		$content .= "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
