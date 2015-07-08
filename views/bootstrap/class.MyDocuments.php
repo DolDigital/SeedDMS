@@ -269,118 +269,6 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					$this->contentContainerEnd();
 				}
 
-				// Get document list for the current user.
-				$revisionStatus = $user->getRevisionStatus();
-
-				$resArr = $dms->getDocumentList('ReviseByMe', $user);
-				if (is_bool($resArr) && !$resArr) {
-					$this->contentHeading(getMLText("warning"));
-					$this->contentContainer(getMLText("internal_error_exit"));
-					$this->htmlEndPage();
-					exit;
-				}
-				if($resArr) {
-					/* Create an array to hold all of these results, and index the array 
-					 * by document id. This makes it easier to retrieve document ID
-					 * information later on and saves us having to repeatedly poll the
-					 * database every time new document information is required.
-					 */
-					$docIdx = array();
-					foreach ($resArr as $res) {
-						/* verify expiry */
-						if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
-							$res["status"]=S_EXPIRED;
-						}
-						$docIdx[$res["id"]][$res["version"]] = $res;
-					}
-
-					$this->contentHeading(getMLText("documents_to_revise"));
-					$this->contentContainerStart();
-					$printheader=true;
-					$iRev = array();
-					$dList = array();
-					foreach ($revisionStatus["indstatus"] as $st) {
-					
-						if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) ) {
-							$dList[] = $st["documentID"];
-							$document = $dms->getDocument($st["documentID"]);
-						
-							if ($printheader){
-								print "<table class=\"table table-condensed\">";
-								print "<thead>\n<tr>\n";
-								print "<th></th>\n";
-								print "<th>".getMLText("name")."</th>\n";
-								print "<th>".getMLText("owner")."</th>\n";
-								print "<th>".getMLText("version")."</th>\n";
-								print "<th>".getMLText("last_update")."</th>\n";
-								print "<th>".getMLText("expires")."</th>\n";
-								print "</tr>\n</thead>\n<tbody>\n";
-								$printheader=false;
-							}
-						
-							print "<tr>\n";
-							$latestContent = $document->getLatestContent();
-							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
-							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							}
-							print "</a></td>";
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
-							print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
-							print "<td>".$st["version"]."</td>";
-							print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
-							print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
-							print "</tr>\n";
-						}
-					}
-					foreach ($revisionStatus["grpstatus"] as $st) {
-					
-						if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
-							$dList[] = $st["documentID"];
-							$document = $dms->getDocument($st["documentID"]);
-
-							if ($printheader){
-								print "<table class=\"table table-condensed\">";
-								print "<thead>\n<tr>\n";
-								print "<th></th>\n";
-								print "<th>".getMLText("name")."</th>\n";
-								print "<th>".getMLText("owner")."</th>\n";
-								print "<th>".getMLText("version")."</th>\n";
-								print "<th>".getMLText("last_update")."</th>\n";
-								print "<th>".getMLText("expires")."</th>\n";
-								print "</tr>\n</thead>\n<tbody>\n";
-								$printheader=false;
-							}
-
-							print "<tr>\n";
-							$latestContent = $document->getLatestContent();
-							$previewer->createPreview($latestContent);
-							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
-							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							}
-							print "</a></td>";
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
-							print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
-							print "<td>".$st["version"]."</td>";
-							print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
-							print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
-							print "</tr>\n";
-						}
-					}
-					if (!$printheader){
-						echo "</tbody>\n</table>";
-					}else{
-						printMLText("no_docs_to_revise");
-					}
-					$this->contentContainerEnd();
-				}
-
 				/* Get list of documents owned by current user that are
 				 * pending review or pending approval.
 				 */
@@ -441,60 +329,121 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				$this->contentContainerEnd();
 			}
 
-			/* Get list of documents owned by current user that has
-			 * been rejected.
-			 */
-			$resArr = $dms->getDocumentList('RejectOwner', $user);
+			// Get document list for the current user.
+			$revisionStatus = $user->getRevisionStatus();
+
+			$resArr = $dms->getDocumentList('ReviseByMe', $user);
 			if (is_bool($resArr) && !$resArr) {
 				$this->contentHeading(getMLText("warning"));
 				$this->contentContainer(getMLText("internal_error_exit"));
 				$this->htmlEndPage();
 				exit;
 			}
-
-			if (count($resArr)>0) {
-				$this->contentHeading(getMLText("documents_user_rejected"));
-				$this->contentContainerStart();
-
-				print "<table class=\"table table-condensed\">";
-				print "<thead>\n<tr>\n";
-				print "<th></th>";
-				print "<th>".getMLText("name")."</th>\n";
-				print "<th>".getMLText("status")."</th>\n";
-				print "<th>".getMLText("version")."</th>\n";
-				print "<th>".getMLText("last_update")."</th>\n";
-				print "<th>".getMLText("expires")."</th>\n";
-				print "</tr>\n</thead>\n<tbody>\n";
-
+			if($resArr) {
+				/* Create an array to hold all of these results, and index the array 
+				 * by document id. This makes it easier to retrieve document ID
+				 * information later on and saves us having to repeatedly poll the
+				 * database every time new document information is required.
+				 */
+				$docIdx = array();
 				foreach ($resArr as $res) {
-					$document = $dms->getDocument($res["documentID"]);
-				
-					// verify expiry
+					/* verify expiry */
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
-						if  ( $res["status"]==S_DRAFT_APP || $res["status"]==S_DRAFT_REV ){
-							$res["status"]=S_EXPIRED;
+						$res["status"]=S_EXPIRED;
+					}
+					$docIdx[$res["id"]][$res["version"]] = $res;
+				}
+
+				$this->contentHeading(getMLText("documents_to_revise"));
+				$this->contentContainerStart();
+				$printheader=true;
+				$iRev = array();
+				$dList = array();
+				foreach ($revisionStatus["indstatus"] as $st) {
+				
+					if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) ) {
+						$dList[] = $st["documentID"];
+						$document = $dms->getDocument($st["documentID"]);
+					
+						if ($printheader){
+							print "<table class=\"table table-condensed\">";
+							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
+							print "<th>".getMLText("name")."</th>\n";
+							print "<th>".getMLText("owner")."</th>\n";
+							print "<th>".getMLText("version")."</th>\n";
+							print "<th>".getMLText("last_update")."</th>\n";
+							print "<th>".getMLText("expires")."</th>\n";
+							print "</tr>\n</thead>\n<tbody>\n";
+							$printheader=false;
 						}
+					
+						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
+						print "<td>".$st["version"]."</td>";
+						print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
+						print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
+						print "</tr>\n";
 					}
+				}
+				foreach ($revisionStatus["grpstatus"] as $st) {
 				
-					print "<tr>\n";
-					$latestContent = $document->getLatestContent();
-					$previewer->createPreview($latestContent);
-					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
-					if($previewer->hasPreview($latestContent)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
+						$dList[] = $st["documentID"];
+						$document = $dms->getDocument($st["documentID"]);
+
+						if ($printheader){
+							print "<table class=\"table table-condensed\">";
+							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
+							print "<th>".getMLText("name")."</th>\n";
+							print "<th>".getMLText("owner")."</th>\n";
+							print "<th>".getMLText("version")."</th>\n";
+							print "<th>".getMLText("last_update")."</th>\n";
+							print "<th>".getMLText("expires")."</th>\n";
+							print "</tr>\n</thead>\n<tbody>\n";
+							$printheader=false;
+						}
+
+						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
+						print "<td>".$st["version"]."</td>";
+						print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
+						print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
+						print "</tr>\n";
 					}
-					print "</a></td>";
-					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
-					print "<td>".getOverallStatusText($res["status"])."</td>";
-					print "<td>".$res["version"]."</td>";
-					print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
-					print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
-					print "</tr>\n";
-				}		
-				print "</tbody></table>";	
-				
+				}
+				if (!$printheader){
+					echo "</tbody>\n</table>";
+				}else{
+					printMLText("no_docs_to_revise");
+				}
+				$this->contentContainerEnd();
+			}
+			else {
+				$this->contentHeading(getMLText("documents_to_revise"));
+				$this->contentContainerStart();
+				printMLText("no_revision_needed");
 				$this->contentContainerEnd();
 			}
 
@@ -607,7 +556,70 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				}
 				$this->contentContainerEnd();
 			}
-			
+			else {
+				$this->contentHeading(getMLText("documents_to_receipt"));
+				$this->contentContainerStart();
+				printMLText("no_receipt_needed");
+				$this->contentContainerEnd();
+			}
+
+			/* Get list of documents owned by current user that has
+			 * been rejected.
+			 */
+			$resArr = $dms->getDocumentList('RejectOwner', $user);
+			if (is_bool($resArr) && !$resArr) {
+				$this->contentHeading(getMLText("warning"));
+				$this->contentContainer(getMLText("internal_error_exit"));
+				$this->htmlEndPage();
+				exit;
+			}
+
+			if (count($resArr)>0) {
+				$this->contentHeading(getMLText("documents_user_rejected"));
+				$this->contentContainerStart();
+
+				print "<table class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>";
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("version")."</th>\n";
+				print "<th>".getMLText("last_update")."</th>\n";
+				print "<th>".getMLText("expires")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+
+				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["documentID"]);
+				
+					// verify expiry
+					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
+						if  ( $res["status"]==S_DRAFT_APP || $res["status"]==S_DRAFT_REV ){
+							$res["status"]=S_EXPIRED;
+						}
+					}
+				
+					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
+					print "<td>".getOverallStatusText($res["status"])."</td>";
+					print "<td>".$res["version"]."</td>";
+					print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
+					print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
+					print "</tr>\n";
+				}		
+				print "</tbody></table>";	
+				
+				$this->contentContainerEnd();
+			}
+
 			/* Get list of documents locked by current user */
 			$resArr = $dms->getDocumentList('LockedByMe', $user);
 			if (is_bool($resArr) && !$resArr) {
