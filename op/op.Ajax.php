@@ -424,6 +424,20 @@ switch($command) {
 			case 'menuclipboard':
 				$content = $view->menuClipboard($session->getClipboard());
 				break;
+			case 'menutasks':
+				$resArr = $dms->getDocumentList('AppRevByMe', $user);
+				if($resArr) {
+					$reviews = array();
+					$approvals = array();
+					foreach ($resArr as $res) {
+						if($res["status"]==S_DRAFT_REV)
+							$reviews[] = $res['id'];
+						if($res["status"]==S_DRAFT_APP)
+							$approvals[] = $res['id'];
+					}
+				}
+				$content = $view->menuTasks(array('review'=>$reviews, 'approval'=>$approvals));
+				break;
 			case 'mainclipboard':
 				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
 				$previewer->setConverters($settings->_converters['preview']);

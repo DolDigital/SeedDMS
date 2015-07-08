@@ -239,6 +239,39 @@ $(document).ready(function () {
 		return $content;
 	} /* }}} */
 
+	/**
+	 * Returns the html needed for the clipboard list in the menu
+	 *
+	 * This function renders the clipboard in a way suitable to be
+	 * used as a menu
+	 *
+	 * @param array $clipboard clipboard containing two arrays for both
+	 *        documents and folders.
+	 * @return string html code
+	 */
+	function menuTasks($tasks) { /* {{{ */
+		$dms = $this->params['dms'];
+		$content = '';
+//		$content .= "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
+//		$content .= "    <li class=\"dropdown\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($tasks['review'] as $t) {
+			$doc = $dms->getDocument($t);
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+		}
+		foreach($tasks['approval'] as $t) {
+			$doc = $dms->getDocument($t);
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+		}
+		$content .= "    <li class=\"divider\"></li>\n";
+		$content .= "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
+		$content .= "     </ul>\n";
+//		$content .= "    </li>\n";
+//		$content .= "   </ul>\n";
+		return $content;
+	} /* }}} */
+
 	function globalNavigation($folder=null) { /* {{{ */
 		$dms = $this->params['dms'];
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
@@ -302,6 +335,14 @@ $(document).ready(function () {
 			echo "     </ul>\n";
 			echo "    </li>\n";
 			echo "   </ul>\n";
+
+			echo "   <div id=\"menu-tasks\">";
+			echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
+			echo "    <li class=\"dropdown\">\n";
+			echo $this->menuTasks(array('review'=>array(), 'approval'=>array()));
+			echo "    </li>\n";
+			echo "   </ul>\n";
+			echo "   </div>";
 
 			if($this->params['enableclipboard']) {
 				echo "   <div id=\"menu-clipboard\">";
