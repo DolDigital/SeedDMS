@@ -5,7 +5,8 @@ SRC=CHANGELOG inc conf utils index.php languages views op out controllers README
 EXTENSIONS := \
 	dynamic_content.tar.gz\
 	login_action.tar.gz\
-	example.tar.gz
+	example.tar.gz\
+	tbs_template.tar.gz
 
 PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
 
@@ -40,6 +41,9 @@ example.tar.gz: ext/example
 
 login_action.tar.gz: ext/login_action
 	tar czvf login_action.tar.gz ext/login_action
+
+tbs_template.tar.gz: ext/tbs_template
+	tar czvf tbs_template.tar.gz ext/tbs_template
 
 extensions: $(EXTENSIONS)
 
