@@ -429,13 +429,27 @@ switch($command) {
 				if($resArr) {
 					$reviews = array();
 					$approvals = array();
+					$receipts = array();
+					$revisions = array();
 					foreach ($resArr as $res) { if($res["status"]==S_DRAFT_REV)
 							$reviews[] = $res['id'];
 						if($res["status"]==S_DRAFT_APP)
 							$approvals[] = $res['id'];
 					}
 				}
-				$content = $view->menuTasks(array('review'=>$reviews, 'approval'=>$approvals));
+				$resArr = $dms->getDocumentList('ReceiptByMe', $user);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$receipts[] = $res['id'];
+					}
+				}
+				$resArr = $dms->getDocumentList('ReviseByMe', $user);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$revisions[] = $res['id'];
+					}
+				}
+				$content = $view->menuTasks(array('review'=>$reviews, 'approval'=>$approvals, 'receipt'=>$receipts, 'revision'=>$revisions));
 				break;
 			case 'mainclipboard':
 				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
@@ -740,6 +754,8 @@ switch($command) {
 			$startts = microtime(true);
 			$reviews = array();
 			$approvals = array();
+			$receipts = array();
+			$revisions = array();
 			$resArr = $dms->getDocumentList('AppRevByMe', $user);
 			if($resArr) {
 				foreach ($resArr as $res) {
@@ -749,8 +765,20 @@ switch($command) {
 						$approvals[] = array('id'=>$res['id'], 'name'=>$res['name']);
 				}
 			}
+			$resArr = $dms->getDocumentList('ReceiptByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					$receipts[] = array('id'=>$res['id'], 'name'=>$res['name']);
+				}
+			}
+			$resArr = $dms->getDocumentList('ReviseByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					$revisions[] = array('id'=>$res['id'], 'name'=>$res['name']);
+				}
+			}
 			header('Content-Type', 'application/json');
-			echo json_encode(array('error'=>0, 'data'=>array('review'=>$reviews, 'approval'=>$approvals), 'processing_time'=>microtime(true)-$startts));
+			echo json_encode(array('error'=>0, 'data'=>array('review'=>$reviews, 'approval'=>$approvals, 'receipt'=>$receipts, 'revision'=>$revisions), 'processing_time'=>microtime(true)-$startts));
 		}
 		break; /* }}} */
 }
