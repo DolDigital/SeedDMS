@@ -350,13 +350,16 @@ $(document).ready(function () {
 			echo "    </li>\n";
 			echo "   </ul>\n";
 
-			echo "   <div id=\"menu-tasks\">";
-			echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
-			echo "    <li class=\"dropdown\">\n";
-			echo $this->menuTasks(array('review'=>array(), 'approval'=>array()));
-			echo "    </li>\n";
-			echo "   </ul>\n";
-			echo "   </div>";
+			if($this->params['enablemenutasks']) {
+				echo "   <div id=\"menu-tasks\">";
+				echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
+				echo "    <li class=\"dropdown\">\n";
+				echo $this->menuTasks(array('review'=>array(), 'approval'=>array()));
+				echo "    </li>\n";
+				echo "   </ul>\n";
+				echo "   </div>";
+				$this->addFooterJS('checkTasks();');
+			}
 
 			if($this->params['enableclipboard']) {
 				echo "   <div id=\"menu-clipboard\">";
