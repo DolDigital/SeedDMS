@@ -694,11 +694,19 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
+}); 
+
+	var approval_count, review_count;
 	var checkTasks = function() {
-		$("#menu-tasks > ul > li").html('Loading').hide().load('../op/op.Ajax.php?command=view&view=menutasks').fadeIn('500')
+		$.get('../op/op.Ajax.php', { command: 'mytasks' }, function(data) {
+			if(approval_count != data.data.approval.length ||
+				 review_count != data.data.review.length) {
+				$("#menu-tasks > ul > li").html('Loading').hide().load('../op/op.Ajax.php?command=view&view=menutasks').fadeIn('500')
+				approval_count = data.data.approval.length;
+				review_count = data.data.review.length;
+			}
+		}, 'json');
 		timeOutId = setTimeout(checkTasks, 10000);
 	}
-//	timeOutId = setTimeout(checkTasks, 30000);
-	checkTasks();
+	//checkTasks();
 
-}); 
