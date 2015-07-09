@@ -679,9 +679,11 @@ class SeedDMS_Core_DMS {
 	 * [statusName] => name of user who has initiated the status change
 	 *
 	 * @param string $listtype type of document list, can be 'AppRevByMe',
-	 * 'AppRevOwner', 'ReceiptByMe', 'LockedByMe', 'MyDocs'
+	 * 'AppRevOwner', 'ReceiptByMe', 'ReviseByMe', 'LockedByMe', 'MyDocs'
 	 * @param object $param1 user
-	 * @param string $param2 sort list if listtype='MyDocs'
+	 * @param string $param2 sort list if listtype='MyDocs', set to true
+	 * if 'AppRevByMe', 'ReviseByMe', 'ReceiptByMe' shall return even documents
+	 * І have already taken care of.
 	 * @return array list of documents
 	 */
 	function getDocumentList($listtype, $param1=null, $param2='') { /* {{{ */
@@ -720,22 +722,22 @@ class SeedDMS_Core_DMS {
 			// Take only those documents into account which hasn't be touched by the user
 			$dList = array();
 			foreach ($reviewStatus["indstatus"] as $st) {
-				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($reviewStatus["grpstatus"] as $st) {
-				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($approvalStatus["indstatus"] as $st) {
-				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($approvalStatus["grpstatus"] as $st) {
-				if ($st["status"]==0 && !in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
@@ -761,12 +763,12 @@ class SeedDMS_Core_DMS {
 			// required.
 			$dList = array();
 			foreach ($receiptStatus["indstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($receiptStatus["grpstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
@@ -791,12 +793,12 @@ class SeedDMS_Core_DMS {
 			// required.
 			$dList = array();
 			foreach ($revisionStatus["indstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
 			foreach ($revisionStatus["grpstatus"] as $st) {
-				if (!in_array($st["documentID"], $dList)) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
 					$dList[] = $st["documentID"];
 				}
 			}
