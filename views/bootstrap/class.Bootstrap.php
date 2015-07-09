@@ -254,7 +254,7 @@ $(document).ready(function () {
 		$content = '';
 //		$content .= "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
 //		$content .= "    <li class=\"dropdown\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval'])."/".count($tasks['receipt'])."/".count($tasks['revision']).") <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		if($tasks['review']) {
 		$content .= "      <li class=\"dropdown-submenu\">\n";
@@ -274,6 +274,28 @@ $(document).ready(function () {
 		foreach($tasks['approval'] as $t) {
 			$doc = $dms->getDocument($t);
 			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+		}
+		$content .= "       </ul>\n";
+		$content .= "      </li>\n";
+		}
+		if($tasks['receipt']) {
+		$content .= "      <li class=\"dropdown-submenu\">\n";
+		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_receipt")."</a>\n";
+		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($tasks['receipt'] as $t) {
+			$doc = $dms->getDocument($t);
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=receipt\">".$doc->getName()."</a></li>";
+		}
+		$content .= "       </ul>\n";
+		$content .= "      </li>\n";
+		}
+		if($tasks['revision']) {
+		$content .= "      <li class=\"dropdown-submenu\">\n";
+		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_revise")."</a>\n";
+		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($tasks['revision'] as $t) {
+			$doc = $dms->getDocument($t);
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revise\">".$doc->getName()."</a></li>";
 		}
 		$content .= "       </ul>\n";
 		$content .= "      </li>\n";
@@ -354,7 +376,7 @@ $(document).ready(function () {
 				echo "   <div id=\"menu-tasks\">";
 				echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
 				echo "    <li class=\"dropdown\">\n";
-				echo $this->menuTasks(array('review'=>array(), 'approval'=>array()));
+				echo $this->menuTasks(array('review'=>array(), 'approval'=>array(), 'receipt'=>array(), 'revision'=>array()));
 				echo "    </li>\n";
 				echo "   </ul>\n";
 				echo "   </div>";
