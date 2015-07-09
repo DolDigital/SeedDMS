@@ -429,8 +429,7 @@ switch($command) {
 				if($resArr) {
 					$reviews = array();
 					$approvals = array();
-					foreach ($resArr as $res) {
-						if($res["status"]==S_DRAFT_REV)
+					foreach ($resArr as $res) { if($res["status"]==S_DRAFT_REV)
 							$reviews[] = $res['id'];
 						if($res["status"]==S_DRAFT_APP)
 							$approvals[] = $res['id'];
@@ -736,6 +735,24 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'mytasks': /* {{{ */
+		if($user) {
+			$startts = microtime(true);
+			$reviews = array();
+			$approvals = array();
+			$resArr = $dms->getDocumentList('AppRevByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					if($res["status"]==S_DRAFT_REV)
+						$reviews[] = array('id'=>$res['id'], 'name'=>$res['name']);
+					elseif($res["status"]==S_DRAFT_APP)
+						$approvals[] = array('id'=>$res['id'], 'name'=>$res['name']);
+				}
+			}
+			header('Content-Type', 'application/json');
+			echo json_encode(array('error'=>0, 'data'=>array('review'=>$reviews, 'approval'=>$approvals), 'processing_time'=>microtime(true)-$startts));
+		}
+		break; /* }}} */
 }
 add_log_line();
 ?>
