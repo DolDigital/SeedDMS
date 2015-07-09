@@ -166,6 +166,8 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the clipboard
 	var $_enableClipboard = true;
+	// enable/disable list of tasks in main menu
+	var $_enableMenuTasks = true;
 	// enable/disable display of the drop zone for file upload
 	var $_enableDropUpload = true;
 	// enable/disable display of the folder tree
@@ -355,6 +357,7 @@ class Settings { /* {{{ */
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
+		$this->_enableMenuTasks = Settings::boolVal($tab["enableMenuTasks"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
@@ -662,6 +665,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
+		$this->setXMLAttributValue($node, "enableMenuTasks", $this->_enableMenuTasks);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);

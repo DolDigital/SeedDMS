@@ -170,6 +170,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableClipboard");?>:</td>
         <td><input name="enableClipboard" type="checkbox" <?php if ($settings->_enableClipboard) echo "checked" ?> /></td>
       </tr>
+	    <tr title="<?php printMLText("settings_enableMenuTasks_desc");?>">
+        <td><?php printMLText("settings_enableMenuTasks");?>:</td>
+        <td><input name="enableMenuTasks" type="checkbox" <?php if ($settings->_enableMenuTasks) echo "checked" ?> /></td>
+      </tr>
 	    <tr title="<?php printMLText("settings_enableDropUpload_desc");?>">
         <td><?php printMLText("settings_enableDropUpload");?>:</td>
         <td><input name="enableDropUpload" type="checkbox" <?php if ($settings->_enableDropUpload) echo "checked" ?> /></td>
