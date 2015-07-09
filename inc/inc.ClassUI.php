@@ -96,6 +96,7 @@ class UI extends UI_Default {
 			$view->setParam('enablefoldertree', $settings->_enableFolderTree);
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 			$view->setParam('enableclipboard', $settings->_enableClipboard);
+			$view->setParam('enablemenutasks', $settings->_enableMenuTasks);
 			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', $settings->_partitionSize);
 			$view->setParam('checkoutdir', $settings->_checkOutDir);
