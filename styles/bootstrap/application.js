@@ -698,18 +698,24 @@ $(document).ready(function() {
 
 	var approval_count, review_count, receipt_count, revision_count;
 	var checkTasks = function() {
-		$.get('../op/op.Ajax.php', { command: 'mytasks' }, function(data) {
-			if(approval_count != data.data.approval.length ||
-				 review_count != data.data.review.length ||
-				 receipt_count != data.data.receipt.length ||
-				 revision_count != data.data.revision.length) {
-				$("#menu-tasks > ul > li").html('Loading').hide().load('../op/op.Ajax.php?command=view&view=menutasks').fadeIn('500')
-				approval_count = data.data.approval.length;
-				review_count = data.data.review.length;
-				receipt_count = data.data.receipt.length;
-				revision_count = data.data.revision.length;
-			}
-		}, 'json');
+		$.ajax({url: '../op/op.Ajax.php',
+			type: 'GET',
+			dataType: "json",
+			data: {command: 'mytasks'},
+			success: function(data) {
+				if(approval_count != data.data.approval.length ||
+					 review_count != data.data.review.length ||
+					 receipt_count != data.data.receipt.length ||
+					 revision_count != data.data.revision.length) {
+					$("#menu-tasks > ul > li").html('Loading').hide().load('../op/op.Ajax.php?command=view&view=menutasks').fadeIn('500')
+					approval_count = data.data.approval.length;
+					review_count = data.data.review.length;
+					receipt_count = data.data.receipt.length;
+					revision_count = data.data.revision.length;
+				}
+			},
+			timeout: 200
+		}); 
 		timeOutId = setTimeout(checkTasks, 10000);
 	}
 	//checkTasks();
