@@ -425,12 +425,12 @@ switch($command) {
 				$content = $view->menuClipboard($session->getClipboard());
 				break;
 			case 'menutasks':
+				$reviews = array();
+				$approvals = array();
+				$receipts = array();
+				$revisions = array();
 				$resArr = $dms->getDocumentList('AppRevByMe', $user);
 				if($resArr) {
-					$reviews = array();
-					$approvals = array();
-					$receipts = array();
-					$revisions = array();
 					foreach ($resArr as $res) { if($res["status"]==S_DRAFT_REV)
 							$reviews[] = $res['id'];
 						if($res["status"]==S_DRAFT_APP)
