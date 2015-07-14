@@ -360,6 +360,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_loginFailure");?>:</td>
         <td><input type="text" name="loginFailure" value="<?php echo $settings->_loginFailure; ?>" size="2" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_autoLoginUser_desc");?>">
+        <td><?php printMLText("settings_autoLoginUser");?>:</td>
+        <td><input type="text" name="autoLoginUser" value="<?php echo $settings->_autoLoginUser; ?>" size="3" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_quota_desc");?>">
         <td><?php printMLText("settings_quota");?>:</td>
         <td><input type="text" name="quota" value="<?php echo $settings->_quota; ?>" size="2" /></td>
