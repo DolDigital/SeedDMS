@@ -50,6 +50,8 @@ class Settings { /* {{{ */
 	var $_passwordHistory = 10;
 	// Number of failed logins before account is disabled
 	var $_loginFailure = 0;
+	// User id that is automatically logged if nobody is logged in
+	var $_autoLoginUser = 0;
 	// maximum amount of bytes a user may consume, 0 = unlimited
 	var $_quota = 0;
 	// comma separated list of undeleteable user ids
@@ -405,6 +407,7 @@ class Settings { /* {{{ */
 		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
+		$this->_autoLoginUser = intval($tab["autoLoginUser"]);
 		$this->_quota = intval($tab["quota"]);
 		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
@@ -711,6 +714,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordExpiration", $this->_passwordExpiration);
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
+    $this->setXMLAttributValue($node, "autoLoginUser", $this->_autoLoginUser);
     $this->setXMLAttributValue($node, "quota", $this->_quota);
     $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
