@@ -69,17 +69,18 @@ if (!isset($_COOKIE["mydms_session"])) {
 	/* Load user data */
 
 	$user = $dms->getUser($resArr["userID"]);
+	if (!is_object($user)) {
+		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+		exit;
+	}
+
 	if($user->isAdmin()) {
 		if($resArr["su"]) {
 			$user = $dms->getUser($resArr["su"]);
 		} else {
 			$session->resetSu();
 		}
-	}
-	if (!is_object($user)) {
-		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
-		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-		exit;
 	}
 	$theme = $resArr["theme"];
 	$lang = $resArr["language"];
