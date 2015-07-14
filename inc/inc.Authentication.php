@@ -69,6 +69,11 @@ if (!isset($_COOKIE["mydms_session"])) {
 	/* Load user data */
 
 	$user = $dms->getUser($resArr["userID"]);
+	if (!is_object($user)) {
+		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+		exit;
+	}
 
 	/* Check if user was substituted */
 	if($resArr["su"] && $su = $dms->getUser($resArr["su"])) {
@@ -79,11 +84,7 @@ if (!isset($_COOKIE["mydms_session"])) {
 			$session->resetSu();
 		}
 	}
-	if (!is_object($user)) {
-		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
-		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-		exit;
-	}
+
 	$theme = $resArr["theme"];
 	$lang = $resArr["language"];
 }
