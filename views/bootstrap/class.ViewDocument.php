@@ -1106,7 +1106,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<thead>\n<tr>\n";
 			print "<th width='10%'></th>\n";
 			print "<th width='30%'>".getMLText("file")."</th>\n";
-			print "<th width='25%'>".getMLText("comment")."</th>\n";
+//			print "<th width='25%'>".getMLText("comment")."</th>\n";
 			print "<th width='15%'>".getMLText("status")."</th>\n";
 			print "<th width='20%'></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
@@ -1148,6 +1148,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 				print "<li>".getLongReadableDate($version->getDate())."</li>";
 				print "</ul>\n";
+				if($version->getComment())
+					print "<p style=\"font-style: italic;\">".htmlspecialchars($version->getComment())."</p>";
 				print "<ul class=\"actions unstyled\">\n";
 				$attributes = $version->getAttributes();
 				if($attributes) {
@@ -1162,7 +1164,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					}
 				}
 				print "</ul>\n";
-				print "<td>".htmlspecialchars($version->getComment())."</td>";
+//				print "<td>".htmlspecialchars($version->getComment())."</td>";
 				print "<td>".getOverallStatusText($vstat["status"])."</td>";
 				print "<td>";
 				print "<ul class=\"actions unstyled\">";
