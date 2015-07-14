@@ -368,14 +368,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		print "<table class=\"table\">";
 		print "<thead>\n<tr>\n";
-		print "<th style=\"width:".$previewwidthdetail."px;\"></th>\n";
-		print "<th width='*'>".getMLText("file")."</th>\n";
-		print "<th width='25%'>".getMLText("comment")."</th>\n";
-		print "<th width='15%'>".getMLText("status")."</th>\n";
+		print "<th colspan=\"2\">".$latestContent->getOriginalFileName()."</th>\n";
+//		print "<th width='*'>".getMLText("file")."</th>\n";
+//		print "<th width='25%'>".getMLText("comment")."</th>\n";
+		print "<th width='20%'>".getMLText("status")."</th>\n";
 		print "<th width='25%'></th>\n";
 		print "</tr></thead><tbody>\n";
 		print "<tr>\n";
-		print "<td style=\"width:".$previewwidthdetail."px;\">";
+		print "<td style=\"width:".$previewwidthdetail."px; text-align: center;\">";
 		/*
 		print "<ul class=\"actions unstyled\">";
 
@@ -408,7 +408,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</td>\n";
 
 		print "<td><ul class=\"actions unstyled\">\n";
-		print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
+//		print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
 		print "<li>".getMLText('version').": ".$latestContent->getVersion()."</li>\n";
 
 		if ($file_exists)
@@ -420,6 +420,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "<li>".getLongReadableDate($latestContent->getDate())."</li>";
 
 		print "</ul>\n";
+		print "<p style=\"font-style: italic;\">".htmlspecialchars($latestContent->getComment())."</p>";
 		print "<ul class=\"actions unstyled\">\n";
 		$attributes = $latestContent->getAttributes();
 		if($attributes) {
@@ -435,7 +436,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		print "</ul>\n";
 
-		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
+//		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
 		print "<td width='10%'>";
 		print getOverallStatusText($status["status"]);
