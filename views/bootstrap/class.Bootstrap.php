@@ -532,47 +532,56 @@ $(document).ready(function () {
 		echo "<id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
+		$menuitems = array();
 
 		if ($accessMode >= M_READWRITE) {
 			if (!$document->isLocked()) {
-				echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-				echo "<li><a href=\"../op/op.LockDocument". $docid ."\">".getMLText("lock_document")."</a></li>";
+				$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+				$menuitems['lock_document'] = array('link'=>"../op/op.LockDocument".$docid, 'label'=>'lock_document');
 				if($document->isCheckedOut())
-					echo "<li><a href=\"../out/out.CheckInDocument". $docid ."\">".getMLText("checkin_document")."</a></li>";
+					$menuitems['checkin_document'] = array('link'=>"../out/out.CheckInDocument".$docid, 'label'=>'checkin_document');
 				else {
 					if($this->params['checkoutdir']) {
-						echo "<li><a href=\"../op/op.CheckOutDocument". $docid ."\">".getMLText("checkout_document")."</a></li>";
+						$menuitems['checkout_document'] = array('link'=>"../op/op.CheckOutDocument".$docid, 'label'=>'checkout_document');
 					}
 				}
-				echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-				echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+				$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid , 'label'=>'edit_document_props');
+				$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
 				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
-					echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
-					if($document->isCheckedOut())
-						echo "<li><a href=\"../out/out.CheckInDocument". $docid ."\">".getMLText("checkin_document")."</a></li>";
-					else {
+					$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+					$menuitems['unlock_document'] = array('link'=>"../op/op.UnlockDocument".$docid, 'label'=>'unlock_document');
+					if($document->isCheckedOut()) {
+						$menuitems['checkin_document'] = array('link'=>"../out/out.CheckInDocument".$docid, 'label'=>'checkin_document');
+					} else {
 						if($this->params['checkoutdir']) {
-							echo "<li><a href=\"../op/op.CheckOutDocument". $docid ."\">".getMLText("checkout_document")."</a></li>";
+							$menuitems['checkout_document'] = array('link'=>"../op/op.CheckOutDocument".$docid, 'label'=>'checkout_document');
 						}
 					}
-					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-					echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+					$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid, 'label'=>'edit_document_props');
+					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
 			if($this->params['accessobject']->maySetExpires()) {
-				echo "<li><a href=\"../out/out.SetExpires". $docid ."\">".getMLText("expires")."</a></li>";
+				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
+			//	$menuitems[''] = array('link'=>"", 'label'=>'');
 			}
 		}
 		if ($accessMode == M_ALL) {
-			echo "<li><a href=\"../out/out.RemoveDocument". $docid ."\">".getMLText("rm_document")."</a></li>";
-			echo "<li><a href=\"../out/out.DocumentAccess". $docid ."\">".getMLText("edit_document_access")."</a></li>";
+			$menuitems['rm_document'] = array('link'=>"../out/out.RemoveDocument".$docid, 'label'=>'rm_document');
+			$menuitems['edit_document_access'] = array('link'=>"../out/out.DocumentAccess". $docid, 'label'=>'edit_document_access');
 		}
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
-			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
+			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
+		}
+
+		$this->hasHook('documentNavigationBar');
+		$this->callHook('documentNavigationBar', $document, $menuitems);
+
+		foreach($menuitems as $menuitem) {
+			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
 		}
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -1140,7 +1149,7 @@ function folderSelected<?php echo $form ?>(id, name) {
 			if(!$attrdef->getMultipleValues()) {
 				echo "<option value=\"\"></option>";
 			}
-			$objvalue = $attribute ? $attribute->getValueAsArray() : array();
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValueAsArray() : $attribute) : array();
 			foreach($valueset as $value) {
 				if($value) {
 					echo "<option value=\"".htmlspecialchars($value)."\"";
@@ -1153,10 +1162,11 @@ function folderSelected<?php echo $form ?>(id, name) {
 			}
 			echo "</select>";
 		} else {
-			if($attribute && strlen($attribute->getValue()) > 30)
-				echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($attribute->getValue())."</textarea>";
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
+			if(strlen($objvalue) > 30)
+				echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($objvalue)."</textarea>";
 			else
-				echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".($attribute ? htmlspecialchars($attribute->getValue()) : '')."\" />";
+				echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
 		}
 	} /* }}} */
 
