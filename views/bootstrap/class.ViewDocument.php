@@ -402,7 +402,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$attributes = $latestContent->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
-				$arr = $this->callHook('showDocumentContentAttribute', $latestcontent, $attribute);
+				$arr = $this->callHook('showDocumentContentAttribute', $latestContent, $attribute);
 				if(is_array($arr)) {
 					print "<li>".$arr[0].": ".$arr[1]."</li>\n";
 				} else {
