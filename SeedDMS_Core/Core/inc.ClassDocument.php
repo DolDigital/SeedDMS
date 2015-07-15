@@ -239,7 +239,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$lock = $lockArr[0]["userID"];
 		}
 
-		$document = new self($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
+		$classname = $dms->getClassname('document');
+		$document = new $classname($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
 		$document->setDMS($dms);
 		return $document;
 	} /* }}} */

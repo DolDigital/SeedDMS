@@ -131,7 +131,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 
 		$resArr = $resArr[0];
-		$folder = new self($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
+		$classname = $dms->getClassname('folder');
+		$folder = new $classname($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
 		$folder->setDMS($dms);
 		return $folder;
 	} /* }}} */
