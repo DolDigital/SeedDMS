@@ -55,7 +55,7 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
   <input type="hidden" name="action" value="saveSettings" />
-	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo (isset($_POST['currenttab']) ? $_POST['currenttab'] : 'site' ); ?>" />
+	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo $currenttab ? $currenttab : 'site'; ?>" />
 <?php
 if(!is_writeable($settings->_configFilePath)) {
 	print "<div class=\"alert alert-warning\">";
