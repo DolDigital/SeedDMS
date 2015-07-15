@@ -425,7 +425,8 @@ switch($command) {
 				$content = $view->menuClipboard($session->getClipboard());
 				break;
 			case 'mainclipboard':
-				$content = $view->mainClipboard($session->getClipboard());
+				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+				$content = $view->mainClipboard($session->getClipboard(), $previewer);
 				break;
 			case 'documentlistrow':
 				$document = $dms->getDocument($_REQUEST['id']);
