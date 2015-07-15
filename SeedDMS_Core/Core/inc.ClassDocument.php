@@ -190,7 +190,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$lock = $lockArr[0]["userID"];
 		}
 
-		$document = new self($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
+		$classname = $dms->getClassname('document');
+		$document = new $classname($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
 		$document->setDMS($dms);
 		return $document;
 	} /* }}} */
@@ -1204,6 +1205,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
+		$docResultSet->setDMS($this->_dms);
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
@@ -1449,9 +1451,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function removeContent($version) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$emailList = array();
-		$emailList[] = $version->_userID;
-
 		if (file_exists( $this->_dms->contentDir.$version->getPath() ))
 			if (!SeedDMS_Core_File::removeFile( $this->_dms->contentDir.$version->getPath() ))
 				return false;
@@ -1500,9 +1499,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
 			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
-			}
 		}
 
 		if (strlen($stList)>0) {
@@ -1531,9 +1527,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				$file = $this->_dms->contentDir . $this->getDir().'a'.$res['approveLogID'];
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
-			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
 			}
 		}
 
@@ -4101,6 +4094,11 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	protected $_content;
 	protected $_status;
 
+	/**
+	 * @var object back reference to document management system
+	 */
+	protected $_dms;
+
 	function SeedDMS_Core_AddContentResultSet($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
@@ -4108,15 +4106,31 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		$this->_indApprovers = null;
 		$this->_grpApprovers = null;
 		$this->_status = null;
+		$this->_dms = null;
+	} /* }}} */
+
+	/*
+	 * Set dms this object belongs to.
+	 *
+	 * Each object needs a reference to the dms it belongs to. It will be
+	 * set when the object is created.
+	 * The dms has a references to the currently logged in user
+	 * and the database connection.
+	 *
+	 * @param object $dms reference to dms
+	 */
+	function setDMS($dms) { /* {{{ */
+		$this->_dms = $dms;
 	} /* }}} */
 
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($reviewer) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
 		}
 		if (!strcasecmp($type, "i")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_User")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("user"))) {
 				return false;
 			}
 			if ($this->_indReviewers == null) {
@@ -4125,7 +4139,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_indReviewers[$status][] = $reviewer;
 		}
 		if (!strcasecmp($type, "g")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_Group")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("group"))) {
 				return false;
 			}
 			if ($this->_grpReviewers == null) {
@@ -4137,6 +4151,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	} /* }}} */
 
 	function addApprover($approver, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($approver) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
