@@ -49,11 +49,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footerjs[] = $script;
 	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
+	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
+		if($base)
+			echo '<base href="../../">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
@@ -71,7 +73,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
+//		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
@@ -252,7 +254,7 @@ $(document).ready(function () {
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 			echo "   <div class=\"nav-collapse nav-col1\">\n";
-			echo "   <ul id=\"main-menu-admin\"class=\"nav pull-right\">\n";
+			echo "   <ul id=\"main-menu-admin\" class=\"nav pull-right\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -482,8 +484,21 @@ $(document).ready(function () {
 			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
 		}
 
-		$this->hasHook('documentNavigationBar');
-		$this->callHook('documentNavigationBar', $document, $menuitems);
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('documentNavigationBar'))
+			$menuitems = $this->callHook('documentNavigationBar', $document, $menuitems);
+
+		/* Do not use $this->callHook() because $menuitems must be returned by the hook
+		 * or left unchanged
+		 */
+		/*
+		$hookObjs = $this->getHookObjects();
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'documentNavigationBar')) {
+	      $menuitems = $hookObj->documentNavigationBar($this, $document, $menuitems);
+			}
+		}
+		*/
 
 		foreach($menuitems as $menuitem) {
 			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
