@@ -67,6 +67,10 @@ class SeedDMS_View_Common {
 	 * This function will execute all registered hooks in the order
 	 * they were registered.
 	 *
+	 * Attention: as func_get_arg() cannot handle references passed to the hook,
+	 * callHook() should not be called if that is required. In that case get
+	 * a list of hook objects with getHookObjects() and call the hooks yourself.
+	 *
 	 * @params string $hook name of hook
 	 * @return string concatenated string of whatever the hook function returns
 	 */
@@ -103,6 +107,35 @@ class SeedDMS_View_Common {
 			}
 		}
 		return $ret;
+	} /* }}} */
+
+	/**
+	 * Return all hook objects for the given or calling class
+	 *
+	 * <code>
+	 * <?php
+	 * $hookObjs = $this->getHookObjects();
+	 * foreach($hookObjs as $hookObj) {
+	 *   if (method_exists($hookObj, $hook)) {
+	 *     $ret = $hookObj->$hook($this, ...);
+	 *     ...
+	 *   }
+	 * }
+	 * ?>
+	 * </code>
+	 *
+	 * @params string $classname name of class (current class if left empty)
+	 * @return array list of hook objects registered for the class
+	 */
+	function getHookObjects($classname='') { /* {{{ */
+		if($classname)
+			$tmp = explode('_', $classname);
+		else
+			$tmp = explode('_', get_class($this));
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			return $GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])];
+		}
+		return array();
 	} /* }}} */
 
 	/**
