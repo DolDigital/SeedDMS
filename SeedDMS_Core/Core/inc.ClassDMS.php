@@ -196,18 +196,23 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Checks if a list of objects contains a single object 
 	 *
-	 * The regular php check done by '==' compares all attributes of
+	 * This function is only applicable on list containing objects which have
+	 * a method getID() because it is used to check if two objects are equal.
+	 * The regular php check on objects done by '==' compares all attributes of
 	 * two objects, which isn't required. The method will first check
 	 * if the objects are instances of the same class.
 	 *
+	 * The result of the function can be 0 which happens if the first element
+	 * of an indexed array matches.
+	 *
 	 * @param object $object1 object to look for (needle)
 	 * @param array $list list of objects (haystack)
-	 * @return boolean true if object was found, otherwise false
+	 * @return boolean/integer index in array if object was found, otherwise false
 	 */
 	static function inList($object, $list) { /* {{{ */
-		foreach($list as $item) {
+		foreach($list as $i=>$item) {
 			if(get_class($item) == get_class($object) && $item->getID() == $object->getID())
-				return true;
+				return $i;
 		}
 		return false;
 	} /* }}} */
@@ -258,7 +263,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
-	 * @return filtered list of links
+	 * @return array filtered list of links
 	 */
 	static function filterDocumentLinks($user, $links) { /* {{{ */
 		$tmp = array();
@@ -514,8 +519,6 @@ class SeedDMS_Core_DMS {
 
 	/**
 	 * Returns all documents locked by a given user
-	 * FIXME: Not full implemented. Do not use, because it still requires the
-	 * temporary tables!
 	 *
 	 * @param object $user
 	 * @return array list of documents
