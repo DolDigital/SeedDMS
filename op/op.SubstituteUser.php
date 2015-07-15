@@ -25,12 +25,18 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('substituteuser', 'GET')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
 
 if (!isset($_GET["userid"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+}
+
+/* Check if user is allowed to switch to a different user */
+if (!$user->isAdmin()) {
+	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
 $session->setSu($_GET['userid']);
