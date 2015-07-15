@@ -49,11 +49,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footerjs[] = $script;
 	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
+	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
+		if($base)
+			echo '<base href="../../">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
@@ -577,8 +579,21 @@ $(document).ready(function () {
 			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
 		}
 
-		$this->hasHook('documentNavigationBar');
-		$this->callHook('documentNavigationBar', $document, $menuitems);
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('documentNavigationBar'))
+			$menuitems = $this->callHook('documentNavigationBar', $document, $menuitems);
+
+		/* Do not use $this->callHook() because $menuitems must be returned by the hook
+		 * or left unchanged
+		 */
+		/*
+		$hookObjs = $this->getHookObjects();
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'documentNavigationBar')) {
+	      $menuitems = $hookObj->documentNavigationBar($this, $document, $menuitems);
+			}
+		}
+		*/
 
 		foreach($menuitems as $menuitem) {
 			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
