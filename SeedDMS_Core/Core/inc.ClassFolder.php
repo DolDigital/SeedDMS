@@ -759,6 +759,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *        must be the id of the attribute definition.
 	 * @param array $version_attributes list of document version attributes.
 	 *        The element key must be the id of the attribute definition.
+	 * @param object $workflow
 	 * @return array/boolean false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
 	 *        second one is the result set returned when inserting the content.
