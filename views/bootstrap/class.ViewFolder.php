@@ -102,6 +102,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 		}
 
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+
 		echo $this->callHook('preContent');
 
 		echo "<div class=\"row-fluid\">\n";
@@ -140,7 +142,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 			echo $this->callHook('leftContent');
 
-			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard(), $previewer);
 
 			echo "</div>\n";
 		}
@@ -248,7 +250,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			if(is_string($txt))
 				echo $txt;
 			else {
-				print "<table id=\"viewfolder-table\" class=\"table\">";
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
 				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
@@ -271,8 +273,6 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 		}
 
-
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 		foreach($documents as $document) {
 			$txt = $this->callHook('documentListItem', $document, $previewer);
 			if(is_string($txt))
