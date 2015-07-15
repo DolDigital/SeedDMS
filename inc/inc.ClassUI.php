@@ -57,13 +57,13 @@ class UI extends UI_Default {
 		 */
 		$filename = '';
 		foreach($EXT_CONF as $extname=>$extconf) {
-			$filename = '../ext/'.$extname.'/views/'.$theme."/class.".$class.".php";
+			$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/class.".$class.".php";
 			if(file_exists($filename)) {
 				break;
 			}
 			$filename = '';
 			if(isset($extconf['views'][$class])) {
-				$filename = '../ext/'.$extname.'/views/'.$theme."/".$extconf['views'][$class]['file'];
+				$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/".$extconf['views'][$class]['file'];
 				if(file_exists($filename)) {
 					$classname = $extconf['views'][$class]['name'];
 					break;
