@@ -443,33 +443,41 @@ $(document).ready(function () {
 		echo "<id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
+		$menuitems = array();
 
 		if ($accessMode >= M_READWRITE) {
 			if (!$document->isLocked()) {
-				echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-				echo "<li><a href=\"../op/op.LockDocument". $docid ."\">".getMLText("lock_document")."</a></li>";
-				echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-				echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+				$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+				$menuitems['lock_document'] = array('link'=>"../op/op.LockDocument".$docid, 'label'=>'lock_document');
+				$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid , 'label'=>'edit_document_props');
+				$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
 				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
-					echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
-					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-					echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+					$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+					$menuitems['unlock_document'] = array('link'=>"../op/op.UnlockDocument".$docid, 'label'=>'unlock_document');
+					$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid, 'label'=>'edit_document_props');
+					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
 			if($this->params['accessobject']->maySetExpires()) {
-				echo "<li><a href=\"../out/out.SetExpires". $docid ."\">".getMLText("expires")."</a></li>";
+				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
 			}
 		}
 		if ($accessMode == M_ALL) {
-			echo "<li><a href=\"../out/out.RemoveDocument". $docid ."\">".getMLText("rm_document")."</a></li>";
-			echo "<li><a href=\"../out/out.DocumentAccess". $docid ."\">".getMLText("edit_document_access")."</a></li>";
+			$menuitems['rm_document'] = array('link'=>"../out/out.RemoveDocument".$docid, 'label'=>'rm_document');
+			$menuitems['edit_document_access'] = array('link'=>"../out/out.DocumentAccess". $docid, 'label'=>'edit_document_access');
 		}
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
-			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
+			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
+		}
+
+		$this->hasHook('documentNavigationBar');
+		$this->callHook('documentNavigationBar', $document, $menuitems);
+
+		foreach($menuitems as $menuitem) {
+			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
 		}
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -1029,7 +1037,7 @@ function folderSelected<?php echo $form ?>(id, name) {
 			if(!$attrdef->getMultipleValues()) {
 				echo "<option value=\"\"></option>";
 			}
-			$objvalue = $attribute ? $attribute->getValueAsArray() : array();
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValueAsArray() : $attribute) : array();
 			foreach($valueset as $value) {
 				if($value) {
 					echo "<option value=\"".htmlspecialchars($value)."\"";
@@ -1042,10 +1050,11 @@ function folderSelected<?php echo $form ?>(id, name) {
 			}
 			echo "</select>";
 		} else {
-			if($attribute && strlen($attribute->getValue()) > 30)
-				echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($attribute->getValue())."</textarea>";
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
+			if(strlen($objvalue) > 30)
+				echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($objvalue)."</textarea>";
 			else
-				echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".($attribute ? htmlspecialchars($attribute->getValue()) : '')."\" />";
+				echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
 		}
 	} /* }}} */
 
@@ -1293,7 +1302,7 @@ $(function() {
 	 * @param array clipboard
 	 * @return string rendered html content
 	 */
-	function mainClipboard($clipboard){ /* {{{ */
+	function mainClipboard($clipboard, $previewer){ /* {{{ */
 		$dms = $this->params['dms'];
 		$content = '';
 		$foldercount = $doccount = 0;
@@ -1318,7 +1327,6 @@ $(function() {
 				}
 			}
 		}
-		$previewer = new SeedDMS_Preview_Previewer($this->params['cachedir'], 40);
 		if($clipboard['docs']) {
 			foreach($clipboard['docs'] as $docid) {
 				/* FIXME: check for access rights, which could have changed after adding the document to the clipboard */
@@ -1375,10 +1383,10 @@ $(function() {
 	 *
 	 * @param array clipboard
 	 */
-	function printClipboard($clipboard){ /* {{{ */
+	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
-		echo $this->mainClipboard($clipboard);
+		echo $this->mainClipboard($clipboard, $previewer);
 		echo "</div>\n";
 	} /* }}} */
 
@@ -1474,7 +1482,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 	 * @param object $previewer
 	 * @param boolean $skipcont set to true if embrasing tr shall be skipped
 	 */
-	function documentListRow($document, $previewer, $skipcont=false) { /* {{{ */
+	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$showtree = $this->params['showtree'];
@@ -1492,7 +1500,12 @@ $('#delete-folder-btn-".$folderid."').popover({
 		if(!$skipcont)
 			$content .= "<tr id=\"table-row-document-".$docID."\">";
 
-		if($latestContent = $document->getLatestContent()) {
+		if($version)
+			$latestContent = $document->getContentByVersion($version);
+		else
+			$latestContent = $document->getLatestContent();
+
+		if($latestContent) {
 			$previewer->createPreview($latestContent);
 			$version = $latestContent->getVersion();
 			$status = $latestContent->getStatus();
@@ -1511,24 +1524,27 @@ $('#delete-folder-btn-".$folderid."').popover({
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				}
-				$content .= "</a></td>";
+				$content .= "</a>";
 			} else
-				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-			
-			$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+				$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			$content .= "</td>";
+
+			$content .= "<td>";	
+			$content .= "<a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
 			$content .= "</td>\n";
-//				$content .= "<td>".htmlspecialchars($owner->getFullName())."</td>";
+
 			$content .= "<td nowrap>";
 			$attentionstr = '';
 			if ( $document->isLocked() ) {
@@ -1544,8 +1560,9 @@ $('#delete-folder-btn-".$folderid."').popover({
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small></td>";
-//				$content .= "<td>".$version."</td>";
+			$content .= getOverallStatusText($status["status"])."</small>";
+			$content .= "</td>\n";
+
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
 			if($document->getAccessMode($user) >= M_ALL) {
