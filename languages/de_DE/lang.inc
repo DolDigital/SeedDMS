@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2092), dgrutsch (18)
+//    Translators: Admin (2094), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -902,6 +902,8 @@ URL: [url]',
 'settings_Advanced' => 'Erweitert',
 'settings_apache_mod_rewrite' => 'Apache - Module Rewrite',
 'settings_Authentication' => 'Authentifikations-Einstellungen',
+'settings_autoLoginUser' => 'Automatisches Login',
+'settings_autoLoginUser_desc' => 'Verwende den Benutzer mit der angegebenen Id, sofern man nicht bereits angemeldet ist. Solch ein Zugriff erzeugt keine eigene Sitzung.',
 'settings_cacheDir' => 'Cache Verzeichnis',
 'settings_cacheDir_desc' => 'Verzeichnis in dem Vorschaubilder abgelegt werden. Dies sollte ein Verzeichnis sein, auf das man über den Web-Browser keinen direkten Zugriff hat.',
 'settings_Calendar' => 'Kalender-Einstellungen',
