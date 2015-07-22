@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1222), dgrutsch (3), netixw (14)
+//    Translators: Admin (1224), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -978,6 +978,8 @@ URL: [url]',
 'settings_enableLanguageSelector_desc' => 'Show selector for user interface language after being logged in.',
 'settings_enableLargeFileUpload' => 'Enable large file upload',
 'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step. Turning this on will turn off http only cookies.',
+'settings_enableMenuTasks' => 'Enable task list in menu',
+'settings_enableMenuTasks_desc' => 'Enable/Disable the menu item which contains all tasks for the user. This contains documents, that need to be reviewed, approved, etc.',
 'settings_enableNotificationAppRev' => 'Enable reviewer/approver notification',
 'settings_enableNotificationAppRev_desc' => 'Check to send a notification to the reviewer/approver when a new document version is added',
 'settings_enableNotificationWorkflow' => 'Send notification to users in next workflow transition',
