@@ -215,6 +215,8 @@ class Settings { /* {{{ */
 	var $_dbUser = null;
 	// password for database-access
 	var $_dbPass = null;
+	// set to 1 if database version shall not be checked
+	var $_doNotCheckDBVersion = 0;
 	// SMTP : server
 	var $_smtpServer = null;
 	// SMTP : port
