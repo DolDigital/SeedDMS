@@ -435,7 +435,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			header("Content-Transfer-Encoding: binary");
 			header("Content-Length: " . filesize($filename));
 			header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".xls\"");
-			header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml. sheet");
+			header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			header("Cache-Control: must-revalidate");
 		}
 
