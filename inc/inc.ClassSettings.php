@@ -85,6 +85,8 @@ class Settings { /* {{{ */
 	var $_luceneDir = null;
 	// Where the drop folders are located
 	var $_dropFolderDir = null;
+	// Where the backup directory is located
+	var $_backupDir = null;
 	// Where the library folder is located
 	var $_libraryFolder = 1;
 	// Where the checked out files are located
@@ -390,6 +392,7 @@ class Settings { /* {{{ */
 		$this->_stagingDir = strval($tab["stagingDir"]);
 		$this->_luceneDir = strval($tab["luceneDir"]);
 		$this->_dropFolderDir = strval($tab["dropFolderDir"]);
+		$this->_backupDir = strval($tab["backupDir"]);
 		$this->_checkOutDir = strval($tab["checkOutDir"]);
 		$this->_createCheckOutDir = Settings::boolVal($tab["createCheckOutDir"]);
 		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
@@ -698,6 +701,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "stagingDir", $this->_stagingDir);
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
     $this->setXMLAttributValue($node, "dropFolderDir", $this->_dropFolderDir);
+    $this->setXMLAttributValue($node, "backupDir", $this->_backupDir);
     $this->setXMLAttributValue($node, "checkOutDir", $this->_checkOutDir);
     $this->setXMLAttributValue($node, "createCheckOutDir", $this->_createCheckOutDir);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
