@@ -169,8 +169,12 @@ if (!is_object($folder)) {
 
 $human_readable = (isset($_GET["human_readable"]) && $_GET["human_readable"]==1 ? true : false);
 
-if ($human_readable)$ark_name = $settings->_contentDir.time()."_".$folderid."_HR.tar";
-else $ark_name = $settings->_contentDir.time()."_".$folderid.".tar";
+if($settings->_backupDir && file_exists($settings->_backupDir))
+	$basedir = $settings->_backupDir;
+else
+	$basedir = $setting->_contentDir;
+if ($human_readable)$ark_name = $basedir.time()."_".$folderid."_HR.tar";
+else $ark_name = $basedir.time()."_".$folderid.".tar";
 
 $ark = fopen($ark_name,"w");
 
