@@ -40,7 +40,7 @@ function getLongReadableDate($timestamp) {
  * @param $date string date in form Y-m-d H:i:s
  * @return integer/boolean unix timestamp or false in case of an error
  */
-function makeTsFromLongDate($date) { /* }}} */
+function makeTsFromLongDate($date) { /* {{{ */
 	$tmp = explode(' ', $date);
 	if(count($tmp) != 2)
 		return false;
@@ -543,5 +543,18 @@ function get_extension($mimetype) { /* {{{ */
 		case 'text/csv': return '.csv';
 		default: return false;
 	}
+} /* }}} */
+
+/**
+ * Adds a missing front slash to a string
+ *
+ * This function is used for making sure a directory name has a
+ * trailing directory separator
+ */
+function addDirSep($str) { /* {{{ */
+	if(substr($str, -1, 1) != DIRECTORY_SEPARATOR)
+		return $str.DIRECTORY_SEPARATOR;
+	else
+		return $str;
 } /* }}} */
 ?>
