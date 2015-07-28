@@ -30,8 +30,12 @@ if (!$user->isAdmin()) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'contentdir'=>$settings->_contentDir));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	if($settings->_backupDir && file_exists($settings->_backupDir))
+		$view->setParam('backupdir', $settings->_backupDir);
+	else
+		$view->setParam('backupdir', $settings->_contentDir);
 	$view->show();
 	exit;
 }

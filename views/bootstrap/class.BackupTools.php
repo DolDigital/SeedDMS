@@ -34,7 +34,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$contentdir = $this->params['contentdir'];
+		$backupdir = $this->params['backupdir'];
 
 		$this->htmlStartPage(getMLText("backup_tools"));
 		$this->globalNavigation();
@@ -43,7 +43,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		$this->contentHeading(getMLText("backup_tools"));
 		$this->contentContainerStart();
-		print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($contentdir));
+		print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($backupdir));
 		$this->contentContainerEnd();
 
 		// versioning file creation ////////////////////////////////////////////////////
@@ -76,10 +76,10 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		$print_header=true;
 
-		$handle = opendir($contentdir);
+		$handle = opendir($backupdir);
 		$entries = array();
 		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
+			if (is_dir($backupdir.$e)) continue;
 			if (strpos($e,".tar.gz")==FALSE) continue;
 			$entries[] = $e;
 		}
@@ -109,8 +109,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 			print "<td><a href=\"../op/op.Download.php?arkname=".$entry."\">".$entry."</a></td>\n";
 			if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
 			else print "<td>".getMLText("unknown_id")."</td>\n";
-			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
 			print "<td>";
 			print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
 			print "</td>\n";	
@@ -137,10 +137,10 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		$print_header=true;
 
-		$handle = opendir($contentdir);
+		$handle = opendir($backupdir);
 		$entries = array();
 		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
+			if (is_dir($backupdir.$e)) continue;
 			if (strpos($e,".sql.gz")==FALSE) continue;
 			$entries[] = $e;
 		}
@@ -164,8 +164,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 			print "<tr>\n";
 			print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
-			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
 			print "<td>";
 			print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
 			print "</td>\n";	
