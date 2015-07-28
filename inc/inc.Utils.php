@@ -552,9 +552,11 @@ function get_extension($mimetype) { /* {{{ */
  * trailing directory separator
  */
 function addDirSep($str) { /* {{{ */
-	if(substr($str, -1, 1) != DIRECTORY_SEPARATOR)
-		return $str.DIRECTORY_SEPARATOR;
+	if(trim($str) == '')
+		return '';
+	if(substr(trim($str), -1, 1) != DIRECTORY_SEPARATOR)
+		return trim($str).DIRECTORY_SEPARATOR;
 	else
-		return $str;
+		return trim($str);
 } /* }}} */
 ?>
