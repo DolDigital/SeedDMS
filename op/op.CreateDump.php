@@ -30,7 +30,11 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$dump_name = $settings->_contentDir.time().".sql";
+if($settings->_backupDir && file_exists($settings->_backupDir))
+	$basedir = $settings->_backupDir;
+else
+	$basedir = $setting->_contentDir;
+$dump_name = $basedir.time().".sql";
 
 $h=fopen($dump_name,"w");
 
