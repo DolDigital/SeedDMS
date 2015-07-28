@@ -107,7 +107,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					</td>
 		    </tr>
 <?php
-	
 	} /* }}} */
 
 	function show() { /* {{{ */

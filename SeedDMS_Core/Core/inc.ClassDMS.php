@@ -357,7 +357,7 @@ class SeedDMS_Core_DMS {
 		$this->classnames['transmittalitem'] = 'SeedDMS_Core_TransmittalItem';
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.17';
+			$this->version = '5.0.0';
 	} /* }}} */
 
 	/**
