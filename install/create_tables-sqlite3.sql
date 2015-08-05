@@ -63,7 +63,6 @@ CREATE TABLE `tblUsers` (
   `disabled` INTEGER NOT NULL default '0',
   `quota` INTEGER,
   `homefolder` INTEGER default '0',
-  `homefolder` INTEGER default '0',
   UNIQUE (`login`)
 );
 
@@ -307,11 +306,26 @@ CREATE TABLE `tblDocumentLocks` (
 
 CREATE TABLE `tblDocumentCheckOuts` (
   `document` INTEGER REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`)
   `version` INTEGER unsigned NOT NULL default '0',
+  `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`),
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
   `filename` varchar(255) NOT NULL default '',
   UNIQUE (`document`)
+) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentReviewers`
+-- 
+
+CREATE TABLE `tblDocumentReviewers` (
+  `reviewID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  `version` INTEGER unsigned NOT NULL default '0',
+  `type` INTEGER NOT NULL default '0',
+  `required` INTEGER NOT NULL default '0',
+  UNIQUE (`documentID`,`version`,`type`,`required`)
 ) ;
 
 -- --------------------------------------------------------
@@ -332,11 +346,11 @@ CREATE TABLE `tblDocumentReviewLog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblDocumentReviewers`
+-- Table structure for table `tblDocumentRecipients`
 -- 
 
-CREATE TABLE `tblDocumentReviewers` (
-  `reviewID` INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE `tblDocumentRecipients` (
+  `receiptID` INTEGER PRIMARY KEY AUTOINCREMENT,
   `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` INTEGER unsigned NOT NULL default '0',
   `type` INTEGER NOT NULL default '0',
@@ -362,36 +376,6 @@ CREATE TABLE `tblDocumentReceiptLog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblDocumentRecipients`
--- 
-
-CREATE TABLE `tblDocumentRecipients` (
-  `receiptID` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  `version` INTEGER unsigned NOT NULL default '0',
-  `type` INTEGER NOT NULL default '0',
-  `required` INTEGER NOT NULL default '0',
-  UNIQUE (`documentID`,`version`,`type`,`required`)
-) ;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `tblDocumentRevisionLog`
--- 
-
-CREATE TABLE `tblDocumentRevisionLog` (
-  `revisionLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `revisionID` INTEGER NOT NULL default '0',
-  `status` INTEGER NOT NULL default '0',
-  `comment` TEXT NOT NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
-  `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
-) ;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `tblDocumentRevisors`
 -- 
 
@@ -402,9 +386,8 @@ CREATE TABLE `tblDocumentRevisors` (
   `type` INTEGER NOT NULL default '0',
   `required` INTEGER NOT NULL default '0',
   `startdate` TEXT default NULL,
-  UNIQUE KEY `documentID` (`documentID`,`version`,`type`,`required`),
-  CONSTRAINT `tblDocumentRevisors_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
-);
+  UNIQUE (`documentID`,`version`,`type`,`required`)
+) ;
 
 -- --------------------------------------------------------
 
@@ -419,22 +402,6 @@ CREATE TABLE `tblDocumentRevisionLog` (
   `comment` TEXT NOT NULL,
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
   `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
-) ;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `tblDocumentRevisors`
--- 
-
-CREATE TABLE `tblDocumentRevisors` (
-  `revisionID` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `documentID` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  `version` INTEGER unsigned NOT NULL default '0',
-  `type` INTEGER NOT NULL default '0',
-  `required` INTEGER NOT NULL default '0',
-  `startdate` TEXT default NULL,
-  UNIQUE (`documentID`,`version`,`type`,`required`)
 ) ;
 
 -- --------------------------------------------------------
@@ -759,10 +726,11 @@ CREATE TABLE `tblTransmittalItems` (
 CREATE TABLE `tblAros` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `model` TEXT NOT NULL,
-	`foreignid` INTEGER NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+	`foreignid` INTEGER NOT NULL DEFAULT '0'
 ) ;
 
+
+-- --------------------------------------------------------
 
 -- 
 -- Table structure for access control objects
@@ -784,7 +752,7 @@ CREATE TABLE `tblArosAcos` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
 	`aro` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAros` (`id`) ON DELETE CASCADE,
 	`aco` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
-  UNIQUE (aco, aro),
+  UNIQUE (aco, aro)
 ) ;
 
 -- --------------------------------------------------------
