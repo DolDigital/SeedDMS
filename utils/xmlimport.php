@@ -94,6 +94,23 @@ function insert_user($user) { /* {{{ */
 	return $newUser;
 } /* }}} */
 
+function set_homefolders() { /* {{{ */
+	global $dms, $debug, $defaultUser, $users, $objmap;
+
+	foreach($users as $user) {
+		if(isset($user['attributes']['homefolder'])) {
+			if(array_key_exists($user['id'], $objmap['users'])) {
+				$userobj = $dms->getUser($objmap['users'][$user['id']]);
+				if(!array_key_exists((int) $user['attributes']['homefolder'], $objmap['folders'])) {
+					echo "Error: homefolder cannot be found\n";
+				} else {
+					$userobj->setHomeFolder($objmap['folders'][(int) $user['attributes']['homefolder']]);
+				}
+			}
+		}
+	}
+} /* }}} */
+
 function insert_group($group) { /* {{{ */
 	global $dms, $debug, $objmap, $sections, $users;
 
@@ -1238,6 +1255,8 @@ while ($data = fread($fp, 65535)) {
 }
 
 resolve_links();
+
+set_homefolders();
 
 if($exportmapping) {
 	if($fp = fopen($exportmapping, 'w')) {

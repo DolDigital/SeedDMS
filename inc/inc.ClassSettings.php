@@ -197,6 +197,8 @@ class Settings { /* {{{ */
 	var $_adminIP = "";
 	// Max Execution Time
 	var $_maxExecutionTime = null;
+	// command timeout
+	var $_cmdTimeout = 5;
 	// Preview image width in lists
 	var $_previewWidthList = 40;
 	// Preview image width on document details page
@@ -543,6 +545,7 @@ class Settings { /* {{{ */
 		$this->_contentOffsetDir = strval($tab["contentOffsetDir"]);
 		$this->_maxDirID = intval($tab["maxDirID"]);
 		$this->_updateNotifyTime = intval($tab["updateNotifyTime"]);
+		$this->_cmdTimeout = intval($tab["cmdTimeout"]);
 		if (isset($tab["maxExecutionTime"]))
 			$this->_maxExecutionTime = intval($tab["maxExecutionTime"]);
 		else
@@ -837,6 +840,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxDirID", $this->_maxDirID);
     $this->setXMLAttributValue($node, "updateNotifyTime", $this->_updateNotifyTime);
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
+    $this->setXMLAttributValue($node, "cmdTimeout", $this->_cmdTimeout);
 
 		// XML Path: /configuration/advanced/converters
 		foreach($this->_converters as $type=>$converters) {
