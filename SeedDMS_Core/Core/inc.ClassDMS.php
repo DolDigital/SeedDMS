@@ -1671,7 +1671,6 @@ class SeedDMS_Core_DMS {
 		}
 
 		$queryStr = "INSERT INTO tblTransmittals (name, comment, userID) VALUES (".$this->db->qstr($name).", ".$this->db->qstr($comment).", ".$user->getID().")";
-		echo $queryStr;
 		if (!$this->db->getResult($queryStr))
 			return false;
 
