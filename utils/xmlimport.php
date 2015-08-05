@@ -644,6 +644,46 @@ function insert_folder($folder) { /* {{{ */
 	return $newFolder;
 } /* }}} */
 
+function insert_transmittal($transmittal) { /* {{{ */
+	global $dms, $debug, $objmap, $sections;
+
+	if(1||$debug) print_r($transmittal);
+
+	if(!array_key_exists((int) $transmittal['attributes']['owner'], $objmap['users'])) {
+		echo "Error: owner of transmittal cannot be found\n";
+		return false;
+	}
+	$owner = $dms->getUser($objmap['users'][(int) $transmittal['attributes']['owner']]);
+
+	if(in_array('transmittals', $sections)) {
+		if(!$newTransmittal = $dms->addTransmittal($transmittal['attributes']['name'], $transmittal['attributes']['comment'], $owner)) {
+			echo "Error: could not add transmittal\n";
+			return false;
+		}
+		foreach($transmittal['items'] as $item) {
+			if(!array_key_exists((int) $item['attributes']['document'], $objmap['documents'])) {
+				echo "Warning: document mapping of transmittal item cannot be found\n";
+			} else {
+				if($document = $dms->getDocument($objmap['documents'][(int) $item['attributes']['document']])) {
+					if($content = $document->getContentByVersion((int) $item['attributes']['version'])) {
+						$newTransmittal->addContent($content);
+					} else {
+						echo "Warning: document version of transmittal item cannot be found\n";
+					}
+				} else {
+					echo "Warning: document of transmittal item cannot be found\n";
+				}
+			}
+		}
+	} else {
+		$newTransmittal = null;
+	}
+
+	if($newTransmittal)
+		$objmap['transmittals'][$documentcat['id']] = $newTransmittal->getID();
+	return $newCategory;
+} /* }}} */
+
 function resolve_links() { /* {{{ */
 	global $dms, $debug, $defaultUser, $links, $objmap;
 
@@ -681,7 +721,7 @@ function resolve_links() { /* {{{ */
 } /* }}} */
 
 function startElement($parser, $name, $attrs) { /* {{{ */
-	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_transmittal, $cur_transmittalitem;
 
 	$parent = end($elementstack);
 	array_push($elementstack, array('name'=>$name, 'attributes'=>$attrs));
@@ -733,6 +773,17 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 					$cur_document['notifications']['groups'][] = (int) $attrs['ID'];
 				}
 			}
+			break;
+		case "TRANSMITTAL":
+			$cur_transmittal = array();
+			$cur_transmittal['id'] = (int) $attrs['ID'];
+			$cur_transmittal['attributes'] = array();
+			$cur_transmittal['items'] = array();
+			break;
+		case "TRANSMITTALITEM":
+			$cur_transmittalitem = array();
+			$cur_transmittalitem['id'] = (int) $attrs['ID'];
+			$cur_transmittalitem['attributes'] = array();
 			break;
 		case "DOCUMENT":
 			$cur_document = array();
@@ -824,6 +875,10 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				$cur_file['attributes'][$attrs['NAME']] = '';
 			} elseif($parent['name'] == 'LINK') {
 				$cur_link['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'TRANSMITTAL') {
+				$cur_transmittal['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'TRANSMITTALITEM') {
+				$cur_transmittalitem['attributes'][$attrs['NAME']] = '';
 			}
 			break;
 		case "CATEGORIES":
@@ -936,7 +991,7 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 } /* }}} */
 
 function endElement($parser, $name) { /* {{{ */
-	global $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_transmittal, $cur_transmittalitem;
 
 	array_pop($elementstack);
 	$parent = end($elementstack);
@@ -1006,11 +1061,17 @@ function endElement($parser, $name) { /* {{{ */
 				$cur_document['links'][] = $cur_link;
 			}
 			break;
+		case "TRANSMITTALITEM":
+			$cur_transmittal['items'][] = $cur_transmittalitem;
+			break;
+		case 'TRANSMITTAL':
+			insert_transmittal($cur_transmittal);
+			break;
 	}
 } /* }}} */
 
 function characterData($parser, $data) { /* {{{ */
-	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_transmittal, $cur_transmittalitem;
 
 	$current = end($elementstack);
 	$parent = prev($elementstack);
@@ -1097,6 +1158,18 @@ function characterData($parser, $data) { /* {{{ */
 					break;
 				case 'LINK':
 					$cur_link['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'TRANSMITTAL':
+					if(isset($cur_transmittal['attributes'][$current['attributes']['NAME']]))
+						$cur_transmittal['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_transmittal['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'TRANSMITTALITEM':
+					if(isset($cur_transmittalitem['attributes'][$current['attributes']['NAME']]))
+						$cur_transmittalitem['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_transmittalitem['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 			}
 			break;
@@ -1194,7 +1267,7 @@ if(isset($options['export-mapping'])) {
 	$exportmapping = $options['export-mapping'];
 }
 
-$sections = array('documents', 'folders', 'groups', 'users', 'keywordcategories', 'documentcategories', 'attributedefinitions');
+$sections = array('documents', 'folders', 'groups', 'users', 'keywordcategories', 'documentcategories', 'attributedefinitions', 'transmittals');
 if(isset($options['sections'])) {
 	$sections = explode(',', $options['sections']);
 }
