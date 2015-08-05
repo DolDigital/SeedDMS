@@ -98,11 +98,11 @@ function set_homefolders() { /* {{{ */
 	global $dms, $debug, $defaultUser, $users, $objmap;
 
 	foreach($users as $user) {
-		if(isset($user['attributes']['homefolder'])) {
+		if(isset($user['attributes']['homefolder']) && $user['attributes']['homefolder']) {
 			if(array_key_exists($user['id'], $objmap['users'])) {
 				$userobj = $dms->getUser($objmap['users'][$user['id']]);
 				if(!array_key_exists((int) $user['attributes']['homefolder'], $objmap['folders'])) {
-					echo "Error: homefolder cannot be found\n";
+					echo "Warning: homefolder ".$user['attributes']['homefolder']." cannot be found\n";
 				} else {
 					$userobj->setHomeFolder($objmap['folders'][(int) $user['attributes']['homefolder']]);
 				}
