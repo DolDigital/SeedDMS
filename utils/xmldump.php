@@ -530,5 +530,30 @@ if($folder) {
 	tree($folder, null, '', $skiproot);
 }
 
+$transmittals = $dms->getAllTransmittals();
+if($transmittals) {
+	echo "<transmittals>\n";
+	foreach($transmittals as $transmittal) {
+		echo " <transmittal id=\"".$transmittal->getID()."\">\n";
+		echo "  <attr name=\"name\">".$transmittal->getName()."</attr>\n";
+		echo "  <attr name=\"owner\">".$transmittal->getUser()->getID()."</attr>\n";
+		echo "  <attr name=\"comment\">".$transmittal->getComment()."</attr>\n";
+		if($items = $transmittal->getItems()) {
+			echo "  <items>\n";
+			foreach($items as $item) {
+				echo "   <item id=\"".$item->getID()."\">\n";
+				$content = $item->getContent();
+				echo "    <attr name=\"document\">".$content->getDocument()->getID()."</attr>\n";
+				echo "    <attr name=\"version\">".$content->getVersion()."</attr>\n";
+				echo "    <attr name=\"date\" format=\"Y-m-d H:i:s\">".$item->getDate()."</attr>\n";
+				echo "   </item>\n";
+			}
+			echo "  </items>\n";
+		}
+		echo " </transmittal>\n";
+	}
+	echo "</transmittals>\n";
+}
+
 echo "</dms>\n";
 ?>
