@@ -858,8 +858,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	protected function removeFromDatabase() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		//Entfernen der Datenbankeinträge
 		$db->startTransaction();
+		// unset homefolder as it will no longer exist
+		$queryStr = "UPDATE tblUsers SET homefolder=NULL WHERE homefolder =  " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		// Remove database entries
 		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
