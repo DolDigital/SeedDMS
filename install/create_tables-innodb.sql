@@ -65,9 +65,10 @@ CREATE TABLE `tblUsers` (
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
   `quota` bigint,
-  `homefolder` int(11) default '0',
+  `homefolder` int(11) default NULL,
   PRIMARY KEY (`id`),
-  UNIQUE (`login`)
+  UNIQUE (`login`),
+  CONSTRAINT `tblUsers_homefolder` FOREIGN KEY (`homefolder`) REFERENCES `tblFolders` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

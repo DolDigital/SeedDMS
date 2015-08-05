@@ -408,6 +408,7 @@ if($users) {
 		echo "  <attr name=\"hidden\">".$user->isHidden()."</attr>\n";
 		echo "  <attr name=\"disabled\">".$user->isDisabled()."</attr>\n";
 		echo "  <attr name=\"pwdexpiration\">".$user->getPwdExpiration()."</attr>\n";
+		echo "  <attr name=\"homefolder\">".$user->getHomeFolder()."</attr>\n";
 		if($image = $user->getImage()) {
 			echo "  <image id=\"".$image['id']."\">\n";
 			echo "   <attr name=\"mimetype\">".$image['mimeType']."</attr>\n";
