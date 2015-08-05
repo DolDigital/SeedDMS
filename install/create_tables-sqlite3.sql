@@ -236,7 +236,7 @@ CREATE TABLE `tblDocumentContent` (
   `mimeType` varchar(70) NOT NULL default '',
   `fileSize` INTEGER,
   `checksum` char(32),
-  `revsiondate` INTEGER default NULL,
+  `revisiondate` TEXT NOT NULL default '0000-00-00 00:00:00',
   UNIQUE (`document`,`version`)
 ) ;
 
