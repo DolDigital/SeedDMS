@@ -99,6 +99,7 @@ $statistic = array(
 	'attributedefinitions'=>0,
 	'keywordcategories'=>0,
 	'documentcategories'=>0,
+	'transmittals'=>0,
 );
 
 function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
@@ -627,6 +628,7 @@ if($transmittals) {
 			echo "  </items>\n";
 		}
 		echo " </transmittal>\n";
+		$statistic['transmittals']++;
 	}
 	echo "</transmittals>\n";
 }
