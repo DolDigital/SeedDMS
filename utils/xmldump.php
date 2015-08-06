@@ -487,6 +487,13 @@ if($users) {
 			}
 			echo "  </mandatory_approvers>\n";
 		}
+		if($substitutes = $user->getSubstitutes()) {
+			echo "  <substitutes>\n";
+			foreach($substitutes as $substitute) {
+				echo "   <substitute user=\"".$substitute['substitute']."\" />\n";
+			}
+			echo "  </substitutes>\n";
+		}
 		echo " </user>\n";
 	}
 	echo "</users>\n";
