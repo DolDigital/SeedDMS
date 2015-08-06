@@ -208,8 +208,10 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($versions) {
 				echo $indent." <versions>\n";
 				foreach($versions as $version) {
-					$approvalStatus = $version->getApprovalStatus(30);
-					$reviewStatus = $version->getReviewStatus();
+					$approvalStatus = $version->getApprovalStatus(300);
+					$reviewStatus = $version->getReviewStatus(300);
+					$receiptStatus = $version->getReceiptStatus(300);
+					$revisionStatus = $version->getRevisionStatus(300);
 					$owner = $version->getUser();
 					echo $indent."  <version version=\"".$version->getVersion()."\">\n";
 					echo $indent."   <attr name=\"mimetype\">".$version->getMimeType()."</attr>\n";
@@ -285,6 +287,56 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						if($curreviewid != 0)
 							echo $indent."    </review>\n";
 						echo $indent."   </reviews>\n";
+					}
+					if($receiptStatus) {
+						echo $indent."   <receipts>\n";
+						$curreceiptid = 0;
+						foreach($receiptStatus as $a) {
+							if($a['receiptID'] != $curreceiptid) {
+								if($curreceiptid != 0) {
+									echo $indent."    </receipt>\n";
+								}
+								echo $indent."    <receipt id=\"".$a['receiptID']."\">\n";
+								echo $indent."     <attr name=\"type\">".$a['type']."</attr>\n";
+								echo $indent."     <attr name=\"required\">".$a['required']."</attr>\n";
+							}
+							echo $indent."     <receiptlog id=\"".$a['receiptLogID']."\">\n";
+							echo $indent."      <attr name=\"user\">".$a['userID']."</attr>\n";
+							echo $indent."      <attr name=\"status\">".$a['status']."</attr>\n";
+							echo $indent."      <attr name=\"comment\">".wrapWithCData($a['comment'])."</attr>\n";
+							echo $indent."      <attr name=\"date\" format=\"Y-m-d H:i:s\">".$a['date']."</attr>\n";
+							echo $indent."     </receiptlog>\n";
+//							echo $indent."    </receipt>\n";
+							$curreceiptid = $a['receiptID'];
+						}
+						if($curreceiptid != 0)
+							echo $indent."    </receipt>\n";
+						echo $indent."   </receipts>\n";
+					}
+					if($revisionStatus) {
+						echo $indent."   <revisions>\n";
+						$currevisionid = 0;
+						foreach($revisionStatus as $a) {
+							if($a['revisionID'] != $currevisionid) {
+								if($currevisionid != 0) {
+									echo $indent."    </revision>\n";
+								}
+								echo $indent."    <revision id=\"".$a['revisionID']."\">\n";
+								echo $indent."     <attr name=\"type\">".$a['type']."</attr>\n";
+								echo $indent."     <attr name=\"required\">".$a['required']."</attr>\n";
+							}
+							echo $indent."     <revisionlog id=\"".$a['revisionLogID']."\">\n";
+							echo $indent."      <attr name=\"user\">".$a['userID']."</attr>\n";
+							echo $indent."      <attr name=\"status\">".$a['status']."</attr>\n";
+							echo $indent."      <attr name=\"comment\">".wrapWithCData($a['comment'])."</attr>\n";
+							echo $indent."      <attr name=\"date\" format=\"Y-m-d H:i:s\">".$a['date']."</attr>\n";
+							echo $indent."     </revisionlog>\n";
+//							echo $indent."    </revision>\n";
+							$currevisionid = $a['revisionID'];
+						}
+						if($currevisionid != 0)
+							echo $indent."    </revision>\n";
+						echo $indent."   </revisions>\n";
 					}
 					if(file_exists($dms->contentDir . $version->getPath())) {
 						echo $indent."   <data length=\"".filesize($dms->contentDir . $version->getPath())."\"";
