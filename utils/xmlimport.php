@@ -16,7 +16,7 @@ function usage() { /* {{{ */
 	echo "  --file <file>: file containing the dump.\n";
 	echo "  --sections <sections>: comma seperated list of sections to read from dump.\n";
 	echo "     can be: users, groups, documents, folders, keywordcategories, or\n";
-	echo "     documentcategories\n";
+	echo "     documentcategories, transmittals\n";
 	echo "  --contentdir <dir>: directory where all document versions are stored\n";
 	echo "    which are not included in the xml file.\n";
 	echo "  --default-user <user id>: use this user if user could not be found.\n";
@@ -680,7 +680,7 @@ function insert_transmittal($transmittal) { /* {{{ */
 	}
 
 	if($newTransmittal)
-		$objmap['transmittals'][$documentcat['id']] = $newTransmittal->getID();
+		$objmap['transmittals'][$transmittal['id']] = $newTransmittal->getID();
 	return $newCategory;
 } /* }}} */
 
@@ -1310,6 +1310,7 @@ $objmap = array(
 	'groups' => array(),
 	'folders' => array(),
 	'documents' => array(),
+	'transmittals' => array(),
 );
 
 $xml_parser = xml_parser_create("UTF-8");
