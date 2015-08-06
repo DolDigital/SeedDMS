@@ -91,8 +91,18 @@ if(isset($options['skip-root'])) {
 	$skiproot = true;
 }
 
+$statistic = array(
+	'documents'=>0,
+	'folders'=>0,
+	'users'=>0,
+	'groups'=>0,
+	'attributedefinitions'=>0,
+	'keywordcategories'=>0,
+	'documentcategories'=>0,
+);
+
 function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
-	global $index, $dms, $maxsize, $contentdir;
+	global $statistic, $index, $dms, $maxsize, $contentdir;
 
 	if(!$skipcurrent) {
 		echo $indent."<folder id=\"".$folder->getId()."\"";
@@ -134,6 +144,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			echo $indent." </acls>\n";
 		}
 		echo $indent."</folder>\n";
+		$statistic['folders']++;
 		$parentfolder = $folder;
 	} else {
 		$parentfolder = null;
@@ -375,6 +386,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			}
 
 			echo $indent."</document>\n";
+			$statistic['documents']++;
 		}
 	}
 } /* }}} */
@@ -391,7 +403,7 @@ if(!$settings->_doNotCheckDBVersion && !$dms->checkVersion()) {
 $dms->setRootFolderID($settings->_rootFolderID);
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-echo "<dms dbversion=\"".implode('.', array_slice($dms->getDBVersion(), 1, 3))."\">\n";
+echo "<dms dbversion=\"".implode('.', array_slice($dms->getDBVersion(), 1, 3))."\" date=\"".date('Y-m-d H:i:s')."\">\n";
 $users = $dms->getAllUsers();
 if($users) {
 	echo "<users>\n";
@@ -436,6 +448,7 @@ if($users) {
 			echo "  </mandatory_approvers>\n";
 		}
 		echo " </user>\n";
+		$statistic['users']++;
 	}
 	echo "</users>\n";
 }
@@ -456,6 +469,7 @@ if($groups) {
 			echo "  </users>\n";
 		}
 		echo " </group>\n";
+		$statistic['groups']++;
 	}
 	echo "</groups>\n";
 }
@@ -478,6 +492,7 @@ if($categories) {
 			echo "  </keywords>\n";
 		}
 		echo " </keywordcategory>\n";
+		$statistic['keywordcategories']++;
 	}
 	echo "</keywordcategories>\n";
 }
@@ -489,6 +504,7 @@ if($categories) {
 		echo " <documentcategory id=\"".$category->getId()."\">\n";
 		echo "  <attr name=\"name\">".wrapWithCData($category->getName())."</attr>\n";
 		echo " </documentcategory>\n";
+		$statistic['documentcategories']++;
 	}
 	echo "</documentcategories>\n";
 }
@@ -521,6 +537,7 @@ if($attrdefs) {
 		echo "  <attr name=\"maxvalues\">".$attrdef->getMaxValues()."</attr>\n";
 		echo "  <attr name=\"regex\">".wrapWithCData($attrdef->getRegex())."</attr>\n";
 		echo " </attributedefinition>\n";
+		$statistic['attributedefinitions']++;
 	}
 	echo "</attrіbutedefinitions>\n";
 }
@@ -530,5 +547,10 @@ if($folder) {
 	tree($folder, null, '', $skiproot);
 }
 
+echo "<statistics>\n";
+echo " <command><![CDATA[".implode(" ", $argv)."]]></command>\n";
+foreach($statistic as $type=>$count)
+	echo " <".$type.">".$count."</".$type.">\n";
+echo "</statistics>\n";
 echo "</dms>\n";
 ?>
