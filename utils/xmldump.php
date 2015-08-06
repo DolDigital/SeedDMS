@@ -502,7 +502,7 @@ if($users) {
 		if($substitutes = $user->getSubstitutes()) {
 			echo "  <substitutes>\n";
 			foreach($substitutes as $substitute) {
-				echo "   <substitute user=\"".$substitute['substitute']."\" />\n";
+				echo "   <substitute user=\"".$substitute->getID()."\" />\n";
 			}
 			echo "  </substitutes>\n";
 		}
