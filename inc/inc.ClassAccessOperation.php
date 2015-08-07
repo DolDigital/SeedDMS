@@ -25,7 +25,7 @@ class SeedDMS_AccessOperation {
 	 * @var object $dms reference to dms
 	 * @access protected
 	 */
-	private $obj;
+	private $dms;
 
 	/**
 	 * @var object $obj object being accessed
@@ -62,7 +62,7 @@ class SeedDMS_AccessOperation {
 	 * even if is disallowed in the settings.
 	 */
 	function mayRemoveVersion() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$versions = $this->obj->getContent();
 			if ((($this->settings->_enableVersionDeletion && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin() ) && (count($versions) > 1)) {
 				return true;
@@ -82,7 +82,7 @@ class SeedDMS_AccessOperation {
 	 * even if is disallowed in the settings.
 	 */
 	function mayOverrideStatus() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT || $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE)) {
@@ -102,7 +102,7 @@ class SeedDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetReviewersApprovers() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status['status']==S_DRAFT || $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP && $this->settings->_workflowMode == 'traditional_only_approval')) {
@@ -162,7 +162,7 @@ class SeedDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetWorkflow() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$workflow = $latestContent->getWorkflow();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (!$workflow || ($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
@@ -179,7 +179,7 @@ class SeedDMS_AccessOperation {
 	 * expiration date is only allowed if the document has not been obsoleted.
 	 */
 	function maySetExpires() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->obj->getAccessMode($this->user) == M_ALL) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
@@ -199,7 +199,7 @@ class SeedDMS_AccessOperation {
 	 * disallowed in the settings.
 	 */
 	function mayEditComment() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			if($this->obj->isLocked()) {
 				$lockingUser = $this->obj->getLockingUser();
 				if (($lockingUser->getID() != $this->user->getID()) && ($this->obj->getAccessMode($this->user) != M_ALL)) {
@@ -225,7 +225,7 @@ class SeedDMS_AccessOperation {
 	 * disallowed in the settings.
 	 */
 	function mayEditAttributes() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			$workflow = $latestContent->getWorkflow();
@@ -244,7 +244,7 @@ class SeedDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayReview() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE) {
@@ -263,7 +263,7 @@ class SeedDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayApprove() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV) {
