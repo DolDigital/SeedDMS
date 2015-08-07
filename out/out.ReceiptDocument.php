@@ -59,7 +59,7 @@ if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 // verify if document may be receipted
 if (!$accessop->mayReceipt()){
