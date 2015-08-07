@@ -266,7 +266,7 @@ class SeedDMS_AccessOperation {
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV) {
+			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV && $status["status"]!=S_REJECTED) {
 				return true;
 			}
 		}
