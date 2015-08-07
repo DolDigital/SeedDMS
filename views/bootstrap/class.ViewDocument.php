@@ -194,6 +194,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "</div>";
 		}
 		$this->contentContainerStart();
+		$txt = $this->callHook('preDocumentInfos', $document);
+		if(is_string($txt))
+			echo $txt;
 		$txt = $this->callHook('documentInfos', $document);
 		if(is_string($txt))
 			echo $txt;
@@ -312,6 +315,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		</table>
 <?php
 		}
+		$txt = $this->callHook('postDocumentInfos', $document);
+		if(is_string($txt))
+			echo $txt;
 		$this->contentContainerEnd();
 ?>
 </div>

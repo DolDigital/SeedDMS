@@ -67,7 +67,7 @@ if ($latestContent->getVersion()==$version->getVersion()) {
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'previewwidthdetail'=>$settings->_previewWidthDetail, 'previewconverters'=>$settings->_converters['preview'], 'cachedir'=>$settings->_cacheDir));
