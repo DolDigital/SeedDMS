@@ -22,6 +22,12 @@
  */
 class SeedDMS_AccessOperation {
 	/**
+	 * @var object $dms reference to dms
+	 * @access protected
+	 */
+	private $obj;
+
+	/**
 	 * @var object $obj object being accessed
 	 * @access protected
 	 */
@@ -39,7 +45,8 @@ class SeedDMS_AccessOperation {
 	 */
 	private $settings;
 
-	function __construct($obj, $user, $settings) { /* {{{ */
+	function __construct($dms, $obj, $user, $settings) { /* {{{ */
+		$this->dms = $dms;
 		$this->obj = $obj;
 		$this->user = $user;
 		$this->settings = $settings;
