@@ -25,7 +25,7 @@ class SeedDMS_AccessOperation {
 	 * @var object $dms reference to dms
 	 * @access protected
 	 */
-	private $obj;
+	private $dms;
 
 	/**
 	 * @var object $obj object being accessed
