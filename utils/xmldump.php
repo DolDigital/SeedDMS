@@ -283,15 +283,12 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($versions) {
 				echo $indent." <versions>\n";
 				foreach($versions as $version) {
-<<<<<<< HEAD
 					$approvalStatus = $version->getApprovalStatus(300);
 					$reviewStatus = $version->getReviewStatus(300);
 					$receiptStatus = $version->getReceiptStatus(300);
 					$revisionStatus = $version->getRevisionStatus(300);
-=======
 					$approvalStatus = $version->getApprovalStatus(30);
 					$reviewStatus = $version->getReviewStatus(30);
->>>>>>> seeddms-5.0.x
 					$owner = $version->getUser();
 					echo $indent."  <version version=\"".$version->getVersion()."\">\n";
 					echo $indent."   <attr name=\"mimetype\">".$version->getMimeType()."</attr>\n";
