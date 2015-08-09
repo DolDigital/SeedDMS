@@ -117,7 +117,7 @@ function dumplog($version, $type, $logs, $indent) { /* {{{ */
 		$type2 = 'approve';
 		break;
 	default:
-		$type2 = 'review';
+		$type2 = $type;
 	}
 	echo $indent."   <".$type."s>\n";
 	$curid = 0;
