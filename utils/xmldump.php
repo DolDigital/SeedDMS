@@ -108,6 +108,59 @@ $statistic = array(
 	'transmittals'=>0,
 );
 
+function dumplog($version, $type, $logs, $indent) { /* {{{ */
+	global $dms, $contentdir, $maxsize;
+
+	$document = $version->getDocument();
+	switch($type) {
+	case 'approval':
+		$type2 = 'approve';
+		break;
+	default:
+		$type2 = 'review';
+	}
+	echo $indent."   <".$type."s>\n";
+	$curid = 0;
+	foreach($logs as $a) {
+		if($a[$type2.'ID'] != $curid) {
+			if($curid != 0) {
+				echo $indent."    </".$type.">\n";
+			}
+			echo $indent."    <".$type." id=\"".$a[$type2.'ID']."\">\n";
+			echo $indent."     <attr name=\"type\">".$a['type']."</attr>\n";
+			echo $indent."     <attr name=\"required\">".$a['required']."</attr>\n";
+		}
+		echo $indent."     <".$type."log id=\"".$a[$type2.'LogID']."\">\n";
+		echo $indent."      <attr name=\"user\">".$a['userID']."</attr>\n";
+		echo $indent."      <attr name=\"status\">".$a['status']."</attr>\n";
+		echo $indent."      <attr name=\"comment\">".wrapWithCData($a['comment'])."</attr>\n";
+		echo $indent."      <attr name=\"date\" format=\"Y-m-d H:i:s\">".$a['date']."</attr>\n";
+		if($a['file']) {
+			$filename = $dms->contentDir . $document->getDir().'r'.(int) $a[$type2.'LogID'];
+			if(file_exists($filename)) {
+				echo $indent."     <data length=\"".filesize($filename)."\"";
+				if(filesize($filename) < $maxsize) {
+					echo ">\n";
+					echo chunk_split(base64_encode(file_get_contents($filename)), 76, "\n");
+					echo $indent."     </data>\n";
+				} else {
+					echo " fileref=\"".$filename."\" />\n";
+					if($contentdir) {
+						copy($filename, $contentdir.$document->getID()."-R-".$a[$type2.'LogID']);
+					} else {
+						echo "Warning: ".$type." log file (size=".filesize($filename).") will be missing from output\n";
+					}
+				}
+			}
+		}
+		echo $indent."     </".$type."log>\n";
+		$curid = $a[$type2.'ID'];
+	}
+	if($curid != 0)
+		echo $indent."    </".$type.">\n";
+	echo $indent."   </".$type."s>\n";
+} /* }}} */
+
 function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 	global $sections, $statistic, $index, $dms, $maxsize, $contentdir;
 
@@ -230,10 +283,15 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($versions) {
 				echo $indent." <versions>\n";
 				foreach($versions as $version) {
+<<<<<<< HEAD
 					$approvalStatus = $version->getApprovalStatus(300);
 					$reviewStatus = $version->getReviewStatus(300);
 					$receiptStatus = $version->getReceiptStatus(300);
 					$revisionStatus = $version->getRevisionStatus(300);
+=======
+					$approvalStatus = $version->getApprovalStatus(30);
+					$reviewStatus = $version->getReviewStatus(30);
+>>>>>>> seeddms-5.0.x
 					$owner = $version->getUser();
 					echo $indent."  <version version=\"".$version->getVersion()."\">\n";
 					echo $indent."   <attr name=\"mimetype\">".$version->getMimeType()."</attr>\n";
@@ -261,54 +319,10 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						echo $indent."   </status>\n";
 					}
 					if($approvalStatus) {
-						echo $indent."   <approvals>\n";
-						$curapprovalid = 0;
-						foreach($approvalStatus as $a) {
-							if($a['approveID'] != $curapprovalid) {
-								if($curapprovalid != 0) {
-									echo $indent."    </approval>\n";
-								}
-								echo $indent."    <approval id=\"".$a['approveID']."\">\n";
-								echo $indent."     <attr name=\"type\">".$a['type']."</attr>\n";
-								echo $indent."     <attr name=\"required\">".$a['required']."</attr>\n";
-							}
-							echo $indent."     <approvallog id=\"".$a['approveLogID']."\">\n";
-							echo $indent."      <attr name=\"user\">".$a['userID']."</attr>\n";
-							echo $indent."      <attr name=\"status\">".$a['status']."</attr>\n";
-							echo $indent."      <attr name=\"comment\">".wrapWithCData($a['comment'])."</attr>\n";
-							echo $indent."      <attr name=\"date\" format=\"Y-m-d H:i:s\">".$a['date']."</attr>\n";
-							echo $indent."     </approvallog>\n";
-//							echo $indent."    </approval>\n";
-							$curapprovalid = $a['approveID'];
-						}
-						if($curapprovalid != 0)
-							echo $indent."    </approval>\n";
-						echo $indent."   </approvals>\n";
+						dumplog($version, 'approval', $approvalStatus, $indent);
 					}
 					if($reviewStatus) {
-						echo $indent."   <reviews>\n";
-						$curreviewid = 0;
-						foreach($reviewStatus as $a) {
-							if($a['reviewID'] != $curreviewid) {
-								if($curreviewid != 0) {
-									echo $indent."    </review>\n";
-								}
-								echo $indent."    <review id=\"".$a['reviewID']."\">\n";
-								echo $indent."     <attr name=\"type\">".$a['type']."</attr>\n";
-								echo $indent."     <attr name=\"required\">".$a['required']."</attr>\n";
-							}
-							echo $indent."     <reviewlog id=\"".$a['reviewLogID']."\">\n";
-							echo $indent."      <attr name=\"user\">".$a['userID']."</attr>\n";
-							echo $indent."      <attr name=\"status\">".$a['status']."</attr>\n";
-							echo $indent."      <attr name=\"comment\">".wrapWithCData($a['comment'])."</attr>\n";
-							echo $indent."      <attr name=\"date\" format=\"Y-m-d H:i:s\">".$a['date']."</attr>\n";
-							echo $indent."     </reviewlog>\n";
-//							echo $indent."    </review>\n";
-							$curreviewid = $a['reviewID'];
-						}
-						if($curreviewid != 0)
-							echo $indent."    </review>\n";
-						echo $indent."   </reviews>\n";
+						dumplog($version, 'review', $reviewStatus, $indent);
 					}
 					if($receiptStatus) {
 						echo $indent."   <receipts>\n";
@@ -468,6 +482,8 @@ $dms->setRootFolderID($settings->_rootFolderID);
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 echo "<dms dbversion=\"".implode('.', array_slice($dms->getDBVersion(), 1, 3))."\" date=\"".date('Y-m-d H:i:s')."\">\n";
+
+/* Dump users {{{ */
 if(!$sections || in_array('users', $sections)) {
 $users = $dms->getAllUsers();
 if($users) {
@@ -525,7 +541,9 @@ if($users) {
 	echo "</users>\n";
 }
 }
+/* }}} */
 
+/* Dump groups {{{ */
 if(!$sections || in_array('groups', $sections)) {
 $groups = $dms->getAllGroups();
 if($groups) {
@@ -548,7 +566,9 @@ if($groups) {
 	echo "</groups>\n";
 }
 }
+/* }}} */
 
+/* Dump keywordcategories {{{ */
 if(!$sections || in_array('keywordcategories', $sections)) {
 $categories = $dms->getAllKeywordCategories();
 if($categories) {
@@ -573,7 +593,9 @@ if($categories) {
 	echo "</keywordcategories>\n";
 }
 }
+/* }}} */
 
+/* Dump documentcategories {{{ */
 if(!$sections || in_array('documentcategories', $sections)) {
 $categories = $dms->getDocumentCategories();
 if($categories) {
@@ -587,7 +609,9 @@ if($categories) {
 	echo "</documentcategories>\n";
 }
 }
+/* }}} */
 
+/* Dump attributedefinition {{{ */
 if(!$sections || in_array('attributedefinition', $sections)) {
 $attrdefs = $dms->getAllAttributeDefinitions();
 if($attrdefs) {
@@ -622,12 +646,16 @@ if($attrdefs) {
 	echo "</attrіbutedefinitions>\n";
 }
 }
+/* }}} */
 
+/* Dump folders and documents {{{ */
 $folder = $dms->getFolder($folderid);
 if($folder) {
 	tree($folder, null, '', $skiproot);
 }
+/* }}} */
 
+/* Dump transmittals {{{ */
 $transmittals = $dms->getAllTransmittals();
 if($transmittals) {
 	echo "<transmittals>\n";
@@ -653,11 +681,15 @@ if($transmittals) {
 	}
 	echo "</transmittals>\n";
 }
+/* }}} */
 
+/* Dump statistics {{{ */
 echo "<statistics>\n";
 echo " <command><![CDATA[".implode(" ", $argv)."]]></command>\n";
 foreach($statistic as $type=>$count)
 	echo " <".$type.">".$count."</".$type.">\n";
 echo "</statistics>\n";
+/* }}} */
+
 echo "</dms>\n";
 ?>
