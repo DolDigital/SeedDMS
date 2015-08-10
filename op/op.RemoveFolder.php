@@ -54,6 +54,12 @@ if ($folder->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
+if($settings->_enableFullSearch) {
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+} else {
+	$index = null;
+}
+
 /* save this for notification later on */
 $nl =	$folder->getNotifyList();
 $parent=$folder->getParent();
@@ -61,6 +67,7 @@ $foldername = $folder->getName();
 
 $controller->setParam('folder', $folder);
 $controller->setParam('index', $index);
+$controller->setParam('indexconf', $indexconf);
 if(!$controller->run()) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }

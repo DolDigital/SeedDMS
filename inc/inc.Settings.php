@@ -92,8 +92,32 @@ if (get_magic_quotes_gpc()) {
 	unset($process);
 }
 
+if($settings->_enableFullSearch) {
+	if($settings->_fullSearchEngine == 'sqlitefts') {
+		$indexconf = array(
+			'Indexer' => 'SeedDMS_SQLiteFTS_Indexer',
+			'Search' => 'SeedDMS_SQLiteFTS_Search',
+			'IndexedDocument' => 'SeedDMS_SQLiteFTS_IndexedDocument'
+		);
+
+		require_once('SeedDMS/SQLiteFTS.php');
+	} else {
+		$indexconf = array(
+			'Indexer' => 'SeedDMS_Lucene_Indexer',
+			'Search' => 'SeedDMS_Lucene_Search',
+			'IndexedDocument' => 'SeedDMS_Lucene_IndexedDocument'
+		);
+
+		if(!empty($settings->_luceneClassDir))
+			require_once($settings->_luceneClassDir.'/Lucene.php');
+		else
+			require_once('SeedDMS/Lucene.php');
+	}
+}
+
 /* Add root Dir. Needed because the view classes are included
  * relative to it.
  */
 ini_set('include_path', $settings->_rootDir. PATH_SEPARATOR .ini_get('include_path'));
+
 ?>
