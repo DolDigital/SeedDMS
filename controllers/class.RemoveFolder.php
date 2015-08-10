@@ -28,6 +28,7 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 		$settings = $this->params['settings'];
 		$folder = $this->params['folder'];
 		$index = $this->params['index'];
+		$indexconf = $this->params['indexconf'];
 
 		/* Get the document id and name before removing the document */
 		$foldername = $folder->getName();
@@ -41,23 +42,19 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 			/* Register a callback which removes each document from the fulltext index
 			 * The callback must return true other the removal will be canceled.
 			 */
-			if($settings->_enableFullSearch) {
-				if(!empty($settings->_luceneClassDir))
-					require_once($settings->_luceneClassDir.'/Lucene.php');
-				else
-					require_once('SeedDMS/Lucene.php');
-
-				$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
-				function removeFromIndex($index, $document) {
-					if($hits = $index->find('document_id:'.$document->getId())) {
-						$hit = $hits[0];
-						$index->delete($hit->id);
-						$index->commit();
-					}
-					return true;
+			function removeFromIndex($arr, $document) {
+				$index = $arr[0];
+				$indexconf = $arr[1];
+				$lucenesearch = new $indexconf['Search']($index);
+				if($hit = $lucenesearch->getDocument($document->getID())) {
+					$index->delete($hit->id);
+					$index->commit();
 				}
-				$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', $index);
+				return true;
 			}
+			if($index)
+				$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', array($index, $indexconf));
+
 			if (!$folder->remove()) {
 				return false;
 			} else {

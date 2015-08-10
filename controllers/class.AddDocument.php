@@ -36,6 +36,7 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 		$settings = $this->params['settings'];
 		$documentsource = $this->params['documentsource'];
 		$index = $this->params['index'];
+		$indexconf = $this->params['indexconf'];
 		$folder = $this->params['folder'];
 		$name = $this->getParam('name');
 		$comment = $this->getParam('comment');
@@ -74,7 +75,7 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 			$document = $res[0];
 
 			if($index) {
-				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
+				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
 			}
 
 			/* Add a default notification for the owner of the document */

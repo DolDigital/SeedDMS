@@ -58,11 +58,8 @@ if($document->isLocked()) {
 }
 
 if($settings->_enableFullSearch) {
-	if(!empty($settings->_luceneClassDir))
-		require_once($settings->_luceneClassDir.'/Lucene.php');
-	else
-		require_once('SeedDMS/Lucene.php');
-	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
 } else {
 	$index = null;
 }
@@ -74,6 +71,7 @@ $docname = $document->getName();
 
 $controller->setParam('document', $document);
 $controller->setParam('index', $index);
+$controller->setParam('indexconf', $indexconf);
 if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
 }

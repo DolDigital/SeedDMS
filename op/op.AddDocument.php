@@ -274,17 +274,11 @@ if($settings->_libraryFolder) {
 	}
 }
 
-$index = null;
 if($settings->_enableFullSearch) {
-	if(!empty($settings->_luceneClassDir))
-		require_once($settings->_luceneClassDir.'/Lucene.php');
-	else
-		require_once('SeedDMS/Lucene.php');
-
-	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
-	if($index) {
-		SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-	}
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
+} else {
+	$index = null;
 }
 
 /* Check if additional notification shall be added */
@@ -345,6 +339,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$controller->setParam('documentsource', $docsource);
 	$controller->setParam('folder', $folder);
 	$controller->setParam('index', $index);
+	$controller->setParam('indexconf', $indexconf);
 	$controller->setParam('name', $name);
 	$controller->setParam('comment', $comment);
 	$controller->setParam('expires', $expires);

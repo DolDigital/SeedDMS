@@ -1,6 +1,6 @@
 <?php
 /**
- * Implementation of search in lucene index
+ * Implementation of search in SQlite FTS index
  *
  * @category   DMS
  * @package    SeedDMS_Lucene
@@ -13,7 +13,7 @@
 
 
 /**
- * Class for searching in a lucene index.
+ * Class for searching in a SQlite FTS index.
  *
  * @category   DMS
  * @package    SeedDMS_Lucene
@@ -22,9 +22,9 @@
  * @copyright  Copyright (C) 2011, Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Lucene_Search {
+class SeedDMS_SQliteFTS_Search {
 	/**
-	 * @var object $index lucene index
+	 * @var object $index SQlite FTS index
 	 * @access protected
 	 */
 	protected $index;
@@ -32,8 +32,8 @@ class SeedDMS_Lucene_Search {
 	/**
 	 * Create a new instance of the search
 	 *
-	 * @param object $index lucene index
-	 * @return object instance of SeedDMS_Lucene_Search
+	 * @param object $index SQlite FTS index
+	 * @return object instance of SeedDMS_SQliteFTS_Search
 	 */
 	function __construct($index) { /* {{{ */
 		$this->index = $index;
@@ -43,20 +43,20 @@ class SeedDMS_Lucene_Search {
 	} /* }}} */
 
 	/**
-	 * Get document from index
+	 * Get hit from index
 	 *
 	 * @param object $index lucene index
 	 * @return object instance of SeedDMS_Lucene_Document of false
 	 */
 	function getDocument($id) { /* {{{ */
-		$hits = $this->index->find('document_id:'.$id);
+		$hits = $this->index->findById((int) $id);
 		return $hits ? $hits[0] : false;
 	} /* }}} */
 
 	/**
 	 * Search in index
 	 *
-	 * @param object $index lucene index
+	 * @param object $index SQlite FTS index
 	 * @return object instance of SeedDMS_Lucene_Search
 	 */
 	function search($term, $owner, $status='', $categories=array(), $fields=array()) { /* {{{ */
@@ -68,29 +68,25 @@ class SeedDMS_Lucene_Search {
 		}
 		if($owner) {
 			if($querystr)
-				$querystr .= ' && ';
+				$querystr .= ' AND ';
 			$querystr .= 'owner:'.$owner;
 		}
 		if($categories) {
 			if($querystr)
-				$querystr .= ' && ';
-			$querystr .= '(category:"';
-			$querystr .= implode('" || category:"', $categories);
-			$querystr .= '")';
+				$querystr .= ' AND ';
+			$querystr .= 'category:';
+			$querystr .= implode(' OR category:', $categories);
+			$querystr .= '';
 		}
+//		echo $querystr;
 		try {
-			$query = Zend_Search_Lucene_Search_QueryParser::parse($querystr);
-			try {
-				$hits = $this->index->find($query);
-				$recs = array();
-				foreach($hits as $hit) {
-					$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->document_id);
-				}
-				return $recs;
-			} catch (Zend_Search_Lucene_Exception $e) {
-				return false;
+			$hits = $this->index->find($querystr);
+			$recs = array();
+			foreach($hits as $hit) {
+				$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->id);
 			}
-		} catch (Zend_Search_Lucene_Search_QueryParserException $e) {
+			return $recs;
+		} catch (Exception $e) {
 			return false;
 		}
 	} /* }}} */
