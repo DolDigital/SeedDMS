@@ -667,8 +667,8 @@ if(!is_writeable($settings->_configFilePath)) {
 	}
 ?>
       <tr title="">
-        <td><?php $this->showTextField("converters[preview]newmimetype", ""); ?></td>
-        <td><?php $this->showTextField("converters[preview]newcmd", ""); ?></td>
+        <td><?php $this->showTextField("converters[preview][newmimetype]", ""); ?>:</td>
+        <td><?php $this->showTextField("converters[preview][newcmd]", ""); ?></td>
       </tr>
     </table>
 <?php		$this->contentContainerEnd(); ?>
