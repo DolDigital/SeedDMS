@@ -406,7 +406,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_autoLoginUser_desc");?>">
         <td><?php printMLText("settings_autoLoginUser");?>:</td>
-        <td><input type="text" name="autoLoginUser" value="<?php echo $settings->_autoLoginUser; ?>" size="3" /></td>
+        <td><?php $this->showTextField("autoLoginUser", $settings->_autoLoginUser); ?></td>
       </tr>
       <tr title="<?php printMLText("settings_quota_desc");?>">
         <td><?php printMLText("settings_quota");?>:</td>
@@ -470,7 +470,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_smtpUser_desc");?>">
         <td><?php printMLText("settings_smtpUser");?>:</td>
-        <td><input type="text" name="smtpUser" value="<?php echo $settings->_smtpUser ?>" /></td>
+        <td><?php $this->showTextField("smtpUser", $settings->_smtpUser); ?></td>
       </tr>
       <tr title="<?php printMLText("settings_smtpPassword_desc");?>">
         <td><?php printMLText("settings_smtpPassword");?>:</td>
