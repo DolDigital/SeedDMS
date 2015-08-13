@@ -308,7 +308,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_backupDir_desc");?>">
         <td><?php printMLText("settings_backupDir");?>:</td>
-        <td><input type="text" name="backupDir" value="<?php echo $settings->_backupDir ?>" size="100" /></td>
+        <td><?php $this->showTextField("backupDir", $settings->_backupDir); ?></td>
       </tr>
       <tr title="<?php printMLText("settings_cacheDir_desc");?>">
         <td><?php printMLText("settings_cacheDir");?>:</td>
@@ -328,7 +328,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_checkOutDir_desc");?>">
         <td><?php printMLText("settings_checkOutDir");?>:</td>
-        <td><input type="text" name="checkOutDir" value="<?php echo $settings->_checkOutDir ?>" size="100" /></td>
+        <td><?php $this->showTextField("checkOutDir", $settings->_checkOutDir); ?></td>
       </tr>
       <tr title="<?php printMLText("settings_createCheckOutDir_desc");?>">
         <td><?php printMLText("settings_createCheckOutDir");?>:</td>
@@ -652,8 +652,8 @@ if(!is_writeable($settings->_configFilePath)) {
 	}
 ?>
       <tr title="">
-			<td><input type="text" name="converters[fulltext][newmimetype]" value="" placeholder="<?= getMLText('converter_new_mimetype') ?>"/>:</td>
-			<td><input type="text" name="converters[fulltext][newcmd]" value="" placeholder="<?= getMLText('converter_new_cmd') ?>"/></td>
+			<td><?php $this->showTextField("converters[fulltext][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
+			<td><?php $this->showTextField("converters[fulltext][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
       </tr>
       <tr ><td><b> <?php printMLText("preview_converters");?></b></td> </tr>
 <?php
