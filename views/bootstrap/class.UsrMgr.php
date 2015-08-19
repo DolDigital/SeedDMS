@@ -31,10 +31,15 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
+	function form() { /* {{{ */
+		$seluser = $this->params['seluser'];
+
+		$this->showUserForm($seluser);
+	} /* }}} */
+
 	function showUserForm($currUser) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$seluser = $this->params['seluser'];
 		$groups = $this->params['allgroups'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$passwordexpiration = $this->params['passwordexpiration'];
@@ -374,7 +379,12 @@ function checkForm(num)
 		return true;
 }
 
+function showUser(selectObj) {
+	id = selectObj.options[selectObj.selectedIndex].value;
+	$('div.ajax').trigger('update', {userid: id});
+}
 
+<?php if(0): ?>
 obj = -1;
 function showUser(selectObj) {
 	if (obj != -1)
@@ -387,6 +397,7 @@ function showUser(selectObj) {
 	obj = document.getElementById("keywords" + id);
 	obj.style.display = "";
 }
+<?php endif; ?>
 </script>
 <?php
 		$this->contentHeading(getMLText("user_management"));
@@ -414,6 +425,8 @@ function showUser(selectObj) {
 
 <div class="span8">
 	<div class="well">
+		<div class="ajax" data-href="../out/out.UsrMgr.php?action=form<?php if($seluser) echo "&userid=".$seluser->getID();?>"></div>
+<?php if(0): ?>
 		<div id="keywords0" style="display : none;">
 		<?php $this->showUserForm(false); ?>
 		</div>
@@ -424,6 +437,7 @@ function showUser(selectObj) {
 			$this->showUserForm($currUser);
 			print "</div>\n";
 		}
+		endif;
 ?>
 	</div>
 	</div>
