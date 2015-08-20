@@ -31,6 +31,30 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$seluser = $this->params['seluser'];
+		$quota = $this->params['quota'];
+
+		$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
+
+		$this->contentHeading(getMLText("user_info"));
+		echo "<table class=\"table table-condensed\">\n";
+		echo "<tr><td>".getMLText('discspace')."</td><td>";
+		$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
+		echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
+		echo $this->getProgressBar($seluser->getUsedDiskSpace(), $qt);
+		echo "</td></tr>\n";
+		$documents = $seluser->getDocuments();
+		echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
+		$sessions = $sessionmgr->getUserSessions($seluser);
+		if($sessions) {
+			$session = array_shift($sessions);
+			echo "<tr><td>".getMLText('lastaccess')."</td><td>".getLongReadableDate($session->getLastAccess())."</td></tr>\n";
+		}
+		echo "</table>";
+	} /* }}} */
+
 	function form() { /* {{{ */
 		$seluser = $this->params['seluser'];
 
@@ -422,11 +446,12 @@ function showUser(selectObj) {
 ?>
 </select>
 </div>
+	<div class="ajax" data-view="UsrMgr" data-action="info"></div>
 </div>
 
 <div class="span8">
 	<div class="well">
-		<div class="ajax" data-href="../out/out.UsrMgr.php?action=form<?php if($seluser) echo "&userid=".$seluser->getID();?>"></div>
+		<div class="ajax" data-view="UsrMgr" data-action="form"></div>
 <?php if(0): ?>
 		<div id="keywords0" style="display : none;">
 		<?php $this->showUserForm(false); ?>
