@@ -214,12 +214,20 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
       <div class="accordion-inner">
 <table class="table-condensed">
 <tr>
-<td><?= getMLText('content') ?></td><td><label class="checkbox inline"><input type="checkbox" name="includecontent" value="1"> <?php printMLText("include_content"); ?></label></td>
+<td><?= getMLText('content') ?></td><td><label class="checkbox inline"><input id="includecontent" type="checkbox" name="includecontent" value="1"> <?php printMLText("include_content"); ?></label></td>
 </tr>
 <tr>
-<td></td><td><a class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a></td>
+<td></td><td><a id="export" class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a></td>
 </tr>
 </table>
+<script>
+$(document).ready( function() {
+	$('#export').on('click', function(e) {
+		e.preventDefault();
+		window.location.href = $(this).attr('href')+'&includecontent='+($('#includecontent').prop('checked') ? '1' : '0');
+	});
+});		
+</script>
       </div>
     </div>
   </div>
