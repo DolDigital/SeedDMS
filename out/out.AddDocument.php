@@ -47,7 +47,6 @@ if($settings->_quota > 0) {
 	}
 }
 
-$folderid = $_GET["folderid"];
 $libfolder = $dms->getFolder($settings->_libraryFolder);
 if (!is_object($libfolder)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
