@@ -35,7 +35,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->theme = $theme;
 		$this->params = $params;
 		$this->imgpath = '../views/'.$theme.'/images/';
-		$this->extraheader = '';
+		$this->extraheader = array('js'=>'', 'css'=>'');
 		$this->footerjs = array();
 	}
 
@@ -62,12 +62,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+		if($this->extraheader['css'])
+			echo $this->extraheader['css'];
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 //		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
 
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
-		if($this->extraheader)
-			echo $this->extraheader;
+		if($this->extraheader['js'])
+			echo $this->extraheader['js'];
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
@@ -108,8 +110,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function htmlAddHeader($head) { /* {{{ */
-		$this->extraheader .= $head;
+	function htmlAddHeader($head, $type='js') { /* {{{ */
+		$this->extraheader[$type] .= $head;
 	} /* }}} */
 
 	function htmlEndPage() { /* {{{ */
@@ -923,7 +925,7 @@ $(document).ready(function () {
     <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
   </div>
   <div class="modal-body">
-    <p>Please wait, until document tree is loaded …</p>
+		<p><?php printMLText('tree_loading') ?></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
@@ -958,7 +960,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
     <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
   </div>
   <div class="modal-body">
-    <p>Please wait, until document tree is loaded …</p>
+		<p><?php printMLText('tree_loading') ?></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
@@ -1017,7 +1019,7 @@ function folderSelected<?php echo $form ?>(id, name) {
     <h3 id="categoryChooserLabel"><?php printMLText("choose_target_category") ?></h3>
   </div>
   <div class="modal-body">
-    <p>Please wait, until category list is loaded …</p>
+		<p><?php printMLText('categories_loading') ?></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
@@ -1039,7 +1041,7 @@ function folderSelected<?php echo $form ?>(id, name) {
     <h3 id="keywordChooserLabel"><?php printMLText("use_default_keywords") ?></h3>
   </div>
   <div class="modal-body">
-    <p>Please wait, until keyword list is loaded …</p>
+		<p><?php printMLText('keywords_loading') ?></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
@@ -1095,7 +1097,7 @@ function folderSelected<?php echo $form ?>(id, name) {
     <h3 id="dropfolderChooserLabel"><?php printMLText("choose_target_file") ?></h3>
   </div>
   <div class="modal-body">
-    <p>Please wait, until file list is loaded …</p>
+		<p><?php printMLText('files_loading') ?></p>
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
@@ -2101,6 +2103,64 @@ mayscript>
 		  <div class="bar bar-success" style="width: '.$free.'%;"></div>
 		</div>';
 		return $html;
+	} /* }}} */
+
+	/**
+	 * Output a timeline for a document
+	 *
+	 * @param object $document document
+	 */
+	protected function printTimeline($document) { /* {{{ */
+		$timeline = $document->getTimeline();
+?>
+	<script type="text/javascript">
+		var timeline;
+		var data;
+
+		data = [
+<?php 
+		foreach($timeline as $item) {
+			switch($item['type']) {
+			case 'add_version':
+				$msg = getMLText('timeline_'.$item['type'], array('version'=> $item['params'][0]));
+				break;
+			case 'add_file':
+				$msg = getMLText('timeline_'.$item['type']);
+				break;
+			case 'status_change':
+				$msg = getMLText('timeline_'.$item['type'], array('version'=> $item['params'][0], 'status'=> getOverallStatusText($item['params'][1])));
+				break;
+			default:
+				$msg = '???';
+			}
+			echo "{'start': new Date('".$item['date']."'), 'content': '".$msg."'},";
+		}
+?>
+			{
+				'start': new Date(),
+				'content': 'Today'
+			}
+		];
+
+		// specify options
+		var options = {
+			'width':  '100%',
+			'height': '300px',
+			'editable': false,   // enable dragging and editing events
+			'style': 'box',
+			'locale': 'de_DE'
+		};
+
+		$(document).ready(function () {
+		// Instantiate our timeline object.
+		timeline = new links.Timeline(document.getElementById('timeline'), options);
+
+		timeline.draw(data);
+		});
+
+	</script>
+	<div id="timeline"></div>
+<?php
 	} /* }}} */
 }
 ?>
