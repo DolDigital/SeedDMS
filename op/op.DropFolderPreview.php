@@ -2,7 +2,8 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2010-2013 Uwe Steinmann
+//    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2011-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,10 +20,10 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.Language.php");
-include("../inc/inc.Init.php");
-include("../inc/inc.Extension.php");
+include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
@@ -31,20 +32,27 @@ include("../inc/inc.Authentication.php");
  */
 require_once("SeedDMS/Preview.php");
 
-$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
+if (!isset($_GET["filename"])) {
+	exit;
+}
+$filename = $_GET["filename"];
 
 if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
 	$dropfolderdir = substr($settings->_dropFolderDir, 0, -1);
 else
 	$dropfolderdir = $settings->_dropFolderDir;
+$dir = $dropfolderdir.'/'.$user->getLogin();
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$dropfolderdir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
-if($view) {
-	$view->setParam('cachedir', $settings->_cacheDir);
-	$view->setParam('previewWidthList', $settings->_previewWidthList);
-	$view->show();
+if(!file_exists($dir.'/'.$filename))
 	exit;
-}
+
+if(!empty($_GET["width"]))
+	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
+else
+	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
+if(!$previewer->hasRawPreview($dir.'/'.$filename, 'dropfolder/'))
+	$previewer->createRawPreview($dir.'/'.$filename, 'dropfolder/');
+header('Content-Type: image/png');
+$previewer->getRawPreview($dir.'/'.$filename, 'dropfolder/');
 
 ?>

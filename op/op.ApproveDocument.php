@@ -169,6 +169,8 @@ if($olddocstatus['status'] != $newdocstatus['status']) {
 	// TODO: if user os not owner send notification to owner
 }
 
+add_log_line("?documentid=".$_POST['documentid']."&version=".$_POST['version']."&approvalType=".$_POST['approvalType']."&approvalStatus=".$_POST['approvalStatus']);
+
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid."&currenttab=revapp");
 
 ?>
