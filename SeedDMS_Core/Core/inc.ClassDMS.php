@@ -1266,7 +1266,7 @@ class SeedDMS_Core_DMS {
 	 * @param integer $isDisabled disable user and prevent login
 	 * @return object of {@link SeedDMS_Core_User}
 	 */
-	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='', $quota=0, $homefolder=0) { /* {{{ */
+	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='', $quota=0, $homefolder=null) { /* {{{ */
 		$db = $this->db;
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
@@ -1275,7 +1275,7 @@ class SeedDMS_Core_DMS {
 			$role = '0';
 		if(trim($pwdexpiration) == '')
 			$pwdexpiration = '0000-00-00 00:00:00';
-		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration, quota, homefolder) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).", '".intval($quota)."', '".intval($homefolder)."')";
+		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration, quota, homefolder) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).", '".intval($quota)."', ".($homefolder ? intval($homefolder) : NULL).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;

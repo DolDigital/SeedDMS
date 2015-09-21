@@ -462,7 +462,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setHomeFolder($homefolder) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET homefolder = " . (int) $homefolder . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET homefolder = " . ($homefolder ? (int) $homefolder : NULL) . " WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
