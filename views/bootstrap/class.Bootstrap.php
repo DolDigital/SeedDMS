@@ -2256,10 +2256,10 @@ mayscript>
 			echo "{'start': new Date('".$item['date']."'), 'content': '".$item['msg']."'},";
 		}
 ?>
-			{
+			/* {
 				'start': new Date(),
 				'content': 'Today'
-			}
+	} */
 		];
 
 		// specify options
