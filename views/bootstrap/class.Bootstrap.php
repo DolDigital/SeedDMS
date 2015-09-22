@@ -2244,7 +2244,9 @@ mayscript>
 	 *
 	 * @param object $document document
 	 */
-	protected function printTimeline($timeline, $height=300) { /* {{{ */
+	protected function printTimeline($timeline, $height=300, $start='', $end='') { /* {{{ */
+		if(!$timeline)
+			return;
 ?>
 	<script type="text/javascript">
 		var timeline;
@@ -2253,7 +2255,7 @@ mayscript>
 		data = [
 <?php 
 		foreach($timeline as $item) {
-			echo "{'start': new Date('".$item['date']."'), 'content': '".$item['msg']."'},";
+			echo "{'start': new Date('".$item['date']."'), 'content': '".$item['msg']."'},\n";
 		}
 ?>
 			/* {
@@ -2265,8 +2267,19 @@ mayscript>
 		// specify options
 		var options = {
 			'width':  '100%',
-			'height': '<?= $height ?>px',
-			'editable': false,   // enable dragging and editing events
+			'height': '100%',
+<?php
+		if($start) {
+			$tmp = explode('-', $start);
+			echo "\t\t\t'min': new Date(".$tmp[0].", ".($tmp[1]-1).", ".$tmp[2]."),\n";
+		}
+		if($end) {
+			$tmp = explode('-', $end);
+			echo "'\t\t\tmax': new Date(".$tmp[0].", ".($tmp[1]-1).", ".$tmp[2]."),\n";
+		}
+?>
+			'_editable': false,
+			'selectable': false,
 			'style': 'box',
 			'locale': 'de_DE'
 		};
@@ -2279,7 +2292,7 @@ mayscript>
 		});
 
 	</script>
-	<div id="timeline"></div>
+	<div id="timeline" style="height: <?= $height ?>px;"></div>
 <?php
 	} /* }}} */
 }
