@@ -3,6 +3,9 @@
 --------------------------------------------------------------------------------
 - fix sql statement when searching for attributes (SeedDMS_Core, Closes: 227)
 - show preview images file list of drop folder
+- add timeline for single document and all documents in a given period
+  of time
+- ensure dates in database are localtime, even if sqlite3 is used
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.20
