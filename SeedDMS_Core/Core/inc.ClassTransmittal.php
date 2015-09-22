@@ -250,7 +250,7 @@ class SeedDMS_Core_Transmittal {
 
 		$document = $item->getDocument();
 		$queryStr = "INSERT INTO `tblTransmittalItems` (`transmittal`, `document`, `version`, `date`) ".
-			"VALUES ('". $this->_id ."', ".$document->getID().", ".$item->getVersion().", CURRENT_TIMESTAMP)";
+			"VALUES ('". $this->_id ."', ".$document->getID().", ".$item->getVersion().", ".$db->getCurrentDatetime().")";
 		$res=$db->getResult($queryStr);
 		if(!$res) {
 			return false;

@@ -703,7 +703,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$receiptStatus = $this->getReceiptStatus();
 		foreach ($receiptStatus["indstatus"] as $ri) {
 			$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["receiptID"] ."', '-2', 'Recipient removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $ri["receiptID"] ."', '-2', 'Recipient removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -714,7 +714,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$revisionStatus = $this->getRevisionStatus();
 		foreach ($revisionStatus["indstatus"] as $ri) {
 			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["revisionID"] ."', '-2', 'Revisor removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $ri["revisionID"] ."', '-2', 'Revisor removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();

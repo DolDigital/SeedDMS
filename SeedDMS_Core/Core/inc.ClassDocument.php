@@ -804,7 +804,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$lc = self::getLatestContent();
 
 		$filename = $checkoutdir."/".$lc->getOriginalFileName();
-		$queryStr = "INSERT INTO tblDocumentCheckOuts (document, version, userID, date, filename) VALUES (".$this->_id.", ".$lc->getVersion().", ".$user->getID().", CURRENT_TIMESTAMP, ".$db->qstr($filename).")";
+		$queryStr = "INSERT INTO tblDocumentCheckOuts (document, version, userID, date, filename) VALUES (".$this->_id.", ".$lc->getVersion().", ".$user->getID().", ".$db->getCurrentDatetime().", ".$db->qstr($filename).")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -2704,7 +2704,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if(!$date)
 			$queryStr = "UPDATE tblDocumentContent SET revisiondate = null WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		elseif($date == 'now')
-			$queryStr = "UPDATE tblDocumentContent SET revisiondate = CURRENT_TIMESTAMP WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+			$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->getCurrentDatetime()." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		else
 			$queryStr = "UPDATE tblDocumentContent SET revisiondate = ".$db->qstr($date)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
@@ -3885,7 +3885,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $receiptID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $receiptID ."', '0', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3947,7 +3947,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $receiptID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $receiptID ."', '0', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -4034,7 +4034,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $revisionID ."', '".S_LOG_SLEEPING."', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $revisionID ."', '".S_LOG_SLEEPING."', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -4100,7 +4100,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $indstatus["receiptID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
+			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -4148,7 +4148,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`recipientsID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $receiptStatus[0]["recipientsID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
+			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -4230,7 +4230,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
 			`comment`, `date`, `userID`) ".
 			"VALUES ('". $indstatus["revisionID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
+			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -4398,7 +4398,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["receiptID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["receiptID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -4430,7 +4430,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $status["receiptID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $status["receiptID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -4504,7 +4504,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			}
 
 			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $indstatus["revisionID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+				"VALUES ('". $indstatus["revisionID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 			$res = $db->getResult($queryStr);
 			if (is_bool($res) && !$res) {
 				return -1;
@@ -4559,7 +4559,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
 					`comment`, `date`, `userID`) ".
 					"VALUES ('". $status["revisionID"] ."', ".
-					S_LOG_WAITING.", ".$db->qstr($msg).", CURRENT_TIMESTAMP, '".
+					S_LOG_WAITING.", ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '".
 					$requestUser->getID() ."')";
 				$res=$db->getResult($queryStr);
 				if (is_bool($res) && !$res) {
@@ -4616,7 +4616,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
 					`comment`, `date`, `userID`) ".
 					"VALUES ('". $status["revisionID"] ."', ".
-					S_LOG_SLEEPING.", ".$db->qstr($msg).", CURRENT_TIMESTAMP, '".
+					S_LOG_SLEEPING.", ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '".
 					$requestUser->getID() ."')";
 				$res=$db->getResult($queryStr);
 				if (is_bool($res) && !$res) {

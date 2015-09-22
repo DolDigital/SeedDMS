@@ -315,7 +315,7 @@ class SeedDMS_Core_Group {
 		$receiptStatus = $this->getReceiptStatus();
 		foreach ($receiptStatus as $r) {
 			$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $r["receiptID"] ."', '-2', 'Recipients group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $r["receiptID"] ."', '-2', 'Recipients group removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -326,7 +326,7 @@ class SeedDMS_Core_Group {
 		$revisionStatus = $this->getRevisionStatus();
 		foreach ($revisionStatus as $r) {
 			$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $r["revisionID"] ."', '-2', 'Revisors group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+				"VALUES ('". $r["revisionID"] ."', '-2', 'Revisors group removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
