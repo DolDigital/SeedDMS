@@ -162,14 +162,18 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			echo "<table class=\"table-condensed\">\n";
 			if($user->isAdmin()) {
-					echo "<tr>";
-					echo "<td>".getMLText("id").":</td>\n";
-					echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
-					echo "</tr>";
+				echo "<tr>";
+				echo "<td>".getMLText("id").":</td>\n";
+				echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
+				echo "</tr>";
 			}
 			echo "<tr>";
 			echo "<td>".getMLText("owner").":</td>\n";
 			echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>".getMLText("creation_date").":</td>";
+			echo "<td>".getLongReadableDate($folder->getDate())."</td>";
 			echo "</tr>";
 			if($folder->getComment()) {
 				echo "<tr>";
