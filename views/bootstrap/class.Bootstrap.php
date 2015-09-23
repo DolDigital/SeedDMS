@@ -2110,7 +2110,7 @@ mayscript>
 	 *
 	 * @param object $document document
 	 */
-	protected function printTimeline($timeline, $height=300, $start='', $end='') { /* {{{ */
+	protected function printTimeline($timeline, $height=300, $start='', $end='', $skip=array()) { /* {{{ */
 		if(!$timeline)
 			return;
 ?>
@@ -2121,7 +2121,12 @@ mayscript>
 		data = [
 <?php 
 		foreach($timeline as $item) {
-			echo "{'start': new Date('".$item['date']."'), 'content': '".$item['msg']."'},\n";
+			if($item['type'] == 'status_change')
+				$classname = $item['type']."_".$item['status'];
+			else
+				$classname = $item['type'];
+			if(!$skip || !in_array($classname, $skip))
+				echo "{'start': new Date('".$item['date']."'), 'content': '".$item['msg']."', 'className': '".$classname."'},\n";
 		}
 ?>
 			/* {
