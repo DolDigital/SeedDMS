@@ -6,6 +6,7 @@
 - add timeline for single document and all documents in a given period
   of time
 - ensure dates in database are localtime, even if sqlite3 is used
+- fix document and page count in fulltext search
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.20
