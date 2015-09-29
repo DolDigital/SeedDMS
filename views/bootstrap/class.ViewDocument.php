@@ -1196,7 +1196,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
 						break;
 					default:
-						$msg = '???';
+						$msg = $this->callHook('getTimelineMsg', $document, $item);
+						if(!is_string($msg))
+							$msg = '???';
 					}
 					$item['msg'] = $msg;
 				}
