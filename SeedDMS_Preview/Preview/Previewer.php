@@ -76,7 +76,7 @@ class SeedDMS_Preview_Previewer {
 		);
 		$pipes = array();
 	 
-	  $timeout += time();
+		$timeout += time();
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
@@ -161,6 +161,10 @@ class SeedDMS_Preview_Previewer {
 			$target = $this->previewDir.$dir.md5($infile).'-'.$width;
 		if($target != '' && (!file_exists($target.'.png') || filectime($target.'.png') < filectime($infile))) {
 			$cmd = '';
+			if(isset($this->converters[$mimetype])) {
+				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimetype]);
+			}
+			/*
 			switch($mimetype) {
 				case "image/png":
 				case "image/gif":
@@ -180,6 +184,7 @@ class SeedDMS_Preview_Previewer {
 					$cmd = 'tar tzvf '.$infile.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target.'.png';
 					break;
 			}
+			 */
 			if($cmd) {
 				//exec($cmd);
 				try {
