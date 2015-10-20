@@ -87,7 +87,7 @@ if($view) {
 	$view->setParam('previewConverters', $settings->_converters['preview']);
 	$view->setParam('checkOutDir', $settings->_checkOutDir);
 	$view->setParam('currenttab', isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : '');
-	$view->show();
+	$view($_GET);
 	exit;
 }
 
