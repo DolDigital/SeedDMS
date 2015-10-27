@@ -53,6 +53,10 @@ ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
 		font-weight: bold;
 }
 
+.wordbreak {
+	word-break: break-word;
+}
+
 .btn-file {
 	position: relative;
 	overflow: hidden;
