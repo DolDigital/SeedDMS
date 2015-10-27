@@ -227,7 +227,7 @@ switch($command) {
 	case 'movefolder': /* {{{ */
 		if($user) {
 			if(!checkFormKey('movefolder', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$mfolder = $dms->getFolder($_REQUEST['folderid']);
@@ -236,26 +236,26 @@ switch($command) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mfolder->setParent($folder)) {
-									header('Content-Type', 'application/json');
+									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
 								} else {
-									header('Content-Type', 'application/json');
+									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
 								}
 							} else {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
 			}
@@ -265,7 +265,7 @@ switch($command) {
 	case 'movedocument': /* {{{ */
 		if($user) {
 			if(!checkFormKey('movedocument', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$mdocument = $dms->getDocument($_REQUEST['docid']);
@@ -274,26 +274,26 @@ switch($command) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mdocument->setFolder($folder)) {
-									header('Content-Type', 'application/json');
+									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
 								} else {
-									header('Content-Type', 'application/json');
+									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
 								}
 							} else {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
 			}
@@ -303,25 +303,25 @@ switch($command) {
 	case 'deletefolder': /* {{{ */
 		if($user) {
 			if(!checkFormKey('removefolder', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$folder = $dms->getFolder($_REQUEST['id']);
 				if($folder) {
 					if ($folder->getAccessMode($user) >= M_READWRITE) {
 						if($folder->remove()) {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
 			}
@@ -331,7 +331,7 @@ switch($command) {
 	case 'deletedocument': /* {{{ */
 		if($user) {
 			if(!checkFormKey('removedocument', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$document = $dms->getDocument($_REQUEST['id']);
@@ -349,18 +349,18 @@ switch($command) {
 									}
 								}
 							}
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
 				}
 			}
@@ -376,31 +376,31 @@ switch($command) {
 						$lockingUser = $document->getLockingUser();
 						if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
 							if (!$document->setLocked(false)) {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>'Error unlocking document', 'data'=>''));
 							} else {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 							}
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 						}
 					} else {
 						if (!$document->setLocked($user)) {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error locking document', 'data'=>''));
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						}
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 				}
 			} else {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
 			}
 		}
@@ -413,10 +413,10 @@ switch($command) {
 					fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
 					fclose($fp);
 				}
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>true, 'message'=>'Thank you for your contribution', 'data'=>''));
 			}	else {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>'Missing translation', 'data'=>''));
 			}
 		}
@@ -461,7 +461,7 @@ switch($command) {
 		if($user) {
 			if(checkFormKey('adddocument')) {
 				if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
 					exit;
 				}
@@ -470,7 +470,7 @@ switch($command) {
 				$folder = $dms->getFolder($folderid);
 
 				if (!is_object($folder)) {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
 					exit;
 				}
@@ -489,12 +489,12 @@ switch($command) {
 				}
 
 				if (!is_uploaded_file($_FILES["userfile"]["tmp_name"]) || $_FILES['userfile']['error']!=0){
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_failed")));
 					exit;
 				}
 				if ($_FILES["userfile"]["size"]==0) {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_zerosize")));
 					exit;
 				} 
@@ -518,7 +518,7 @@ switch($command) {
 				/* Check if name already exists in the folder */
 				if(!$settings->_enableDuplicateDocNames) {
 					if($folder->hasDocumentByName($name)) {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>getMLText("document_duplicate_name")));
 						exit;
 					}
@@ -587,7 +587,7 @@ switch($command) {
 																		'', array(), array(), $workflow);
 
 				if (is_bool($res) && !$res) {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("error_occured")));
 					exit;
 				} else {
@@ -654,10 +654,10 @@ switch($command) {
 
 					}
 				}
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_added'), 'data'=>$document->getID()));
 			} else {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			}
 		}
