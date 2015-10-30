@@ -318,6 +318,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	const type_boolean = '4';
 	const type_url = '5';
 	const type_email = '6';
+	const type_date = '7';
 
 	/*
 	 * The object type for which a attribute may be used
