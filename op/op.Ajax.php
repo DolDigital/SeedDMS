@@ -695,7 +695,7 @@ switch($command) {
 	case 'removetransmittalitem': /* {{{ */
 		if($user) {
 			if(!checkFormKey('removetransmittalitem', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$item = SeedDMS_Core_TransmittalItem::getInstance((int) $_REQUEST['id'], $dms);
@@ -704,22 +704,22 @@ switch($command) {
 					if($transmittal) {
 						if ($transmittal->getUser()->getID() == $user->getID()) {
 							if($item->remove()) {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 							} else {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>'Error removing transmittal item', 'data'=>''));
 							}
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No transmittal', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No transmittal item', 'data'=>''));
 				}
 			}
@@ -729,7 +729,7 @@ switch($command) {
 	case 'updatetransmittalitem': /* {{{ */
 		if($user) {
 			if(!checkFormKey('updatetransmittalitem', 'GET')) {
-				header('Content-Type', 'application/json');
+				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
 			} else {
 				$item = SeedDMS_Core_TransmittalItem::getInstance((int) $_REQUEST['id'], $dms);
@@ -738,22 +738,22 @@ switch($command) {
 					if($transmittal) {
 						if ($transmittal->getUser()->getID() == $user->getID()) {
 							if($item->updateContent()) {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 							} else {
-								header('Content-Type', 'application/json');
+								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>'Error removing transmittal item', 'data'=>''));
 							}
 						} else {
-							header('Content-Type', 'application/json');
+							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 						}
 					} else {
-						header('Content-Type', 'application/json');
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>'No transmittal', 'data'=>''));
 					}
 				} else {
-					header('Content-Type', 'application/json');
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No transmittal item', 'data'=>''));
 				}
 			}
@@ -788,7 +788,7 @@ switch($command) {
 					$revisions[] = array('id'=>$res['id'], 'name'=>$res['name']);
 				}
 			}
-			header('Content-Type', 'application/json');
+			header('Content-Type: application/json');
 			echo json_encode(array('error'=>0, 'data'=>array('review'=>$reviews, 'approval'=>$approvals, 'receipt'=>$receipts, 'revision'=>$revisions), 'processing_time'=>microtime(true)-$startts));
 		}
 		break; /* }}} */
