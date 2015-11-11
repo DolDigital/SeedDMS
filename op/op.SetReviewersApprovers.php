@@ -127,7 +127,7 @@ foreach ($pIndRev as $p) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -186,7 +186,7 @@ if (count($reviewIndex["i"]) > 0) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -233,7 +233,7 @@ foreach ($pGrpRev as $p) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -289,7 +289,7 @@ if (count($reviewIndex["g"]) > 0) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -341,7 +341,7 @@ foreach ($pIndApp as $p) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -398,7 +398,7 @@ if (count($approvalIndex["i"]) > 0) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -445,7 +445,7 @@ foreach ($pGrpApp as $p) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -502,7 +502,7 @@ if (count($approvalIndex["g"]) > 0) {
 								$params = array();
 								$params['name'] = $document->getName();
 								$params['folder_path'] = $folder->getFolderPathPlain();
-								$params['version'] = $content->_version;
+								$params['version'] = $content->getVersion();
 								$params['comment'] = $content->getComment();
 								$params['username'] = $user->getFullName();
 								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
