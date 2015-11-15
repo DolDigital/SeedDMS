@@ -33,7 +33,8 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 				if(!$this->callHook('version')) {
 					header("Content-Transfer-Encoding: binary");
 					header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
-					header("Content-Disposition: attachment; filename=\"" . $content->getOriginalFileName() . "\"");
+					$efilename = rawurlencode($content->getOriginalFileName());
+					header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
 					header("Content-Type: " . $content->getMimeType());
 					header("Cache-Control: must-revalidate");
 
