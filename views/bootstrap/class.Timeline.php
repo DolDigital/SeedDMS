@@ -82,28 +82,28 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		}
 
 		if($todate) {
-			$to = makeTsFromLongDate($todate.' 00:00:00');
+			$to = makeTsFromLongDate($todate.' 23:59:59');
 		} else {
 			$to = time()-7*86400;
 		}
 
-		$data = $dms->getTimeline($from, $to);
-
-		foreach($data as &$item) {
-			switch($item['type']) {
-			case 'add_version':
-				$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName()), 'version'=> $item['version']));
-				break;
-			case 'add_file':
-				$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName())));
-				break;
-			case 'status_change':
-				$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName()), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
-				break;
-			default:
-				$msg = '???';
+		if($data = $dms->getTimeline($from, $to)) {
+			foreach($data as $i=>$item) {
+				switch($item['type']) {
+				case 'add_version':
+					$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName()), 'version'=> $item['version']));
+					break;
+				case 'add_file':
+					$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName())));
+					break;
+				case 'status_change':
+					$msg = getMLText('timeline_full_'.$item['type'], array('document'=>htmlspecialchars($item['document']->getName()), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
+					break;
+				default:
+					$msg = '???';
+				}
+				$data[$i]['msg'] = $msg;
 			}
-			$item['msg'] = $msg;
 		}
 
 		$jsondata = array();
@@ -144,7 +144,7 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		}
 
 		if($todate) {
-			$to = makeTsFromLongDate($todate.' 00:00:00');
+			$to = makeTsFromLongDate($todate.' 23:59:59');
 		} else {
 			$to = time();
 		}
@@ -206,7 +206,6 @@ echo "<div class=\"well\">\n";
 $(document).ready(function () {
 	$('#update').click(function(ev){
 		ev.preventDefault();
-		console.log($('#form1').serialize());
 		$.getJSON(
 			'out.Timeline.php?action=data&' + $('#form1').serialize(), 
 			function(data) {
