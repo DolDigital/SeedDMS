@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1272), dgrutsch (3), netixw (14)
+//    Translators: Admin (1275), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -728,7 +728,10 @@ If you have still problems to login, then please contact your administrator.',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
 'possible_substitutes' => 'Substitutes',
+'preview' => 'Preview',
 'preview_converters' => 'Preview document conversion',
+'preview_markdown' => 'Markdown',
+'preview_plain' => 'Text',
 'previous_state' => 'Previous state',
 'previous_versions' => 'Previous versions',
 'pt_BR' => 'Portugese (BR)',

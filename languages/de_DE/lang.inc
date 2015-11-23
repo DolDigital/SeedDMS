@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2137), dgrutsch (18)
+//    Translators: Admin (2140), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -728,7 +728,10 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
 'possible_substitutes' => 'Vertreter',
+'preview' => 'Vorschau',
 'preview_converters' => 'Vorschau Dokumentenumwandlung',
+'preview_markdown' => 'Markdown',
+'preview_plain' => 'Text',
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',
 'pt_BR' => 'Portugiesisch (BR)',
