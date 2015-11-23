@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (709), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (710), gijsbertush (7), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -51,7 +51,7 @@ URL: [url]',
 'add_approval' => 'Verzend [Goedkeuring]',
 'add_document' => 'Document toevoegen',
 'add_document_link' => 'Link toevoegen',
-'add_document_notify' => '',
+'add_document_notify' => 'Notificatie toekennen',
 'add_doc_reviewer_approver_warning' => 'N.B. Documenten zijn automatisch gemarkeeerd als [Gepubliceerd] als geen [Autoriseerder] of [Controleur] is toegewezen.',
 'add_doc_workflow_warning' => 'N.B. Documenten worden automatisch gemarkeerd als vrijgegeven, indien er geen workflow is toegewezen.',
 'add_event' => 'Activiteit toevoegen',
@@ -59,13 +59,13 @@ URL: [url]',
 'add_member' => 'Lid toevoegen',
 'add_multiple_documents' => 'Meerdere Documenten Toevoegen',
 'add_multiple_files' => 'Meerdere bestanden toevoegen (Gebruikt bestandsnaam als document naam)',
-'add_receipt' => '',
+'add_receipt' => 'Bericht ontvangst',
 'add_review' => 'Verzend [Controle]',
-'add_revision' => '',
+'add_revision' => 'Voeg goedkeuring toe',
 'add_subfolder' => 'Submap toevoegen',
 'add_to_clipboard' => 'Toevoegen aan klembord',
-'add_to_transmittal' => '',
-'add_transmittal' => '',
+'add_to_transmittal' => 'Toevoegen aan verzending',
+'add_transmittal' => 'Verzending toevoegen',
 'add_user' => 'Nieuwe gebruiker toevoegen',
 'add_user_to_group' => 'Gebruiker aan groep toevoegen',
 'add_workflow' => 'Nieuwe workflow toevoegen',
@@ -82,8 +82,13 @@ URL: [url]',
 'and' => 'en',
 'apply' => 'Toepassen',
 'approval_deletion_email' => 'Goedkeuring verzoek verwijderd',
-'approval_deletion_email_body' => '',
-'approval_deletion_email_subject' => '',
+'approval_deletion_email_body' => 'Vraag om goedkeuring verwijderd
+Document: [name]
+Versie: [version]
+Map: [folder_path]
+Gebruiker: [username]
+URL: [url]',
+'approval_deletion_email_subject' => '[sitename]: [name] - Verzoek om goedkeuring verwijderd',
 'approval_file' => '',
 'approval_group' => 'Goedkeuring Groep',
 'approval_log' => 'Goedkeuring overzicht',
@@ -717,7 +722,10 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'personal_default_keywords' => 'Persoonlijke sleutelwoorden',
 'pl_PL' => 'Polen',
 'possible_substitutes' => '',
+'preview' => '',
 'preview_converters' => '',
+'preview_markdown' => '',
+'preview_plain' => '',
 'previous_state' => 'Vorige staat',
 'previous_versions' => 'Vorige versies',
 'pt_BR' => 'Portugees (BR)',
@@ -1245,7 +1253,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Versie [version]: [status]',
 'to' => 'Aan',
 'toggle_manager' => 'Wijzig Beheerder',
 'to_before_from' => 'De einddatum mag niet voor de startdatum liggen',
