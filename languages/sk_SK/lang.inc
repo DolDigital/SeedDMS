@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (488)
+//    Translators: Admin (489)
 
 $text = array(
 'accept' => 'Prijať',
@@ -1153,7 +1153,7 @@ $text = array(
 'uploaded_by' => 'Nahral',
 'uploading_failed' => 'Nahranie zlyhalo. Prosám, kontaktujte správcu.',
 'uploading_maxsize' => 'Uploadovaný súbor prekročil maximálnu povolenú velkosť.',
-'uploading_zerosize' => '',
+'uploading_zerosize' => 'Nahrávate prázdny súbor. Nahrávanie je zrušené.',
 'used_discspace' => 'Využitý priestor na disku',
 'user' => 'Používateľ',
 'users' => 'Používateľ',
