@@ -174,7 +174,7 @@ if ($action == "saveSettings")
   $settings->_converters['fulltext'] = $_POST["converters"];
 
   // SETTINGS - EXTENSIONS
-  $settings->_extensions = $_POST["extensions"];
+  $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();
 
   // -------------------------------------------------------------------------
   // save
