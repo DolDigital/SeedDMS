@@ -30,6 +30,15 @@ require_once("inc.ClassNotify.php");
  * @version    Release: @package_version@
  */
 class SeedDMS_EmailNotify extends SeedDMS_Notify {
+	/* User sending the notification
+	 * Will only be used if the sender of one of the notify methods
+	 * is not set
+	 */
+	protected $sender;
+
+	function setSender($user) {
+		$this->sender = $user;
+	}
 
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		global $settings;
