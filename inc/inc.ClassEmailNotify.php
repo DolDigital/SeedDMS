@@ -82,18 +82,5 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 		return true;
 	} /* }}} */
-
-	function sendPassword($sender, $recipient, $subject, $message) { /* {{{ */
-		global $settings;
-
-		$headers   = array();
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $settings->_smtpSendFrom;
-		$headers[] = "Reply-To: ". $settings->_smtpSendFrom;
-
-		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
-		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
-	} /* }}} */
 }
 ?>
