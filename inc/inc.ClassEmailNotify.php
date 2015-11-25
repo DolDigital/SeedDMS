@@ -30,7 +30,7 @@ require_once("Mail.php");
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Email extends SeedDMS_Notify {
+class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 	var $smtp_server;
 
