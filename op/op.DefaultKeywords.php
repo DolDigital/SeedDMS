@@ -21,7 +21,6 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
 if (!$user->isAdmin()) {

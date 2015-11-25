@@ -29,7 +29,7 @@ require_once("inc.ClassNotify.php");
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Email extends SeedDMS_Notify {
+class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		global $settings;

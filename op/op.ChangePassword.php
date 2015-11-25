@@ -25,7 +25,6 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassSession.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.ClassEmail.php");
 
 function _printMessage($heading, $message) {
 

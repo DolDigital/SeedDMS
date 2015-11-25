@@ -22,7 +22,6 @@ include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
 if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
