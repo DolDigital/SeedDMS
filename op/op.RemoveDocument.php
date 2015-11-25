@@ -53,7 +53,12 @@ if($document->isLocked()) {
 $folder = $document->getFolder();
 
 /* Get the notify list before removing the document */
-$nl =	$document->getNotifyList();
+$dnl =	$document->getNotifyList();
+$fnl =	$folder->getNotifyList();
+$nl = array(
+	'users'=>array_merge($dnl['users'], $fnl['users']),
+	'groups'=>array_merge($dnl['groups'], $fnl['groups'])
+);
 $docname = $document->getName();
 if (!$document->remove()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
@@ -72,29 +77,6 @@ if (!$document->remove()) {
 	}
 
 	if ($notifier){
-/*
-		$path = "";
-		$folderPath = $folder->getPath();
-		for ($i = 0; $i  < count($folderPath); $i++) {
-			$path .= $folderPath[$i]->getName();
-			if ($i +1 < count($folderPath))
-				$path .= " / ";
-		}
-	
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_deleted_email");
-		$message = getMLText("document_deleted_email")."\r\n";
-		$message .= 
-			getMLText("document").": ".$document->getName()."\r\n".
-			getMLText("folder").": ".$path."\r\n".
-			getMLText("comment").": ".$document->getComment()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
-		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
-		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
 		$subject = "document_deleted_email_subject";
 		$message = "document_deleted_email_body";
 		$params = array();
