@@ -318,6 +318,15 @@ switch($command) {
 				$document = $dms->getDocument($_REQUEST['id']);
 				if($document) {
 					if ($document->getAccessMode($user) >= M_READWRITE) {
+						$folder = $document->getFolder();
+						/* Get the notify list before removing the document */
+						$dnl =	$document->getNotifyList();
+						$fnl =	$folder->getNotifyList();
+						$nl = array(
+							'users'=>array_merge($dnl['users'], $fnl['users']),
+							'groups'=>array_merge($dnl['groups'], $fnl['groups'])
+						);
+						$docname = $document->getName();
 						if($document->remove()) {
 							/* Remove the document from the fulltext index */
 							if($settings->_enableFullSearch) {
@@ -330,6 +339,22 @@ switch($command) {
 									}
 								}
 							}
+
+							if ($notifier){
+								$subject = "document_deleted_email_subject";
+								$message = "document_deleted_email_body";
+								$params = array();
+								$params['name'] = $docname;
+								$params['folder_path'] = $folder->getFolderPathPlain();
+								$params['username'] = $user->getFullName();
+								$params['sitename'] = $settings->_siteName;
+								$params['http_root'] = $settings->_httpRoot;
+								$notifier->toList($user, $nl["users"], $subject, $message, $params);
+								foreach ($nl["groups"] as $grp) {
+									$notifier->toGroup($user, $grp, $subject, $message, $params);
+								}
+							}
+
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
