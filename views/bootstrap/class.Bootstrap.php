@@ -503,7 +503,7 @@ $(document).ready(function () {
 		$menuitems = array();
 
 		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
-			$menuitems['edit_folder_notify'] = array('link'=>"../out/out.FolderNotify".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_notify');
+			$menuitems['edit_folder_notify'] = array('link'=>"../out/out.FolderNotify.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_notify');
 		}
 		else if ($accessMode >= M_READWRITE) {
 			$menuitems['add_subfolder'] = array('link'=>"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');

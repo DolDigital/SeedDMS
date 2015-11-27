@@ -20,7 +20,7 @@ if (!strncmp("/op", $refer, 3)) {
 }
 
 require_once("inc.Utils.php");
-require_once("inc.ClassEmail.php");
+require_once("inc.ClassEmailNotify.php");
 require_once("inc.ClassSession.php");
 
 if (!isset($_COOKIE["mydms_session"])) {
@@ -91,7 +91,7 @@ if (!isset($_COOKIE["mydms_session"])) {
 
 $dms->setUser($user);
 if($settings->_enableEmail) {
-	$notifier = new SeedDMS_Email($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+	$notifier = new SeedDMS_EmailNotify($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
 	$notifier->setSender($user);
 } else {
 	$notifier = null;

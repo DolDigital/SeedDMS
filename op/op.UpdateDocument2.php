@@ -19,7 +19,6 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");

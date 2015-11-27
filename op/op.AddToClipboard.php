@@ -25,7 +25,6 @@ include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {

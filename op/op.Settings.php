@@ -198,7 +198,7 @@ if ($action == "saveSettings")
 	unset($settings->_converters['preview']['newcmd']);
 
   // SETTINGS - EXTENSIONS
-  $settings->_extensions = $_POST["extensions"];
+  $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();
 
   // -------------------------------------------------------------------------
   // save

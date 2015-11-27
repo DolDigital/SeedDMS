@@ -30,7 +30,7 @@ require_once("Mail.php");
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Email extends SeedDMS_Notify {
+class SeedDMS_EmailNotify extends SeedDMS_Notify {
 
 	var $smtp_server;
 
@@ -140,22 +140,6 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		}
 
 		return true;
-	} /* }}} */
-
-	function sendPassword($sender, $recipient, $subject, $message, $params = array()) { /* {{{ */
-
-		$this->toIndividual($sender, $recipient, $subject, $message, $params);
-
-		return true;
-
-		$headers   = array();
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $sender;
-		$headers[] = "Reply-To: ". $sender;
-
-		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
-		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
 	} /* }}} */
 }
 ?>
