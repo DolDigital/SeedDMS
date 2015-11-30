@@ -803,7 +803,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$lc = self::getLatestContent();
 
-		$filename = $checkoutdir."/".$lc->getOriginalFileName();
+		$ext = pathinfo($this->getName(), PATHINFO_EXTENSION);
+		$oext = pathinfo($lc->getOriginalFileName(), PATHINFO_EXTENSION);
+		if($ext == $oext)
+			$filename = preg_replace('/[^A-Za-z0-9_.-]/', '_', $this->getName());
+		else {
+			$filename = preg_replace('/[^A-Za-z0-9_-]/', '_', $this->getName()).'.'.$oext;
+		}
+		$filename = $checkoutdir.$this->getID().'-'.$lc->getVersion().'-'.$filename; //$lc->getOriginalFileName();
 		$queryStr = "INSERT INTO tblDocumentCheckOuts (document, version, userID, date, filename) VALUES (".$this->_id.", ".$lc->getVersion().", ".$user->getID().", ".$db->getCurrentDatetime().", ".$db->qstr($filename).")";
 		if (!$db->getResult($queryStr))
 			return false;
