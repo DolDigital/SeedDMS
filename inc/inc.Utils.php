@@ -540,6 +540,7 @@ function get_extension($mimetype) { /* {{{ */
 		case 'application/pdf': return '.pdf';
 		case 'application/postscript': return '.ps';
 		case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': return '.docx';
+		case 'application/vnd.openxmlformats-officedocument.presentationml.presentation': return '.pptx';
 		case 'text/plain': return '.txt';
 		case 'text/csv': return '.csv';
 		default: return false;
