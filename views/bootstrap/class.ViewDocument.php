@@ -232,8 +232,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("document_infos"));
 		if($info = $document->getCheckOutInfo()) {
 			echo "<div class=\"alert alert-info\">";
-			$checkoutpath = sprintf($checkoutdir, preg_replace('/[^A-Za-z0-9_-]/', '', $user->getLogin()));
-			echo "<a href=\"file://".$info['filename']."\">".getMLText('copied_to_checkout_as', array('filename'=>substr($info['filename'], strlen($checkoutpath)+1)))."</a>";
+			$session = $this->params['session'];
+			if($session->getSu()) {
+				$origuser = $dms->getUser($session->getUser());
+				$checkoutpath = sprintf($checkoutdir, preg_replace('/[^A-Za-z0-9_-]/', '', $origuser->getLogin()));
+			} else {
+				$checkoutpath = sprintf($checkoutdir, preg_replace('/[^A-Za-z0-9_-]/', '', $user->getLogin()));
+			}
+			echo "<a href=\"file://".$info['filename']."\">".getMLText('copied_to_checkout_as', array('date'=>$info['date'], 'filename'=>substr($info['filename'], strlen($checkoutpath)+1)))."</a>";
 			echo "</div>";
 		}
 		$this->contentContainerStart();

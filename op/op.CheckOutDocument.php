@@ -53,7 +53,12 @@ if ($document->isCheckedOut()) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("document_already_checkedout"));
 }
 
-$checkoutpath = sprintf($settings->_checkOutDir.'/', preg_replace('/[^A-Za-z0-9_-]/', '', $user->getLogin()));
+if($session->getSu()) {
+	$origuser = $dms->getUser($session->getUser());
+	$checkoutpath = sprintf($settings->_checkOutDir.'/', preg_replace('/[^A-Za-z0-9_-]/', '', $origuser->getLogin()));
+} else {
+	$checkoutpath = sprintf($settings->_checkOutDir.'/', preg_replace('/[^A-Za-z0-9_-]/', '', $user->getLogin()));
+}
 if(!file_exists($checkoutpath) && $settings->_createCheckOutDir) {
 	SeedDMS_Core_File::makeDir($checkoutpath);
 }
