@@ -171,6 +171,15 @@ class SeedDMS_Session {
 	} /* }}} */
 
 	/**
+	 * Get user id of session
+	 *
+	 * @return integer user id
+	 */
+	function getUser() { /* {{{ */
+		return $this->data['userid'];
+	} /* }}} */
+
+	/**
 	 * Set user of session
 	 *
 	 * @param integer $userid id of user
