@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (489)
+//    Translators: Admin (492)
 
 $text = array(
 'accept' => 'Prijať',
@@ -141,7 +141,7 @@ $text = array(
 'automatic_status_update' => 'Automaticka zmena stavu',
 'back' => 'Prejsť späť',
 'backup_list' => 'Zoznam záloh',
-'backup_log_management' => '',
+'backup_log_management' => 'Zálohovanie/Log-y',
 'backup_remove' => 'Odstrániť zálohu',
 'backup_tools' => 'Zálohovacie nástroje',
 'between' => 'medzi',
@@ -578,7 +578,7 @@ $text = array(
 'no_version_check' => '',
 'no_version_modification' => 'Žiadne zmeny',
 'no_workflow_available' => '',
-'objectcheck' => '',
+'objectcheck' => 'Kontrola Adresárov/Dokumentov',
 'obsolete' => 'Zastaralé',
 'october' => 'Október',
 'old' => 'Stare',
@@ -1093,7 +1093,7 @@ $text = array(
 'theme' => 'Vzhľad',
 'thursday' => 'Štvrtok',
 'thursday_abbr' => '',
-'timeline' => '',
+'timeline' => 'Časová os',
 'timeline_add_file' => '',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',

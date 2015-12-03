@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1275), dgrutsch (3), netixw (14)
+//    Translators: Admin (1276), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -250,7 +250,7 @@ URL: [url]',
 'continue' => 'Continue',
 'converter_new_cmd' => 'Command',
 'converter_new_mimetype' => 'New mimetype',
-'copied_to_checkout_as' => 'File copied to checkout space as \'[filename]\'',
+'copied_to_checkout_as' => 'File copied to checkout space as \'[filename]\' on [date]',
 'create_fulltext_index' => 'Create fulltext index',
 'create_fulltext_index_warning' => 'You are about to recreate the fulltext index. This can take a considerable amount of time and reduce your overall system performance. If you really want to recreate the index, please confirm your operation.',
 'creation_date' => 'Created',

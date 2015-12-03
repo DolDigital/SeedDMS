@@ -25,31 +25,8 @@
  * @version    Release: @package_version@
  */
 abstract class SeedDMS_Notify {
-	/* User sending the notification
-	 * Will only be used if the sender of one of the notify methods
-	 * is not set
-	 */
-	protected $sender;
-
 	abstract function toIndividual($sender, $recipient, $subject, $message, $params=array());
 	abstract function toGroup($sender, $groupRecipient, $subject, $message, $params=array());
 	abstract function toList($sender, $recipients, $subject, $message, $params=array());
-
-	/**
-	 * Deprecated: don't use any more
-	 * 
-	 */
-	function replaceMarker($text) { /* {{{ */
-		global $settings;
-
-		return(str_replace(
-			array('###SITENAME###', '###HTTP_ROOT###', '###URL_PREFIX###'),
-			array($settings->_siteName, $settings->_httpRoot, "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot),
-			$text));
-	} /* }}} */
-
-	function setSender($user) {
-		$this->sender = $user;
-	}
 }
 ?>

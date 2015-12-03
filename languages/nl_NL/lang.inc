@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (710), gijsbertush (7), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (711), gijsbertush (7), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -780,7 +780,7 @@ URL: [url]',
 'review_deletion_email' => 'Controle verzoek gewijzigd',
 'review_deletion_email_body' => '',
 'review_deletion_email_subject' => '',
-'review_file' => '',
+'review_file' => 'Bestand',
 'review_group' => '[Controle] Groep',
 'review_log' => 'Reviseer overzicht',
 'review_request_email' => 'Controle verzoek',

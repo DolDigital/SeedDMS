@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2140), dgrutsch (18)
+//    Translators: Admin (2141), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -250,7 +250,7 @@ URL: [url]',
 'continue' => 'fortführen',
 'converter_new_cmd' => 'Kommando',
 'converter_new_mimetype' => 'Neuer Mime-Type',
-'copied_to_checkout_as' => 'Datei in den Checkout-Space als \'[filename]\' kopiert.',
+'copied_to_checkout_as' => 'Datei am [date] in den Checkout-Space als \'[filename]\' kopiert.',
 'create_fulltext_index' => 'Erzeuge Volltextindex',
 'create_fulltext_index_warning' => 'Sie möchten den Volltextindex neu erzeugen. Dies kann beträchtlich Zeit in Anspruch nehmen und Gesamtleistung Ihres System beeinträchtigen. Bestätigen Sie bitte diese Operation.',
 'creation_date' => 'Erstellt am',

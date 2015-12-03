@@ -63,9 +63,15 @@ if($settings->_enableFullSearch) {
 	$index = null;
 }
 
-/* save this for notification later on */
-$nl =	$document->getNotifyList();
 $folder = $document->getFolder();
+
+/* Get the notify list before removing the document */
+$dnl =	$document->getNotifyList();
+$fnl =	$folder->getNotifyList();
+$nl = array(
+	'users'=>array_merge($dnl['users'], $fnl['users']),
+	'groups'=>array_merge($dnl['groups'], $fnl['groups'])
+);
 $docname = $document->getName();
 
 $controller->setParam('document', $document);
@@ -88,9 +94,9 @@ if ($notifier){
 	foreach ($nl["groups"] as $grp) {
 		$notifier->toGroup($user, $grp, $subject, $message, $params);
 	}
-
-	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_document')));
 }
+
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_document')));
 
 add_log_line("?documentid=".$documentid);
 
