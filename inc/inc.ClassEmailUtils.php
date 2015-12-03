@@ -36,5 +36,15 @@ class SeedDMS_EmailUtils {
 		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
 		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
 	} /* }}} */
+
+	function replaceMarker($text) { /* {{{ */
+		global $settings;
+
+		return(str_replace(
+			array('###SITENAME###', '###HTTP_ROOT###', '###URL_PREFIX###'),
+			array($settings->_siteName, $settings->_httpRoot, "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot),
+			$text));
+	} /* }}} */
+
 }
 ?>

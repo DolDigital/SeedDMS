@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (608), fengjohn (5)
+//    Translators: Admin (610), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -312,7 +312,7 @@ URL: [url]',
 'dump_creation_warning' => '通过此操作，您可以创建一个您数据库的转储文件，之后可以将转储数据保存到您服务器所在的数据文件夹中',
 'dump_list' => '存在转储文件',
 'dump_remove' => '删除转储文件',
-'duplicate_content' => '',
+'duplicate_content' => '重复的内容',
 'edit' => '编辑',
 'edit_attributes' => '编辑属性',
 'edit_comment' => '编辑说明',
@@ -784,7 +784,7 @@ URL: [url]',
 'settings_createdatabase' => '',
 'settings_createdirectory' => '',
 'settings_currentvalue' => '',
-'settings_Database' => '',
+'settings_Database' => '数据库设置',
 'settings_dbDatabase' => '',
 'settings_dbDatabase_desc' => '',
 'settings_dbDriver' => '',
