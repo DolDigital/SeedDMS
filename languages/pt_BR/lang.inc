@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (902), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (903), flaviove (627), lfcristofoli (352)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -1080,7 +1080,7 @@ URL: [url]',
 'settings_php_gd2' => 'Extensão PHP : php_gd2',
 'settings_php_mbstring' => 'Extensão PHP : php_mbstring',
 'settings_php_version' => 'Versão PHP',
-'settings_presetExpirationDate' => '',
+'settings_presetExpirationDate' => 'Data de Expiração Pré-Definida',
 'settings_presetExpirationDate_desc' => '',
 'settings_previewWidthDetail' => 'Largura de imagens de visualização (detalhe)',
 'settings_previewWidthDetail_desc' => 'Largura imagem de visualização mostrados na página de detalhes',

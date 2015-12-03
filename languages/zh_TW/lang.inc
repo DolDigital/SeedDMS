@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2345)
+//    Translators: Admin (2349)
 
 $text = array(
 'accept' => '接受',
@@ -177,13 +177,13 @@ URL: [url]',
 'change_revisors' => '',
 'change_status' => '變更狀態',
 'charts' => '圖表',
-'chart_docsaccumulated_title' => '',
+'chart_docsaccumulated_title' => '每月文件數量',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
-'chart_docspermonth_title' => '',
+'chart_docspermonth_title' => '每月新增文件',
 'chart_docsperstatus_title' => '',
-'chart_docsperuser_title' => '',
-'chart_selection' => '',
+'chart_docsperuser_title' => '用戶文件比例圖表',
+'chart_selection' => '選擇圖表',
 'chart_sizeperuser_title' => '',
 'checkedout_file_has_different_version' => '',
 'checkedout_file_has_disappeared' => '',

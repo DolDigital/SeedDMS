@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1274)
+//    Translators: Admin (1278)
 
 $text = array(
 'accept' => 'Принять',
@@ -125,12 +125,12 @@ URL: [url]',
 'attrdef_objtype' => 'Тип объекта',
 'attrdef_regex' => 'Регулярное выражение',
 'attrdef_type' => 'Тип',
-'attrdef_type_boolean' => '',
+'attrdef_type_boolean' => 'Булево',
 'attrdef_type_date' => 'Дата',
 'attrdef_type_email' => '',
-'attrdef_type_float' => '',
-'attrdef_type_int' => '',
-'attrdef_type_string' => '',
+'attrdef_type_float' => 'Вещественное',
+'attrdef_type_int' => 'Целое',
+'attrdef_type_string' => 'Строка',
 'attrdef_type_url' => '',
 'attrdef_valueset' => 'Набор значений',
 'attributes' => 'Атрибуты',
