@@ -1008,6 +1008,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
+			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
 			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".($objvalue ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
