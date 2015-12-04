@@ -122,7 +122,7 @@ class SeedDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetRecipients() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED)) {
@@ -142,10 +142,10 @@ class SeedDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetRevisors() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) /* && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)*/) {
+			if (($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin() /* && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)*/) {
 				return true;
 			}
 		}
@@ -281,7 +281,7 @@ class SeedDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayReceipt() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE) {
@@ -299,7 +299,7 @@ class SeedDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayRevise() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE) {
