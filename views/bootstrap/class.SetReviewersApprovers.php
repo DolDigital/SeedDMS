@@ -123,6 +123,17 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 ?>
   </select>
 
+  <div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups")?>:</div>
+  <select class="chzn-select span9" name="grpIndReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_grp_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<?php
+
+		foreach ($docAccess["groups"] as $group) {
+
+			print "<option value='". $group->getID() ."'>".htmlspecialchars($group->getName())."</option>";
+		}
+?>
+  </select>
+
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
   <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
@@ -196,8 +207,19 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		}
 ?>
   </select>
-  <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
 
+  <div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups")?>:</div>
+  <select class="chzn-select span9" name="grpIndApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<?php
+
+		foreach ($docAccess["groups"] as $group) {
+
+			print "<option value='". $group->getID() ."'>".htmlspecialchars($group->getName())."</option>";
+		}
+?>
+  </select>
+
+  <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
   <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 		foreach ($docAccess["groups"] as $group) {

@@ -129,6 +129,16 @@ if ($_FILES['userfile']['error'] == 0) {
 					$reviewers["g"][] = $grp;
 				}
 			}
+			// Retrieve the list of reviewer groups whose members become individual reviewers
+			if (isset($_POST["grpIndReviewers"])) {
+				foreach ($_POST["grpIndReviewers"] as $grp) {
+					if($group = $dms->getGroup($grp)) {
+						$members = $group->getUsers();
+						foreach($members as $member)
+							$reviewers["i"][] = $member->getID();
+					}
+				}
+			}
 		}
 
 		// Retrieve the list of individual approvers from the form.
@@ -143,6 +153,16 @@ if ($_FILES['userfile']['error'] == 0) {
 		if (isset($_POST["grpApprovers"])) {
 			foreach ($_POST["grpApprovers"] as $grp) {
 				$approvers["g"][] = $grp;
+			}
+		}
+		// Retrieve the list of reviewer groups whose members become individual approvers
+		if (isset($_POST["grpIndApprovers"])) {
+			foreach ($_POST["grpIndApprovers"] as $grp) {
+				if($group = $dms->getGroup($grp)) {
+					$members = $group->getUsers();
+					foreach($members as $member)
+						$approvers["i"][] = $member->getID();
+				}
 			}
 		}
 

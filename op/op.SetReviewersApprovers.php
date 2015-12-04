@@ -104,6 +104,18 @@ foreach ($approvalStatus as $i=>$rs) {
 
 // Get the list of proposed reviewers, stripping out any duplicates.
 $pIndRev = (isset($_POST["indReviewers"]) ? array_values(array_unique($_POST["indReviewers"])) : array());
+// Retrieve the list of reviewer groups whose members become individual reviewers
+if (isset($_POST["grpIndReviewers"])) {
+	foreach ($_POST["grpIndReviewers"] as $grp) {
+		if($group = $dms->getGroup($grp)) {
+			$members = $group->getUsers();
+			foreach($members as $member) {
+				if(!in_array($member->getID(), $pIndRev))
+					$pIndRev[] = $member->getID();
+			}
+		}
+	}
+}
 $pGrpRev = (isset($_POST["grpReviewers"]) ? array_values(array_unique($_POST["grpReviewers"])) : array());
 foreach ($pIndRev as $p) {
 	if (is_numeric($p)) {
@@ -319,6 +331,18 @@ if (count($reviewIndex["g"]) > 0) {
 
 // Get the list of proposed approvers, stripping out any duplicates.
 $pIndApp = (isset($_POST["indApprovers"]) ? array_values(array_unique($_POST["indApprovers"])) : array());
+// Retrieve the list of approver groups whose members become individual reviewers
+if (isset($_POST["grpIndApprovers"])) {
+	foreach ($_POST["grpIndApprovers"] as $grp) {
+		if($group = $dms->getGroup($grp)) {
+			$members = $group->getUsers();
+			foreach($members as $member) {
+				if(!in_array($member->getID(), $pIndApp))
+					$pIndApp[] = $member->getID();
+			}
+		}
+	}
+}
 $pGrpApp = (isset($_POST["grpApprovers"]) ? array_values(array_unique($_POST["grpApprovers"])) : array());
 foreach ($pIndApp as $p) {
 	if (is_numeric($p)) {

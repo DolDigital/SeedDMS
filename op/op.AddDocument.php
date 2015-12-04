@@ -164,6 +164,16 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 				$reviewers["g"][] = $grp;
 			}
 		}
+		// Retrieve the list of reviewer groups whose members become individual reviewers
+		if (isset($_POST["grpIndReviewers"])) {
+			foreach ($_POST["grpIndReviewers"] as $grp) {
+				if($group = $dms->getGroup($grp)) {
+					$members = $group->getUsers();
+					foreach($members as $member)
+						$reviewers["i"][] = $member->getID();
+				}
+			}
+		}
 	}
 
 	// Retrieve the list of individual approvers from the form.
@@ -178,6 +188,17 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 			$approvers["g"][] = $grp;
 		}
 	}
+	// Retrieve the list of reviewer groups whose members become individual approvers
+	if (isset($_POST["grpIndApprovers"])) {
+		foreach ($_POST["grpIndApprovers"] as $grp) {
+			if($group = $dms->getGroup($grp)) {
+				$members = $group->getUsers();
+				foreach($members as $member)
+					$approvers["i"][] = $member->getID();
+			}
+		}
+	}
+
 	// add mandatory reviewers/approvers
 	$docAccess = $folder->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
 	if($settings->_workflowMode == 'traditional') {

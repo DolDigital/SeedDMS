@@ -350,6 +350,20 @@ $(document).ready(function() {
       </tr>
       <tr>
         <td>
+			<div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups");?>:</div>
+        </td>
+        <td>
+        <select class="chzn-select span9" name="grpIndReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_ind_reviewers'); ?>">
+<?php
+			foreach ($docAccess["groups"] as $grp) {
+				print "<option value=\"".$grp->getID()."\">".htmlspecialchars($grp->getName())."</option>";
+			}
+?>
+			</select>
+			</td>
+			</tr>
+      <tr>
+        <td>
 			<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
         </td>
         <td>
@@ -456,6 +470,20 @@ $(document).ready(function() {
 					}
 				}
 ?>
+				</td>
+		  </tr>	
+		  <tr>	
+        <td>
+			<div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups");?>:</div>
+        </td>
+        <td>
+      <select class="chzn-select span9" name="grpIndApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_ind_approvers'); ?>">
+<?php
+			foreach ($docAccess["groups"] as $grp) {
+				print "<option value=\"". $grp->getID() ."\">".htmlspecialchars($grp->getName())."</option>";
+			}
+?>
+			</select>
 				</td>
 		  </tr>	
 		  <tr>	
