@@ -87,6 +87,18 @@ foreach ($receiptStatus as $i=>$rs) {
 
 // Get the list of proposed recipients, stripping out any duplicates.
 $pIndRev = (isset($_POST["indRecipients"]) ? array_values(array_unique($_POST["indRecipients"])) : array());
+// Retrieve the list of recipient groups whose members become individual recipients
+if (isset($_POST["grpIndRecipients"])) {
+	foreach ($_POST["grpIndRecipients"] as $grp) {
+		if($group = $dms->getGroup($grp)) {
+			$members = $group->getUsers();
+			foreach($members as $member) {
+				if(!in_array($member->getID(), $pIndRev))
+					$pIndRev[] = $member->getID();
+			}
+		}
+	}
+}
 $pGrpRev = (isset($_POST["grpRecipients"]) ? array_values(array_unique($_POST["grpRecipients"])) : array());
 foreach ($pIndRev as $p) {
 	if (is_numeric($p)) {

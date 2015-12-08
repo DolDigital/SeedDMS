@@ -95,6 +95,15 @@ class SeedDMS_View_SetRecipients extends SeedDMS_Bootstrap_Style {
 ?>
   </select>
 
+  <div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups")?>:</div>
+  <select class="chzn-select span9" name="grpIndRecipients[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_ind_recipients'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
+<?php
+		foreach ($docAccess["groups"] as $group) {
+			print "<option value='". $group->getID() ."'>".htmlspecialchars($group->getName())."</option>";
+		}
+?>
+  </select>
+
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
   <select class="chzn-select span9" name="grpRecipients[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_recipients'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
