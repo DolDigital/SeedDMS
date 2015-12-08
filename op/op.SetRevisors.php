@@ -85,7 +85,7 @@ $revisionStatus = $content->getRevisionStatus();
 // Index the revision results for easy cross-reference with the Approvers List.
 $revisionIndex = array("i"=>array(), "g"=>array());
 foreach ($revisionStatus as $i=>$rs) {
-	if ($rs["status"]!=-2) {
+	if ($rs["status"]!=S_LOG_USER_REMOVED) {
 		if ($rs["type"]==0) {
 			$revisionIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 		}
@@ -161,11 +161,6 @@ if (count($revisionIndex["i"]) > 0) {
 			if (!isset($accessIndex["i"][$rx])) {
 				// User does not have any revision privileges for this document
 				// revision or does not exist.
-				/* Take this out for now 
-				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('". $revisionStatus[$rv["idx"]]["revisionID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
-				$res = $db->getResult($queryStr);
-				 */
 				$res = $content->delIndRevisor($dms->getUser($rx), $user, getMLText("removed_recipient"));
 			}
 			else {
@@ -268,11 +263,6 @@ if (count($revisionIndex["g"]) > 0) {
 			if (!isset($accessIndex["g"][$rx])) {
 				// Group does not have any revision privileges for this document
 				// revision or does not exist.
-				/*
-				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('". $revisionStatus[$rv["idx"]]["revisionID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
-				$res = $db->getResult($queryStr);
-*/
 				$res = $content->delGrpRevisor($dms->getGroup($rx), $user, getMLText("removed_recipient"));
 			}
 			else {
