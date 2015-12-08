@@ -35,6 +35,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
+		$settings = $this->params['settings'];
 
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
@@ -53,6 +54,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 				$session = array_shift($sessions);
 				echo "<tr><td>".getMLText('lastaccess')."</td><td>".getLongReadableDate($session->getLastAccess())."</td></tr>\n";
 			}
+			echo "<tr><td>".getMLText('network_drive')."</td><td><a href=\"http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot.'checkout/'.preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."\">".preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."</a></td></tr>\n";
 			echo "</table>";
 		}
 	} /* }}} */
