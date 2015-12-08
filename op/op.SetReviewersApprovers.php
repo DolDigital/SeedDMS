@@ -80,7 +80,7 @@ $approvalStatus = $content->getApprovalStatus();
 // Index the review results for easy cross-reference with the Approvers List.
 $reviewIndex = array("i"=>array(), "g"=>array());
 foreach ($reviewStatus as $i=>$rs) {
-	if ($rs["status"]!=-2) {
+	if ($rs["status"]!=S_LOG_USER_REMOVED) {
 		if ($rs["type"]==0) {
 			$reviewIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 		}
@@ -92,7 +92,7 @@ foreach ($reviewStatus as $i=>$rs) {
 // Index the approval results for easy cross-reference with the Approvers List.
 $approvalIndex = array("i"=>array(), "g"=>array());
 foreach ($approvalStatus as $i=>$rs) {
-	if ($rs["status"]!=-2) {
+	if ($rs["status"]!=S_LOG_USER_REMOVED) {
 		if ($rs["type"]==0) {
 			$approvalIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 		}
