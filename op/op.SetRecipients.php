@@ -75,7 +75,7 @@ $receiptStatus = $content->getReceiptStatus();
 // Index the receipt results for easy cross-reference with the Approvers List.
 $receiptIndex = array("i"=>array(), "g"=>array());
 foreach ($receiptStatus as $i=>$rs) {
-	if ($rs["status"]!=-2) {
+	if ($rs["status"]!=S_LOG_USER_REMOVED) {
 		if ($rs["type"]==0) {
 			$receiptIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 		}
@@ -164,7 +164,7 @@ if (count($receiptIndex["i"]) > 0) {
 				// User does not have any receipt privileges for this document
 				// revision or does not exist.
 				$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('". $receiptStatus[$rv["idx"]]["receiptID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
+					"VALUES ('". $receiptStatus[$rv["idx"]]["receiptID"] ."', '".S_LOG_USER_REMOVED."', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
 			}
 			else {
@@ -268,7 +268,7 @@ if (count($receiptIndex["g"]) > 0) {
 				// Group does not have any receipt privileges for this document
 				// revision or does not exist.
 				$queryStr = "INSERT INTO `tblDocumentReceiptLog` (`receiptID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('". $receiptStatus[$rv["idx"]]["receiptID"] ."', '-2', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
+					"VALUES ('". $receiptStatus[$rv["idx"]]["receiptID"] ."', '".S_LOG_USER_REMOVED."', '".getMLText("removed_recipient")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
 			}
 			else {
