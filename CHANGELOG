@@ -5,7 +5,7 @@
 - fix editing of customer attributes of type checkbox
 - disallow read access for group didn't prevent the users from being selected
   as a reviewer/approver
-- move the last bits of plain sql code into the core
+- move the last bits of plain sql code from op/*.php into the core
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22
