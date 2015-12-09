@@ -111,6 +111,7 @@ else {
 	 */
 	$emailUserList = array();
 	$emailUserList[] = $version->_userID;
+	$emailGroupList = array();
 	$status = $version->getReviewStatus();
 	foreach ($status as $st) {
 		if ($st["status"]==0 && !in_array($st["required"], $emailUserList)) {
