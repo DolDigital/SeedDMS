@@ -3,6 +3,9 @@
 --------------------------------------------------------------------------------
 - send notification if document is delete to those users watching the folder
 - fix editing of customer attributes of type checkbox
+- disallow read access for group didn't prevent the users from being selected
+  as a reviewer/approver
+- move the last bits of plain sql code into the core
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22
