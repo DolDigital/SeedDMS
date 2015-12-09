@@ -125,9 +125,6 @@ foreach ($pIndRev as $p) {
 				// Proposed reviewer is not a current reviewer, so add as a new
 				// reviewer.
 				$res = $content->addIndReviewer($docAccess["users"][$accessIndex["i"][$p]], $user);
-				$unm = $docAccess["users"][$accessIndex["i"][$p]]->getFullName();
-				$uml = $docAccess["users"][$accessIndex["i"][$p]]->getEmail();
-				
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new reviewer.
@@ -172,6 +169,12 @@ foreach ($pIndRev as $p) {
 		}
 	}
 }
+
+/* $reviewIndex['i'] has now those individual reviewers which are left over
+ * and must be removed. There are two cases to distinguish: 1. The user may
+ * access the document but shall no longer review the document, 2. the user
+ * many not access the document any more.
+ */
 if (count($reviewIndex["i"]) > 0) {
 	foreach ($reviewIndex["i"] as $rx=>$rv) {
 		if ($rv["status"] == 0) {
@@ -179,14 +182,15 @@ if (count($reviewIndex["i"]) > 0) {
 			if (!isset($docAccess["users"][$accessIndex["i"][$rx]])) {
 				// User does not have any review privileges for this document
 				// revision or does not exist.
+				/*
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $reviewStatus[$rv["idx"]]["reviewID"] ."', '-2', '".getMLText("removed_reviewer")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+				 */
+				$res = $content->delIndReviewer($dms->getUser($reviewStatus[$rv["idx"]]["required"]), $user, getMLText("removed_reviewer"));
 			}
 			else {
 				$res = $content->delIndReviewer($docAccess["users"][$accessIndex["i"][$rx]], $user);
-				$unm = $docAccess["users"][$accessIndex["i"][$rx]]->getFullName();
-				$uml = $docAccess["users"][$accessIndex["i"][$rx]]->getEmail();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the reviewer.
@@ -233,7 +237,6 @@ foreach ($pGrpRev as $p) {
 				// Proposed reviewer is not a current reviewer, so add as a new
 				// reviewer.
 				$res = $content->addGrpReviewer($docAccess["groups"][$accessIndex["g"][$p]], $user);
-				$gnm = $docAccess["groups"][$accessIndex["g"][$p]]->getName();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new reviewer.
@@ -283,13 +286,15 @@ if (count($reviewIndex["g"]) > 0) {
 			if (!isset($docAccess["groups"][$accessIndex["g"][$rx]])) {
 				// Group does not have any review privileges for this document
 				// revision or does not exist.
+				/*
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $reviewStatus[$rv["idx"]]["reviewID"] ."', '-2', '".getMLText("removed_reviewer")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+				 */
+				$res = $content->delGrpReviewer($dms->getGroup($reviewStatus[$rv["idx"]]["required"]), $user, getMLText("removed_reviewer"));
 			}
 			else {
 				$res = $content->delGrpReviewer($docAccess["groups"][$accessIndex["g"][$rx]], $user);
-				$gnm = $docAccess["groups"][$accessIndex["g"][$rx]]->getName();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the review group.
@@ -352,8 +357,6 @@ foreach ($pIndApp as $p) {
 				// Proposed approver is not a current approver, so add as a new
 				// approver.
 				$res = $content->addIndApprover($docAccess["users"][$accessIndex["i"][$p]], $user);
-				$unm = $docAccess["users"][$accessIndex["i"][$p]]->getFullName();
-				$uml = $docAccess["users"][$accessIndex["i"][$p]]->getEmail();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new approver.
@@ -403,14 +406,15 @@ if (count($approvalIndex["i"]) > 0) {
 			if (!isset($docAccess["users"][$accessIndex["i"][$rx]])) {
 				// User does not have any approval privileges for this document
 				// revision or does not exist.
+				/*
 				$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $approvalStatus[$rv["idx"]]["approveID"] ."', '-2', '".getMLText("removed_approver")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+				 */
+				$res = $content->delIndApprover($dms->getUser($approvalStatus[$rv["idx"]]["required"]), $user, getMLText("removed_approver"));
 			}
 			else {
 				$res = $content->delIndApprover($docAccess["users"][$accessIndex["i"][$rx]], $user);
-				$unm = $docAccess["users"][$accessIndex["i"][$rx]]->getFullName();
-				$uml = $docAccess["users"][$accessIndex["i"][$rx]]->getEmail();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the approver.
@@ -457,7 +461,6 @@ foreach ($pGrpApp as $p) {
 				// Proposed approver is not a current approver, so add as a new
 				// approver.
 				$res = $content->addGrpApprover($docAccess["groups"][$accessIndex["g"][$p]], $user);
-				$gnm = $docAccess["groups"][$accessIndex["g"][$p]]->getName();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new approver.
@@ -507,14 +510,15 @@ if (count($approvalIndex["g"]) > 0) {
 			if (!isset($docAccess["groups"][$accessIndex["g"][$rx]])) {
 				// Group does not have any approval privileges for this document
 				// revision or does not exist.
-				
+				/*
 				$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $approvalStatus[$rv["idx"]]["approveID"] ."', '-2', '".getMLText("removed_approver")."', NOW(), '". $user->getID() ."')";
 				$res = $db->getResult($queryStr);
+*/
+				$res = $content->delGrpApprover($dms->getGroup($approvalStatus[$rv["idx"]]["required"]), $user, getMLText("removed_approver"));
 			}
 			else {
 				$res = $content->delGrpApprover($docAccess["groups"][$accessIndex["g"][$rx]], $user);
-				$gnm = $docAccess["groups"][$accessIndex["g"][$rx]]->getName();
 				switch ($res) {
 					case 0:
 						// Send an email notification to the approval group.

@@ -16,6 +16,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Language.php");
@@ -33,39 +34,11 @@ if($settings->_backupDir && file_exists($settings->_backupDir))
 	$basedir = $settings->_backupDir;
 else
 	$basedir = $setting->_contentDir;
-$dump_name = $basedir.time().".sql";
 
-$h=fopen($dump_name,"w");
-
-if (is_bool($h)&&!$h)
+$v = new SeedDMS_Version;
+$dump_name = $basedir.date('Y-m-d\TH:i:s')."_".$v->_number.".sql";
+if(!$dms->createDump($dump_name))
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-
-$tables = $db->TableList('TABLES');
-
-foreach ($tables as $table){
-
-	$query = "SELECT * FROM ".$table;
-	$records = $db->getResultArray($query);
-	
-	fwrite($h,"\n-- TABLE: ".$table."--\n\n");
-	
-	foreach ($records as $record){
-		
-		$values="";
-		$i = 1;
-		foreach ($record as $column) {
-			if (is_numeric($column)) $values .= $column;
-			else $values .= "'".$column."'";
-			
-			if ($i<(count($record))) $values .= ",";
-			$i++;
-		}
-		
-		fwrite($h, "INSERT INTO " . $table . " VALUES (" . $values . ");\n");
-	}
-}
-
-fclose($h);
 
 if (SeedDMS_Core_File::gzcompressfile($dump_name,9)) unlink($dump_name);
 else UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
