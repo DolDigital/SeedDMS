@@ -30,38 +30,8 @@ if (!$user->isAdmin()) {
 }
 
 $dump_name = $settings->_contentDir.time().".sql";
-
-$h=fopen($dump_name,"w");
-
-if (is_bool($h)&&!$h)
+if(!$dms->createDump($dump_name))
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-
-$tables = $db->TableList('TABLES');
-
-foreach ($tables as $table){
-
-	$query = "SELECT * FROM ".$table;
-	$records = $db->getResultArray($query);
-	
-	fwrite($h,"\n-- TABLE: ".$table."--\n\n");
-	
-	foreach ($records as $record){
-		
-		$values="";
-		$i = 1;
-		foreach ($record as $column) {
-			if (is_numeric($column)) $values .= $column;
-			else $values .= "'".$column."'";
-			
-			if ($i<(count($record))) $values .= ",";
-			$i++;
-		}
-		
-		fwrite($h, "INSERT INTO " . $table . " VALUES (" . $values . ");\n");
-	}
-}
-
-fclose($h);
 
 if (SeedDMS_Core_File::gzcompressfile($dump_name,9)) unlink($dump_name);
 else UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
