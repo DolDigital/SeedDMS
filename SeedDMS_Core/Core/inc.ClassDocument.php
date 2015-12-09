@@ -1980,7 +1980,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 //					"WHERE `tblUsers`.`role` != ".SeedDMS_Core_User::role_guest." ".
 //					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))").
 					" ORDER BY `login`";
-				echo $queryStr;
 			}
 			$resArr = $db->getResultArray($queryStr);
 			if (!is_bool($resArr)) {
