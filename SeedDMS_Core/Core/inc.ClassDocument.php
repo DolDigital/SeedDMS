@@ -3352,10 +3352,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $approveLogID;
  } /* }}} */
 
-	function delIndReviewer($user, $requestUser) { /* {{{ */
+	function delIndReviewer($user, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
-
-		$userID = $user->getID();
 
 		// Check to see if the user can be removed from the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
@@ -3375,7 +3373,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["reviewID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3384,7 +3382,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpReviewer($group, $requestUser) { /* {{{ */
+	function delGrpReviewer($group, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -3406,7 +3404,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3415,7 +3413,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delIndApprover($user, $requestUser) { /* {{{ */
+	function delIndApprover($user, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3438,7 +3436,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["approveID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3447,7 +3445,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpApprover($group, $requestUser) { /* {{{ */
+	function delGrpApprover($group, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -3469,7 +3467,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
