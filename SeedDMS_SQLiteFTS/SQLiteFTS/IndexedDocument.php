@@ -129,7 +129,7 @@ class SeedDMS_SQLiteFTS_IndexedDocument extends SeedDMS_SQLiteFTS_Document {
 			$mimetype = $version->getMimeType();
 			if(isset($_convcmd[$mimetype])) {
 				$cmd = sprintf($_convcmd[$mimetype], $path);
-				$content = self::execWithTimeout($cmd);
+				$content = self::execWithTimeout($cmd, $timeout);
 				if($content) {
 					$this->addField('content', $content, 'unstored');
 				}

@@ -2,6 +2,7 @@
                      Changes in version 4.3.23
 --------------------------------------------------------------------------------
 - send notification if document is delete to those users watching the folder
+- fix editing of customer attributes of type checkbox
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22

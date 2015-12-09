@@ -1985,7 +1985,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 					(strlen($userIDs) == 0 ? "" : " OR (`tblUsers`.`id` IN (". $userIDs ."))").
 					") ORDER BY `login`";
 			}
-			/* If default access is equal or greate then read, $userIDs and
+			/* If default access is equal or greater then M_READ, $userIDs and
 			 * $groupIDs contains a list of user without read access
 			 */
 			else {
@@ -1995,16 +1995,22 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 						"WHERE `tblGroupMembers`.`groupID` NOT IN (". $groupIDs .")".
 						"AND `tblUsers`.`role` != ".SeedDMS_Core_User::role_guest." ".
 						(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))")." UNION ";
+				} else {
+					$queryStr .=
+						"SELECT `tblUsers`.* FROM `tblUsers` ".
+						"WHERE `tblUsers`.`role` != ".SeedDMS_Core_User::role_guest." ".
+						(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))")." UNION ";
 				}
 				$queryStr .=
 					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`id` = ". $this->_ownerID . ") ".
 					"OR (`tblUsers`.`role` = ".SeedDMS_Core_User::role_admin.") ".
-					"UNION ".
-					"SELECT `tblUsers`.* FROM `tblUsers` ".
-					"WHERE `tblUsers`.`role` != ".SeedDMS_Core_User::role_guest." ".
-					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))").
+//					"UNION ".
+//					"SELECT `tblUsers`.* FROM `tblUsers` ".
+//					"WHERE `tblUsers`.`role` != ".SeedDMS_Core_User::role_guest." ".
+//					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))").
 					" ORDER BY `login`";
+				echo $queryStr;
 			}
 			$resArr = $db->getResultArray($queryStr);
 			if (!is_bool($resArr)) {
