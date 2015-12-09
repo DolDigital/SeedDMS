@@ -16,6 +16,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Language.php");
@@ -29,7 +30,8 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$dump_name = $settings->_contentDir.time().".sql";
+$v = new SeedDMS_Version;
+$dump_name = $settings->_contentDir.date('Y-m-d\TH:i:s')."_".$v->_number.".sql";
 if(!$dms->createDump($dump_name))
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 
