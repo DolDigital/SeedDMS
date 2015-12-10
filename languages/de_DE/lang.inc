@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2141), dgrutsch (18)
+//    Translators: Admin (2145), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -493,6 +493,7 @@ URL: [url]',
 'index_converters' => 'Index Dokumentenumwandlung',
 'index_folder' => 'Indiziere Ordner',
 'individuals' => 'Einzelpersonen',
+'indivіduals_in_groups' => 'Mitglieder einer Gruppe',
 'inherited' => 'geerbt',
 'inherits_access_copy_msg' => 'Berechtigungen kopieren',
 'inherits_access_empty_msg' => 'Leere Zugriffsliste',
@@ -889,6 +890,9 @@ URL: [url]',
 'select_category' => 'Klicken zur Auswahl einer Kategorie',
 'select_groups' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_approvers' => 'Klicken zur Auswahl einer Freigabegruppe',
+'select_grp_ind_approvers' => 'Klicken zur Auswahl einer Gruppe',
+'select_grp_ind_notification' => 'Klicken zur Auswahl einer Gruppe',
+'select_grp_ind_reviewers' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_notification' => 'Klicken zur Auswahl einer Beobachtergruppe',
 'select_grp_recipients' => 'Klicken zur Auswahl einer Empfängergruppe',
 'select_grp_reviewers' => 'Klicken zur Auswahl einer Prüfgruppe',
