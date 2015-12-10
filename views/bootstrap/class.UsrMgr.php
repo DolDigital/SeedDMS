@@ -97,7 +97,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td></td>
-			<td><a class="standardText btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
+			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
 		</tr>
 <?php
 	}
@@ -419,12 +419,8 @@ function showUser(selectObj) {
 <option value="-1"><?php echo getMLText("choose_user")?>
 <option value="0"><?php echo getMLText("add_user")?>
 <?php
-		$selected=0;
-		$count=2;
 		foreach ($users as $currUser) {
-			if ($seluser && $currUser->getID()==$seluser->getID()) $selected=$count;
-			print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
-			$count++;
+			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$currUser->getID() ? 'selected' : '').">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
 		}
 ?>
 </select>
@@ -441,7 +437,6 @@ function showUser(selectObj) {
 <script language="JavaScript">
 
 sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
 showUser(sel);
 
 </script>
