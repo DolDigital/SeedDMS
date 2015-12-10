@@ -288,7 +288,7 @@ $(document).ready(function () {
 		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($tasks['receipt'] as $t) {
 			$doc = $dms->getDocument($t);
-			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=receipt\">".$doc->getName()."</a></li>";
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=recipients\">".$doc->getName()."</a></li>";
 		}
 		$content .= "       </ul>\n";
 		$content .= "      </li>\n";
@@ -299,7 +299,7 @@ $(document).ready(function () {
 		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($tasks['revision'] as $t) {
 			$doc = $dms->getDocument($t);
-			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revise\">".$doc->getName()."</a></li>";
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revision\">".$doc->getName()."</a></li>";
 		}
 		$content .= "       </ul>\n";
 		$content .= "      </li>\n";
