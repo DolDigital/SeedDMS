@@ -48,8 +48,7 @@ if(isset($_GET['groupid']) && $_GET['groupid']) {
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selgroup'=>$selgroup, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
-	$view->show();
-	exit;
+	$view($_GET);
 }
 
 ?>
