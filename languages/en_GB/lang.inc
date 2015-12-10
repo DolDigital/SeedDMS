@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1276), dgrutsch (3), netixw (14)
+//    Translators: Admin (1280), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -493,6 +493,7 @@ URL: [url]',
 'index_converters' => 'Index document conversion',
 'index_folder' => 'Index folder',
 'individuals' => 'Individuals',
+'indivіduals_in_groups' => 'Members of a group',
 'inherited' => 'inherited',
 'inherits_access_copy_msg' => 'Copy inherited access list',
 'inherits_access_empty_msg' => 'Start with empty access list',
@@ -896,6 +897,9 @@ URL: [url]',
 'select_category' => 'Click to select category',
 'select_groups' => 'Click to select groups',
 'select_grp_approvers' => 'Click to select group approver',
+'select_grp_ind_approvers' => 'Click to select group',
+'select_grp_ind_notification' => 'Click to select group',
+'select_grp_ind_reviewers' => 'Click to select group',
 'select_grp_notification' => 'Click to select group notification',
 'select_grp_recipients' => 'Click to select group of recipients',
 'select_grp_reviewers' => 'Click to select group reviewer',
