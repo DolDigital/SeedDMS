@@ -31,13 +31,117 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 
+	function css() { /* {{{ */
+		$selgroup = $this->params['selgroup'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		header("Content-type: text/javascript");
+?>
+function checkForm1() {
+	msg = new Array();
+	
+	if($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
+<?php
+	if ($strictformcheck) {
+?>
+	if($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
+<?php
+	}
+?>
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	} else
+		return true;
+}
+
+function checkForm2() {
+	msg = "";
+	
+		if($("#userid").val() == -1) msg += "<?php printMLText("js_select_user");?>\n";
+
+		if (msg != "") {
+			noty({
+				text: msg,
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				_timeout: 1500,
+			});
+			return false;
+		} else
+			return true;
+	}
+
+$(document).ready( function() {
+	$('body').on('submit', '#form_1', function(ev){
+		if(checkForm1())
+			return;
+		event.preventDefault();
+	});
+
+	$('body').on('submit', '#form_2', function(ev){
+		if(checkForm2())
+			return;
+		event.preventDefault();
+	});
+
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {groupid: $(this).val()});
+	});
+});
+<?php
+	} /* }}} */
+
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
 		$selgroup = $this->params['selgroup'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthList'];
 
 		if($selgroup) {
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 			$this->contentHeading(getMLText("group_info"));
 			echo "<table class=\"table table-condensed\">\n";
+			$reviewstatus = $selgroup->getReviewStatus();
+			$i = 0;
+			foreach($reviewstatus as $rv) {
+				if($rv['status'] == 0) {
+					$i++;
+					/*
+					$document = $dms->getDocument($rv['documentID']);
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					echo "<tr>";
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$document->getID()."&currenttab=revapp\">".htmlspecialchars($document->getName())."</a></td>";
+					echo "</tr>";
+					 */
+				}
+			}
+			echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
+			$approvalstatus = $selgroup->getApprovalStatus();
+			$i = 0;
+			foreach($approvalstatus as $rv) {
+				if($rv['status'] == 0) {
+					$i++;
+				}
+			}
+			echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
 			echo "</table>";
 		}
 	} /* }}} */
@@ -48,7 +152,7 @@ class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 		$allUsers = $this->params['allusers'];
 		$groups = $this->params['allgroups'];
 ?>
-	<form action="../op/op.GroupMgr.php" name="form<?php print $group ? $group->getID() : '0';?>_1" method="post" onsubmit="return checkForm1('<?php print $group ? $group->getID() : '0';?>');">
+	<form action="../op/op.GroupMgr.php" name="form_1" id="form_1" method="post">
 <?php
 		if($group) {
 			echo createHiddenFieldWithKey('editgroup');
@@ -76,11 +180,11 @@ class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>"></td>
+			<td><input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea></td>
+			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea></td>
 		</tr>
 		<tr>
 			<td></td>
@@ -119,14 +223,14 @@ class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
 		
-		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2" _onsubmit="return checkForm2('<?php print $group->getID();?>');">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
 		<table class="table-condensed">
 			<tr>
 				<td>
-					<select name="userid">
+					<select name="userid" id="userid">
 						<option value="-1"><?php printMLText("select_one");?>
 						<?php
 							foreach ($allUsers as $currUser)
@@ -167,65 +271,6 @@ class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-?>
-<script language="JavaScript">
-
-function checkForm1(num) {
-	msg = new Array();
-	eval("var formObj = document.form" + num + "_1;");
-	
-	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
-<?php
-	if ($strictformcheck) {
-?>
-	if (formObj.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-<?php
-	}
-?>
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
-function checkForm2(num) {
-	msg = "";
-	eval("var formObj = document.form" + num + "_2;");
-	
-	if (formObj.userid.options[formObj.userid.selectedIndex].value == -1) msg += "<?php printMLText("js_select_user");?>\n";
-
-	if (msg != "")
-	{
-  	noty({
-  		text: msg,
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
-function showGroup(selectObj) {
-	id = selectObj.options[selectObj.selectedIndex].value;
-	$('div.ajax').trigger('update', {groupid: id});
-}
-</script>
-<?php
 		$this->contentHeading(getMLText("group_management"));
 ?>
 
@@ -233,7 +278,7 @@ function showGroup(selectObj) {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" onchange="showGroup(this)" id="selector" class="span9">
+<select class="chzn-select" id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_group")?>
 <option value="0"><?php echo getMLText("add_group")?>
 <?php
@@ -252,13 +297,6 @@ function showGroup(selectObj) {
 </div>
 </div>
 </div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-showGroup(sel);
-
-</script>
 
 <?php
 		$this->contentContainerEnd();
