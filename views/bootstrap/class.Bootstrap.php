@@ -43,7 +43,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
-		if(method_exists($this, 'css')) {
+		if(method_exists($this, 'js')) {
 			$csp_rules = "script-src 'self';"; // style-src 'self';";
 			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
 				header($csp . ": " . $csp_rules);
@@ -121,8 +121,8 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
-		if(method_exists($this, 'css'))
-			echo '<script src="../out/out.'.$this->params['class'].'.php?action=css"></script>'."\n";
+		if(method_exists($this, 'js'))
+			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js"></script>'."\n";
 		echo "</body>\n</html>\n";
 	} /* }}} */
 

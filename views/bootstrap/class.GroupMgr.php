@@ -31,7 +31,7 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 
-	function css() { /* {{{ */
+	function js() { /* {{{ */
 		$selgroup = $this->params['selgroup'];
 		$strictformcheck = $this->params['strictformcheck'];
 

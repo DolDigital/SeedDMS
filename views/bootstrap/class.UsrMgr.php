@@ -31,7 +31,7 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
-	function css() { /* {{{ */
+	function js() { /* {{{ */
 		$seluser = $this->params['seluser'];
 ?>
 function checkForm()
