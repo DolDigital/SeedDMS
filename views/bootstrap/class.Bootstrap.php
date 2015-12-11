@@ -43,6 +43,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
+		if(method_exists($this, 'css')) {
+			$csp_rules = "script-src 'self';"; // style-src 'self';";
+			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
+				header($csp . ": " . $csp_rules);
+			}
+		}
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
@@ -84,19 +90,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
-?>
-		<script>
-  	noty({
-  		text: '<?php echo $flashmsg['msg'] ?>',
-  		type: '<?php echo $flashmsg['type'] ?>',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			timeout: 1500,
-			_template: '<div class="noty_message alert alert-block alert-error"><span class="noty_text"></span><div class="noty_close"></div></div>'
-  	});
-		</script>
-<?php
+			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
 		}
 	} /* }}} */
 
@@ -127,6 +121,8 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
+		if(method_exists($this, 'css'))
+			echo '<script src="../out/out.'.$this->params['class'].'.php?action=css"></script>'."\n";
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
