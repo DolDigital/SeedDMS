@@ -65,7 +65,7 @@ if($view) {
 	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);
 	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 
