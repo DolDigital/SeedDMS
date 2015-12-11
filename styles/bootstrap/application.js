@@ -732,5 +732,18 @@ $(document).ready(function() {
 		e.stopPropagation();
 		e.preventDefault();
 	});
- 
+
+	$('div.splash').each(function(index) {
+		var element = $(this);
+		var msgtype = element.data('type');
+		var msg = element.text();
+		noty({
+			text: msg,
+			type: msgtype,
+			dismissQueue: true,
+			layout: 'topRight',
+			theme: 'defaultTheme',
+			timeout: 1500,
+		});
+	});
 }); 
