@@ -71,6 +71,33 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$orderby = $this->params['orderby'];
+		$expandFolderTree = $this->params['expandFolderTree'];
+		$enableDropUpload = $this->params['enableDropUpload'];
+
+		header('Content-Type: application/json');
+?>
+		function folderSelected(id, name) {
+			window.location = '../out/out.ViewFolder.php?folderid=' + id;
+		}
+<?php
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
+
+		if (0 && $enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
+			echo "SeedDMSUpload.setUrl('../op/op.Ajax.php');";
+			echo "SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');";
+			echo "SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');";
+			echo "SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");";
+			echo "SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');";
+		}
+
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -88,6 +115,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$previewwidth = $this->params['previewWidthList'];
 
 		$folderid = $folder->getId();
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 
@@ -111,14 +140,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				if ($showtree==1){
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
 					$this->contentContainerStart();
-?>
-		<script language="JavaScript">
-		function folderSelected(id, name) {
-			window.location = '../out/out.ViewFolder.php?folderid=' + id;
-		}
-		</script>
-<?php
-					$this->printNewTreeNavigation($folderid, M_READ, 0, '', $expandFolderTree == 2, $orderby);
+					$this->printNewTreeNavigationHtml($folderid, M_READ, 0, '', $expandFolderTree == 2, $orderby);
 					$this->contentContainerEnd();
 				} else {
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
@@ -198,11 +220,11 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			echo "</div>";
 			echo "<div class=\"span4\">";
 			$this->contentHeading(getMLText("dropupload"), true);
-			$this->addFooterJS("SeedDMSUpload.setUrl('../op/op.Ajax.php');");
-			$this->addFooterJS("SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');");
-			$this->addFooterJS("SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');");
-			$this->addFooterJS("SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");");
-			$this->addFooterJS("SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');");
+//			$this->addFooterJS("SeedDMSUpload.setUrl('../op/op.Ajax.php');");
+//			$this->addFooterJS("SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');");
+//			$this->addFooterJS("SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');");
+//			$this->addFooterJS("SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");");
+//			$this->addFooterJS("SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');");
 ?>
 <div id="dragandrophandler" class="well alert" data-target="<?php echo $folder->getID(); ?>" data-formtoken="<?php echo createFormKey('adddocument'); ?>"><?php printMLText('drop_files_here'); ?></div>
 <?php

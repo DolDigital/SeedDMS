@@ -110,6 +110,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		echo json_encode($jsondata);
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$document = $this->params['document'];
+
+		header('Content-Type: application/json');
+		$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+		$this->printDocumentChooserJs("form1");
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -1085,7 +1093,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			<table class="table-condensed">
 			<tr>
 			<td><?php printMLText("add_document_link");?>:</td>
-			<td><?php $this->printDocumentChooser("form1");?></td>
+			<td><?php $this->printDocumentChooserHtml("form1");?></td>
 			</tr>
 			<?php
 			if ($document->getAccessMode($user) >= M_READWRITE) {
@@ -1171,7 +1179,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					}
 					$item['msg'] = $msg;
 				}
-				$this->printTimeline('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+//				$this->printTimeline('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+				$this->printTimelineHtml(300);
 			}
 		}
 ?>
