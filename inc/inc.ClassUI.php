@@ -81,6 +81,7 @@ class UI extends UI_Default {
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
 			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
+			$view->setParam('class', $class);
 			$view->setParam('session', $session);
 			$view->setParam('settings', $settings);
 			$view->setParam('sitename', $settings->_siteName);

@@ -31,6 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$folder = $this->params['folder'];
+		$form = $this->params['form'];
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 1, $form);
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -39,9 +45,10 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 
 		$this->htmlStartPage(getMLText("choose_target_document"));
 		$this->contentContainerStart();
-		$this->printNewTreeNavigation($folder->getID(), M_READ, 1, $form);
+		$this->printNewTreeNavigationHtml($folder->getID(), M_READ, 1, $form);
 		$this->contentContainerEnd();
-		echo "</body>\n</html>\n";
+		$this->htmlEndPage(true);
+//		echo "</body>\n</html>\n";
 	} /* }}} */
 }
 ?>

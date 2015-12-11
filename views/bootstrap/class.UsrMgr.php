@@ -31,6 +31,52 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$seluser = $this->params['seluser'];
+?>
+function checkForm()
+{
+	msg = new Array();
+
+	if($("#login").val() == "") msg.push("<?php printMLText("js_no_login");?>");
+	if(($("#userid").val() == "0") && ($("#pwd").val() == "")) msg.push("<?php printMLText("js_no_pwd");?>");
+	if(($("#pwd").val() != $("#pwdconf").val())&&($("#pwd").val() != "")&&($("#pwd").val() != "")) msg.push("<?php printMLText("js_pwd_not_conf");?>");
+	if($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
+	if($("#email").val() == "") msg.push("<?php printMLText("js_no_email");?>");
+<?php
+	if ($strictformcheck) {
+?>
+	if($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
+<?php
+	}
+?>
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
+$(document).ready( function() {
+	$('body').on('submit', '#form', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {userid: $(this).val()});
+	});
+});
+<?php
+	} /* }}} */
+
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
 		$seluser = $this->params['seluser'];
@@ -76,17 +122,18 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
 ?>
-	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form<?php print $currUser ? $currUser->getID() : '0';?>" onsubmit="return checkForm('<?php print $currUser ? $currUser->getID() : '0';?>');">
+	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
 <?php
 		if($currUser) {
 			echo createHiddenFieldWithKey('edituser');
 ?>
-	<input type="hidden" name="userid" value="<?php print $currUser->getID();?>">
+	<input type="hidden" name="userid" id="userid" value="<?php print $currUser->getID();?>">
 	<input type="hidden" name="action" value="edituser">
 <?php
 		} else {
 			echo createHiddenFieldWithKey('adduser');
 ?>
+	<input type="hidden" id="userid" value="0">
 	<input type="hidden" name="action" value="adduser">
 <?php
 		}
@@ -97,18 +144,18 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td></td>
-			<td><a class="standardText btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
+			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
 		</tr>
 <?php
 	}
 ?>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
-			<td><input type="text" name="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
+			<td><input type="text" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd"></td>
+			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {
@@ -124,7 +171,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
-			<td><input type="Password" name="pwdconf"></td>
+			<td><input type="Password" name="pwdconf" id="pwdconf"></td>
 		</tr>
 <?php
 	if($passwordexpiration > 0) {
@@ -138,15 +185,15 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 ?>
 		<tr>
 			<td><?php printMLText("user_name");?>:</td>
-			<td><input type="text" name="name" value="<?php print $currUser ? htmlspecialchars($currUser->getFullName()) : "";?>"></td>
+			<td><input type="text" name="name" id="name" value="<?php print $currUser ? htmlspecialchars($currUser->getFullName()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("email");?>:</td>
-			<td><input type="text" name="email" value="<?php print $currUser ? htmlspecialchars($currUser->getEmail()) : "";?>"></td>
+			<td><input type="text" name="email" id="email" value="<?php print $currUser ? htmlspecialchars($currUser->getEmail()) : "";?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"><?php print $currUser ? htmlspecialchars($currUser->getComment()) : "";?></textarea></td>
+			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $currUser ? htmlspecialchars($currUser->getComment()) : "";?></textarea></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("role");?>:</td>
@@ -376,59 +423,18 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-?>
-<script language="JavaScript">
-
-function checkForm(num)
-{
-	msg = new Array();
-	eval("var formObj = document.form" + num + ";");
-
-	if (formObj.login.value == "") msg.push("<?php printMLText("js_no_login");?>");
-	if ((num == '0') && (formObj.pwd.value == "")) msg.push("<?php printMLText("js_no_pwd");?>");
-	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg.push("<?php printMLText("js_pwd_not_conf");?>");
-	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
-	if (formObj.email.value == "") msg.push("<?php printMLText("js_no_email");?>");
-	//if (formObj.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
-function showUser(selectObj) {
-	id = selectObj.options[selectObj.selectedIndex].value;
-	$('div.ajax').trigger('update', {userid: id});
-}
-</script>
-<?php
 		$this->contentHeading(getMLText("user_management"));
 ?>
-
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" onchange="showUser(this)" id="selector" class="span9">
+<select class="chzn-select" id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_user")?>
 <option value="0"><?php echo getMLText("add_user")?>
 <?php
-		$selected=0;
-		$count=2;
 		foreach ($users as $currUser) {
-			if ($seluser && $currUser->getID()==$seluser->getID()) $selected=$count;
-			print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
-			$count++;
+			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '').">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
 		}
 ?>
 </select>
@@ -441,15 +447,6 @@ function showUser(selectObj) {
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	</div>
 </div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showUser(sel);
-
-</script>
-
 
 <?php
 		$this->htmlEndPage();

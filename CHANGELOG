@@ -6,6 +6,8 @@
 - disallow read access for group didn't prevent the users from being selected
   as a reviewer/approver
 - move the last bits of plain sql code from op/*.php into the core
+- group manager uses ajax like user manager
+- start to enforce content security policy
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22

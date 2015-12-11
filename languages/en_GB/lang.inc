@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1280), dgrutsch (3), netixw (14)
+//    Translators: Admin (1287), dgrutsch (3), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -472,6 +472,7 @@ URL: [url]',
 'groups' => 'Groups',
 'group_approval_summary' => 'Group approval summary',
 'group_exists' => 'Group already exists.',
+'group_info' => 'Group information',
 'group_management' => 'Groups management',
 'group_members' => 'Group members',
 'group_receipt_summary' => '',
@@ -726,6 +727,8 @@ If you have still problems to login, then please contact your administrator.',
 'password_strength' => 'Password strength',
 'password_strength_insuffient' => 'Insuffient password strength',
 'password_wrong' => 'Wrong password',
+'pending_approvals' => 'Pending approvals',
+'pending_reviews' => 'Pending reviews',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
 'possible_substitutes' => 'Substitutes',
@@ -741,6 +744,13 @@ If you have still problems to login, then please contact your administrator.',
 'quota_is_disabled' => 'Quota support is currently disabled in the settings. Setting a user quota will have no effect until it is enabled again.',
 'quota_warning' => 'Your maximum disc usage is exceeded by [bytes]. Please remove documents or previous versions.',
 'receipt_log' => 'Reception Log',
+'receipt_request_email_body' => 'Reception request
+Document: [name]
+Version: [version]
+Parent folder: [folder_path]
+User: [username]
+URL: [url]',
+'receipt_request_email_subject' => '[sitename]: [name] - Reception request',
 'receipt_summary' => 'Receipt summary',
 'recipients' => 'Recipients',
 'refresh' => 'Refresh',
@@ -828,6 +838,13 @@ URL: [url]',
 'revise_document_on' => 'Next revision of document version on [date]',
 'revision_date' => 'Date of revision',
 'revision_log' => 'Revision log',
+'revision_request_email_body' => 'Revision request
+Document: [name]
+Version: [version]
+Parent folder: [folder_path]
+User: [username]
+URL: [url]',
+'revision_request_email_subject' => '[sitename]: [name] - Revision request',
 'revisors' => 'Revisors',
 'revisor_already_assigned' => 'User is already assigned as an revisor.',
 'revisor_already_removed' => 'Revisor has already been removed from revision process or has already revised the document.',
