@@ -49,7 +49,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
 
 		header('Content-Type: application/json');
 
