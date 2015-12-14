@@ -431,7 +431,7 @@ if(count($entries) == 1) {
 		$view->setParam('workflowmode', $settings->_workflowMode);
 		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
 		$view->setParam('previewWidthList', $settings->_previewWidthList);
-		$view->show();
+		$view($_GET);
 		exit;
 	}
 }
