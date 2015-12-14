@@ -47,6 +47,16 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		return $str;
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$user = $this->params['user'];
+
+		header('Content-Type: application/json');
+
+		$this->printFolderChooserJs("form1");
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -82,6 +92,8 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
+
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -103,7 +115,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	</ul>
 	<div class="tab-content">
 	  <div class="tab-pane <?php echo ($fullsearch == false) ? 'active' : ''; ?>" id="database">
-<form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
+<form action="../out/out.Search.php" name="form1">
 <?php
 // Database search Form {{{
 		$this->contentContainerStart();
@@ -155,7 +167,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 <td><?php printMLText("under_folder")?>:</td>
-<td><?php $this->printFolderChooser("form1", M_READ, -1, $startfolder);?></td>
+<td><?php $this->printFolderChooserHtml("form1", M_READ, -1, $startfolder);?></td>
 </tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
@@ -356,7 +368,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	  	echo "<div class=\"tab-pane ".(($fullsearch == true) ? 'active' : '')."\" id=\"fulltext\">\n";
 	$this->contentContainerStart();
 ?>
-<form action="../op/op.Search.php" name="form2" onsubmit="return checkForm();" style="min-height: 330px;">
+<form action="../out/out.Search.php" name="form2" style="min-height: 330px;">
 <input type="hidden" name="fullsearch" value="1" />
 <table class="table-condensed">
 <tr>
@@ -432,7 +444,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			}
 			 */
 			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
-			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $urlparams);
+			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
 
 			print "<table class=\"table\">";
@@ -607,7 +619,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			}
 			print "</tbody></table>\n";
 //			$this->contentContainerEnd();
-			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $_GET);
+			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $_GET);
 		} else {
 			$numResults = $totaldocs + $totalfolders;
 			if ($numResults == 0) {

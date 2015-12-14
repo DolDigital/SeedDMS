@@ -31,6 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$this->printFolderChooserJs("form1");
+		$this->printFolderChooserJs("form2");
+		$this->printFolderChooserJs("form3");
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -53,7 +59,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "<p>".getMLText("versioning_file_creation_warning")."</p>\n";
 
 		print "<form class=\"form-inline\" action=\"../op/op.CreateVersioningFiles.php\" name=\"form1\">";
-		$this->printFolderChooser("form1",M_READWRITE);
+		$this->printFolderChooserHtml("form1",M_READWRITE);
 		print "<input type='submit' class='btn' name='' value='".getMLText("versioning_file_creation")."'/>";
 		print "</form>\n";
 
@@ -66,7 +72,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "<p>".getMLText("archive_creation_warning")."</p>\n";
 
 		print "<form action=\"../op/op.CreateFolderArchive.php\" name=\"form2\">";
-		$this->printFolderChooser("form2",M_READWRITE);
+		$this->printFolderChooserHtml("form2",M_READWRITE);
 		print "<label class=\"checkbox\"><input type=\"checkbox\" name=\"human_readable\" value=\"1\">".getMLText("human_readable")."</label>";
 		print "<input type='submit' class='btn' name='' value='".getMLText("archive_creation")."'/>";
 		print "</form>\n";
@@ -184,7 +190,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "<p>".getMLText("files_deletion_warning")."</p>\n";
 
 		print "<form class=\"form-inline\" action=\"../out/out.RemoveFolderFiles.php\" name=\"form3\">";
-		$this->printFolderChooser("form3",M_READWRITE);
+		$this->printFolderChooserHtml("form3",M_READWRITE);
 		print "<input type='submit' class='btn' name='' value='".getMLText("files_deletion")."'/>";
 		print "</form>\n";
 

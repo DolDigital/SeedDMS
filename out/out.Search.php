@@ -354,7 +354,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			$pageNumber = (int) $_GET["pg"];
 		}
 		elseif (!strcasecmp($_GET["pg"], "all")) {
-			$limit = 0;
+		//	$limit = 0;
 		}
 	}
 
@@ -387,7 +387,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	$totalPages = (int) (count($entries)/$limit);
 	if(count($entries)%$limit)
 		$totalPages++;
-	if($limit > 0)
+	if (strcasecmp($_GET["pg"], "all"))
 		$entries = array_slice($entries, ($pageNumber-1)*$limit, $limit);
 // }}}
 }
@@ -433,7 +433,7 @@ if(count($entries) == 1) {
 		$view->setParam('workflowmode', $settings->_workflowMode);
 		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
 		$view->setParam('previewWidthList', $settings->_previewWidthList);
-		$view->show();
+		$view($_GET);
 		exit;
 	}
 }
