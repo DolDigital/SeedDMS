@@ -34,6 +34,8 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$folder = $this->params['folder'];
 		$form = $this->params['form'];
+
+		header('Content-Type: application/json');
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 1, $form);
 	} /* }}} */
 
@@ -43,12 +45,13 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 		$folder = $this->params['folder'];
 		$form = $this->params['form'];
 
-		$this->htmlStartPage(getMLText("choose_target_document"));
-		$this->contentContainerStart();
+//		$this->htmlStartPage(getMLText("choose_target_document"));
+//		$this->contentContainerStart();
+//		$this->printNewTreeNavigationHtml($folder->getID(), M_READ, 1, $form);
 		$this->printNewTreeNavigationHtml($folder->getID(), M_READ, 1, $form);
-		$this->contentContainerEnd();
-		$this->htmlEndPage(true);
-//		echo "</body>\n</html>\n";
+		echo '<script src="../out/out.DocumentChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+//		$this->contentContainerEnd();
+//		$this->htmlEndPage(true);
 	} /* }}} */
 }
 ?>
