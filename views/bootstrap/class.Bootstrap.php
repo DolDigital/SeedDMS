@@ -43,7 +43,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
-		if(method_exists($this, 'js')) {
+		if(1||method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
 			 * which is evaled by jquery
@@ -1016,7 +1016,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printKeywordChooser($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 ?>
 		    <div class="input-append">
 				<input type="text" name="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>" />
@@ -1032,9 +1032,28 @@ function folderSelected<?php echo $formName ?>(id, name) {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
+<?php
+	} /* }}} */
+
+	function printKeywordChooserJs($formName) { /* {{{ */
+?>
+$('#acceptkeywords').click(function(ev) {
+	acceptKeywords();
+});
+<?php
+	} /* }}} */
+
+	function printKeywordChooser($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+		$this->printKeywordChooserHtml($formName, $keywords, $fieldname);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printKeywordChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 
@@ -1086,10 +1105,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		}
 	} /* }}} */
 
-	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
+	function printDropFolderChooserHtml($formName, $dropfolderfile="") { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" onclick=\"javascript:clearFilename".$formName."();\"><i class=\"icon-remove\"></i></button>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1106,7 +1125,11 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <!--    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button> -->
   </div>
 </div>
-<script language="JavaScript">
+<?php
+	} /* }}} */
+
+	function printDropFolderChooserJs($formName) { /* {{{ */
+?>
 /* Set up a callback which is called when a folder in the tree is selected */
 modalDropfolderChooser = $('#dropfolderChooser');
 function fileSelected(name) {
@@ -1116,7 +1139,20 @@ function fileSelected(name) {
 function clearFilename<?php print $formName ?>() {
 	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
-</script>
+$('#clearfilename<?php print $formName ?>').click(function(ev) {
+	$('#dropfolderfile<?php echo $formName ?>').val('');
+});
+<?php
+	} /* }}} */
+
+	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
+		$this->printDropFolderChooserHtml($formName, $dropfolderfile);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printDropFolderChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 

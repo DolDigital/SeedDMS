@@ -31,31 +31,19 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$attrdefs = $this->params['attrdefs'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-		$orderby = $this->params['orderby'];
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
+		$this->printKeywordChooserJs();
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
-	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if ($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
 	if ($strictformcheck) {
 	?>
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
+	if ($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if ($("#keywords").val() == "") msg.push("<?php printMLText("js_no_keywords");?>");
 <?php
 	}
 ?>
@@ -74,9 +62,30 @@ function checkForm()
 	else
 		return true;
 }
-</script>
 
+$(document).ready( function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$attrdefs = $this->params['attrdefs'];
+		$strictformcheck = $this->params['strictformcheck'];
+		$orderby = $this->params['orderby'];
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
 		$this->contentHeading(getMLText("edit_document_props"));
 		$this->contentContainerStart();
 
@@ -85,22 +94,22 @@ function checkForm()
 		else
 			$expdate = '';
 ?>
-<form action="../op/op.EditDocument.php" name="form1" onsubmit="return checkForm();" method="post">
+<form action="../op/op.EditDocument.php" name="form1" id="form1" method="post">
 	<input type="hidden" name="documentid" value="<?php echo $document->getID() ?>">
 	<table cellpadding="3">
 		<tr>
 			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" value="<?php print htmlspecialchars($document->getName());?>" size="60"></td>
+			<td><input type="text" name="name" id="name" value="<?php print htmlspecialchars($document->getName());?>" size="60"></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($document->getComment());?></textarea></td>
+			<td><textarea name="comment" id="comment" rows="4" cols="80"><?php print htmlspecialchars($document->getComment());?></textarea></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("keywords");?>:</td>
 			<td class="standardText">
 <?php
-	$this->printKeywordChooser('form1', $document->getKeywords());
+	$this->printKeywordChooserHtml('form1', $document->getKeywords());
 ?>
 			</td>
 		</tr>
