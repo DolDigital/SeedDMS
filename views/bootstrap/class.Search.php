@@ -47,6 +47,17 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		return $str;
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+
+		header('Content-Type: application/json');
+
+		$this->printFolderChooserJs("form1");
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -82,6 +93,8 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
+
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -102,7 +115,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	</ul>
 	<div class="tab-content">
 	  <div class="tab-pane <?php echo ($fullsearch == false) ? 'active' : ''; ?>" id="database">
-<form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
+<form _action="../op/op.Search.php" name="form1">
 <?php
 // Database search Form {{{
 		$this->contentContainerStart();
@@ -154,7 +167,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 <td><?php printMLText("under_folder")?>:</td>
-<td><?php $this->printFolderChooser("form1", M_READ, -1, $startfolder);?></td>
+<td><?php $this->printFolderChooserHtml("form1", M_READ, -1, $startfolder);?></td>
 </tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
@@ -355,7 +368,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	  	echo "<div class=\"tab-pane ".(($fullsearch == true) ? 'active' : '')."\" id=\"fulltext\">\n";
 	$this->contentContainerStart();
 ?>
-<form action="../op/op.Search.php" name="form2" onsubmit="return checkForm();" style="min-height: 330px;">
+<form _action="../op/op.Search.php" name="form2" style="min-height: 330px;">
 <input type="hidden" name="fullsearch" value="1" />
 <table class="table-condensed">
 <tr>
