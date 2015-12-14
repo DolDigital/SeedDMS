@@ -44,7 +44,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
 		if(method_exists($this, 'js')) {
-			$csp_rules = "script-src 'self';"; // style-src 'self';";
+			/* We still need unsafe-eval, because printDocumentChooserHtml and
+			 * printFolderChooserHtml will include a javascript file with ajax
+			 * which is evaled by jquery
+			 * X-WebKit-CSP is deprecated, Chrome understands Content-Security-Policy
+			 * since version 25+
+			 * X-Content-Security-Policy is deprecated, Firefox understands
+			 * Content-Security-Policy since version 23+
+			 */
+			$csp_rules = "script-src 'self' 'unsafe-eval';"; // style-src 'self';";
 			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
 				header($csp . ": " . $csp_rules);
 			}
@@ -913,7 +921,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
+	function printFolderChooserHtml($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-target=\"targetid".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
@@ -932,15 +940,28 @@ function folderSelected<?php echo $formName ?>(id, name) {
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
-<script language="JavaScript">
-/* Set up a callback which is called when a folder in the tree is selected */
+<?php
+	} /* }}} */
+
+	function printFolderChooserJs($formName) { /* {{{ */
+?>
 modalFolderChooser<?php echo $formName ?> = $('#folderChooser<?php echo $formName ?>');
 function folderSelected<?php echo $formName ?>(id, name) {
 	$('#targetid<?php echo $formName ?>').val(id);
 	$('#choosefoldersearch<?php echo $formName ?>').val(name);
 	modalFolderChooser<?php echo $formName ?>.modal('hide');
 }
-</script>
+<?php
+	} /* }}} */
+
+	function printFolderChooser($formName) { /* {{{ */
+		$this->printFolderChooserHtml($formName);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printFolderChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 
