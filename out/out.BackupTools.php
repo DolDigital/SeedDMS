@@ -30,7 +30,7 @@ if (!$user->isAdmin()) {
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'contentdir'=>$settings->_contentDir));
 if($view) {
-	$view->show();
+	$view($_GET);
 	exit;
 }
 
