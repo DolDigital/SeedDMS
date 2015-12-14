@@ -307,7 +307,7 @@ $(document).ready(function () {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
 			echo "   </ul>\n";
-			echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
+			echo "     <form action=\"../out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
 			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
@@ -954,8 +954,8 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName) { /* {{{ */
-		$this->printFolderChooserHtml($formName);
+	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
+		$this->printFolderChooserHtml($formName, $accessMode, $exclude, $default);
 ?>
 		<script language="JavaScript">
 <?php
