@@ -40,23 +40,9 @@ class SeedDMS_View_DocumentAccess extends SeedDMS_Bootstrap_Style {
 		print "</select>\n";
 	} /* }}} */
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$document = $this->params['document'];
-		$folder = $this->params['folder'];
-		$allUsers = $this->params['allusers'];
-		$allGroups = $this->params['allgroups'];
-
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
+	function js() { /* {{{ */
+		header('Content-Type: application/json');
 ?>
-
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -78,9 +64,29 @@ function checkForm()
 	else
 		return true;
 }
-</script>
 
+$(document).ready( function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$document = $this->params['document'];
+		$folder = $this->params['folder'];
+		$allUsers = $this->params['allusers'];
+		$allGroups = $this->params['allgroups'];
+
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 
 		$this->contentHeading(getMLText("edit_document_access"));
 		$this->contentContainerStart();
@@ -233,7 +239,7 @@ function checkForm()
 			print "</table><br>";
 		}
 ?>
-<form action="../op/op.DocumentAccess.php" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.DocumentAccess.php" name="form1" id="form1">
 <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 <input type="Hidden" name="documentid" value="<?php print $document->getId()?>">
 <input type="Hidden" name="action" value="addaccess">

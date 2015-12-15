@@ -48,8 +48,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
-		$user = $this->params['user'];
-
 		header('Content-Type: application/json');
 
 		$this->printFolderChooserJs("form1");

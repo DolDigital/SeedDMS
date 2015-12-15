@@ -70,7 +70,7 @@ $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'target'=>$target));
 if($view) {
 	$view->setParam('accessobject', $accessop);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

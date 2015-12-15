@@ -387,7 +387,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	$totalPages = (int) (count($entries)/$limit);
 	if(count($entries)%$limit)
 		$totalPages++;
-	if (strcasecmp($_GET["pg"], "all"))
+	if (!isset($_GET["pg"]) || strcasecmp($_GET["pg"], "all"))
 		$entries = array_slice($entries, ($pageNumber-1)*$limit, $limit);
 // }}}
 }

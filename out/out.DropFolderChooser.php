@@ -43,7 +43,7 @@ $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfold
 if($view) {
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

@@ -31,15 +31,10 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_KeywordChooser extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$categories = $this->params['categories'];
+	function js() { /* {{{ */
 		$form = $this->params['form'];
-
-//		$this->htmlStartPage(getMLText("use_default_keywords"));
+		header('Content-Type: application/json');
 ?>
-<script language="JavaScript">
 var targetObj = document.<?php echo $form ?>.keywords;
 var myTA;
 
@@ -89,7 +84,34 @@ function showKeywords(which) {
 	obj[which] = document.getElementById("keywords" + id);
 	obj[which].style.display = "";
 }
-</script>
+
+$('#categories0').change(function(ev) {
+	showKeywords(0);
+});
+
+$('#categories1').change(function(ev) {
+	showKeywords(1);
+});
+
+$('.insertkeyword').click(function(ev) {
+	attr_keyword = $(ev.currentTarget).attr('keyword');
+	insertKeywords(attr_keyword);
+});
+
+myTA = document.getElementById("keywordta");
+myTA.value = targetObj.value;
+myTA.focus();
+<?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$categories = $this->params['categories'];
+		$form = $this->params['form'];
+
+//		$this->htmlStartPage(getMLText("use_default_keywords"));
+?>
 
 <div>
 <?php
@@ -106,7 +128,7 @@ function showKeywords(which) {
 	<tr>
 		<td class="inputDescription"><?php echo getMLText("global_default_keywords")?>:</td>
 		<td>
-			<select onchange="showKeywords(0)" id="categories0">
+			<select _onchange="showKeywords(0)" id="categories0">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 <?php
 				foreach ($categories as $category) {
@@ -136,7 +158,7 @@ function showKeywords(which) {
 				else {	
 					print "<ul>";
 					foreach ($lists as $list) {
-						print "<li><a href='javascript:insertKeywords(\"".htmlspecialchars($list["keywords"])."\");'>".htmlspecialchars($list["keywords"])."</a></li>";
+						print "<li><a class=\"insertkeyword\" keyword=\"".htmlspecialchars($list["keywords"])."\">".htmlspecialchars($list["keywords"])."</a></li>";
 					}
 					print "</ul>";
 				}
@@ -147,7 +169,7 @@ function showKeywords(which) {
 	<tr>
 		<td class="inputDescription"><?php echo getMLText("personal_default_keywords")?>:</td>
 		<td>
-			<select onchange="showKeywords(1)" id="categories1">
+			<select _onchange="showKeywords(1)" id="categories1">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 <?php
 				foreach ($categories as $category) {
@@ -188,13 +210,7 @@ function showKeywords(which) {
 
 <?php
 		$this->contentContainerEnd();
-?>
-<script language="JavaScript">
-myTA = document.getElementById("keywordta");
-myTA.value = targetObj.value;
-myTA.focus();
-</script>
-<?php
+		echo '<script src="../out/out.KeywordChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
 //		$this->htmlEndPage();
 //		echo "</body>\n</html>\n";
 	} /* }}} */
