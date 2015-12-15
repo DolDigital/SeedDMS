@@ -31,22 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_DocumentNotify extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$sortusersinlist = $this->params['sortusersinlist'];
-
-		$notifyList = $document->getNotifyList();
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
+	function js() { /* {{{ */
+		header('Content-Type: application/json');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -67,9 +54,30 @@ function checkForm()
 	else
 		return true;
 }
-</script>
 
+$(document).ready( function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$sortusersinlist = $this->params['sortusersinlist'];
+
+		$notifyList = $document->getNotifyList();
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
 		$this->contentHeading(getMLText("edit_existing_notify"));
 		$this->contentContainerStart();
 
@@ -107,7 +115,7 @@ function checkForm()
 ?>
 <br>
 
-<form action="../op/op.DocumentNotify.php" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.DocumentNotify.php" name="form1" id="form1">
 <input type="hidden" name="documentid" value="<?php print $document->getID()?>">
 <input type="hidden" name="action" value="addnotify">
 <table class="table-condensed">
