@@ -685,6 +685,7 @@ $(document).ready(function() {
 	$('div.splash').each(function(index) {
 		var element = $(this);
 		var msgtype = element.data('type');
+		var timeout = element.data('timeout');
 		var msg = element.text();
 		noty({
 			text: msg,
@@ -692,7 +693,7 @@ $(document).ready(function() {
 			dismissQueue: true,
 			layout: 'topRight',
 			theme: 'defaultTheme',
-			timeout: 1500,
+			timeout: (timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
 }); 
