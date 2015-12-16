@@ -30,11 +30,6 @@ require_once("class.Bootstrap.php");
  * @version    Release: @package_version@
  */
 class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
-	var $dms;
-	var $folder_count;
-	var $document_count;
-	var $file_count;
-	var $storage_size;
 
 	function iteminfo() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -130,6 +125,30 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		echo json_encode($jsondata);
 	} /* }}} */
 
+	function js() { /* {{{ */
+		header('Content-Type: application/json');
+?>
+$(document).ready(function () {
+	$('#update').click(function(ev){
+		ev.preventDefault();
+		$.getJSON(
+			'out.Timeline.php?action=data&' + $('#form1').serialize(), 
+			function(data) {
+				$.each( data, function( key, val ) {
+					val.start = new Date(val.start);
+				});
+				timeline.setData(data);
+				timeline.redraw();
+//				timeline.setVisibleChartRange(0,0);
+			}
+		);
+	});
+});
+<?php
+		$timelineurl = 'out.Timeline.php?action=data&fromdate='.date('Y-m-d', $from).'&todate='.date('Y-m-d', $to).'&skip='.urldecode(http_build_query(array('skip'=>$skip)));
+		$this->printTimelineJs($timelineurl, 550, ''/*date('Y-m-d', $from)*/, ''/*date('Y-m-d', $to+1)*/, $skip);
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -160,11 +179,11 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 ?>
 
 <?php
-echo "<div class=\"row-fluid\">\n";
+		echo "<div class=\"row-fluid\">\n";
 
-echo "<div class=\"span3\">\n";
-$this->contentHeading(getMLText("timeline"));
-echo "<div class=\"well\">\n";
+		echo "<div class=\"span3\">\n";
+		$this->contentHeading(getMLText("timeline"));
+		echo "<div class=\"well\">\n";
 ?>
 <form action="../out/out.Timeline.php" class="form form-inline" name="form1" id="form1">
 	<div class="control-group">
@@ -200,39 +219,18 @@ echo "<div class=\"well\">\n";
 	</div>
 </form>
 <?php
- $timelineurl = 'out.Timeline.php?action=data&fromdate='.date('Y-m-d', $from).'&todate='.date('Y-m-d', $to).'&skip='.urldecode(http_build_query(array('skip'=>$skip)));
-?>
-<script type="text/javascript">
-$(document).ready(function () {
-	$('#update').click(function(ev){
-		ev.preventDefault();
-		$.getJSON(
-			'out.Timeline.php?action=data&' + $('#form1').serialize(), 
-			function(data) {
-				$.each( data, function( key, val ) {
-					val.start = new Date(val.start);
-				});
-				timeline.setData(data);
-				timeline.redraw();
-//				timeline.setVisibleChartRange(0,0);
-			}
-		);
-	});
-});
-</script>
-<?php
-echo "</div>\n";
-echo "<div class=\"ajax\" data-view=\"Timeline\" data-action=\"iteminfo\" ></div>";
-echo "</div>\n";
+		echo "</div>\n";
+		echo "<div class=\"ajax\" data-view=\"Timeline\" data-action=\"iteminfo\" ></div>";
+		echo "</div>\n";
 
-echo "<div class=\"span9\">\n";
-$this->contentHeading(getMLText("timeline"));
-$this->printTimeline($timelineurl, 550, ''/*date('Y-m-d', $from)*/, ''/*date('Y-m-d', $to+1)*/, $skip);
-echo "</div>\n";
-echo "</div>\n";
+		echo "<div class=\"span9\">\n";
+		$this->contentHeading(getMLText("timeline"));
+		$this->printTimelineHtml(550);
+		echo "</div>\n";
+		echo "</div>\n";
 
-$this->contentContainerEnd();
-$this->htmlEndPage();
+		$this->contentContainerEnd();
+		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>
