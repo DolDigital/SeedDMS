@@ -175,20 +175,6 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 }
 </style>
 
-<script language="JavaScript">
-
-function showDocument(id) {
-	url = "out.DetailedStatistic.php?documentid=" + id;
-	alert(url);
-}
-
-function showFolder(id) {
-	url = "out.DetailedStatistic.php?folderid=" + id;
-	alert(url);
-}
-
-</script>
-
 <?php
 
 $this->contentHeading(getMLText("folders_and_documents_statistic"));

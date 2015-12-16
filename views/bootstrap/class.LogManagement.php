@@ -67,7 +67,10 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 
 		if ($print_header) printMLText("empty_notify_list");
 		else print "<tr><td><i class=\"icon-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form>\n";
-		echo "<script>\n";
+	} /* }}} */
+
+	function js() { /* {{{ */
+		header('Content-Type: application/json');
 ?>
 $(document).ready( function() {
 	$('i.icon-arrow-up').on('click', function(e) {
@@ -78,7 +81,6 @@ $(document).ready( function() {
 
 });		
 <?php
-		echo "</script>\n";
 	} /* }}} */
 
 	function show() { /* {{{ */
