@@ -148,18 +148,7 @@ $(document).ready(function () {
 				echo "<tr><td>".$key."</td><td>".$LANG['en_GB'][$key]."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
 			}
 			echo "</table>";
-?>
-		<script>
-  	noty({
-  		text: '<b>There are missing translations on this page!</b><br />Please check the bottom of the page.',
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			timeout: 5500,
-  	});
-		</script>
-<?php
+			echo "<div class=\"splash\" data-type=\"error\" data-timeout=\"5500\"><b>There are missing translations on this page!</b><br />Please check the bottom of the page.</div>\n";
 		}
 	} /* }}} */
 
