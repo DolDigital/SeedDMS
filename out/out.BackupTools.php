@@ -36,7 +36,7 @@ if($view) {
 		$view->setParam('backupdir', $settings->_backupDir);
 	else
 		$view->setParam('backupdir', $settings->_contentDir);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

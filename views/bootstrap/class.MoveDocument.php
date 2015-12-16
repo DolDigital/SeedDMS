@@ -31,6 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_MoveDocument extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/json');
+
+		$this->printFolderChooserJs("form1");
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -50,7 +56,7 @@ class SeedDMS_View_MoveDocument extends SeedDMS_Bootstrap_Style {
 	<table>
 		<tr>
 			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooser("form1", M_READWRITE, -1, $target);?></td>
+			<td><?php $this->printFolderChooserHtml("form1", M_READWRITE, -1, $target);?></td>
 		</tr>
 		<tr>
 			<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("move");?>"></td>

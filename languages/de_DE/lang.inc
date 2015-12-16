@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2145), dgrutsch (18)
+//    Translators: Admin (2154), dgrutsch (18)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -472,6 +472,7 @@ URL: [url]',
 'groups' => 'Gruppen',
 'group_approval_summary' => 'Freigabe-Gruppen',
 'group_exists' => 'Gruppe existiert bereits',
+'group_info' => 'Gruppeninformation',
 'group_management' => 'Gruppenverwaltung',
 'group_members' => 'Gruppenmitglieder',
 'group_receipt_summary' => 'Übersicht Gruppenbestätigungen',
@@ -726,6 +727,8 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_strength' => 'Passwortstärke',
 'password_strength_insuffient' => 'Ungenügend starkes Passwort',
 'password_wrong' => 'Falsches Passwort',
+'pending_approvals' => 'Ausstehende Freigaben',
+'pending_reviews' => 'Ausstehende Prüfungen',
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
 'possible_substitutes' => 'Vertreter',
@@ -741,6 +744,13 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'quota_is_disabled' => 'Quota-Unterstützung ist zur Zeit ausgeschaltet. Benutzer-Quota werden ignoriert bis Quota-Unterstützung in den Einstellungen eingeschaltet wird.',
 'quota_warning' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten. Bitte löschen Sie Dokumente oder ältere Versionen.',
 'receipt_log' => 'Protokoll der Empfangsbestätigungen',
+'receipt_request_email_body' => 'Aufforderung zur Empfangsbestätigung
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'receipt_request_email_subject' => '[sitename]: [name] - Aufforderung zur Empfangsbestätigung',
 'receipt_summary' => 'Übersicht Bestätigungen',
 'recipients' => 'Empfänger',
 'refresh' => 'Aktualisieren',
@@ -821,6 +831,13 @@ URL: [url]',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
+'revision_request_email_body' => 'Aufforderung zur Wiederholungsprüfung
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'revision_request_email_subject' => '[sitename]: [name] - Aufforderung zur Wiederholungsprüfung',
 'revisors' => 'Überprüfer',
 'revisor_already_assigned' => 'Benutzer bereits als Wiederholungsprüfer eingetragen.',
 'revisor_already_removed' => 'Wiederholungsprüfer wurde bereits vom Prozess ausgeschlossen oder hat das Dokument bereits geprüft.',

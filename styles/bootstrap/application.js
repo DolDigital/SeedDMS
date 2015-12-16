@@ -128,76 +128,6 @@ $(document).ready( function() {
 		}
 	});
 
-	$('body').on('click', 'button.removedocument', function(ev){
-		ev.preventDefault();
-		attr_rel = $(ev.currentTarget).attr('rel');
-		attr_msg = $(ev.currentTarget).attr('msg');
-		attr_formtoken = $(ev.currentTarget).attr('formtoken');
-		id = attr_rel;
-		$.get('../op/op.Ajax.php',
-			{ command: 'deletedocument', id: id, formtoken: attr_formtoken },
-			function(data) {
-//				console.log(data);
-				if(data.success) {
-					$('#table-row-document-'+id).hide('slow');
-					noty({
-						text: attr_msg,
-						type: 'success',
-						dismissQueue: true,
-						layout: 'topRight',
-						theme: 'defaultTheme',
-						timeout: 1500,
-					});
-				} else {
-					noty({
-						text: data.message,
-						type: 'error',
-						dismissQueue: true,
-						layout: 'topRight',
-						theme: 'defaultTheme',
-						timeout: 3500,
-					});
-				}
-			},
-			'json'
-		);
-	});
-
-	$('body').on('click', 'button.removefolder', function(ev){
-		ev.preventDefault();
-		attr_rel = $(ev.currentTarget).attr('rel');
-		attr_msg = $(ev.currentTarget).attr('msg');
-		attr_formtoken = $(ev.currentTarget).attr('formtoken');
-		id = attr_rel;
-		$.get('../op/op.Ajax.php',
-			{ command: 'deletefolder', id: id, formtoken: attr_formtoken },
-			function(data) {
-//				console.log(data);
-				if(data.success) {
-					$('#table-row-folder-'+id).hide('slow');
-					noty({
-						text: attr_msg,
-						type: 'success',
-						dismissQueue: true,
-						layout: 'topRight',
-						theme: 'defaultTheme',
-						timeout: 1500,
-					});
-				} else {
-					noty({
-						text: data.message,
-						type: 'error',
-						dismissQueue: true,
-						layout: 'topRight',
-						theme: 'defaultTheme',
-						timeout: 3500,
-					});
-				}
-			},
-			'json'
-		);
-	});
-
 	$('body').on('click', 'a.addtoclipboard', function(ev){
 		ev.preventDefault();
 		attr_rel = $(ev.currentTarget).attr('rel');
@@ -752,6 +682,20 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
+	$('div.splash').each(function(index) {
+		var element = $(this);
+		var msgtype = element.data('type');
+		var timeout = element.data('timeout');
+		var msg = element.text();
+		noty({
+			text: msg,
+			type: msgtype,
+			dismissQueue: true,
+			layout: 'topRight',
+			theme: 'defaultTheme',
+			timeout: (timeout == 'undefined' ? 1500 : timeout),
+		});
+	});
 }); 
 
 	var approval_count, review_count, receipt_count, revision_count;
@@ -776,5 +720,9 @@ $(document).ready(function() {
 		}); 
 		timeOutId = setTimeout(checkTasks, 10000);
 	}
+$(document).ready(function() {
+$("#menu-tasks > ul > li").checkTasks();
+}); 
+
 	//checkTasks();
 
