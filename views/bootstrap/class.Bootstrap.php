@@ -43,7 +43,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
-		if(1||method_exists($this, 'js')) {
+		if(method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
 			 * which is evaled by jquery
