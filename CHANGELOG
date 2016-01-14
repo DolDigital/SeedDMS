@@ -8,6 +8,7 @@
 - move the last bits of plain sql code from op/*.php into the core
 - group manager uses ajax like user manager
 - start to enforce content security policy
+- fixed possible XSS attack in user manager
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22
