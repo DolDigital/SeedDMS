@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1024), aydin (83)
+//    Translators: Admin (1030), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -131,11 +131,11 @@ URL: [url]',
 'attrdef_objtype' => 'Nesne türü',
 'attrdef_regex' => 'Düzenli ifade (Regular expression)',
 'attrdef_type' => 'Tür',
-'attrdef_type_boolean' => '',
+'attrdef_type_boolean' => 'Mantık',
 'attrdef_type_date' => 'Tarih',
 'attrdef_type_email' => '',
 'attrdef_type_float' => '',
-'attrdef_type_int' => '',
+'attrdef_type_int' => 'TamSayı',
 'attrdef_type_string' => '',
 'attrdef_type_url' => '',
 'attrdef_valueset' => 'Değer',
@@ -867,15 +867,15 @@ URL: [url]',
 'search_fulltext' => 'Tam metinde ara',
 'search_in' => 'Şurada ara',
 'search_mode_and' => 'tüm sözcükler',
-'search_mode_documents' => '',
-'search_mode_folders' => '',
+'search_mode_documents' => 'Sadece Belgeler',
+'search_mode_folders' => 'Sadece Klasörler',
 'search_mode_or' => 'en az bir sözcük',
 'search_no_results' => 'Arama kriterinize uyan bir doküman bulunamadı',
 'search_query' => 'Arama sorgusu',
 'search_report' => '[doccount] adet dosya ve [foldercount] adet klasör [searchtime] saniye içinde bulundu',
 'search_report_fulltext' => '[doccount] adet doküman bulundu',
-'search_resultmode' => '',
-'search_resultmode_both' => '',
+'search_resultmode' => 'Arama Sonuçları',
+'search_resultmode_both' => 'Dökümanlar ve Klasörler',
 'search_results' => 'Arama sonucu',
 'search_results_access_filtered' => 'Arama sonuçları içerisinde erişimin kısıtlandığı içerik bulunabilir.',
 'search_time' => 'Arama süresi: [time] sn.',
