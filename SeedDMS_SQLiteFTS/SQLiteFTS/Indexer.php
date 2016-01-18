@@ -55,7 +55,8 @@ class SeedDMS_SQLiteFTS_Indexer {
 	 * @param string $indexerDir directory on disk containing the index
 	 */
 	static function create($indexerDir) { /* {{{ */
-		unlink($indexerDir.'/index.db');
+		if(file_exists($indexerDir.'/index.db'))
+			unlink($indexerDir.'/index.db');
 		$index =  new SeedDMS_SQLiteFTS_Indexer($indexerDir);
 		/* Make sure the sequence of fields is identical to the field list
 		 * in SeedDMS_SQLiteFTS_Term
