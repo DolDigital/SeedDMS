@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1287), dgrutsch (3), netixw (14)
+//    Translators: Admin (1287), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -475,7 +475,7 @@ URL: [url]',
 'group_info' => 'Group information',
 'group_management' => 'Groups management',
 'group_members' => 'Group members',
-'group_receipt_summary' => '',
+'group_receipt_summary' => 'Group receipt confirmations overview.',
 'group_review_summary' => 'Group review summary',
 'guest_login' => 'Login as guest',
 'guest_login_disabled' => 'Guest login is disabled.',
@@ -675,7 +675,7 @@ URL: [url]',
 'no_group_members' => 'This group has no members',
 'no_linked_files' => 'No linked files',
 'no_previous_versions' => 'No other versions found',
-'no_receipt_needed' => '',
+'no_receipt_needed' => 'There are currently no documents requiring a receipt confirmation.',
 'no_review_needed' => 'No review pending.',
 'no_revision_needed' => 'No revision pending.',
 'no_revision_planed' => 'No revision of document scheduled',
@@ -683,7 +683,7 @@ URL: [url]',
 'no_user_image' => 'No image found',
 'no_version_check' => 'Checking for a new version of SeedDMS has failed! This could be caused by allow_url_fopen being set to 0 in your php configuration.',
 'no_version_modification' => 'No version modification',
-'no_workflow_available' => '',
+'no_workflow_available' => 'No workflow available',
 'objectcheck' => 'Folder/Document check',
 'obsolete' => 'Obsolete',
 'october' => 'October',

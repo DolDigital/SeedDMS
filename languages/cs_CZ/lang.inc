@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (702), kreml (455)
+//    Translators: Admin (703), kreml (455)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -1262,7 +1262,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Verze [version]: [status]',
 'to' => 'Do',
 'toggle_manager' => 'Přepnout správce',
 'to_before_from' => 'Datum ukončení nesmí být před datem zahájení',

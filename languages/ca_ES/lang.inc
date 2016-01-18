@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (660)
+//    Translators: Admin (662)
 
 $text = array(
 'accept' => 'Acceptar',
@@ -1109,7 +1109,7 @@ URL: [url]',
 'theme' => 'Tema gràfic',
 'thursday' => 'Dijous',
 'thursday_abbr' => '',
-'timeline' => '',
+'timeline' => 'Linea de temps',
 'timeline_add_file' => '',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
@@ -1136,7 +1136,7 @@ URL: [url]',
 'transmittal_comment' => '',
 'transmittal_name' => '',
 'transmittal_size' => '',
-'tree_loading' => '',
+'tree_loading' => 'Espereu mentre l\'arbre de documents es carrega...',
 'trigger_workflow' => '',
 'tr_TR' => '',
 'tuesday' => 'Dimarts',

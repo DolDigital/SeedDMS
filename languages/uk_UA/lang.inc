@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1132)
+//    Translators: Admin (1133)
 
 $text = array(
 'accept' => 'Прийняти',
@@ -982,7 +982,7 @@ URL: [url]',
 'settings_enableConverting' => 'Увімкнути перетворення',
 'settings_enableConverting_desc' => 'Увімкнути/вимкнути перетворення файлів.',
 'settings_enableDropUpload' => 'Увімкнути швидке завантаження',
-'settings_enableDropUpload_desc' => 'Увімкнути/вимкнути область в ""Перегляді каталогу"" для завантаження за допомогою Drag&Drop.',
+'settings_enableDropUpload_desc' => 'Увімкнути/вимкнути область в "Перегляді каталогу" для завантаження за допомогою Drag&Drop.',
 'settings_enableDuplicateDocNames' => 'Дозволити документи<br/>з однаковою назвою',
 'settings_enableDuplicateDocNames_desc' => 'Дозволити документи з однаковими назвами в каталозі.',
 'settings_enableEmail' => 'Увімкнути e-mail',
