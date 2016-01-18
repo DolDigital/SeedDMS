@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2154), dgrutsch (18)
+//    Translators: Admin (2154), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -683,7 +683,7 @@ URL: [url]',
 'no_user_image' => 'Kein Bild vorhanden',
 'no_version_check' => 'Ein Check auf neuere Versionen von SeedDMS ist fehlgeschlagen. Dies könnte daran liegen, dass allow_url_fopen in der PHP-Konfiguration auf 0 gesetzt ist.',
 'no_version_modification' => 'Keine Modifikationen an einer Version',
-'no_workflow_available' => '',
+'no_workflow_available' => 'Kein Workflow verfügbar',
 'objectcheck' => 'Ordner- und Dokumentenprüfung',
 'obsolete' => 'veraltet',
 'october' => 'Oktober',
@@ -777,8 +777,15 @@ URL: [url]',
 'remove_marked_files' => 'Markierte Dateien löschen',
 'repaired' => 'repariert',
 'repairing_objects' => 'Repariere Dokumente und Ordner.',
-'request_workflow_action_email_body' => '',
-'request_workflow_action_email_subject' => '',
+'request_workflow_action_email_body' => 'Der Workflow hat einen Status erreicht welcher Ihre Aktion benötigt.
+Dokument: [name]
+Version: [version]
+Workflow: [workflow]
+Aktueller Status: [current_state]
+Übergeordneter Ordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'request_workflow_action_email_subject' => 'Workflow-Aktion benötigt',
 'reset_checkout' => 'Auschecken beenden',
 'results_page' => 'Ergebnis-Seite',
 'return_from_subworkflow' => 'Rückkehr aus Sub-Workflow',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1278)
+//    Translators: Admin (1281)
 
 $text = array(
 'accept' => 'Принять',
@@ -670,7 +670,7 @@ URL: [url]',
 'no_update_cause_locked' => 'Вы не можете обновить документ. Свяжитесь с заблокировавшим его пользователем.',
 'no_user_image' => 'Изображение не найдено',
 'no_version_check' => '',
-'no_version_modification' => '',
+'no_version_modification' => 'Отсутвует версия модификации',
 'no_workflow_available' => '',
 'objectcheck' => 'Проверка каталога или документа',
 'obsolete' => 'Устарел',
@@ -772,7 +772,7 @@ URL: [url]',
 Пользователь: [username]
 URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: выход из подпроцесса «[name]»',
-'reverse_links' => '',
+'reverse_links' => 'Документы, в которых есть ссылки на текущий документ',
 'reviewers' => 'Рецензирующие',
 'reviewer_already_assigned' => 'уже назначен на рецензирование',
 'reviewer_already_removed' => 'уже удалён из списка рецензирующих или уже оставил рецензию',
@@ -960,7 +960,7 @@ URL: [url]',
 'settings_enableConverting' => 'Включить преобразование',
 'settings_enableConverting_desc' => 'Включить/отключить преобразование файлов.',
 'settings_enableDropUpload' => 'Включить быструю загрузку',
-'settings_enableDropUpload_desc' => 'Вкл/выкл область в ""Просмотр папки"" для загрузки при помощи Drag&Drop.',
+'settings_enableDropUpload_desc' => 'Вкл/выкл область в "Просмотр папки" для загрузки при помощи Drag&Drop.',
 'settings_enableDuplicateDocNames' => 'Разрешить документы<br/>с одинаковым названием',
 'settings_enableDuplicateDocNames_desc' => 'Разрешить документы с одинаковым названием в каталоге.',
 'settings_enableEmail' => 'Включить e-mail',
