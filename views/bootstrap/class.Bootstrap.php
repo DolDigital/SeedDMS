@@ -379,7 +379,7 @@ $(document).ready(function () {
 				echo "    </li>\n";
 				echo "   </ul>\n";
 				echo "   </div>";
-				$this->addFooterJS('checkTasks();');
+				//$this->addFooterJS('checkTasks();');
 			}
 
 			if($this->params['enableclipboard']) {
