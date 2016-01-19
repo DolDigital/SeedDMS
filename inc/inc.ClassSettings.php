@@ -217,6 +217,7 @@ class Settings { /* {{{ */
 	var $_ldapBindPw = "";
 	var $_ldapAccountDomainName = "";
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
+	var $_ldapFilter = "";
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
 
 	/**
@@ -422,6 +423,7 @@ class Settings { /* {{{ */
 				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
 				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 0;
+				$this->_ldapFilter = strVal($connectorNode["filter"]);
 			}
 			else if ($params['enable'] && ($typeConn == "AD"))
 			{
@@ -431,6 +433,7 @@ class Settings { /* {{{ */
 				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
 				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 1;
+				$this->_ldapFilter = strVal($connectorNode["filter"]);
 				$this->_ldapAccountDomainName = strVal($connectorNode["accountDomainName"]);
 			}
 		}

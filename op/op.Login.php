@@ -99,7 +99,7 @@ if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 				// and http://stackoverflow.com/questions/6222641/how-to-php-ldap-search-to-get-user-ou-if-i-dont-know-the-ou-for-base-dn
 				ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
 			}
-		} 
+		}
 
 		// Ensure that the LDAP connection is set to use version 3 protocol.
 		// Required for most authentication methods, including SASL.
@@ -116,15 +116,19 @@ if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 		}
 		$dn = false;
 		/* If bind succeed, then get the dn of for the user */
-		if ($bind) {        
-			$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+		if ($bind) {
+            if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
+			    $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
+            } else {
+			    $search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+            }
 			if (!is_bool($search)) {
 				$info = ldap_get_entries($ds, $search);
 				if (!is_bool($info) && $info["count"]>0) {
 					$dn = $info[0]['dn'];
 				}
 			}
-		} 
+		}
 
 		/* If the previous bind failed, try it with the users creditionals
 		 * by simply setting $dn to a default string
@@ -142,8 +146,12 @@ if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 			$user = $dms->getUserByLogin($login);
 			if (is_bool($user) && !$settings->_restricted) {
 				// Retrieve the user's LDAP information.
-				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
-				
+                if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
+			        $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
+                } else {
+			        $search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+                }
+
 				if (!is_bool($search)) {
 					$info = ldap_get_entries($ds, $search);
 					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
@@ -198,14 +206,14 @@ if (is_bool($user)) {
 		_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
 		exit;
 	}
-	
+
 	// control admin IP address if required
 	// TODO: extend control to LDAP autentication
 	if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
 		_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
 		exit;
 	}
-	
+
 	/* Clear login failures if login was successful */
 	$user->clearLoginFailures();
 
@@ -282,7 +290,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot, null, null, !$settings->_enableLargeFileUpload);
 }
 
-// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded. 
+// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded.
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
 
 if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
