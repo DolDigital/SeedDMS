@@ -721,8 +721,8 @@ $(document).ready(function() {
 		timeOutId = setTimeout(checkTasks, 10000);
 	}
 $(document).ready(function() {
-$("#menu-tasks > ul > li").checkTasks();
+//$("#menu-tasks > ul > li").checkTasks();
+	checkTasks();
 }); 
 
-	//checkTasks();
 
