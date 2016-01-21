@@ -50,6 +50,51 @@ $(document).ready( function() {
 <?php
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
+		$dropfolderdir = $this->params['dropfolderdir'];
+		$this->printDropFolderChooserJs("form1");
+?>
+function checkForm()
+{
+	msg = new Array();
+<?php if($dropfolderdir) { ?>
+	if ($("#userfile").val() == "" && $("#dropfolderfileform1").val() == "") msg.push("<?php printMLText("js_no_file");?>");
+<?php } else { ?>
+	if ($("#userfile").val() == "") msg.push("<?php printMLText("js_no_file");?>");
+<?php } ?>
+<?php
+	if ($strictformcheck) {
+	?>
+	if ($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
+<?php
+	}
+?>
+	if (msg != "")
+	{
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
+$(document).ready( function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -70,42 +115,7 @@ $(document).ready( function() {
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 		$this->contentHeading(getMLText("update_document"));
-?>
 
-<script language="JavaScript">
-function checkForm()
-{
-	msg = new Array();
-<?php if($dropfolderdir) { ?>
-	if (document.form1.userfile.value == "" && document.form1.dropfolderfileform1.value == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } else { ?>
-	if (document.form1.userfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } ?>
-<?php
-	if ($strictformcheck) {
-	?>
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-<?php
-	}
-?>
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-</script>
-
-<?php
 		if ($document->isLocked()) {
 
 			$lockingUser = $document->getLockingUser();
@@ -148,7 +158,7 @@ function checkForm()
 		$this->contentContainerStart();
 ?>
 
-<form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table class="table-condensed">
 	
@@ -163,7 +173,7 @@ function checkForm()
 <?php if($dropfolderdir) { ?>
 		<tr>
 			<td><?php printMLText("dropfolder_file");?>:</td>
-			<td><?php $this->printDropFolderChooser("form1");?></td>
+			<td><?php $this->printDropFolderChooserHtml("form1");?></td>
 		</tr>
 <?php } ?>
 		<tr>

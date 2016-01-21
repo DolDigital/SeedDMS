@@ -43,6 +43,20 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
+		if(method_exists($this, 'js')) {
+			/* We still need unsafe-eval, because printDocumentChooserHtml and
+			 * printFolderChooserHtml will include a javascript file with ajax
+			 * which is evaled by jquery
+			 * X-WebKit-CSP is deprecated, Chrome understands Content-Security-Policy
+			 * since version 25+
+			 * X-Content-Security-Policy is deprecated, Firefox understands
+			 * Content-Security-Policy since version 23+
+			 */
+			$csp_rules = "script-src 'self' 'unsafe-eval';"; // style-src 'self';";
+			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
+				header($csp . ": " . $csp_rules);
+			}
+		}
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
@@ -84,19 +98,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
-?>
-		<script>
-  	noty({
-  		text: '<?php echo $flashmsg['msg'] ?>',
-  		type: '<?php echo $flashmsg['type'] ?>',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			timeout: 1500,
-			_template: '<div class="noty_message alert alert-block alert-error"><span class="noty_text"></span><div class="noty_close"></div></div>'
-  	});
-		</script>
-<?php
+			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
 		}
 	} /* }}} */
 
@@ -104,10 +106,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$this->extraheader[$type] .= $head;
 	} /* }}} */
 
-	function htmlEndPage() { /* {{{ */
-		$this->footNote();
-		if($this->params['showmissingtranslations']) {
-			$this->missingḺanguageKeys();
+	function htmlEndPage($nofooter=false) { /* {{{ */
+		if(!$nofooter) {
+			$this->footNote();
+			if($this->params['showmissingtranslations']) {
+				$this->missingḺanguageKeys();
+			}
 		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
@@ -127,6 +131,8 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
+		if(method_exists($this, 'js'))
+			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
@@ -142,18 +148,7 @@ $(document).ready(function () {
 				echo "<tr><td>".$key."</td><td>".$LANG['en_GB'][$key]."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
 			}
 			echo "</table>";
-?>
-		<script>
-  	noty({
-  		text: '<b>There are missing translations on this page!</b><br />Please check the bottom of the page.',
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			timeout: 5500,
-  	});
-		</script>
-<?php
+			echo "<div class=\"splash\" data-type=\"error\" data-timeout=\"5500\"><b>There are missing translations on this page!</b><br />Please check the bottom of the page.</div>\n";
 		}
 	} /* }}} */
 
@@ -301,7 +296,7 @@ $(document).ready(function () {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
 			echo "   </ul>\n";
-			echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
+			echo "     <form action=\"../out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
 			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
@@ -868,8 +863,8 @@ $(document).ready(function () {
 		}
 		print "</select>";
 	} /* }}} */
-	
-	function printDocumentChooser($formName) { /* {{{ */
+
+	function printDocumentChooserHtml($formName) { /* {{{ */
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
@@ -888,7 +883,11 @@ $(document).ready(function () {
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
-		<script language="JavaScript">
+<?php 
+	} /* }}} */
+
+	function printDocumentChooserJs($formName) { /* {{{ */
+?>
 modalDocChooser<?php echo $formName ?> = $('#docChooser<?php echo $formName ?>');
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
@@ -897,11 +896,21 @@ function documentSelected<?php echo $formName ?>(id, name) {
 }
 function folderSelected<?php echo $formName ?>(id, name) {
 }
+<?php
+	} /* }}} */
+
+	function printDocumentChooser($formName) { /* {{{ */
+		$this->printDocumentChooserHtml($formName);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printDocumentChooserJs($formName);
+?>
 		</script>
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
+	function printFolderChooserHtml($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-target=\"targetid".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
@@ -920,15 +929,28 @@ function folderSelected<?php echo $formName ?>(id, name) {
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
-<script language="JavaScript">
-/* Set up a callback which is called when a folder in the tree is selected */
+<?php
+	} /* }}} */
+
+	function printFolderChooserJs($formName) { /* {{{ */
+?>
 modalFolderChooser<?php echo $formName ?> = $('#folderChooser<?php echo $formName ?>');
 function folderSelected<?php echo $formName ?>(id, name) {
 	$('#targetid<?php echo $formName ?>').val(id);
 	$('#choosefoldersearch<?php echo $formName ?>').val(name);
 	modalFolderChooser<?php echo $formName ?>.modal('hide');
 }
-</script>
+<?php
+	} /* }}} */
+
+	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
+		$this->printFolderChooserHtml($formName, $accessMode, $exclude, $default);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printFolderChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 
@@ -983,7 +1005,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printKeywordChooser($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 ?>
 		    <div class="input-append">
 				<input type="text" name="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>" />
@@ -999,15 +1021,35 @@ function folderSelected<?php echo $formName ?>(id, name) {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
+<?php
+	} /* }}} */
+
+	function printKeywordChooserJs($formName) { /* {{{ */
+?>
+$('#acceptkeywords').click(function(ev) {
+	acceptKeywords();
+});
+<?php
+	} /* }}} */
+
+	function printKeywordChooser($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+		$this->printKeywordChooserHtml($formName, $keywords, $fieldname);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printKeywordChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 
 	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
+			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
 			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".($objvalue ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
@@ -1052,10 +1094,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		}
 	} /* }}} */
 
-	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
+	function printDropFolderChooserHtml($formName, $dropfolderfile="") { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" onclick=\"javascript:clearFilename".$formName."();\"><i class=\"icon-remove\"></i></button>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1072,7 +1114,11 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <!--    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button> -->
   </div>
 </div>
-<script language="JavaScript">
+<?php
+	} /* }}} */
+
+	function printDropFolderChooserJs($formName) { /* {{{ */
+?>
 /* Set up a callback which is called when a folder in the tree is selected */
 modalDropfolderChooser = $('#dropfolderChooser');
 function fileSelected(name) {
@@ -1082,7 +1128,20 @@ function fileSelected(name) {
 function clearFilename<?php print $formName ?>() {
 	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
-</script>
+$('#clearfilename<?php print $formName ?>').click(function(ev) {
+	$('#dropfolderfile<?php echo $formName ?>').val('');
+});
+<?php
+	} /* }}} */
+
+	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
+		$this->printDropFolderChooserHtml($formName, $dropfolderfile);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printDropFolderChooserJs($formName);
+?>
+		</script>
 <?php
 	} /* }}} */
 
@@ -1138,6 +1197,21 @@ function clearFilename<?php print $formName ?>() {
 		exit;	
 	} /* }}} */
 
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+		$this->printNewTreeNavigationHtml($folderid, $accessmode, $showdocs, $formid, $expandtree, $orderby);
+?>
+		<script language="JavaScript">
+<?php
+		$this->printNewTreeNavigationJs($folderid, $accessmode, $showdocs, $formid, $expandtree, $orderby);
+?>
+	</script>
+<?php
+	} /* }}} */
+
+	function printNewTreeNavigationHtml($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."&orderby=".$orderby."\"></div>\n";
+	} /* }}} */
+
 	/**
 	 * Create a tree of folders using jqtree.
 	 *
@@ -1150,7 +1224,7 @@ function clearFilename<?php print $formName ?>() {
 	 * @param boolean $showdocs set to true if tree shall contain documents
 	 *   as well.
 	 */
-	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
+	function printNewTreeNavigationJs($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
 		function jqtree($path, $folder, $user, $accessmode, $showdocs=1, $expandtree=0, $orderby='') {
 			if($path || $expandtree) {
 				if($path)
@@ -1213,9 +1287,7 @@ function clearFilename<?php print $formName ?>() {
 			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'load_on_demand'=>true, 'is_folder'=>true));
 		}
 
-		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."&orderby=".$orderby."\"></div>\n";
 ?>
-	<script language="JavaScript">
 var data = <?php echo json_encode($tree); ?>;
 $(function() {
 	$('#jqtree<?php echo $formid ?>').tree({
@@ -1240,7 +1312,6 @@ $(function() {
     }
   });
 });
-	</script>
 <?php
 	} /* }}} */
 
@@ -1378,19 +1449,62 @@ $(function() {
 	function printDeleteDocumentButton($document, $msg, $return=false){ /* {{{ */
 		$docid = $document->getID();
 		$content = '';
-    $content .= '<a id="delete-document-btn-'.$docid.'" rel="'.$docid.'" msg="'.getMLText($msg).'"><i class="icon-remove"></i></a>';
-		$this->addFooterJS("
-$('#delete-document-btn-".$docid."').popover({
-	title: '".getMLText("rm_document")."',
-	placement: 'left',
-	html: true,
-	content: \"<div>".htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES)."</div><div><button class='btn btn-danger removedocument' style='float: right; margin:10px 0px;' rel='".$docid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removedocument')."' id='confirm-delete-document-btn-".$docid."'><i class='icon-remove'></i> ".getMLText("rm_document")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-document-btn-".$docid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
-");
+    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
 		if($return)
 			return $content;
 		else
 			echo $content;
 		return '';
+	} /* }}} */
+
+	function printDeleteDocumentButtonJs(){ /* {{{ */
+		echo "
+		$(document).ready(function () {
+			$('.delete-document-btn').click(function(ev) {
+				id = $(ev.currentTarget).attr('rel');
+				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+				msg = $(ev.currentTarget).attr('msg');
+				formtoken = '".createFormKey('removedocument')."';
+				bootbox.dialog(confirmmsg, [{
+					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_document")."\",
+					\"class\" : \"btn-danger\",
+					\"callback\": function() {
+						$.get('../op/op.Ajax.php',
+							{ command: 'deletedocument', id: id, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-document-'+id).hide('slow');
+									noty({
+										text: msg,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					\"label\" : \"".getMLText("cancel")."\",
+					\"class\" : \"btn-cancel\",
+					\"callback\": function() {
+					}
+				}]);
+			});
+		});
+		";
 	} /* }}} */
 
 	/**
@@ -1407,19 +1521,62 @@ $('#delete-document-btn-".$docid."').popover({
 	function printDeleteFolderButton($folder, $msg, $return=false){ /* {{{ */
 		$folderid = $folder->getID();
 		$content = '';
-    $content .= '<a id="delete-folder-btn-'.$folderid.'" rel="'.$folderid.'" msg="'.getMLText($msg).'"><i class="icon-remove"></i></a>';
-		$this->addFooterJS("
-$('#delete-folder-btn-".$folderid."').popover({
-	title: '".getMLText("rm_folder")."',
-	placement: 'left',
-	html: true,
-	content: \"<div>".htmlspecialchars(getMLText("confirm_rm_folder", array ("foldername" => $folder->getName())), ENT_QUOTES)."</div><div><button class='btn btn-danger removefolder' style='float: right; margin:10px 0px;' rel='".$folderid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removefolder')."' id='confirm-delete-folder-btn-".$folderid."'><i class='icon-remove'></i> ".getMLText("rm_folder")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-folder-btn-".$folderid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
-");
+		$content .= '<a class="delete-folder-btn" rel="'.$folderid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_folder", array ("foldername" => $folder->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
 		if($return)
 			return $content;
 		else
 			echo $content;
 		return '';
+	} /* }}} */
+
+	function printDeleteFolderButtonJs(){ /* {{{ */
+		echo "
+		$(document).ready(function () {
+			$('.delete-folder-btn').click(function(ev) {
+				id = $(ev.currentTarget).attr('rel');
+				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+				msg = $(ev.currentTarget).attr('msg');
+				formtoken = '".createFormKey('removefolder')."';
+				bootbox.dialog(confirmmsg, [{
+					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_folder")."\",
+					\"class\" : \"btn-danger\",
+					\"callback\": function() {
+						$.get('../op/op.Ajax.php',
+							{ command: 'deletefolder', id: id, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-folder-'+id).hide('slow');
+									noty({
+										text: msg,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					\"label\" : \"".getMLText("cancel")."\",
+					\"class\" : \"btn-cancel\",
+					\"callback\": function() {
+					}
+				}]);
+			});
+		});
+		";
 	} /* }}} */
 
 	function printLockButton($document, $msglock, $msgunlock, $return=false) { /* {{{ */
@@ -2037,11 +2194,10 @@ mayscript>
 	 *
 	 * @param object $document document
 	 */
-	protected function printTimeline($timelineurl, $height=300, $start='', $end='', $skip=array()) { /* {{{ */
+	protected function printTimelineJs($timelineurl, $height=300, $start='', $end='', $skip=array()) { /* {{{ */
 		if(!$timelineurl)
 			return;
 ?>
-	<script type="text/javascript">
 		var timeline;
 		var data;
 
@@ -2090,10 +2246,20 @@ mayscript>
 			}
 		);
 		});
+<?php
+	} /* }}} */
 
-	</script>
+	protected function printTimelineHtml($height) { /* {{{ */
+?>
 	<div id="timeline" style="height: <?= $height ?>px;"></div>
 <?php
+	} /* }}} */
+
+	protected function printTimeline($timelineurl, $height=300, $start='', $end='', $skip=array()) { /* {{{ */
+		echo "<script type=\"text/javascript\">\n";
+		$this->printTimelineJs($timelineurl, $height, $start, $end, $skip);
+		echo "</script>";
+		$this->printTimelineHtml($height);
 	} /* }}} */
 }
 ?>

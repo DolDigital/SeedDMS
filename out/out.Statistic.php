@@ -31,7 +31,7 @@ $rootfolder = $dms->getFolder($settings->_rootFolderID);
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rootfolder'=>$rootfolder));
 if($view) {
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2137), dgrutsch (18)
+//    Translators: Admin (2154), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -250,7 +250,7 @@ URL: [url]',
 'continue' => 'fortführen',
 'converter_new_cmd' => 'Kommando',
 'converter_new_mimetype' => 'Neuer Mime-Type',
-'copied_to_checkout_as' => 'Datei in den Checkout-Space als \'[filename]\' kopiert.',
+'copied_to_checkout_as' => 'Datei am [date] in den Checkout-Space als \'[filename]\' kopiert.',
 'create_fulltext_index' => 'Erzeuge Volltextindex',
 'create_fulltext_index_warning' => 'Sie möchten den Volltextindex neu erzeugen. Dies kann beträchtlich Zeit in Anspruch nehmen und Gesamtleistung Ihres System beeinträchtigen. Bestätigen Sie bitte diese Operation.',
 'creation_date' => 'Erstellt am',
@@ -472,6 +472,7 @@ URL: [url]',
 'groups' => 'Gruppen',
 'group_approval_summary' => 'Freigabe-Gruppen',
 'group_exists' => 'Gruppe existiert bereits',
+'group_info' => 'Gruppeninformation',
 'group_management' => 'Gruppenverwaltung',
 'group_members' => 'Gruppenmitglieder',
 'group_receipt_summary' => 'Übersicht Gruppenbestätigungen',
@@ -493,6 +494,7 @@ URL: [url]',
 'index_converters' => 'Index Dokumentenumwandlung',
 'index_folder' => 'Indiziere Ordner',
 'individuals' => 'Einzelpersonen',
+'indivіduals_in_groups' => 'Mitglieder einer Gruppe',
 'inherited' => 'geerbt',
 'inherits_access_copy_msg' => 'Berechtigungen kopieren',
 'inherits_access_empty_msg' => 'Leere Zugriffsliste',
@@ -681,7 +683,7 @@ URL: [url]',
 'no_user_image' => 'Kein Bild vorhanden',
 'no_version_check' => 'Ein Check auf neuere Versionen von SeedDMS ist fehlgeschlagen. Dies könnte daran liegen, dass allow_url_fopen in der PHP-Konfiguration auf 0 gesetzt ist.',
 'no_version_modification' => 'Keine Modifikationen an einer Version',
-'no_workflow_available' => '',
+'no_workflow_available' => 'Kein Workflow verfügbar',
 'objectcheck' => 'Ordner- und Dokumentenprüfung',
 'obsolete' => 'veraltet',
 'october' => 'Oktober',
@@ -725,10 +727,15 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_strength' => 'Passwortstärke',
 'password_strength_insuffient' => 'Ungenügend starkes Passwort',
 'password_wrong' => 'Falsches Passwort',
+'pending_approvals' => 'Ausstehende Freigaben',
+'pending_reviews' => 'Ausstehende Prüfungen',
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
 'possible_substitutes' => 'Vertreter',
+'preview' => 'Vorschau',
 'preview_converters' => 'Vorschau Dokumentenumwandlung',
+'preview_markdown' => 'Markdown',
+'preview_plain' => 'Text',
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',
 'pt_BR' => 'Portugiesisch (BR)',
@@ -737,6 +744,13 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'quota_is_disabled' => 'Quota-Unterstützung ist zur Zeit ausgeschaltet. Benutzer-Quota werden ignoriert bis Quota-Unterstützung in den Einstellungen eingeschaltet wird.',
 'quota_warning' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten. Bitte löschen Sie Dokumente oder ältere Versionen.',
 'receipt_log' => 'Protokoll der Empfangsbestätigungen',
+'receipt_request_email_body' => 'Aufforderung zur Empfangsbestätigung
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'receipt_request_email_subject' => '[sitename]: [name] - Aufforderung zur Empfangsbestätigung',
 'receipt_summary' => 'Übersicht Bestätigungen',
 'recipients' => 'Empfänger',
 'refresh' => 'Aktualisieren',
@@ -763,8 +777,15 @@ URL: [url]',
 'remove_marked_files' => 'Markierte Dateien löschen',
 'repaired' => 'repariert',
 'repairing_objects' => 'Repariere Dokumente und Ordner.',
-'request_workflow_action_email_body' => '',
-'request_workflow_action_email_subject' => '',
+'request_workflow_action_email_body' => 'Der Workflow hat einen Status erreicht welcher Ihre Aktion benötigt.
+Dokument: [name]
+Version: [version]
+Workflow: [workflow]
+Aktueller Status: [current_state]
+Übergeordneter Ordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'request_workflow_action_email_subject' => 'Workflow-Aktion benötigt',
 'reset_checkout' => 'Auschecken beenden',
 'results_page' => 'Ergebnis-Seite',
 'return_from_subworkflow' => 'Rückkehr aus Sub-Workflow',
@@ -817,6 +838,13 @@ URL: [url]',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
+'revision_request_email_body' => 'Aufforderung zur Wiederholungsprüfung
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'revision_request_email_subject' => '[sitename]: [name] - Aufforderung zur Wiederholungsprüfung',
 'revisors' => 'Überprüfer',
 'revisor_already_assigned' => 'Benutzer bereits als Wiederholungsprüfer eingetragen.',
 'revisor_already_removed' => 'Wiederholungsprüfer wurde bereits vom Prozess ausgeschlossen oder hat das Dokument bereits geprüft.',
@@ -886,6 +914,9 @@ URL: [url]',
 'select_category' => 'Klicken zur Auswahl einer Kategorie',
 'select_groups' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_approvers' => 'Klicken zur Auswahl einer Freigabegruppe',
+'select_grp_ind_approvers' => 'Klicken zur Auswahl einer Gruppe',
+'select_grp_ind_notification' => 'Klicken zur Auswahl einer Gruppe',
+'select_grp_ind_reviewers' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_notification' => 'Klicken zur Auswahl einer Beobachtergruppe',
 'select_grp_recipients' => 'Klicken zur Auswahl einer Empfängergruppe',
 'select_grp_reviewers' => 'Klicken zur Auswahl einer Prüfgruppe',

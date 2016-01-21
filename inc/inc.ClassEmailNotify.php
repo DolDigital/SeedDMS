@@ -29,7 +29,16 @@ require_once("inc.ClassNotify.php");
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Email extends SeedDMS_Notify {
+class SeedDMS_EmailNotify extends SeedDMS_Notify {
+	/* User sending the notification
+	 * Will only be used if the sender of one of the notify methods
+	 * is not set
+	 */
+	protected $sender;
+
+	function setSender($user) {
+		$this->sender = $user;
+	}
 
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		global $settings;
@@ -81,19 +90,6 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		}
 
 		return true;
-	} /* }}} */
-
-	function sendPassword($sender, $recipient, $subject, $message) { /* {{{ */
-		global $settings;
-
-		$headers   = array();
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $settings->_smtpSendFrom;
-		$headers[] = "Reply-To: ". $settings->_smtpSendFrom;
-
-		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
-		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
 	} /* }}} */
 }
 ?>

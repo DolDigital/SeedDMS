@@ -31,6 +31,15 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_FolderChooser extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$rootfolderid = $this->params['rootfolderid'];
+		$form = $this->params['form'];
+		$mode = $this->params['mode'];
+
+		header('Content-Type: application/json');
+		$this->printNewTreeNavigationJs($rootfolderid, $mode, 0, $form);
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -39,11 +48,16 @@ class SeedDMS_View_FolderChooser extends SeedDMS_Bootstrap_Style {
 		$form = $this->params['form'];
 		$rootfolderid = $this->params['rootfolderid'];
 
-		$this->htmlStartPage(getMLText("choose_target_folder"));
-		$this->contentContainerStart();
-		$this->printNewTreeNavigation($rootfolderid, $mode, 0, $form);
-		$this->contentContainerEnd();
-		echo "</body>\n</html>\n";
+//		$this->htmlStartPage(getMLText("choose_target_folder"));
+//		$this->contentContainerStart();
+if(1) {
+		$this->printNewTreeNavigationHtml($rootfolderid, $mode, 0, $form);
+		echo '<script src="../out/out.FolderChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+} else {
+			$this->printNewTreeNavigation($rootfolderid, $mode, 0, $form);
+}
+//		$this->contentContainerEnd();
+//		$this->htmlEndPage(true);
 	} /* }}} */
 }
 ?>

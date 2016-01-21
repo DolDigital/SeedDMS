@@ -19,7 +19,6 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
@@ -112,6 +111,7 @@ else {
 	 */
 	$emailUserList = array();
 	$emailUserList[] = $version->_userID;
+	$emailGroupList = array();
 	$status = $version->getReviewStatus();
 	foreach ($status as $st) {
 		if ($st["status"]==0 && !in_array($st["required"], $emailUserList)) {

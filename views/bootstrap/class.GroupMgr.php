@@ -31,36 +31,24 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
+	function js() { /* {{{ */
 		$selgroup = $this->params['selgroup'];
-		$allUsers = $this->params['allusers'];
-		$allGroups = $this->params['allgroups'];
 		$strictformcheck = $this->params['strictformcheck'];
 
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-
+		header("Content-type: text/javascript");
 ?>
-<script language="JavaScript">
-
-function checkForm1(num) {
+function checkForm1() {
 	msg = new Array();
-	eval("var formObj = document.form" + num + "_1;");
 	
-	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
 	if ($strictformcheck) {
 ?>
-	if (formObj.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php
 	}
 ?>
-	if (msg != "")
-	{
+	if (msg != "") {
   	noty({
   		text: msg.join('<br />'),
   		type: 'error',
@@ -70,117 +58,133 @@ function checkForm1(num) {
 			_timeout: 1500,
   	});
 		return false;
-	}
-	else
+	} else
 		return true;
 }
 
-function checkForm2(num) {
+function checkForm2() {
 	msg = "";
-	eval("var formObj = document.form" + num + "_2;");
 	
-	if (formObj.userid.options[formObj.userid.selectedIndex].value == -1) msg += "<?php printMLText("js_select_user");?>\n";
+		if($("#userid").val() == -1) msg += "<?php printMLText("js_select_user");?>\n";
 
-	if (msg != "")
-	{
-  	noty({
-  		text: msg,
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
+		if (msg != "") {
+			noty({
+				text: msg,
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				_timeout: 1500,
+			});
+			return false;
+		} else
+			return true;
 	}
-	else
-		return true;
-}
 
-obj = -1;
-function showUser(selectObj) {
-	if (obj != -1)
-		obj.style.display = "none";
-	
-	id = selectObj.options[selectObj.selectedIndex].value;
-	if (id == -1)
-		return;
-	
-	obj = document.getElementById("keywords" + id);
-	obj.style.display = "";
-}
-</script>
+$(document).ready( function() {
+	$('body').on('submit', '#form_1', function(ev){
+		if(checkForm1())
+			return;
+		event.preventDefault();
+	});
+
+	$('body').on('submit', '#form_2', function(ev){
+		if(checkForm2())
+			return;
+		event.preventDefault();
+	});
+
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {groupid: $(this).val()});
+	});
+});
 <?php
-		$this->contentHeading(getMLText("group_management"));
+	} /* }}} */
+
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$selgroup = $this->params['selgroup'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthList'];
+
+		if($selgroup) {
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+			$this->contentHeading(getMLText("group_info"));
+			echo "<table class=\"table table-condensed\">\n";
+			$reviewstatus = $selgroup->getReviewStatus();
+			$i = 0;
+			foreach($reviewstatus as $rv) {
+				if($rv['status'] == 0) {
+					$i++;
+					/*
+					$document = $dms->getDocument($rv['documentID']);
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					echo "<tr>";
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$document->getID()."&currenttab=revapp\">".htmlspecialchars($document->getName())."</a></td>";
+					echo "</tr>";
+					 */
+				}
+			}
+			echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
+			$approvalstatus = $selgroup->getApprovalStatus();
+			$i = 0;
+			foreach($approvalstatus as $rv) {
+				if($rv['status'] == 0) {
+					$i++;
+				}
+			}
+			echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
+			echo "</table>";
+		}
+	} /* }}} */
+
+	function showGroupForm($group) { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$allUsers = $this->params['allusers'];
+		$groups = $this->params['allgroups'];
 ?>
-
-<div class="row-fluid">
-<div class="span4">
-<div class="well">
-<?php echo getMLText("selection")?>:
-<select onchange="showUser(this)" id="selector" class="span9">
-<option value="-1"><?php echo getMLText("choose_group")?>
-<option value="0"><?php echo getMLText("add_group")?>
+	<form action="../op/op.GroupMgr.php" name="form_1" id="form_1" method="post">
 <?php
-		$selected=0;
-		$count=2;
-		foreach ($allGroups as $group) {
-			if ($selgroup && $group->getID()==$selgroup->getID()) $selected=$count;
-			print "<option value=\"".$group->getID()."\">" . htmlspecialchars($group->getName());
-			$count++;
+		if($group) {
+			echo createHiddenFieldWithKey('editgroup');
+?>
+	<input type="hidden" name="groupid" value="<?php print $group->getID();?>">
+	<input type="hidden" name="action" value="editgroup">
+<?php
+		} else {
+			echo createHiddenFieldWithKey('addgroup');
+?>
+	<input type="hidden" name="action" value="addgroup">
+<?php
 		}
 ?>
-</select>
-</div>
-</div>
-
-<div class="span8">
-<div class="well">
-<table class="table-condensed">
-  <tr>
-	<td id="keywords0" style="display : none;">
-	
-	<form action="../op/op.GroupMgr.php" name="form0_1" method="post" onsubmit="return checkForm1('0');">
-  <?php echo createHiddenFieldWithKey('addgroup'); ?>
-	<input type="Hidden" name="action" value="addgroup">
-	<table>
-		<tr>
-			<td><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"></textarea></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type="submit" class="btn" value="<?php printMLText("add_group");?>"></td>
-		</tr>
-	</table>
-	</form>	
-	
-	</td>
-	
-<?php	
-		foreach ($allGroups as $group) {
-			print "<td id=\"keywords".$group->getID()."\" style=\"display : none;\">";
+	<table class="table-condensed">
+<?php
+		if($group) {
 ?>
-	<form action="../op/op.GroupMgr.php" name="form<?php print $group->getID();?>_1" method="post" onsubmit="return checkForm1('<?php print $group->getID();?>');">
-	<?php echo createHiddenFieldWithKey('editgroup'); ?>
-	<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
-	<input type="Hidden" name="action" value="editgroup">
-	<table>
 		<tr>
 			<td></td>
 			<td><a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a></td>
 		</tr>
+<?php
+		}
+?>
 		<tr>
 			<td><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" value="<?php print htmlspecialchars($group->getName());?>"></td>
+			<td><input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"><?php print htmlspecialchars($group->getComment());?></textarea></td>
+			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea></td>
 		</tr>
 		<tr>
 			<td></td>
@@ -189,6 +193,7 @@ function showUser(selectObj) {
 	</table>
 	</form>
 <?php
+		if($group) {
 			$this->contentSubHeading(getMLText("group_members"));
 ?>
 		<table class="table-condensed">
@@ -218,14 +223,14 @@ function showUser(selectObj) {
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
 		
-		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2" _onsubmit="return checkForm2('<?php print $group->getID();?>');">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
 		<table class="table-condensed">
 			<tr>
 				<td>
-					<select name="userid">
+					<select name="userid" id="userid">
 						<option value="-1"><?php printMLText("select_one");?>
 						<?php
 							foreach ($allUsers as $currUser)
@@ -243,22 +248,55 @@ function showUser(selectObj) {
 			</tr>
 		</table>
 		</form>
-	</td>
-<?php  } ?>
+<?php
+		}
+	} /* }}} */
 
-</tr>
-</table>
+	function form() { /* {{{ */
+		$selgroup = $this->params['selgroup'];
+
+		$this->showGroupForm($selgroup);
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selgroup = $this->params['selgroup'];
+		$allUsers = $this->params['allusers'];
+		$allGroups = $this->params['allgroups'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		$this->htmlStartPage(getMLText("admin_tools"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+
+		$this->contentHeading(getMLText("group_management"));
+?>
+
+<div class="row-fluid">
+<div class="span4">
+<div class="well">
+<?php echo getMLText("selection")?>:
+<select class="chzn-select" id="selector" class="span9">
+<option value="-1"><?php echo getMLText("choose_group")?>
+<option value="0"><?php echo getMLText("add_group")?>
+<?php
+		foreach ($allGroups as $group) {
+			print "<option value=\"".$group->getID()."\" ".($selgroup && $group->getID()==$selgroup->getID() ? 'selected' : '').">" . htmlspecialchars($group->getName());
+		}
+?>
+</select>
+</div>
+<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
+</div>
+
+<div class="span8">
+<div class="well">
+<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 </div>
 </div>
 </div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showUser(sel);
-
-</script>
 
 <?php
 		$this->contentContainerEnd();

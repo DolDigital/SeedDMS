@@ -1,4 +1,17 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.23
+--------------------------------------------------------------------------------
+- send notification if document is delete to those users watching the folder
+- fix editing of customer attributes of type checkbox
+- disallowed read access for a group didn't prevent the users from being selected
+  as a reviewer/approver
+- move the last bits of plain sql code from op/*.php into the core
+- group manager uses ajax like user manager
+- start to enforce content security policy
+- fixed possible XSS attack in user manager
+- ldap search can be filtered (Thanks to Tobias for the patch)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.22
 --------------------------------------------------------------------------------
 - fix lots of HTTP-Headers in op.Ajax.php (Closes: #233)

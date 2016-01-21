@@ -154,6 +154,10 @@ div.timeline-event-selected {
 	z-index: 999;
 }
 
+div.splash {
+	display: none;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

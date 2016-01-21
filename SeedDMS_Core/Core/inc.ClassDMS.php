@@ -273,7 +273,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.21';
+			$this->version = '4.3.23';
 	} /* }}} */
 
 	/**
@@ -2267,6 +2267,40 @@ class SeedDMS_Core_DMS {
 	function setCallback($name, $func, $params=null) { /* {{{ */
 		if($name && $func)
 			$this->callbacks[$name] = array($func, $params);
+	} /* }}} */
+
+	/**
+	 * Create an sql dump of the complete database
+	 *
+	 * @param string $filename name of dump file
+	 */
+	function createDump($filename) { /* {{{ */
+		$h = fopen($filename, "w");
+		if(!$h)
+			return false;
+
+		$tables = $this->db->TableList('TABLES');
+		foreach($tables as $table) {
+			$query = "SELECT * FROM `".$table."`";
+			$records = $this->db->getResultArray($query);
+			fwrite($h,"\n-- TABLE: ".$table."--\n\n");
+			foreach($records as $record) {
+				$values="";
+				$i = 1;
+				foreach ($record as $column) {
+					if (is_numeric($column)) $values .= $column;
+					else $values .= $this->db->qstr($column);
+			
+					if ($i<(count($record))) $values .= ",";
+					$i++;
+				}
+		
+				fwrite($h, "INSERT INTO `".$table."` VALUES (".$values.");\n");
+			}
+		}
+
+		fclose($h);
+		return true;
 	} /* }}} */
 
 }

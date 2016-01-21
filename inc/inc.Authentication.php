@@ -24,7 +24,7 @@ if (!isset($_COOKIE["mydms_session"])) {
 }
 
 require_once("inc.Utils.php");
-require_once("inc.ClassEmail.php");
+require_once("inc.ClassEmailNotify.php");
 require_once("inc.ClassSession.php");
 
 /* Load session */
@@ -54,7 +54,7 @@ if (!is_object($user)) {
 
 $dms->setUser($user);
 if($settings->_enableEmail) {
-	$notifier = new SeedDMS_Email();
+	$notifier = new SeedDMS_EmailNotify();
 	$notifier->setSender($user);
 } else {
 	$notifier = null;

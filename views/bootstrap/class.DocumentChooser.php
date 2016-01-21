@@ -31,17 +31,27 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$folder = $this->params['folder'];
+		$form = $this->params['form'];
+
+		header('Content-Type: application/json');
+		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 1, $form);
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$form = $this->params['form'];
 
-		$this->htmlStartPage(getMLText("choose_target_document"));
-		$this->contentContainerStart();
-		$this->printNewTreeNavigation($folder->getID(), M_READ, 1, $form);
-		$this->contentContainerEnd();
-		echo "</body>\n</html>\n";
+//		$this->htmlStartPage(getMLText("choose_target_document"));
+//		$this->contentContainerStart();
+//		$this->printNewTreeNavigationHtml($folder->getID(), M_READ, 1, $form);
+		$this->printNewTreeNavigationHtml($folder->getID(), M_READ, 1, $form);
+		echo '<script src="../out/out.DocumentChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+//		$this->contentContainerEnd();
+//		$this->htmlEndPage(true);
 	} /* }}} */
 }
 ?>
