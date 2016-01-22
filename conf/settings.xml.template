@@ -111,6 +111,7 @@
            -       URIs are supported, e.g.: ldaps://ldap.host.com
            - port: port of the authentification server
            - baseDN: top level of the LDAP directory tree
+           - filter: Additional filters which are to be checked
         -->  
         <connector
           enable = "false"
@@ -120,6 +121,7 @@
           baseDN = ""
           bindDN="" 
           bindPw=""
+          filter=""
         >
         </connector>
         <!-- ***** CONNECTOR Microsoft Active Directory  *****
