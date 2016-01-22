@@ -18,17 +18,25 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('substituteuser', 'GET')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
 
 if (!isset($_GET["userid"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+}
+
+/* Check if user is allowed to switch to a different user */
+if (!$user->isAdmin()) {
+	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
 $session->setSu($_GET['userid']);
@@ -36,6 +44,14 @@ $session->setSu($_GET['userid']);
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_substituted_user')));
 
 add_log_line("?userid=".$_GET["userid"]);
-header("Location: ../".(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".$settings->_rootFolderID));
+
+$newuser = $dms->getUser($_GET["userid"]);
+
+if (isset($referuri) && strlen($referuri)>0) {
+	header("Location: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'] . $referuri);
+}
+else {
+	header("Location: ".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".($newuser->getHomeFolder() ? $newuser->getHomeFolder() : $settings->_rootFolderID)));
+}
 
 ?>

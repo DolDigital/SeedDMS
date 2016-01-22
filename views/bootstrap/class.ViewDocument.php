@@ -31,7 +31,7 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
-	function getAccessModeText($defMode) { /* {{{ */
+	protected function getAccessModeText($defMode) { /* {{{ */
 		switch($defMode) {
 			case M_NONE:
 				return getMLText("access_mode_none");
@@ -48,7 +48,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
-	function printAccessList($obj) { /* {{{ */
+	protected function printAccessList($obj) { /* {{{ */
 		$accessList = $obj->getAccessList();
 		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
 			return;
@@ -69,6 +69,44 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			if ($i+1 < count($accessList["users"]))
 				print "<br />";
 		}
+	} /* }}} */
+
+	/**
+	 * Output a single attribute in the document info section
+	 *
+	 * @param object $attribute attribute
+	 */
+	protected function printAttribute($attribute) { /* {{{ */
+		$attrdef = $attribute->getAttributeDefinition();
+?>
+		    <tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td>
+<?php
+		switch($attrdef->getType()) {
+		case SeedDMS_Core_AttributeDefinition::type_url:
+			$attrs = $attribute->getValueAsArray();
+			$tmp = array();
+			foreach($attrs as $attr) {
+				$tmp[] = '<a href="'.htmlspecialchars($attr).'">'.htmlspecialchars($attr).'</a>';
+			}
+			echo implode('<br />', $tmp);
+			break;
+		case SeedDMS_Core_AttributeDefinition::type_email:
+			$attrs = $attribute->getValueAsArray();
+			$tmp = array();
+			foreach($attrs as $attr) {
+				$tmp[] = '<a mailto="'.htmlspecialchars($attr).'">'.htmlspecialchars($attr).'</a>';
+			}
+			echo implode('<br />', $tmp);
+			break;
+		default:
+			echo htmlspecialchars(implode(', ', $attribute->getValueAsArray()));
+		}
+?>
+					</td>
+		    </tr>
+<?php
 	} /* }}} */
 
 	function timelinedata() { /* {{{ */
@@ -119,6 +157,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function show() { /* {{{ */
+		parent::show();
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
@@ -146,11 +185,16 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		if ($document->isLocked()) {
 			$lockingUser = $document->getLockingUser();
+			$txt = $this->callHook('documentIsLocked', $document, $lockingUser);
+			if(is_string($txt))
+				echo $txt;
+			else {
 ?>
 		<div class="alert alert-warning">
 			<?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?>
 		</div>
 <?php
+			}
 		}
 
 		/* Retrieve attacheѕ files */
@@ -191,6 +235,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
+		$txt = $this->callHook('preDocumentInfos', $document);
+		if(is_string($txt))
+			echo $txt;
+		$txt = $this->callHook('documentInfos', $document);
+		if(is_string($txt))
+			echo $txt;
+		else {
 ?>
 		<table class="table-condensed">
 <?php
@@ -289,18 +340,25 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$attributes = $document->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
-				$attrdef = $attribute->getAttributeDefinition();
-?>
-		    <tr>
-					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
-		    </tr>
-<?php
+				$arr = $this->callHook('showDocumentAttribute', $document, $attribute);
+				if(is_array($arr)) {
+					echo $txt;
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				} else {
+					$this->printAttribute($attribute);
+				}
 			}
 		}
 ?>
 		</table>
 <?php
+		}
+		$txt = $this->callHook('postDocumentInfos', $document);
+		if(is_string($txt))
+			echo $txt;
 		$this->contentContainerEnd();
 ?>
 </div>
@@ -401,8 +459,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$attributes = $latestContent->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
-				$attrdef = $attribute->getAttributeDefinition();
-				print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
+				$arr = $this->callHook('showDocumentContentAttribute', $latestContent, $attribute);
+				if(is_array($arr)) {
+					print "<li>".$arr[0].": ".$arr[1]."</li>\n";
+				} else {
+					$attrdef = $attribute->getAttributeDefinition();
+					print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
+				}
 			}
 		}
 		print "</ul>\n";
@@ -926,8 +989,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$attributes = $version->getAttributes();
 				if($attributes) {
 					foreach($attributes as $attribute) {
-						$attrdef = $attribute->getAttributeDefinition();
-						print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
+						$arr = $this->callHook('showDocumentContentAttribute', $version, $attribute);
+						if(is_array($arr)) {
+							print "<li>".$arr[0].": ".$arr[1]."</li>\n";
+						} else {
+							$attrdef = $attribute->getAttributeDefinition();
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
+						}
 					}
 				}
 				print "</ul>\n";
@@ -1175,7 +1243,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						$msg = getMLText('timeline_'.$item['type'], array('document'=>$item['document']->getName(), 'version'=> $item['version'], 'status'=> getOverallStatusText($item['status'])));
 						break;
 					default:
-						$msg = '???';
+						$msg = $this->callHook('getTimelineMsg', $document, $item);
+						if(!is_string($msg))
+							$msg = '???';
 					}
 					$item['msg'] = $msg;
 				}

@@ -45,6 +45,14 @@ ul.tree, ul.tree ul {
 	margin-left: 20px;
 }
 
+ul.jqtree-tree li.jqtree-selected > .jqtree-element,
+ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
+    background-color: #fff;
+    background: none;
+    text-shadow: none;
+		font-weight: bold;
+}
+
 .wordbreak {
 	word-break: break-word;
 }

@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
@@ -60,6 +62,7 @@ if($view) {
 	$view->setParam('enableDropUpload', $settings->_enableDropUpload);
 	$view->setParam('expandFolderTree', $settings->_expandFolderTree);
 	$view->setParam('showtree', showtree());
+	$view->setParam('settings', $settings);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);

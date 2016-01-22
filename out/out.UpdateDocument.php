@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
@@ -56,7 +58,7 @@ if($settings->_quota > 0) {
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate));

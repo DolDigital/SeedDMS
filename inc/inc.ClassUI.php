@@ -26,7 +26,7 @@ if (!isset($theme) || strlen($theme)==0) {
 	$theme = $settings->_theme;
 }
 if (strlen($theme)==0) {
-	$theme="blue";
+	$theme="bootstrap";
 }
 
 /* Sooner or later the parent will be removed, because all output will
@@ -45,21 +45,45 @@ class UI extends UI_Default {
 	 * @return object an object of a class implementing the view
 	 */
 	static function factory($theme, $class='', $params=array()) { /* {{{ */
-		global $settings, $session;
+		global $settings, $session, $EXT_CONF;
 		if(!$class) {
 			$class = 'Bootstrap';
 			$classname = "SeedDMS_Bootstrap_Style";
 		} else {
 			$classname = "SeedDMS_View_".$class;
 		}
-		$filename = "../views/".$theme."/class.".$class.".php";
-		if(file_exists($filename)) {
+		/* Do not check for class file anymore but include it relative
+		 * to rootDir or an extension dir if it has set the include path
+		 */
+		$filename = '';
+		foreach($EXT_CONF as $extname=>$extconf) {
+			if(!isset($extconf['disable']) || $extconf['disable'] == false) {
+				$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/class.".$class.".php";
+				if(file_exists($filename)) {
+					break;
+				}
+				$filename = '';
+				if(isset($extconf['views'][$class])) {
+					$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/".$extconf['views'][$class]['file'];
+					if(file_exists($filename)) {
+						$classname = $extconf['views'][$class]['name'];
+						break;
+					}
+				}
+			}
+		}
+		if(!$filename)
+			$filename = $settings->_rootDir."views/".$theme."/class.".$class.".php";
+		if(!file_exists($filename))
+			$filename = '';
+		if($filename) {
 			require($filename);
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
 			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
 			$view->setParam('class', $class);
 			$view->setParam('session', $session);
+			$view->setParam('settings', $settings);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);
 			$view->setParam('disableselfedit', $settings->_disableSelfEdit);
@@ -101,9 +125,10 @@ class UI extends UI_Default {
 	} /* }}} */
 
 	static function exitError($pagetitle, $error) {
-		global $theme;
+		global $theme, $dms;
 		$tmp = 'ErrorDlg';
 		$view = UI::factory($theme, $tmp);
+		$view->setParam('dms', $dms);
 		$view->exitError($pagetitle, $error);
 	}
 }

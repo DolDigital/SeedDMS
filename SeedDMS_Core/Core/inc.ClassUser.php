@@ -22,7 +22,7 @@
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Core_User {
+class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * @var integer id of user
 	 *
@@ -67,9 +67,7 @@ class SeedDMS_Core_User {
 
 	/**
 	 * @var string prefered language of user
-	 *      possible values are 'English', 'German', 'Chinese_ZH_TW', 'Czech'
-	 *      'Francais', 'Hungarian', 'Italian', 'Portuguese_BR', 'Slovak', 
-	 *      'Spanish'
+	 *      possible values are subdirectories within the language directory
 	 *
 	 * @access protected
 	 */
@@ -119,6 +117,13 @@ class SeedDMS_Core_User {
 	var $_loginFailures;
 
 	/**
+	 * @var object home folder
+	 *
+	 * @access protected
+	 */
+	var $_homeFolder;
+
+	/**
 	 * @var object reference to the dms instance this user belongs to
 	 *
 	 * @access protected
@@ -129,7 +134,7 @@ class SeedDMS_Core_User {
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='0000-00-00 00:00:00', $loginFailures=0, $quota=0) {
+	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='0000-00-00 00:00:00', $loginFailures=0, $quota=0, $homeFolder=null) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;
@@ -144,8 +149,71 @@ class SeedDMS_Core_User {
 		$this->_pwdExpiration = $pwdExpiration;
 		$this->_loginFailures = $loginFailures;
 		$this->_quota = $quota;
+		$this->_homeFolder = $homeFolder;
 		$this->_dms = null;
 	}
+
+	/**
+	 * Create an instance of a user object
+	 *
+	 * @param string|integer $id Id, login name, or email of user, depending
+	 * on the 3rd parameter.
+	 * @param object $dms instance of dms
+	 * @param string $by search by [name|email]. If 'name' is passed, the method
+	 * will check for the 4th paramater and also filter by email. If this
+	 * parameter is left empty, the user will be search by its Id.
+	 * @param string $email optional email address if searching for name
+	 * @return object instance of class SeedDMS_Core_User
+	 */
+	public static function getInstance($id, $dms, $by='', $email='') { /* {{{ */
+		$db = $dms->getDB();
+
+		switch($by) {
+		case 'name':
+			$queryStr = "SELECT * FROM tblUsers WHERE login = ".$db->qstr($id);
+			if($email)
+				$queryStr .= " AND email=".$db->qstr($email);
+			break;
+		case 'email':
+			$queryStr = "SELECT * FROM tblUsers WHERE email = ".$db->qstr($id);
+			break;
+		default:
+			$queryStr = "SELECT * FROM tblUsers WHERE id = " . (int) $id;
+		}
+		$resArr = $db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$user = new self($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"], $resArr["homefolder"]);
+		$user->setDMS($dms);
+		return $user;
+	} /* }}} */
+
+	public static function getAllInstances($orderby, $dms) { /* {{{ */
+		$db = $dms->getDB();
+
+		if($orderby == 'fullname')
+			$queryStr = "SELECT * FROM tblUsers ORDER BY fullname";
+		else
+			$queryStr = "SELECT * FROM tblUsers ORDER BY login";
+		$resArr = $db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$users = array();
+
+		for ($i = 0; $i < count($resArr); $i++) {
+			$user = new self($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr[$i]["language"])?$resArr[$i]["language"]:NULL), (isset($resArr[$i]["theme"])?$resArr[$i]["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr[$i]["quota"], $resArr[$i]["homefolder"]);
+			$user->setDMS($dms);
+			$users[$i] = $user;
+		}
+
+		return $users;
+} /* }}} */
 
 	function setDMS($dms) {
 		$this->_dms = $dms;
@@ -386,6 +454,19 @@ class SeedDMS_Core_User {
 			return false;
 
 		$this->_quota = $quota;
+		return true;
+	}	 /* }}} */
+
+	function getHomeFolder() { return $this->_homeFolder; }
+
+	function setHomeFolder($homefolder) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblUsers SET homefolder = " . ($homefolder ? (int) $homefolder : NULL) . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_homeFolder = $homefolder;
 		return true;
 	}	 /* }}} */
 
@@ -665,8 +746,9 @@ class SeedDMS_Core_User {
 				return false;
 
 			$this->_groups = array();
+			$classname = $this->_dms->getClassname('group');
 			foreach ($resArr as $row) {
-				$group = new SeedDMS_Core_Group($row["id"], $row["name"], $row["comment"]);
+				$group = new $classname($row["id"], $row["name"], $row["comment"]);
 				$group->setDMS($this->_dms);
 				array_push($this->_groups, $group);
 			}
@@ -761,8 +843,9 @@ class SeedDMS_Core_User {
 			return false;
 
 		$documents = array();
+		$classname = $this->_dms->getClassname('document');
 		foreach ($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+			$document = new $classname($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 			$document->setDMS($this->_dms);
 			$documents[] = $document;
 		}
@@ -771,8 +854,6 @@ class SeedDMS_Core_User {
 
 	/**
 	 * Returns all documents locked by a given user
-	 * FIXME: Not full implemented. Do not use, because it still requires the
-	 * temporary tables!
 	 *
 	 * @param object $user
 	 * @return array list of documents
@@ -790,8 +871,9 @@ class SeedDMS_Core_User {
 			return false;
 
 		$documents = array();
+		$classname = $this->_dms->getClassname('document');
 		foreach ($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+			$document = new $classname($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 			$document->setDMS($this->_dms);
 			$documents[] = $document;
 		}
@@ -802,7 +884,7 @@ class SeedDMS_Core_User {
 	 * Get a list of reviews
 	 * This function returns a list of all reviews seperated by individual
 	 * and group reviews. If the document id
-	 * is passed, then only this document will be checked for approvals. The
+	 * is passed, then only this document will be checked for reviews. The
 	 * same is true for the version of a document which limits the list
 	 * further.
 	 *
@@ -818,11 +900,6 @@ class SeedDMS_Core_User {
 	function getReviewStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-/*
-		if (!$db->createTemporaryTable("ttreviewid")) {
-			return false;
-		}
-*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
 
 		// See if the user is assigned as an individual reviewer.
@@ -912,27 +989,7 @@ class SeedDMS_Core_User {
 	function getApprovalStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-/*
-		if (!$db->createTemporaryTable("ttapproveid")) {
-			return false;
-		}
-*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
-
-		// See if the user is assigned as an individual approver.
-		/*
-		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-			"`tblDocumentApproveLog`.`userID` ".
-			"FROM `tblDocumentApprovers` ".
-			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-			"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
-			"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
-			"AND `tblDocumentApprovers`.`type`='0' ".
-			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ";
-*/
 		$queryStr =
    "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
@@ -962,20 +1019,6 @@ class SeedDMS_Core_User {
 
 		// See if the user is the member of a group that has been assigned to
 		// approve the document version.
-		/*
-		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-			"`tblDocumentApproveLog`.`userID` ".
-			"FROM `tblDocumentApprovers` ".
-			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentApprovers`.`required` ".
-			"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
-			"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
-			"AND `tblDocumentApprovers`.`type`='1' ".
-			"AND `tblGroupMembers`.`userID`='". $this->_id ."'";
-			*/
 		$queryStr =
 			"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
@@ -1231,5 +1274,5 @@ class SeedDMS_Core_User {
 		return true;
 	} /* }}} */
 
-}
+} /* }}} */
 ?>

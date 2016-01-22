@@ -22,7 +22,14 @@
 
 class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	var $imgpath;
-	var $extraheader;
+
+	/**
+	 * @var string $extraheader extra html code inserted in the html header
+	 * of the page
+	 *
+	 * @access protected
+	 */
+	protected $extraheader;
 
 	function __construct($params, $theme='bootstrap') {
 		$this->theme = $theme;
@@ -42,7 +49,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footerjs[] = $script;
 	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
+	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
 		if(method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
@@ -61,6 +68,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
+		if($base)
+			echo '<base href="../../">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
@@ -80,6 +89,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
+//		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
@@ -229,6 +239,7 @@ $(document).ready(function () {
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
+		$dms = $this->params['dms'];
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
@@ -297,7 +308,7 @@ $(document).ready(function () {
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
 			echo "   </ul>\n";
 			echo "     <form action=\"../out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
-			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
+			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
 			echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
@@ -349,7 +360,8 @@ $(document).ready(function () {
 			echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".col2\">\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
-			echo " 		<span class=\"icon-bar\"></span></a>\n";
+			echo " 		<span class=\"icon-bar\"></span>\n";
+			echo "   </a>\n";
 			switch ($pageType) {
 				case "view_folder":
 					$this->folderNavigationBar($extra);
@@ -383,7 +395,8 @@ $(document).ready(function () {
 	} /* }}} */
 
 	private function folderNavigationBar($folder) { /* {{{ */
-		if (!is_object($folder) || strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
+		$dms = $this->params['dms'];
+		if (!is_object($folder) || strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
 			echo "<ul class=\"nav\">\n";
 			echo "</ul>\n";
 			return;
@@ -393,30 +406,39 @@ $(document).ready(function () {
 		echo "<id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
+		$menuitems = array();
 
 		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
-			echo "<li id=\"first\"><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_notify")."</a></li>\n";
+			$menuitems['edit_folder_notify'] = array('link'=>"../out/out.FolderNotify.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_notify');
 		}
 		else if ($accessMode >= M_READWRITE) {
-			echo "<li id=\"first\"><a href=\"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_subfolder")."</a></li>\n";
-			echo "<li><a href=\"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_document")."</a></li>\n";
+			$menuitems['add_subfolder'] = array('link'=>"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');
+			$menuitems['add_document'] = array('link'=>"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_document');
 			if($this->params['enablelargefileupload'])
-				echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
-			echo "<li><a href=\"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_props")."</a></li>\n";
+				$menuitems['add_multiple_documents'] = array('link'=>"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
+			$menuitems['edit_folder_props'] = array('link'=>"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'edit_folder_props');
 			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
-				echo "<li><a href=\"../out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("move_folder")."</a></li>\n";
+				$menuitems['move_folder'] = array('link'=>"../out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'move_folder');
 
 			if ($accessMode == M_ALL) {
 				if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
-					echo "<li><a href=\"../out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("rm_folder")."</a></li>\n";
+					$menuitems['rm_folder'] = array('link'=>"../out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'rm_folder');
 			}
 			if ($accessMode == M_ALL) {
-				echo "<li><a href=\"../out/out.FolderAccess.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_access")."</a></li>\n";
+				$menuitems['edit_folder_access'] = array('link'=>"../out/out.FolderAccess.php?folderid=".$folderID."&showtree=".showtree(), 'label'=>'edit_folder_access');
 			}
-			echo "<li><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_existing_notify")."</a></li>\n";
+			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=". showtree(), 'label'=>'edit_existing_notify');
 		}
 		if ($this->params['user']->isAdmin() && $this->params['enablefullsearch']) {
-			echo "<li><a href=\"../out/out.Indexer.php?folderid=". $folderID ."\">".getMLText("index_folder")."</a></li>\n";
+			$menuitems['index_folder'] = array('link'=>"../out/out.Indexer.php?folderid=". $folderID."&showtree=".showtree(), 'label'=>'index_folder');
+		}
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('folderNavigationBar'))
+			$menuitems = $this->callHook('folderNavigationBar', $folder, $menuitems);
+
+		foreach($menuitems as $menuitem) {
+			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
 		}
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -429,33 +451,54 @@ $(document).ready(function () {
 		echo "<id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
+		$menuitems = array();
 
 		if ($accessMode >= M_READWRITE) {
 			if (!$document->isLocked()) {
-				echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-				echo "<li><a href=\"../op/op.LockDocument". $docid ."\">".getMLText("lock_document")."</a></li>";
-				echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-				echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+				$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+				$menuitems['lock_document'] = array('link'=>"../op/op.LockDocument".$docid, 'label'=>'lock_document');
+				$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid , 'label'=>'edit_document_props');
+				$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
 				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
-					echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
-					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
-					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
-					echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
+					$menuitems['update_document'] = array('link'=>"../out/out.UpdateDocument".$docid, 'label'=>'update_document');
+					$menuitems['unlock_document'] = array('link'=>"../op/op.UnlockDocument".$docid, 'label'=>'unlock_document');
+					$menuitems['edit_document_props'] = array('link'=>"../out/out.EditDocument".$docid, 'label'=>'edit_document_props');
+					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
 			if($this->params['accessobject']->maySetExpires()) {
-				echo "<li><a href=\"../out/out.SetExpires". $docid ."\">".getMLText("expires")."</a></li>";
+				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
 			}
 		}
 		if ($accessMode == M_ALL) {
-			echo "<li><a href=\"../out/out.RemoveDocument". $docid ."\">".getMLText("rm_document")."</a></li>";
-			echo "<li><a href=\"../out/out.DocumentAccess". $docid ."\">".getMLText("edit_document_access")."</a></li>";
+			$menuitems['rm_document'] = array('link'=>"../out/out.RemoveDocument".$docid, 'label'=>'rm_document');
+			$menuitems['edit_document_access'] = array('link'=>"../out/out.DocumentAccess". $docid, 'label'=>'edit_document_access');
 		}
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
-			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
+			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
+		}
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('documentNavigationBar'))
+			$menuitems = $this->callHook('documentNavigationBar', $document, $menuitems);
+
+		/* Do not use $this->callHook() because $menuitems must be returned by the hook
+		 * or left unchanged
+		 */
+		/*
+		$hookObjs = $this->getHookObjects();
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'documentNavigationBar')) {
+	      $menuitems = $hookObj->documentNavigationBar($this, $document, $menuitems);
+			}
+		}
+		*/
+
+		foreach($menuitems as $menuitem) {
+			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
 		}
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -567,6 +610,7 @@ $(document).ready(function () {
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
@@ -910,17 +954,20 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooserHtml($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid\" value=\"". (($default) ? $default->getID() : "") ."\">";
+	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid";
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-target=\"targetid".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
+		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="folderChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $formName ?>Label" aria-hidden="true">
+<div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?php echo $formName ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
   </div>
   <div class="modal-body">
 		<p><?php printMLText('tree_loading') ?></p>
@@ -1046,11 +1093,11 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
+	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes') { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".($objvalue ? 'checked' : '')." />";
+			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 ?>
@@ -1072,6 +1119,7 @@ $('#acceptkeywords').click(function(ev) {
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
+				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValueAsArray() : $attribute) : array();
 				foreach($valueset as $value) {
 					if($value) {
 						echo "<option value=\"".htmlspecialchars($value)."\"";
@@ -1084,8 +1132,9 @@ $('#acceptkeywords').click(function(ev) {
 				}
 				echo "</select>";
 			} else {
-				if (strlen($objvalue) > 80) {
-					echo '<textarea class="input-xxlarge" name="'.$fieldname.'['.$attrdef->getId().']">'.htmlspecialchars($objvalue).'</textarea>';
+				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
+				if(strlen($objvalue) > 80) {
+					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
 					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
 				}
@@ -1153,6 +1202,16 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		return "../out/images/$img";
 	} /* }}} */
 
+	function getCountryFlag($lang) { /* {{{ */
+		switch($lang) {
+		case "en_GB":
+			return 'flags/gb.png';
+			break;
+		default:
+			return 'flags/'.substr($lang, 0, 2).'.png';
+		}
+	} /* }}} */
+
 	function printImgPath($img) { /* {{{ */
 		print $this->getImgPath($img);
 	} /* }}} */
@@ -1189,7 +1248,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		
 		$this->htmlEndPage();
 		
-		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle);
+		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
 
 		if($noexit)
 			return;
@@ -1280,7 +1339,13 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 					}
 				}
 			}
-			$tree[] = $node;
+			/* Nasty hack to remove the highest folder */
+			if(isset($this->params['remove_root_from_tree']) && $this->params['remove_root_from_tree']) {
+				foreach($node['children'] as $n)
+					$tree[] = $n;
+			} else {
+				$tree[] = $node;
+			}
 			
 		} else {
 			$root = $this->params['dms']->getFolder($this->params['rootfolderid']);
@@ -1293,13 +1358,14 @@ $(function() {
 	$('#jqtree<?php echo $formid ?>').tree({
 		saveState: true,
 		data: data,
+		saveState: 'jqtree<?= $formid; ?>',
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
-		onCanSelectNode: function(node) {
-			if(node.is_folder)
-				folderSelected<?php echo $formid ?>(node.id, node.name);
-			else
-				documentSelected<?php echo $formid ?>(node.id, node.name);
+		_onCanSelectNode: function(node) {
+			if(node.is_folder) {
+				folderSelected<?= $formid ?>(node.id, node.name);
+			} else
+				documentSelected<?= $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1311,6 +1377,18 @@ $(function() {
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
   });
+  $('#jqtree<?= $formid ?>').bind(
+		'tree.click',
+		function(event) {
+			var node = event.node;
+			$('#jqtree<?= $formid ?>').tree('openNode', node);
+//			event.preventDefault();
+			if(node.is_folder) {
+				folderSelected<?= $formid ?>(node.id, node.name);
+			} else
+				documentSelected<?= $formid ?>(node.id, node.name);
+		}
+	);
 });
 <?php
 	} /* }}} */
@@ -1339,7 +1417,7 @@ $(function() {
 	 * @param array clipboard
 	 * @return string rendered html content
 	 */
-	function mainClipboard($clipboard){ /* {{{ */
+	function mainClipboard($clipboard, $previewer){ /* {{{ */
 		$dms = $this->params['dms'];
 		$content = '';
 		$foldercount = $doccount = 0;
@@ -1364,7 +1442,6 @@ $(function() {
 				}
 			}
 		}
-		$previewer = new SeedDMS_Preview_Previewer($this->params['cachedir'], 40);
 		if($clipboard['docs']) {
 			foreach($clipboard['docs'] as $docid) {
 				/* FIXME: check for access rights, which could have changed after adding the document to the clipboard */
@@ -1421,10 +1498,10 @@ $(function() {
 	 *
 	 * @param array clipboard
 	 */
-	function printClipboard($clipboard){ /* {{{ */
+	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
-		echo $this->mainClipboard($clipboard);
+		echo $this->mainClipboard($clipboard, $previewer);
 		echo "</div>\n";
 	} /* }}} */
 
@@ -1606,7 +1683,7 @@ $(function() {
 	 * @param object $previewer
 	 * @param boolean $skipcont set to true if embrasing tr shall be skipped
 	 */
-	function documentListRow($document, $previewer, $skipcont=false) { /* {{{ */
+	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$showtree = $this->params['showtree'];
@@ -1624,7 +1701,12 @@ $(function() {
 		if(!$skipcont)
 			$content .= "<tr id=\"table-row-document-".$docID."\">";
 
-		if($latestContent = $document->getLatestContent()) {
+		if($version)
+			$latestContent = $document->getContentByVersion($version);
+		else
+			$latestContent = $document->getLatestContent();
+
+		if($latestContent) {
 			$previewer->createPreview($latestContent);
 			$version = $latestContent->getVersion();
 			$status = $latestContent->getStatus();
@@ -1643,24 +1725,27 @@ $(function() {
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				}
-				$content .= "</a></td>";
+				$content .= "</a>";
 			} else
-				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-			
-			$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+				$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			$content .= "</td>";
+
+			$content .= "<td>";	
+			$content .= "<a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
 			$content .= "</td>\n";
-//				$content .= "<td>".htmlspecialchars($owner->getFullName())."</td>";
+
 			$content .= "<td nowrap>";
 			$attentionstr = '';
 			if ( $document->isLocked() ) {
@@ -1676,8 +1761,9 @@ $(function() {
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small></td>";
-//				$content .= "<td>".$version."</td>";
+			$content .= getOverallStatusText($status["status"])."</small>";
+			$content .= "</td>\n";
+
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
 			if($document->getAccessMode($user) >= M_ALL) {
@@ -2075,6 +2161,10 @@ mayscript>
 <p></p>
 <p id="fileList"></p>
 <?php
+	} /* }}} */
+
+	function show(){ /* {{{ */
+		parent::show();
 	} /* }}} */
 
 	/**

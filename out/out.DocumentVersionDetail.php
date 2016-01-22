@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
@@ -65,7 +67,7 @@ if ($latestContent->getVersion()==$version->getVersion()) {
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'previewwidthdetail'=>$settings->_previewWidthDetail, 'cachedir'=>$settings->_cacheDir));

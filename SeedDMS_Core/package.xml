@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-01-21</date>
- <time>07:12:53</time>
+ <date>2016-01-22</date>
+ <time>09:28:28</time>
  <version>
-  <release>4.3.23</release>
-  <api>4.3.23</api>
+  <release>5.0.0</release>
+  <api>5.0.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- new method SeedDMS_Core_DMS::createDump()
-- minor improvements int SeedDMS_Core_Document::getReadAccessList()
+- classes can be overloaded
+- clean workflow log when a document version was deleted
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -925,6 +925,23 @@ by a group or user right
 - fix sql statement to reset password
 - pass some more information for timeline
    </notes>
+  </release>
+  <release>
+   <date>2016-01-21</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.23</release>
+    <api>4.3.23</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMS_Core_DMS::createDump()
+- minor improvements int SeedDMS_Core_Document::getReadAccessList()
+	 </notes>
   </release>
  </changelog>
 </package>

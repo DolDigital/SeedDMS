@@ -28,6 +28,5 @@ abstract class SeedDMS_Notify {
 	abstract function toIndividual($sender, $recipient, $subject, $message, $params=array());
 	abstract function toGroup($sender, $groupRecipient, $subject, $message, $params=array());
 	abstract function toList($sender, $recipients, $subject, $message, $params=array());
-
 }
 ?>

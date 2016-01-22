@@ -79,6 +79,39 @@ function getReadableDurationArray($secs) {
 	return $units;
 }
 
+/**
+ * Compare two version
+ *
+ * This functions compares two version in the format x.x.x
+ *
+ * @param string $ver1
+ * @param string $ver2
+ * @return int -1 if $ver1 < $ver2, 0 if $ver1 == $ver2, 1 if $ver1 > $ver2
+ */
+function cmpVersion($ver1, $ver2) {
+	$tmp1 = explode('.', $ver1);
+	$tmp2 = explode('.', $ver2);
+	if(intval($tmp1[0]) < intval($tmp2[0])) {
+		return -1;
+	} elseif(intval($tmp1[0]) > intval($tmp2[0])) {
+		return 1;
+	} else {
+		if(intval($tmp1[1]) < intval($tmp2[1])) {
+			return -1;
+		} elseif(intval($tmp1[1]) > intval($tmp2[1])) {
+			return 1;
+		} else {
+			if(intval($tmp1[2]) < intval($tmp2[2])) {
+				return -1;
+			} elseif(intval($tmp1[2]) > intval($tmp2[2])) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+}
+
 //
 // The original string sanitizer, kept for reference.
 //function sanitizeString($string) {
@@ -306,15 +339,26 @@ function dskspace($dir) { /* {{{ */
 	return $space;
 } /* }}} */
 
-function add_log_line($msg="") { /* {{{ */
+/**
+ * Log a message
+ *
+ * This function is still here for convienice and because it is
+ * used at so many places.
+ *
+ * @param string $msg
+ * @param int $priority can be one of PEAR_LOG_EMERG, PEAR_LOG_ALERT,
+ *            PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING,
+ *						PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
+ */
+function add_log_line($msg="", $priority=null) { /* {{{ */
 	global $logger, $user;
 
 	if(!$logger) return;
 
 	if($user)
-		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
 	else
-		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
 } /* }}} */
 
 function _add_log_line($msg="") { /* {{{ */
@@ -443,6 +487,22 @@ function checkQuota($user) { /* {{{ */
 
 	return ($quota - $user->getUsedDiskSpace());
 } /* }}} */
+
+function encryptData($key, $value){
+  $text = $value;
+  $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+  $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+  $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_ECB, $iv);
+  return $crypttext;
+}
+
+function decryptData($key, $value){
+  $crypttext = $value;
+  $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+  $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+  $decrypttext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_ECB, $iv);
+  return trim($decrypttext);
+}
 
 /**
  * Return file extension for a give mimetype

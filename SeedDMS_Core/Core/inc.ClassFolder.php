@@ -87,19 +87,69 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$this->_notifyList = array();
 	} /* }}} */
 
+	/**
+	 * Return an array of database fields which used for searching
+	 * a term entered in the database search form
+	 *
+	 * @param array $searchin integer list of search scopes (2=name, 3=comment,
+	 * 4=attributes)
+	 * @return array list of database fields
+	 */
+	public static function getSearchFields($searchin) { /* {{{ */
+		$searchFields = array();
+		if (in_array(2, $searchin)) {
+			$searchFields[] = "`tblFolders`.`name`";
+		}
+		if (in_array(3, $searchin)) {
+			$searchFields[] = "`tblFolders`.`comment`";
+		}
+		if (in_array(4, $searchin)) {
+			$searchFields[] = "`tblFolderAttributes`.`value`";
+		}
+		return $searchFields;
+	} /* }}} */
+
+	/**
+	 * Return a sql statement with all tables used for searching.
+	 * This must be a syntactically correct left join of all tables.
+	 *
+	 * @return string sql expression for left joining tables
+	 */
+	public static function getSearchTables() { /* {{{ */
+		$sql = "`tblFolders` LEFT JOIN `tblFolderAttributes` on `tblFolders`.`id`=`tblFolderAttributes`.`folder`";
+		return $sql;
+	} /* }}} */
+
+	public static function getInstance($id, $dms) { /* {{{ */
+		$db = $dms->getDB();
+
+		$queryStr = "SELECT * FROM tblFolders WHERE id = " . (int) $id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		else if (count($resArr) != 1)
+			return false;
+
+		$resArr = $resArr[0];
+		$classname = $dms->getClassname('folder');
+		$folder = new $classname($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
+		$folder->setDMS($dms);
+		return $folder;
+	} /* }}} */
+
 	/*
 	 * Get the name of the folder.
 	 *
 	 * @return string name of folder
 	 */
-	function getName() { return $this->_name; }
+	public function getName() { return $this->_name; }
 
 	/*
 	 * Set the name of the folder.
 	 *
 	 * @param string $newName set a new name of the folder
 	 */
-	function setName($newName) { /* {{{ */
+	public function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblFolders SET name = " . $db->qstr($newName) . " WHERE id = ". $this->_id;
@@ -111,9 +161,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
-	function getComment() { return $this->_comment; }
+	public function getComment() { return $this->_comment; }
 
-	function setComment($newComment) { /* {{{ */
+	public function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblFolders SET comment = " . $db->qstr($newComment) . " WHERE id = ". $this->_id;
@@ -129,7 +179,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return integer unix timestamp of creation date
 	 */
-	function getDate() { /* {{{ */
+	public function getDate() { /* {{{ */
 		return $this->_date;
 	} /* }}} */
 
@@ -162,7 +212,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return object parent folder or false if there is no parent folder
 	 */
-	function getParent() { /* {{{ */
+	public function getParent() { /* {{{ */
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
 			return false;
 		}
@@ -200,7 +250,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param object $newParent new parent folder
 	 * @return boolean true if operation was successful otherwise false
 	 */
-	function setParent($newParent) { /* {{{ */
+	public function setParent($newParent) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
@@ -274,7 +324,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return object owner of the folder
 	 */
-	function getOwner() { /* {{{ */
+	public function getOwner() { /* {{{ */
 		if (!isset($this->_owner))
 			$this->_owner = $this->_dms->getUser($this->_ownerID);
 		return $this->_owner;
@@ -427,7 +477,6 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 			$this->_subFolders = array();
 			for ($i = 0; $i < count($resArr); $i++)
-//				$this->_subFolders[$i] = new SeedDMS_Core_Folder($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["parent"], $resArr[$i]["comment"], $resArr[$i]["owner"], $resArr[$i]["inheritAccess"], $resArr[$i]["defaultAccess"], $resArr[$i]["sequence"]);
 				$this->_subFolders[$i] = $this->_dms->getFolder($resArr[$i]["id"]);
 		}
 
@@ -735,6 +784,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *        must be the id of the attribute definition.
 	 * @param array $version_attributes list of document version attributes.
 	 *        The element key must be the id of the attribute definition.
+	 * @param object $workflow
 	 * @return array/boolean false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
 	 *        second one is the result set returned when inserting the content.
@@ -794,6 +844,59 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return array($document, $res);
 	} /* }}} */
 
+	/**
+	 * Remove a single folder
+	 *
+	 * Removes just a single folder, but not its subfolders or documents
+	 * This function will fail if the folder has subfolders or documents
+	 * because of referencial integrity errors.
+	 *
+	 * @return boolean true on success, false in case of an error
+	 */
+	protected function removeFromDatabase() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$db->startTransaction();
+		// unset homefolder as it will no longer exist
+		$queryStr = "UPDATE tblUsers SET homefolder=NULL WHERE homefolder =  " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		// Remove database entries
+		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$queryStr = "DELETE FROM tblFolderAttributes WHERE folder =  " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$queryStr = "DELETE FROM tblACLs WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "DELETE FROM tblNotify WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove recursively a folder
+	 *
+	 * Removes a folder, all its subfolders and documents
+	 *
+	 * @return boolean true on success, false in case of an error
+	 */
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -822,32 +925,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			}
 		}
 
-		//Entfernen der Datenbankeinträge
-		$db->startTransaction();
-		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-		$queryStr = "DELETE FROM tblFolderAttributes WHERE folder =  " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-		$queryStr = "DELETE FROM tblACLs WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		$queryStr = "DELETE FROM tblNotify WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-		$db->commitTransaction();
-
-		return true;
+		return $this->removeFromDatabase();
 	} /* }}} */
 
 	/**

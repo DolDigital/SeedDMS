@@ -21,9 +21,12 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
 include("../inc/inc.ClassSession.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
@@ -34,6 +37,9 @@ function _printMessage($heading, $message) {
 	$view->exitError($heading, $message, true);
 	return;
 }
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
 	$theme = $_REQUEST["sesstheme"];
@@ -65,17 +71,24 @@ if($settings->_enableGuestLogin && (int) $settings->_guestID) {
 	}
 }
 
-$user = false;
-
-//
-// LDAP Sign In
-//
-
 /* Initialy set $user to false. It will contain a valid user record
  * if authentication against ldap succeeds.
  * _ldapHost will only have a value if the ldap connector has been enabled
  */
-if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+$user = false;
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['authentication'] as $authObj) {
+		if(method_exists($authObj, 'authenticate')) {
+			$user = $authObj->authenticate($dms, $settings, $login, $pwd);
+			if(is_object($user))
+				$userid = $user->getID();
+		}
+	}
+}
+
+if (is_bool($user)) {
+if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
 		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
 	} else {
@@ -146,25 +159,41 @@ if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 			$user = $dms->getUserByLogin($login);
 			if (is_bool($user) && !$settings->_restricted) {
 				// Retrieve the user's LDAP information.
-                if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-			        $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-                } else {
-			        $search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-                }
-
-				if (!is_bool($search)) {
-					$info = ldap_get_entries($ds, $search);
-					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-						$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
-					}
+        if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
+			    $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
+        } else {
+					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
 				}
 			}
-			if (!is_bool($user)) {
-				$userid = $user->getID();
+			$bind = @ldap_bind($ds, $dn, $pwd);
+			if ($bind) {
+				// Successfully authenticated. Now check to see if the user exists within
+				// the database. If not, add them in, but do not add their password.
+				$user = $dms->getUserByLogin($login);
+				if (is_bool($user) && !$settings->_restricted) {
+					// Retrieve the user's LDAP information.
+					
+					
+					/* new code by doudoux  - TO BE TESTED */
+					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
+					/* old code */
+					//$search = ldap_search($ds, $dn, "uid=".$login);
+					
+					if (!is_bool($search)) {
+						$info = ldap_get_entries($ds, $search);
+						if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
+							$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
+						}
+					}
+				}
+				if (!is_bool($user)) {
+					$userid = $user->getID();
+				}
 			}
+			ldap_close($ds);
 		}
-		ldap_close($ds);
 	}
+}
 }
 
 if (is_bool($user)) {
@@ -300,13 +329,17 @@ else if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
 	$referuri = trim(urldecode($_GET["referuri"]));
 }
 
+$controller->setParam('user', $user);
+$controller->setParam('session', $session);
+$controller->run();
+
 add_log_line();
 
 if (isset($referuri) && strlen($referuri)>0) {
 	header("Location: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'] . $referuri);
 }
 else {
-	header("Location: ".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".$settings->_rootFolderID));
+	header("Location: ".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".($user->getHomeFolder() ? $user->getHomeFolder() : $settings->_rootFolderID)));
 }
 
 //_printMessage(getMLText("login_ok"),

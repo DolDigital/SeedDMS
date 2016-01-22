@@ -30,7 +30,7 @@ define("S_DRAFT_APP", 1);
 /*
  * Document is released. A document is in release state either when
  * it needs no review or approval after uploaded or has been reviewed
- * and/or approved..
+ * and/or approved.
  */
 define("S_RELEASED",  2);
 
@@ -166,6 +166,36 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$this->_categories = array();
 		$this->_notifyList = array();
 	} /* }}} */
+
+	public static function getInstance($id, $dms) { /* {{{ */
+		$db = $dms->getDB();
+
+		$queryStr = "SELECT * FROM tblDocuments WHERE id = " . (int) $id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) != 1)
+			return false;
+		$resArr = $resArr[0];
+
+		// New Locking mechanism uses a separate table to track the lock.
+		$queryStr = "SELECT * FROM tblDocumentLocks WHERE document = " . (int) $id;
+		$lockArr = $db->getResultArray($queryStr);
+		if ((is_bool($lockArr) && $lockArr==false) || (count($lockArr)==0)) {
+			// Could not find a lock on the selected document.
+			$lock = -1;
+		}
+		else {
+			// A lock has been identified for this document.
+			$lock = $lockArr[0]["userID"];
+		}
+
+		$classname = $dms->getClassname('document');
+		$document = new $classname($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
+		$document->setDMS($dms);
+		return $document;
+	} /* }}} */
+
 
 	/*
 	 * Return the directory of the document in the file system relativ
@@ -1189,7 +1219,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$db->rollbackTransaction();
 			return false;
 		}
-		if (!SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType)) {
+		if($this->_dms->forceRename)
+			$err = SeedDMS_Core_File::renameFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType);
+		else
+			$err = SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType);
+		if (!$err) {
 			$db->rollbackTransaction();
 			return false;
 		}
@@ -1201,6 +1235,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
+		$docResultSet->setDMS($this->_dms);
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
@@ -1444,9 +1479,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function removeContent($version) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$emailList = array();
-		$emailList[] = $version->_userID;
-
 		if (file_exists( $this->_dms->contentDir.$version->getPath() ))
 			if (!SeedDMS_Core_File::removeFile( $this->_dms->contentDir.$version->getPath() ))
 				return false;
@@ -1495,9 +1527,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
 			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
-			}
 		}
 
 		if (strlen($stList)>0) {
@@ -1526,9 +1555,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				$file = $this->_dms->contentDir . $this->getDir().'a'.$res['approveLogID'];
 				if(file_exists($file))
 					SeedDMS_Core_File::removeFile($file);
-			}
-			if ($st["status"]==0 && !in_array($st["required"], $emailList)) {
-				$emailList[] = $st["required"];
 			}
 		}
 
@@ -1738,7 +1764,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		// copy file
 		if (!SeedDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) return false;
-		if (!SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $file->getPath() )) return false;
+		if($this->_dms->forceRename)
+			$err = SeedDMS_Core_File::renameFile($tmpFile, $this->_dms->contentDir . $file->getPath());
+		else
+			$err = SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $file->getPath());
+		if (!$err) return false;
 
 		return true;
 	} /* }}} */
@@ -2426,6 +2456,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * then its status is set to S_RELEASED immediately. Any change of
 	 * the status is monitored in the table tblDocumentStatusLog. This
 	 * function will always return the latest entry for the content.
+	 *
+	 * @return array latest record from tblDocumentStatusLog
 	 */
 	function getStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -2435,20 +2467,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		// Retrieve the current overall status of the content represented by
 		// this object.
 		if (!isset($this->_status)) {
-		/*
-			if (!$db->createTemporaryTable("ttstatid", $forceTemporaryTable)) {
-				return false;
-			}
-			$queryStr="SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
-				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
-				"`tblDocumentStatusLog`.`userID` ".
-				"FROM `tblDocumentStatus` ".
-				"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
-				"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-				"AND `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ";
-		*/
 			$queryStr=
 				"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
@@ -2544,7 +2562,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		unset($this->_status);
-
 		return true;
 	} /* }}} */
 
@@ -3340,10 +3357,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $approveLogID;
  } /* }}} */
 
-	function delIndReviewer($user, $requestUser) { /* {{{ */
+	function delIndReviewer($user, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
-
-		$userID = $user->getID();
 
 		// Check to see if the user can be removed from the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
@@ -3353,7 +3368,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus["indstatus"])==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($reviewStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3363,7 +3378,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["reviewID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3372,7 +3387,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpReviewer($group, $requestUser) { /* {{{ */
+	function delGrpReviewer($group, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -3385,7 +3400,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus)==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($reviewStatus[0]["status"]!=0) {
 			// User has already submitted a review or has already been deleted;
@@ -3394,7 +3409,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3403,7 +3418,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delIndApprover($user, $requestUser) { /* {{{ */
+	function delIndApprover($user, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3416,7 +3431,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus["indstatus"])==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($approvalStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3426,7 +3441,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["approveID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3435,7 +3450,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpApprover($group, $requestUser) { /* {{{ */
+	function delGrpApprover($group, $requestUser, $msg='') { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -3448,7 +3463,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus)==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($approvalStatus[0]["status"]!=0) {
 			// User has already submitted an approval or has already been deleted;
@@ -3457,7 +3472,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', '', ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -4361,6 +4376,11 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	protected $_content;
 	protected $_status;
 
+	/**
+	 * @var object back reference to document management system
+	 */
+	protected $_dms;
+
 	function SeedDMS_Core_AddContentResultSet($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
@@ -4368,15 +4388,31 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		$this->_indApprovers = null;
 		$this->_grpApprovers = null;
 		$this->_status = null;
+		$this->_dms = null;
+	} /* }}} */
+
+	/*
+	 * Set dms this object belongs to.
+	 *
+	 * Each object needs a reference to the dms it belongs to. It will be
+	 * set when the object is created.
+	 * The dms has a references to the currently logged in user
+	 * and the database connection.
+	 *
+	 * @param object $dms reference to dms
+	 */
+	function setDMS($dms) { /* {{{ */
+		$this->_dms = $dms;
 	} /* }}} */
 
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($reviewer) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
 		}
 		if (!strcasecmp($type, "i")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_User")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("user"))) {
 				return false;
 			}
 			if ($this->_indReviewers == null) {
@@ -4385,7 +4421,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_indReviewers[$status][] = $reviewer;
 		}
 		if (!strcasecmp($type, "g")) {
-			if (strcasecmp(get_class($reviewer), "SeedDMS_Core_Group")) {
+			if (strcasecmp(get_class($reviewer), $dms->getClassname("group"))) {
 				return false;
 			}
 			if ($this->_grpReviewers == null) {
@@ -4397,12 +4433,13 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	} /* }}} */
 
 	function addApprover($approver, $type, $status) { /* {{{ */
+		$dms = $this->_dms;
 
 		if (!is_object($approver) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
 		}
 		if (!strcasecmp($type, "i")) {
-			if (strcasecmp(get_class($approver), "SeedDMS_Core_User")) {
+			if (strcasecmp(get_class($approver), $dms->getClassname("user"))) {
 				return false;
 			}
 			if ($this->_indApprovers == null) {
@@ -4411,7 +4448,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_indApprovers[$status][] = $approver;
 		}
 		if (!strcasecmp($type, "g")) {
-			if (strcasecmp(get_class($approver), "SeedDMS_Core_Group")) {
+			if (strcasecmp(get_class($approver), $dms->getClassname("group"))) {
 				return false;
 			}
 			if ($this->_grpApprovers == null) {

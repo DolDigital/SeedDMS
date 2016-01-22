@@ -50,6 +50,8 @@ class Settings { /* {{{ */
 	var $_passwordHistory = 10;
 	// Number of failed logins before account is disabled
 	var $_loginFailure = 0;
+	// User id that is automatically logged if nobody is logged in
+	var $_autoLoginUser = 0;
 	// maximum amount of bytes a user may consume, 0 = unlimited
 	var $_quota = 0;
 	// comma separated list of undeleteable user ids
@@ -209,6 +211,10 @@ class Settings { /* {{{ */
 	var $_smtpPort = null;
 	// SMTP : send from
 	var $_smtpSendFrom = null;
+	// SMTP : user
+	var $_smtpUser = null;
+	// SMTP : password
+	var $_smtpPassword = null;
 	// LDAP
 	var $_ldapHost = ""; // URIs are supported, e.g.: ldaps://ldap.host.com
 	var $_ldapPort = 389; // Optional.
@@ -219,6 +225,7 @@ class Settings { /* {{{ */
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
 	var $_ldapFilter = "";
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
+	var $_extensions = array(); // configuration for extensions
 
 	/**
 	 * Constructor
@@ -388,6 +395,7 @@ class Settings { /* {{{ */
 		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
+		$this->_autoLoginUser = intval($tab["autoLoginUser"]);
 		$this->_quota = intval($tab["quota"]);
 		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
@@ -468,6 +476,9 @@ class Settings { /* {{{ */
 				$this->_smtpSendFrom = strval($tab["smtpSendFrom"]);
 			else
 				$this->_smtpSendFrom = ini_get("sendmail_from");
+			// smtpUser
+			$this->_smtpUser = strval($tab["smtpUser"]);
+			$this->_smtpPassword = strval($tab["smtpPassword"]);
 		}
 
 		// XML Path: /configuration/advanced/display
@@ -534,6 +545,19 @@ class Settings { /* {{{ */
 			else
 				$this->_converters[trim(strval($tab['target']))][trim(strval($tab['mimeType']))] = trim(strval($converter));
 		}
+
+		// XML Path: /configuration/extensions
+		$extensions = $xml->xpath('/configuration/extensions/extension');
+		$this->_extensions = array();
+		foreach($extensions as $extension) {
+			$tmp = $extension->attributes();
+			$extname = strval($tmp['name']);
+			foreach($extension->children() as $parameter) {
+				$tmp2 = $parameter->attributes();
+				$this->_extensions[$extname][strval($tmp2['name'])] = strval($parameter);
+			}
+		}
+
 		return true;
 	} /* }}} */
 
@@ -661,6 +685,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordExpiration", $this->_passwordExpiration);
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
+    $this->setXMLAttributValue($node, "autoLoginUser", $this->_autoLoginUser);
     $this->setXMLAttributValue($node, "quota", $this->_quota);
     $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
@@ -732,6 +757,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "smtpServer", $this->_smtpServer);
     $this->setXMLAttributValue($node, "smtpPort", $this->_smtpPort);
     $this->setXMLAttributValue($node, "smtpSendFrom", $this->_smtpSendFrom);
+    $this->setXMLAttributValue($node, "smtpUser", $this->_smtpUser);
+    $this->setXMLAttributValue($node, "smtpPassword", $this->_smtpPassword);
 
     // XML Path: /configuration/advanced/display
     $this->getXMLNode($xml, '/configuration', 'advanced');
@@ -803,6 +830,29 @@ class Settings { /* {{{ */
     } // foreach
 
 
+    // XML Path: /configuration/extensions
+    $extnodes = $xml->xpath('/configuration/extensions');
+		if(!$extnodes) {
+			$nodeParent = $xml->xpath('/configuration');
+			$extnodes = $nodeParent[0]->addChild("extensions");
+		} else {
+			unset($xml->extensions);
+			$extnodes = $xml->addChild("extensions");
+		}
+    foreach($this->_extensions as $name => $extension)
+    {
+      // search XML node
+			$extnode = $extnodes->addChild('extension');
+      $this->setXMLAttributValue($extnode, 'name', $name);
+			foreach($GLOBALS['EXT_CONF'][$name]['config'] as $fieldname=>$conf) {
+				$parameter = $extnode->addChild('parameter');
+				$parameter[0] = isset($extension[$fieldname]) ? $extension[$fieldname] : '';
+				$this->setXMLAttributValue($parameter, 'name', $fieldname);
+			}
+
+
+    } // foreach
+
     // Save
     return $xml->asXML($configFilePath);
   } /* }}} */
@@ -824,16 +874,30 @@ class Settings { /* {{{ */
 	/**
 	 * Returns absolute path for configuration files respecting links
 	 *
-	 * This function checks three directories for a configuration directory
-	 * 1. The directory where the current script is located adding '/conf'
-	 * 2. The parent directory of the current script adding '/conf'
-	 * 3. The directory /etc/seeddms
+	 * This function checks all parent directories of the current script
+	 * for a configuration directory named 'conf'. It doesn't check
+	 * if that directory contains a configuration file.
+	 * If none was found a final try will be made checking /etc/seeddms
 	 * @return NULL|string config directory
 	 */
 	function getConfigDir() { /* {{{ */
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
 		$_arr = preg_split('/\//', rtrim(str_replace('\\', '/', $_tmp)));
 		$configDir = null;
+		/* new code starts here */
+		while($_arr && !$configDir) {
+			if(file_exists(implode('/', $_arr)."/conf/"))
+				$configDir = implode('/', $_arr)."/conf/";
+			else
+				array_pop($_arr);
+		}
+		if(!$configDir) {
+			if(file_exists('/etc/seeddms'))
+				$configDir = '/etc/seeddms';
+		}
+		return $configDir;
+		/* new code ends here */
+
 		if(file_exists(implode('/', $_arr)."/conf/"))
 			$configDir = implode('/', $_arr)."/conf/";
 		else {

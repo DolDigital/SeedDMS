@@ -50,6 +50,62 @@ class SeedDMS_Core_Group {
 		$this->_dms = null;
 	} /* }}} */
 
+	/**
+	 * Create an instance of a group object
+	 *
+	 * @param string|integer $id Id, name of group, depending
+	 * on the 3rd parameter.
+	 * @param object $dms instance of dms
+	 * @param string $by search by group name if set to 'name'. 
+	 * Search by Id of group if left empty.
+	 * @return object instance of class SeedDMS_Core_Group
+	 */
+	public static function getInstance($id, $dms, $by='') { /* {{{ */
+		$db = $dms->getDB();
+
+		switch($by) {
+		case 'name':
+			$queryStr = "SELECT * FROM `tblGroups` WHERE `name` = ".$db->qstr($id);
+			break;
+		default:
+			$queryStr = "SELECT * FROM `tblGroups` WHERE id = " . (int) $id;
+		}
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		else if (count($resArr) != 1) //wenn, dann wohl eher 0 als > 1 ;-)
+			return false;
+
+		$resArr = $resArr[0];
+
+		$group = new self($resArr["id"], $resArr["name"], $resArr["comment"]);
+		$group->setDMS($dms);
+		return $group;
+	} /* }}} */
+
+	public static function getAllInstances($orderby, $dms) { /* {{{ */
+		$db = $dms->getDB();
+
+		switch($orderby) {
+		default:
+			$queryStr = "SELECT * FROM tblGroups ORDER BY name";
+		}
+		$resArr = $db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$groups = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$group = new self($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["comment"]);
+			$group->setDMS($dms);
+			$groups[$i] = $group;
+		}
+
+		return $groups;
+	} /* }}} */
+
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
@@ -95,8 +151,9 @@ class SeedDMS_Core_Group {
 
 			$this->_users = array();
 
+			$classname = $this->_dms->getClassname('user');
 			foreach ($resArr as $row) {
-				$user = new SeedDMS_Core_User($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
+				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
 				array_push($this->_users, $user);
 			}
 		}
@@ -115,8 +172,9 @@ class SeedDMS_Core_Group {
 
 		$managers = array();
 
+		$classname = $this->_dms->getClassname('user');
 		foreach ($resArr as $row) {
-			$user = new SeedDMS_Core_User($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
+			$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
 			array_push($managers, $user);
 		}
 		return $managers;

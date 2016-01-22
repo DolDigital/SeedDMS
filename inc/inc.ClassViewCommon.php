@@ -66,5 +66,106 @@ class SeedDMS_View_Common {
 
 	function show() {
 	}
+
+	/**
+	 * Call a hook with a given name
+	 *
+	 * Checks if a hook with the given name and for the current view
+	 * exists and executes it. The name of the current view is taken
+	 * from the current class name by lower casing the first char.
+	 * This function will execute all registered hooks in the order
+	 * they were registered.
+	 *
+	 * Attention: as func_get_arg() cannot handle references passed to the hook,
+	 * callHook() should not be called if that is required. In that case get
+	 * a list of hook objects with getHookObjects() and call the hooks yourself.
+	 *
+	 * @params string $hook name of hook
+	 * @return string concatenated string of whatever the hook function returns
+	 */
+	function callHook($hook) { /* {{{ */
+		$tmp = explode('_', get_class($this));
+		$ret = null;
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
+				if (method_exists($hookObj, $hook)) {
+					switch(func_num_args()) {
+						case 1:
+							$tmpret = $hookObj->$hook($this);
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							else
+								$ret = $tmpret;
+							break;
+						case 2:
+							$tmpret = $hookObj->$hook($this, func_get_arg(1));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							else
+								$ret = $tmpret;
+							break;
+						case 3:
+						default:
+							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							else
+								$ret = $tmpret;
+					}
+				}
+			}
+		}
+		return $ret;
+	} /* }}} */
+
+	/**
+	 * Return all hook objects for the given or calling class
+	 *
+	 * <code>
+	 * <?php
+	 * $hookObjs = $this->getHookObjects();
+	 * foreach($hookObjs as $hookObj) {
+	 *   if (method_exists($hookObj, $hook)) {
+	 *     $ret = $hookObj->$hook($this, ...);
+	 *     ...
+	 *   }
+	 * }
+	 * ?>
+	 * </code>
+	 *
+	 * @params string $classname name of class (current class if left empty)
+	 * @return array list of hook objects registered for the class
+	 */
+	function getHookObjects($classname='') { /* {{{ */
+		if($classname)
+			$tmp = explode('_', $classname);
+		else
+			$tmp = explode('_', get_class($this));
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			return $GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])];
+		}
+		return array();
+	} /* }}} */
+
+	/**
+	 * Check if a hook is registered
+	 *
+	 * @param $hook string name of hook
+	 * @return mixed false if one of the hooks fails,
+	 *               true if all hooks succedded,
+	 *               null if no hook was called
+	 */
+	function hasHook($hook) { /* {{{ */
+		$tmp = explode('_', get_class($this));
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
+				if (method_exists($hookObj, $hook)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	} /* }}} */
+
 }
 ?>

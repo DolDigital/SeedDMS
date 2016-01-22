@@ -80,6 +80,13 @@ class SeedDMS_Core_DMS {
 	protected $db;
 
 	/**
+	 * @var array $classnames list of classnames for objects being instanciate
+	 *      by the dms
+	 * @access protected
+	 */
+	protected $classnames;
+
+	/**
 	 * @var object $user reference to currently logged in user. This must be
 	 *      an instance of {@link SeedDMS_Core_User}. This variable is currently not
 	 *      used. It is set by {@link setUser}.
@@ -101,11 +108,30 @@ class SeedDMS_Core_DMS {
 	public $rootFolderID;
 
 	/**
+	 * @var integer $maxDirID maximum number of documents per folder on the
+	 *      filesystem. If this variable is set to a value != 0, the content
+	 *      directory will have a two level hierarchy for document storage.
+	 * @access public
+	 */
+	public $maxDirID;
+
+	/**
 	 * @var boolean $enableConverting set to true if conversion of content
 	 *      is desired
 	 * @access public
 	 */
 	public $enableConverting;
+
+	/**
+	 * @var boolean $forceRename use renameFile() instead of copyFile() when
+	 *      copying the document content into the data store. The default is
+	 *      to copy the file. This parameter only affects the methods
+	 *      SeedDMS_Core_Document::addDocument() and
+	 *      SeedDMS_Core_Document::addDocumentFile(). Setting this to true
+	 *      may save resources especially for large files.
+	 * @access public
+	 */
+	public $forceRename;
 
 	/**
 	 * @var array $convertFileTypes list of files types that shall be converted
@@ -170,18 +196,23 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Checks if a list of objects contains a single object 
 	 *
-	 * The regular php check done by '==' compares all attributes of
+	 * This function is only applicable on list containing objects which have
+	 * a method getID() because it is used to check if two objects are equal.
+	 * The regular php check on objects done by '==' compares all attributes of
 	 * two objects, which isn't required. The method will first check
 	 * if the objects are instances of the same class.
 	 *
+	 * The result of the function can be 0 which happens if the first element
+	 * of an indexed array matches.
+	 *
 	 * @param object $object1 object to look for (needle)
 	 * @param array $list list of objects (haystack)
-	 * @return boolean true if object was found, otherwise false
+	 * @return boolean/integer index in array if object was found, otherwise false
 	 */
 	static function inList($object, $list) { /* {{{ */
-		foreach($list as $item) {
+		foreach($list as $i=>$item) {
 			if(get_class($item) == get_class($object) && $item->getID() == $object->getID())
-				return true;
+				return $i;
 		}
 		return false;
 	} /* }}} */
@@ -243,7 +274,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
-	 * @return filtered list of links
+	 * @return array filtered list of links
 	 */
 	static function filterDocumentLinks($user, $links) { /* {{{ */
 		$tmp = array();
@@ -269,11 +300,60 @@ class SeedDMS_Core_DMS {
 			$this->contentDir = $contentDir.'/';
 		$this->rootFolderID = 1;
 		$this->maxDirID = 0; //31998;
+		$this->forceRename = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
+		$this->classnames = array();
+		$this->classnames['folder'] = 'SeedDMS_Core_Folder';
+		$this->classnames['document'] = 'SeedDMS_Core_Document';
+		$this->classnames['documentcontent'] = 'SeedDMS_Core_DocumentContent';
+		$this->classnames['user'] = 'SeedDMS_Core_User';
+		$this->classnames['group'] = 'SeedDMS_Core_Group';
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.23';
+			$this->version = '5.0.0';
+	} /* }}} */
+
+	/**
+	 * Return class name of instantiated objects
+	 *
+	 * This method returns the class name of those objects being instatiated
+	 * by the dms. Each class has an internal place holder, which must be
+	 * passed to function.
+	 *
+	 * @param string placeholder (can be one of 'folder', 'document',
+	 * 'documentcontent', 'user', 'group'
+	 *
+	 * @return string/boolean name of class or false if placeholder is invalid
+	 */
+	function getClassname($objectname) { /* {{{ */
+		if(isset($this->classnames[$objectname]))
+			return $this->classnames[$objectname];
+		else
+			return false;
+	} /* }}} */
+
+	/**
+	 * Set class name of instantiated objects
+	 *
+	 * This method sets the class name of those objects being instatiated
+	 * by the dms. It is mainly used to create a new class (possible
+	 * inherited from one of the available classes) implementing new
+	 * features. The method should be called in the postInitDMS hook.
+	 *
+	 * @param string placeholder (can be one of 'folder', 'document',
+	 * 'documentcontent', 'user', 'group'
+	 * @param string name of class
+	 *
+	 * @return string/boolean name of old class or false if not set
+	 */
+	function setClassname($objectname, $classname) { /* {{{ */
+		if(isset($this->classnames[$objectname]))
+			$oldclass =  $this->classnames[$objectname];
+		else
+			$oldclass = false;
+		$this->classnames[$objectname] = $classname;
+		return $oldclass;
 	} /* }}} */
 
 	/**
@@ -393,6 +473,10 @@ class SeedDMS_Core_DMS {
 		$this->viewOnlineFileTypes = $types;
 	} /* }}} */
 
+	function setForceRename($enable) { /* {{{ */
+		$this->forceRename = $enable;
+	} /* }}} */
+
 	/**
 	 * Login as a user
 	 *
@@ -430,31 +514,8 @@ class SeedDMS_Core_DMS {
 	 * @return object instance of {@link SeedDMS_Core_Document} or false
 	 */
 	function getDocument($id) { /* {{{ */
-		if (!is_numeric($id)) return false;
-
-		$queryStr = "SELECT * FROM tblDocuments WHERE id = " . (int) $id;
-		$resArr = $this->db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-		if (count($resArr) != 1)
-			return false;
-		$resArr = $resArr[0];
-
-		// New Locking mechanism uses a separate table to track the lock.
-		$queryStr = "SELECT * FROM tblDocumentLocks WHERE document = " . (int) $id;
-		$lockArr = $this->db->getResultArray($queryStr);
-		if ((is_bool($lockArr) && $lockArr==false) || (count($lockArr)==0)) {
-			// Could not find a lock on the selected document.
-			$lock = -1;
-		}
-		else {
-			// A lock has been identified for this document.
-			$lock = $lockArr[0]["userID"];
-		}
-
-		$document = new SeedDMS_Core_Document($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
-		$document->setDMS($this);
-		return $document;
+		$classname = $this->classnames['document'];
+		return $classname::getInstance($id, $this);
 	} /* }}} */
 
 	/**
@@ -469,8 +530,6 @@ class SeedDMS_Core_DMS {
 
 	/**
 	 * Returns all documents locked by a given user
-	 * FIXME: Not full implemented. Do not use, because it still requires the
-	 * temporary tables!
 	 *
 	 * @param object $user
 	 * @return array list of documents
@@ -508,7 +567,7 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		$row = $resArr[0];
-		$document = new SeedDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+		$document = new $this->classnames['document']($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 		$document->setDMS($this);
 		return $document;
 	} /* }}} */
@@ -533,7 +592,7 @@ class SeedDMS_Core_DMS {
 		$row = $resArr[0];
 
 		$document = $this->getDocument($row['document']);
-		$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+		$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 		return $version;
 	} /* }}} */
 
@@ -620,16 +679,9 @@ class SeedDMS_Core_DMS {
 		$totalFolders = 0;
 		if($mode & 0x2) {
 			$searchKey = "";
-			$searchFields = array();
-			if (in_array(2, $searchin)) {
-				$searchFields[] = "`tblFolders`.`name`";
-			}
-			if (in_array(3, $searchin)) {
-				$searchFields[] = "`tblFolders`.`comment`";
-			}
-			if (in_array(4, $searchin)) {
-				$searchFields[] = "`tblFolderAttributes`.`value`";
-			}
+
+			$classname = $this->classnames['folder'];
+			$searchFields = $classname::getSearchFields($searchin);
 
 			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {
@@ -699,7 +751,7 @@ class SeedDMS_Core_DMS {
 				}
 			}
 
-			$searchQuery = "FROM `tblFolders` LEFT JOIN `tblFolderAttributes` on `tblFolders`.`id`=`tblFolderAttributes`.`folder` WHERE 1=1";
+			$searchQuery = "FROM ".$classname::getSearchTables()." WHERE 1=1";
 
 			if (strlen($searchKey)>0) {
 				$searchQuery .= " AND (".$searchKey.")";
@@ -955,56 +1007,57 @@ class SeedDMS_Core_DMS {
 			}
 
 			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
-			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
-			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
-				$totalDocs = (integer)$resArr[0]["num"];
-			}
+				// Count the number of rows that the search will produce.
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
+				$totalDocs = 0;
+				if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+					$totalDocs = (integer)$resArr[0]["num"];
+				}
 
-			// If there are no results from the count query, then there is no real need
-			// to run the full query. TODO: re-structure code to by-pass additional
-			// queries when no initial results are found.
+				// If there are no results from the count query, then there is no real need
+				// to run the full query. TODO: re-structure code to by-pass additional
+				// queries when no initial results are found.
 
-			// Prepare the complete search query, including the LIMIT clause.
-			$searchQuery = "SELECT DISTINCT `tblDocuments`.*, ".
-				"`tblDocumentContent`.`version`, ".
-				"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
+				// Prepare the complete search query, including the LIMIT clause.
+				$searchQuery = "SELECT DISTINCT `tblDocuments`.*, ".
+					"`tblDocumentContent`.`version`, ".
+					"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
 
-			// calculate the remaining entrїes of the current page
-			// If page is not full yet, get remaining entries
-			if($limit) {
-				$remain = $limit - count($folderresult['folders']);
-				if($remain) {
-					if($remain == $limit)
-						$offset -= $totalFolders;
-					else
-						$offset = 0;
-					if($limit)
-						$searchQuery .= " LIMIT ".$offset.",".$remain;
+				// calculate the remaining entrїes of the current page
+				// If page is not full yet, get remaining entries
+				if($limit) {
+					$remain = $limit - count($folderresult['folders']);
+					if($remain) {
+						if($remain == $limit)
+							$offset -= $totalFolders;
+						else
+							$offset = 0;
+						if($limit)
+							$searchQuery .= " LIMIT ".$offset.",".$remain;
 
+						// Send the complete search query to the database.
+						$resArr = $this->db->getResultArray($searchQuery);
+					} else {
+						$resArr = array();
+					}
+				} else {
 					// Send the complete search query to the database.
 					$resArr = $this->db->getResultArray($searchQuery);
-				} else {
-					$resArr = array();
 				}
-			} else {
-				// Send the complete search query to the database.
-				$resArr = $this->db->getResultArray($searchQuery);
-			}
 
-			// ------------------- Ausgabe der Ergebnisse ----------------------------
-			$numResults = count($resArr);
-			if ($numResults == 0) {
-				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
-			} else {
-				foreach ($resArr as $docArr) {
-					$docs[] = $this->getDocument($docArr['id']);
+				// ------------------- Ausgabe der Ergebnisse ----------------------------
+				$numResults = count($resArr);
+				if ($numResults == 0) {
+					$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
+				} else {
+					foreach ($resArr as $docArr) {
+						$docs[] = $this->getDocument($docArr['id']);
+					}
+					$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 				}
-				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
+			} else {
+				$docresult = array('totalDocs'=>0, 'docs'=>array());
 			}
-		} else {
-			$docresult = array('totalDocs'=>0, 'docs'=>array());
-		}
 		} else {
 			$docresult = array('totalDocs'=>0, 'docs'=>array());
 		}
@@ -1030,20 +1083,8 @@ class SeedDMS_Core_DMS {
 	 * @return object instance of SeedDMS_Core_Folder or false
 	 */
 	function getFolder($id) { /* {{{ */
-		if (!is_numeric($id)) return false;
-
-		$queryStr = "SELECT * FROM tblFolders WHERE id = " . (int) $id;
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-		else if (count($resArr) != 1)
-			return false;
-
-		$resArr = $resArr[0];
-		$folder = new SeedDMS_Core_Folder($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
-		$folder->setDMS($this);
-		return $folder;
+		$classname = $this->classnames['folder'];
+		return $classname::getInstance($id, $this);
 	} /* }}} */
 
 	/**
@@ -1074,7 +1115,7 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		$resArr = $resArr[0];
-		$folder = new SeedDMS_Core_Folder($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
+		$folder = new $this->classnames['folder']($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
 		$folder->setDMS($this);
 		return $folder;
 	} /* }}} */
@@ -1167,20 +1208,8 @@ class SeedDMS_Core_DMS {
 	 * @return object instance of {@link SeedDMS_Core_User} or false
 	 */
 	function getUser($id) { /* {{{ */
-		if (!is_numeric($id))
-			return false;
-
-		$queryStr = "SELECT * FROM tblUsers WHERE id = " . (int) $id;
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false) return false;
-		if (count($resArr) != 1) return false;
-
-		$resArr = $resArr[0];
-
-		$user = new SeedDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
-		$user->setDMS($this);
-		return $user;
+		$classname = $this->classnames['user'];
+		return $classname::getInstance($id, $this);
 	} /* }}} */
 
 	/**
@@ -1195,19 +1224,8 @@ class SeedDMS_Core_DMS {
 	 * @return object instance of {@link SeedDMS_Core_User} or false
 	 */
 	function getUserByLogin($login, $email='') { /* {{{ */
-		$queryStr = "SELECT * FROM tblUsers WHERE login = ".$this->db->qstr($login);
-		if($email)
-			$queryStr .= " AND email=".$this->db->qstr($email);
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false) return false;
-		if (count($resArr) != 1) return false;
-
-		$resArr = $resArr[0];
-
-		$user = new SeedDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
-		$user->setDMS($this);
-		return $user;
+		$classname = $this->classnames['user'];
+		return $classname::getInstance($login, $this, 'name', $email);
 	} /* }}} */
 
 	/**
@@ -1220,17 +1238,8 @@ class SeedDMS_Core_DMS {
 	 * @return object instance of {@link SeedDMS_Core_User} or false
 	 */
 	function getUserByEmail($email) { /* {{{ */
-		$queryStr = "SELECT * FROM tblUsers WHERE email = ".$this->db->qstr($email);
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false) return false;
-		if (count($resArr) != 1) return false;
-
-		$resArr = $resArr[0];
-
-		$user = new SeedDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
-		$user->setDMS($this);
-		return $user;
+		$classname = $this->classnames['user'];
+		return $classname::getInstance($email, $this, 'email');
 	} /* }}} */
 
 	/**
@@ -1239,24 +1248,8 @@ class SeedDMS_Core_DMS {
 	 * @return array of instances of {@link SeedDMS_Core_User} or false
 	 */
 	function getAllUsers($orderby = '') { /* {{{ */
-		if($orderby == 'fullname')
-			$queryStr = "SELECT * FROM tblUsers ORDER BY fullname";
-		else
-			$queryStr = "SELECT * FROM tblUsers ORDER BY login";
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-
-		$users = array();
-
-		for ($i = 0; $i < count($resArr); $i++) {
-			$user = new SeedDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr[$i]["language"])?$resArr[$i]["language"]:NULL), (isset($resArr[$i]["theme"])?$resArr[$i]["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr[$i]["quota"]);
-			$user->setDMS($this);
-			$users[$i] = $user;
-		}
-
-		return $users;
+		$classname = $this->classnames['user'];
+		return $classname::getAllInstances($orderby, $this);
 	} /* }}} */
 
 	/**
@@ -1273,7 +1266,7 @@ class SeedDMS_Core_DMS {
 	 * @param integer $isDisabled disable user and prevent login
 	 * @return object of {@link SeedDMS_Core_User}
 	 */
-	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='') { /* {{{ */
+	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='', $quota=0, $homefolder=null) { /* {{{ */
 		$db = $this->db;
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
@@ -1282,7 +1275,7 @@ class SeedDMS_Core_DMS {
 			$role = '0';
 		if(trim($pwdexpiration) == '')
 			$pwdexpiration = '0000-00-00 00:00:00';
-		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).")";
+		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration, quota, homefolder) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1297,22 +1290,8 @@ class SeedDMS_Core_DMS {
 	 * @return object/boolean group or false if no group was found
 	 */
 	function getGroup($id) { /* {{{ */
-		if (!is_numeric($id))
-			return false;
-
-		$queryStr = "SELECT * FROM tblGroups WHERE id = " . (int) $id;
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-		else if (count($resArr) != 1) //wenn, dann wohl eher 0 als > 1 ;-)
-			return false;
-
-		$resArr = $resArr[0];
-
-		$group = new SeedDMS_Core_Group($resArr["id"], $resArr["name"], $resArr["comment"]);
-		$group->setDMS($this);
-		return $group;
+		$classname = $this->classnames['group'];
+		return $classname::getInstance($id, $this, '');
 	} /* }}} */
 
 	/**
@@ -1322,19 +1301,8 @@ class SeedDMS_Core_DMS {
 	 * @return object/boolean group or false if no group was found
 	 */
 	function getGroupByName($name) { /* {{{ */
-		$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` WHERE `tblGroups`.`name` = ".$this->db->qstr($name);
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-		else if (count($resArr) != 1) //wenn, dann wohl eher 0 als > 1 ;-)
-			return false;
-
-		$resArr = $resArr[0];
-
-		$group = new SeedDMS_Core_Group($resArr["id"], $resArr["name"], $resArr["comment"]);
-		$group->setDMS($this);
-		return $group;
+		$classname = $this->classnames['group'];
+		return $classname::getInstance($name, $this, 'name');
 	} /* }}} */
 
 	/**
@@ -1343,22 +1311,8 @@ class SeedDMS_Core_DMS {
 	 * @return array array of instances of {@link SeedDMS_Core_Group}
 	 */
 	function getAllGroups() { /* {{{ */
-		$queryStr = "SELECT * FROM tblGroups ORDER BY name";
-		$resArr = $this->db->getResultArray($queryStr);
-
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-
-		$groups = array();
-
-		for ($i = 0; $i < count($resArr); $i++) {
-
-			$group = new SeedDMS_Core_Group($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["comment"]);
-			$group->setDMS($this);
-			$groups[$i] = $group;
-		}
-
-		return $groups;
+		$classname = $this->classnames['group'];
+		return $classname::getAllInstances('name', $this);
 	} /* }}} */
 
 	/**
@@ -2065,9 +2019,9 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			$versions[] = $version;
 		}
 		return $versions;
@@ -2089,9 +2043,9 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum'], $row['fileSize'], $row['checksum']);
+			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum'], $row['fileSize'], $row['checksum']);
 			$versions[] = $version;
 		}
 		return $versions;
@@ -2113,9 +2067,9 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			$versions[] = $version;
 		}
 		return $versions;
@@ -2137,9 +2091,9 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			if(!isset($versions[$row['dupid']])) {
 				$versions[$row['id']]['content'] = $version;
 				$versions[$row['id']]['duplicates'] = array();

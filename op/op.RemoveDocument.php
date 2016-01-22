@@ -19,10 +19,16 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('removedocument')) {
@@ -50,6 +56,12 @@ if($document->isLocked()) {
 	}
 }
 
+if($settings->_enableFullSearch) {
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+} else {
+	$index = null;
+}
+
 $folder = $document->getFolder();
 
 /* Get the notify list before removing the document */
@@ -60,39 +72,30 @@ $nl = array(
 	'groups'=>array_merge($dnl['groups'], $fnl['groups'])
 );
 $docname = $document->getName();
-if (!$document->remove()) {
+
+$controller->setParam('document', $document);
+$controller->setParam('index', $index);
+$controller->setParam('indexconf', $indexconf);
+if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
-} else {
-
-	/* Remove the document from the fulltext index */
-	if($settings->_enableFullSearch) {
-		$index = $indexconf['Indexer']::open($settings->_luceneDir);
-		if($index) {
-			$lucenesearch = new $indexconf['Search']($index);
-			if($hit = $lucenesearch->getDocument($documentid)) {
-				$index->delete($hit->id);
-				$index->commit();
-			}
-		}
-	}
-
-	if ($notifier){
-		$subject = "document_deleted_email_subject";
-		$message = "document_deleted_email_body";
-		$params = array();
-		$params['name'] = $docname;
-		$params['folder_path'] = $folder->getFolderPathPlain();
-		$params['username'] = $user->getFullName();
-		$params['sitename'] = $settings->_siteName;
-		$params['http_root'] = $settings->_httpRoot;
-		$notifier->toList($user, $nl["users"], $subject, $message, $params);
-		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message, $params);
-		}
-	}
-
-	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_document')));
 }
+
+if ($notifier){
+	$subject = "document_deleted_email_subject";
+	$message = "document_deleted_email_body";
+	$params = array();
+	$params['name'] = $docname;
+	$params['folder_path'] = $folder->getFolderPathPlain();
+	$params['username'] = $user->getFullName();
+	$params['sitename'] = $settings->_siteName;
+	$params['http_root'] = $settings->_httpRoot;
+	$notifier->toList($user, $nl["users"], $subject, $message, $params);
+	foreach ($nl["groups"] as $grp) {
+		$notifier->toGroup($user, $grp, $subject, $message, $params);
+	}
+}
+
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_document')));
 
 add_log_line("?documentid=".$documentid);
 

@@ -22,8 +22,10 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassPasswordStrength.php");
@@ -59,12 +61,14 @@ if ($action == "adduser") {
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
+	$homefolder = (isset($_POST["homefolder"]) ? $_POST["homefolder"] : 0);
+	$quota = (isset($_POST["quota"]) ? (int) $_POST["quota"] : 0);
 
 	if (is_object($dms->getUserByLogin($login))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("user_exists"));
 	}
 
-	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration);
+	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration, $homefolder);
 	if ($newUser) {
 
 		/* Set Quota */
@@ -205,6 +209,8 @@ else if ($action == "edituser") {
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
+	$homefolder = (isset($_POST["homefolder"]) ? $_POST["homefolder"] : 0);
+	$quota = (isset($_POST["quota"]) ? (int) $_POST["quota"] : 0);
 	
 	if ($editedUser->getLogin() != $login)
 		$editedUser->setLogin($login);
@@ -245,6 +251,10 @@ else if ($action == "edituser") {
 		if(!$isDisabled)
 			$editedUser->clearLoginFailures();
 	}
+	if ($editedUser->getHomeFolder() != $homefolder)
+		$editedUser->setHomeFolder($homefolder);
+	if ($editedUser->getQuota() != $quota)
+		$editedUser->setQuota($quota);
 	if(isset($_POST["workflow"]) && $_POST["workflow"]) {
 		$currworkflow = $editedUser->getMandatoryWorkflow();
 		if (!$currworkflow || ($currworkflow->getID() != $_POST["workflow"])) {

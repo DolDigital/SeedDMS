@@ -17,8 +17,10 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
@@ -31,7 +33,7 @@ if(!trim($settings->_encryptionKey))
 	$settings->_encryptionKey = md5(uniqid());
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'settings'=>$settings, 'currenttab'=>(isset($_GET['currenttab']) ? $_GET['currenttab'] : '')));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'settings'=>$settings, 'currenttab'=>(isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : '')));
 if($view) {
 	$view->show();
 	exit;

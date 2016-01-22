@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
@@ -39,6 +41,11 @@ if (!is_object($folder)) {
 
 if ($folder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
+}
+
+$remain = checkQuota($user);
+if ($remain < 0) {
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));

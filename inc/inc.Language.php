@@ -67,6 +67,11 @@ function getLanguages()
 function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {{{ */
 	GLOBAL $settings, $LANG, $session, $MISSING_LANG;
 
+	$trantext = '';
+	if(0 && $settings->_otrance) {
+		$trantext = '<form style="display: inline-block;" accept-charset="UTF-8" action="http://translate.seeddms.org/connector/index" target="_blank" method="post"><input type="hidden" value="" name="oTranceKeys['.$key.']"><input type="submit" value="submit" class="btn btn-mini"/></form>';
+	}
+
 	if(!$lang) {
 		if($session)
 			$lang = $session->getLanguage();
@@ -87,17 +92,12 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 	} else
 		$tmpText = $LANG[$lang][$key];
 
-/*
-	if (!isset($text[$key])) {
-		if (!$defaulttext)
-			return "Error getting Text: " . $key . " (" . $settings->_language . ")";
-		else
-			$tmpText = $defaulttext;
-	} else
-		$tmpText = $text[$key];
-*/	
+	if(0 && $settings->_otrance) {
+		$_GLOBALS['used_langs'][$key] = $tmpText;
+	}
+
 	if (count($replace) == 0)
-		return $tmpText;
+		return $tmpText.$trantext;
 	
 	$keys = array_keys($replace);
 	foreach ($keys as $key)

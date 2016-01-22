@@ -44,11 +44,12 @@ class SeedDMS_View_EditFolder extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation($folder);
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+		$this->contentHeading(getMLText("edit_folder_props"));
+		$this->contentContainerStart();
 ?>
 
 <script language="JavaScript">
-function checkForm()
-{
+function checkForm() {
 	msg = new Array();
 	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
@@ -65,7 +66,6 @@ function checkForm()
       dismissQueue: true,
   		layout: 'topRight',
   		theme: 'defaultTheme',
-			_timeout: 1500,
   	});
 		return false;
 	}
@@ -73,14 +73,9 @@ function checkForm()
 		return true;
 }
 </script>
-
-<?php
-		$this->contentHeading(getMLText("edit_folder_props"));
-		$this->contentContainerStart();
-?>
-<form action="../op/op.EditFolder.php" name="form1" onsubmit="return checkForm();" method="POST">
-<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
-<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
+<form action="../op/op.EditFolder.php" name="form1" onsubmit="return checkForm();" method="post">
+<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+<input type="hidden" name="showtree" value="<?php echo showtree();?>">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("name");?>:</td>
@@ -103,12 +98,21 @@ function checkForm()
 
 		if($attrdefs) {
 			foreach($attrdefs as $attrdef) {
+				$arr = $this->callHook('folderEditAttribute', $folder, $attrdef);
+				if(is_array($arr)) {
+					echo $txt;
+					echo "<tr>";
+					echo "<td>".$arr[0]."</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				} else {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, $folder->getAttributeValue($attrdef)) ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, $folder->getAttribute($attrdef)) ?></td>
 </tr>
 <?php
+				}
 			}
 		}
 ?>

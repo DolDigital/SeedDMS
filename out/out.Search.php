@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
@@ -394,10 +396,10 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 
 if(count($entries) == 1) {
 	$entry = $entries[0];
-	if(get_class($entry) == 'SeedDMS_Core_Document') {
+	if(get_class($entry) == $dms->getClassname('document')) {
 		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
 		exit;
-	} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
+	} elseif(get_class($entry) == $dms->getClassname('folder')) {
 		header('Location: ../out/out.ViewFolder.php?folderid='.$entry->getID());
 		exit;
 	}

@@ -210,6 +210,10 @@ $(document).ready( function() {
 			</select></td>
 		</tr>
 		<tr>
+			<td><?php printMLText("home_folder")?>:</td>
+			<td><?php $this->printFolderChooser("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
+		</tr>
+		<tr>
 			<td><?php printMLText("quota");?>:</td>
 			<td><input type="text" name="quota" value="<?php echo $currUser ? $currUser->getQuota() : ""; ?>">
 <?php

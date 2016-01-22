@@ -19,12 +19,14 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.ClassEmailNotify.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.ClassEmailNotify.php");
 include("../inc/inc.ClassUI.php");
 
-require_once("../inc/inc.Utils.php");
 require_once("../inc/inc.ClassSession.php");
 include("../inc/inc.ClassPasswordStrength.php");
 include("../inc/inc.ClassPasswordHistoryManager.php");
@@ -201,6 +203,23 @@ switch($command) {
 			} else {
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
+			}
+		}
+		break; /* }}} */
+
+	case 'testmail': /* {{{ */
+		if($user && $user->isAdmin()) {
+			if($user->getEmail()) {
+				$emailobj = new SeedDMS_Email($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+				$params = array();
+
+				if($emailobj->toIndividual($settings->_smtpSendFrom, $user, "testmail_subject", "testmail_body", $params)) {
+					echo json_encode(array("error"=>0, "msg"=>"Sending email succeded"));
+				} else {
+					echo json_encode(array("error"=>1, "msg"=>"Sending email failed"));
+				}
+			} else {
+				echo json_encode(array("error"=>1, "msg"=>"No email address"));
 			}
 		}
 		break; /* }}} */
@@ -442,7 +461,8 @@ switch($command) {
 				$content = $view->menuClipboard($session->getClipboard());
 				break;
 			case 'mainclipboard':
-				$content = $view->mainClipboard($session->getClipboard());
+				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+				$content = $view->mainClipboard($session->getClipboard(), $previewer);
 				break;
 			case 'documentlistrow':
 				$document = $dms->getDocument($_REQUEST['id']);

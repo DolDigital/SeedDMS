@@ -18,8 +18,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
@@ -112,9 +114,7 @@ function getFolderPathPlainAST($folder) { /* {{{ */
     return $path;
 } /* }}} */
 
-function createFolderTar($folder,$ark) { /* {{{ */
-	global $human_readable,$dms;
-
+function createFolderTar($folder,$ark, $human_readable, $dms) { /* {{{ */
 	$documents=$folder->getDocuments();
 	foreach ($documents as $document){
 
@@ -150,7 +150,7 @@ function createFolderTar($folder,$ark) { /* {{{ */
 
 	$subFolders=$folder->getSubfolders();
 	foreach ($subFolders as $folder)
-		if (!createFolderTar($folder,$ark))
+		if (!createFolderTar($folder,$ark,$human_readable,$dms))
 			return false;
 
 	return true;
@@ -173,7 +173,7 @@ else $ark_name = $settings->_contentDir.time()."_".$folderid.".tar";
 
 $ark = fopen($ark_name,"w");
 
-if (!createFolderTar($folder,$ark)) {
+if (!createFolderTar($folder,$ark, $human_readable, $dms)) {
 	fclose($ark);
 	unlink($ark_name);
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));

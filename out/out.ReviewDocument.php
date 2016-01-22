@@ -20,8 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
@@ -58,7 +60,7 @@ if ($latestContent->getVersion()!=$version) {
 }
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 // verify if document may be reviewed
 if (!$accessop->mayReview()){

@@ -22,7 +22,7 @@ $(document).ready( function() {
 		});
 
 	$(".chzn-select").chosen({width: "95%"});
-	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+	$(".chzn-select-deselect").chosen({width: "95%", allow_single_deselect:true});
 
 	/* change the color and length of the bar graph showing the password
 	 * strength on each change to the passwod field.
@@ -232,6 +232,25 @@ $(document).ready( function() {
 			},
 			'json'
 		);
+	});
+	$('a.sendtestmail').click(function(ev){
+		ev.preventDefault();
+		$.ajax({url: '../op/op.Ajax.php',
+			type: 'GET',
+			dataType: "json",
+			data: {command: 'testmail'},
+			success: function(data) {
+				console.log(data);
+				noty({
+					text: data.msg,
+					type: (data.error) ? 'error' : 'success',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		}); 
 	});
 
 	$('a.movefolder').click(function(ev){

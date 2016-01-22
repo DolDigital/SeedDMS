@@ -73,7 +73,7 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
   <input type="hidden" name="action" value="saveSettings" />
-	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo (isset($_POST['currenttab']) ? $_POST['currenttab'] : 'site' ); ?>" />
+	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo $currenttab ? $currenttab : 'site'; ?>" />
 <?php
 if(!is_writeable($settings->_configFilePath)) {
 	print "<div class=\"alert alert-warning\">";
@@ -86,6 +86,7 @@ if(!is_writeable($settings->_configFilePath)) {
 		<li class="<?php if(!$currenttab || $currenttab == 'site') echo 'active'; ?>"><a data-target="#site" data-toggle="tab"><?php printMLText('settings_Site'); ?></a></li>
 	  <li class="<?php if($currenttab == 'system') echo 'active'; ?>"><a data-target="#system" data-toggle="tab"><?php printMLText('settings_System'); ?></a></li>
 	  <li class="<?php if($currenttab == 'advanced') echo 'active'; ?>"><a data-target="#advanced" data-toggle="tab"><?php printMLText('settings_Advanced'); ?></a></li>
+	  <li class="<?php if($currenttab == 'extensions') echo 'active'; ?>"><a data-target="#extensions" data-toggle="tab"><?php printMLText('settings_Extensions'); ?></a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -386,6 +387,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_loginFailure");?>:</td>
         <td><?php $this->showTextField("loginFailure", $settings->_loginFailure); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_autoLoginUser_desc");?>">
+        <td><?php printMLText("settings_autoLoginUser");?>:</td>
+        <td><?php $this->showTextField("autoLoginUser", $settings->_autoLoginUser); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_quota_desc");?>">
         <td><?php printMLText("settings_quota");?>:</td>
         <td><?php $this->showTextField("quota", $settings->_quota); ?></td>
@@ -433,7 +438,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <!--
         -- SETTINGS - SYSTEM - SMTP
       -->
-      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td> </tr>
+      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail">Send test mail</a></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
         <td><?php $this->showTextField("smtpServer", $settings->_smtpServer); ?></td>
@@ -445,6 +450,14 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_smtpSendFrom_desc");?>">
         <td><?php printMLText("settings_smtpSendFrom");?>:</td>
         <td><?php $this->showTextField("smtpSendFrom", $settings->_smtpSendFrom); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_smtpUser_desc");?>">
+        <td><?php printMLText("settings_smtpUser");?>:</td>
+        <td><?php $this->showTextField("smtpUser", $settings->_smtpUser); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_smtpPassword_desc");?>">
+        <td><?php printMLText("settings_smtpPassword");?>:</td>
+        <td><input type="password" name="smtpPassword" value="<?php echo $settings->_smtpPassword ?>" /></td>
       </tr>
 
     </table>
@@ -611,6 +624,42 @@ if(!is_writeable($settings->_configFilePath)) {
     </table>
 <?php		$this->contentContainerEnd(); ?>
   </div>
+
+	  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
+<?php		$this->contentContainerStart(); ?>
+    <table class="table-condensed">
+      <!--
+        -- SETTINGS - ADVANCED - DISPLAY
+      -->
+<?php
+				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
+?>
+      <tr ><td><b><?php echo $extconf['title'];?></b></td></tr>
+<?php
+					foreach($extconf['config'] as $confkey=>$conf) {
+?>
+      <tr title="<?php echo $extconf['title'];?>">
+        <td><?php echo $conf['title'];?>:</td><td>
+<?php
+						switch($conf['type']) {
+							case 'checkbox':
+?>
+        <input type="checkbox" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" value="1" <?php if(isset($settings->_extensions[$extname][$confkey]) && $settings->_extensions[$extname][$confkey]) echo 'checked'; ?> />
+<?php
+								break;
+							default:
+?>
+        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
+<?php
+						}
+?>
+      </td></tr>
+<?php
+					}
+				}
+?>
+		</table>
+	</div>
   </div>
 <?php
 if(is_writeable($settings->_configFilePath)) {

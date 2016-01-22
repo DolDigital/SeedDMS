@@ -74,13 +74,13 @@ class SeedDMS_Core_Object { /* {{{ */
 			$db = $this->_dms->getDB();
 
 			switch(get_class($this)) {
-				case "SeedDMS_Core_Document":
+				case $this->_dms->getClassname('document'):
 					$queryStr = "SELECT * FROM tblDocumentAttributes WHERE document = " . $this->_id." ORDER BY `id`";
 					break;
-				case "SeedDMS_Core_DocumentContent":
+				case $this->_dms->getClassname('documentcontent'):
 					$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE content = " . $this->_id." ORDER BY `id`";
 					break;
-				case "SeedDMS_Core_Folder":
+				case $this->_dms->getClassname('folder'):
 					$queryStr = "SELECT * FROM tblFolderAttributes WHERE folder = " . $this->_id." ORDER BY `id`";
 					break;
 				default:
@@ -108,6 +108,25 @@ class SeedDMS_Core_Object { /* {{{ */
 	 * @return array|string value of attritbute or false. The value is an array
 	 * if the attribute is defined as multi value
 	 */
+	function getAttribute($attrdef) { /* {{{ */
+		if (!$this->_attributes) {
+			$this->getAttributes();
+		}
+
+		if (isset($this->_attributes[$attrdef->getId()])) {
+			return $this->_attributes[$attrdef->getId()];
+		} else {
+			return false;
+		}
+
+	} /* }}} */
+
+	/**
+	 * Returns an attribute value of the object for the given attribute definition
+	 *
+	 * @return array|string value of attritbute or false. The value is an array
+	 * if the attribute is defined as multi value
+	 */
 	function getAttributeValue($attrdef) { /* {{{ */
 		if (!$this->_attributes) {
 			$this->getAttributes();
@@ -121,6 +140,50 @@ class SeedDMS_Core_Object { /* {{{ */
 			} else {
 				return $value;
 			}
+		} else
+			return false;
+
+	} /* }}} */
+
+	/**
+	 * Returns an attribute value of the object for the given attribute definition
+	 *
+	 * This is a short cut for getAttribute($attrdef)->getValueAsArray() but
+	 * first checks if the object has an attribute for the given attribute
+	 * definition.
+	 *
+	 * @return array value of attritbute or false. The value is always an array
+	 * even if the attribute is not defined as multi value
+	 */
+	function getAttributeValueAsArray($attrdef) { /* {{{ */
+		if (!$this->_attributes) {
+			$this->getAttributes();
+		}
+
+		if (isset($this->_attributes[$attrdef->getId()])) {
+			return $this->_attributes[$attrdef->getId()]->getValueAsArray();
+		} else
+			return false;
+
+	} /* }}} */
+
+	/**
+	 * Returns an attribute value of the object for the given attribute definition
+	 *
+	 * This is a short cut for getAttribute($attrdef)->getValueAsString() but
+	 * first checks if the object has an attribute for the given attribute
+	 * definition.
+	 *
+	 * @return string value of attritbute or false. The value is always a string
+	 * even if the attribute is defined as multi value
+	 */
+	function getAttributeValueAsString($attrdef) { /* {{{ */
+		if (!$this->_attributes) {
+			$this->getAttributes();
+		}
+
+		if (isset($this->_attributes[$attrdef->getId()])) {
+			return $this->_attributes[$attrdef->getId()]->getValue();
 		} else
 			return false;
 
@@ -145,13 +208,13 @@ class SeedDMS_Core_Object { /* {{{ */
 		}
 		if(!isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {
-				case "SeedDMS_Core_Document":
+				case $this->_dms->getClassname('document'):
 					$queryStr = "INSERT INTO tblDocumentAttributes (document, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
-				case "SeedDMS_Core_DocumentContent":
+				case $this->_dms->getClassname('documentcontent'):
 					$queryStr = "INSERT INTO tblDocumentContentAttributes (content, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
-				case "SeedDMS_Core_Folder":
+				case $this->_dms->getClassname('folder'):
 					$queryStr = "INSERT INTO tblFolderAttributes (folder, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				default:
@@ -184,13 +247,13 @@ class SeedDMS_Core_Object { /* {{{ */
 		}
 		if(isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {
-				case "SeedDMS_Core_Document":
+				case $this->_dms->getClassname('document'):
 					$queryStr = "DELETE FROM tblDocumentAttributes WHERE document=".$this->_id." AND attrdef=".$attrdef->getId();
 					break;
-				case "SeedDMS_Core_DocumentContent":
+				case $this->_dms->getClassname('documentcontent'):
 					$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content=".$this->_id." AND attrdef=".$attrdef->getId();
 					break;
-				case "SeedDMS_Core_Folder":
+				case $this->_dms->getClassname('folder'):
 					$queryStr = "DELETE FROM tblFolderAttributes WHERE folder=".$this->_id." AND attrdef=".$attrdef->getId();
 					break;
 				default:

@@ -88,7 +88,30 @@ function showAttributeDefinitions(selectObj) {
 						$ot = getMLText("version");
 						break;
 				}
-				print "<option value=\"".$attrdef->getID()."\">" . htmlspecialchars($attrdef->getName() ." (".$ot.")");
+				switch($attrdef->getType()) {
+					case SeedDMS_Core_AttributeDefinition::type_int:
+						$vt = getMLText('attrdef_type_int');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_float:
+						$vt = getMLText('attrdef_type_float');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_string:
+						$vt = getMLText('attrdef_type_string');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_boolean:
+						$vt = getMLText('attrdef_type_boolean');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_url:
+						$vt = getMLText('attrdef_type_url');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_email:
+						$vt = getMLText('attrdef_type_email');
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_date:
+						$vt = getMLText('attrdef_type_date');
+						break;
+				}
+				print "<option value=\"".$attrdef->getID()."\">" . htmlspecialchars($attrdef->getName() ." (".$ot.", ".$vt.")");
 				$count++;
 			}
 		}
@@ -110,7 +133,7 @@ function showAttributeDefinitions(selectObj) {
 					<td><?php printMLText("attrdef_objtype");?>:</td><td><select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>">Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>"><?php printMLText("document"); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>"><?php printMLText("version"); ?></option></select>
 				</tr>
 				<tr>
-				<td><?php printMLText("attrdef_type");?>:</td><td><select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>"><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>"><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>"><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>"><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>"><?php printMLText('attrdef_type_date'); ?></option></select></td>
+				<td><?php printMLText("attrdef_type");?>:</td><td><select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>"><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>"><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>"><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>"><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_url ?>"><?php printMLText('attrdef_type_url'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_email ?>"><?php printMLText('attrdef_type_email'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>"><?php printMLText('attrdef_type_date'); ?></option></select></td>
 				</tr>
 				<tr>
 					<td><?php printMLText("attrdef_multiple");?>:</td><td><input type="checkbox" value="1" name="multiple" /></td>
@@ -279,7 +302,7 @@ function showAttributeDefinitions(selectObj) {
 							<?php printMLText("attrdef_objtype");?>:
 						</td>
 						<td>
-							<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>>Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>>Document</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>>Document content</option></select>
+						<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_url ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_url) echo "selected"; ?>><?php printMLText('attrdef_type_url'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_email ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_email) echo "selected"; ?>><?php printMLText('attrdef_type_email'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_date) echo "selected"; ?>><?php printMLText('attrdef_type_date'); ?></option></select>
 						</td>
 					</tr>
 					<tr>
@@ -287,7 +310,7 @@ function showAttributeDefinitions(selectObj) {
 							<?php printMLText("attrdef_type");?>:
 						</td>
 						<td>
-							<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_date) echo "selected"; ?>><?php printMLText('attrdef_type_date'); ?></option></select>
+							<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_url ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_url) echo "selected"; ?>><?php printMLText('attrdef_type_url'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_email ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_email) echo "selected"; ?>><?php printMLText('attrdef_type_email'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_date) echo "selected"; ?>><?php printMLText('attrdef_type_date'); ?></option></select>
 						</td>
 					</tr>
 					<tr>

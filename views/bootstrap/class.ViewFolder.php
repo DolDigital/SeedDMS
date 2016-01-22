@@ -118,11 +118,21 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
+		echo $this->callHook('startPage');
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
+		$txt = $this->callHook('folderMenu', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else {
+			$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
+		}
+
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+
+		echo $this->callHook('preContent');
 
 		echo "<div class=\"row-fluid\">\n";
 
@@ -140,82 +150,103 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				if ($showtree==1){
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
 					$this->contentContainerStart();
-					$this->printNewTreeNavigationHtml($folderid, M_READ, 0, '', $expandFolderTree == 2, $orderby);
+					/*
+					 * access expandFolderTree with $this->params because it can
+					 * be changed by preContent hook.
+					 */
+					$this->printNewTreeNavigationHtml($folderid, M_READ, 0, '', $this->params['expandFolderTree'] == 2, $orderby);
 					$this->contentContainerEnd();
 				} else {
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
 				}
 			}
-			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+
+			echo $this->callHook('leftContent');
+
+			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard(), $previewer);
 
 			echo "</div>\n";
 		}
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
-
 		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "<div class=\"row-fluid\">";
 			echo "<div class=\"span8\">";
 		}
-		$owner = $folder->getOwner();
-		$this->contentHeading(getMLText("folder_infos"));
-		$this->contentContainerStart();
-		echo "<table class=\"table-condensed\">\n";
-		if($user->isAdmin()) {
-			echo "<tr>";
-			echo "<td>".getMLText("id").":</td>\n";
-			echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
-			echo "</tr>";
-		}
-		echo "<tr>";
-		echo "<td>".getMLText("owner").":</td>\n";
-		echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
-		echo "</tr>";
-		if($folder->getComment()) {
-			echo "<tr>";
-			echo "<td>".getMLText("comment").":</td>\n";
-			echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
-			echo "</tr>";
-		}
-		echo "<tr>";
-		echo "<td>".getMLText("creation_date").":</td>";
-		echo "<td>".getLongReadableDate($folder->getDate())."</td>";
-		echo "</tr>";
+		$txt = $this->callHook('folderInfo', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else {
 
-		if($user->isAdmin()) {
-			if($folder->inheritsAccess()) {
+			$owner = $folder->getOwner();
+			$this->contentHeading(getMLText("folder_infos"));
+			$this->contentContainerStart();
+			echo "<table class=\"table-condensed\">\n";
+			if($user->isAdmin()) {
 				echo "<tr>";
-				echo "<td>".getMLText("access_mode").":</td>\n";
-				echo "<td>";
-				echo getMLText("inherited");
-				echo "</tr>";
-			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
-				echo "</tr>";
-				echo "<tr>";
-				echo "<td>".getMLText('access_mode').":</td>";
-				echo "<td>";
-				$this->printAccessList($folder);
-				echo "</td>";
+				echo "<td>".getMLText("id").":</td>\n";
+				echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
 				echo "</tr>";
 			}
-		}
-		$attributes = $folder->getAttributes();
-		if($attributes) {
-			foreach($attributes as $attribute) {
-				$attrdef = $attribute->getAttributeDefinition();
-		?>
-				<tr>
-				<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-				<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
-				</tr>
-		<?php
+			echo "<tr>";
+			echo "<td>".getMLText("owner").":</td>\n";
+			echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>".getMLText("creation_date").":</td>";
+			echo "<td>".getLongReadableDate($folder->getDate())."</td>";
+			echo "</tr>";
+			if($folder->getComment()) {
+				echo "<tr>";
+				echo "<td>".getMLText("comment").":</td>\n";
+				echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
+				echo "</tr>";
 			}
+
+			if($user->isAdmin()) {
+				if($folder->inheritsAccess()) {
+					echo "<tr>";
+					echo "<td>".getMLText("access_mode").":</td>\n";
+					echo "<td>";
+					echo getMLText("inherited");
+					echo "</tr>";
+				} else {
+					echo "<tr>";
+					echo "<td>".getMLText('default_access').":</td>";
+					echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
+					echo "</tr>";
+					echo "<tr>";
+					echo "<td>".getMLText('access_mode').":</td>";
+					echo "<td>";
+					$this->printAccessList($folder);
+					echo "</td>";
+					echo "</tr>";
+				}
+			}
+			$attributes = $folder->getAttributes();
+			if($attributes) {
+				foreach($attributes as $attribute) {
+					$arr = $this->callHook('showFolderAttribute', $folder, $attribute);
+					if(is_array($arr)) {
+						echo $txt;
+						echo "<tr>";
+						echo "<td>".$arr[0].":</td>";
+						echo "<td>".$arr[1].":</td>";
+						echo "</tr>";
+					} else {
+						$attrdef = $attribute->getAttributeDefinition();
+			?>
+					<tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
+					</tr>
+<?php
+					}
+				}
+			}
+			echo "</table>\n";
+			$this->contentContainerEnd();
 		}
-		echo "</table>\n";
-		$this->contentContainerEnd();
 		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "</div>";
 			echo "<div class=\"span4\">";
@@ -240,35 +271,55 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
-			print "<table id=\"viewfolder-table\" class=\"table\">";
-			print "<thead>\n<tr>\n";
-			print "<th></th>\n";	
-			print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
-//			print "<th>".getMLText("owner")."</th>\n";
-			print "<th>".getMLText("status")."</th>\n";
-//			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("action")."</th>\n";
-			print "</tr>\n</thead>\n<tbody>\n";
+			$txt = $this->callHook('folderListHeader', $folder, $orderby);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
+	//			print "<th>".getMLText("owner")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+	//			print "<th>".getMLText("version")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+			}
 		}
 		else printMLText("empty_folder_list");
 
 
 		foreach($subFolders as $subFolder) {
-			echo $this->folderListRow($subFolder);
+			$txt = $this->callHook('folderListItem', $subFolder);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				echo $this->folderListRow($subFolder);
+			}
 		}
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 		foreach($documents as $document) {
-			echo $this->documentListRow($document, $previewer);
+			$txt = $this->callHook('documentListItem', $document, $previewer);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				echo $this->documentListRow($document, $previewer);
+			}
 		}
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)) {
-			echo "</tbody>\n</table>\n";
+			$txt = $this->callHook('folderListFooter', $folder);
+			if(is_string($txt))
+				echo $txt;
+			else
+				echo "</tbody>\n</table>\n";
 		}
 
 		echo "</div>\n"; // End of right column div
 
 		$this->contentEnd();
+
+		echo $this->callHook('postContent');
 
 		$this->htmlEndPage();
 	} /* }}} */

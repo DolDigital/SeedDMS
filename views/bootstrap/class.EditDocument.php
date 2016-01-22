@@ -152,12 +152,20 @@ $(document).ready( function() {
 		}
 		if($attrdefs) {
 			foreach($attrdefs as $attrdef) {
+				$arr = $this->callHook('editDocumentAttribute', $document, $attrdef);
+				if(is_array($arr)) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				} else {
 ?>
 		<tr>
 			<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-			<td><?php $this->printAttributeEditField($attrdef, $document->getAttributeValue($attrdef)) ?></td>
+			<td><?php $this->printAttributeEditField($attrdef, $document->getAttribute($attrdef)) ?></td>
 		</tr>
 <?php
+				}
 			}
 		}
 ?>

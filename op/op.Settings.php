@@ -21,8 +21,10 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
@@ -110,6 +112,7 @@ if ($action == "saveSettings")
   $settings->_passwordExpiration = intval($_POST["passwordExpiration"]);
   $settings->_passwordHistory = intval($_POST["passwordHistory"]);
   $settings->_loginFailure = intval($_POST["loginFailure"]);
+  $settings->_autoLoginUser = intval($_POST["autoLoginUser"]);
   $settings->_quota = intval($_POST["quota"]);
   $settings->_undelUserIds = strval($_POST["undelUserIds"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
@@ -128,6 +131,8 @@ if ($action == "saveSettings")
   $settings->_smtpServer = $_POST["smtpServer"];
   $settings->_smtpPort = $_POST["smtpPort"];
   $settings->_smtpSendFrom = $_POST["smtpSendFrom"];
+  $settings->_smtpUser = $_POST["smtpUser"];
+  $settings->_smtpPassword = $_POST["smtpPassword"];
 
   // SETTINGS -ADVANCED - DISPLAY
   $settings->_siteDefaultPage = $_POST["siteDefaultPage"];
@@ -167,6 +172,9 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - INDEX CMD
   $settings->_converters['fulltext'] = $_POST["converters"];
+
+  // SETTINGS - EXTENSIONS
+  $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();
 
   // -------------------------------------------------------------------------
   // save
