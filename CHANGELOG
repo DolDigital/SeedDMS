@@ -1,4 +1,12 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.0
+--------------------------------------------------------------------------------
+- support for customer extensions
+- smtp authentification
+- add .xml to online file types by default
+- add home folder for users
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.23
 --------------------------------------------------------------------------------
 - send notification if document is delete to those users watching the folder
