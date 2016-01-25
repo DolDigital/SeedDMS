@@ -86,7 +86,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
-		if (0 && $enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
+		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "SeedDMSUpload.setUrl('../op/op.Ajax.php');";
 			echo "SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');";
 			echo "SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');";
