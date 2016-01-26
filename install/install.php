@@ -167,6 +167,7 @@ if(!$settings->_contentDir) {
 	$settings->_contentDir = $settings->_rootDir . 'data/';
 	$settings->_luceneDir = $settings->_rootDir . 'data/lucene/';
 	$settings->_stagingDir = $settings->_rootDir . 'data/staging/';
+	$settings->_cacheDir = $settings->_rootDir . 'data/cache/';
 }
 $settings->_httpRoot = $httpRoot;
 
@@ -258,6 +259,7 @@ if ($action=="setSettings") {
 	$settings->_contentDir = $_POST["contentDir"];
 	$settings->_luceneDir = $_POST["luceneDir"];
 	$settings->_stagingDir = $_POST["stagingDir"];
+	$settings->_cacheDir = $_POST["cacheDir"];
 	$settings->_extraPath = $_POST["extraPath"];
 	$settings->_dbDriver = $_POST["dbDriver"];
 	$settings->_dbHostname = $_POST["dbHostname"];
@@ -415,6 +417,10 @@ if($showform) {
 	      <tr title="<?php printMLText("settings_stagingDir_desc");?>">
 	        <td><?php printMLText("settings_stagingDir");?>:</td>
 	        <td><input name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" style="background:yellow" /></td>
+	      </tr>
+	      <tr title="<?php printMLText("settings_cacheDir_desc");?>">
+	        <td><?php printMLText("settings_cacheDir");?>:</td>
+	        <td><input name="cacheDir" value="<?php echo $settings->_cacheDir ?>" size="100" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_coreDir_desc");?>">
 	        <td><?php printMLText("settings_coreDir");?>:</td>
