@@ -381,30 +381,28 @@ class UI_Default {
 
 	function contentContainerStart() { /* {{{ */
 
-		echo "<div class=\"contentContainer\">\n";
-		echo "<div class=\"content\">\n";
-		echo "<div class=\"content-l\"><div class=\"content-r\"><div class=\"content-br\"><div class=\"content-bl\">\n";
+		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
 		return;
 	} /* }}} */
 
 	function contentContainerEnd() { /* {{{ */
 
-		echo "</div></div></div></div>\n</div>\n</div>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	function contentHeading($heading, $noescape=false) { /* {{{ */
 
 		if($noescape)
-			echo "<div class=\"contentHeading\">".$heading."</div>\n";
+			echo "<legend>".$heading."</legend>\n";
 		else
-			echo "<div class=\"contentHeading\">".htmlspecialchars($heading)."</div>\n";
+			echo "<legend>".htmlspecialchars($heading)."</legend>\n";
 		return;
 	} /* }}} */
 
 	function contentSubHeading($heading, $first=false) { /* {{{ */
 
-		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".htmlspecialchars($heading)."</div>\n";
+		echo "<h5>".$heading."</h5>";
 		return;
 	} /* }}} */
 
@@ -642,6 +640,12 @@ class UI_Default {
 
 	function __printImgPath($img) { /* {{{ */
 		print UI::getImgPath($img);
+	} /* }}} */
+
+	function errorMsg($msg) { /* {{{ */
+		echo "<div class=\"alert alert-error\">\n";
+		echo $msg;
+		echo "</div>\n";
 	} /* }}} */
 
 	static function exitError($pagetitle,$error) { /* {{{ */
