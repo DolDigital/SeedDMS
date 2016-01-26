@@ -168,6 +168,10 @@ if(!$settings->_contentDir) {
 	$settings->_luceneDir = $settings->_rootDir . 'data/lucene/';
 	$settings->_stagingDir = $settings->_rootDir . 'data/staging/';
 	$settings->_cacheDir = $settings->_rootDir . 'data/cache/';
+} else {
+	if(!$settings->_cacheDir) {
+		$settings->_cacheDir = $settings->_contentDir . 'cache/';
+	}
 }
 $settings->_httpRoot = $httpRoot;
 
@@ -177,13 +181,15 @@ if(isset($settings->_extraPath))
 /**
  * Include GUI + Language
  */
-$theme = "blue";
+$theme = "bootstrap";
 include("../inc/inc.Language.php");
 include "../languages/en_GB/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 
 UI::htmlStartPage("INSTALL");
+UI::globalBanner();
+UI::contentStart();
 UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
 UI::contentContainerStart();
 
@@ -400,58 +406,58 @@ if($showform) {
 	      <tr ><td><b> <?php printMLText("settings_Server");?></b></td> </tr>
 	      <tr title="<?php printMLText("settings_rootDir_desc");?>">
 	        <td><?php printMLText("settings_rootDir");?>:</td>
-	        <td><input name="rootDir" value="<?php echo $settings->_rootDir ?>" size="100" /></td>
+	        <td><input type="text" name="rootDir" value="<?php echo $settings->_rootDir ?>" size="100" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_httpRoot_desc");?>">
 	        <td><?php printMLText("settings_httpRoot");?>:</td>
-	        <td><input name="httpRoot" value="<?php echo $settings->_httpRoot ?>" size="100" /></td>
+	        <td><input type="text" name="httpRoot" value="<?php echo $settings->_httpRoot ?>" size="100" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_contentDir_desc");?>">
 	        <td><?php printMLText("settings_contentDir");?>:</td>
-	        <td><input name="contentDir" value="<?php echo $settings->_contentDir ?>" size="100" style="background:yellow" /></td>
+	        <td><input type="text" name="contentDir" value="<?php echo $settings->_contentDir ?>" size="100" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_luceneDir_desc");?>">
 	        <td><?php printMLText("settings_luceneDir");?>:</td>
-	        <td><input name="luceneDir" value="<?php echo $settings->_luceneDir ?>" size="100" style="background:yellow" /></td>
+	        <td><input type="text" name="luceneDir" value="<?php echo $settings->_luceneDir ?>" size="100" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_stagingDir_desc");?>">
 	        <td><?php printMLText("settings_stagingDir");?>:</td>
-	        <td><input name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" style="background:yellow" /></td>
+	        <td><input type="text" name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_cacheDir_desc");?>">
 	        <td><?php printMLText("settings_cacheDir");?>:</td>
-	        <td><input name="cacheDir" value="<?php echo $settings->_cacheDir ?>" size="100" style="background:yellow" /></td>
+	        <td><input type="text" name="cacheDir" value="<?php echo $settings->_cacheDir ?>" size="100" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_coreDir_desc");?>">
 	        <td><?php printMLText("settings_coreDir");?>:</td>
-	        <td><input name="coreDir" value="<?php echo $settings->_coreDir ?>" size="100" /></td>
+	        <td><input type="text" name="coreDir" value="<?php echo $settings->_coreDir ?>" size="100" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_luceneClassDir_desc");?>">
 	        <td><?php printMLText("settings_luceneClassDir");?>:</td>
-	        <td><input name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
+	        <td><input type="text" name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_extraPath_desc");?>">
 	        <td><?php printMLText("settings_extraPath");?>:</td>
-	        <td><input name="extraPath" value="<?php echo $settings->_extraPath ?>" size="100" /></td>
+	        <td><input type="text" name="extraPath" value="<?php echo $settings->_extraPath ?>" size="100" /></td>
 	      </tr>
 
 	 	    <!-- SETTINGS - SYSTEM - DATABASE -->
 	      <tr ><td><b> <?php printMLText("settings_Database");?></b></td> </tr>
 	      <tr title="<?php printMLText("settings_dbDriver_desc");?>">
 	        <td><?php printMLText("settings_dbDriver");?>:</td>
-	        <td><input name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
+	        <td><input type="text" name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_dbHostname_desc");?>">
 	        <td><?php printMLText("settings_dbHostname");?>:</td>
-	        <td><input name="dbHostname" value="<?php echo $settings->_dbHostname ?>" /></td>
+	        <td><input type="text" name="dbHostname" value="<?php echo $settings->_dbHostname ?>" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_dbDatabase_desc");?>">
 	        <td><?php printMLText("settings_dbDatabase");?>:</td>
-	        <td><input name="dbDatabase" value="<?php echo $settings->_dbDatabase ?>" style="background:yellow" /></td>
+	        <td><input type="text" name="dbDatabase" value="<?php echo $settings->_dbDatabase ?>" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_dbUser_desc");?>">
 	        <td><?php printMLText("settings_dbUser");?>:</td>
-	        <td><input name="dbUser" value="<?php echo $settings->_dbUser ?>" style="background:yellow" /></td>
+	        <td><input type="text" name="dbUser" value="<?php echo $settings->_dbUser ?>" style="background:yellow" /></td>
 	      </tr>
 	      <tr title="<?php printMLText("settings_dbPass_desc");?>">
 	        <td><?php printMLText("settings_dbPass");?>:</td>
@@ -463,9 +469,12 @@ if($showform) {
 	        <td><?php printMLText("settings_createdatabase");?>:</td>
 	        <td><input name="createDatabase" type="checkbox" style="background:yellow"/></td>
 	      </tr>
+	      <tr>
+	        <td></td>
+      	  <td><input type="submit" class="btn btn-primary" value="<?php printMLText("apply");?>" /></td>
+	      </tr>
 	    </table>
 
-	   <input type="Submit" value="<?php printMLText("apply");?>" />
 	</form>
 	<?php
 
@@ -479,6 +488,7 @@ if($showform) {
 $settings->_printDisclaimer = false;
 $settings->_footNote = false;
 // end of the page
+UI::contentEnd();
 UI::contentContainerEnd();
 UI::htmlEndPage();
 ?>
