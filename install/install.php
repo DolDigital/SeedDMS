@@ -64,8 +64,7 @@ function openDBConnection($settings) { /* {{{ */
 } /* }}} */
 
 function printError($error) { /* {{{ */
-	print "<div class=\"install_error\">";
-	print "Error<br />";
+	print "<div class=\"alert alert-error\">\n";
 	print $error;
 	print "</div>";
 } /* }}} */
