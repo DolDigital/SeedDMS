@@ -200,6 +200,7 @@ if (isset($_GET['phpinfo'])) {
 	echo '<a href="install.php">' . getMLText("back") . '</a>';
   phpinfo();
 	UI::contentContainerEnd();
+	UI::contentEnd();
 	UI::htmlEndPage();
   exit();
 }
@@ -224,6 +225,7 @@ if (isset($_GET['disableinstall'])) { /* {{{ */
 		echo '<a href="install.php">' . getMLText("back") . '</a>';
 	}
 	UI::contentContainerEnd();
+	UI::contentEnd();
 	UI::htmlEndPage();
   exit();
 } /* }}} */
@@ -487,7 +489,7 @@ if($showform) {
 $settings->_printDisclaimer = false;
 $settings->_footNote = false;
 // end of the page
-UI::contentEnd();
 UI::contentContainerEnd();
+UI::contentEnd();
 UI::htmlEndPage();
 ?>
