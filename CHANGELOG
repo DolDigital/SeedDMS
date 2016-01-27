@@ -1,4 +1,10 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.24
+--------------------------------------------------------------------------------
+- fixed possible XSS attack in user substitution
+- users can have than 1 mandatory workflow, in that case the user can select one
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.23
 --------------------------------------------------------------------------------
 - send notification if document is delete to those users watching the folder
