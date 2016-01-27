@@ -378,12 +378,15 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
 			</td>
 			<td>
-        <select name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+        <select class="chzn-select" name="workflows[]" multiple="multiple" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				print "<option value=\"\">"."</option>";
+				$mandatoryworkflows = $currUser ? $currUser->getMandatoryWorkflows() : array();
 				foreach ($workflows as $workflow) {
 					print "<option value=\"".$workflow->getID()."\"";
-					if($currUser && $currUser->getMandatoryWorkflow() && $currUser->getMandatoryWorkflow()->getID() == $workflow->getID())
+					$checked = false;
+					foreach($mandatoryworkflows as $mw) if($mw->getID() == $workflow->getID()) $checked = true;
+					if($checked)
 						echo " selected=\"selected\"";
 					print ">". htmlspecialchars($workflow->getName())."</option>";
 				}

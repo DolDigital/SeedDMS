@@ -248,12 +248,25 @@ $(document).ready(function() {
       </td>
       <td>
 <?php
-				$mandatoryworkflow = $user->getMandatoryWorkflow();
-				if($mandatoryworkflow) {
+				$mandatoryworkflows = $user->getMandatoryWorkflows();
+				if($mandatoryworkflows) {
+					if(count($mandatoryworkflows) == 1) {
 ?>
-				<?php echo $mandatoryworkflow->getName(); ?>
-				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflow->getID(); ?>">
+				<?php echo htmlspecialchars($mandatoryworkflows[0]->getName()); ?>
+				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflows[0]->getID(); ?>">
 <?php
+					} else {
+?>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+					foreach ($mandatoryworkflows as $workflow) {
+						print "<option value=\"".$workflow->getID()."\"";
+						print ">". htmlspecialchars($workflow->getName())."</option>";
+					}
+?>
+        </select>
+<?php
+					}
 				} else {
 ?>
         <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
@@ -262,8 +275,6 @@ $(document).ready(function() {
 					print "<option value=\"\">"."</option>";
 					foreach ($workflows as $workflow) {
 						print "<option value=\"".$workflow->getID()."\"";
-						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-							echo " selected=\"selected\"";
 						print ">". htmlspecialchars($workflow->getName())."</option>";
 					}
 ?>

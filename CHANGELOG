@@ -1,10 +1,22 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.1
+--------------------------------------------------------------------------------
+- merged changes from 4.3.24
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.0
 --------------------------------------------------------------------------------
 - support for customer extensions
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.24
+--------------------------------------------------------------------------------
+- fixed possible XSS attack in user substitution
+- users can have than 1 mandatory workflow, in that case the user can select one
+- completed MyDocuments page for advanced workflows
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23
