@@ -31,6 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];

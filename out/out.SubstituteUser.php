@@ -36,7 +36,7 @@ if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
 	$view->setParam('allusers', $allUsers);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 
