@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - fixed possible XSS attack in user substitution
 - users can have than 1 mandatory workflow, in that case the user can select one
+- completed MyDocuments page for advanced workflows
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23
