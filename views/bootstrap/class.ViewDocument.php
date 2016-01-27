@@ -776,6 +776,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					echo implode(", ", $names);
 					echo ") - ";
 					echo $wkflog->getDate();
+					echo "<br />";
 				}
 				echo "</td>";
 			}
