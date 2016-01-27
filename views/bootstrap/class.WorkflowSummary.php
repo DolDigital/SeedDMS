@@ -128,6 +128,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 					print "<th>".getMLText("version")."</th>\n";
 					print "<th>".getMLText("owner")."</th>\n";
 					print "<th>".getMLText("workflow")."</th>\n";
+					print "<th>".getMLText("workflow_state")."</th>\n";
 					print "<th>".getMLText("last_update")."</th>\n";
 					print "<th>".getMLText("expires")."</th>\n";
 					print "</tr>\n</thead>\n<tbody>\n";
