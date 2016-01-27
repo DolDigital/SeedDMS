@@ -94,10 +94,13 @@ if ($action == "adduser") {
 	}
 	else UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	
-	if(isset($_POST["workflow"])) {
-		$workflow = $dms->getWorkflow($_POST["workflow"]);
-		if($workflow)
-			$newUser->setMandatoryWorkflow($workflow);
+	if(isset($_POST["workflows"]) && $_POST["workflows"]) {
+		$workflows = array();
+		foreach($_POST["workflows"] as $workflowid)
+			if($tmp = $dms->getWorkflow($workflowid))
+				$workflows[] = $tmp;
+		if($workflows)
+			$newUser->setMandatoryWorkflows($workflows);
 	}
 
 	if (isset($_POST["usrReviewers"])){
@@ -245,13 +248,14 @@ else if ($action == "edituser") {
 		if(!$isDisabled)
 			$editedUser->clearLoginFailures();
 	}
-	if(isset($_POST["workflow"]) && $_POST["workflow"]) {
-		$currworkflow = $editedUser->getMandatoryWorkflow();
-		if (!$currworkflow || ($currworkflow->getID() != $_POST["workflow"])) {
-			$workflow = $dms->getWorkflow($_POST["workflow"]);
-			if($workflow)
-				$editedUser->setMandatoryWorkflow($workflow);
+	if(isset($_POST["workflows"]) && $_POST["workflows"]) {
+		$workflows = array();
+		foreach($_POST["workflows"] as $workflowid) {
+			if($tmp = $dms->getWorkflow($workflowid))
+				$workflows[] = $tmp;
 		}
+		if($workflows)
+			$editedUser->setMandatoryWorkflows($workflows);
 	} else {
 		$editedUser->delMandatoryWorkflow();
 	}
