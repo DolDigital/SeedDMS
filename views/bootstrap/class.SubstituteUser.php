@@ -50,17 +50,17 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		foreach ($allUsers as $currUser) {
 			echo "<tr>";
 			echo "<td>";
-			echo $currUser->getFullName()." (".$currUser->getLogin().")<br />";
-			echo "<small>".$currUser->getComment()."</small>";
+			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
+			echo "<small>".htmlspecialchars($currUser->getComment())."</small>";
 			echo "</td>";
 			echo "<td>";
-			echo "<a href=\"mailto:".$currUser->getEmail()."\">".$currUser->getEmail()."</a><br />";
+			echo "<a href=\"mailto:".htmlspecialchars($currUser->getEmail())."\">".htmlspecialchars($currUser->getEmail())."</a><br />";
 			echo "</td>";
 			echo "<td>";
 			$groups = $currUser->getGroups();
 			if (count($groups) != 0) {
 				for ($j = 0; $j < count($groups); $j++)	{
-					print $groups[$j]->getName();
+					print htmlspecialchars($groups[$j]->getName());
 					if ($j +1 < count($groups))
 						print ", ";
 				}
@@ -68,7 +68,7 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "<td>";
 			if($currUser->getID() != $user->getID()) {
-				echo "<a class=\"btn\" href=\"../op/op.SubstituteUser.php?userid=".$currUser->getID()."\"><i class=\"icon-exchange\"></i> ".getMLText('substitute_user')."</a> ";
+				echo "<a class=\"btn\" href=\"../op/op.SubstituteUser.php?userid=".((int) $currUser->getID())."\"><i class=\"icon-exchange\"></i> ".getMLText('substitute_user')."</a> ";
 			}
 			echo "</td>";
 			echo "</tr>";
