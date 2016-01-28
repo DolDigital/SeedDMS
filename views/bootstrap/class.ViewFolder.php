@@ -78,7 +78,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$enableDropUpload = $this->params['enableDropUpload'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 ?>
 		function folderSelected(id, name) {
 			window.location = '../out/out.ViewFolder.php?folderid=' + id;
