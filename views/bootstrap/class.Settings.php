@@ -49,6 +49,16 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
+	function js() { /* {{{ */
+?>
+		$(document).ready( function() {
+			$('#settingstab li a').click(function(event) {
+				$('#currenttab').val($(event.currentTarget).data('target').substring(1));
+			});
+		});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -62,15 +72,6 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("settings"));
 
 ?>
-
-		<script language="JavaScript">
-		$(document).ready( function() {
-			$('#settingstab li a').click(function(event) {
-				$('#currenttab').val($(event.currentTarget).data('target').substring(1));
-			});
-		}); 
-		</script>
-
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
   <input type="hidden" name="action" value="saveSettings" />
 	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo (isset($_POST['currenttab']) ? $_POST['currenttab'] : 'site' ); ?>" />

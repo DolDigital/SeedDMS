@@ -33,7 +33,7 @@ if(!trim($settings->_encryptionKey))
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'settings'=>$settings, 'currenttab'=>(isset($_GET['currenttab']) ? $_GET['currenttab'] : '')));
 if($view) {
-	$view->show();
+	$view($_GET);
 	exit;
 }
 
