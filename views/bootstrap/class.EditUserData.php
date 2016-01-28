@@ -31,30 +31,14 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$enableuserimage = $this->params['enableuserimage'];
-		$enablelanguageselector = $this->params['enablelanguageselector'];
-		$enablethemeselector = $this->params['enablethemeselector'];
-		$passwordstrength = $this->params['passwordstrength'];
-		$httproot = $this->params['httproot'];
-
-		$this->htmlStartPage(getMLText("edit_user_details"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("my_account"), "my_account");
-
+	function js() { /* {{{ */
 ?>
-
-<script language="JavaScript">
-
 function checkForm()
 {
 	msg = new Array();
-	if (document.form1.pwd.value != document.form1.pwdconf.value) msg.push("<?php printMLText("js_pwd_not_conf");?>");
-	if (document.form1.fullname.value == "") msg.push("<?php printMLText("js_no_name");?>");
-	if (document.form1.email.value == "") msg.push("<?php printMLText("js_no_email");?>");
+	if ($("#pwd").val() != $("#pwdconf").val()) msg.push("<?php printMLText("js_pwd_not_conf");?>");
+	if ($("#fullname").val() == "") msg.push("<?php printMLText("js_no_name");?>");
+	if ($("#email").val() == "") msg.push("<?php printMLText("js_no_email");?>");
 //	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "") {
   	noty({
@@ -70,13 +54,34 @@ function checkForm()
 	else
 		return true;
 }
-</script>
 
+$(document).ready( function() {
+	$('body').on('submit', '#form', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$enableuserimage = $this->params['enableuserimage'];
+		$enablelanguageselector = $this->params['enablelanguageselector'];
+		$enablethemeselector = $this->params['enablethemeselector'];
+		$passwordstrength = $this->params['passwordstrength'];
+		$httproot = $this->params['httproot'];
+
+		$this->htmlStartPage(getMLText("edit_user_details"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("my_account"), "my_account");
+
 		$this->contentHeading(getMLText("edit_user_details"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" id="form">
 <table class="table-condensed">
 	<tr>
 		<td><?php printMLText("current_password");?>:</td>
@@ -84,7 +89,7 @@ function checkForm()
 	</tr>
 	<tr>
 		<td><?php printMLText("new_password");?>:</td>
-		<td><input class="pwd" type="password" rel="strengthbar" name="pwd" size="30"></td>
+		<td><input class="pwd" type="password" rel="strengthbar" id="pwd" name="pwd" size="30"></td>
 	</tr>
 <?php
 	if($passwordstrength) {
@@ -100,15 +105,15 @@ function checkForm()
 ?>
 	<tr>
 		<td><?php printMLText("confirm_pwd");?>:</td>
-		<td><input id="pwdconf" type="Password" name="pwdconf" size="30"></td>
+		<td><input id="pwdconf" type="Password" id="pwdconf" name="pwdconf" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("name");?>:</td>
-		<td><input type="text" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
+		<td><input type="text" id="fullname" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("email");?>:</td>
-		<td><input type="text" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
+		<td><input type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("comment");?>:</td>
