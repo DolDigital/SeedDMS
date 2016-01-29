@@ -139,6 +139,11 @@ class SeedDMS_Core_Object { /* {{{ */
 		if (!$this->_attributes) {
 			$this->getAttributes();
 		}
+		switch($attrdef->getType()) {
+		case SeedDMS_Core_AttributeDefinition::type_boolean:
+			$value = ($value === true || $value != '' || $value == 1) ? 1 : 0;
+			break;
+		}
 		if($attrdef->getMultipleValues() && is_array($value)) {
 			$sep = substr($attrdef->getValueSet(), 0, 1);
 			$value = $sep.implode($sep, $value);
