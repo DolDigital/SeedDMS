@@ -54,7 +54,7 @@ $(document).ready( function() {
 		 * actually provided to update the input field, but here we use
 		 * it to set the document location. */
 		updater: function (item) {
-			document.location = "../op/op.Search.php?query=" + encodeURIComponent(item.substring(1));
+			document.location = "../out/out.Search.php?query=" + encodeURIComponent(item.substring(1));
 			return item;
 		},
 		/* Set a matcher that allows any returned value */
