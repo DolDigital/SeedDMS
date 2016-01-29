@@ -101,6 +101,7 @@ if ($action == "saveSettings")
 
   // SETTINGS - SYSTEM - AUTHENTICATION
   $settings->_enableGuestLogin = getBoolValue("enableGuestLogin");
+  $settings->_enableGuestAutoLogin = getBoolValue("enableGuestAutoLogin");
   $settings->_restricted = getBoolValue("restricted");
   $settings->_enableUserImage = getBoolValue("enableUserImage");
   $settings->_disableSelfEdit = getBoolValue("disableSelfEdit");

@@ -12,6 +12,10 @@
  * @version    Release: @package_version@
  */
 
+require_once("inc.Utils.php");
+require_once("inc.ClassEmailNotify.php");
+require_once("inc.ClassSession.php");
+
 $refer = $_SERVER["REQUEST_URI"];
 if (!strncmp("/op", $refer, 3)) {
 	$refer="";
@@ -19,39 +23,45 @@ if (!strncmp("/op", $refer, 3)) {
 	$refer = urlencode($refer);
 }
 if (!isset($_COOKIE["mydms_session"])) {
-	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-	exit;
-}
-
-require_once("inc.Utils.php");
-require_once("inc.ClassEmailNotify.php");
-require_once("inc.ClassSession.php");
-
-/* Load session */
-$dms_session = $_COOKIE["mydms_session"];
-$session = new SeedDMS_Session($db);
-if(!$resArr = $session->load($dms_session)) {
-	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
-	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-	exit;
+	if($settings->_enableGuestLogin && $settings->_enableGuestAutoLogin) {
+		require_once("../inc/inc.ClassSession.php");
+		$session = new SeedDMS_Session($db);
+		if(!$dms_session = $session->create(array('userid'=>$settings->_guestID, 'theme'=>$settings->_theme, 'lang'=>$settings->_language))) {
+			header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+			exit;
+		}
+		$resArr = $session->load($dms_session);
+	} else {
+		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+		exit;
+	}
+} else {
+	/* Load session */
+	$dms_session = $_COOKIE["mydms_session"];
+	$session = new SeedDMS_Session($db);
+	if(!$resArr = $session->load($dms_session)) {
+		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+		exit;
+	}
 }
 
 /* Update last access time */
 $session->updateAccess($dms_session);
-/* Load user data */
 
+/* Load user data */
 $user = $dms->getUser($resArr["userID"]);
-if($user->isAdmin()) {
-	if($resArr["su"]) {
-		$user = $dms->getUser($resArr["su"]);
-	}
-}
 if (!is_object($user)) {
 	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
 	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
 	exit;
 }
 
+if($user->isAdmin()) {
+	if($resArr["su"]) {
+		$user = $dms->getUser($resArr["su"]);
+	}
+}
 $dms->setUser($user);
 if($settings->_enableEmail) {
 	$notifier = new SeedDMS_EmailNotify();

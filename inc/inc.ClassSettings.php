@@ -38,6 +38,8 @@ class Settings { /* {{{ */
 	var $_rootFolderID = 1;
 	// If you want anybody to login as guest, set the following line to true
 	var $_enableGuestLogin = false;
+	// If you even want guest to be logged in automatically, set the following to true
+	var $_enableGuestAutoLogin = false;
 	// Allow users to reset their password
 	var $_enablePasswordForgotten = false;
 	// Minimum password strength (0 - x, 0 means no check)
@@ -382,6 +384,7 @@ class Settings { /* {{{ */
 		$node = $xml->xpath('/configuration/system/authentication');
 		$tab = $node[0]->attributes();
 		$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
+		$this->_enableGuestAutoLogin = Settings::boolVal($tab["enableGuestAutoLogin"]);
 		$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
 		$this->_passwordStrength = intval($tab["passwordStrength"]);
 		$this->_passwordStrengthAlgorithm = strval($tab["passwordStrengthAlgorithm"]);
@@ -655,6 +658,7 @@ class Settings { /* {{{ */
     // XML Path: /configuration/system/authentication
     $node = $this->getXMLNode($xml, '/configuration/system', 'authentication');
     $this->setXMLAttributValue($node, "enableGuestLogin", $this->_enableGuestLogin);
+    $this->setXMLAttributValue($node, "enableGuestAutoLogin", $this->_enableGuestAutoLogin);
     $this->setXMLAttributValue($node, "enablePasswordForgotten", $this->_enablePasswordForgotten);
     $this->setXMLAttributValue($node, "passwordStrength", $this->_passwordStrength);
     $this->setXMLAttributValue($node, "passwordStrengthAlgorithm", $this->_passwordStrengthAlgorithm);

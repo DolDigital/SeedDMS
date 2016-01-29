@@ -346,6 +346,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableGuestLogin");?>:</td>
         <td><input name="enableGuestLogin" type="checkbox" <?php if ($settings->_enableGuestLogin) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableGuestAutoLogin_desc");?>">
+        <td><?php printMLText("settings_enableGuestAutoLogin");?>:</td>
+        <td><input name="enableGuestAutoLogin" type="checkbox" <?php if ($settings->_enableGuestAutoLogin) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_restricted_desc");?>">
         <td><?php printMLText("settings_restricted");?>:</td>
         <td><input name="restricted" type="checkbox" <?php if ($settings->_restricted) echo "checked" ?> /></td>
