@@ -4,6 +4,8 @@
 - fixed possible XSS attack in user substitution
 - users can have than 1 mandatory workflow, in that case the user can select one
 - completed MyDocuments page for advanced workflows
+- guest user can be automatically logged in
+- get/set custom attributes by webdav
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23
