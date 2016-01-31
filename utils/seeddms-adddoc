@@ -1,6 +1,8 @@
-#!/bin/sh
-if [ -z ${SEEDDMS_HOME+x} ]; then
-	echo "Please set SEEDDMS_HOME before running this script";
-	exit 1;
+#!/usr/bin/env bash
+
+if [ -z "${SEEDDMS_HOME}" ]; then
+	echo 'Please set $SEEDDMS_HOME before running this script'
+	exit 1
 fi
-php -f ${SEEDDMS_HOME}/utils/adddoc.php -- $*
+
+exec php -f "${SEEDDMS_HOME}/utils/adddoc.php" -- "${@}"
