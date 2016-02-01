@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2161), dgrutsch (21)
+//    Translators: Admin (2162), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -1015,7 +1015,7 @@ URL: [url]',
 'settings_enableFullSearch' => 'Volltextsuche einschalten',
 'settings_enableFullSearch_desc' => 'Anwählen, um die Volltextsuche mittels Lucene einzuschalten.',
 'settings_enableGuestAutoLogin' => 'Automatische Anmeldung als Gast',
-'settings_enableGuestAutoLogin_desc' => '',
+'settings_enableGuestAutoLogin_desc' => 'Wenn das Gast-Login und automatisches Anmelden eingeschaltet ist, dann wird der Gast-Benutzer sofort angemeldet.',
 'settings_enableGuestLogin' => 'Anmeldung als Gast',
 'settings_enableGuestLogin_desc' => 'Wenn Sie Gast-Logins erlauben wollen, dann wählen Sie diese Option an. Anmerkung: Gast-Logins sollten nur in einer vertrauenswürdigen Umgebung erlaubt werden.',
 'settings_enableHelp' => 'Hilfe einschalten',

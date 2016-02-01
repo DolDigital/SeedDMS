@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (980), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (981), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -984,7 +984,7 @@ URL: [url]',
 'settings_enableFullSearch' => 'Habilitar búsqueda de texto completo',
 'settings_enableFullSearch_desc' => 'Habilitar búsqueda de texto completo',
 'settings_enableGuestAutoLogin' => '',
-'settings_enableGuestAutoLogin_desc' => 'Wenn das Gast-Login und automatisches Anmelden eingeschaltet ist, dann wird der Gast-Benutzer sofort angemeldet.',
+'settings_enableGuestAutoLogin_desc' => '',
 'settings_enableGuestLogin' => 'Habilitar acceso de invitado',
 'settings_enableGuestLogin_desc' => 'Si quiere que cualquiera acceda como invitado, chequee esta opción. Nota: El acceso de invitado debería permitirse solo en entornos de confianza',
 'settings_enableHelp' => '',

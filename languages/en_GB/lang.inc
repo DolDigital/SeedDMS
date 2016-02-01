@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1296), dgrutsch (7), netixw (14)
+//    Translators: Admin (1297), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -985,7 +985,7 @@ URL: [url]',
 'settings_defaultSearchMethod' => 'Default search method',
 'settings_defaultSearchMethod_desc' => 'Default search method, when a search is started by the search form in the main menu.',
 'settings_defaultSearchMethod_valdatabase' => 'database',
-'settings_defaultSearchMethod_valfulltext' => 'Fulltext',
+'settings_defaultSearchMethod_valfulltext' => 'fulltext',
 'settings_delete_install_folder' => 'In order to use SeedDMS, you must delete the file ENABLE_INSTALL_TOOL in the configuration directory',
 'settings_disableSelfEdit' => 'Disable Self Edit',
 'settings_disableSelfEdit_desc' => 'If checked user cannot edit his own profile',

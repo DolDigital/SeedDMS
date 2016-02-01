@@ -189,6 +189,15 @@ if(!is_writeable($settings->_configFilePath)) {
 					</select>
 				</td>
       </tr>
+      <tr title="<?php printMLText("settings_defaultSearchMethod_desc");?>">
+        <td><?php printMLText("settings_defaultSearchMethod");?>:</td>
+				<td>
+				  <select name="defaultSearchMethod">
+					  <option value="database" <?php if ($settings->_defaultSearchMethod=='database') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valdatabase");?></option>
+						<option value="fulltext" <?php if ($settings->_defaultSearchMethod=='fulltext') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valfulltext");?></option>
+					</select>
+				</td>
+      </tr>
       <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
         <td><?php $this->showTextField("stopWordsFile", $settings->_stopWordsFile); ?></td>
@@ -225,6 +234,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enableLanguageSelector_desc");?>">
         <td><?php printMLText("settings_enableLanguageSelector");?>:</td>
         <td><input name="enableLanguageSelector" type="checkbox" <?php if ($settings->_enableLanguageSelector) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableHelp_desc");?>">
+        <td><?php printMLText("settings_enableHelp");?>:</td>
+        <td><input name="enableHelp" type="checkbox" <?php if ($settings->_enableHelp) echo "checked" ?> /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableThemeSelector_desc");?>">
         <td><?php printMLText("settings_enableThemeSelector");?>:</td>
