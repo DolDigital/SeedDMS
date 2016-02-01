@@ -25,6 +25,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - make sure boolean attribute is saved as 0/1
+- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
