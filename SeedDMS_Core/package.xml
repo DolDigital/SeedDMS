@@ -15,8 +15,8 @@
  <date>2016-01-21</date>
  <time>07:12:53</time>
  <version>
-  <release>4.3.23</release>
-  <api>4.3.23</api>
+  <release>4.3.24</release>
+  <api>4.3.24</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- new method SeedDMS_Core_DMS::createDump()
-- minor improvements int SeedDMS_Core_Document::getReadAccessList()
+- make sure boolean attribute is saved as 0/1
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -924,6 +923,23 @@ by a group or user right
    <notes>
 - fix sql statement to reset password
 - pass some more information for timeline
+   </notes>
+  </release>
+  <release>
+   <date>2016-01-21</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.23</release>
+    <api>4.3.23</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMS_Core_DMS::createDump()
+- minor improvements int SeedDMS_Core_Document::getReadAccessList()
    </notes>
   </release>
  </changelog>
