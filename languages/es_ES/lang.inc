@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (979), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (980), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -951,6 +951,10 @@ URL: [url]',
 'settings_dbUser' => 'Nombre de usuario',
 'settings_dbUser_desc' => 'Nombre de usuario de acceso a su base de datos introducido durante el proceso de instalación. No edite este campo a menos que sea necesario, por ejemplo si la base de datos se transfiere a un nuevo servidor.',
 'settings_dbVersion' => 'Esquema de base de datos demasiado antiguo',
+'settings_defaultSearchMethod' => '',
+'settings_defaultSearchMethod_desc' => '',
+'settings_defaultSearchMethod_valdatabase' => '',
+'settings_defaultSearchMethod_valfulltext' => '',
 'settings_delete_install_folder' => 'Para utilizar SeedDMS, debe eliminar el archivo ENABLE_INSTALL_TOOL de la carpeta de configuración',
 'settings_disableSelfEdit' => 'Deshabilitar autoedición',
 'settings_disableSelfEdit_desc' => 'Si está seleccionado el usuario no podrá editar su propio perfil',
@@ -979,8 +983,12 @@ URL: [url]',
 'settings_enableFolderTree_desc' => 'Falso para no mostrar el árbol de carpetas',
 'settings_enableFullSearch' => 'Habilitar búsqueda de texto completo',
 'settings_enableFullSearch_desc' => 'Habilitar búsqueda de texto completo',
+'settings_enableGuestAutoLogin' => '',
+'settings_enableGuestAutoLogin_desc' => 'Wenn das Gast-Login und automatisches Anmelden eingeschaltet ist, dann wird der Gast-Benutzer sofort angemeldet.',
 'settings_enableGuestLogin' => 'Habilitar acceso de invitado',
 'settings_enableGuestLogin_desc' => 'Si quiere que cualquiera acceda como invitado, chequee esta opción. Nota: El acceso de invitado debería permitirse solo en entornos de confianza',
+'settings_enableHelp' => '',
+'settings_enableHelp_desc' => '',
 'settings_enableLanguageSelector' => 'Habilitar selector de idioma',
 'settings_enableLanguageSelector_desc' => 'Mostrar selector de lenguaje para usuario despues de identificarse.',
 'settings_enableLargeFileUpload' => 'Habilitar la carga de ficheros grandes',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2154), dgrutsch (21)
+//    Translators: Admin (2161), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -982,6 +982,10 @@ URL: [url]',
 'settings_dbUser' => 'Benutzer',
 'settings_dbUser_desc' => 'Der Benutzername, um auf die Datenbank zugreifen zu können.',
 'settings_dbVersion' => 'Datenbankschema zu alt',
+'settings_defaultSearchMethod' => 'Voreinstellte Suchmethode',
+'settings_defaultSearchMethod_desc' => 'Voreingestellte Suchmethode, wenn über das Suchfeld in der Menüleiste gesucht wird.',
+'settings_defaultSearchMethod_valdatabase' => 'Datenbank',
+'settings_defaultSearchMethod_valfulltext' => 'Volltext',
 'settings_delete_install_folder' => 'Um SeedDMS nutzen zu können, müssen Sie die Datei ENABLE_INSTALL_TOOL aus dem Konfigurationsverzeichnis löschen.',
 'settings_disableSelfEdit' => 'Kein Ändern des eigenen Profils',
 'settings_disableSelfEdit_desc' => 'Anwählen, um das Ändern des eigenen Profiles zu verhindern.',
@@ -1010,8 +1014,12 @@ URL: [url]',
 'settings_enableFolderTree_desc' => 'Schaltet den Verzeichnisbaum auf der \'View Folder\' Seite ein oder aus',
 'settings_enableFullSearch' => 'Volltextsuche einschalten',
 'settings_enableFullSearch_desc' => 'Anwählen, um die Volltextsuche mittels Lucene einzuschalten.',
+'settings_enableGuestAutoLogin' => 'Automatische Anmeldung als Gast',
+'settings_enableGuestAutoLogin_desc' => '',
 'settings_enableGuestLogin' => 'Anmeldung als Gast',
 'settings_enableGuestLogin_desc' => 'Wenn Sie Gast-Logins erlauben wollen, dann wählen Sie diese Option an. Anmerkung: Gast-Logins sollten nur in einer vertrauenswürdigen Umgebung erlaubt werden.',
+'settings_enableHelp' => 'Hilfe einschalten',
+'settings_enableHelp_desc' => 'Ein-/Ausschalten des Hilfe-Links im Hauptmenü.',
 'settings_enableLanguageSelector' => 'Sprachauswahl einschalten',
 'settings_enableLanguageSelector_desc' => 'Zeige Auswahl der verfügbaren Sprachen nachdem man sich angemeldet hat.',
 'settings_enableLargeFileUpload' => 'Hochladen von sehr großen Dateien ermöglichen',
