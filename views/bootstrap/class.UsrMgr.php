@@ -33,6 +33,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$seluser = $this->params['seluser'];
+		$strictformcheck = $this->params['strictformcheck'];
 ?>
 function checkForm()
 {
@@ -381,7 +382,7 @@ $(document).ready( function() {
 				foreach ($workflows as $workflow) {
 					print "<option value=\"".$workflow->getID()."\"";
 					$checked = false;
-					foreach($mandatoryworkflows as $mw) if($mw->getID() == $workflow->getID()) $checked = true;
+					if($mandatoryworkflows) foreach($mandatoryworkflows as $mw) if($mw->getID() == $workflow->getID()) $checked = true;
 					if($checked)
 						echo " selected=\"selected\"";
 					print ">". htmlspecialchars($workflow->getName())."</option>";
