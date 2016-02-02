@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1287), dgrutsch (7), netixw (14)
+//    Translators: Admin (1297), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -689,7 +689,7 @@ URL: [url]',
 'october' => 'October',
 'old' => 'Old',
 'only_jpg_user_images' => 'Only .jpg-images may be used as user-images',
-'order_by_sequence_off' => 'Ordering by sequence is turned of in the settings. If you want this parameter to have effect, you will have to turn it back on.',
+'order_by_sequence_off' => 'Ordering by sequence is turned off in the settings. If you want this parameter to have effect, you will have to turn it back on.',
 'original_filename' => 'Original filename',
 'owner' => 'Owner',
 'ownership_changed_email' => 'Owner changed',
@@ -982,6 +982,10 @@ URL: [url]',
 'settings_dbUser' => 'Username',
 'settings_dbUser_desc' => 'The username for access to your database entered during the installation process. Do not edit field unless absolutely necessary, for example transfer of the database to a new Host.',
 'settings_dbVersion' => 'Database schema too old',
+'settings_defaultSearchMethod' => 'Default search method',
+'settings_defaultSearchMethod_desc' => 'Default search method, when a search is started by the search form in the main menu.',
+'settings_defaultSearchMethod_valdatabase' => 'database',
+'settings_defaultSearchMethod_valfulltext' => 'fulltext',
 'settings_delete_install_folder' => 'In order to use SeedDMS, you must delete the file ENABLE_INSTALL_TOOL in the configuration directory',
 'settings_disableSelfEdit' => 'Disable Self Edit',
 'settings_disableSelfEdit_desc' => 'If checked user cannot edit his own profile',
@@ -1010,8 +1014,12 @@ URL: [url]',
 'settings_enableFolderTree_desc' => 'Enabel/Disable the folder tree on the \'View Folder\' page',
 'settings_enableFullSearch' => 'Enable Full text search',
 'settings_enableFullSearch_desc' => 'Enable Full text search',
+'settings_enableGuestAutoLogin' => 'Enable auto login for guest',
+'settings_enableGuestAutoLogin_desc' => 'If a guest login and auto login is enabled, the guest will be logged in automatically.',
 'settings_enableGuestLogin' => 'Enable Guest Login',
 'settings_enableGuestLogin_desc' => 'If you want anybody to login as guest, check this option. Note: guest login should be used only in a trusted environment',
+'settings_enableHelp' => 'Enable Help',
+'settings_enableHelp_desc' => 'Enable/disable the link to the help screens in the menu',
 'settings_enableLanguageSelector' => 'Enable Language Selector',
 'settings_enableLanguageSelector_desc' => 'Show selector for user interface language after being logged in.',
 'settings_enableLargeFileUpload' => 'Enable large file upload',

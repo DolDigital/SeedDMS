@@ -70,7 +70,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 ?>
 $(document).ready( function() {
 	$('i.icon-arrow-up').on('click', function(e) {

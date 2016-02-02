@@ -32,7 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 
 		$this->printFolderChooserJs("form1");
 		$this->printFolderChooserJs("form2");

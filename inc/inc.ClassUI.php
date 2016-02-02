@@ -91,6 +91,7 @@ class UI extends UI_Default {
 			$view->setParam('enablecalendar', $settings->_enableCalendar);
 			$view->setParam('calendardefaultview', $settings->_calendarDefaultView);
 			$view->setParam('enablefullsearch', $settings->_enableFullSearch);
+			$view->setParam('enablehelp', $settings->_enableHelp);
 			$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
 			$view->setParam('printdisclaimer', $settings->_printDisclaimer);
 			$view->setParam('footnote', $settings->_footNote);

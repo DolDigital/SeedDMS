@@ -47,7 +47,7 @@ if(isset($_GET['userid']) && $_GET['userid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
 	$view($_GET);
 }

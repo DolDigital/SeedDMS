@@ -77,7 +77,7 @@ if ($action == "addattrdef") {
 	add_log_line("&action=addattrdef&name=".$name);
 }
 
-// delet attribute definition -----------------------------------------------
+// delete attribute definition -----------------------------------------------
 else if ($action == "removeattrdef") {
 
 	/* Check if the form data comes for a trusted request */

@@ -326,6 +326,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$info["props"][] = $this->mkprop("getcontentlength", filesize($this->dms->contentDir.'/'.$fspath));
 			if($keywords = $obj->getKeywords())
 				$info["props"][] = $this->mkprop("SeedDMS:", "keywords", $keywords);
+			$info["props"][] = $this->mkprop("SeedDMS:", "id", $obj->getID());
 			$info["props"][] = $this->mkprop("SeedDMS:", "version", $content->getVersion());
 			$status = $content->getStatus();
 			$info["props"][] = $this->mkprop("SeedDMS:", "status", $status['status']);
@@ -338,17 +339,20 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$info["props"][] = $this->mkprop("SeedDMS:", "comment", $comment);
 		$info["props"][] = $this->mkprop("SeedDMS:", "owner", $obj->getOwner()->getLogin());
 
-		// get additional properties from database
-				/*
-		$query = "SELECT ns, name, value 
-						FROM {$this->db_prefix}properties 
-					   WHERE path = '$path'";
-		$res = mysql_query($query);
-		while ($row = mysql_fetch_assoc($res)) {
-			$info["props"][] = $this->mkprop($row["ns"], $row["name"], $row["value"]);
+		$attributes = $obj->getAttributes();
+		if($attributes) {
+			foreach($attributes as $attribute) {
+				$attrdef = $attribute->getAttributeDefinition();
+				$valueset = $attrdef->getValueSetAsArray();
+				if($valueset && $attrdef->getMultipleValues()) {
+					$valuesetstr = $attrdef->getValueSet();
+					$delimiter = substr($valuesetstr, 0, 1);
+					$info["props"][] = $this->mkprop("SeedDMS:", str_replace(' ', '', $attrdef->getName()), $delimiter.implode($delimiter, $attribute->getValueAsArray()));
+				} else
+					$info["props"][] = $this->mkprop("SeedDMS:", str_replace(' ', '', $attrdef->getName()), $attribute->getValue());
+			}
 		}
-		mysql_free_result($res);
-				*/
+
 		return $info;
 	} /* }}} */
 
@@ -898,16 +902,52 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			if ($prop["ns"] == "DAV:") {
 				$options["props"][$key]['status'] = "403 Forbidden";
 			} else {
-			$this->logger->log('PROPPATCH: set '.$prop["ns"].''.$prop["val"].' to '.$prop["val"], PEAR_LOG_INFO);
+				$this->logger->log('PROPPATCH: set '.$prop["ns"].''.$prop["val"].' to '.$prop["val"], PEAR_LOG_INFO);
 				if($prop["ns"] == "SeedDMS:") {
 					if (isset($prop["val"]))
 						$val = $prop["val"];
 					else
 						$val = '';
 					switch($prop["name"]) {
-						case "comment":
-							$obj->setComment($val);
-							break;
+					case "comment":
+						$obj->setComment($val);
+						break;
+					default:
+						if($attrdef = $this->dms->getAttributeDefinitionByName($prop["name"])) {
+							$valueset = $attrdef->getValueSetAsArray();
+							switch($attrdef->getType()) {
+							case SeedDMS_Core_AttributeDefinition::type_string:
+								if($valueset) {
+									if(in_array($val, $valueset)) {
+										$obj->setAttributeValue($attrdef, $val);
+									}
+								} else {
+									$obj->setAttributeValue($attrdef, $val);
+								}
+								break;
+							case SeedDMS_Core_AttributeDefinition::type_int:
+								if($valueset) {
+									if(in_array($val, $valueset)) {
+										$obj->setAttributeValue($attrdef, (int) $val);
+									}
+								} else {
+									$obj->setAttributeValue($attrdef, (int) $val);
+								}
+								break;
+							case SeedDMS_Core_AttributeDefinition::type_float:
+								if($valueset) {
+									if(in_array($val, $valueset)) {
+										$obj->setAttributeValue($attrdef, (float) $val);
+									}
+								} else {
+									$obj->setAttributeValue($attrdef, (float) $val);
+								}
+								break;
+							case SeedDMS_Core_AttributeDefinition::type_boolean:
+								$obj->setAttributeValue($attrdef, $val == 1 ? true : false);
+								break;
+							}
+						}
 					}
 				}
 			}

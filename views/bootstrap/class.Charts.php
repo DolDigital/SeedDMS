@@ -35,7 +35,7 @@ class SeedDMS_View_Charts extends SeedDMS_Bootstrap_Style {
 		$data = $this->params['data'];
 		$type = $this->params['type'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 
 ?>
 	$("<div id='tooltip'></div>").css({

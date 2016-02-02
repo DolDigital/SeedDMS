@@ -38,6 +38,8 @@ class Settings { /* {{{ */
 	var $_rootFolderID = 1;
 	// If you want anybody to login as guest, set the following line to true
 	var $_enableGuestLogin = false;
+	// If you even want guest to be logged in automatically, set the following to true
+	var $_enableGuestAutoLogin = false;
 	// Allow users to reset their password
 	var $_enablePasswordForgotten = false;
 	// Minimum password strength (0 - x, 0 means no check)
@@ -91,6 +93,8 @@ class Settings { /* {{{ */
 	var $_enableFullSearch = true;
 	// fulltext search engine
 	var $_fullSearchEngine = 'lucene';
+	// default search method
+	var $_defaultSearchMethod = 'database'; // or 'fulltext'
 	// contentOffsetDirTo
 	var $_contentOffsetDir = "1048576";
 	// Maximum number of sub-directories per parent directory
@@ -166,6 +170,8 @@ class Settings { /* {{{ */
 	var $_enableRecursiveCount = false;
 	// maximum number of documents or folders when counted recursively
 	var $_maxRecursiveCount = 10000;
+	// enable/disable help
+	var $_enableHelp = true;
 	// enable/disable language selection menu
 	var $_enableLanguageSelector = true;
 	// enable/disable theme selector
@@ -354,10 +360,12 @@ class Settings { /* {{{ */
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
+		$this->_enableHelp = Settings::boolVal($tab["enableHelp"]);
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
 		$this->_enableThemeSelector = Settings::boolVal($tab["enableThemeSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
 		$this->_fullSearchEngine = strval($tab["fullSearchEngine"]);
+		$this->_defaultSearchMethod = strval($tab["defaultSearchMethod"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
@@ -389,6 +397,7 @@ class Settings { /* {{{ */
 		$node = $xml->xpath('/configuration/system/authentication');
 		$tab = $node[0]->attributes();
 		$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
+		$this->_enableGuestAutoLogin = Settings::boolVal($tab["enableGuestAutoLogin"]);
 		$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
 		$this->_passwordStrength = intval($tab["passwordStrength"]);
 		$this->_passwordStrengthAlgorithm = strval($tab["passwordStrengthAlgorithm"]);
@@ -646,10 +655,12 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
+    $this->setXMLAttributValue($node, "enableHelp", $this->_enableHelp);
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
     $this->setXMLAttributValue($node, "enableThemeSelector", $this->_enableThemeSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "fullSearchEngine", $this->_fullSearchEngine);
+    $this->setXMLAttributValue($node, "defaultSearchMethod", $this->_defaultSearchMethod);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
@@ -679,6 +690,7 @@ class Settings { /* {{{ */
     // XML Path: /configuration/system/authentication
     $node = $this->getXMLNode($xml, '/configuration/system', 'authentication');
     $this->setXMLAttributValue($node, "enableGuestLogin", $this->_enableGuestLogin);
+    $this->setXMLAttributValue($node, "enableGuestAutoLogin", $this->_enableGuestAutoLogin);
     $this->setXMLAttributValue($node, "enablePasswordForgotten", $this->_enablePasswordForgotten);
     $this->setXMLAttributValue($node, "passwordStrength", $this->_passwordStrength);
     $this->setXMLAttributValue($node, "passwordStrengthAlgorithm", $this->_passwordStrengthAlgorithm);

@@ -70,12 +70,14 @@ if ($action == "saveSettings")
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
 	$settings->_fullSearchEngine = $_POST["fullSearchEngine"];
+	$settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);
   $settings->_enableLanguageSelector = getBoolValue("enableLanguageSelector");
+  $settings->_enableHelp = getBoolValue("enableHelp");
   $settings->_enableThemeSelector = getBoolValue("enableThemeSelector");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
 	$settings->_stopWordsFile = $_POST["stopWordsFile"];
@@ -103,6 +105,7 @@ if ($action == "saveSettings")
 
   // SETTINGS - SYSTEM - AUTHENTICATION
   $settings->_enableGuestLogin = getBoolValue("enableGuestLogin");
+  $settings->_enableGuestAutoLogin = getBoolValue("enableGuestAutoLogin");
   $settings->_restricted = getBoolValue("restricted");
   $settings->_enableUserImage = getBoolValue("enableUserImage");
   $settings->_disableSelfEdit = getBoolValue("disableSelfEdit");

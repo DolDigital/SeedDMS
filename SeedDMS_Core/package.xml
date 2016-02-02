@@ -943,5 +943,22 @@ by a group or user right
 - minor improvements int SeedDMS_Core_Document::getReadAccessList()
 	 </notes>
   </release>
+  <release>
+   <date>2016-01-22</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.24</release>
+    <api>4.3.24</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- make sure boolean attribute is saved as 0/1
+- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
+	 </notes>
+  </release>
  </changelog>
 </package>
