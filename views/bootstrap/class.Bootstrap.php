@@ -1376,7 +1376,9 @@ $(function() {
 				else
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
-  });
+	});
+	// Unfold tree if folder is opened
+	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
   $('#jqtree<?= $formid ?>').bind(
 		'tree.click',
 		function(event) {
