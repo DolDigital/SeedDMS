@@ -31,6 +31,28 @@ if (!isset($_COOKIE["mydms_session"])) {
 			exit;
 		}
 		$resArr = $session->load($dms_session);
+	}	elseif($settings->_autoLoginUser) {
+		require_once("../inc/inc.ClassSession.php");
+		if(!($user = $dms->getUser($settings->_autoLoginUser))/* || !$user->isGuest()*/) {
+			header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+			exit;
+		}
+		$theme = $user->getTheme();
+		if (strlen($theme)==0) {
+			$theme = $settings->_theme;
+			$user->setTheme($theme);
+		}
+		$lang = $user->getLanguage();
+		if (strlen($lang)==0) {
+			$lang = $settings->_language;
+			$user->setLanguage($lang);
+		}
+		$session = new SeedDMS_Session($db);
+		if(!$dms_session = $session->create(array('userid'=>$user->getID(), 'theme'=>$theme, 'lang'=>$lang))) {
+			header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+			exit;
+		}
+		$resArr = $session->load($dms_session);
 	} else {
 		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
 		exit;
@@ -49,68 +71,23 @@ if (!isset($_COOKIE["mydms_session"])) {
 /* Update last access time */
 $session->updateAccess($dms_session);
 
-if (!isset($_COOKIE["mydms_session"])) {
-	if($settings->_autoLoginUser) {
-		if(!($user = $dms->getUser($settings->_autoLoginUser))/* || !$user->isGuest()*/) {
-			header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-			exit;
-		}
-		$theme = $user->getTheme();
-		if (strlen($theme)==0) {
-			$theme = $settings->_theme;
-			$user->setTheme($theme);
-		}
-		$lang = $user->getLanguage();
-		if (strlen($lang)==0) {
-			$lang = $settings->_language;
-			$user->setLanguage($lang);
-		}
-		$session = new SeedDMS_Session($db);
-		if(!$id = $session->create(array('userid'=>$user->getID(), 'theme'=>$theme, 'lang'=>$lang))) {
-			header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-			exit;
-		}
-		/*
-		if($settings->_cookieLifetime)
-			$lifetime = time() + intval($settings->_cookieLifetime);
-		else
-			$lifetime = 0;
-		setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot, null, null, !$settings->_enableLargeFileUpload);
-		*/
-	} else {
-		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-		exit;
-	}
-} else {
-	/* Load session */
-	$dms_session = $_COOKIE["mydms_session"];
-	$session = new SeedDMS_Session($db);
-	if(!$resArr = $session->load($dms_session)) {
-		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
-		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-		exit;
-	}
-	/* Update last access time */
-	$session->updateAccess($dms_session);
-	/* Load user data */
-
-	$user = $dms->getUser($resArr["userID"]);
-	if (!is_object($user)) {
-		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
-		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
-		exit;
-	}
-
-	if($user->isAdmin()) {
-		if($resArr["su"]) {
-			$user = $dms->getUser($resArr["su"]);
-		} else {
-			$session->resetSu();
-		}
-	}
-	$theme = $resArr["theme"];
-	$lang = $resArr["language"];
+/* Load user data */
+$user = $dms->getUser($resArr["userID"]);
+if (!is_object($user)) {
+	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+	exit;
 }
+
+if($user->isAdmin()) {
+	if($resArr["su"]) {
+		$user = $dms->getUser($resArr["su"]);
+	} else {
+		$session->resetSu();
+	}
+}
+$theme = $resArr["theme"];
+$lang = $resArr["language"];
 
 $dms->setUser($user);
 if($settings->_enableEmail) {
