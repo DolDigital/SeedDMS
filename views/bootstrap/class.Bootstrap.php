@@ -308,6 +308,8 @@ $(document).ready(function () {
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"4\" />";
 			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
+			if($this->params['defaultsearchmethod'] == 'fulltext')
+				echo "      <input type=\"hidden\" name=\"fullsearch\" value=\"1\" />";
 //			if($this->params['enablefullsearch']) {
 //				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
 //			}

@@ -59,7 +59,7 @@ if (isset($_GET["navBar"])) {
 	*/
 }
 
-if((isset($_GET["fullsearch"]) && $_GET["fullsearch"] || $settings->_defaultSearchMethod == 'fulltext') && $settings->_enableFullSearch) {
+if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) {
 // Search in Fulltext {{{
 	if (isset($_GET["query"]) && is_string($_GET["query"])) {
 		$query = $_GET["query"];
@@ -407,8 +407,9 @@ if(count($entries) == 1) {
 	if($view) {
 		$view->setParam('totaldocs', $dcount /*resArr['totalDocs']*/);
 		$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
-		$view->setParam('fullsearch', ((isset($_GET["fullsearch"]) && $_GET["fullsearch"] || $settings->_defaultSearchMethod == 'fulltext') && $settings->_enableFullSearch) ? true : false);
+		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) ? true : false);
 		$view->setParam('mode', isset($mode) ? $mode : '');
+		$view->setParam('defaultsearchmethod', $settings->_defaultSearchMethod);
 		$view->setParam('resultmode', isset($resultmode) ? $resultmode : '');
 		$view->setParam('searchin', isset($searchin) ? $searchin : array());
 		$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
