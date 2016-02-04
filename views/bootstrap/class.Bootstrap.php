@@ -1711,7 +1711,7 @@ $(function() {
 	function folderListRow($subFolder) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
+//		$folder = $this->params['folder'];
 		$showtree = $this->params['showtree'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
