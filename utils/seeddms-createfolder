@@ -1,2 +1,8 @@
-#!/bin/sh
-/usr/bin/php -f /usr/share/seeddms/utils/createfolder.php -- $*
+#!/usr/bin/env bash
+
+if [ -z "${SEEDDMS_HOME}" ]; then
+	echo 'Please set $SEEDDMS_HOME before running this script'
+	exit 1
+fi
+
+exec php -f "${SEEDDMS_HOME}/utils/createfolder.php" -- "${@}"

@@ -48,7 +48,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();

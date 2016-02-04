@@ -117,7 +117,7 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	/**
 	 * Return attribute values as an array
 	 *
-	 * This function returns the attribute value as an array. Such an array
+	 * This function returns the attribute value as an array. The array
 	 * has one element for non multi value attributes and n elements for
 	 * multi value attributes.
 	 *
@@ -133,13 +133,66 @@ class SeedDMS_Core_Attribute { /* {{{ */
 
 	/**
 	 * Set a value of an attribute
-	 * The attribute is deleted completely if the value is the empty string
 	 *
-	 * @param string $value value to be set
+	 * The attribute is completely deleted if the value is an empty string
+	 * or empty array. An array of values is only allowed if the attribute may
+	 * have multiple values. If an array is passed and the attribute may
+	 * have only a single value, then the first element of the array will
+	 * be taken.
+	 *
+	 * @param string $values value as string or array to be set
 	 * @return boolean true if operation was successfull, otherwise false
 	 */
-	function setValue($value) { /* {{{*/
+	function setValue($values) { /* {{{*/
 		$db = $this->_dms->getDB();
+
+		if($this->_attrdef->getMultipleValues()) {
+			/* Multiple values without a value set is not allowed */
+			if(!$valuesetstr = $this->_attrdef->getValueSet())
+				return false;
+			$valueset = $this->_attrdef->getValueSetAsArray();
+
+			if(is_array($values)) {
+				if($values) {
+					$error = false;
+					foreach($values as $v) {
+						if(!in_array($v, $valueset)) { $error = true; break; }
+					}
+					if($error)
+						return false;
+					$valuesetstr = $this->_attrdef->getValueSet();
+					$value = $valuesetstr[0].implode($valuesetstr[0], $values);
+				} else {
+					$value = '';
+				}
+			} else {
+				if($values) {
+					if($valuesetstr[0] != $values[0])
+						$values = explode($valuesetstr[0], $values);
+					else
+						$values = explode($valuesetstr[0], substr($values, 1));
+
+					$error = false;
+					foreach($values as $v) {
+						if(!in_array($v, $valueset)) { $error = true; break; }
+					}
+					if($error)
+						return false;
+					$value = $valuesetstr[0].implode($valuesetstr[0], $values);
+				} else {
+					$value = $values;
+				}
+			}
+		} else {
+			if(is_array($values)) {
+				if($values)
+					$value = $values[0];
+				else
+					$value = '';
+			} else {
+				$value = $values;
+			}
+		}
 
 		switch(get_class($this->_obj)) {
 			case $this->_dms->getClassname('document'):
@@ -524,6 +577,12 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	/**
 	 * Get the value set as saved in the database
 	 *
+	 * This is a string containing the list of valueѕ separated by a
+	 * delimiter which also precedes the whole string, e.g. '|Yes|No'
+	 *
+	 * Use {@link SeedDMS_Core_AttributeDefinition::getValueSetAsArray()}
+	 * for a list of values returned as an array.
+	 *
 	 * @return string value set
 	 */
 	function getValueSet() { /* {{{ */
@@ -540,7 +599,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		if(strlen($this->_valueset) > 1)
 			return explode($this->_valueset[0], substr($this->_valueset, 1));
 		else
-			return false;
+			return array();
 	} /* }}} */
 
 	/**
@@ -677,7 +736,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			$queryStr = "SELECT count(*) c, value FROM tblDocumentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
-				$result['frequencies'] = $resArr;
+				$result['frequencies']['document'] = $resArr;
 			}
 		}
 
@@ -694,6 +753,11 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
+			$queryStr = "SELECT count(*) c, value FROM tblFolderAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies']['folder'] = $resArr;
+			}
 		}
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
@@ -708,6 +772,11 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 						$result['contents'][] = $content;
 					}
 				}
+			}
+			$queryStr = "SELECT count(*) c, value FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies']['content'] = $resArr;
 			}
 		}
 

@@ -36,7 +36,7 @@ class SeedDMS_View_FolderChooser extends SeedDMS_Bootstrap_Style {
 		$form = $this->params['form'];
 		$mode = $this->params['mode'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 		$this->printNewTreeNavigationJs($rootfolderid, $mode, 0, $form);
 	} /* }}} */
 

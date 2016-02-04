@@ -12,8 +12,8 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2015-04-15</date>
- <time>08:02:04</time>
+ <date>2016-01-22</date>
+ <time>09:28:28</time>
  <version>
   <release>5.0.0</release>
   <api>5.0.0</api>
@@ -911,6 +911,57 @@ by a group or user right
 - add method SeedDMS_Core_Database::getCurrentDatetime()
 - user getCurrentTimestamp() and getCurrentDatetime() whenever possible
    </notes>
+  </release>
+  <release>
+   <date>2015-11-09</date>
+   <time>19:49:20</time>
+   <version>
+    <release>4.3.22</release>
+    <api>4.3.22</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fix sql statement to reset password
+- pass some more information for timeline
+   </notes>
+  </release>
+  <release>
+   <date>2016-01-21</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.23</release>
+    <api>4.3.23</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMS_Core_DMS::createDump()
+- minor improvements int SeedDMS_Core_Document::getReadAccessList()
+	 </notes>
+  </release>
+  <release>
+   <date>2016-01-22</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.24</release>
+    <api>4.3.24</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- make sure boolean attribute is saved as 0/1
+- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
+	 </notes>
   </release>
  </changelog>
 </package>

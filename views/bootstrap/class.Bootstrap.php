@@ -393,8 +393,10 @@ $(document).ready(function () {
 	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
 			if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
 			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+			if($this->params['enablehelp']) {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
+			}
 			echo "   </ul>\n";
 			echo "     <form action=\"../out/out.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
 			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
@@ -406,9 +408,11 @@ $(document).ready(function () {
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"4\" />";
 			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
-			if($this->params['enablefullsearch']) {
-				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
-			}
+			if($this->params['defaultsearchmethod'] == 'fulltext')
+				echo "      <input type=\"hidden\" name=\"fullsearch\" value=\"1\" />";
+//			if($this->params['enablefullsearch']) {
+//				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
+//			}
 	//		echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
 			echo "</form>\n";
 			echo "    </div>\n";
@@ -1498,7 +1502,9 @@ $(function() {
 				else
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
-  });
+	});
+	// Unfold tree if folder is opened
+	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
   $('#jqtree<?= $formid ?>').bind(
 		'tree.click',
 		function(event) {
@@ -1915,7 +1921,7 @@ $(function() {
 	function folderListRow($subFolder) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
+//		$folder = $this->params['folder'];
 		$showtree = $this->params['showtree'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];

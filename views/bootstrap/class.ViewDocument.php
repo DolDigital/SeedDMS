@@ -151,7 +151,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$document = $this->params['document'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 		$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
@@ -876,6 +876,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					echo implode(", ", $names);
 					echo ") - ";
 					echo $wkflog->getDate();
+					echo "<br />";
 				}
 				echo "</td>";
 			}

@@ -149,6 +149,13 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+
+		$this->printFolderChooserJs("form1");
+		$this->printDocumentChooserJs("form2");
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$this->dms = $this->params['dms'];
 		$this->user = $this->params['user'];
@@ -169,7 +176,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=folder&action=add\" name=\"form1\">";
 		$this->contentSubHeading(getMLText("choose_target_folder"));
-		$this->printFolderChooser("form1",M_READ);
+		$this->printFolderChooserHtml("form1",M_READ);
 		print "<label class=\"checkbox\">";
 		print "<input type=\"checkbox\" name=\"recursefolder\" value=\"1\">";
 		print getMLText("include_subdirectories");
@@ -190,7 +197,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->contentSubHeading(getMLText("choose_target_document"));
 		/* 'form1' must be passed to printDocumentChooser() because the typeahead
 		 * function is currently hardcoded on this value */
-		$this->printDocumentChooser("form2");
+		$this->printDocumentChooserHtml("form2");
 		print "<br /><button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 

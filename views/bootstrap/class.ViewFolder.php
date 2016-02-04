@@ -78,7 +78,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$enableDropUpload = $this->params['enableDropUpload'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 ?>
 		function folderSelected(id, name) {
 			window.location = '../out/out.ViewFolder.php?folderid=' + id;
@@ -86,7 +86,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
-		if (0 && $enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
+		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "SeedDMSUpload.setUrl('../op/op.Ajax.php');";
 			echo "SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');";
 			echo "SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');";

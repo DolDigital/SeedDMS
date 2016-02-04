@@ -1,14 +1,39 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.1
+--------------------------------------------------------------------------------
+- merged changes from 4.3.24
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.0
+--------------------------------------------------------------------------------
+- support for customer extensions
+- smtp authentification
+- add .xml to online file types by default
+- add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.24
+--------------------------------------------------------------------------------
+- fixed possible XSS attack in user substitution
+- users can have than one mandatory workflow, in that case the user can select one
+- completed MyDocuments page for advanced workflows
+- guest user can be automatically logged in
+- get/set custom attributes by webdav
+- default search method can be set (fulltext, database)
+- various translation updates
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.23
 --------------------------------------------------------------------------------
 - send notification if document is delete to those users watching the folder
 - fix editing of customer attributes of type checkbox
-- disallow read access for group didn't prevent the users from being selected
+- disallowed read access for a group didn't prevent the users from being selected
   as a reviewer/approver
 - move the last bits of plain sql code from op/*.php into the core
 - group manager uses ajax like user manager
 - start to enforce content security policy
 - fixed possible XSS attack in user manager
+- ldap search can be filtered (Thanks to Tobias for the patch)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.22
