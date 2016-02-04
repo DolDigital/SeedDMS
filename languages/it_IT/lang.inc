@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1506), s.pnt (26)
+//    Translators: Admin (1507), s.pnt (26)
 
 $text = array(
 'accept' => 'Accetta',
@@ -125,12 +125,14 @@ URL: [url]',
 'assign_user_property_to' => 'Assegna le proprietà dell\'utente a',
 'assumed_released' => 'Rilascio acquisito',
 'attrdef_exists' => 'Definizione di Attributo già esistente',
+'attrdef_info' => '',
 'attrdef_in_use' => 'Definizione di Attributo ancora in uso',
 'attrdef_management' => 'Gestione Attributi',
 'attrdef_maxvalues' => 'Numero di valori Max.',
 'attrdef_minvalues' => 'Numero di valori Min.',
 'attrdef_min_greater_max' => 'Il numero minimo di valori è maggiore del massimo',
 'attrdef_multiple' => 'Permetti valori multipli',
+'attrdef_multiple_needs_valueset' => '',
 'attrdef_must_be_multiple' => 'Gli Attributi devono avere più di un valore, ma non sono permessi valori multipli',
 'attrdef_name' => 'Nome',
 'attrdef_noname' => 'Nella definizione dell\'Attributo manca il nome',
@@ -1286,7 +1288,7 @@ URL: [url]',
 'thursday' => 'Giovedì',
 'thursday_abbr' => 'Gio',
 'timeline' => 'Linea del Tempo',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Nuovo allegato',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',
