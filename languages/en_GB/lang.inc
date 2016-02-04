@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1297), dgrutsch (7), netixw (14)
+//    Translators: Admin (1299), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -125,12 +125,14 @@ URL: [url]',
 'assign_user_property_to' => 'Assign user\'s properties to',
 'assumed_released' => 'Assumed released',
 'attrdef_exists' => 'Attribute definition already exists',
+'attrdef_info' => 'Information',
 'attrdef_in_use' => 'Attribute definition still in use',
 'attrdef_management' => 'Attribute definition management',
 'attrdef_maxvalues' => 'Max. number of values',
 'attrdef_minvalues' => 'Min. number of values',
 'attrdef_min_greater_max' => 'Minimum number of values is larger than maximum number of values',
 'attrdef_multiple' => 'Allow multiple values',
+'attrdef_multiple_needs_valueset' => 'Attribute definition with multiple values needs value set.',
 'attrdef_must_be_multiple' => 'Attribute must have more than one value, but is not set multiple value',
 'attrdef_name' => 'Name',
 'attrdef_noname' => 'Missing name for attribute definition',

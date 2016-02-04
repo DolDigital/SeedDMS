@@ -65,6 +65,9 @@ if ($action == "addattrdef") {
 	if($minvalues > $maxvalues) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_min_greater_max"));
 	}
+	if($multiple && $valueset == '') {
+		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
+	}
 
 	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex);
 	if (!$newAttrdef) {
@@ -138,6 +141,9 @@ else if ($action == "editattrdef") {
 	}
 	if($minvalues > $maxvalues) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_min_greater_max"));
+	}
+	if($multiple && $valueset == '') {
+		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
 	}
 
 	if (!$attrdef->setName($name)) {

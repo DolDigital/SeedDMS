@@ -904,48 +904,34 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			} else {
 				$this->logger->log('PROPPATCH: set '.$prop["ns"].''.$prop["val"].' to '.$prop["val"], PEAR_LOG_INFO);
 				if($prop["ns"] == "SeedDMS:") {
-					if (isset($prop["val"]))
-						$val = $prop["val"];
-					else
-						$val = '';
-					switch($prop["name"]) {
-					case "comment":
-						$obj->setComment($val);
-						break;
-					default:
-						if($attrdef = $this->dms->getAttributeDefinitionByName($prop["name"])) {
-							$valueset = $attrdef->getValueSetAsArray();
-							switch($attrdef->getType()) {
-							case SeedDMS_Core_AttributeDefinition::type_string:
-								if($valueset) {
-									if(in_array($val, $valueset)) {
-										$obj->setAttributeValue($attrdef, $val);
-									}
-								} else {
+					if(in_array($prop['name'], array('id', 'version', 'status', 'status-comment', 'status-date'))) {
+						$options["props"][$key]['status'] = "403 Forbidden";
+					} else {
+						if (isset($prop["val"]))
+							$val = $prop["val"];
+						else
+							$val = '';
+						switch($prop["name"]) {
+						case "comment":
+							$obj->setComment($val);
+							break;
+						default:
+							if($attrdef = $this->dms->getAttributeDefinitionByName($prop["name"])) {
+								$valueset = $attrdef->getValueSetAsArray();
+								switch($attrdef->getType()) {
+								case SeedDMS_Core_AttributeDefinition::type_string:
 									$obj->setAttributeValue($attrdef, $val);
-								}
-								break;
-							case SeedDMS_Core_AttributeDefinition::type_int:
-								if($valueset) {
-									if(in_array($val, $valueset)) {
-										$obj->setAttributeValue($attrdef, (int) $val);
-									}
-								} else {
+									break;
+								case SeedDMS_Core_AttributeDefinition::type_int:
 									$obj->setAttributeValue($attrdef, (int) $val);
-								}
-								break;
-							case SeedDMS_Core_AttributeDefinition::type_float:
-								if($valueset) {
-									if(in_array($val, $valueset)) {
-										$obj->setAttributeValue($attrdef, (float) $val);
-									}
-								} else {
+									break;
+								case SeedDMS_Core_AttributeDefinition::type_float:
 									$obj->setAttributeValue($attrdef, (float) $val);
+									break;
+								case SeedDMS_Core_AttributeDefinition::type_boolean:
+									$obj->setAttributeValue($attrdef, $val == 1 ? true : false);
+									break;
 								}
-								break;
-							case SeedDMS_Core_AttributeDefinition::type_boolean:
-								$obj->setAttributeValue($attrdef, $val == 1 ? true : false);
-								break;
 							}
 						}
 					}

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2162), dgrutsch (21)
+//    Translators: Admin (2164), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -125,12 +125,14 @@ URL: [url]',
 'assign_user_property_to' => 'Dokumente einem anderen Benutzer zuweisen',
 'assumed_released' => 'Angenommen, freigegeben',
 'attrdef_exists' => 'Attributdefinition existiert bereits',
+'attrdef_info' => 'Information',
 'attrdef_in_use' => 'Definition des Attributs noch in Gebrauch',
 'attrdef_management' => 'Attributdefinitions-Management',
 'attrdef_maxvalues' => 'Max. Anzahl Werte',
 'attrdef_minvalues' => 'Min. Anzahl Werte',
 'attrdef_min_greater_max' => 'Zahl der minimalen Werte ist größer als Zahl der maximalen Werte',
 'attrdef_multiple' => 'Mehrfachwerte erlaubt',
+'attrdef_multiple_needs_valueset' => 'Attributdefinition mit Mehrfachwerten erfordert eine Werteliste.',
 'attrdef_must_be_multiple' => 'Attribut muss mehr als einen Wert haben, erlaubt aber keine Mehrfachwerte',
 'attrdef_name' => 'Name',
 'attrdef_noname' => 'Kein Name für die Attributedefinition eingegeben',
