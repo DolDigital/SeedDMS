@@ -79,6 +79,7 @@ class UI extends UI_Default {
 			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', $settings->_partitionSize);
 			$view->setParam('showmissingtranslations', $settings->_showMissingTranslations);
+			$view->setParam('defaultsearchmethod', $settings->_defaultSearchMethod);
 			return $view;
 		}
 		return null;
