@@ -25,17 +25,32 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
 $attrdefs = $dms->getAllAttributeDefinitions();
 
+if(isset($_GET['attrdefid']) && $_GET['attrdefid']) {
+	$selattrdef = $dms->getAttributeDefinition($_GET['attrdefid']);
+} else {
+	$selattrdef = null;
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'attrdefs'=>$attrdefs));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'attrdefs'=>$attrdefs, 'selattrdef'=>$selattrdef));
 if($view) {
-	$view->show();
-	exit;
+	$view->setParam('showtree', showtree());
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);
+	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view($_GET);
 }
 
 ?>
