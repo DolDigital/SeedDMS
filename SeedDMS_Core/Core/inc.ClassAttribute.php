@@ -692,7 +692,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			$queryStr = "SELECT count(*) c, value FROM tblDocumentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
-				$result['frequencies'] = $resArr;
+				$result['frequencies']['document'] = $resArr;
 			}
 		}
 
@@ -709,6 +709,11 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
+			$queryStr = "SELECT count(*) c, value FROM tblFolderAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies']['folder'] = $resArr;
+			}
 		}
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
@@ -723,6 +728,11 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 						$result['contents'][] = $content;
 					}
 				}
+			}
+			$queryStr = "SELECT count(*) c, value FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies']['content'] = $resArr;
 			}
 		}
 
