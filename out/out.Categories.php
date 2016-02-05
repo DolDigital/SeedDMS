@@ -30,11 +30,16 @@ if (!$user->isAdmin()) {
 
 $categories = $dms->getDocumentCategories();
 
+if(isset($_GET['categoryid']) && $_GET['categoryid']) {
+	$selcat = $dms->getDocumentCategory($_GET['categoryid']);
+} else {
+	$selcat = null;
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories, 'selcategory'=>$selcat));
 if($view) {
-	$view->show();
-	exit;
+	$view($_GET);
 }
 
 ?>
