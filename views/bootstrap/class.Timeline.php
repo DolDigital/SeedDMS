@@ -121,7 +121,7 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 				);
 			}
 		}
-		header('Content-Type: application/json'),
+		header('Content-Type: application/json');
 		echo json_encode($jsondata);
 	} /* }}} */
 
