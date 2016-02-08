@@ -171,7 +171,7 @@ $human_readable = (isset($_GET["human_readable"]) && $_GET["human_readable"]==1 
 if($settings->_backupDir && file_exists($settings->_backupDir))
 	$basedir = $settings->_backupDir;
 else
-	$basedir = $setting->_contentDir;
+	$basedir = $settings->_contentDir;
 if ($human_readable)$ark_name = $basedir.time()."_".$folderid."_HR.tar";
 else $ark_name = $basedir.time()."_".$folderid.".tar";
 

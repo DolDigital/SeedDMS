@@ -80,9 +80,6 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "</form>\n";
 
 		// list backup files
-		$this->contentSubHeading(getMLText("backup_list"));
-
-		$print_header=true;
 
 		$handle = opendir($backupdir);
 		$entries = array();
@@ -96,37 +93,35 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		sort($entries);
 		$entries = array_reverse($entries);
 
-		foreach ($entries as $entry){
+		if($entries) {
+			$this->contentSubHeading(getMLText("backup_list"));
+			print "<table class=\"table-condensed\">\n";
+			print "<thead>\n<tr>\n";
+			print "<th></th>\n";
+			print "<th>".getMLText("folder")."</th>\n";
+			print "<th>".getMLText("creation_date")."</th>\n";
+			print "<th>".getMLText("file_size")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
 
-			if ($print_header){
-				print "<table class=\"table-condensed\">\n";
-				print "<thead>\n<tr>\n";
-				print "<th></th>\n";
-				print "<th>".getMLText("folder")."</th>\n";
-				print "<th>".getMLText("creation_date")."</th>\n";
-				print "<th>".getMLText("file_size")."</th>\n";
-				print "<th></th>\n";
-				print "</tr>\n</thead>\n<tbody>\n";
-				$print_header=false;
+			foreach ($entries as $entry){
+
+				$folderid=substr($entry,strpos($entry,"_")+1);
+				$folder=$dms->getFolder((int)$folderid);
+						
+				print "<tr>\n";
+				print "<td><a href=\"../op/op.Download.php?arkname=".$entry."\">".$entry."</a></td>\n";
+				if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
+				else print "<td>".getMLText("unknown_id")."</td>\n";
+				print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+				print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
+				print "<td>";
+				print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
+				print "</td>\n";	
+				print "</tr>\n";
 			}
-
-			$folderid=substr($entry,strpos($entry,"_")+1);
-			$folder=$dms->getFolder((int)$folderid);
-					
-			print "<tr>\n";
-			print "<td><a href=\"../op/op.Download.php?arkname=".$entry."\">".$entry."</a></td>\n";
-			if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
-			else print "<td>".getMLText("unknown_id")."</td>\n";
-			print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
-			print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
-			print "<td>";
-			print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
-			print "</td>\n";	
-			print "</tr>\n";
+			print "</table>\n";
 		}
-
-		if ($print_header) printMLText("empty_notify_list");
-		else print "</table>\n";
 
 		$this->contentContainerEnd();
 
@@ -141,10 +136,6 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "</form>\n";
 
 		// list backup files
-		$this->contentSubHeading(getMLText("dump_list"));
-
-		$print_header=true;
-
 		$handle = opendir($backupdir);
 		$entries = array();
 		while ($e = readdir($handle)){
@@ -157,31 +148,28 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		sort($entries);
 		$entries = array_reverse($entries);
 
-		foreach ($entries as $entry){
+		if($entries) {
+			$this->contentSubHeading(getMLText("dump_list"));
+			print "<table class=\"table-condensed\">\n";
+			print "<thead>\n<tr>\n";
+			print "<th></th>\n";
+			print "<th>".getMLText("creation_date")."</th>\n";
+			print "<th>".getMLText("file_size")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
 
-			if ($print_header){
-				print "<table class=\"table-condensed\">\n";
-				print "<thead>\n<tr>\n";
-				print "<th></th>\n";
-				print "<th>".getMLText("creation_date")."</th>\n";
-				print "<th>".getMLText("file_size")."</th>\n";
-				print "<th></th>\n";
-				print "</tr>\n</thead>\n<tbody>\n";
-				$print_header=false;
+			foreach ($entries as $entry){
+				print "<tr>\n";
+				print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
+				print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+				print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
+				print "<td>";
+				print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
+				print "</td>\n";	
+				print "</tr>\n";
 			}
-
-			print "<tr>\n";
-			print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
-			print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
-			print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
-			print "<td>";
-			print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
-			print "</td>\n";	
-			print "</tr>\n";
+			print "</table>\n";
 		}
-
-		if ($print_header) printMLText("empty_notify_list");
-		else print "</table>\n";
 
 		$this->contentContainerEnd();
 
