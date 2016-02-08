@@ -958,6 +958,10 @@ by a group or user right
    <notes>
 - make sure boolean attribute is saved as 0/1
 - add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
+- add SeedDMS_Core_User::getNotifications()
+- add SeedDMS_Core_Group::getNotifications()
+- SeedDMS_Core_DMS::getNotificationsByGroup() and
+SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 	 </notes>
   </release>
  </changelog>

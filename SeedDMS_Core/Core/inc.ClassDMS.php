@@ -1483,57 +1483,27 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Get all notifications for a group
 	 *
+	 * deprecated: User {@link SeedDMS_Core_Group::getNotifications()}
+	 *
 	 * @param object $group group for which notifications are to be retrieved
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
 	 * @return array array of notifications
 	 */
 	function getNotificationsByGroup($group, $type=0) { /* {{{ */
-		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
-		 "WHERE `tblNotify`.`groupID` = ". $group->getID();
-		if($type) {
-			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
-		}
-
-		$resArr = $this->db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$resArr)
-			return false;
-
-		$notifications = array();
-		foreach ($resArr as $row) {
-			$not = new SeedDMS_Core_Notification($row["target"], $row["targetType"], $row["userID"], $row["groupID"]);
-			$not->setDMS($this);
-			array_push($notifications, $cat);
-		}
-
-		return $notifications;
+		return $group->getNotifications($type);
 	} /* }}} */
 
 	/**
 	 * Get all notifications for a user
+	 *
+	 * deprecated: User {@link SeedDMS_Core_User::getNotifications()}
 	 *
 	 * @param object $user user for which notifications are to be retrieved
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
 	 * @return array array of notifications
 	 */
 	function getNotificationsByUser($user, $type=0) { /* {{{ */
-		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
-		 "WHERE `tblNotify`.`userID` = ". $user->getID();
-		if($type) {
-			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
-		}
-
-		$resArr = $this->db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$resArr)
-			return false;
-
-		$notifications = array();
-		foreach ($resArr as $row) {
-			$not = new SeedDMS_Core_Notification($row["target"], $row["targetType"], $row["userID"], $row["groupID"]);
-			$not->setDMS($this);
-			array_push($notifications, $cat);
-		}
-
-		return $notifications;
+		return $user->getNotifications($type);
 	} /* }}} */
 
 	/**

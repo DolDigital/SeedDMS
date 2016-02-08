@@ -121,11 +121,27 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 				);
 			}
 		}
-		header('Content-Type: application/json'),
+		header('Content-Type: application/json');
 		echo json_encode($jsondata);
 	} /* }}} */
 
 	function js() { /* {{{ */
+		$fromdate = $this->params['fromdate'];
+		$todate = $this->params['todate'];
+		$skip = $this->params['skip'];
+
+		if($fromdate) {
+			$from = makeTsFromLongDate($fromdate.' 00:00:00');
+		} else {
+			$from = time()-7*86400;
+		}
+
+		if($todate) {
+			$to = makeTsFromLongDate($todate.' 23:59:59');
+		} else {
+			$to = time();
+		}
+
 		header('Content-Type: application/javascript');
 ?>
 $(document).ready(function () {

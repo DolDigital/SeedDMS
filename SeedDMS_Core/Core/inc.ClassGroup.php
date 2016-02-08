@@ -379,5 +379,34 @@ class SeedDMS_Core_Group {
 
 		return $status;
 	} /* }}} */
+
+	/**
+	 * Get all notifications of group
+	 *
+	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
+	 * @return array array of notifications
+	 */
+	function getNotificationsByGroup($type=0) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
+		 "WHERE `tblNotify`.`groupID` = ". $this->_id;
+		if($type) {
+			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
+		}
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$notifications = array();
+		foreach ($resArr as $row) {
+			$not = new SeedDMS_Core_Notification($row["target"], $row["targetType"], $row["userID"], $row["groupID"]);
+			$not->setDMS($this);
+			array_push($notifications, $not);
+		}
+
+		return $notifications;
+	} /* }}} */
+
 }
 ?>
