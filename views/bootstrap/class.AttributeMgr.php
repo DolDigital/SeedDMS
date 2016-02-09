@@ -33,6 +33,7 @@ class SeedDMS_View_AttributeMgr extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$selattrdef = $this->params['selattrdef'];
+		header('Content-Type: application/javascript');
 ?>
 
 $(document).ready( function() {
@@ -45,6 +46,8 @@ $(document).ready( function() {
 	});
 });
 <?php
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
@@ -241,6 +244,8 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$attrdefs = $this->params['attrdefs'];
 		$selattrdef = $this->params['selattrdef'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
