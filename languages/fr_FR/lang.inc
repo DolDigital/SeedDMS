@@ -187,6 +187,7 @@ URL: [url]',
 'category' => 'Catégorie',
 'category_exists' => 'Catégorie déjà existante.',
 'category_filter' => 'Uniquement les catégories',
+'category_info' => '',
 'category_in_use' => 'Cette catégorie est en cours d\'utilisation par des documents.',
 'category_noname' => 'Aucun nom de catégorie fourni.',
 'ca_ES' => 'Catalan',
@@ -293,6 +294,7 @@ Dossier parent: [folder_path]
 Utilisateur: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Commentaire modifié',
+'document_count' => '',
 'document_deleted' => 'Document supprimé',
 'document_deleted_email' => 'Document supprimé',
 'document_deleted_email_body' => 'ocument supprimé

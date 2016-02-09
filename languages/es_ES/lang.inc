@@ -187,6 +187,7 @@ URL: [url]',
 'category' => 'Categoría',
 'category_exists' => 'La categoría ya existe.',
 'category_filter' => 'Filtro categorías',
+'category_info' => '',
 'category_in_use' => 'Esta categoría está en uso por documentos.',
 'category_noname' => 'No ha proporcionado un nombre de categoría.',
 'ca_ES' => 'Catala',
@@ -293,6 +294,7 @@ Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Comentario modificado',
+'document_count' => '',
 'document_deleted' => 'Documento eliminado',
 'document_deleted_email' => 'Documento eliminado',
 'document_deleted_email_body' => 'Documento eliminado

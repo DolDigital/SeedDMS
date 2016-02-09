@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1299), dgrutsch (7), netixw (14)
+//    Translators: Admin (1301), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -192,6 +192,7 @@ URL: [url]',
 'category' => 'Category',
 'category_exists' => 'Category already exists.',
 'category_filter' => 'Only categories',
+'category_info' => 'Information',
 'category_in_use' => 'This category is currently used by documents.',
 'category_noname' => 'No category name given.',
 'ca_ES' => 'Catalan',
@@ -298,6 +299,7 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Comment changed',
+'document_count' => 'Number of documents',
 'document_deleted' => 'Document deleted',
 'document_deleted_email' => 'Document deleted',
 'document_deleted_email_body' => 'Document deleted

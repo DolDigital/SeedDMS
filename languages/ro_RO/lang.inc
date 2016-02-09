@@ -192,6 +192,7 @@ URL: [url]',
 'category' => 'Categorie',
 'category_exists' => 'Categorie deja existentă',
 'category_filter' => 'Doar categoriile',
+'category_info' => '',
 'category_in_use' => 'Această categorie este momentan utilizată de documente.',
 'category_noname' => 'Nu s-a furnizat nici un nume categorie',
 'ca_ES' => 'Catalana',
@@ -298,6 +299,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Comentariu schimbat',
+'document_count' => '',
 'document_deleted' => 'Document șters',
 'document_deleted_email' => 'Document șters',
 'document_deleted_email_body' => 'Document șters

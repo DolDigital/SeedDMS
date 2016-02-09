@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2164), dgrutsch (21)
+//    Translators: Admin (2166), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -192,6 +192,7 @@ URL: [url]',
 'category' => 'Kategorie',
 'category_exists' => 'Kategorie existiert bereits.',
 'category_filter' => 'Nur Kategorien',
+'category_info' => 'Information',
 'category_in_use' => 'Diese Kategorie wird zur Zeit von Dokumenten verwendet.',
 'category_noname' => 'Kein Kategoriename eingetragen.',
 'ca_ES' => 'Katalanisch',
@@ -298,6 +299,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Kommentar geändert',
+'document_count' => 'Anzahl der Dokumente',
 'document_deleted' => 'Dokument gelöscht',
 'document_deleted_email' => 'Dokument gelöscht',
 'document_deleted_email_body' => 'Dokument gelöscht

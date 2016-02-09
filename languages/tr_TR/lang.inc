@@ -186,6 +186,7 @@ URL: [url]',
 'category' => 'Kategori',
 'category_exists' => 'Kategori zaten mevcut.',
 'category_filter' => 'Sadece kategori',
+'category_info' => '',
 'category_in_use' => 'Bu kategoride dokümanlar mevcut.',
 'category_noname' => 'Kategori ismi verilmedi.',
 'ca_ES' => 'Katalanca',
@@ -292,6 +293,7 @@ Açıklama: [new_comment]
 Kullanıcı: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Açıklama değişti',
+'document_count' => '',
 'document_deleted' => 'Doküman silindi',
 'document_deleted_email' => 'Doküman silindi',
 'document_deleted_email_body' => 'Doküman silindi

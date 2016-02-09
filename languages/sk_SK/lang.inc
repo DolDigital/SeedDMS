@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (492)
+//    Translators: Admin (492), destinqo (4)
 
 $text = array(
 'accept' => 'Prijať',
@@ -31,7 +31,11 @@ $text = array(
 'access_mode_read' => 'Na čítanie',
 'access_mode_readwrite' => 'Na čítanie aj zápis',
 'access_permission_changed_email' => 'Pristupové prava zmenene',
-'access_permission_changed_email_body' => '',
+'access_permission_changed_email_body' => 'Zmenené prístupové práva
+Dokument: [name]
+Nadradený adresár: [folder_path]
+Užívateľ: [username]
+URL: [url]',
 'access_permission_changed_email_subject' => '',
 'according_settings' => '',
 'action' => 'Operácia',
@@ -69,8 +73,8 @@ $text = array(
 'add_workflow_state' => '',
 'admin' => 'Správca',
 'admin_tools' => 'Nástroje správcu',
-'all' => '',
-'all_categories' => '',
+'all' => 'Všetko',
+'all_categories' => 'Všetky kategórie',
 'all_documents' => 'Všetky dokumenty',
 'all_pages' => 'Všetky',
 'all_users' => 'Všetci používatelia',
@@ -165,6 +169,7 @@ $text = array(
 'category' => '',
 'category_exists' => '',
 'category_filter' => '',
+'category_info' => '',
 'category_in_use' => '',
 'category_noname' => '',
 'ca_ES' => 'Katalánština',
@@ -265,6 +270,7 @@ $text = array(
 'document_comment_changed_email' => '',
 'document_comment_changed_email_body' => '',
 'document_comment_changed_email_subject' => '',
+'document_count' => '',
 'document_deleted' => 'Dokument zmazaný',
 'document_deleted_email' => 'Dokument zmazany',
 'document_deleted_email_body' => '',
@@ -486,7 +492,7 @@ $text = array(
 'lock_message' => 'Tento dokument zamkol <a href="mailto:[email]">[username]</a>.<br>Iba oprávnení používatelia ho môžu odomknúť (pozri koniec stránky).',
 'lock_status' => 'Stav',
 'login' => '',
-'login_disabled_text' => '',
+'login_disabled_text' => 'Vaše konto bolo zakázané, pravdepodobne veľa pokusov o prihlásenie zlyhalo.',
 'login_disabled_title' => '',
 'login_error_text' => 'Chyba pri prihlasovaní. ID používateľa alebo heslo je nesprávne.',
 'login_error_title' => 'Chyba pri prihlasovaní',

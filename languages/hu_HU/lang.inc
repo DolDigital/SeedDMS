@@ -187,6 +187,7 @@ URL: [url]',
 'category' => 'Kategória',
 'category_exists' => 'Kategória már létezik',
 'category_filter' => 'Kizárólag kategóriák',
+'category_info' => '',
 'category_in_use' => 'Dokumentumok használják ezt a kategóriát',
 'category_noname' => 'Nem adott meg kategória nevet.',
 'ca_ES' => 'Katalán',
@@ -293,6 +294,7 @@ Szülő mappa: [folder_path]
 Felhasználó: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Megjegyzés módosult',
+'document_count' => '',
 'document_deleted' => 'Dokumentum törölve',
 'document_deleted_email' => 'Dokumentum törölve',
 'document_deleted_email_body' => 'Dokumentum törölve

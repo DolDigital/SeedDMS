@@ -187,6 +187,7 @@ URL: [url]',
 'category' => 'Categoria',
 'category_exists' => 'Categoria já existe.',
 'category_filter' => 'Somente categorias',
+'category_info' => '',
 'category_in_use' => 'Esta categoria é usada atualmente por documentos.',
 'category_noname' => 'Nenhum nome de categoria foi fornecido.',
 'ca_ES' => 'Catalão',
@@ -293,6 +294,7 @@ Pasta mãe: [folder_path]
 Usuário: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Comentário modificado',
+'document_count' => '',
 'document_deleted' => 'Documento deletado',
 'document_deleted_email' => 'Documento eliminado',
 'document_deleted_email_body' => 'Documento eliminado

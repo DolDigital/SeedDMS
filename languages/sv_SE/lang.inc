@@ -180,6 +180,7 @@ URL: [url]',
 'category' => 'Kategori',
 'category_exists' => 'Kategorin finns redan.',
 'category_filter' => 'Bara kategorier',
+'category_info' => '',
 'category_in_use' => 'Denna kategori används av ett dokument.',
 'category_noname' => 'Inget kategorinamn angivet',
 'ca_ES' => 'katalonska',
@@ -286,6 +287,7 @@ Kommentar: [new_comment]
 Användare: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Kommentar ändrat',
+'document_count' => '',
 'document_deleted' => 'Dokumentet raderades',
 'document_deleted_email' => 'Dokument har raderats',
 'document_deleted_email_body' => 'Dokument har raderats

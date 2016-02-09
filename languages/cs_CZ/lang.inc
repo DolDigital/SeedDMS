@@ -187,6 +187,7 @@ URL: [url]',
 'category' => 'Kategorie',
 'category_exists' => 'Kategorie již existuje.',
 'category_filter' => 'Pouze kategorie',
+'category_info' => '',
 'category_in_use' => 'Tato kategorie je používána v dokumentech.',
 'category_noname' => 'Není zadán název kategorie.',
 'ca_ES' => 'Katalánština',
@@ -293,6 +294,7 @@ Nadřazená složka: [folder_path]
 Uživatel: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Změna komentáře',
+'document_count' => '',
 'document_deleted' => 'Dokument odstraněn',
 'document_deleted_email' => 'Dokument odstraněn',
 'document_deleted_email_body' => 'Dokument odstraněn

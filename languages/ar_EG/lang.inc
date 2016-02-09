@@ -180,6 +180,7 @@ URL: [url]',
 'category' => 'قسم',
 'category_exists' => '.القسم بالفعل موجود',
 'category_filter' => 'اقسام فقط',
+'category_info' => '',
 'category_in_use' => 'هذا القسم مستخدم حاليا بواسطة مستندات.',
 'category_noname' => 'لم يتم كتابة اسم القسم.',
 'ca_ES' => 'الكاتالونية',
@@ -286,6 +287,7 @@ Parent folder: [folder_path]
 المستخدم: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - تم تعديل التعليق',
+'document_count' => '',
 'document_deleted' => 'تم مسح المستند',
 'document_deleted_email' => 'تم مسح المستند',
 'document_deleted_email_body' => 'تم مسح المستند

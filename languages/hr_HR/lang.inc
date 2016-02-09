@@ -192,6 +192,7 @@ Internet poveznica: [url]',
 'category' => 'Kategorija',
 'category_exists' => 'Kategorija već postoji.',
 'category_filter' => 'Samo kategorije',
+'category_info' => '',
 'category_in_use' => 'Ovu kategoriju trenutno koriste dokumenti.',
 'category_noname' => 'Nije dan naziv kategoriji.',
 'ca_ES' => 'Katalonski',
@@ -298,6 +299,7 @@ Glavna mapa: [folder_path]
 Korisnik: [username]
 Internet poveznica: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Promijenjen komentar',
+'document_count' => '',
 'document_deleted' => 'Izbrisan dokument',
 'document_deleted_email' => 'Izbrisan dokument',
 'document_deleted_email_body' => 'Izbrisan dokument

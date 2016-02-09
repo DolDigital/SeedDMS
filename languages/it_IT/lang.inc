@@ -193,6 +193,7 @@ URL: [url]',
 'category' => 'Categoria',
 'category_exists' => 'Categoria esistente.',
 'category_filter' => 'Solo categorie',
+'category_info' => '',
 'category_in_use' => 'Questa categoria è attualmente in uso in alcuni documenti.',
 'category_noname' => 'Non è stato attribuito un nome alla categoria.',
 'ca_ES' => 'Catalano',
@@ -299,6 +300,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Commento modificato',
+'document_count' => '',
 'document_deleted' => 'Documento cancellato',
 'document_deleted_email' => 'Documento cancellato',
 'document_deleted_email_body' => 'Cancellazione documento

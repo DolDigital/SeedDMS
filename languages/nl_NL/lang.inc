@@ -185,6 +185,7 @@ URL: [url]',
 'category' => 'Categorie',
 'category_exists' => 'Categorie bestaat al.',
 'category_filter' => 'Alleen categorieen',
+'category_info' => '',
 'category_in_use' => 'Categorie is in gebruikt door documenten.',
 'category_noname' => 'Geen Categorienaam opgegeven.',
 'ca_ES' => 'Catalaans',
@@ -291,6 +292,7 @@ Bovenliggende map: [folder_path]
 Gebruiker: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Commentaar gewijzigd',
+'document_count' => '',
 'document_deleted' => 'Document verwijderd',
 'document_deleted_email' => 'Document verwijderd',
 'document_deleted_email_body' => 'Document verwijderd

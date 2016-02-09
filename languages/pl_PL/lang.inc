@@ -180,6 +180,7 @@ URL: [url]',
 'category' => 'Kategoria',
 'category_exists' => 'Kategoria już istnieje.',
 'category_filter' => 'Tylko w kategoriach',
+'category_info' => '',
 'category_in_use' => 'Ta kategoria jest aktualnie używana przez dokumenty.',
 'category_noname' => 'Nie podano nazwy kategorii.',
 'ca_ES' => 'Kataloński',
@@ -286,6 +287,7 @@ Folder macierzysty: [folder_path]
 Użytkownik: [username]
 URL: [url]',
 'document_comment_changed_email_subject' => '[sitename]: [name] - Zmiana komentarza',
+'document_count' => '',
 'document_deleted' => 'Dokument usunięty',
 'document_deleted_email' => 'Dokument usunięty',
 'document_deleted_email_body' => 'Document usunięto
