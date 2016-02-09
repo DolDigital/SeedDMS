@@ -259,6 +259,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 		foreach($documents as $document) {
+			$document->verifyLastestContentExpriry();
 			echo $this->documentListRow($document, $previewer);
 		}
 

@@ -148,6 +148,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) ) {
 								$dList[] = $st["documentID"];
 								$document = $dms->getDocument($st["documentID"]);
+								$document->verifyLastestContentExpriry();
 							
 								if ($printheader){
 									print "<table class=\"table table-condensed\">";
@@ -185,6 +186,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) /* && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId() */) {
 								$dList[] = $st["documentID"];
 								$document = $dms->getDocument($st["documentID"]);
+								$document->verifyLastestContentExpriry();
 
 								if ($printheader){
 									print "<table class=\"table table-condensed\">";
@@ -234,6 +236,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					
 						if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && $docIdx[$st["documentID"]][$st["version"]]['status'] == S_DRAFT_APP) {
 							$document = $dms->getDocument($st["documentID"]);
+							$document->verifyLastestContentExpriry();
 						
 							if ($printheader){
 								print "<table class=\"table table-condensed\">";
@@ -270,6 +273,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					
 						if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && $docIdx[$st["documentID"]][$st["version"]]['status'] == S_DRAFT_APP /* && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId() */) {
 							$document = $dms->getDocument($st["documentID"]);
+							$document->verifyLastestContentExpriry();
 							if ($printheader){
 								print "<table class=\"table table-condensed\">";
 								print "<thead>\n<tr>\n";
@@ -365,6 +369,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 
 					foreach ($resArr as $res) {
 						$document = $dms->getDocument($res["documentID"]);
+						$document->verifyLastestContentExpriry();
 					
 						// verify expiry
 						if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -475,6 +480,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						if ( isset($docIdx[$st["document"]][$st["version"]]) && !in_array($st["document"], $dList) ) {
 							$dList[] = $st["document"];
 							$document = $dms->getDocument($st["document"]);
+							$document->verifyLastestContentExpriry();
 						
 							if ($printheader){
 								print "<table class=\"table table-condensed\">";
@@ -512,6 +518,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						if (!in_array($st["document"], $iRev) && isset($docIdx[$st["document"]][$st["version"]]) && !in_array($st["document"], $dList) /* && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId() */) {
 							$dList[] = $st["document"];
 							$document = $dms->getDocument($st["document"]);
+							$document->verifyLastestContentExpriry();
 
 							if ($printheader){
 								print "<table class=\"table table-condensed\">";
@@ -597,6 +604,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 
 					foreach ($resArr as $res) {
 						$document = $dms->getDocument($res["documentID"]);
+						$document->verifyLastestContentExpriry();
 					
 						// verify expiry
 						if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -673,6 +681,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 
 				foreach ($resArr as $res) {
 					$document = $dms->getDocument($res["documentID"]);
+					$document->verifyLastestContentExpriry();
 				
 					// verify expiry
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -770,6 +779,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 				foreach ($resArr as $res) {
 					$document = $dms->getDocument($res["documentID"]);
+					$document->verifyLastestContentExpriry();
 				
 					// verify expiry
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
