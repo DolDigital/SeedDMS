@@ -30,6 +30,7 @@
 - add SeedDMS_Core_Group::getNotifications()
 - SeedDMS_Core_DMS::getNotificationsByGroup() and
 SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
+- SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
