@@ -106,27 +106,37 @@ $(document).ready( function() {
 		$selgroup = $this->params['selgroup'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$workflowmode = $this->params['workflowmode'];
 
 		if($selgroup) {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 			$this->contentHeading(getMLText("group_info"));
 			echo "<table class=\"table table-condensed\">\n";
-			$reviewstatus = $selgroup->getReviewStatus();
-			$i = 0;
-			foreach($reviewstatus as $rv) {
-				if($rv['status'] == 0) {
-					$i++;
+			if($workflowmode == "traditional") {
+				$reviewstatus = $selgroup->getReviewStatus();
+				$i = 0;
+				foreach($reviewstatus as $rv) {
+					if($rv['status'] == 0) {
+						$i++;
+					}
 				}
 			}
-			echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
-			$approvalstatus = $selgroup->getApprovalStatus();
-			$i = 0;
-			foreach($approvalstatus as $rv) {
-				if($rv['status'] == 0) {
-					$i++;
+			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
+				echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
+				$approvalstatus = $selgroup->getApprovalStatus();
+				$i = 0;
+				foreach($approvalstatus as $rv) {
+					if($rv['status'] == 0) {
+						$i++;
+					}
 				}
+				echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
 			}
-			echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
+			if($workflowmode == 'advanced') {
+				$workflowStatus = $selgroup->getWorkflowStatus();
+				if($workflowStatus)
+					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus)."</td></tr>\n";
+			}
 			echo "</table>";
 		}
 	} /* }}} */
