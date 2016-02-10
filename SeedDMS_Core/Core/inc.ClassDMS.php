@@ -874,6 +874,12 @@ class SeedDMS_Core_DMS {
 			$queryStr .= "AND `tblDocumentLocks`.`userID` = '".$user->getID()."' ".
 				"ORDER BY `statusDate` DESC";
 			break;
+		case 'WorkflowOwner': // Documents waiting for workflow trigger I'm owning
+			$user = $param1;
+			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+				"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.") ".
+				"ORDER BY `statusDate` DESC";
+			break;
 		case 'MyDocs': // Documents owned by me
 			$user = $param1;
 			$orderby = $param2;
