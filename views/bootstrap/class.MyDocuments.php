@@ -336,53 +336,15 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				// Get document list for the current user.
 				$workflowStatus = $user->getWorkflowStatus();
 
-				// Create a comma separated list of all the documentIDs whose information is
-				// required.
-				$dList = array();
-				foreach ($workflowStatus["u"] as $st) {
-					if (!in_array($st["document"], $dList)) {
-						$dList[] = $st["document"];
-					}
+				$resArr = $dms->getDocumentList('WorkflowByMe', $user);
+				if (is_bool($resArr) && !$resArr) {
+					$this->contentHeading(getMLText("warning"));
+					$this->contentContainer(getMLText("internal_error_exit"));
+					$this->htmlEndPage();
+					exit;
 				}
-				foreach ($workflowStatus["g"] as $st) {
-					if (!in_array($st["document"], $dList)) {
-						$dList[] = $st["document"];
-					}
-				}
-				$docCSV = "";
-				foreach ($dList as $d) {
-					$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
-				}
-				
-				if (strlen($docCSV)>0) {
-					// Get the document information.
-					$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
-						"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
-						"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
-						"`tblDocumentStatusLog`.`userID`, `oTbl`.`fullName` AS `ownerName`, `sTbl`.`fullName` AS `statusName` ".
-						"FROM `tblDocumentContent` ".
-						"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
-						"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
-						"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
-						"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-						"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
-						"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
-						"LEFT JOIN `tblUsers` AS `oTbl` on `oTbl`.`id` = `tblDocuments`.`owner` ".
-						"LEFT JOIN `tblUsers` AS `sTbl` on `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ".
-						"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-						"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version` ".
-						"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.", ".S_EXPIRED.") ".
-						"AND `tblDocuments`.`id` IN (" . $docCSV . ") ".
-						"ORDER BY `statusDate` DESC";
-
-					$resArr = $db->getResultArray($queryStr);
-					if (is_bool($resArr) && !$resArr) {
-						$this->contentHeading(getMLText("warning"));
-						$this->contentContainer(getMLText("internal_error_exit"));
-						$this->htmlEndPage();
-						exit;
-					}
 					
+				if (count($resArr)>0) {
 					// Create an array to hold all of these results, and index the array by
 					// document id. This makes it easier to retrieve document ID information
 					// later on and saves us having to repeatedly poll the database every time
@@ -403,6 +365,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					// List the documents where a review has been requested.
 					$this->contentHeading(getMLText("documents_to_process"));
 					$this->contentContainerStart();
+
 					$printheader=true;
 					$iRev = array();
 					$dList = array();
