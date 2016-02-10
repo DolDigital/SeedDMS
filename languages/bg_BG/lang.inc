@@ -253,6 +253,7 @@ $text = array(
 'documents' => 'Документи',
 'documents_checked_out_by_you' => '',
 'documents_in_process' => 'Документи в процес на работа',
+'documents_locked' => '',
 'documents_locked_by_you' => 'Документи, блокирани от Вас',
 'documents_only' => 'Само документи',
 'documents_to_approve' => 'Документи, чакащи Вашето утвърждаване',

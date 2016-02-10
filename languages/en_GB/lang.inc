@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1301), dgrutsch (7), netixw (14)
+//    Translators: Admin (1302), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -280,6 +280,7 @@ URL: [url]',
 'documents' => 'Documents',
 'documents_checked_out_by_you' => 'Documents checked out by you',
 'documents_in_process' => 'Documents In Process',
+'documents_locked' => 'Locked documents',
 'documents_locked_by_you' => 'Documents locked by you',
 'documents_only' => 'Documents only',
 'documents_to_approve' => 'Documents awaiting your approval',
