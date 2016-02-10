@@ -82,6 +82,7 @@ $(document).ready( function() {
 		$dms = $this->params['dms'];
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
+		$workflowmode = $this->params['workflowmode'];
 
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
@@ -97,25 +98,34 @@ $(document).ready( function() {
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
 			$documents = $seluser->getDocumentsLocked();
 			echo "<tr><td>".getMLText('documents_locked')."</td><td>".count($documents)."</td></tr>\n";
-			$reviewStatus = $seluser->getReviewStatus();
-			if($reviewStatus['indstatus']) {
-				$i = 0;
-				foreach($reviewStatus['indstatus'] as $rv) {
-					if($rv['status'] == 0) {
-						$i++;
+			if($workflowmode == "traditional") {
+				$reviewStatus = $seluser->getReviewStatus();
+				if($reviewStatus['indstatus']) {
+					$i = 0;
+					foreach($reviewStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
 					}
+					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
 				}
-				echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
 			}
-			$approvalStatus = $seluser->getApprovalStatus();
-			if($approvalStatus['indstatus']) {
-				$i = 0;
-				foreach($approvalStatus['indstatus'] as $rv) {
-					if($rv['status'] == 0) {
-						$i++;
+			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
+				$approvalStatus = $seluser->getApprovalStatus();
+				if($approvalStatus['indstatus']) {
+					$i = 0;
+					foreach($approvalStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
 					}
+					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
 				}
-				echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
+			}
+			if($workflowmode == 'advanced') {
+				$workflowStatus = $seluser->getWorkflowStatus();
+				if($workflowStatus['u'])
+					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus['u'])."</td></tr>\n";
 			}
 			$sessions = $sessionmgr->getUserSessions($seluser);
 			if($sessions) {
