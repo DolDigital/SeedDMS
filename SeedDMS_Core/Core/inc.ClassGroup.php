@@ -381,6 +381,35 @@ class SeedDMS_Core_Group {
 	} /* }}} */
 
 	/**
+	 * Get a list of documents with a workflow
+	 *
+	 * @param int $documentID optional document id for which to retrieve the
+	 *        reviews
+	 * @param int $version optional version of the document
+	 * @return array list of all workflows
+	 */
+	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = 'select distinct d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow where d.document is not null and a.state=d.state and c.groupid='.$this->_id;
+		if($documentID) {
+			$queryStr .= ' AND d.document='.(int) $documentID;
+			if($version)
+				$queryStr .= ' AND d.version='.(int) $version;
+		}
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result[] = $res;
+			}
+		}
+		return $result;
+	} /* }}} */
+
+	/**
 	 * Get all notifications of group
 	 *
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)

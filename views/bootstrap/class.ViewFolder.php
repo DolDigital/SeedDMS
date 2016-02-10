@@ -299,6 +299,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 
 		foreach($documents as $document) {
+			$document->verifyLastestContentExpriry();
 			$txt = $this->callHook('documentListItem', $document, $previewer);
 			if(is_string($txt))
 				echo $txt;
