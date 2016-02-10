@@ -470,7 +470,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					}
 
 					// List the documents where a review has been requested.
-					$this->contentHeading(getMLText("documents_to_check"));
+					$this->contentHeading(getMLText("documents_to_process"));
 					$this->contentContainerStart();
 					$printheader=true;
 					$iRev = array();
