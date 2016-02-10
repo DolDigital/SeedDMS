@@ -453,28 +453,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					$this->contentContainerEnd();
 				}
 
-				// Get list of documents owned by current user that are pending review or
-				// pending approval.
-				$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
-					"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
-					"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
-					"`tblDocumentStatusLog`.`userID`, `oTbl`.`fullName` AS `ownerName`, `sTbl`.`fullName` AS `statusName` ".
-					"FROM `tblDocumentContent` ".
-					"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
-					"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
-					"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
-					"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-					"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
-					"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
-					"LEFT JOIN `tblUsers` AS `oTbl` on `oTbl`.`id` = `tblDocuments`.`owner` ".
-					"LEFT JOIN `tblUsers` AS `sTbl` on `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ".
-					"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-					"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version` ".
-					"AND `tblDocuments`.`owner` = '".$user->getID()."' ".
-					"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.") ".
-					"ORDER BY `statusDate` DESC";
-
-				$resArr = $db->getResultArray($queryStr);
+				$resArr = $dms->getDocumentList('WorkflowOwner', $user);
 				if (is_bool($resArr) && !$resArr) {
 					$this->contentHeading(getMLText("warning"));
 					$this->contentContainer("Internal error. Unable to complete request. Exiting.");
