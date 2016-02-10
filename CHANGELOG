@@ -15,12 +15,14 @@
                      Changes in version 4.3.24
 --------------------------------------------------------------------------------
 - fixed possible XSS attack in user substitution
-- users can have than one mandatory workflow, in that case the user can select one
+- users can have mor than one mandatory workflow, in that case the user can select one
 - completed MyDocuments page for advanced workflows
 - guest user can be automatically logged in
-- get/set custom attributes by webdav
+- get/set custom attributes by webdav, better handling of different attribute types
 - default search method can be set (fulltext, database)
+- further pages with content security policy turned on
 - various translation updates
+- check for document expiration when showing search result and folder content
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23

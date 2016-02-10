@@ -1665,7 +1665,8 @@ $(function() {
 	function printDeleteDocumentButtonJs(){ /* {{{ */
 		echo "
 		$(document).ready(function () {
-			$('.delete-document-btn').click(function(ev) {
+//			$('.delete-document-btn').click(function(ev) {
+			$('body').on('click', 'a.delete-document-btn', function(ev){
 				id = $(ev.currentTarget).attr('rel');
 				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
 				msg = $(ev.currentTarget).attr('msg');
@@ -1737,7 +1738,8 @@ $(function() {
 	function printDeleteFolderButtonJs(){ /* {{{ */
 		echo "
 		$(document).ready(function () {
-			$('.delete-folder-btn').click(function(ev) {
+//			$('.delete-folder-btn').click(function(ev) {
+			$('body').on('click', 'a.delete-folder-btn', function(ev){
 				id = $(ev.currentTarget).attr('rel');
 				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
 				msg = $(ev.currentTarget).attr('msg');

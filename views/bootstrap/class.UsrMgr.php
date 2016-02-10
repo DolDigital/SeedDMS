@@ -83,6 +83,7 @@ $(document).ready( function() {
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
 		$settings = $this->params['settings'];
+		$workflowmode = $this->params['workflowmode'];
 
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
@@ -96,6 +97,37 @@ $(document).ready( function() {
 			echo "</td></tr>\n";
 			$documents = $seluser->getDocuments();
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
+			$documents = $seluser->getDocumentsLocked();
+			echo "<tr><td>".getMLText('documents_locked')."</td><td>".count($documents)."</td></tr>\n";
+			if($workflowmode == "traditional") {
+				$reviewStatus = $seluser->getReviewStatus();
+				if($reviewStatus['indstatus']) {
+					$i = 0;
+					foreach($reviewStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
+					}
+					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
+				}
+			}
+			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
+				$approvalStatus = $seluser->getApprovalStatus();
+				if($approvalStatus['indstatus']) {
+					$i = 0;
+					foreach($approvalStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
+					}
+					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
+				}
+			}
+			if($workflowmode == 'advanced') {
+				$workflowStatus = $seluser->getWorkflowStatus();
+				if($workflowStatus['u'])
+					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus['u'])."</td></tr>\n";
+			}
 			$sessions = $sessionmgr->getUserSessions($seluser);
 			if($sessions) {
 				$session = array_shift($sessions);
@@ -103,6 +135,8 @@ $(document).ready( function() {
 			}
 			echo "<tr><td>".getMLText('network_drive')."</td><td><a href=\"http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot.'checkout/'.preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."\">".preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."</a></td></tr>\n";
 			echo "</table>";
+
+			echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 
@@ -461,7 +495,7 @@ $(document).ready( function() {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" id="selector" class="span9">
+<select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_user")?>
 <option value="0"><?php echo getMLText("add_user")?>
 <?php

@@ -108,7 +108,7 @@ class SeedDMS_Core_DocumentCategory {
 
 		$documents = array();
 		foreach ($resArr as $row) {
-			array_push($documents, $this->_dms->getDocument($row["id"]));
+			array_push($documents, $this->_dms->getDocument($row["documentID"]));
 		}
 		return $documents;
 	} /* }}} */
