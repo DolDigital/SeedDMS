@@ -51,7 +51,7 @@ if(isset($_GET['groupid']) && $_GET['groupid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selgroup'=>$selgroup, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck, 'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selgroup'=>$selgroup, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck, 'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList, 'workflowmode'=>$settings->_workflowMode));
 if($view) {
 	$view($_GET);
 }
