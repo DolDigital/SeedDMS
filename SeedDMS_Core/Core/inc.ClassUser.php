@@ -483,7 +483,7 @@ class SeedDMS_Core_User {
 			return false;
 		}
 
-		//Evtl. von diesem Benutzer gelockte Dokumente werden freigegeben
+		// unlock documents locked by the user
 		$queryStr = "DELETE FROM tblDocumentLocks WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
@@ -806,7 +806,7 @@ class SeedDMS_Core_User {
 	 * same is true for the version of a document which limits the list
 	 * further.
 	 *
-	 * For a detaile description of the result array see
+	 * For a detailed description of the result array see
 	 * {link SeedDMS_Core_User::getApprovalStatus} which does the same for
 	 * approvals.
 	 *
