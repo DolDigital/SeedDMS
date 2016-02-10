@@ -116,21 +116,6 @@ $(document).ready( function() {
 			foreach($reviewstatus as $rv) {
 				if($rv['status'] == 0) {
 					$i++;
-					/*
-					$document = $dms->getDocument($rv['documentID']);
-					$latestContent = $document->getLatestContent();
-					$previewer->createPreview($latestContent);
-					echo "<tr>";
-					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
-					if($previewer->hasPreview($latestContent)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-					}
-					print "</a></td>";
-					print "<td><a href=\"out.ViewDocument.php?documentid=".$document->getID()."&currenttab=revapp\">".htmlspecialchars($document->getName())."</a></td>";
-					echo "</tr>";
-					 */
 				}
 			}
 			echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
@@ -278,7 +263,7 @@ $(document).ready( function() {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" id="selector" class="span9">
+<select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?>
 <option value="0"><?php echo getMLText("add_group")?>
 <?php
