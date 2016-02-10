@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2167), dgrutsch (21)
+//    Translators: Admin (2170), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -284,6 +284,7 @@ URL: [url]',
 'documents_locked_by_you' => 'Von mir gesperrte Dokumente',
 'documents_only' => 'Nur Dokumente',
 'documents_to_approve' => 'Freigabe erforderlich',
+'documents_to_process' => 'Dokumente, die bearbeitet werden müssen',
 'documents_to_receipt' => 'Dokumente deren Empfang bestätigt werden muss',
 'documents_to_review' => 'Prüfung erforderlich',
 'documents_to_revise' => 'Erneute Prüfung erforderlich',
@@ -734,6 +735,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_wrong' => 'Falsches Passwort',
 'pending_approvals' => 'Ausstehende Freigaben',
 'pending_reviews' => 'Ausstehende Prüfungen',
+'pending_workflows' => 'Ausstehende Workflows',
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
 'possible_substitutes' => 'Vertreter',
@@ -1419,6 +1421,7 @@ URL: [url]',
 'workflow_management' => 'Workflow-Management',
 'workflow_name' => 'Name',
 'workflow_no_states' => 'Es muss zunächst mindestens ein Workflow-Status angelegt werden, um einen Workflow anlegen zu können.',
+'workflow_state' => 'Workflow-Status',
 'workflow_states_management' => 'Workflow-Status-Management',
 'workflow_state_docstatus' => 'Dokumentenstatus',
 'workflow_state_in_use' => 'Dieser Status wird zur Zeit von einem Workflow verwendet.',

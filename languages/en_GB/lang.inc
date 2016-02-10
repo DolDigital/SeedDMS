@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1302), dgrutsch (7), netixw (14)
+//    Translators: Admin (1305), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -284,6 +284,7 @@ URL: [url]',
 'documents_locked_by_you' => 'Documents locked by you',
 'documents_only' => 'Documents only',
 'documents_to_approve' => 'Documents awaiting your approval',
+'documents_to_process' => 'Documents that need processing',
 'documents_to_receipt' => 'Documents awaiting to confirm the receipt',
 'documents_to_review' => 'Documents awaiting your review',
 'documents_to_revise' => 'Documents to revise',
@@ -734,6 +735,7 @@ If you have still problems to login, then please contact your administrator.',
 'password_wrong' => 'Wrong password',
 'pending_approvals' => 'Pending approvals',
 'pending_reviews' => 'Pending reviews',
+'pending_workflows' => 'Pending workflows',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
 'possible_substitutes' => 'Substitutes',
@@ -1419,6 +1421,7 @@ URL: [url]',
 'workflow_management' => 'Workflow management',
 'workflow_name' => 'Name',
 'workflow_no_states' => 'You must first define workflow states, before adding a workflow.',
+'workflow_state' => 'workflow state',
 'workflow_states_management' => 'Workflow states management',
 'workflow_state_docstatus' => 'Document status',
 'workflow_state_in_use' => 'This state is currently used by workflows.',
