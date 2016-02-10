@@ -825,6 +825,38 @@ class SeedDMS_Core_DMS {
 				$queryStr = '';
 			}
 			break;
+		case 'WorkflowByMe': // Documents I to trigger in Worklflow
+			$user = $param1;
+			// Get document list for the current user.
+			$workflowStatus = $user->getWorkflowStatus();
+			
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			$dList = array();
+			foreach ($workflowStatus["u"] as $st) {
+				if (!in_array($st["document"], $dList)) {
+					$dList[] = $st["document"];
+				}
+			}
+			foreach ($workflowStatus["g"] as $st) {
+				if (!in_array($st["document"], $dList)) {
+					$dList[] = $st["document"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+			
+			if (strlen($docCSV)>0) {
+				$queryStr .= 
+							//"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.", ".S_EXPIRED.") ".
+							"AND `tblDocuments`.`id` IN (" . $docCSV . ") ".
+							"ORDER BY `statusDate` DESC";
+			} else {
+				$queryStr = '';
+			}
+			break;
 		case 'AppRevOwner': // Documents waiting for review/approval I'm owning
 			$user = $param1;
 			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
