@@ -63,6 +63,9 @@ $(document).ready( function() {
 		if($selattrdef) {
 			$this->contentHeading(getMLText("attrdef_info"));
 			$res = $selattrdef->getStatistics(30);
+			if(!empty($res['frequencies']['document']) ||!empty($res['frequencies']['folder']) ||!empty($res['frequencies']['content'])) {
+
+
 ?>
     <div class="accordion" id="accordion1">
       <div class="accordion-group">
@@ -93,6 +96,7 @@ $(document).ready( function() {
       </div>
      </div>
 <?php
+			}
 			if($res['folders'] || $res['docs']) {
 				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
@@ -278,7 +282,24 @@ $(document).ready( function() {
 						$ot = getMLText("version");
 						break;
 				}
-				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.")");
+				switch($attrdef->getType()) {
+					case SeedDMS_Core_AttributeDefinition::type_int:
+						$t = getMLText("attrdef_type_int");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_float:
+						$t = getMLText("attrdef_type_float");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_string:
+						$t = getMLText("attrdef_type_string");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_date:
+						$t = getMLText("attrdef_type_date");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_boolean:
+						$t = getMLText("attrdef_type_boolean");
+						break;
+				}
+				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.", ".$t.")");
 			}
 		}
 ?>
