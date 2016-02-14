@@ -210,7 +210,7 @@ switch($command) {
 	case 'testmail': /* {{{ */
 		if($user && $user->isAdmin()) {
 			if($user->getEmail()) {
-				$emailobj = new SeedDMS_Email($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+				$emailobj = new SeedDMS_EmailNotify($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
 				$params = array();
 
 				if($emailobj->toIndividual($settings->_smtpSendFrom, $user, "testmail_subject", "testmail_body", $params)) {
