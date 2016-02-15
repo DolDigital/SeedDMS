@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1009), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1011), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -881,6 +881,7 @@ URL: [url]',
 'select_one' => 'Selectionner',
 'select_users' => 'Cliquer pour choisir un utilisateur',
 'select_workflow' => 'Choisir un workflow',
+'send_test_mail' => '',
 'september' => 'Septembre',
 'sequence' => 'Position dans le répertoire',
 'seq_after' => 'Après "[prevname]"',
@@ -936,7 +937,7 @@ URL: [url]',
 'settings_dbVersion' => 'Schéma de base de données trop ancien',
 'settings_defaultSearchMethod' => '',
 'settings_defaultSearchMethod_desc' => '',
-'settings_defaultSearchMethod_valdatabase' => '',
+'settings_defaultSearchMethod_valdatabase' => 'base de données',
 'settings_defaultSearchMethod_valfulltext' => '',
 'settings_delete_install_folder' => 'Pour utiliser SeedDMS, vous devez supprimer le fichier ENABLE_INSTALL_TOOL dans le répertoire de configuration',
 'settings_disableSelfEdit' => 'Désactiver auto modification',
@@ -970,7 +971,7 @@ URL: [url]',
 'settings_enableGuestAutoLogin_desc' => '',
 'settings_enableGuestLogin' => 'Activer la connexion Invité',
 'settings_enableGuestLogin_desc' => 'Si vous voulez vous connecter en tant qu\'invité, cochez cette option. Remarque: l\'utilisateur invité ne doit être utilisé que dans un environnement de confiance',
-'settings_enableHelp' => '',
+'settings_enableHelp' => 'Activer l\'aide',
 'settings_enableHelp_desc' => '',
 'settings_enableLanguageSelector' => 'Activer la sélection de langue',
 'settings_enableLanguageSelector_desc' => 'Montrer le sélecteur de langue d\'interface après connexion de l\'utilisateur.',

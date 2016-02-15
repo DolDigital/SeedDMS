@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1305), dgrutsch (7), netixw (14)
+//    Translators: Admin (1306), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -936,6 +936,7 @@ URL: [url]',
 'select_one' => 'Select one',
 'select_users' => 'Click to select users',
 'select_workflow' => 'Select workflow',
+'send_test_mail' => 'Send test mail',
 'september' => 'September',
 'sequence' => 'Sequence',
 'seq_after' => 'After "[prevname]"',
