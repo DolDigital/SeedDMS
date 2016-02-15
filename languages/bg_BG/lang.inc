@@ -515,6 +515,7 @@ $text = array(
 'minutes' => 'минути',
 'misc' => 'Разни',
 'missing_checksum' => 'липсва контролна сума',
+'missing_file' => '',
 'missing_filesize' => 'липсва размер на файла',
 'missing_transition_user_group' => 'липсва потребител или група за преход',
 'monday' => 'понеделник',

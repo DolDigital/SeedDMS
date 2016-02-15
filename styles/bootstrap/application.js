@@ -674,7 +674,7 @@ $(document).ready(function() {
 			dismissQueue: true,
 			layout: 'topRight',
 			theme: 'defaultTheme',
-			timeout: (timeout == 'undefined' ? 1500 : timeout),
+			timeout: (typeof timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
 }); 
