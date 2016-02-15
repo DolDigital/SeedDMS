@@ -24,6 +24,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 add method getFilesize()
+timeout for external commands can be passed to contructor of SeedDMS_Preview_Previewer
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
