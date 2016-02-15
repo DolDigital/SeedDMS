@@ -32,6 +32,7 @@
 SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
 - add SeedDMS_Core_Group::getWorkflowStatus()
+- SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
