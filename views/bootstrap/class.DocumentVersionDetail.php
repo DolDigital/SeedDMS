@@ -40,7 +40,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
 		$enableversionmodification = $this->params['enableversionmodification'];
 		$cachedir = $this->params['cachedir'];
-		$previewwidthdetail = $this->params['previewwidthdetail'];
+		$previewwidthdetail = $this->params['previewWidthDetail'];
 
 		$latestContent = $document->getLatestContent();
 		$status = $version->getStatus();
