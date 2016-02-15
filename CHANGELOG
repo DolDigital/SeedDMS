@@ -10,6 +10,7 @@
 - further pages with content security policy turned on
 - various translation updates
 - check for document expiration when showing search result and folder content
+- more rest api functions
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23
