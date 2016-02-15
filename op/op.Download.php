@@ -58,7 +58,11 @@ if (isset($_GET["version"])) {
 	if (!is_object($content)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 	}
-	
+
+	if(!file_exists($dms->contentDir . $content->getPath())) {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("missing_file"));
+	}
+
 	//header("Content-Type: application/force-download; name=\"" . mydmsDecodeString($content->getOriginalFileName()) . "\"");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
@@ -104,6 +108,10 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_file_id"));
 	}
 
+	if(!file_exists($dms->contentDir . $file->getPath())) {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("missing_file"));
+	}
+
 	header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
@@ -126,8 +134,12 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
+	if (!isset($filename)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+	}
+
+	if (!file_exists($settings->_contentDir.$filename) ) {
+		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
 
 	header('Content-Description: File Transfer');
@@ -156,8 +168,12 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
+	if (!isset($filename)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+	}
+
+	if (!file_exists($settings->_contentDir.$filename) ) {
+		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
 
 	header("Content-Type: text/plain; name=\"" . $filename . "\"");
@@ -207,8 +223,12 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
+	if (!isset($filename)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+	}
+
+	if (!file_exists($settings->_contentDir.$filename) ) {
+		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
 
 	header("Content-Type: application/zip; name=\"" . $filename . "\"");
@@ -244,17 +264,20 @@ if (isset($_GET["version"])) {
 	}
 
 	$filename = $dms->contentDir . $document->getDir().'r'.(int) $_GET['reviewlogid'];
-	if(file_exists($filename)) {
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$mimetype = finfo_file($finfo, $filename);
-
-		header("Content-Type: ".$mimetype."; name=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
-		header("Content-Transfer-Encoding: binary");
-		header("Content-Length: " . filesize($filename ));
-		header("Content-Disposition: attachment; filename=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
-		header("Cache-Control: must-revalidate");
-		readfile($filename);
+	if (!file_exists($filename) ) {
+		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
+
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$mimetype = finfo_file($finfo, $filename);
+
+	header("Content-Type: ".$mimetype."; name=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
+	header("Content-Transfer-Encoding: binary");
+	header("Content-Length: " . filesize($filename ));
+	header("Content-Disposition: attachment; filename=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
+	header("Cache-Control: must-revalidate");
+	readfile($filename);
+
 } elseif (isset($_GET["approvelogid"])) {
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 		UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -275,17 +298,19 @@ if (isset($_GET["version"])) {
 	}
 
 	$filename = $dms->contentDir . $document->getDir().'a'.(int) $_GET['approvelogid'];
-	if(file_exists($filename)) {
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$mimetype = finfo_file($finfo, $filename);
-
-		header("Content-Type: ".$mimetype."; name=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
-		header("Content-Transfer-Encoding: binary");
-		header("Content-Length: " . filesize($filename ));
-		header("Content-Disposition: attachment; filename=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
-		header("Cache-Control: must-revalidate");
-		readfile($filename);
+	if (!file_exists($filename) ) {
+		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
+
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$mimetype = finfo_file($finfo, $filename);
+
+	header("Content-Type: ".$mimetype."; name=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
+	header("Content-Transfer-Encoding: binary");
+	header("Content-Length: " . filesize($filename ));
+	header("Content-Disposition: attachment; filename=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
+	header("Cache-Control: must-revalidate");
+	readfile($filename);
 }
 
 add_log_line();
