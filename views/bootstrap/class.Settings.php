@@ -55,6 +55,26 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 			$('#settingstab li a').click(function(event) {
 				$('#currenttab').val($(event.currentTarget).data('target').substring(1));
 			});
+
+			$('a.sendtestmail').click(function(ev){
+				ev.preventDefault();
+				$.ajax({url: '../op/op.Ajax.php',
+					type: 'GET',
+					dataType: "json",
+					data: {command: 'testmail'},
+					success: function(data) {
+						console.log(data);
+						noty({
+							text: data.msg,
+							type: (data.error) ? 'error' : 'success',
+							dismissQueue: true,
+							layout: 'topRight',
+							theme: 'defaultTheme',
+							timeout: 1500,
+						});
+					}
+				}); 
+			});
 		});
 <?php
 	} /* }}} */
@@ -456,7 +476,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <!--
         -- SETTINGS - SYSTEM - SMTP
       -->
-      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail">Send test mail</a></td> </tr>
+			<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
         <td><?php $this->showTextField("smtpServer", $settings->_smtpServer); ?></td>
