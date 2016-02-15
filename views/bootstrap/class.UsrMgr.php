@@ -80,6 +80,7 @@ $(document).ready( function() {
 
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
 		$workflowmode = $this->params['workflowmode'];
@@ -134,7 +135,8 @@ $(document).ready( function() {
 			}
 			echo "</table>";
 
-			echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+			if($user->isAdmin() && $seluser->getID() != $user->getID())
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 
