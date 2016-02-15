@@ -90,7 +90,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 			printMLText("empty_notify_list");
 		}
 		else {
-			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth);
+			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth, $this->timeout);
 			$previewer->setConverters($this->previewconverters);
 
 			print "<table class=\"table-condensed\">";
@@ -149,6 +149,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->previewwidth = $this->params['previewWidthList'];
 		$this->previewconverters = $this->params['previewconverters'];
 		$this->db = $this->dms->getDB();
+		$this->timeout = $this->params['timeout'];
 
 		$this->htmlStartPage(getMLText("my_account"));
 		$this->globalNavigation();

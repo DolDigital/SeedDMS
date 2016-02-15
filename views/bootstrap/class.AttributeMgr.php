@@ -59,10 +59,14 @@ $(document).ready( function() {
 		$previewwidth = $this->params['previewWidthList'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
+		$timeout = $this->params['timeout'];
 
 		if($selattrdef) {
 			$this->contentHeading(getMLText("attrdef_info"));
 			$res = $selattrdef->getStatistics(30);
+			if(!empty($res['frequencies']['document']) ||!empty($res['frequencies']['folder']) ||!empty($res['frequencies']['content'])) {
+
+
 ?>
     <div class="accordion" id="accordion1">
       <div class="accordion-group">
@@ -93,6 +97,7 @@ $(document).ready( function() {
       </div>
      </div>
 <?php
+			}
 			if($res['folders'] || $res['docs']) {
 				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
@@ -104,7 +109,7 @@ $(document).ready( function() {
 				foreach($res['folders'] as $subFolder) {
 					echo $this->folderListRow($subFolder);
 				}
-				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 				foreach($res['docs'] as $document) {
 					echo $this->documentListRow($document, $previewer);
 				}
@@ -120,7 +125,7 @@ $(document).ready( function() {
 				print "<th>".getMLText("status")."</th>\n";
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
-				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 				foreach($res['contents'] as $content) {
 					$doc = $content->getDocument();
 					echo $this->documentListRow($doc, $previewer);
@@ -278,7 +283,24 @@ $(document).ready( function() {
 						$ot = getMLText("version");
 						break;
 				}
-				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.")");
+				switch($attrdef->getType()) {
+					case SeedDMS_Core_AttributeDefinition::type_int:
+						$t = getMLText("attrdef_type_int");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_float:
+						$t = getMLText("attrdef_type_float");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_string:
+						$t = getMLText("attrdef_type_string");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_date:
+						$t = getMLText("attrdef_type_date");
+						break;
+					case SeedDMS_Core_AttributeDefinition::type_boolean:
+						$t = getMLText("attrdef_type_boolean");
+						break;
+				}
+				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.", ".$t.")");
 			}
 		}
 ?>

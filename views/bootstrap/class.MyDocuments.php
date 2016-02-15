@@ -42,7 +42,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 		$previewconverters = $this->params['previewconverters'];
 
 		$db = $dms->getDB();
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 		$previewer->setConverters($previewconverters);
 
 		$this->htmlStartPage(getMLText("my_documents"));

@@ -173,6 +173,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$checkoutdir = $this->params['checkOutDir'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
+		$timeout = $this->params['timeout'];
 
 		$versions = $document->getContent();
 
@@ -449,7 +450,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		print "</ul>";
 		*/
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 		$previewer->setConverters($previewconverters);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {

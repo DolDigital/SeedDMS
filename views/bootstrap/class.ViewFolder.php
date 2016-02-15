@@ -114,6 +114,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 		$previewwidth = $this->params['previewWidthList'];
 		$previewconverters = $this->params['previewconverters'];
+		$timeout = $this->params['timeout'];
 
 		$folderid = $folder->getId();
 
@@ -131,7 +132,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 		}
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 		$previewer->setConverters($previewconverters);
 
 		echo $this->callHook('preContent');

@@ -64,6 +64,7 @@ if($view) {
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);
 	exit;
 }

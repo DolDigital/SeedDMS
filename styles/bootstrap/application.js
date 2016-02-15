@@ -233,25 +233,6 @@ $(document).ready( function() {
 			'json'
 		);
 	});
-	$('a.sendtestmail').click(function(ev){
-		ev.preventDefault();
-		$.ajax({url: '../op/op.Ajax.php',
-			type: 'GET',
-			dataType: "json",
-			data: {command: 'testmail'},
-			success: function(data) {
-				console.log(data);
-				noty({
-					text: data.msg,
-					type: (data.error) ? 'error' : 'success',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
-		}); 
-	});
 
 	$('a.movefolder').click(function(ev){
 		ev.preventDefault();
@@ -693,7 +674,7 @@ $(document).ready(function() {
 			dismissQueue: true,
 			layout: 'topRight',
 			theme: 'defaultTheme',
-			timeout: (timeout == 'undefined' ? 1500 : timeout),
+			timeout: (typeof timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
 }); 

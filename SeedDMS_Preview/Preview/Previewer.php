@@ -44,7 +44,13 @@ class SeedDMS_Preview_Previewer {
 	 */
 	protected $converters;
 
-	function __construct($previewDir, $width=40) {
+	/**
+	 * @var integer $timeout maximum time for execution of external commands
+	 * @access protected
+	 */
+	protected $timeout;
+
+	function __construct($previewDir, $width=40, $timeout=5) {
 		if(!is_dir($previewDir)) {
 			if (!SeedDMS_Core_File::makeDir($previewDir)) {
 				$this->previewDir = '';
@@ -66,9 +72,10 @@ class SeedDMS_Preview_Previewer {
 			'application/postscript' => "convert -density 100 -resize %wx '%f[0]' '%o'",
 			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
 		);
+		$this->timeout = intval($timeout);
 	}
 
-	static function execWithTimeout($cmd, $timeout=2) { /* {{{ */
+	static function execWithTimeout($cmd, $timeout=5) { /* {{{ */
 		$descriptorspec = array(
 			0 => array("pipe", "r"),
 			1 => array("pipe", "w"),
@@ -188,7 +195,7 @@ class SeedDMS_Preview_Previewer {
 			if($cmd) {
 				//exec($cmd);
 				try {
-					self::execWithTimeout($cmd);
+					self::execWithTimeout($cmd, $this->timeout);
 				} catch(Exception $e) {
 				}
 			}
@@ -254,7 +261,7 @@ class SeedDMS_Preview_Previewer {
 			if($cmd) {
 				//exec($cmd);
 				try {
-					self::execWithTimeout($cmd);
+					self::execWithTimeout($cmd, $this->timeout);
 				} catch(Exception $e) {
 				}
 			}
@@ -319,6 +326,21 @@ class SeedDMS_Preview_Previewer {
 			readfile($target.'.png');
 		}
 	} /* }}} */
+
+	public function getFilesize($object, $width=0) { /* {{{ */
+		if($width == 0)
+			$width = $this->width;
+		else
+			$width = intval($width);
+		$target = $this->getFileName($object, $width);
+		if($target && file_exists($target.'.png')) {
+			return(filesize($target.'.png'));
+		} else {
+			return false;
+		}
+
+	} /* }}} */
+
 
 	public function deletePreview($document, $object, $width=0) { /* {{{ */
 		if($width == 0)

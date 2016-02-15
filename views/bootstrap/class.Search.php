@@ -90,6 +90,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 		$previewconverters = $this->params['previewconverters'];
+		$timeout = $this->params['timeout'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
@@ -488,7 +489,7 @@ $(document).ready( function() {
 			print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 			$previewer->setConverters($previewconverters);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == $dms->getClassname('document')) {

@@ -80,6 +80,7 @@ $(document).ready( function() {
 
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
 		$settings = $this->params['settings'];
@@ -136,7 +137,8 @@ $(document).ready( function() {
 			echo "<tr><td>".getMLText('network_drive')."</td><td><a href=\"http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot.'checkout/'.preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."\">".preg_replace('/[^A-Za-z0-9_-]/', '', $seluser->getLogin())."</a></td></tr>\n";
 			echo "</table>";
 
-			echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+			if($user->isAdmin() && $seluser->getID() != $user->getID())
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 

@@ -470,6 +470,7 @@ if(count($entries) == 1) {
 		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
 		$view->setParam('previewWidthList', $settings->_previewWidthList);
 		$view->setParam('previewconverters', $settings->_converters['preview']);
+		$view->setParam('timeout', $settings->_cmdTimeout);
 		$view($_GET);
 		exit;
 	}

@@ -31,31 +31,35 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 				$content = $this->params['content'];
 
 				if(!$this->callHook('version')) {
-					header("Content-Transfer-Encoding: binary");
-					header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
-					$efilename = rawurlencode($content->getOriginalFileName());
-					header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
-					header("Content-Type: " . $content->getMimeType());
-					header("Cache-Control: must-revalidate");
+					if(file_exists($dms->contentDir . $content->getPath()) {
+						header("Content-Transfer-Encoding: binary");
+						header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
+						$efilename = rawurlencode($content->getOriginalFileName());
+						header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
+						header("Content-Type: " . $content->getMimeType());
+						header("Cache-Control: must-revalidate");
 
-					readfile($dms->contentDir . $content->getPath());
+						readfile($dms->contentDir . $content->getPath());
+					}
 				}
 				break;
 			case "file":
 				$file = $this->params['file'];
 
 				if(!$this->callHook('file')) {
-					header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
-					header("Content-Transfer-Encoding: binary");
-					header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
-					header("Content-Disposition: attachment; filename=\"" . $file->getOriginalFileName() . "\"");
-					//header("Expires: 0");
-					header("Content-Type: " . $file->getMimeType());
-					//header("Cache-Control: no-cache, must-revalidate");
-					header("Cache-Control: must-revalidate");
-					//header("Pragma: no-cache");
+					if(file_exists($dms->contentDir . $file->getPath()) {
+						header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
+						header("Content-Transfer-Encoding: binary");
+						header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
+						header("Content-Disposition: attachment; filename=\"" . $file->getOriginalFileName() . "\"");
+						//header("Expires: 0");
+						header("Content-Type: " . $file->getMimeType());
+						//header("Cache-Control: no-cache, must-revalidate");
+						header("Cache-Control: must-revalidate");
+						//header("Pragma: no-cache");
 
-					readfile($dms->contentDir . $file->getPath());
+						readfile($dms->contentDir . $file->getPath());
+					}
 				}
 				break;
 		}

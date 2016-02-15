@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2170), dgrutsch (21)
+//    Translators: Admin (2172), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -596,6 +596,7 @@ URL: [url]',
 'minutes' => 'Minuten',
 'misc' => 'Sonstiges',
 'missing_checksum' => 'Fehlende Check-Summe',
+'missing_file' => 'Datei fehlt',
 'missing_filesize' => 'Fehlende Dateigröße',
 'missing_transition_user_group' => 'Fehlende/r Benutzer/Gruppe für Transition',
 'monday' => 'Montag',
@@ -936,6 +937,7 @@ URL: [url]',
 'select_one' => 'Bitte wählen',
 'select_users' => 'Klicken zur Auswahl eines Benutzers',
 'select_workflow' => 'Workflow auswählen',
+'send_test_mail' => 'Sende Test-Email',
 'september' => 'September',
 'sequence' => 'Reihenfolge',
 'seq_after' => 'Nach "[prevname]"',
