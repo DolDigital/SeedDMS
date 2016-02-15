@@ -1136,46 +1136,57 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
         return;
     }
     
-    if ($app->request()->put('id') == null)
-    {
-        $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'Please PUT the user or group Id', 'data'=>''));
-        return; 
-    }
-
-    if ($app->request()->put('mode') == null)
-    {
-        $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'Please PUT the access mode', 'data'=>''));
-        return; 
-    }
-
     $userOrGroupIdInput = $app->request()->put('id');
-    $modeInput = $app->request()->put('mode');
+    if ($operationType == 'add')
+    {
+	    if ($app->request()->put('id') == null)
+	    {
+	        $app->response()->header('Content-Type', 'application/json');
+	        echo json_encode(array('success'=>false, 'message'=>'Please PUT the user or group Id', 'data'=>''));
+	        return; 
+	    }
 
-    $mode = M_NONE;
-    if ($modeInput == 'read')
-    {
-			$mode = M_READ;
-    }
-    if ($modeInput == 'readwrite')
-    {
-			$mode = M_READWRITE;
-    }
-    if ($modeInput == 'all')
-    {
-			$mode = M_ALL;
-    }
+	    if ($app->request()->put('mode') == null)
+	    {
+	        $app->response()->header('Content-Type', 'application/json');
+	        echo json_encode(array('success'=>false, 'message'=>'Please PUT the access mode', 'data'=>''));
+	        return; 
+	    }
+
+	    $modeInput = $app->request()->put('mode');
+
+	    $mode = M_NONE;
+	    if ($modeInput == 'read')
+	    {
+	    	$mode = M_READ;
+	    }
+	    if ($modeInput == 'readwrite')
+	    {
+	    	$mode = M_READWRITE;
+	    }
+	    if ($modeInput == 'all')
+	    {
+	    	$mode = M_ALL;
+	    }
+	}
 
 
     $userOrGroupId = $userOrGroupIdInput;
     if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
     {
-			$userOrGroupObj = $dms->getUserByLogin($userOrGroupIdInput);
+    	$userOrGroupObj = $dms->getUserByLogin($userOrGroupIdInput);
     }
     if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
     {
-			$userOrGroupObj = $dms->getGroupByName($userOrGroupIdInput);
+    	$userOrGroupObj = $dms->getGroupByName($userOrGroupIdInput);
+    }
+    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
+    {
+    	$userOrGroupObj = $dms->getUser($userOrGroupIdInput);
+    }
+    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
+    {
+    	$userOrGroupObj = $dms->getGroup($userOrGroupIdInput);
     }
     if (!$userOrGroupObj) {
         $app->response()->status(404);
@@ -1232,15 +1243,15 @@ function clearFolderAccessList($id) { /* {{{ */
     }
     if (!$folder)
     {
-			$app->response()->status(404);
-			return;
+    	$app->response()->status(404);
+    	return;
     }
     $operationResult = $folder->clearAccessList();
     $data = array();
     $app->response()->header('Content-Type', 'application/json');
     if (!$operationResult)
     {
-			echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));	
+    	echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));	
     }
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
@@ -1298,7 +1309,6 @@ $app->put('/accounts/:id/disable', 'setDisabledAccount');
 $app->post('/groups', 'createGroup');
 $app->get('/groups/:id', 'getGroup');
 $app->put('/groups/:id/addUser', 'addUserToGroup');
-$app->put('/groups/:id/removeUser', 'removeUserFromGroup'); 
 $app->put('/groups/:id/removeUser', 'removeUserFromGroup');
 $app->put('/folder/:id/setInherit', 'setFolderInheritsAccess');
 $app->put('/folder/:id/access/group/add', 'addGroupAccessToFolder'); // 
@@ -1306,7 +1316,6 @@ $app->put('/folder/:id/access/user/add', 'addUserAccessToFolder'); //
 $app->put('/folder/:id/access/group/remove', 'removeGroupAccessFromFolder'); 
 $app->put('/folder/:id/access/user/remove', 'removeUserAccessFromFolder'); 
 $app->put('/folder/:id/access/clear', 'clearFolderAccessList');
-
 $app->run();
 
 ?>

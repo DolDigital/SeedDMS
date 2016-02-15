@@ -48,8 +48,9 @@ $('#fileselect').click(function(ev) {
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
 //		$this->htmlStartPage(getMLText("choose_target_file"));
 //		$this->globalBanner();

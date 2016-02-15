@@ -36,8 +36,9 @@ class SeedDMS_View_ApprovalSummary extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
 		$this->htmlStartPage(getMLText("approval_summary"));
 		$this->globalNavigation();

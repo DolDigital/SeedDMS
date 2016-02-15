@@ -755,6 +755,7 @@ $text = array(
 'select_one' => 'Избери един',
 'select_users' => 'Кликни да избереш потребители',
 'select_workflow' => 'Избери процес',
+'send_test_mail' => '',
 'september' => 'септември',
 'sequence' => 'Последователност',
 'seq_after' => 'След "[prevname]"',

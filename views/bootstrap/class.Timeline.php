@@ -38,8 +38,10 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$timeout = $this->params['timeout'];
+
 		if($document) {
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 			$previewer->createPreview($version);
 
 			$this->contentHeading(getMLText("timeline_selected_item"));

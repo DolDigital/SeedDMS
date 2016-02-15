@@ -861,7 +861,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getDocumentsLocked() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT `tblDocuments`.* ".
+		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
 			"FROM `tblDocumentLocks` LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentLocks`.`document` ".
 			"WHERE `tblDocumentLocks`.`userID` = '".$this->_id."' ".
 			"ORDER BY `id` DESC";

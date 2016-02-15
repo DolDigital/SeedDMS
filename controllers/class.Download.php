@@ -31,14 +31,16 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 			case "version":
 
 				if(!$this->callHook('version')) {
-					header("Content-Transfer-Encoding: binary");
-					header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
-					$efilename = rawurlencode($content->getOriginalFileName());
-					header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
-					header("Content-Type: " . $content->getMimeType());
-					header("Cache-Control: must-revalidate");
+					if(file_exists($dms->contentDir . $content->getPath()) {
+						header("Content-Transfer-Encoding: binary");
+						header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
+						$efilename = rawurlencode($content->getOriginalFileName());
+						header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
+						header("Content-Type: " . $content->getMimeType());
+						header("Cache-Control: must-revalidate");
 
-					readfile($dms->contentDir . $content->getPath());
+						readfile($dms->contentDir . $content->getPath());
+					}
 				}
 				break;
 		}
