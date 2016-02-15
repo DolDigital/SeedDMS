@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1306), dgrutsch (7), netixw (14)
+//    Translators: Admin (1307), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -596,6 +596,7 @@ URL: [url]',
 'minutes' => 'minutes',
 'misc' => 'Misc',
 'missing_checksum' => 'Missing checksum',
+'missing_file' => 'Missing file',
 'missing_filesize' => 'Missing filesize',
 'missing_transition_user_group' => 'Missing user/group for transition',
 'monday' => 'Monday',
