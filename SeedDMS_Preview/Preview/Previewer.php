@@ -282,6 +282,21 @@ class SeedDMS_Preview_Previewer {
 		}
 	} /* }}} */
 
+	public function getFilesize($object, $width=0) { /* {{{ */
+		if($width == 0)
+			$width = $this->width;
+		else
+			$width = intval($width);
+		$target = $this->getFileName($object, $width);
+		if($target && file_exists($target.'.png')) {
+			return(filesize($target.'.png'));
+		} else {
+			return false;
+		}
+
+	} /* }}} */
+
+
 	public function deletePreview($document, $object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;

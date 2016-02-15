@@ -186,7 +186,7 @@ class SeedDMS_Core_Group {
 		$queryStr = "INSERT INTO tblGroupMembers (groupID, userID, manager) VALUES (".$this->_id.", ".$user->getID(). ", " . ($asManager?"1":"0") ." )";
 		$res = $db->getResult($queryStr);
 
-		if ($res) return false;
+		if (!$res) return false;
 
 		unset($this->_users);
 		return true;
@@ -198,7 +198,7 @@ class SeedDMS_Core_Group {
 		$queryStr = "DELETE FROM tblGroupMembers WHERE groupID = ".$this->_id." AND userID = ".$user->getID();
 		$res = $db->getResult($queryStr);
 
-		if ($res) return false;
+		if (!$res) return false;
 		unset($this->_users);
 		return true;
 	} /* }}} */

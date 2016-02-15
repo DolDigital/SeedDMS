@@ -64,6 +64,8 @@ Here is a detailed list of requirements:
 6. The Zend Framework (version 1) (optional, only needed for fulltext search)
 7. The pear Log package
 8. The pear HTTP_WebDAV_Server package (optional, only need for webdav)
+9. SLIM RestApi
+10. FeedWriter from https://github.com/mibe/FeedWriter
 
 
 BEFORE YOU START
