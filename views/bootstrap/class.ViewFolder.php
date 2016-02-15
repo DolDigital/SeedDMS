@@ -113,6 +113,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
 		$folderid = $folder->getId();
 
@@ -257,7 +258,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			echo $this->folderListRow($subFolder);
 		}
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 		foreach($documents as $document) {
 			$document->verifyLastestContentExpriry();
 			echo $this->documentListRow($document, $previewer);

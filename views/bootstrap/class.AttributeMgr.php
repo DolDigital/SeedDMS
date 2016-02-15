@@ -59,6 +59,7 @@ $(document).ready( function() {
 		$previewwidth = $this->params['previewWidthList'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
+		$timeout = $this->params['timeout'];
 
 		if($selattrdef) {
 			$this->contentHeading(getMLText("attrdef_info"));
@@ -108,7 +109,7 @@ $(document).ready( function() {
 				foreach($res['folders'] as $subFolder) {
 					echo $this->folderListRow($subFolder);
 				}
-				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 				foreach($res['docs'] as $document) {
 					echo $this->documentListRow($document, $previewer);
 				}
@@ -124,7 +125,7 @@ $(document).ready( function() {
 				print "<th>".getMLText("status")."</th>\n";
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
-				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 				foreach($res['contents'] as $content) {
 					$doc = $content->getDocument();
 					echo $this->documentListRow($doc, $previewer);

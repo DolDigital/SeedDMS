@@ -132,6 +132,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$previewwidthdetail = $this->params['previewWidthDetail'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
+		$timeout = $this->params['timeout'];
 
 		$versions = $document->getContent();
 
@@ -365,7 +366,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		print "</ul>";
 		*/
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {

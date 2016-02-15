@@ -107,9 +107,10 @@ $(document).ready( function() {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 		$workflowmode = $this->params['workflowmode'];
+		$timeout = $this->params['timeout'];
 
 		if($selgroup) {
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 			$this->contentHeading(getMLText("group_info"));
 			echo "<table class=\"table table-condensed\">\n";
 			if($workflowmode == "traditional") {
