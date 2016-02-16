@@ -74,7 +74,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 */
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		global $settings;
-		if ($recipient->getEmail()=="") return 0;
+		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
 		if (!is_object($recipient) && strcasecmp(get_class($recipient), "SeedDMS_Core_User")) {
 			return -1;
