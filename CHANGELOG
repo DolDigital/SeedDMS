@@ -11,6 +11,7 @@
 - various translation updates
 - check for document expiration when showing search result and folder content
 - more rest api functions
+- do not send notification mails to disabled users
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23
