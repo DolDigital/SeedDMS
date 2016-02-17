@@ -892,11 +892,10 @@ $(document).ready(function () {
 
 	function printDocumentChooserJs($formName) { /* {{{ */
 ?>
-modalDocChooser<?php echo $formName ?> = $('#docChooser<?php echo $formName ?>');
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
 	$('#choosedocsearch').val(name);
-	modalDocChooser<?php echo $formName ?>.modal('hide');
+	$('#docChooser<?php echo $formName ?>').modal('hide');
 }
 function folderSelected<?php echo $formName ?>(id, name) {
 }
@@ -938,11 +937,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 
 	function printFolderChooserJs($formName) { /* {{{ */
 ?>
-modalFolderChooser<?php echo $formName ?> = $('#folderChooser<?php echo $formName ?>');
 function folderSelected<?php echo $formName ?>(id, name) {
 	$('#targetid<?php echo $formName ?>').val(id);
 	$('#choosefoldersearch<?php echo $formName ?>').val(name);
-	modalFolderChooser<?php echo $formName ?>.modal('hide');
+	$('#folderChooser<?php echo $formName ?>').modal('hide');
 }
 <?php
 	} /* }}} */
