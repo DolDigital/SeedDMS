@@ -1052,15 +1052,15 @@ modalDocChooser<?php echo $formName ?> = $('#docChooser<?php echo $formName ?>')
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
 	$('#choosedocsearch').val(name);
-	modalDocChooser<?php echo $form ?>.modal('hide');
+	modalDocChooser<?php echo $formName ?>.modal('hide');
 }
-function folderSelected<?php echo $form ?>(id, name) {
+function folderSelected<?php echo $formName ?>(id, name) {
 }
 <?php
 	} /* }}} */
 
-	function printDocumentChooser($formName) { /* {{{ */
-		$this->printDocumentChooserHtml($formName);
+	function printDocumentChooser($formName, $accessMode=M_READ, $exclude = -1, $default = false, $formname = '', $folder='', $partialtree=0) { /* {{{ */
+		$this->printDocumentChooserHtml($formName, $accessMode, $exclude, $default, $formName, $folder, $partialtree);
 ?>
 		<script language="JavaScript">
 <?php
