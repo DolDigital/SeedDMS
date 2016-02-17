@@ -34,6 +34,8 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$seluser = $this->params['seluser'];
 		$strictformcheck = $this->params['strictformcheck'];
+
+		header('Content-Type: application/javascript');
 ?>
 function checkForm()
 {
