@@ -34,6 +34,8 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$seluser = $this->params['seluser'];
 		$strictformcheck = $this->params['strictformcheck'];
+
+		$this->printFolderChooserJs("form");
 ?>
 function checkForm()
 {
@@ -250,7 +252,7 @@ $(document).ready( function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("home_folder")?>:</td>
-			<td><?php $this->printFolderChooser("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
+			<td><?php $this->printFolderChooserHtml("form", M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("quota");?>:</td>
