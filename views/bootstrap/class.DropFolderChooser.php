@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_DropFolderChooser extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
 ?>
 $('#fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');

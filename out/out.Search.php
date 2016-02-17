@@ -374,7 +374,6 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 	if($resArr['folders']) {
 		foreach ($resArr['folders'] as $entry) {
 			if ($entry->getAccessMode($user) >= M_READ) {
-				$entry->verifyLastestContentExpriry();
 				$entries[] = $entry;
 				$fcount++;
 			}
@@ -384,6 +383,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 	if($resArr['docs']) {
 		foreach ($resArr['docs'] as $entry) {
 			if ($entry->getAccessMode($user) >= M_READ) {
+				$entry->verifyLastestContentExpriry();
 				$entries[] = $entry;
 				$dcount++;
 			}

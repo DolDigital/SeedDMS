@@ -33,6 +33,7 @@ class SeedDMS_View_Categories extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$selcat = $this->params['selcategory'];
+		header('Content-Type: application/javascript');
 ?>
 $(document).ready( function() {
 	$( "#selector" ).change(function() {

@@ -35,6 +35,8 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$seluser = $this->params['seluser'];
 		$strictformcheck = $this->params['strictformcheck'];
 
+		header('Content-Type: application/javascript');
+
 		$this->printFolderChooserJs("form");
 ?>
 function checkForm()
