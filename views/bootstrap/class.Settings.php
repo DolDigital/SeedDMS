@@ -50,6 +50,8 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
+
+		header('Content-Type: application/javascript');
 ?>
 		$(document).ready( function() {
 			$('#settingstab li a').click(function(event) {

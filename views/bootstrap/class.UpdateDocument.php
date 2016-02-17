@@ -53,6 +53,7 @@ $(document).ready( function() {
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		header('Content-Type: application/javascript');
 		$this->printDropFolderChooserJs("form1");
 ?>
 function checkForm()
