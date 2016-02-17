@@ -77,6 +77,7 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 			});
 		});
 <?php
+		$this->printFolderChooserJs("form1");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -287,7 +288,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_libraryFolder_desc");?>">
         <td><?php printMLText("settings_libraryFolder");?>:</td>
-				<td><?php $this->printFolderChooser("form1", M_READWRITE, -1, $dms->getFolder($settings->_libraryFolder), 'libraryFolder');?></td>
+				<td><?php $this->printFolderChooserHtml("form1", M_READWRITE, -1, $dms->getFolder($settings->_libraryFolder), 'libraryFolder');?></td>
       </tr>
 
       <!--
