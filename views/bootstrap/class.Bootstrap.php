@@ -1058,12 +1058,12 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printDocumentChooser($formName, $accessMode=M_READ, $exclude = -1, $default = false, $formname = '', $folder='', $partialtree=0) { /* {{{ */
-		$this->printDocumentChooserHtml($formName, $accessMode, $exclude, $default, $formName, $folder, $partialtree);
+	function printDocumentChooser($form, $accessMode=M_READ, $exclude = -1, $default = false, $formname = '', $folder='', $partialtree=0) { /* {{{ */
+		$this->printDocumentChooserHtml($form, $accessMode, $exclude, $default, $formname, $folder, $partialtree);
 ?>
 		<script language="JavaScript">
 <?php
-		$this->printDocumentChooserJs($formName);
+		$this->printDocumentChooserJs($form);
 ?>
 		</script>
 <?php
