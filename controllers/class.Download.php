@@ -31,7 +31,7 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 				$content = $this->params['content'];
 
 				if(!$this->callHook('version')) {
-					if(file_exists($dms->contentDir . $content->getPath()) {
+					if(file_exists($dms->contentDir . $content->getPath())) {
 						header("Content-Transfer-Encoding: binary");
 						header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
 						$efilename = rawurlencode($content->getOriginalFileName());
