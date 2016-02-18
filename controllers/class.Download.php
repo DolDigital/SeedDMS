@@ -47,7 +47,7 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 				$file = $this->params['file'];
 
 				if(!$this->callHook('file')) {
-					if(file_exists($dms->contentDir . $file->getPath()) {
+					if(file_exists($dms->contentDir . $file->getPath())) {
 						header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
 						header("Content-Transfer-Encoding: binary");
 						header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
