@@ -40,6 +40,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$previewconverters = $this->params['previewconverters'];
+		$timeout = $this->params['timeout'];
 
 		$db = $dms->getDB();
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
