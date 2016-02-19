@@ -79,9 +79,9 @@ if (!is_object($user)) {
 	exit;
 }
 
-if($user->isAdmin() || $user->maySwitchToUser($su)) {
-	if($resArr["su"]) {
-		$user = $dms->getUser($resArr["su"]);
+if($resArr["su"] && $su = $dms->getUser($resArr["su"])) {
+	if($user->isAdmin() || $user->maySwitchToUser($su)) {
+		$user = $su;
 	} else {
 		$session->resetSu();
 	}
