@@ -94,7 +94,7 @@ CREATE TABLE `tblTransmittalItems` (
   CONSTRAINT `tblTransmittalItem_transmittal` FOREIGN KEY (`transmittal`) REFERENCES `tblTransmittals` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-UPDATE tblVersion set major=6, minor=0, subminor=0;
+UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;
 

@@ -73,6 +73,6 @@ CREATE TABLE `tblTransmittalItems` (
   UNIQUE (document, version)
 );
 
-UPDATE tblVersion set major=6, minor=0, subminor=0;
+UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;
