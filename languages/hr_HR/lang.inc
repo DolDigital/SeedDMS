@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1175), marbanas (16)
+//    Translators: Admin (1177), marbanas (16)
 
 $text = array(
 'accept' => 'Prihvati',
@@ -721,10 +721,10 @@ zaprimili smo zahtjev za promjenu vaše lozinke.
 
 To se može izvršiti klikom na sljedeću poveznicu:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Ako i dalje imate problema s prijavom, molimo kontaktirajte Vašeg administratora.',
-'password_forgotten_email_subject' => 'Zaboravljena lozinka',
+'password_forgotten_email_subject' => '[sitename]: Zaboravljena lozinka',
 'password_forgotten_send_hash' => 'Upute kako postupiti su poslane na e-mail adresu korisnika',
 'password_forgotten_text' => 'Ispunite donji obrazac i slijedite upute iz e-maila koji će vam biti poslan.',
 'password_forgotten_title' => 'Lozinka je poslana',

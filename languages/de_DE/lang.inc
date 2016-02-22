@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2172), dgrutsch (21)
+//    Translators: Admin (2174), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -724,7 +724,7 @@ Dies kann durch den folgenden Link erfolgen:
 [url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren Sie bitte Ihren Adminstrator',
-'password_forgotten_email_subject' => 'Passwort vergessen',
+'password_forgotten_email_subject' => '[sitename]: Passwort vergessen',
 'password_forgotten_send_hash' => 'Anweisungen zum weiteren Vorgehen wurden an die E-Mail Adresse des Benutzers versandt',
 'password_forgotten_text' => 'Füllen Sie bitte untenstehendes Formular aus. Weitere Anweisungen erhalten Sie dann in einer E-Mail die an Sie gesandt wird',
 'password_forgotten_title' => 'Passwort gesendet',

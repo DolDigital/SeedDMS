@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (903), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (905), flaviove (627), lfcristofoli (352)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -715,10 +715,10 @@ nós recebemos um pedido para alterar sua senha.
 
 Isso pode ser feito clicando no seguinte link:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Se você ainda tiver problemas para fazer o login, por favor, contate o administrador.',
-'password_forgotten_email_subject' => 'Esqueceu sua senha',
+'password_forgotten_email_subject' => '[sitename]: Esqueceu sua senha',
 'password_forgotten_send_hash' => 'Instruções de como proceder para que seja enviada para o endereço de e-mail do usuário',
 'password_forgotten_text' => 'Preencha o formulário abaixo e siga as instruções do e-mail que será enviado para você.',
 'password_forgotten_title' => 'Senha enviada',

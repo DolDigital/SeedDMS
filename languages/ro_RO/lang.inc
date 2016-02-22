@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1031), balan (87)
+//    Translators: Admin (1033), balan (87)
 
 $text = array(
 'accept' => 'Accept',
@@ -722,10 +722,10 @@ am primit o solicitare pentru a vă schimba parola.
 
 Acest lucru poate fi realizat prin click pe link-ul următor:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Dacă aveți în continuare probleme la autentificare, vă rugăm să contactați administratorul.',
-'password_forgotten_email_subject' => 'Am uitat parola',
+'password_forgotten_email_subject' => '[sitename]: Am uitat parola',
 'password_forgotten_send_hash' => 'Instrucțiuni privind modul cum trebuie procedat au fost trimise la adresa de email a utilizatorului',
 'password_forgotten_text' => 'Completați formularul de mai jos și urmați instrucțiunile ce vor fi trimise prin e-mail.',
 'password_forgotten_title' => 'Parola a fost trimisă',

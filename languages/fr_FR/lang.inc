@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1011), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1013), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -714,10 +714,10 @@ URL: [url]',
 
 Pour ce faire, cliquez sur le lien suivant:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 En cas de problème persistant, veuillez contacter votre administrateur.',
-'password_forgotten_email_subject' => 'Mot de passe oublié',
+'password_forgotten_email_subject' => '[sitename]: Mot de passe oublié',
 'password_forgotten_send_hash' => 'La procédure à suivre a bien été envoyée à l\'adresse indiquée',
 'password_forgotten_text' => 'Remplissez le formulaire ci-dessous et suivez les instructions dans le courrier électronique qui vous sera envoyé.',
 'password_forgotten_title' => 'Mot de passe envoyé',
