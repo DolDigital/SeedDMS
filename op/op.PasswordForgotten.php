@@ -63,6 +63,7 @@ if($user) {
 		$params['http_root'] = $settings->_httpRoot;
 		$params['hash'] = $hash;
 		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ChangePassword.php?hash=".$hash;
+	 	$params['url_prefix'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot;
 		$emailobj->toIndividual($settings->_smtpSendFrom, $user, $subject, $message, $params);
 	}
 }

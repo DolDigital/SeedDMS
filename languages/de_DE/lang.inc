@@ -721,7 +721,7 @@ wir haben einen Anfrage zum Zurücksetzen Ihres Passworts erhalten.
 
 Dies kann durch den folgenden Link erfolgen:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren Sie bitte Ihren Adminstrator',
 'password_forgotten_email_subject' => 'Passwort vergessen',

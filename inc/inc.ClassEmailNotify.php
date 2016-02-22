@@ -76,9 +76,16 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		global $settings;
 		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
-		if (!is_object($recipient) && strcasecmp(get_class($recipient), "SeedDMS_Core_User")) {
+		if(!is_object($recipient) && strcasecmp(get_class($recipient), "SeedDMS_Core_User")) {
 			return -1;
 		}
+		if (is_object($sender) && !strcasecmp(get_class($sender), "SeedDMS_Core_User")) {
+			$from = $sender->getFullName() ." <". $sender->getEmail() .">";
+		} elseif(is_string($sender) && trim($sender) != "") {
+			$from = $sender;
+		} else
+			return -1;
+
 
 		if(is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) {
 			$from = $sender->getFullName() ." <". $sender->getEmail() .">";
@@ -127,9 +134,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers   = array();
 		$headers[] = "MIME-Version: 1.0";
 		$headers[] = "Content-type: text/plain; charset=utf-8";
-		//$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
-		$headers[] = "From: ". $settings->_smtpSendFrom;
-		$headers[] = "Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">";
+		$headers[] = "From: ". $from;
 
 		$lang = $recipient->getLanguage();
 		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
