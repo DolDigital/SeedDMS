@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (782)
+//    Translators: Admin (784)
 
 $text = array(
 'accept' => 'Приеми',
@@ -605,8 +605,8 @@ $text = array(
 'password_expired' => '',
 'password_expires_in_days' => '',
 'password_forgotten' => 'Забравена парола',
-'password_forgotten_email_body' => 'Уважаемый потребителю,nnполучихме запитване за изменение на Вашата парола.nnЗа да стане, идете на адрес:nn###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###nnАко и след това не можете да влезете, свържете се с админа.',
-'password_forgotten_email_subject' => 'Забравена парола',
+'password_forgotten_email_body' => 'Уважаемый потребителю,nnполучихме запитване за изменение на Вашата парола.nnЗа да стане, идете на адрес:nn[url_prefix]out/out.ChangePassword.php?hash=[hash]nnАко и след това не можете да влезете, свържете се с админа.',
+'password_forgotten_email_subject' => '[sitename]: Забравена парола',
 'password_forgotten_send_hash' => 'Инструкциите са изпратени на email',
 'password_forgotten_text' => 'Попълнете формата и следвайте инструкциите в писмото',
 'password_forgotten_title' => 'Парола изпратена',

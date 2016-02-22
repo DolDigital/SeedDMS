@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (703), kreml (455)
+//    Translators: Admin (705), kreml (455)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -713,10 +713,10 @@ URL: [url]',
 'password_forgotten' => 'Zapomenuté heslo',
 'password_forgotten_email_body' => 'Uživateli Sportplex DMS,nnobdrželi jsme vaši žádost o změnu hesla.nnToto bude učiněno kliknutím na následující odkaz:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Administrátora.',
-'password_forgotten_email_subject' => 'Obnova zapomenutého hesla',
+'password_forgotten_email_subject' => '[sitename]: Obnova zapomenutého hesla',
 'password_forgotten_send_hash' => 'Instrukce byly poslány uživateli na emailovou adresu.',
 'password_forgotten_text' => 'Vyplňte následující formulář a následujte instrukce v emailu, který vám bude odeslán.',
 'password_forgotten_title' => 'Heslo odesláno',

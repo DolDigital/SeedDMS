@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (981), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (983), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -717,10 +717,10 @@ hemos recibido una petición para cambiar su contraseña.
 
 Puede modificarla haciendo click en el siguiente enlace:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Si continua teniendo problemas de acceso, por favor contacte con el administrador del sistema.',
-'password_forgotten_email_subject' => 'Recordatorio de contraseña',
+'password_forgotten_email_subject' => '[sitename]: Recordatorio de contraseña',
 'password_forgotten_send_hash' => 'Las instrucciones para proceder al cambio se han enviado a la dirección de correo de usuario',
 'password_forgotten_text' => 'Rellene el siguiente formulario y siga las instrucciones del correo que se le enviará.',
 'password_forgotten_title' => 'Envío de contraseña',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (713), gijsbertush (35), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (715), gijsbertush (35), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -714,10 +714,10 @@ Wij hebben een verzoek ontvangen om uw wachtwoord te veranderen.
 
 Dit kan uitgevoerd worden door op de volgende koppeling te drukken:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Als u nog steed problemen ondervind met het inloggen, neem aub contact op met uw beheerder.',
-'password_forgotten_email_subject' => 'Wachtwoord vergeten',
+'password_forgotten_email_subject' => '[sitename]: Wachtwoord vergeten',
 'password_forgotten_send_hash' => 'Verdere instructies zijn naar uw gebruikers email adres verstuurd.',
 'password_forgotten_text' => 'Vul het formulier hieronder in en volg de instructie in de email, welke naar u verzonden zal worden.',
 'password_forgotten_title' => 'Wachtwoord verzonden',
