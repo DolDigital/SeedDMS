@@ -13,10 +13,10 @@
   <active>yes</active>
  </lead>
  <date>2016-01-22</date>
- <time>09:28:28</time>
+ <time>14:34:58</time>
  <version>
-  <release>5.0.0</release>
-  <api>5.0.0</api>
+  <release>5.0.1</release>
+  <api>5.0.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- classes can be overloaded
-- clean workflow log when a document version was deleted
+- all changes from 4.3.24 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -966,6 +965,23 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - add SeedDMS_Core_Group::getWorkflowStatus()
 - SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
 	 </notes>
+  </release>
+  <release>
+   <date>2016-01-22</date>
+   <time>09:28:28</time>
+   <version>
+    <release>5.0.0</release>
+    <api>5.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- classes can be overloaded
+- clean workflow log when a document version was deleted
+   </notes>
   </release>
  </changelog>
 </package>
