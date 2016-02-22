@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_DropFolderChooser extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
 ?>
 $('#fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');
@@ -48,8 +49,9 @@ $('#fileselect').click(function(ev) {
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
 //		$this->htmlStartPage(getMLText("choose_target_file"));
 //		$this->globalBanner();

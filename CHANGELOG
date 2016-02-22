@@ -1,10 +1,32 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.1
+--------------------------------------------------------------------------------
+- merged changes from 4.3.24
+- fixed sending test mail
+- fixed sending password forgotten mail
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.0
 --------------------------------------------------------------------------------
 - support for customer extensions
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.24
+--------------------------------------------------------------------------------
+- fixed possible XSS attack in user substitution
+- users can have mor than one mandatory workflow, in that case the user can select one
+- completed MyDocuments page for advanced workflows
+- guest user can be automatically logged in
+- get/set custom attributes by webdav, better handling of different attribute types
+- default search method can be set (fulltext, database)
+- further pages with content security policy turned on
+- various translation updates
+- check for document expiration when showing search result and folder content
+- more rest api functions
+- do not send notification mails to disabled users
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.23

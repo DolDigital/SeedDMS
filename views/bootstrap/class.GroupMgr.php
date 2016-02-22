@@ -106,42 +106,38 @@ $(document).ready( function() {
 		$selgroup = $this->params['selgroup'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$workflowmode = $this->params['workflowmode'];
+		$timeout = $this->params['timeout'];
 
 		if($selgroup) {
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 			$this->contentHeading(getMLText("group_info"));
 			echo "<table class=\"table table-condensed\">\n";
-			$reviewstatus = $selgroup->getReviewStatus();
-			$i = 0;
-			foreach($reviewstatus as $rv) {
-				if($rv['status'] == 0) {
-					$i++;
-					/*
-					$document = $dms->getDocument($rv['documentID']);
-					$latestContent = $document->getLatestContent();
-					$previewer->createPreview($latestContent);
-					echo "<tr>";
-					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
-					if($previewer->hasPreview($latestContent)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			if($workflowmode == "traditional") {
+				$reviewstatus = $selgroup->getReviewStatus();
+				$i = 0;
+				foreach($reviewstatus as $rv) {
+					if($rv['status'] == 0) {
+						$i++;
 					}
-					print "</a></td>";
-					print "<td><a href=\"out.ViewDocument.php?documentid=".$document->getID()."&currenttab=revapp\">".htmlspecialchars($document->getName())."</a></td>";
-					echo "</tr>";
-					 */
 				}
 			}
-			echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
-			$approvalstatus = $selgroup->getApprovalStatus();
-			$i = 0;
-			foreach($approvalstatus as $rv) {
-				if($rv['status'] == 0) {
-					$i++;
+			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
+				echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>";
+				$approvalstatus = $selgroup->getApprovalStatus();
+				$i = 0;
+				foreach($approvalstatus as $rv) {
+					if($rv['status'] == 0) {
+						$i++;
+					}
 				}
+				echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
 			}
-			echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>";
+			if($workflowmode == 'advanced') {
+				$workflowStatus = $selgroup->getWorkflowStatus();
+				if($workflowStatus)
+					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus)."</td></tr>\n";
+			}
 			echo "</table>";
 		}
 	} /* }}} */
@@ -278,7 +274,7 @@ $(document).ready( function() {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" id="selector" class="span9">
+<select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?>
 <option value="0"><?php echo getMLText("add_group")?>
 <?php

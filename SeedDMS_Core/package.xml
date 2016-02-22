@@ -13,10 +13,10 @@
   <active>yes</active>
  </lead>
  <date>2016-01-22</date>
- <time>09:28:28</time>
+ <time>14:34:58</time>
  <version>
-  <release>5.0.0</release>
-  <api>5.0.0</api>
+  <release>5.0.1</release>
+  <api>5.0.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- classes can be overloaded
-- clean workflow log when a document version was deleted
+- all changes from 4.3.24 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -942,6 +941,47 @@ by a group or user right
 - new method SeedDMS_Core_DMS::createDump()
 - minor improvements int SeedDMS_Core_Document::getReadAccessList()
 	 </notes>
+  </release>
+  <release>
+   <date>2016-01-22</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.24</release>
+    <api>4.3.24</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- make sure boolean attribute is saved as 0/1
+- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
+- add SeedDMS_Core_User::getNotifications()
+- add SeedDMS_Core_Group::getNotifications()
+- SeedDMS_Core_DMS::getNotificationsByGroup() and
+SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
+- SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
+- add SeedDMS_Core_Group::getWorkflowStatus()
+- SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
+	 </notes>
+  </release>
+  <release>
+   <date>2016-01-22</date>
+   <time>09:28:28</time>
+   <version>
+    <release>5.0.0</release>
+    <api>5.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- classes can be overloaded
+- clean workflow log when a document version was deleted
+   </notes>
   </release>
  </changelog>
 </package>

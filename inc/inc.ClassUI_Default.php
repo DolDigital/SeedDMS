@@ -27,7 +27,7 @@ class UI_Default {
 		$this->theme = $theme;
 	}
 
-	static function getStyles() { /* {{{ */
+	static function __getStyles() { /* {{{ */
 		global $settings;
 
 		$themes = array();
@@ -52,12 +52,14 @@ class UI_Default {
 		} else {
 			echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n".
 				"\"http://www.w3.org/TR/html4/strict.dtd\">\n";
-			echo "<html>\n<head>\n";
+			echo "<html lang=\"en\">\n<head>\n";
 			echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/".$theme."/style.css\"/>\n";
-			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/print.css\" media=\"print\"/>\n";
+			echo "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+			echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"../styles/".$theme."/bootstrap/css/bootstrap.css\"/>\n";
+			echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"../styles/".$theme."/bootstrap/css/bootstrap-responsive.css\"/>\n";
 			echo "<link rel='shortcut icon' href='../styles/".$theme."/favicon.ico' type='image/x-icon'/>\n";
-			echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
+			echo "<script type='text/javascript' src='../styles/".$theme."/jquery/jquery.min.js'></script>\n";
+			echo "<script type='text/javascript' src='../styles/".$theme."/bootstrap/js/bootstrap.min.js'></script>\n";
 			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 			echo "</head>\n";
 			echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
@@ -78,6 +80,9 @@ class UI_Default {
 	function footNote() { /* {{{ */
 		global $settings;
 		
+		echo '<div class="row-fluid" style="padding-top: 20px;">'."\n";
+		echo '<div class="span12">'."\n";
+		echo '<div class="alert alert-info">'."\n";
 		if ($settings->_printDisclaimer){
 			echo "<div class=\"disclaimer\">".getMLText("disclaimer")."</div>";
 		}
@@ -85,31 +90,38 @@ class UI_Default {
 		if (isset($settings->_footNote) && strlen((string)$settings->_footNote)>0) {
 			echo "<div class=\"footNote\">".(string)$settings->_footNote."</div>";
 		}
+		echo "</div>\n";
+		echo "</div>\n";
+		echo "</div>\n";
 	
 		return;
 	} /* }}} */
 
 	function contentStart() { /* {{{ */
+		echo "<div class=\"container-fluid\" style=\"margin-top: 50px;\">\n";
+		echo " <div class=\"row-fluid\">\n";
 	} /* }}} */
 
 	function contentEnd() { /* {{{ */
+		echo " </div>\n";
+		echo "</div>\n";
 	} /* }}} */
 
 	function globalBanner() { /* {{{ */
 		global $settings;
 
-		echo "<div class=\"globalBox\" id=\"noNav\">\n";
-		echo "<div class=\"globalTR\"></div>\n";
-		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
-		echo "<div class=\"siteNameLogin\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").
-			"</div>\n";
-		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
-			"</div>\n";
+		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
+		echo " <div class=\"navbar-inner\">\n";
+		echo "  <div class=\"container-fluid\">\n";
+		echo "   <a class=\"brand\">".(strlen($settings->_sitename)>0 ? $settings->_sitename : "SeedDMS")."</a>\n";
+		echo "  </div>\n";
+		echo " </div>\n";
+		echo "</div>\n";
+
 		return;
 	} /* }}} */
 
-	function globalNavigation($folder=null) { /* {{{ */
+	function __globalNavigation($folder=null) { /* {{{ */
 	
 		global $settings, $user;
 
@@ -150,7 +162,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function pageNavigation($pageTitle, $pageType=null, $extra=null) { /* {{{ */
+	function __pageNavigation($pageTitle, $pageType=null, $extra=null) { /* {{{ */
 		global $settings, $user;
 
 		echo "<div class=\"headingContainer\">\n";
@@ -188,7 +200,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function folderNavigationBar($folder) { /* {{{ */
+	function __folderNavigationBar($folder) { /* {{{ */
 	
 		global $user, $settings, $theme;
 
@@ -222,7 +234,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function documentNavigationBar()	{ /* {{{ */
+	function __documentNavigationBar()	{ /* {{{ */
 	
 		global $user, $settings, $document;
 
@@ -259,7 +271,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function accountNavigationBar() { /* {{{ */
+	function __accountNavigationBar() { /* {{{ */
 	
 		global $settings,$user;
 		
@@ -279,7 +291,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function myDocumentsNavigationBar() { /* {{{ */
+	function __myDocumentsNavigationBar() { /* {{{ */
 
 		echo "<ul class=\"localNav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
@@ -290,7 +302,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function adminToolsNavigationBar() { /* {{{ */
+	function __adminToolsNavigationBar() { /* {{{ */
 	
 		global $settings;
 
@@ -305,7 +317,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 	
-	function calendarNavigationBar($d){ /* {{{ */
+	function __calendarNavigationBar($d){ /* {{{ */
 
 		global $settings,$user;
 
@@ -321,7 +333,7 @@ class UI_Default {
 	
 	} /* }}} */
 
-	function pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
+	function __pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
 
 		if (!is_numeric($pageNumber) || !is_numeric($totalPages) || $totalPages<2) {
 			return;
@@ -364,7 +376,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function contentContainer($content) { /* {{{ */
+	function __contentContainer($content) { /* {{{ */
 		echo "<div class=\"contentContainer\">\n";
 		echo "<div class=\"content\">\n";
 		echo "<div class=\"content-l\"><div class=\"content-r\"><div class=\"content-br\"><div class=\"content-bl\">\n";
@@ -375,34 +387,32 @@ class UI_Default {
 
 	function contentContainerStart() { /* {{{ */
 
-		echo "<div class=\"contentContainer\">\n";
-		echo "<div class=\"content\">\n";
-		echo "<div class=\"content-l\"><div class=\"content-r\"><div class=\"content-br\"><div class=\"content-bl\">\n";
+		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
 		return;
 	} /* }}} */
 
 	function contentContainerEnd() { /* {{{ */
 
-		echo "</div></div></div></div>\n</div>\n</div>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	function contentHeading($heading, $noescape=false) { /* {{{ */
 
 		if($noescape)
-			echo "<div class=\"contentHeading\">".$heading."</div>\n";
+			echo "<legend>".$heading."</legend>\n";
 		else
-			echo "<div class=\"contentHeading\">".htmlspecialchars($heading)."</div>\n";
+			echo "<legend>".htmlspecialchars($heading)."</legend>\n";
 		return;
 	} /* }}} */
 
 	function contentSubHeading($heading, $first=false) { /* {{{ */
 
-		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".htmlspecialchars($heading)."</div>\n";
+		echo "<h5>".$heading."</h5>";
 		return;
 	} /* }}} */
 
-	function getMimeIcon($fileType) { /* {{{ */
+	function __getMimeIcon($fileType) { /* {{{ */
 		// for extension use LOWER CASE only
 		$icons = array();
 		$icons["txt"]  = "txt.png";
@@ -483,7 +493,7 @@ class UI_Default {
 		}
 	} /* }}} */
 
-	function printDateChooser($defDate = -1, $varName) { /* {{{ */
+	function __printDateChooser($defDate = -1, $varName) { /* {{{ */
 	
 		if ($defDate == -1)
 			$defDate = mktime();
@@ -520,7 +530,7 @@ class UI_Default {
 		print "</select>";
 	} /* }}} */
 
-	function printSequenceChooser($objArr, $keepID = -1) { /* {{{ */
+	function __printSequenceChooser($objArr, $keepID = -1) { /* {{{ */
 		if (count($objArr) > 0) {
 			$max = $objArr[count($objArr)-1]->getSequence() + 1;
 			$min = $objArr[0]->getSequence() - 1;
@@ -546,7 +556,7 @@ class UI_Default {
 		print "</select>";
 	} /* }}} */
 	
-	function printDocumentChooser($formName) { /* {{{ */
+	function __printDocumentChooser($formName) { /* {{{ */
 		global $settings;
 		?>
 		<script language="JavaScript">
@@ -561,7 +571,7 @@ class UI_Default {
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("document")."...\" onclick=\"chooseDoc".$formName."();\">";
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
+	function __printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		global $settings;
 		?>
 		<script language="JavaScript">
@@ -576,7 +586,7 @@ class UI_Default {
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("folder")."...\" onclick=\"chooseFolder".$formName."();\">";
 	} /* }}} */
 
-	function printCategoryChooser($formName, $categories=array()) { /* {{{ */
+	function __printCategoryChooser($formName, $categories=array()) { /* {{{ */
 		global $settings;
 ?>
 		<script language="JavaScript">
@@ -604,7 +614,7 @@ class UI_Default {
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("category")."...\" onclick=\"chooseCategory".$formName."();\">";
 	} /* }}} */
 
-	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
+	function __printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
 		if($valueset = $attrdef->getValueSetAsArray()) {
 			echo "<select name=\"".$fieldname."[".$attrdef->getId()."]\">";
 			if($attrdef->getMinValues() < 1) {
@@ -622,7 +632,7 @@ class UI_Default {
 		}
 	} /* }}} */
 
-	function getImgPath($img) { /* {{{ */
+	function __getImgPath($img) { /* {{{ */
 		global $theme;
 
 		if ( is_file("../styles/$theme/images/$img") ) {
@@ -634,8 +644,14 @@ class UI_Default {
 		return "../out/images/$img";
 	} /* }}} */
 
-	function printImgPath($img) { /* {{{ */
+	function __printImgPath($img) { /* {{{ */
 		print UI::getImgPath($img);
+	} /* }}} */
+
+	function errorMsg($msg) { /* {{{ */
+		echo "<div class=\"alert alert-error\">\n";
+		echo $msg;
+		echo "</div>\n";
 	} /* }}} */
 
 	static function exitError($pagetitle,$error) { /* {{{ */
@@ -655,7 +671,7 @@ class UI_Default {
 	} /* }}} */
 
 	// navigation flag is used for items links (navigation or selection)
-	function printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
+	function __printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
 		global $dms, $user, $form, $settings;
 		
 		if ($settings->_expandFolderTree==2){
@@ -745,7 +761,7 @@ class UI_Default {
 		if ($folderID == $settings->_rootFolderID) print "</ul>\n";
 	} /* }}} */
 
-	function printTreeNavigation($folderid,$showtree){ /* {{{ */
+	function __printTreeNavigation($folderid,$showtree){ /* {{{ */
 		global $settings;
 		
 ?>
@@ -799,7 +815,7 @@ class UI_Default {
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printUploadApplet($uploadurl, $attributes, $maxfiles=0, $fields=array()){ /* {{{ */
+	function __printUploadApplet($uploadurl, $attributes, $maxfiles=0, $fields=array()){ /* {{{ */
 		global $settings;
 ?>
 <applet id="jumpLoaderApplet" name="jumpLoaderApplet"

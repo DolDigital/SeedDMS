@@ -36,6 +36,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
@@ -48,7 +49,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		// Get document list for the current user.
 		$workflowStatus = $user->getWorkflowStatus();
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
 		$printheader=true;
 		$iRev = array();
@@ -128,6 +129,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 					print "<th>".getMLText("version")."</th>\n";
 					print "<th>".getMLText("owner")."</th>\n";
 					print "<th>".getMLText("workflow")."</th>\n";
+					print "<th>".getMLText("workflow_state")."</th>\n";
 					print "<th>".getMLText("last_update")."</th>\n";
 					print "<th>".getMLText("expires")."</th>\n";
 					print "</tr>\n</thead>\n<tbody>\n";

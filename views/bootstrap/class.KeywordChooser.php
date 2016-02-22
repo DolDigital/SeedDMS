@@ -33,7 +33,7 @@ class SeedDMS_View_KeywordChooser extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$form = $this->params['form'];
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 ?>
 var targetObj = document.<?php echo $form ?>.keywords;
 var myTA;

@@ -187,11 +187,19 @@ if ($_FILES['userfile']['error'] == 0) {
 			}
 		}
 	} elseif($settings->_workflowMode == 'advanced') {
-		if(!$workflow = $user->getMandatoryWorkflow()) {
+		if(!$workflows = $user->getMandatoryWorkflows()) {
 			if(isset($_POST["workflow"]))
 				$workflow = $dms->getWorkflow($_POST["workflow"]);
 			else
 				$workflow = null;
+		} else {
+			/* If there is excactly 1 mandatory workflow, then set no matter what has
+			 * been posted in 'workflow', otherwise check if the posted workflow is in the
+			 * list of mandatory workflows. If not, then take the first one.
+			 */
+			$workflow = array_shift($workflows);
+			foreach($workflows as $mw)
+				if($mw->getID() == $_POST['workflow']) {$workflow = $mw; break;}
 		}
 	}
 

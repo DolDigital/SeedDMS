@@ -64,6 +64,7 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	public function __construct($dms, $document, $convcmd=null, $nocontent=false, $timeout=5) {
 		$_convcmd = array(
 			'application/pdf' => 'pdftotext -enc UTF-8 -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
+			'application/postscript' => 'ps2pdf14 %s - | pdftotext -enc UTF-8 -nopgbrk - - | sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
 			'application/msword' => 'catdoc %s',
 			'application/vnd.ms-excel' => 'ssconvert -T Gnumeric_stf:stf_csv -S %s fd://1',
 			'audio/mp3' => "id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'",

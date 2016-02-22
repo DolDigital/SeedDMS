@@ -33,7 +33,8 @@ class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-		$this->printKeywordChooserJs();
+		header('Content-Type: application/javascript');
+		$this->printKeywordChooserJs('form1');
 ?>
 function checkForm()
 {

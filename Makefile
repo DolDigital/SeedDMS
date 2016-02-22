@@ -1,5 +1,5 @@
-VERSION=5.0.0
-SRC=CHANGELOG inc conf utils index.php languages views op out controllers README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
+VERSION=5.0.1
+SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
 # webapp
 
 EXTENSIONS := \

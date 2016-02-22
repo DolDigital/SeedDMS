@@ -61,7 +61,7 @@ if (isset($_GET["navBar"])) {
 	*/
 }
 
-if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
+if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) {
 // Search in Fulltext {{{
 	if (isset($_GET["query"]) && is_string($_GET["query"])) {
 		$query = $_GET["query"];
@@ -143,6 +143,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 				foreach($hits as $hit) {
 					if($tmp = $dms->getDocument($hit['document_id'])) {
 						if($tmp->getAccessMode($user) >= M_READ) {
+							$tmp->verifyLastestContentExpriry();
 							$entries[] = $tmp;
 							$dcount++;
 						}
@@ -379,6 +380,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	if($resArr['docs']) {
 		foreach ($resArr['docs'] as $entry) {
 			if ($entry->getAccessMode($user) >= M_READ) {
+				$entry->verifyLastestContentExpriry();
 				$entries[] = $entry;
 				$dcount++;
 			}
@@ -409,8 +411,9 @@ if(count($entries) == 1) {
 	if($view) {
 		$view->setParam('totaldocs', $dcount /*resArr['totalDocs']*/);
 		$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
-		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"]) ? true : false);
+		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) ? true : false);
 		$view->setParam('mode', isset($mode) ? $mode : '');
+		$view->setParam('defaultsearchmethod', $settings->_defaultSearchMethod);
 		$view->setParam('resultmode', isset($resultmode) ? $resultmode : '');
 		$view->setParam('searchin', isset($searchin) ? $searchin : array());
 		$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
@@ -433,6 +436,7 @@ if(count($entries) == 1) {
 		$view->setParam('workflowmode', $settings->_workflowMode);
 		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
 		$view->setParam('previewWidthList', $settings->_previewWidthList);
+		$view->setParam('timeout', $settings->_cmdTimeout);
 		$view($_GET);
 		exit;
 	}

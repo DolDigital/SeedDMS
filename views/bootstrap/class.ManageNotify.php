@@ -35,40 +35,26 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 	function getNotificationList($as_group, $folders) { /* {{{ */
 
 		// First, get the list of groups of which the user is a member.
+		$notifications = array();
 		if ($as_group){
-		
-			$groups = $this->user->getGroups();
-			
-			if (count($groups)==0) return NULL;
-			
-			$grpList = "";
+			if(!($groups = $this->user->getGroups()))
+				return NULL;
+
 			foreach ($groups as $group) {
-				$grpList .= (strlen($grpList)==0 ? "" : ", ") . $group->getID();
+				$tmp = $group->getNotifications($folders ? T_FOLDER : T_DOCUMENT);
+				if($tmp) {
+					$notifications = array_merge($notifications, $tmp);
+				}
 			}
-			
-			$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
-			 "WHERE `tblNotify`.`groupID` IN (". $grpList .")";
-					
 		} else {
-			$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
-				"WHERE `tblNotify`.`userID` = '". $this->user->getID()."'" ;
+			$notifications = $this->user->getNotifications($folders ? T_FOLDER : T_DOCUMENT);
 		}
-		
-		$resArr = $this->db->getResultArray($queryStr);
-		
-		$ret=array();
-			
-		foreach ($resArr as $res){
-			
-			if (($res["targetType"] == T_DOCUMENT)&&(!$folders)) $ret[]=$res["target"];
-			if (($res["targetType"] == T_FOLDER)&&($folders)) $ret[]=$res["target"];
-		}
-		
-		return $ret;
+
+		return $notifications;
 	} /* }}} */
 
-	function printFolderNotificationList($ret,$deleteaction=true) { /* {{{ */
-		if (count($ret)==0) {
+	function printFolderNotificationList($notifications, $deleteaction=true) { /* {{{ */
+		if (count($notifications)==0) {
 			printMLText("empty_notify_list");
 		}
 		else {
@@ -80,17 +66,17 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("actions")."</th>\n";
 			print "</tr></thead>\n<tbody>\n";
-			foreach($ret as $ID) {
-				$fld = $this->dms->getFolder($ID);
+			foreach($notifications as $notification) {
+				$fld = $this->dms->getFolder($notification->getTarget());
 				if (is_object($fld)) {
 					$owner = $fld->getOwner();
 					print "<tr class=\"folder\">";
 					print "<td><i class=\"icon-folder-close-alt\"></i></td>";
-					print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
+					print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$fld->getID()."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td>";
-					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=folder&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
-					else print "<a href='../out/out.FolderNotify.php?folderid=".$ID."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
+					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$fld->getID()."&type=folder&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
+					else print "<a href='../out/out.FolderNotify.php?folderid=".$fld->getID()."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
 					print "</td></tr>";
 				}
 			}
@@ -98,13 +84,13 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
-	function printDocumentNotificationList($ret,$deleteaction=true) { /* {{{ */
+	function printDocumentNotificationList($notifications,$deleteaction=true) { /* {{{ */
 
-		if (count($ret)==0) {
+		if (count($notifications)==0) {
 			printMLText("empty_notify_list");
 		}
 		else {
-			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth);
+			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth, $this->timeout);
 
 			print "<table class=\"table-condensed\">";
 			print "<thead>\n<tr>\n";
@@ -113,8 +99,8 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 			print "<th>".getMLText("status")."</th>\n";
 			print "<th>".getMLText("action")."</th>\n";
 			print "</tr></thead>\n<tbody>\n";
-			foreach ($ret as $ID) {
-				$doc = $this->dms->getDocument($ID);
+			foreach ($notifications as $notification) {
+				$doc = $this->dms->getDocument($notification->getTarget());
 				if (is_object($doc)) {
 					$owner = $doc->getOwner();
 					$latest = $doc->getLatestContent();
@@ -129,7 +115,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					}
 					print "</td>";
 
-					print "<td><a href=\"out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a>";
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$doc->getID()."\">" . htmlspecialchars($doc->getName()) . "</a>";
 					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $doc->getDate())."</b>, ".getMLText('version')." <b>".$latest->getVersion()."</b> - <b>".date('Y-m-d', $latest->getDate())."</b></span>";
 					$comment = $latest->getComment();
 					if($comment) {
@@ -139,13 +125,20 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 
 					print "<td>".getOverallStatusText($status["status"])."</td>";
 					print "<td>";
-					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=document&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
-					else print "<a href='../out/out.DocumentNotify.php?documentid=".$ID."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
+					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$doc->getID()."&type=document&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
+					else print "<a href='../out/out.DocumentNotify.php?documentid=".$doc->getID()."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
 					print "</td></tr>\n";
 				}
 			}
 			print "</tbody></table>";
 		}
+	} /* }}} */
+
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+
+		$this->printFolderChooserJs("form1");
+		$this->printDocumentChooserJs("form2");
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -154,6 +147,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->cachedir = $this->params['cachedir'];
 		$this->previewwidth = $this->params['previewWidthList'];
 		$this->db = $this->dms->getDB();
+		$this->timeout = $this->params['timeout'];
 
 		$this->htmlStartPage(getMLText("my_account"));
 		$this->globalNavigation();
@@ -167,7 +161,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=folder&action=add\" name=\"form1\">";
 		$this->contentSubHeading(getMLText("choose_target_folder"));
-		$this->printFolderChooser("form1",M_READ);
+		$this->printFolderChooserHtml("form1",M_READ);
 		print "<label class=\"checkbox\">";
 		print "<input type=\"checkbox\" name=\"recursefolder\" value=\"1\">";
 		print getMLText("include_subdirectories");
@@ -188,7 +182,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->contentSubHeading(getMLText("choose_target_document"));
 		/* 'form1' must be passed to printDocumentChooser() because the typeahead
 		 * function is currently hardcoded on this value */
-		$this->printDocumentChooser("form2");
+		$this->printDocumentChooserHtml("form2");
 		print "<br /><button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 

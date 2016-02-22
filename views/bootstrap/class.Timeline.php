@@ -38,8 +38,10 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$timeout = $this->params['timeout'];
+
 		if($document) {
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 			$previewer->createPreview($version);
 
 			$this->contentHeading(getMLText("timeline_selected_item"));
@@ -126,7 +128,23 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
-		header('Content-Type: application/json');
+		$fromdate = $this->params['fromdate'];
+		$todate = $this->params['todate'];
+		$skip = $this->params['skip'];
+
+		if($fromdate) {
+			$from = makeTsFromLongDate($fromdate.' 00:00:00');
+		} else {
+			$from = time()-7*86400;
+		}
+
+		if($todate) {
+			$to = makeTsFromLongDate($todate.' 23:59:59');
+		} else {
+			$to = time();
+		}
+
+		header('Content-Type: application/javascript');
 ?>
 $(document).ready(function () {
 	$('#update').click(function(ev){

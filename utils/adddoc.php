@@ -3,7 +3,7 @@ include("../inc/inc.ClassSettings.php");
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
-	echo "  seeddms-adddoc [--config <file>] [-c <comment>] [-k <keywords>] [-s <number>] [-n <name>] [-V <version>] [-s <sequence>] [-t <mimetype>] [-h] [-v] -F <folder id> -f <filename>\n";
+	echo "  seeddms-adddoc [--config <file>] [-c <comment>] [-k <keywords>] [-s <number>] [-n <name>] [-V <version>] [-s <sequence>] [-t <mimetype>] [-a <attribute=value>] [-h] [-v] -F <folder id> -f <filename>\n";
 	echo "\n";
 	echo "Description:\n";
 	echo "  This program uploads a file into a folder of SeedDMS.\n";
@@ -25,10 +25,12 @@ function usage() { /* {{{ */
 	echo "  -s <sequence>: set sequence of file\n";
 	echo "  -t <mimetype> set mimetype of file manually. Do not do that unless you know\n";
 	echo "      what you do. If not set, the mimetype will be determined automatically.\n";
+	echo "  -a <attribute=value>: Set a document attribute; can occur multiple times.\n";
+	echo "  -A <attribute=value>: Set a version attribute; can occur multiple times.\n";
 } /* }}} */
 
 $version = "0.0.1";
-$shortoptions = "F:c:C:k:K:s:V:u:f:n:t:hv";
+$shortoptions = "F:c:C:k:K:s:V:u:f:n:t:a:A:hv";
 $longoptions = array('help', 'version', 'config:');
 if(false === ($options = getopt($shortoptions, $longoptions))) {
 	usage();
@@ -141,6 +143,59 @@ if(!$dms->checkVersion()) {
 	exit;
 }
 
+/* Parse document attributes.  */
+$document_attributes = array();
+if (isset($options['a'])) {
+	$docattr = array();
+	if (is_array($options['a'])) {
+		$docattr = $options['a'];
+	} else {
+		$docattr = array($options['a']);
+	}
+
+	foreach ($docattr as $thisAttribute) {
+		$attrKey = strstr($thisAttribute, '=', true);
+		$attrVal = substr(strstr($thisAttribute, '='), 1);
+		if (empty($attrKey) || empty($attrVal)) {
+			echo "Document attribute $thisAttribute not understood\n";
+			exit(1);
+		}
+		$attrdef = $dms->getAttributeDefinitionByName($attrKey);
+		if (!$attrdef) {
+			echo "Document attribute $attrKey unknown\n";
+			exit(1);
+		}
+		$document_attributes[$attrdef->getID()] = $attrVal;
+	}
+}
+
+/* Parse version attributes.  */
+$version_attributes = array();
+if (isset($options['A'])) {
+	$verattr = array();
+	if (is_array($options['A'])) {
+		$verattr = $options['A'];
+	} else {
+		$verattr = array($options['A']);
+	}
+
+	foreach ($verattr as $thisAttribute) {
+		$attrKey = strstr($thisAttribute, '=', true);
+		$attrVal = substr(strstr($thisAttribute, '='), 1);
+		if (empty($attrKey) || empty($attrVal)) {
+			echo "Version attribute $thisAttribute not understood\n";
+			exit(1);
+		}
+		$attrdef = $dms->getAttributeDefinitionByName($attrKey);
+		if (!$attrdef) {
+			echo "Version attribute $attrKey unknown\n";
+			exit(1);
+		}
+		$version_attributes[$attrdef->getID()] = $attrVal;
+	}
+}
+
+
 $dms->setRootFolderID($settings->_rootFolderID);
 $dms->setMaxDirID($settings->_maxDirID);
 $dms->setEnableConverting($settings->_enableConverting);
@@ -201,7 +256,8 @@ $approvers = array();
 $res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
                             $categories, $filetmp, basename($filename),
                             $filetype, $mimetype, $sequence, $reviewers,
-                            $approvers, $reqversion, $version_comment);
+                            $approvers, $reqversion, $version_comment,
+                            $document_attributes, $version_attributes);
 
 if (is_bool($res) && !$res) {
 	echo "Could not add document to folder\n";

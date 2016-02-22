@@ -151,7 +151,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$document = $this->params['document'];
 
-		header('Content-Type: application/json');
+		header('Content-Type: application/javascript');
 		$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
@@ -171,6 +171,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$previewwidthdetail = $this->params['previewWidthDetail'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
+		$timeout = $this->params['timeout'];
 
 		$versions = $document->getContent();
 
@@ -423,7 +424,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		print "</ul>";
 		*/
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
@@ -839,6 +840,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					echo implode(", ", $names);
 					echo ") - ";
 					echo $wkflog->getDate();
+					echo "<br />";
 				}
 				echo "</td>";
 			}

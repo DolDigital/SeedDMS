@@ -34,7 +34,7 @@ $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot, 'quota'=>$settings->_quota, 'pwdexpiration'=>$settings->_passwordExpiration));
 if($view) {
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

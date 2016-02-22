@@ -49,6 +49,38 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
+	function js() { /* {{{ */
+
+		header('Content-Type: application/javascript');
+?>
+		$(document).ready( function() {
+			$('#settingstab li a').click(function(event) {
+				$('#currenttab').val($(event.currentTarget).data('target').substring(1));
+			});
+
+			$('a.sendtestmail').click(function(ev){
+				ev.preventDefault();
+				$.ajax({url: '../op/op.Ajax.php',
+					type: 'GET',
+					dataType: "json",
+					data: {command: 'testmail'},
+					success: function(data) {
+						console.log(data);
+						noty({
+							text: data.msg,
+							type: (data.error) ? 'error' : 'success',
+							dismissQueue: true,
+							layout: 'topRight',
+							theme: 'defaultTheme',
+							timeout: 1500,
+						});
+					}
+				}); 
+			});
+		});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -62,15 +94,6 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("settings"));
 
 ?>
-
-		<script language="JavaScript">
-		$(document).ready( function() {
-			$('#settingstab li a').click(function(event) {
-				$('#currenttab').val($(event.currentTarget).data('target').substring(1));
-			});
-		}); 
-		</script>
-
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
   <input type="hidden" name="action" value="saveSettings" />
 	<input type="hidden" id="currenttab" name="currenttab" value="<?php echo $currenttab ? $currenttab : 'site'; ?>" />
@@ -189,6 +212,15 @@ if(!is_writeable($settings->_configFilePath)) {
 					</select>
 				</td>
       </tr>
+      <tr title="<?php printMLText("settings_defaultSearchMethod_desc");?>">
+        <td><?php printMLText("settings_defaultSearchMethod");?>:</td>
+				<td>
+				  <select name="defaultSearchMethod">
+					  <option value="database" <?php if ($settings->_defaultSearchMethod=='database') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valdatabase");?></option>
+						<option value="fulltext" <?php if ($settings->_defaultSearchMethod=='fulltext') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valfulltext");?></option>
+					</select>
+				</td>
+      </tr>
       <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
         <td><?php $this->showTextField("stopWordsFile", $settings->_stopWordsFile); ?></td>
@@ -225,6 +257,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enableLanguageSelector_desc");?>">
         <td><?php printMLText("settings_enableLanguageSelector");?>:</td>
         <td><input name="enableLanguageSelector" type="checkbox" <?php if ($settings->_enableLanguageSelector) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableHelp_desc");?>">
+        <td><?php printMLText("settings_enableHelp");?>:</td>
+        <td><input name="enableHelp" type="checkbox" <?php if ($settings->_enableHelp) echo "checked" ?> /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableThemeSelector_desc");?>">
         <td><?php printMLText("settings_enableThemeSelector");?>:</td>
@@ -346,6 +382,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableGuestLogin");?>:</td>
         <td><input name="enableGuestLogin" type="checkbox" <?php if ($settings->_enableGuestLogin) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableGuestAutoLogin_desc");?>">
+        <td><?php printMLText("settings_enableGuestAutoLogin");?>:</td>
+        <td><input name="enableGuestAutoLogin" type="checkbox" <?php if ($settings->_enableGuestAutoLogin) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_restricted_desc");?>">
         <td><?php printMLText("settings_restricted");?>:</td>
         <td><input name="restricted" type="checkbox" <?php if ($settings->_restricted) echo "checked" ?> /></td>
@@ -438,7 +478,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <!--
         -- SETTINGS - SYSTEM - SMTP
       -->
-      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail">Send test mail</a></td> </tr>
+			<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
         <td><?php $this->showTextField("smtpServer", $settings->_smtpServer); ?></td>

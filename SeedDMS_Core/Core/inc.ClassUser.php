@@ -564,7 +564,7 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		//Evtl. von diesem Benutzer gelockte Dokumente werden freigegeben
+		// unlock documents locked by the user
 		$queryStr = "DELETE FROM tblDocumentLocks WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
@@ -861,7 +861,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getDocumentsLocked() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT `tblDocuments`.* ".
+		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
 			"FROM `tblDocumentLocks` LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentLocks`.`document` ".
 			"WHERE `tblDocumentLocks`.`userID` = '".$this->_id."' ".
 			"ORDER BY `id` DESC";
@@ -888,7 +888,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * same is true for the version of a document which limits the list
 	 * further.
 	 *
-	 * For a detaile description of the result array see
+	 * For a detailed description of the result array see
 	 * {link SeedDMS_Core_User::getApprovalStatus} which does the same for
 	 * approvals.
 	 *
@@ -1059,7 +1059,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = 'SELECT d.*, c.userid FROM tblWorkflowTransitions a LEFT JOIN tblWorkflows b ON a.workflow=b.id LEFT JOIN tblWorkflowTransitionUsers c ON a.id=c.transition LEFT JOIN tblWorkflowDocumentContent d ON b.id=d.workflow WHERE d.document IS NOT NULL AND a.state=d.state AND c.userid='.$this->_id;
+		$queryStr = 'SELECT DISTINCT d.*, c.userid FROM tblWorkflowTransitions a LEFT JOIN tblWorkflows b ON a.workflow=b.id LEFT JOIN tblWorkflowTransitionUsers c ON a.id=c.transition LEFT JOIN tblWorkflowDocumentContent d ON b.id=d.workflow WHERE d.document IS NOT NULL AND a.state=d.state AND c.userid='.$this->_id;
 		if($documentID) {
 			$queryStr .= ' AND d.document='.(int) $documentID;
 			if($version)
@@ -1075,7 +1075,7 @@ class SeedDMS_Core_User { /* {{{ */
 			}
 		}
 
-		$queryStr = 'select d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow left join tblGroupMembers e on c.groupid = e.groupID where d.document is not null and a.state=d.state and e.userID='.$this->_id;
+		$queryStr = 'select distinct d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow left join tblGroupMembers e on c.groupid = e.groupID where d.document is not null and a.state=d.state and e.userID='.$this->_id;
 		if($documentID) {
 			$queryStr .= ' AND d.document='.(int) $documentID;
 			if($version)
@@ -1149,6 +1149,32 @@ class SeedDMS_Core_User { /* {{{ */
 
 		$workflow = $this->_dms->getWorkflow($resArr[0]['workflow']);
 		return $workflow;
+	} /* }}} */
+
+	/**
+	 * Get the mandatory workflows
+	 * A user which isn't trusted completely may have assigned mandatory
+	 * workflow
+	 * Whenever the user inserts a new document the mandatory workflow is
+	 * filled in as the workflow.
+	 *
+	 * @return object workflow
+	 */
+	function getMandatoryWorkflows() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		if(!$resArr)
+			return null;
+
+		$workflows = array();
+		foreach($resArr as $res) {
+			$workflows[] = $this->_dms->getWorkflow($res['workflow']);
+		}
+		return $workflows;
 	} /* }}} */
 
 	/**
@@ -1238,6 +1264,36 @@ class SeedDMS_Core_User { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Set a mandatory workflows
+	 * This function sets a list of mandatory workflows.
+	 *
+	 * @param array $workflows list of workflow objects
+	 * @return boolean true on success, otherwise false
+	 */
+	function setMandatoryWorkflows($workflows) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$db->startTransaction();
+		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		foreach($workflows as $workflow) {
+			$queryStr = "INSERT INTO tblWorkflowMandatoryWorkflow (userid, workflow) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
+			$resArr = $db->getResult($queryStr);
+			if (is_bool($resArr) && !$resArr) {
+				$db->rollbackTransaction();
+				return false;
+			}
+		}
+
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
 	 * Deletes all mandatory reviewers
 	 *
 	 * @return boolean true on success, otherwise false
@@ -1272,6 +1328,34 @@ class SeedDMS_Core_User { /* {{{ */
 		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 		return true;
+	} /* }}} */
+
+	/**
+	 * Get all notifications of user
+	 *
+	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
+	 * @return array array of notifications
+	 */
+	function getNotifications($type=0) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
+		 "WHERE `tblNotify`.`userID` = ". $this->_id;
+		if($type) {
+			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
+		}
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$notifications = array();
+		foreach ($resArr as $row) {
+			$not = new SeedDMS_Core_Notification($row["target"], $row["targetType"], $row["userID"], $row["groupID"]);
+			$not->setDMS($this);
+			array_push($notifications, $not);
+		}
+
+		return $notifications;
 	} /* }}} */
 
 } /* }}} */

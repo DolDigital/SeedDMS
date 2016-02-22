@@ -31,80 +31,38 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_Categories extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$categories = $this->params['categories'];
-
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+	function js() { /* {{{ */
+		$selcat = $this->params['selcategory'];
+		header('Content-Type: application/javascript');
 ?>
-
-<script language="JavaScript">
-obj = -1;
-function showCategories(selectObj) {
-	if (obj != -1)
-		obj.style.display = "none";
-	
-	id = selectObj.options[selectObj.selectedIndex].value;
-	if (id == -1)
-		return;
-	
-	obj = document.getElementById("categories" + id);
-	obj.style.display = "";
-}
-</script>
+$(document).ready( function() {
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {categoryid: $(this).val()});
+	});
+});
 <?php
-		$this->contentHeading(getMLText("global_document_categories"));
-?>
-<div class="row-fluid">
-<div class="span4">
-<div class="well">
-<?php echo getMLText("selection")?>:
-			<select onchange="showCategories(this)" id="selector" class="span9">
-				<option value="-1"><?php echo getMLText("choose_category")?>
-				<option value="0"><?php echo getMLText("new_document_category")?>
+	} /* }}} */
 
-				<?php
-				
-				$selected=0;
-				$count=2;				
-				foreach ($categories as $category) {
-				
-					if (isset($_GET["categoryid"]) && $category->getID()==$_GET["categoryid"]) $selected=$count;				
-					print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
-					$count++;
-				}
-				?>
-			</select>
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$selcat = $this->params['selcategory'];
 
-</div>
-</div>
+		if($selcat) {
+			$this->contentHeading(getMLText("category_info"));
+			$documents = $selcat->getDocumentsByCategory();
+			echo "<table class=\"table table-condensed\">\n";
+			echo "<tr><td>".getMLText('document_count')."</td><td>".(count($documents))."</td></tr>\n";
+			echo "</table>";
+		}
+	} /* }}} */
 
-<div class="span8">
-<div class="well">
-
-<table class="table-condensed"><tr>
-		<td id="categories0" style="display : none;">	
-			<form class="form-inline" action="../op/op.Categories.php" method="post">
-  		<?php echo createHiddenFieldWithKey('addcategory'); ?>
-			<input type="Hidden" name="action" value="addcategory">
-			<?php printMLText("name");?> : <input type="text" name="name">
-			<input type="submit" class="btn" value="<?php printMLText("new_document_category"); ?>">
-			</form>
-		</td>
-	
-<?php	
-			foreach ($categories as $category) {
-				print "<td id=\"categories".$category->getID()."\" style=\"display : none;\">";	
+	function showCategoryForm($category) { /* {{{ */
 ?>
 			<table class="table-condensed">
 				<tr>
 					<td></td><td>
 <?php
-		if(!$category->isUsed()) {
+		if($category && !$category->isUsed()) {
 ?>
 						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
@@ -125,28 +83,68 @@ function showCategories(selectObj) {
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
 						<form class="form-inline" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
+						<?php if(!$category) { ?>
+							<?php echo createHiddenFieldWithKey('addcategory'); ?>
+							<input type="Hidden" name="action" value="addcategory">
+						<?php } else { ?>
   		        <?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
+						<?php } ?>
+							<input name="name" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
 							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
 						</form>
 					</td>
 				</tr>
 				
 			</table>
-		</td>
-<?php } ?>
-	</tr></table>
-</div>
-</div>
+<?php
+	} /* }}} */
+
+	function form() { /* {{{ */
+		$selcat = $this->params['selcategory'];
+
+		$this->showCategoryForm($selcat);
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$categories = $this->params['categories'];
+		$selcat = $this->params['selcategory'];
+
+		$this->htmlStartPage(getMLText("admin_tools"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+
+		$this->contentHeading(getMLText("global_document_categories"));
+?>
+<div class="row-fluid">
+	<div class="span4">
+		<div class="well">
+<?php echo getMLText("selection")?>:
+			<select id="selector" class="span9">
+				<option value="-1"><?php echo getMLText("choose_category")?>
+				<option value="0"><?php echo getMLText("new_document_category")?>
+<?php
+				foreach ($categories as $category) {
+					print "<option value=\"".$category->getID()."\" ".($selcat && $category->getID()==$selcat->getID() ? 'selected' : '').">" . htmlspecialchars($category->getName());
+				}
+?>
+			</select>
+		</div>
+		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
+	</div>
+
+	<div class="span8">
+		<div class="well">
+			<div class="ajax" data-view="Categories" data-action="form" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
+
+		</div>
+	</div>
 </div>
 	
-<script language="JavaScript">
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showCategories(sel);
-</script>
 <?php
 		$this->htmlEndPage();
 	} /* }}} */

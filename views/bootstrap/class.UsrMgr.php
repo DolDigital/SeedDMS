@@ -33,6 +33,9 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$seluser = $this->params['seluser'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		header('Content-Type: application/javascript');
 ?>
 function checkForm()
 {
@@ -79,8 +82,10 @@ $(document).ready( function() {
 
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$seluser = $this->params['seluser'];
 		$quota = $this->params['quota'];
+		$workflowmode = $this->params['workflowmode'];
 
 		if($seluser) {
 			$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
@@ -94,12 +99,46 @@ $(document).ready( function() {
 			echo "</td></tr>\n";
 			$documents = $seluser->getDocuments();
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
+			$documents = $seluser->getDocumentsLocked();
+			echo "<tr><td>".getMLText('documents_locked')."</td><td>".count($documents)."</td></tr>\n";
+			if($workflowmode == "traditional") {
+				$reviewStatus = $seluser->getReviewStatus();
+				if($reviewStatus['indstatus']) {
+					$i = 0;
+					foreach($reviewStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
+					}
+					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
+				}
+			}
+			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
+				$approvalStatus = $seluser->getApprovalStatus();
+				if($approvalStatus['indstatus']) {
+					$i = 0;
+					foreach($approvalStatus['indstatus'] as $rv) {
+						if($rv['status'] == 0) {
+							$i++;
+						}
+					}
+					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
+				}
+			}
+			if($workflowmode == 'advanced') {
+				$workflowStatus = $seluser->getWorkflowStatus();
+				if($workflowStatus['u'])
+					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus['u'])."</td></tr>\n";
+			}
 			$sessions = $sessionmgr->getUserSessions($seluser);
 			if($sessions) {
 				$session = array_shift($sessions);
 				echo "<tr><td>".getMLText('lastaccess')."</td><td>".getLongReadableDate($session->getLastAccess())."</td></tr>\n";
 			}
 			echo "</table>";
+
+			if($user->isAdmin() && $seluser->getID() != $user->getID())
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 
@@ -378,12 +417,15 @@ $(document).ready( function() {
 				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
 			</td>
 			<td>
-        <select name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+        <select class="chzn-select" name="workflows[]" multiple="multiple" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				print "<option value=\"\">"."</option>";
+				$mandatoryworkflows = $currUser ? $currUser->getMandatoryWorkflows() : array();
 				foreach ($workflows as $workflow) {
 					print "<option value=\"".$workflow->getID()."\"";
-					if($currUser && $currUser->getMandatoryWorkflow() && $currUser->getMandatoryWorkflow()->getID() == $workflow->getID())
+					$checked = false;
+					if($mandatoryworkflows) foreach($mandatoryworkflows as $mw) if($mw->getID() == $workflow->getID()) $checked = true;
+					if($checked)
 						echo " selected=\"selected\"";
 					print ">". htmlspecialchars($workflow->getName())."</option>";
 				}
@@ -429,7 +471,7 @@ $(document).ready( function() {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select class="chzn-select" id="selector" class="span9">
+<select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_user")?>
 <option value="0"><?php echo getMLText("add_user")?>
 <?php

@@ -838,6 +838,424 @@ function doSearchByAttr() { /* {{{ */
 	echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
 } /* }}} */
 
+function checkIfAdmin()
+{
+    global $app, $dms, $userobj;
+    if(!$userobj) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
+    }
+    if(!$userobj->isAdmin()) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must be logged in with an administrator account to access this resource', 'data'=>''));
+        return;
+    }
+
+    return true;
+}
+
+
+function createAccount() { /* {{{ */
+    global $app, $dms, $userobj;
+
+    checkIfAdmin();
+
+    $userName = $app->request()->post('user');
+    $password = $app->request()->post('pass');
+    $fullname = $app->request()->post('name');
+    $email = $app->request()->post('email');
+    $language = $app->request()->post('language');
+    $theme = $app->request()->post('theme');
+    $comment = $app->request()->post('comment');
+    
+    $newAccount = $dms->addUser($userName, $password, $fullname, $email, $language, $theme, $comment);  
+    if ($newAccount === false)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Account could not be created, maybe it already exists', 'data'=>''));
+        return;
+    }
+
+    $result = array(
+                'id'=>$newAccount->getID()
+                );
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
+    return;
+} /* }}} */
+
+function getAccountById($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    if(is_numeric($id))
+        $account = $dms->getUser($id);
+    else {
+        $account = $dms->getUserByLogin($id);
+    }
+    if($account) {
+        $data = array();
+        $data['id'] = $account->getId();
+        $data['login'] = $account->getLogin();
+        $data['fullname'] = $account->getFullName();
+        $data['email'] = $account->getEmail();
+        $data['language'] = $account->getLanguage();
+        $data['theme'] = $account->getTheme();
+        $data['role'] = $account->getRole();
+        $data['comment'] = $account->getComment();
+        $outputDisabled = ($account->isDisabled() === true || $account->isDisabled() === '1');
+        $data['isdisabled'] = $outputDisabled;
+        $data['isguest'] = $account->isGuest();
+        $data['isadmin'] = $account->isAdmin();
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    } else {
+        $app->response()->status(404);
+    }
+} /* }}} */
+
+function setDisabledAccount($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    if ($app->request()->put('disable') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must PUT a disabled state', 'data'=>''));
+        return; 
+    }
+    
+    $isDisabled = false;
+    $status = $app->request()->put('disable');
+    if ($status == 'true' || $status == '1')
+    {
+        $isDisabled = true;
+    }
+    
+    if(is_numeric($id))
+        $account = $dms->getUser($id);
+    else {
+        $account = $dms->getUserByLogin($id);
+    }
+    
+    if($account) {
+        $account->setDisabled($isDisabled);
+        $data = array();
+        $data['id'] = $account->getId();
+        $data['login'] = $account->getLogin();
+        $data['fullname'] = $account->getFullName();
+        $data['email'] = $account->getEmail();
+        $outputDisabled = ($account->isDisabled() === true || $account->isDisabled() === '1');
+        $data['isdisabled'] = $outputDisabled;
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    } else {
+        $app->response()->status(404);
+    }
+} /* }}} */
+
+function createGroup() { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    $groupName = $app->request()->post('name');
+    $comment = $app->request()->post('comment');
+    
+    $newGroup = $dms->addGroup($groupName, $comment);   
+    if ($newGroup === false)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Group could not be created, maybe it already exists', 'data'=>''));
+        return;
+    }
+
+    $result = array(
+                'id'=>$newGroup->getID()
+                );
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
+    return;
+} /* }}} */
+
+function getGroup($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    if(is_numeric($id))
+        $group = $dms->getGroup($id);
+    else {
+        $group = $dms->getGroupByName($id);
+    }
+    if($group) {
+        $data = array();
+        $data['id'] = $group->getId();
+        $data['name'] = $group->getName();
+        $data['comment'] = $group->getComment();
+        $data['users'] = array();
+        foreach ($group->getUsers() as $user) {
+            $data['users'][] =  array('id' => $user->getID(), 'login' => $user->getLogin());
+        }
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    } else {
+        $app->response()->status(404);
+    }
+} /* }}} */
+
+function changeGroupMembership($id, $operationType) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    
+    if(is_numeric($id))
+        $group = $dms->getGroup($id);
+    else {
+        $group = $dms->getGroupByName($id);
+    }
+    
+    if ($app->request()->put('userid') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Please PUT the userid', 'data'=>''));
+        return; 
+    }
+    $userId = $app->request()->put('userid');
+    if(is_numeric($userId))
+        $user = $dms->getUser($userId);
+    else {
+        $user = $dms->getUserByLogin($userId);
+    }
+    
+    if (!($group && $user)) {
+        $app->response()->status(404);
+    }
+
+    $operationResult = false; 
+
+    if ($operationType == 'add')
+    {
+        $operationResult = $group->addUser($user);
+    }
+    if ($operationType == 'remove')
+    {
+        $operationResult = $group->removeUser($user);
+    }
+    
+    if ($operationResult === false)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        $message = 'Could not add user to the group.';
+        if ($operationType == 'remove')
+        {
+            $message = 'Could not remove user from group.';
+        }
+        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. ' . $message, 'data'=>''));
+        return;
+    }
+
+    $data = array();
+    $data['id'] = $group->getId();
+    $data['name'] = $group->getName();
+    $data['comment'] = $group->getComment();
+    $data['users'] = array();
+    foreach ($group->getUsers() as $userObj) {
+        $data['users'][] =  array('id' => $userObj->getID(), 'login' => $userObj->getLogin());
+    }
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
+function addUserToGroup($id) { /* {{{ */
+    changeGroupMembership($id, 'add');
+}
+
+function removeUserFromGroup($id) { /* {{{ */
+    changeGroupMembership($id, 'remove');   
+} /* }}} */
+
+function setFolderInheritsAccess($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    if ($app->request()->put('enable') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must PUT an "enable" value', 'data'=>''));
+        return; 
+    }
+    
+    $inherit = false;
+    $status = $app->request()->put('enable');
+    if ($status == 'true' || $status == '1')
+    {
+        $inherit = true;
+    }
+    
+    if(is_numeric($id))
+        $folder = $dms->getFolder($id);
+    else {
+        $folder = $dms->getFolderByName($id);
+    }
+    
+    if($folder) {
+        $folder->setInheritAccess($inherit);
+        $folderId = $folder->getId();
+        $folder = null;
+        // reread from db
+        $folder = $dms->getFolder($folderId);
+        $success = ($folder->inheritsAccess() == $inherit);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>$success, 'message'=>'', 'data'=>$data));
+    } else {
+        $app->response()->status(404);
+    }
+} /* }}} */
+
+function addUserAccessToFolder($id) { /* {{{ */
+    changeFolderAccess($id, 'add', 'user');
+} /* }}} */
+
+function addGroupAccessToFolder($id) { /* {{{ */
+    changeFolderAccess($id, 'add', 'group');
+} /* }}} */
+
+function removeUserAccessFromFolder($id) { /* {{{ */
+    changeFolderAccess($id, 'remove', 'user');   
+} /* }}} */
+
+function removeGroupAccessFromFolder($id) { /* {{{ */
+    changeFolderAccess($id, 'remove', 'group');   
+} /* }}} */
+
+function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+    
+    if(is_numeric($id))
+        $folder = $dms->getfolder($id);
+    else {
+        $folder = $dms->getfolderByName($id);
+    }
+    if (!$folder) {
+        $app->response()->status(404);
+        return;
+    }
+    
+    $userOrGroupIdInput = $app->request()->put('id');
+    if ($operationType == 'add')
+    {
+	    if ($app->request()->put('id') == null)
+	    {
+	        $app->response()->header('Content-Type', 'application/json');
+	        echo json_encode(array('success'=>false, 'message'=>'Please PUT the user or group Id', 'data'=>''));
+	        return; 
+	    }
+
+	    if ($app->request()->put('mode') == null)
+	    {
+	        $app->response()->header('Content-Type', 'application/json');
+	        echo json_encode(array('success'=>false, 'message'=>'Please PUT the access mode', 'data'=>''));
+	        return; 
+	    }
+
+	    $modeInput = $app->request()->put('mode');
+
+	    $mode = M_NONE;
+	    if ($modeInput == 'read')
+	    {
+	    	$mode = M_READ;
+	    }
+	    if ($modeInput == 'readwrite')
+	    {
+	    	$mode = M_READWRITE;
+	    }
+	    if ($modeInput == 'all')
+	    {
+	    	$mode = M_ALL;
+	    }
+	}
+
+
+    $userOrGroupId = $userOrGroupIdInput;
+    if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
+    {
+    	$userOrGroupObj = $dms->getUserByLogin($userOrGroupIdInput);
+    }
+    if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
+    {
+    	$userOrGroupObj = $dms->getGroupByName($userOrGroupIdInput);
+    }
+    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
+    {
+    	$userOrGroupObj = $dms->getUser($userOrGroupIdInput);
+    }
+    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
+    {
+    	$userOrGroupObj = $dms->getGroup($userOrGroupIdInput);
+    }
+    if (!$userOrGroupObj) {
+        $app->response()->status(404);
+        return;
+    } 
+	$userOrGroupId = $userOrGroupObj->getId();
+
+    $operationResult = false; 
+
+    if ($operationType == 'add' && $userOrGroup == 'user')
+    {
+        $operationResult = $folder->addAccess($mode, $userOrGroupId, true);
+    }
+    if ($operationType == 'remove' && $userOrGroup == 'user')
+    {
+        $operationResult = $folder->removeAccess($userOrGroupId, true);
+    }
+
+    if ($operationType == 'add' && $userOrGroup == 'group')
+    {
+        $operationResult = $folder->addAccess($mode, $userOrGroupId, false);
+    }
+    if ($operationType == 'remove' && $userOrGroup == 'group')
+    {
+        $operationResult = $folder->removeAccess($userOrGroupId, false);
+    }
+    
+    if ($operationResult === false)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        $message = 'Could not add user/group access to this folder.';
+        if ($operationType == 'remove')
+        {
+            $message = 'Could not remove user/group access from this folder.';
+        }
+        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. ' . $message, 'data'=>''));
+        return;
+    }
+
+    $data = array();
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
+
+function clearFolderAccessList($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+        
+    if(is_numeric($id))
+        $folder = $dms->getFolder($id);
+    else {
+        $folder = $dms->getFolderByName($id);
+    }
+    if (!$folder)
+    {
+    	$app->response()->status(404);
+    	return;
+    }
+    $operationResult = $folder->clearAccessList();
+    $data = array();
+    $app->response()->header('Content-Type', 'application/json');
+    if (!$operationResult)
+    {
+    	echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));	
+    }
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
 //$app = new Slim(array('mode'=>'development', '_session.handler'=>null));
 $app = new \Slim\Slim(array('mode'=>'development', '_session.handler'=>null));
 
@@ -885,6 +1303,19 @@ $app->get('/document/:id/links', 'getDocumentLinks');
 $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
 $app->get('/account/locked', 'getLockedDocuments');
+$app->post('/accounts', 'createAccount');
+$app->get('/accounts/:id', 'getAccountById');
+$app->put('/accounts/:id/disable', 'setDisabledAccount');
+$app->post('/groups', 'createGroup');
+$app->get('/groups/:id', 'getGroup');
+$app->put('/groups/:id/addUser', 'addUserToGroup');
+$app->put('/groups/:id/removeUser', 'removeUserFromGroup');
+$app->put('/folder/:id/setInherit', 'setFolderInheritsAccess');
+$app->put('/folder/:id/access/group/add', 'addGroupAccessToFolder'); // 
+$app->put('/folder/:id/access/user/add', 'addUserAccessToFolder'); // 
+$app->put('/folder/:id/access/group/remove', 'removeGroupAccessFromFolder'); 
+$app->put('/folder/:id/access/user/remove', 'removeUserAccessFromFolder'); 
+$app->put('/folder/:id/access/clear', 'clearFolderAccessList');
 $app->run();
 
 ?>

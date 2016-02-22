@@ -186,7 +186,7 @@ class SeedDMS_Core_Group {
 		$queryStr = "INSERT INTO tblGroupMembers (groupID, userID, manager) VALUES (".$this->_id.", ".$user->getID(). ", " . ($asManager?"1":"0") ." )";
 		$res = $db->getResult($queryStr);
 
-		if ($res) return false;
+		if (!$res) return false;
 
 		unset($this->_users);
 		return true;
@@ -198,7 +198,7 @@ class SeedDMS_Core_Group {
 		$queryStr = "DELETE FROM tblGroupMembers WHERE groupID = ".$this->_id." AND userID = ".$user->getID();
 		$res = $db->getResult($queryStr);
 
-		if ($res) return false;
+		if (!$res) return false;
 		unset($this->_users);
 		return true;
 	} /* }}} */
@@ -379,5 +379,63 @@ class SeedDMS_Core_Group {
 
 		return $status;
 	} /* }}} */
+
+	/**
+	 * Get a list of documents with a workflow
+	 *
+	 * @param int $documentID optional document id for which to retrieve the
+	 *        reviews
+	 * @param int $version optional version of the document
+	 * @return array list of all workflows
+	 */
+	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = 'select distinct d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow where d.document is not null and a.state=d.state and c.groupid='.$this->_id;
+		if($documentID) {
+			$queryStr .= ' AND d.document='.(int) $documentID;
+			if($version)
+				$queryStr .= ' AND d.version='.(int) $version;
+		}
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result[] = $res;
+			}
+		}
+		return $result;
+	} /* }}} */
+
+	/**
+	 * Get all notifications of group
+	 *
+	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
+	 * @return array array of notifications
+	 */
+	function getNotificationsByGroup($type=0) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
+		 "WHERE `tblNotify`.`groupID` = ". $this->_id;
+		if($type) {
+			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
+		}
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$notifications = array();
+		foreach ($resArr as $row) {
+			$not = new SeedDMS_Core_Notification($row["target"], $row["targetType"], $row["userID"], $row["groupID"]);
+			$not->setDMS($this);
+			array_push($notifications, $not);
+		}
+
+		return $notifications;
+	} /* }}} */
+
 }
 ?>

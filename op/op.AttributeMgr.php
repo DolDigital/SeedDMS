@@ -65,6 +65,9 @@ if ($action == "addattrdef") {
 	if($minvalues > $maxvalues) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_min_greater_max"));
 	}
+	if($multiple && $valueset == '') {
+		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
+	}
 
 	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex);
 	if (!$newAttrdef) {
@@ -77,7 +80,7 @@ if ($action == "addattrdef") {
 	add_log_line("&action=addattrdef&name=".$name);
 }
 
-// delet attribute definition -----------------------------------------------
+// delete attribute definition -----------------------------------------------
 else if ($action == "removeattrdef") {
 
 	/* Check if the form data comes for a trusted request */
@@ -138,6 +141,9 @@ else if ($action == "editattrdef") {
 	}
 	if($minvalues > $maxvalues) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_min_greater_max"));
+	}
+	if($multiple && $valueset == '') {
+		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
 	}
 
 	if (!$attrdef->setName($name)) {

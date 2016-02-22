@@ -59,15 +59,15 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 				print "<img width=\"50\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
 			echo "</td>";
 			echo "<td>";
-			echo $currUser->getFullName()." (".$currUser->getLogin().")<br />";
-			echo "<a href=\"mailto:".$currUser->getEmail()."\">".$currUser->getEmail()."</a><br />";
-			echo "<small>".$currUser->getComment()."</small>";
+			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
+			echo "<a href=\"mailto:".$currUser->getEmail()."\">".htmlspecialchars($currUser->getEmail())."</a><br />";
+			echo "<small>".htmlspecialchars($currUser->getComment())."</small>";
 			echo "</td>";
 			echo "<td>";
 			$groups = $currUser->getGroups();
 			if (count($groups) != 0) {
 				for ($j = 0; $j < count($groups); $j++)	{
-					print $groups[$j]->getName();
+					print htmlspecialchars($groups[$j]->getName());
 					if ($j +1 < count($groups))
 						print ", ";
 				}
