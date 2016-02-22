@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1133)
+//    Translators: Admin (1135)
 
 $text = array(
 'accept' => 'Прийняти',
@@ -719,10 +719,10 @@ URL: [url]',
 ми отримали запит наз зміну вашого паролю.
 Щоб зробити це, перейдіть по ссилці:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Якщо ви і після цього не зможете зайти, зв\'яжіться з адміністратором',
-'password_forgotten_email_subject' => 'Втрачено пароль',
+'password_forgotten_email_subject' => '[sitename]: Втрачено пароль',
 'password_forgotten_send_hash' => 'Інструкції вислано на e-mail',
 'password_forgotten_text' => 'Заповніть форму і виконайте інструкції в листі',
 'password_forgotten_title' => 'Пароль вислано',

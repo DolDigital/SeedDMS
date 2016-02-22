@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1307), dgrutsch (7), netixw (14)
+//    Translators: Admin (1309), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -721,10 +721,10 @@ we have received a request to change your password.
 
 This can be done by clicking on the following link:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 If you have still problems to login, then please contact your administrator.',
-'password_forgotten_email_subject' => 'Password forgotten',
+'password_forgotten_email_subject' => '[sitename]: Password forgotten',
 'password_forgotten_send_hash' => 'Instructions on how to proceed has been send to the user\'s email address',
 'password_forgotten_text' => 'Fill out the form below and follow the instructions in the email, which will be sent to you.',
 'password_forgotten_title' => 'Password sent',

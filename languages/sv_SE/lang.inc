@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1115), tmichelfelder (106)
+//    Translators: Admin (1117), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -704,8 +704,8 @@ URL: [url]',
 'password_expired' => '',
 'password_expires_in_days' => '',
 'password_forgotten' => 'Glömt lösenord',
-'password_forgotten_email_body' => 'Bästa användare av dokumenthanteringssystemet,nnvi fick en förfrågan om att ändra ditt lösenord.nnDu kan göra det genom att klicka på följande länk:nn###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###nnOm du fortfarande har problem med inloggningen, kontakta administratören.',
-'password_forgotten_email_subject' => 'Glömt lösenord',
+'password_forgotten_email_body' => 'Bästa användare av dokumenthanteringssystemet,nnvi fick en förfrågan om att ändra ditt lösenord.nnDu kan göra det genom att klicka på följande länk:nn[url_prefix]out/out.ChangePassword.php?hash=[hash]nnOm du fortfarande har problem med inloggningen, kontakta administratören.',
+'password_forgotten_email_subject' => '[sitename]: Glömt lösenord',
 'password_forgotten_send_hash' => 'En beskrivning av vad du måste göra har nu skickats till din e-postadress.',
 'password_forgotten_text' => 'Fyll i formuläret nedan och följ instruktionerna som skickas till din e-postadress.',
 'password_forgotten_title' => 'Glömt lösenord',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1030), aydin (83)
+//    Translators: Admin (1032), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -716,12 +716,12 @@ parolanızı değiştirmek istediğinize dair talep aldık.
 
 Aşağıdaki linke tıklayarak bu işlemi gerçekleştirebilirsiniz.
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Böyle bir talebiniz olmadıysa bu mesajı görmezden gelebilirsiniz. 
  
 Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görüşünüz.',
-'password_forgotten_email_subject' => 'Şifre sıfırlama',
+'password_forgotten_email_subject' => '[sitename]: Şifre sıfırlama',
 'password_forgotten_send_hash' => 'Yeni şifre alma talimatı kullanıcının e-posta adresine gönderilmiştir.',
 'password_forgotten_text' => 'Aşağıdaki formu doldurunuz ve e-posta adresinize gönderilecek olan talimatı uygulayınız.',
 'password_forgotten_title' => 'Parola gönderildi',

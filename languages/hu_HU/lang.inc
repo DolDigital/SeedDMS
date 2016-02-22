@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (581), ribaz (1019)
+//    Translators: Admin (586), ribaz (1019)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -397,7 +397,7 @@ URL: [url]',
 'error_occured' => 'Hiba történt',
 'es_ES' => 'Spanyol',
 'event_details' => 'Esemény részletek',
-'exclude_items' => '',
+'exclude_items' => 'Kizárt elemek',
 'expired' => 'Lejárt',
 'expires' => 'Lejárat',
 'expiry_changed_email' => 'Lejárati dátum módosítva',
@@ -717,10 +717,10 @@ Kérést kaptunk jelszavának módósításáról.
 
 Ezt az alábbi hivatkozásra kattintva teheti meg:
 
-###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###
+[url_prefix]out/out.ChangePassword.php?hash=[hash]
 
 Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a kapcsolatot az adminisztrátorral.',
-'password_forgotten_email_subject' => 'Jelszó emlékeztető',
+'password_forgotten_email_subject' => '[sitename]: Jelszó emlékeztető',
 'password_forgotten_send_hash' => 'Utasítások arról, hogyan kell eljárni a felhasználók email címének elküldéséhez',
 'password_forgotten_text' => 'Töltse ki a következő űrlapot és kövesse az Önnek küldött, elektronikus levélben szereplő utasításokat.',
 'password_forgotten_title' => 'Jelszó küldés',
@@ -1284,7 +1284,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => '[version]: [status] Verzio',
 'to' => 'ig',
 'toggle_manager' => 'Kulcs kezelő',
 'to_before_from' => 'A lejárati dátum nem előzheti meg a kezdési dátumot',
@@ -1306,7 +1306,7 @@ URL: [url]',
 'transmittal_comment' => '',
 'transmittal_name' => '',
 'transmittal_size' => '',
-'tree_loading' => '',
+'tree_loading' => 'Kérem várjon, amíg a dokumentumfa betöltődik...',
 'trigger_workflow' => 'Munkafolyamat',
 'tr_TR' => 'Török',
 'tuesday' => 'Kedd',
