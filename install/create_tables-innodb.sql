@@ -50,6 +50,20 @@ CREATE TABLE `tblAttributeDefinitions` (
 -- Table structure for table `tblUsers`
 -- 
 
+CREATE TABLE `tblRoles` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  `role` smallint(1) NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  UNIQUE (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblUsers`
+-- 
+
 CREATE TABLE `tblUsers` (
   `id` int(11) NOT NULL auto_increment,
   `login` varchar(50) default NULL,
@@ -59,7 +73,7 @@ CREATE TABLE `tblUsers` (
   `language` varchar(32) NOT NULL,
   `theme` varchar(32) NOT NULL,
   `comment` text NOT NULL,
-  `role` smallint(1) NOT NULL default '0',
+  `role` int(11) NOT NULL,
   `hidden` smallint(1) NOT NULL default '0',
   `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00',
   `loginfailures` tinyint(4) NOT NULL default '0',
@@ -67,7 +81,8 @@ CREATE TABLE `tblUsers` (
   `quota` bigint,
   `homefolder` int(11) default NULL,
   PRIMARY KEY (`id`),
-  UNIQUE (`login`)
+  UNIQUE (`login`),
+  CONSTRAINT `tblUsers_role` FOREIGN KEY (`role`) REFERENCES `tblRoles` (`id`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -598,7 +613,7 @@ CREATE TABLE `tblSessions` (
   `theme` varchar(30) NOT NULL default '',
   `language` varchar(30) NOT NULL default '',
   `clipboard` text default '',
-	`su` INTEGER DEFAULT NULL,
+  `su` INTEGER DEFAULT NULL,
   `splashmsg` text default '',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblSessions_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -821,7 +836,7 @@ CREATE TABLE `tblTransmittals` (
 
 CREATE TABLE `tblTransmittalItems` (
   `id` int(11) NOT NULL auto_increment,
-	`transmittal` int(11) NOT NULL DEFAULT '0',
+  `transmittal` int(11) NOT NULL DEFAULT '0',
   `document` int(11) default NULL,
   `version` smallint(5) unsigned NOT NULL default '0',
   `date` datetime,
@@ -855,8 +870,10 @@ CREATE TABLE `tblCachedAccess` (
 
 CREATE TABLE `tblAros` (
   `id` int(11) NOT NULL auto_increment,
+  `parent` int(11),
   `model` text NOT NULL,
-	`foreignid` int(11) NOT NULL DEFAULT '0',
+  `foreignid` int(11) NOT NULL DEFAULT '0',
+  `alias` varchar(255),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -868,8 +885,10 @@ CREATE TABLE `tblAros` (
 
 CREATE TABLE `tblAcos` (
   `id` int(11) NOT NULL auto_increment,
+  `parent` int(11),
   `model` text NOT NULL,
-	`foreignid` int(11) NOT NULL DEFAULT '0',
+  `foreignid` int(11) NOT NULL DEFAULT '0',
+  `alias` varchar(255),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -881,8 +900,12 @@ CREATE TABLE `tblAcos` (
 
 CREATE TABLE `tblArosAcos` (
   `id` int(11) NOT NULL auto_increment,
-	`aro` int(11) NOT NULL DEFAULT '0',
-	`aco` int(11) NOT NULL DEFAULT '0',
+  `aro` int(11) NOT NULL DEFAULT '0',
+  `aco` int(11) NOT NULL DEFAULT '0',
+  `create` tinyint(4) NOT NULL DEFAULT '-1',
+  `read` tinyint(4) NOT NULL DEFAULT '-1',
+  `update` tinyint(4) NOT NULL DEFAULT '-1',
+  `delete` tinyint(4) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`id`),
   UNIQUE (aco, aro),
   CONSTRAINT `tblArosAcos_acos` FOREIGN KEY (`aco`) REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,

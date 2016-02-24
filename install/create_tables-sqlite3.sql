@@ -47,6 +47,19 @@ CREATE TABLE `tblAttributeDefinitions` (
 -- Table structure for table `tblUsers`
 -- 
 
+CREATE TABLE `tblRoles` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `name` varchar(50) default NULL,
+  `role` INTEGER NOT NULL default '0',
+  UNIQUE (`name`)
+) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblUsers`
+-- 
+
 CREATE TABLE `tblUsers` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `login` varchar(50) default NULL,
@@ -56,7 +69,7 @@ CREATE TABLE `tblUsers` (
   `language` varchar(32) NOT NULL,
   `theme` varchar(32) NOT NULL,
   `comment` text NOT NULL,
-  `role` INTEGER NOT NULL default '0',
+  `role` INTEGER NOT NULL REFERENCES `tblRoles` (`id`),
   `hidden` INTEGER NOT NULL default '0',
   `pwdExpiration` TEXT NOT NULL default '0000-00-00 00:00:00',
   `loginfailures` INTEGER NOT NULL default '0',
