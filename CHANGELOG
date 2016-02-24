@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - merged changes from 4.3.24
 - fixed sending test mail
+- fixed sending password forgotten mail
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.0

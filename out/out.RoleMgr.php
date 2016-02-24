@@ -35,24 +35,19 @@ if (is_bool($users)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
 }
 
-$groups = $dms->getAllGroups();
-if (is_bool($groups)) {
-	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
-}
-
 $roles = $dms->getAllRoles();
 if (is_bool($roles)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
 }
 
-if(isset($_GET['userid']) && $_GET['userid']) {
-	$seluser = $dms->getUser($_GET['userid']);
+if(isset($_GET['roleid']) && $_GET['roleid']) {
+	$selrole = $dms->getRole($_GET['roleid']);
 } else {
-	$seluser = null;
+	$selrole = null;
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'allroles'=>$roles, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selrole'=>$selrole, 'allusers'=>$users, 'allroles'=>$roles));
 if($view) {
 	$view($_GET);
 }

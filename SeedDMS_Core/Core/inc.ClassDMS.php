@@ -363,6 +363,7 @@ class SeedDMS_Core_DMS {
 		$this->classnames['document'] = 'SeedDMS_Core_Document';
 		$this->classnames['documentcontent'] = 'SeedDMS_Core_DocumentContent';
 		$this->classnames['user'] = 'SeedDMS_Core_User';
+		$this->classnames['role'] = 'SeedDMS_Core_Role';
 		$this->classnames['group'] = 'SeedDMS_Core_Group';
 		$this->classnames['transmittal'] = 'SeedDMS_Core_Transmittal';
 		$this->classnames['transmittalitem'] = 'SeedDMS_Core_TransmittalItem';
@@ -1598,7 +1599,9 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
 		}
-		if($role == '')
+		if(is_object($role))
+			$role = $role->getID();
+		elseif($role == '')
 			$role = '0';
 		if(trim($pwdexpiration) == '')
 			$pwdexpiration = '0000-00-00 00:00:00';
@@ -1660,6 +1663,57 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		return $this->getGroup($this->db->getInsertID());
+	} /* }}} */
+
+	/**
+	 * Get a role by its id
+	 *
+	 * @param integer $id id of role
+	 * @return object/boolean role or false if no role was found
+	 */
+	function getRole($id) { /* {{{ */
+		$classname = $this->classnames['role'];
+		return $classname::getInstance($id, $this);
+	} /* }}} */
+
+	/**
+	 * Get a role by its name
+	 *
+	 * @param integer $name name of role
+	 * @return object/boolean role or false if no role was found
+	 */
+	function getRoleByName($name) { /* {{{ */
+		$classname = $this->classnames['role'];
+		return $classname::getInstance($name, $this, 'name');
+	} /* }}} */
+
+	/**
+	 * Return list of all roles
+	 *
+	 * @return array of instances of {@link SeedDMS_Core_Role} or false
+	 */
+	function getAllRoles($orderby = '') { /* {{{ */
+		$classname = $this->classnames['role'];
+		return $classname::getAllInstances($orderby, $this);
+	} /* }}} */
+
+	/**
+	 * Create a new role
+	 *
+	 * @param string $name name of role
+	 * @return object/boolean instance of {@link SeedDMS_Core_Role} or false in
+	 *         case of an error.
+	 */
+	function addRole($name, $role) { /* {{{ */
+		if (is_object($this->getRoleByName($name))) {
+			return false;
+		}
+
+		$queryStr = "INSERT INTO tblRoles (name, role) VALUES (".$this->db->qstr($name).", ".$role.")";
+		if (!$this->db->getResult($queryStr))
+			return false;
+
+		return $this->getRole($this->db->getInsertID());
 	} /* }}} */
 
 	/**

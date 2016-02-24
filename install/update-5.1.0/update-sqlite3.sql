@@ -73,6 +73,44 @@ CREATE TABLE `tblTransmittalItems` (
   UNIQUE (document, version)
 );
 
+CREATE TABLE `tblRoles` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `name` varchar(50) default NULL,
+  `role` INTEGER NOT NULL default '0',
+  UNIQUE (`name`)
+);
+
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (1, 'Admin', 1);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (2, 'Guest', 2);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (3, 'User', 0);
+
+UPDATE `tblUsers` SET role=3 WHERE role=0;
+
+CREATE TABLE `new_tblUsers` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `login` varchar(50) default NULL,
+  `pwd` varchar(50) default NULL,
+  `fullName` varchar(100) default NULL,
+  `email` varchar(70) default NULL,
+  `language` varchar(32) NOT NULL,
+  `theme` varchar(32) NOT NULL,
+  `comment` text NOT NULL,
+  `role` INTEGER NOT NULL REFERENCES `tblRoles` (`id`),
+  `hidden` INTEGER NOT NULL default '0',
+  `pwdExpiration` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `loginfailures` INTEGER NOT NULL default '0',
+  `disabled` INTEGER NOT NULL default '0',
+  `quota` INTEGER,
+  `homefolder` INTEGER default NULL REFERENCES `tblFolders` (`id`),
+  UNIQUE (`login`)
+);
+
+INSERT INTO new_tblUsers SELECT * FROM tblUsers;
+
+DROP TABLE tblUsers;
+
+ALTER TABLE new_tblUsers RENAME TO tblUsers;
+
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;

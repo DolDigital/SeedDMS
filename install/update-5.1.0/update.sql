@@ -94,6 +94,23 @@ CREATE TABLE `tblTransmittalItems` (
   CONSTRAINT `tblTransmittalItem_transmittal` FOREIGN KEY (`transmittal`) REFERENCES `tblTransmittals` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `tblRoles` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  `role` smallint(1) NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  UNIQUE (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (1, 'Admin', 1);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (2, 'Guest', 2);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (3, 'User', 0);
+ALTER TABLE `tblRoles` AUTO_INCREMENT=4;
+
+ALTER TABLE tblUsers CHANGE role role int(11) NOT NULL;
+UPDATE `tblUsers` SET role=3 WHERE role=0;
+ALTER TABLE tblUsers ADD CONSTRAINT `tblUsers_role` FOREIGN KEY (`role`) REFERENCES `tblRoles` (`id`);
+
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;

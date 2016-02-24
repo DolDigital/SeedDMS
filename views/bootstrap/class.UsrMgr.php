@@ -157,6 +157,7 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$users = $this->params['allusers'];
 		$groups = $this->params['allgroups'];
+		$roles = $this->params['allroles'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$passwordexpiration = $this->params['passwordexpiration'];
 		$httproot = $this->params['httproot'];
@@ -240,7 +241,13 @@ $(document).ready( function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("role");?>:</td>
-			<td><select name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
+			<td><select name="role">
+<?php
+		foreach($roles as $role) {
+			echo '<option value="'.$role->getID().'"'.($currUser && $currUser->getRole()->getID() == $role->getID() ? ' selected' : '').'>'.$role->getName().'</option>';
+		}
+?>
+			</select></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("groups");?>:</td>

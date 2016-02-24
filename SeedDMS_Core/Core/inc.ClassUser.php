@@ -13,6 +13,202 @@
  */
 
 /**
+ * Class to represent a role in the document management system
+ *
+ * @category   DMS
+ * @package    SeedDMS_Core
+ * @author     Uwe Steinmann <uwe@steinmann.cx>
+ * @copyright  Copyright (C) 2016 Uwe Steinmann
+ * @version    Release: @package_version@
+ */
+class SeedDMS_Core_Role { /* {{{ */
+	/**
+	 * @var integer id of role
+	 *
+	 * @access protected
+	 */
+	var $_id;
+
+	/**
+	 * @var string name of role
+	 *
+	 * @access protected
+	 */
+	var $_login;
+
+	/**
+	 * @var string role of user. Can be one of SeedDMS_Core_User::role_user,
+	 *      SeedDMS_Core_User::role_admin, SeedDMS_Core_User::role_guest
+	 *
+	 * @access protected
+	 */
+	var $_role;
+
+	/**
+	 * @var object reference to the dms instance this user belongs to
+	 *
+	 * @access protected
+	 */
+	var $_dms;
+
+	const role_user = '0';
+	const role_admin = '1';
+	const role_guest = '2';
+
+	function SeedDMS_Core_Role($id, $name, $role) { /* {{{ */
+		$this->_id = $id;
+		$this->_name = $name;
+		$this->_role = $role;
+		$this->_dms = $role;
+	} /* }}} */
+
+	/**
+	 * Create an instance of a role object
+	 *
+	 * @param string|integer $id Id, login name, or email of user, depending
+	 * on the 3rd parameter.
+	 * @param object $dms instance of dms
+	 * @param string $by search by [name|email]. If 'name' is passed, the method
+	 * will check for the 4th paramater and also filter by email. If this
+	 * parameter is left empty, the user will be search by its Id.
+	 * @param string $email optional email address if searching for name
+	 * @return object instance of class SeedDMS_Core_User
+	 */
+	public static function getInstance($id, $dms, $by='') { /* {{{ */
+		$db = $dms->getDB();
+
+		switch($by) {
+		case 'name':
+			$queryStr = "SELECT * FROM `tblRoles` WHERE `name` = ".$db->qstr($id);
+			break;
+		default:
+			$queryStr = "SELECT * FROM `tblRoles` WHERE id = " . (int) $id;
+		}
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$role = new self($resArr["id"], $resArr["name"], $resArr["role"]);
+		$role->setDMS($dms);
+		return $role;
+	} /* }}} */
+
+	public static function getAllInstances($orderby, $dms) { /* {{{ */
+		$db = $dms->getDB();
+
+		if($orderby == 'ame')
+			$queryStr = "SELECT * FROM tblRoles ORDER BY name";
+		else
+			$queryStr = "SELECT * FROM tblRoles ORDER BY id";
+		$resArr = $db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$roles = array();
+
+		for ($i = 0; $i < count($resArr); $i++) {
+			$role = new self($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["role"]);
+			$role->setDMS($dms);
+			$roles[$i] = $role;
+		}
+
+		return $roles;
+} /* }}} */
+
+	function setDMS($dms) {
+		$this->_dms = $dms;
+	}
+
+	function getID() { return $this->_id; }
+
+	function getName() { return $this->_name; }
+
+	function setName($newName) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblRoles SET name =".$db->qstr($newName)." WHERE id = " . $this->_id;
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		$this->_name = $newName;
+		return true;
+	} /* }}} */
+
+	function isAdmin() { return ($this->_role == SeedDMS_Core_Role::role_admin); }
+
+	function isGuest() { return ($this->_role == SeedDMS_Core_Role::role_guest); }
+
+	function getRole() { return $this->_role; }
+
+	function setRole($newrole) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblRoles SET role = " . $newrole . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_role = $newrole;
+		return true;
+	} /* }}} */
+
+	/**
+	 * Delete role
+	 *
+	 * @return boolean true on success or false in case of an error
+	 */
+	function remove($user) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "DELETE FROM tblRoles WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
+	function isUsed() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$queryStr = "SELECT * FROM tblUsers WHERE role=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_array($resArr) && count($resArr) == 0)
+			return false;
+		return true;
+	} /* }}} */
+
+	function getUsers() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		if (!isset($this->_users)) {
+			$queryStr = "SELECT * FROM tblUsers WHERE role=".$this->_id;
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && $resArr == false)
+				return false;
+
+			$this->_users = array();
+
+			$classnamerole = $this->_dms->getClassname('role');
+
+			$classname = $this->_dms->getClassname('user');
+			foreach ($resArr as $row) {
+				$role = $classnamerole::getInstance($row['role'], $this->_dms);
+				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $role, $row['hidden']);
+				$user->setDMS($this->_dms);
+				array_push($this->_users, $user);
+			}
+		}
+		return $this->_users;
+	} /* }}} */
+
+} /* }}} */
+
+/**
  * Class to represent a user in the document management system
  *
  * @category   DMS
@@ -203,7 +399,10 @@ class SeedDMS_Core_User { /* {{{ */
 
 		$resArr = $resArr[0];
 
-		$user = new self($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"], $resArr["homefolder"]);
+		$classname = $dms->getClassname('role');
+		$role = $classname::getInstance($resArr['role'], $dms);
+
+		$user = new self($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $role, $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"], $resArr["homefolder"]);
 		$user->setDMS($dms);
 		return $user;
 	} /* }}} */
@@ -356,7 +555,10 @@ class SeedDMS_Core_User { /* {{{ */
 	function setRole($newrole) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET role = " . $newrole . " WHERE id = " . $this->_id;
+		if(is_object($newrole))
+			$queryStr = "UPDATE tblUsers SET role = " . $newrole->getID() . " WHERE id = " . $this->_id;
+		else
+			$queryStr = "UPDATE tblUsers SET role = " . $newrole . " WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -364,9 +566,12 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
-	function isAdmin() { return ($this->_role == SeedDMS_Core_User::role_admin); }
+	function isAdmin() { return (is_object($this->_role) ? $this->_role->isAdmin() : $this->_role == SeedDMS_Core_User::role_admin); }
 
-	function setAdmin($isAdmin) { /* {{{ */
+	/**
+	 * Was never used and is now deprecated
+	 */
+	function _setAdmin($isAdmin) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblUsers SET role = " . SeedDMS_Core_User::role_admin . " WHERE id = " . $this->_id;
@@ -377,9 +582,12 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
-	function isGuest() { return ($this->_role == SeedDMS_Core_User::role_guest); }
+	function isGuest() { return (is_object($this->_role) ? $this->_role->isGuest() : $this->_role == SeedDMS_Core_User::role_guest); }
 
-	function setGuest($isGuest) { /* {{{ */
+	/**
+	 * Was never used and is now deprecated
+	 */
+	function _setGuest($isGuest) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblUsers SET role = " . SeedDMS_Core_User::role_guest . " WHERE id = " . $this->_id;
