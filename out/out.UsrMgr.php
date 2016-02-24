@@ -40,6 +40,11 @@ if (is_bool($groups)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
 }
 
+$roles = $dms->getAllRoles();
+if (is_bool($roles)) {
+	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
+}
+
 if(isset($_GET['userid']) && $_GET['userid']) {
 	$seluser = $dms->getUser($_GET['userid']);
 } else {
@@ -47,7 +52,7 @@ if(isset($_GET['userid']) && $_GET['userid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'allroles'=>$roles, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
 	$view($_GET);
 }
