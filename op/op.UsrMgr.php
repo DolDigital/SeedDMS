@@ -58,7 +58,7 @@ if ($action == "adduser") {
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
-	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
+	$role    = $dms->getRole($_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
 	$homefolder = (isset($_POST["homefolder"]) ? $_POST["homefolder"] : 0);
@@ -217,7 +217,7 @@ else if ($action == "edituser") {
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
-	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
+	$role    = $dms->getRole($_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
 	$homefolder = (isset($_POST["homefolder"]) ? $_POST["homefolder"] : 0);
