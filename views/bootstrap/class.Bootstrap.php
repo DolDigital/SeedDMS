@@ -1102,6 +1102,7 @@ $('#acceptkeywords').click(function(ev) {
 			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
+				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
         <span class="input-append date datepicker" style="display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
 					<input class="span4" size="16" name="<?= $fieldname ?>[<?= $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
