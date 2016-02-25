@@ -155,20 +155,21 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 		} elseif(is_object($id)) {
 			if($dms->getClassname('role') == get_class($id)) {
 				$model = 'Role';
-				$queryStr = "SELECT * FROM tblAros WHERE model=".$model." AND foreignid=".$id->getID();
+				$queryStr = "SELECT * FROM tblAros WHERE model=".$db->qstr($model)." AND foreignid=".$id->getID();
 				$resArr = $db->getResultArray($queryStr);
 				if (is_bool($resArr) && $resArr == false)
 					return null;
 				if (count($resArr) != 1)
 					return null;
 				$parentid = $resArr[0]['parent'];
+				$resArr = $resArr[0];
 			} else {
 				return null;
 			}
 		}
 
-		if($resArr['model'] == 'Group') {
-			$classname = $dms->getClassname('group');
+		if($resArr['model'] == 'Role') {
+			$classname = $dms->getClassname('role');
 			$object = $classname::getInstance($resArr['foreignid'], $dms);
 		} else {
 			$object = null;
