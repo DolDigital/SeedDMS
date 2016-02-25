@@ -83,7 +83,7 @@ function tree($dms, $index, $indexconf, $folder, $indent='') { /* {{{ */
 		$lucenesearch = new $indexconf['Search']($index);
 		if(!($hit = $lucenesearch->getDocument($document->getId()))) {
 			try {
-				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false));
+				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout));
 				echo " (Document added)\n";
 			} catch(Exception $e) {
 				echo " (Timeout)\n";
@@ -100,7 +100,7 @@ function tree($dms, $index, $indexconf, $folder, $indent='') { /* {{{ */
 			} else {
 				if($index->delete($hit->id)) {
 					try {
-						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false));
+						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout));
 						echo " (Document updated)\n";
 					} catch(Exception $e) {
 						echo " (Timeout)\n";
