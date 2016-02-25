@@ -48,6 +48,7 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 	<div class="row-fluid">
 		<a href="../out/out.UsrMgr.php" class="span3 btn btn-medium"><i class="icon-user"></i><br /><?php echo getMLText("user_management")?></a>
 		<a href="../out/out.GroupMgr.php" class="span3 btn btn-medium"><i class="icon-group"></i><br /><?php echo getMLText("group_management")?></a>
+		<a href="../out/out.RoleMgr.php" class="span3 btn btn-medium"><i class="icon-bullseye"></i><br /><?php echo getMLText("role_management")?></a>
 	</div>
 	<div class="row-fluid">
 		<a href="../out/out.BackupTools.php" class="span3 btn btn-medium"><i class="icon-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>

@@ -213,6 +213,27 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 // }}}
 ?>
+<?php
+		/* First check if any of the folder filters are set. If it is,
+		 * open the accordion.
+		 */
+		$openfilterdlg = false;
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+					if(!empty($attributes[$attrdef->getID()]))
+						$openfilterdlg = true;
+				}
+			}
+		}
+		if($categories)
+			$openfilterdlg = true;
+		if($status)
+			$openfilterdlg = true;
+		if($expirationdate)
+			$openfilterdlg = true;
+?>
 <?php if($totaldocs): ?>
 <div class="accordion" id="accordion1">
   <div class="accordion-group">
@@ -244,27 +265,6 @@ $(document).ready( function() {
   </div>
 </div>
 <?php endif; ?>
-<?php
-		/* First check if any of the folder filters are set. If it is,
-		 * open the accordion.
-		 */
-		$openfilterdlg = false;
-		if($attrdefs) {
-			foreach($attrdefs as $attrdef) {
-				$attricon = '';
-				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
-					if(!empty($attributes[$attrdef->getID()]))
-						$openfilterdlg = true;
-				}
-			}
-		}
-		if($categories)
-			$openfilterdlg = true;
-		if($status)
-			$openfilterdlg = true;
-		if($expirationdate)
-			$openfilterdlg = true;
-?>
 <div class="accordion" id="accordion2">
   <div class="accordion-group">
     <div class="accordion-heading">
