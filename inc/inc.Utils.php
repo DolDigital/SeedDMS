@@ -26,13 +26,13 @@ function formatted_size($size_bytes) { /* {{{ */
 	return number_format($size_bytes,0,"","")." Bytes";
 } /* }}} */
 
-function getReadableDate($timestamp) {
+function getReadableDate($timestamp) { /* {{{ */
 	return date("Y-m-d", $timestamp);
-}
+} /* }}} */
 
-function getLongReadableDate($timestamp) {
+function getLongReadableDate($timestamp) { /* {{{ */
 	return date("Y-m-d H:i:s", $timestamp);
-}
+} /* }}} */
 
 /*
  * Converts a date/time string into a timestamp
@@ -52,16 +52,16 @@ function makeTsFromLongDate($date) { /* {{{ */
 	return $ts;
 } /* }}} */
 
-function getReadableDuration($secs) {
+function getReadableDuration($secs) { /* {{{ */
 	$s = "";
 	foreach ( getReadableDurationArray($secs) as $k => $v ) {
 		if ( $v ) $s .= $v." ".($v==1? substr($k,0,-1) : $k).", ";
 	}
 
 	return substr($s, 0, -2);
-}
+} /* }}} */
 
-function getReadableDurationArray($secs) {
+function getReadableDurationArray($secs) { /* {{{ */
 	$units = array(
 		getMLText("weeks")   => 7*24*3600,
 		getMLText("days")    =>   24*3600,
@@ -77,7 +77,7 @@ function getReadableDurationArray($secs) {
 	}
 
 	return $units;
-}
+} /* }}} */
 
 /**
  * Compare two version
