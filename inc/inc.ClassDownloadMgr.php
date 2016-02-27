@@ -107,7 +107,8 @@ class SeedDMS_Download_Mgr {
 					}
 					$tcol = $col;
 					$sheet->setCellValueByColumnAndRow($tcol++, $l, $reqName);
-					$sheet->setCellValueByColumnAndRow($tcol++, $l, ($r['status']==1 || $r['status']==-1) ? $r['date'] : "");
+					$sheet->setCellValueByColumnAndRow($tcol, $l, ($r['status']==1 || $r['status']==-1) ? PHPExcel_Shared_Date::PHPToExcel(makeTsFromLongDate($r['date'])) : "");
+					$sheet->getStyleByColumnAndRow($tcol++, $l)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX22);
 					$sheet->setCellValueByColumnAndRow($tcol++, $l, $r['comment']);
 					$sheet->setCellValueByColumnAndRow($tcol++, $l, getReviewStatusText($r["status"]));
 					$l++;
@@ -137,7 +138,8 @@ class SeedDMS_Download_Mgr {
 					}
 					$tcol = $col;
 					$sheet->setCellValueByColumnAndRow($tcol++, $k, $reqName);
-					$sheet->setCellValueByColumnAndRow($tcol++, $k, ($r['status']==1 || $r['status']==-1) ?$r['date'] : "");
+					$sheet->setCellValueByColumnAndRow($tcol, $k, ($r['status']==1 || $r['status']==-1) ?PHPExcel_Shared_Date::PHPToExcel(makeTsFromLongDate($r['date'])) : "");
+					$sheet->getStyleByColumnAndRow($tcol++, $k)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX22);
 					$sheet->setCellValueByColumnAndRow($tcol++, $k, $r['comment']);
 					$sheet->setCellValueByColumnAndRow($tcol++, $k, getApprovalStatusText($r["status"]));
 					$k++;
