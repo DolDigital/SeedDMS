@@ -28,7 +28,7 @@
 class SeedDMS_Acl {
 	/**
 	 * @var object $dms reference to dms object.
-	 * @access protected
+	 * @access public
 	 */
 	protected $dms;
 
@@ -72,7 +72,7 @@ class SeedDMS_AroAco { /* {{{ */
 	 * @var object $dms reference to dms object.
 	 * @access protected
 	 */
-	protected $dms;
+	public $dms;
 
 	/**
 	 * @var integer id of access request object
@@ -102,8 +102,12 @@ class SeedDMS_AroAco { /* {{{ */
 		$this->_alias = $alias;
 	} /* }}} */
 
-	public function ѕetDMS($dms) { /* {{{ */
+	public function setDMS($dms) { /* {{{ */
 		$this->dms = $dms;
+	} /* }}} */
+
+	public function getDMS() { /* {{{ */
+		return($this->dms);
 	} /* }}} */
 
 	public function getID() { /* {{{ */
@@ -200,9 +204,9 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 	 * @param object $dms object to access the underlying database
 	 * @return object instance of SeedDMS_Aco
 	 */
-	function __construct($dms, $id, $object, $alias) { /* {{{ */
-		parent::__construct($dms, $id, $object, $alias);
-	} /* }}} */
+//	function __construct($dms, $id, $object, $alias) { /* {{{ */
+//		parent::__construct($dms, $id, $object, $alias);
+//	} /* }}} */
 
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
@@ -241,7 +245,57 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 			$object = null;
 		}
 
-		$aco = new self($dms, $resArr["id"], $object, $resArr['alias']);
+		$aco = new SeedDMS_Aco($dms, $resArr["id"], $object, $resArr['alias']);
+		$aco->setDMS($dms);
 		return $aco;
+	} /* }}} */
+
+	public function getChildren() { /* {{{ */
+		$dms = $this->getDMS();
+		$db = $dms->getDB();
+		$queryStr = "SELECT * FROM tblAcos WHERE parent = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return null;
+		if (count($resArr) != 1)
+			return null;
+
+		$acos = array();
+		foreach($resArr as $row) {
+			$aco = new SeedDMS_Aco($this->dms, $row["id"], null, $row['alias']);
+			$aco->setDMS($dms);
+			$acos[] = $aco;
+		}
+		return $acos;
+	} /* }}} */
+
+	public function getPermission($aro) { /* {{{ */
+		$dms = $this->getDMS();
+		$db = $dms->getDB();
+		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) != 1)
+			return 0;
+		return $resArr[0]['read'];
+	} /* }}} */
+
+	public static function getRoot($dms) { /* {{{ */
+		$db = $dms->getDB();
+		$queryStr = "SELECT * FROM tblAcos WHERE parent IS NULL";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return null;
+		if (count($resArr) != 1)
+			return null;
+
+		$acos = array();
+		foreach($resArr as $row) {
+			$aco = new SeedDMS_Aco($dms, $row["id"], null, $row['alias']);
+			$aco->setDMS($dms);
+			$acos[] = $aco;
+		}
+		return $acos;
 	} /* }}} */
 } /* }}} */
