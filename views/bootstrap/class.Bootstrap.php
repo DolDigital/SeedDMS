@@ -141,8 +141,11 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
-		if(method_exists($this, 'js'))
-			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+		if(method_exists($this, 'js')) {
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'js';
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+		}
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
