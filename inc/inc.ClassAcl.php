@@ -25,12 +25,12 @@
  * @copyright  2016 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Acl {
+class SeedDMS_Acl { /* {{{ */
 	/**
 	 * @var object $dms reference to dms object.
 	 * @access public
 	 */
-	protected $dms;
+	public $_dms;
 
 	/**
 	 * Create a new instance of an acl
@@ -38,12 +38,12 @@ class SeedDMS_Acl {
 	 * @param object $dms object of dms
 	 * @return object instance of SeedDMS_Acl
 	 */
-	function __construct($dms) { /* {{{ */
-		$this->dmѕ = $dms;
+	public function __construct($dms) { /* {{{ */
+		$this->_dms = $dms;
 	} /* }}} */
 
 	public function check($aro, $aco) { /* {{{ */
-		$db = $dms->getDB();
+		$db = $this->_dms->getDB();
 		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
@@ -52,9 +52,56 @@ class SeedDMS_Acl {
 			return false;
 		$resArr = $resArr[0];
 		return($resArr['read'] == 1 ? true : false);
+	} /* }}} */
+
+	public function toggle($aro, $aco) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) != 1)
+			return false;
+		$resArr = $resArr[0];
+
+		$newperm = $resArr['read'] == 1 ? -1 : 1;
+		$queryStr = "UPDATE tblArosAcos SET `read`=".$newperm." WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
+		if (!$db->getResult($queryStr))
+			return false;
+		return true;
 
 	} /* }}} */
-}
+
+	public function add($aro, $aco, $perm=-1) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) == 1) {
+			$resArr = $resArr[0];
+
+			$newperm = $resArr['read'] == 1 ? -1 : 1;
+			$queryStr = "UPDATE tblArosAcos SET `read`=".$newperm." WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
+			if (!$db->getResult($queryStr))
+				return false;
+		} else {
+			$queryStr = "INSERT INTO tblArosAcos (`aro`, `aco`, `read`) VALUES (".$aro->getID().", ".$aco->getID().", ".$perm.")";
+			if (!$db->getResult($queryStr))
+				return false;
+		}
+		return true;
+
+	} /* }}} */
+
+	public function remove($aro, $aco) { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "DELETE FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
+		if (!$db->getResult($queryStr))
+			return false;
+		return true;
+	} /* }}} */
+} /* }}} */
 
 /**
  * Class to represent an access request/controll object
