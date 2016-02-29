@@ -30,30 +30,33 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_Acl extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$selrole = $this->params['selrole'];
 		header('Content-Type: application/javascript');
 ?>
 $('#acostree').tree({
+	autoOpen: 0,
+	saveState: 'acostree<?php echo $selrole->getID(); ?>',
 	openedIcon: '<i class="icon-minus-sign"></i>',
 	closedIcon: '<i class="icon-plus-sign"></i>',
 	onCreateLi: function(node, $li) {
 		switch(node.permission) {
 			case "-1":
-				$li.find('.jqtree-element').after('<span class="jqtree-remove-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-minus-sign"></i></span> <span class="jqtree-toggle-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-exchange"></i></span>');
+				$li.find('.jqtree-element span:last-child').after('<span style="position: absolute; right:10px;" class="jqtree-remove-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-minus-sign"></i></span> <span style="position: absolute; right:50px;" class="jqtree-toggle-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-exchange"></i></span>');
 				$li.attr('style', 'background-color:#FDD');
 				break;
 			case "1":
-				$li.find('.jqtree-element').after('<span class="jqtree-remove-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-minus-sign"></i></span> <span class="jqtree-toggle-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-exchange"></i></span>');
+				$li.find('.jqtree-element span:last-child').after('<span style="position: absolute; right:10px;" class="jqtree-remove-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-minus-sign"></i></span> <span style="position: absolute; right:50px;" class="jqtree-toggle-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-exchange"></i></span>');
 				$li.attr('style', 'background-color:#DFD');
 				break;
 			default:
-				$li.find('.jqtree-element').after('<span class="jqtree-add-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-plus-sign"></i></span>');
+				$li.find('.jqtree-element span:last-child').after('<span style="position: absolute; right:10px;" class="jqtree-add-permission" data-acoid="'+node.acoid+'" data-aroid="'+node.aroid+'"><i class="icon-plus-sign"></i></span>');
 		}
  }
 });
 $('#acostree').on('click', '.jqtree-toggle-permission', function(event) {
 	acoid = $(event.target).parent().attr('data-acoid');
 	aroid = $(event.target).parent().attr('data-aroid');
-	$.ajax('out.Acl.php?action=add_permission&acoid='+acoid+'&aroid='+aroid, {
+	$.ajax('../op/op.Acl.php?action=toggle_permission&acoid='+acoid+'&aroid='+aroid, {
 		dataType: 'json',
 		success: function(data, textStatus) {
 			if(data.type == 'success')  {
@@ -70,7 +73,7 @@ $('#acostree').on('click', '.jqtree-toggle-permission', function(event) {
 $('#acostree').on('click', '.jqtree-add-permission', function(event) {
 	acoid = $(event.target).parent().attr('data-acoid');
 	aroid = $(event.target).parent().attr('data-aroid');
-	$.ajax('out.Acl.php?action=add_permission&acoid='+acoid+'&aroid='+aroid, {
+	$.ajax('../op/op.Acl.php?action=add_permission&acoid='+acoid+'&aroid='+aroid, {
 		dataType: 'json',
 		success: function(data, textStatus) {
 			if(data.type == 'success')  {
@@ -87,7 +90,7 @@ $('#acostree').on('click', '.jqtree-add-permission', function(event) {
 $('#acostree').on('click', '.jqtree-remove-permission', function(event) {
 	acoid = $(event.currentTarget).attr('data-acoid');
 	aroid = $(event.currentTarget).attr('data-aroid');
-	$.ajax('out.Acl.php?action=remove_permission&acoid='+acoid+'&aroid='+aroid, {
+	$.ajax('../op/op.Acl.php?action=remove_permission&acoid='+acoid+'&aroid='+aroid, {
 		dataType: 'json',
 		success: function(data, textStatus) {
 			if(data.type == 'success')  {
@@ -103,7 +106,7 @@ $('#acostree').on('click', '.jqtree-remove-permission', function(event) {
 
 $(document).ready( function() {
 	$( "#selector" ).change(function() {
-//		window.location='out.Acl.php?action=show&roleid=' + $(this).val();
+		window.location='out.Acl.php?action=show&roleid=' + $(this).val();
 //		$('#acostree').tree({dataUrl: 'out.Acl.php?action=tree&roleid=' + $(this).val()});
 	});
 });
@@ -160,8 +163,8 @@ $(document).ready( function() {
 					$tree['permission'] = $perm;
 				$tree['id'] = $aco->getID();
 				$tree['label'] = $aco->getAlias();
-				$node['acoid'] = $aco->getID();
-				$node['aroid'] = $aro->getID();
+				$tree['acoid'] = $aco->getID();
+				$tree['aroid'] = $aro->getID();
 				$tree['is_folder'] = true;
 				$tree['children'] = $this->_tree($aro, $aco);
 				$result[] = $tree;
