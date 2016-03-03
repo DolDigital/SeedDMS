@@ -35,7 +35,7 @@ class SeedDMS_View_Acl extends SeedDMS_Bootstrap_Style {
 ?>
 $('#acostree').tree({
 	autoOpen: 0,
-	saveState: 'acostree<?php echo $selrole->getID(); ?>',
+	saveState: 'acostree<?php echo ($selrole ? $selrole->getID() : ''); ?>',
 	openedIcon: '<i class="icon-minus-sign"></i>',
 	closedIcon: '<i class="icon-plus-sign"></i>',
 	onCreateLi: function(node, $li) {
@@ -104,6 +104,22 @@ $('#acostree').on('click', '.jqtree-remove-permission', function(event) {
 	});
 });
 
+$('#add_aro').on('click', function(event) {
+	roleid = $(event.currentTarget).attr('data-roleid');
+	$.ajax('../op/op.Acl.php?action=add_aro&roleid='+roleid, {
+		dataType: 'json',
+		success: function(data, textStatus) {
+			if(data.type == 'success')  {
+				timeout = 1500;
+				window.location='out.Acl.php?action=show&roleid=' + roleid;
+			} else {
+				timeout = 3500;
+			}
+			noty({text: data.msg, type: data.type, dismissQueue: true, layout: 'topRight', theme: 'defaultTheme', timeout: timeout});
+		},
+	});
+});
+
 $(document).ready( function() {
 	$( "#selector" ).change(function() {
 		window.location='out.Acl.php?action=show&roleid=' + $(this).val();
@@ -130,7 +146,7 @@ $(document).ready( function() {
 				$node['id'] = $child->getID();
 				$node['label'] = $child->getAlias();
 				$node['acoid'] = $child->getID();
-				$node['aroid'] = $aro->getID();
+				$node['aroid'] = $aro ? $aro->getID() : 0;
 
 				$nchildren = $this->_tree($aro, $child);
 				if($nchildren) {
@@ -164,7 +180,7 @@ $(document).ready( function() {
 				$tree['id'] = $aco->getID();
 				$tree['label'] = $aco->getAlias();
 				$tree['acoid'] = $aco->getID();
-				$tree['aroid'] = $aro->getID();
+				$tree['aroid'] = $aro ? $aro->getID() : 0;
 				$tree['is_folder'] = true;
 				$tree['children'] = $this->_tree($aro, $aco);
 				$result[] = $tree;
@@ -187,7 +203,7 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <?php
-		$this->contentHeading("Role");
+		$this->contentHeading(getMLText("role"));
 ?>
 <select class="chzn-select" id="selector">
 	<option value="-1"><?php echo getMLText("choose_role")?>
@@ -201,9 +217,18 @@ $(document).ready( function() {
 
 <div class="span8">
 <?php
-		$this->contentHeading("Acl");
+		$this->contentHeading(getMLText("access_control"));
+
+		$aro = SeedDMS_Aro::getInstance($selrole, $dms);
+		if(!$aro) {
+			$this->warningMsg(getMLText("missing_request_object"));
+			echo "<button id=\"add_aro\" class=\"btn btn-primary\" data-roleid=\"".$selrole->getID()."\">".getMLText('add')."</button>";
+		} else {
 ?>
 	<div id="acostree" data-url="out.Acl.php?action=tree&roleid=<?= ($selrole ? $selrole->getID() : 0) ?>">Berechtigungen werden geladen ...</div>
+<?php
+		}
+?>
 </div>
 </div>
 <?php
