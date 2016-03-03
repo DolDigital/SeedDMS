@@ -579,7 +579,7 @@ $(document).ready(function () {
 					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
-			if($this->params['accessobject']->maySetExpires()) {
+			if($this->params['accessobject']->maySetExpires($document)) {
 				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
 			//	$menuitems[''] = array('link'=>"", 'label'=>'');
 			}
