@@ -44,21 +44,27 @@ class SeedDMS_Acl { /* {{{ */
 
 	public function check($aro, $aco) { /* {{{ */
 		$db = $this->_dms->getDB();
-		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
-		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
-			return false;
-		if (count($resArr) != 1)
-			return false;
-		$resArr = $resArr[0];
-		return($resArr['read'] == 1 ? true : false);
+
+		while($aco) {
+			$acoid = $aco->getID();
+			$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$acoid;
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && $resArr === false)
+				return false;
+			if (count($resArr) == 1)
+				return($resArr[0]['read'] == 1 ? true : false);
+
+			$aco = $aco->getParent();
+		}
+
+		return false;
 	} /* }}} */
 
 	public function toggle($aro, $aco) { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr) != 1)
 			return false;
@@ -76,7 +82,7 @@ class SeedDMS_Acl { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$aco->getID();
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr) == 1) {
 			$resArr = $resArr[0];
@@ -127,6 +133,11 @@ class SeedDMS_AroAco { /* {{{ */
 	protected $_id;
 
 	/**
+	 * @var integer id of parent of access request object
+	 */
+	protected $_parent;
+
+	/**
 	 * @var string alias of access request object
 	 */
 	protected $_alias;
@@ -142,9 +153,10 @@ class SeedDMS_AroAco { /* {{{ */
 	 * @param object $dms object of dms
 	 * @return object instance of SeedDMS_Aco
 	 */
-	function __construct($dms, $id, $object, $alias) { /* {{{ */
+	function __construct($dms, $id, $parent, $object, $alias) { /* {{{ */
 		$this->dmѕ = $dms;
 		$this->_id = $id;
+		$this->_parent = $parent;
 		$this->_object = $object;
 		$this->_alias = $alias;
 	} /* }}} */
@@ -189,8 +201,8 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 	 * @param object $dms object to access the underlying database
 	 * @return object instance of SeedDMS_Aro
 	 */
-	function __construct($dms, $id, $object, $alias) { /* {{{ */
-		parent::__construct($dms, $id, $object, $alias);
+	function __construct($dms, $id, $parent, $object, $alias) { /* {{{ */
+		parent::__construct($dms, $id, $parent, $object, $alias);
 	} /* }}} */
 
 	public static function getInstance($id, $dms) { /* {{{ */
@@ -198,7 +210,7 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 		if(is_int($id)) {
 			$queryStr = "SELECT * FROM tblAros WHERE id = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && $resArr == false)
+			if (is_bool($resArr) && $resArr === false)
 				return null;
 			if (count($resArr) != 1)
 				return null;
@@ -208,11 +220,16 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 				$model = 'Role';
 				$queryStr = "SELECT * FROM tblAros WHERE model=".$db->qstr($model)." AND foreignid=".$id->getID();
 				$resArr = $db->getResultArray($queryStr);
-				if (is_bool($resArr) && $resArr == false)
+				if (is_bool($resArr) && $resArr === false)
 					return null;
-				if (count($resArr) != 1)
-					return null;
-				$parentid = $resArr[0]['parent'];
+				if (count($resArr) == 0) {
+					$queryStr = "INSERT INTO tblAros (parent, model, foreignid) VALUES (0, ".$db->qstr($model).", ".$id->getID().")";
+					if (!$db->getResult($queryStr))
+						return null;
+					$id = $db->getInsertID();
+					$queryStr = "SELECT * FROM tblAros WHERE id = " . $id;
+					$resArr = $db->getResultArray($queryStr);
+				}
 				$resArr = $resArr[0];
 			} else {
 				return null;
@@ -226,7 +243,7 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 			$object = null;
 		}
 
-		$aro = new self($dms, $resArr["id"], $object, $resArr['alias']);
+		$aro = new self($dms, $resArr["id"], $resArr['parent'], $object, $resArr['alias']);
 		return $aro;
 	} /* }}} */
 
@@ -260,24 +277,31 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 		if(is_int($id)) {
 			$queryStr = "SELECT * FROM tblAcos WHERE id = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && $resArr == false)
+			if (is_bool($resArr) && $resArr === false)
 				return null;
-			if (count($resArr) != 1)
+			if (count($resArr) == 0) {
 				return null;
+			}
 			$resArr = $resArr[0];
 		} elseif(is_string($id)) {
 			$tmp = explode('/', $id);
 			$parentid = 0;
 			foreach($tmp as $part) {
 				$queryStr = "SELECT * FROM tblAcos WHERE alias = " . $db->qstr($part);
-				if($parentid)
-					$queryStr .= " AND parent=".$parentid;
+//				if($parentid)
+				$queryStr .= " AND parent=".$parentid;
 				$resArr = $db->getResultArray($queryStr);
-				if (is_bool($resArr) && $resArr == false)
+				if (is_bool($resArr) && $resArr === false)
 					return null;
-				if (count($resArr) != 1)
-					return null;
-				$parentid = $resArr[0]['parent'];
+				if (count($resArr) == 0) {
+					$queryStr = "INSERT INTO tblAcos (parent, alias) VALUES (".$parentid.",".$db->qstr($part).")";
+					if (!$db->getResult($queryStr))
+						return null;
+					$id = $db->getInsertID();
+					$queryStr = "SELECT * FROM tblAcos WHERE id = " . $id;
+					$resArr = $db->getResultArray($queryStr);
+				}
+				$parentid = (int) $resArr[0]['id'];
 			}
 			$resArr = $resArr[0];
 		}
@@ -292,7 +316,7 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 			$object = null;
 		}
 
-		$aco = new SeedDMS_Aco($dms, $resArr["id"], $object, $resArr['alias']);
+		$aco = new SeedDMS_Aco($dms, $resArr["id"], $resArr['parent'], $object, $resArr['alias']);
 		$aco->setDMS($dms);
 		return $aco;
 	} /* }}} */
@@ -300,16 +324,16 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 	public function getChildren() { /* {{{ */
 		$dms = $this->getDMS();
 		$db = $dms->getDB();
-		$queryStr = "SELECT * FROM tblAcos WHERE parent = " . $this->_id;
+		$queryStr = "SELECT * FROM tblAcos WHERE parent = ".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return null;
-		if (count($resArr) != 1)
+		if (count($resArr) == 0)
 			return null;
 
 		$acos = array();
 		foreach($resArr as $row) {
-			$aco = new SeedDMS_Aco($this->dms, $row["id"], null, $row['alias']);
+			$aco = new SeedDMS_Aco($dms, $row["id"], $row['parent'], null, $row['alias']);
 			$aco->setDMS($dms);
 			$acos[] = $aco;
 		}
@@ -317,11 +341,13 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 	} /* }}} */
 
 	public function getPermission($aro) { /* {{{ */
+		if(!$aro)
+			return 0;
 		$dms = $this->getDMS();
 		$db = $dms->getDB();
 		$queryStr = "SELECT * FROM tblArosAcos WHERE aro=".$aro->getID()." AND aco=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr) != 1)
 			return 0;
@@ -330,19 +356,35 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 
 	public static function getRoot($dms) { /* {{{ */
 		$db = $dms->getDB();
-		$queryStr = "SELECT * FROM tblAcos WHERE parent IS NULL";
+		$queryStr = "SELECT * FROM tblAcos WHERE parent = 0";
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return null;
 		if (count($resArr) != 1)
 			return null;
 
 		$acos = array();
 		foreach($resArr as $row) {
-			$aco = new SeedDMS_Aco($dms, $row["id"], null, $row['alias']);
+			$aco = new SeedDMS_Aco($dms, $row["id"], $row['parent'], null, $row['alias']);
 			$aco->setDMS($dms);
 			$acos[] = $aco;
 		}
 		return $acos;
+	} /* }}} */
+
+	public function getParent() { /* {{{ */
+		$dms = $this->getDMS();
+		$db = $dms->getDB();
+		$queryStr = "SELECT * FROM tblAcos WHERE id = ".$this->_parent;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr === false)
+			return null;
+		if (count($resArr) != 1)
+			return null;
+
+		$row = $resArr[0];
+		$aco = new SeedDMS_Aco($dms, $row["id"], $row['parent'], null, $row['alias']);
+		$aco->setDMS($dms);
+		return $aco;
 	} /* }}} */
 } /* }}} */
