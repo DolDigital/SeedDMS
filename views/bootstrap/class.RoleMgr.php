@@ -88,7 +88,6 @@ $(document).ready( function() {
 						echo "<br /><small>".htmlspecialchars($currUser->getComment())."</small>";
 					echo "</td>";
 					echo "<td>";
-						echo htmlspecialchars($this->html_link('RemoveUser', array('userid'=>$currUser->getID()), array(), '<i class="icon-remove"></i>'));
 					if($this->check_access(array('UsrMgr', 'RemoveUser'))) {
 						echo "<div class=\"list-action\">";
 						echo $this->html_link('UsrMgr', array('userid'=>$currUser->getID()), array(), '<i class="icon-edit"></i>', false);
