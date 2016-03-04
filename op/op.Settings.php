@@ -166,6 +166,7 @@ if ($action == "saveSettings")
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
   $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");
   $settings->_overrideMimeType = getBoolValue("overrideMimeType");
+  $settings->_advancedAcl = getBoolValue("advancedAcl");
 
   // SETTINGS - ADVANCED - NOTIFICATION
   $settings->_enableOwnerNotification = getBoolValue("enableOwnerNotification");

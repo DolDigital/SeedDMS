@@ -139,6 +139,8 @@ class Settings { /* {{{ */
 	var $_enableDuplicateDocNames = true;
 	// override mimetype set by browser when uploading a file
 	var $_overrideMimeType = false;
+	// advanced access control lists
+	var $_advancedAcl = false;
 	// enable/disable notification when added as a reviewer/approver
 	var $_enableNotificationAppRev = true;
 	// enable/disable notification of users/group who need to take action for
@@ -541,6 +543,7 @@ class Settings { /* {{{ */
 		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
 		$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
 		$this->_overrideMimeType = Settings::boolval($tab["overrideMimeType"]);
+		$this->_advancedAcl = Settings::boolval($tab["advancedAcl"]);
 
 		// XML Path: /configuration/advanced/notification
 		$node = $xml->xpath('/configuration/advanced/notification');
@@ -843,6 +846,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
     $this->setXMLAttributValue($node, "enableDuplicateDocNames", $this->_enableDuplicateDocNames);
     $this->setXMLAttributValue($node, "overrideMimeType", $this->_overrideMimeType);
+    $this->setXMLAttributValue($node, "advancedAcl", $this->_advancedAcl);
 
     // XML Path: /configuration/advanced/notification
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'notification');
