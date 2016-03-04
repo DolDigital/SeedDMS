@@ -24,15 +24,16 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET) && !$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enablefullsearch'=>$settings->_enableFullSearch, 'logfileenable'=>$settings->_logFileEnable));
 if($view) {
-	$view->show();
-	exit;
+	$view->setParam('enablefullsearch', $settings->_enableFullSearch);
+	$view->setParam('logfileenable', $settings->_logFileEnable);
+	$view->setParam('accessobject', $accessop);
+	$view($_GET);
 }
-
-?>
