@@ -27,19 +27,25 @@ class SeedDMS_AccessOperation {
 	 * @var object $dms reference to dms
 	 * @access protected
 	 */
-	private $dms;
+	protected $dms;
 
 	/**
 	 * @var object $user user requesting the access
 	 * @access protected
 	 */
-	private $user;
+	protected $user;
 
 	/**
 	 * @var object $settings SeedDMS Settings
 	 * @access protected
 	 */
-	private $settings;
+	protected $settings;
+
+	/**
+	 * @var object $aro access request object for caching
+	 * @access protected
+	 */
+	private $_aro;
 
 	function __construct($dms, $user, $settings) { /* {{{ */
 		$this->dms = $dms;
@@ -307,21 +313,36 @@ class SeedDMS_AccessOperation {
 	/**
 	 * Check for access permission
 	 *
-	 * @param object $dms Instanz of dms
-	 * @param object $role role of currently logged in user
-	 * @param string $scope 'Views', 'Controllers'
-	 * @param string $script Scriptname without 'out.' and '.php'
+	 * If the parameter $view is an array then each element is considered the
+	 * name of a view and true will be returned if one is accesible.
+	 *
+	 * @param mixed $view Instanz of view, name of view or array of view names
 	 * @param string $get query parameters
 	 * @return boolean true if access is allowed otherwise false
 	 */
 	function check_view_access($view, $get=array()) { /* {{{ */
+		if(!$this->settings->_advancedAcl)
+			return false;
+		if(is_string($view)) {
+			$scripts = array($view);
+		} elseif(is_array($view)) {
+			$scripts = $view;
+		} elseif(is_subclass_of($view, 'SeedDMS_View_Common')) {
+			$scripts = array($view->getParam('class'));
+		} else {
+			return false;
+		}
 		$scope = 'Views';
-		$script = $view->getParam('class');
 		$action = (isset($get['action']) && $get['action']) ? $get['action'] : 'show';
 		$acl = new SeedDMS_Acl($this->dms);
-		$aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
-		$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
-		return $acl->check($aro, $aco);
+		if(!$this->_aro)
+			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
+		foreach($scripts as $script) {
+			$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
+			if($acl->check($this->_aro, $aco))
+				return true;
+		}
+		return false;
 	} /* }}} */
 }
 ?>
