@@ -29,6 +29,10 @@ include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
+//$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+//if (!$accessop->check_controller_access($controller, $_POST)) {
+//	UI::exitError(getMLText("document_title", array("documentname" => "")),getMLText("access_denied"));
+//}
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('removedocument')) {
