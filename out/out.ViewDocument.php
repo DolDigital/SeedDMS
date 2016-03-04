@@ -36,8 +36,7 @@ require_once("SeedDMS/Preview.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1]);
-if(!$view) {
-}
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -47,9 +46,6 @@ $document = $dms->getDocument($_GET["documentid"]);
 if (!is_object($document)) {
 	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
-
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 $folder = $document->getFolder();
 
