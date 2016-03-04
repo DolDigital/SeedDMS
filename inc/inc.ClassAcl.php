@@ -317,7 +317,7 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 	public function getChildren() { /* {{{ */
 		$dms = $this->getDMS();
 		$db = $dms->getDB();
-		$queryStr = "SELECT * FROM tblAcos WHERE parent = ".$this->_id;
+		$queryStr = "SELECT * FROM tblAcos WHERE parent = ".$this->_id." ORDER BY alias";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr === false)
 			return null;
@@ -349,11 +349,9 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 
 	public static function getRoot($dms) { /* {{{ */
 		$db = $dms->getDB();
-		$queryStr = "SELECT * FROM tblAcos WHERE parent = 0";
+		$queryStr = "SELECT * FROM tblAcos WHERE parent = 0 ORDER BY alias";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr === false)
-			return null;
-		if (count($resArr) != 1)
 			return null;
 
 		$acos = array();
