@@ -206,19 +206,20 @@ $(document).ready( function() {
 		if($selrole) {
 			$aro = SeedDMS_Aro::getInstance($selrole, $dms);
 
-			$acos = SeedDMS_Aco::getRoot($dms);
-			foreach($acos as $aco) {
-				if(false === ($perm = $aco->getPermission($aro)))
-					$tree['permission'] = 0;
-				else
-					$tree['permission'] = $perm;
-				$tree['id'] = $aco->getID();
-				$tree['label'] = $aco->getAlias();
-				$tree['acoid'] = $aco->getID();
-				$tree['aroid'] = $aro ? $aro->getID() : 0;
-				$tree['is_folder'] = true;
-				$tree['children'] = $this->_tree($aro, $aco);
-				$result[] = $tree;
+			if($acos = SeedDMS_Aco::getRoot($dms)) {
+				foreach($acos as $aco) {
+					if(false === ($perm = $aco->getPermission($aro)))
+						$tree['permission'] = 0;
+					else
+						$tree['permission'] = $perm;
+					$tree['id'] = $aco->getID();
+					$tree['label'] = $aco->getAlias();
+					$tree['acoid'] = $aco->getID();
+					$tree['aroid'] = $aro ? $aro->getID() : 0;
+					$tree['is_folder'] = true;
+					$tree['children'] = $this->_tree($aro, $aco);
+					$result[] = $tree;
+				}
 			}
 		}
 		echo json_encode($result);
