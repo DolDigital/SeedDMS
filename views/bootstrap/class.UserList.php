@@ -50,7 +50,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 ?>
 
 	<table class="table table-condensed">
-	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th><?php printMLText('discspace'); ?></th><th><?php printMLText('authentication'); ?></th><th></th></tr>
+		<thead><tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th><?php printMLText('role'); ?></th><th><?php printMLText('discspace'); ?></th><th><?php printMLText('authentication'); ?></th><th></th></tr></thead><tbody>
 <?php
 		foreach ($allUsers as $currUser) {
 			echo "<tr>";
@@ -72,6 +72,9 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 						print ", ";
 				}
 			}
+			echo "</td>";
+			echo "<td>";
+			echo htmlspecialchars($currUser->getRole()->getName());
 			echo "</td>";
 			echo "<td>";
 			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace());
@@ -109,7 +112,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "</tr>";
 		}
-		echo "</table>";
+		echo "</tbody></table>";
 
 		$this->contentContainerEnd();
 		$this->htmlEndPage();
