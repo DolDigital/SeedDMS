@@ -395,7 +395,7 @@ $(document).ready(function () {
 	//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
 	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
 			if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
-			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+			if ($this->check_access('AdminTools')) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 			if($this->params['enablehelp']) {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
@@ -664,70 +664,103 @@ $(document).ready(function () {
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
+		if($this->check_access(array('UsrMgr', 'RoleMgr', 'GroupMgr', 'UserList', 'Acl'))) {
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('UsrMgr')))
 		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('RoleMgr')))
 		echo "      <li><a href=\"../out/out.RoleMgr.php\">".getMLText("role_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('GroupMgr')))
 		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('UserList')))
 		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Acl')))
+		echo "      <li><a href=\"../out/out.Acl.php\">".getMLText("access_control")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
+		if($this->check_access(array('DefaultKeywords', 'Categories', 'AttributeMgr', 'WorkflowMgr', 'WorkflowStatesMgr', 'WorkflowActionsMgr'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('DefaultKeywords')))
 		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Categories')))
 		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('AttributeMgr')))
 		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
 		if($this->params['workflowmode'] == 'advanced') {
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowStatesMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowActionsMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
 		}
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
 		if($this->params['enablefullsearch']) {
+			if($this->check_access(array('Indexer', 'CreateIndex', 'IndexInfo'))) {
 			echo "   <ul class=\"nav\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Indexer')))
 			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('CreateIndex')))
 			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('IndexInfo')))
 			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
 			echo "     </ul>\n";
 			echo "    </li>\n";
 			echo "   </ul>\n";
+			}
 		}
 
+		if($this->check_access(array('BackupTools', 'LogManagement'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('BackupTools')))
 		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
 		if ($this->params['logfileenable'])
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('LogManagement')))
 			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
+		if($this->check_access(array('Statistic', 'Charts', 'Timeline', 'ObjectCheck', 'ExtensionMgr', 'Info'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Statistic')))
 		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Charts')))
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Timeline')))
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('ObjectCheck')))
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('ExtensionMgr')))
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Info')))
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
 		echo "<ul class=\"nav\">\n";
 		echo "</ul>\n";
@@ -1367,7 +1400,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		
 		$this->htmlEndPage();
 		
-		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
+//		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
 
 		if($noexit)
 			return;
