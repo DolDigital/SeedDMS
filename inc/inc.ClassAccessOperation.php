@@ -311,7 +311,7 @@ class SeedDMS_AccessOperation {
 	} /* }}} */
 
 	/**
-	 * Check for access permission
+	 * Check for access permission on view
 	 *
 	 * If the parameter $view is an array then each element is considered the
 	 * name of a view and true will be returned if one is accesible.
@@ -334,6 +334,41 @@ class SeedDMS_AccessOperation {
 		}
 		$scope = 'Views';
 		$action = (isset($get['action']) && $get['action']) ? $get['action'] : 'show';
+		$acl = new SeedDMS_Acl($this->dms);
+		if(!$this->_aro)
+			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
+		foreach($scripts as $script) {
+			$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
+			if($acl->check($this->_aro, $aco))
+				return true;
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check for access permission on controller
+	 *
+	 * If the parameter $controller is an array then each element is considered the
+	 * name of a controller and true will be returned if one is accesible.
+	 *
+	 * @param mixed $controller Instanz of controller, name of controller or array of controller names
+	 * @param string $get query parameters
+	 * @return boolean true if access is allowed otherwise false
+	 */
+	function check_controller_access($controller, $get=array()) { /* {{{ */
+		if(!$this->settings->_advancedAcl)
+			return false;
+		if(is_string($controller)) {
+			$scripts = array($controller);
+		} elseif(is_array($controller)) {
+			$scripts = $controller;
+		} elseif(is_subclass_of($controller, 'SeedDMS_Controller_Common')) {
+			$scripts = array($controller->getParam('class'));
+		} else {
+			return false;
+		}
+		$scope = 'Controllers';
+		$action = (isset($get['action']) && $get['action']) ? $get['action'] : 'run';
 		$acl = new SeedDMS_Acl($this->dms);
 		if(!$this->_aro)
 			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
