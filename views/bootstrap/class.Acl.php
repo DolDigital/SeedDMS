@@ -129,6 +129,41 @@ $(document).ready( function() {
 <?php
 	} /* }}} */
 
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selrole = $this->params['selrole'];
+		if($selrole) {
+			$this->contentHeading(getMLText("role_info"));
+
+			$users = $selrole->getUsers();
+			if($users) {
+				echo "<table class=\"table table-condensed\"><thead><tr><th>".getMLText('name')."</th><th></th></tr></thead><tbody>";
+				foreach($users as $currUser) {
+					echo "<tr>";
+					echo "<td>";
+					echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")";
+					echo "<br /><a href=\"mailto:".$currUser->getEmail()."\">".htmlspecialchars($currUser->getEmail())."</a>";
+					if($currUser->getComment())
+						echo "<br /><small>".htmlspecialchars($currUser->getComment())."</small>";
+					echo "</td>";
+					echo "<td>";
+					if($this->check_access(array('UsrMgr', 'RemoveUser'))) {
+						echo "<div class=\"list-action\">";
+						if($this->check_access('UsrMgr'))
+							echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
+						if($this->check_access('RemoveUser'))
+							echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
+						echo "</div>";
+					}
+					echo "</td>";
+					echo "</tr>";
+				}
+				echo "</tbody></table>";
+			}
+		}
+	} /* }}} */
+
 	/**
 	 * Show tree of acos
 	 *
@@ -194,17 +229,23 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$roles = $this->params['allroles'];
 		$selrole = $this->params['selrole'];
+		$settings = $this->params['settings'];
+		$accessop = $this->params['accessobject'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+		if(!$settings->_advancedAcl) {
+			$this->warningMsg(getMLText("access_control_is_off"));
+		}
 ?>
 <div class="row-fluid">
 <div class="span4">
 <?php
 		$this->contentHeading(getMLText("role"));
 ?>
+<div class="well">
 <select class="chzn-select" id="selector">
 	<option value="-1"><?php echo getMLText("choose_role")?>
 <?php
@@ -213,6 +254,10 @@ $(document).ready( function() {
 		}
 ?>
 </select>
+</div>
+<?php if($accessop->check_view_access($this, array('action'=>'info')) || $user->isAdmin()) { ?>
+<div class="ajax" data-view="Acl" data-action="info" <?php echo ($selrole ? "data-query=\"roleid=".$selrole->getID()."\"" : "") ?>></div>
+<?php } ?>
 </div>
 
 <div class="span8">
