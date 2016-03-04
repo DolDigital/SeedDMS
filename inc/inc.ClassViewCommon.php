@@ -167,5 +167,54 @@ class SeedDMS_View_Common {
 		return false;
 	} /* }}} */
 
+	/**
+	 * Check if the access on the view with given name or the current view itself
+	 * may be accessed.
+	 *
+	 * @param string|array $name name of view or list of view names
+	 * @return boolean true if access is allowed otherwise false
+	 */
+	protected function check_access($name='') { /* {{{ */
+		if(!$name)
+			$name = $this;
+		return ((isset($this->params['user']) && $this->params['user']->isAdmin()) || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access($name)));
+	} /* }}} */
+
+	/**
+	 * Create an url to a view
+	 *
+	 * @param string $name name of view
+	 * @param array $urlparams list of url parameters
+	 * @return string $url
+	 */
+	protected function html_url($view='', $urlparams) { /* {{{ */
+		$url = "../out/out.".$view.".php";
+		if($urlparams)
+			$url .= "?".http_build_query($urlparams);
+		return $url;
+	} /* }}} */
+
+	/**
+	 * Create a html link to a view
+	 *
+	 * First checks if the view may be accessed by the user
+	 *
+	 * @param string $name name of view
+	 * @param array $urlparams list of url parameters
+	 * @param array $linkparams list of link attributes (e.g. class, target)
+	 * @param string $link the link text itself
+	 * @param boolean $hsc set to false if htmlspecialchars() shall not be called
+	 * @return string link
+	 */
+	protected function html_link($view='', $urlparams=array(), $linkparams=array(), $link, $hsc=true) { /* {{{ */
+		if(!$this->check_access($view))
+			return '';
+		$url = $this->html_url($view, $urlparams);
+		$tag = "<a href=\"".$url."\"";
+		if($linkparams)
+			array_walk($linkparams, function($v, $k) {$tag .= " ".$k."=\"".$v."\"";});
+		$tag .= ">".($hsc ? htmlspecialchars($link) : $link)."</a>";
+		return $tag;
+	} /* }}} */
 }
 ?>
