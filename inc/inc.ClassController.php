@@ -54,6 +54,7 @@ class Controller {
 			/* Set some configuration parameters */
 			$controller->setParam('dms', $dms);
 			$controller->setParam('user', $user);
+			$controller->setParam('class', $class);
 			$controller->setParam('postVars', $_POST);
 			$controller->setParam('getVars', $_GET);
 			$controller->setParam('requestVars', $_REQUEST);
