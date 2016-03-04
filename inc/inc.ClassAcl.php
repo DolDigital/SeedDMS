@@ -125,7 +125,7 @@ class SeedDMS_AroAco { /* {{{ */
 	 * @var object $dms reference to dms object.
 	 * @access protected
 	 */
-	public $dms;
+	public $_dms;
 
 	/**
 	 * @var integer id of access request object
@@ -154,7 +154,7 @@ class SeedDMS_AroAco { /* {{{ */
 	 * @return object instance of SeedDMS_Aco
 	 */
 	function __construct($dms, $id, $parent, $object, $alias) { /* {{{ */
-		$this->dmѕ = $dms;
+		$this->_dmѕ = $dms;
 		$this->_id = $id;
 		$this->_parent = $parent;
 		$this->_object = $object;
@@ -162,11 +162,11 @@ class SeedDMS_AroAco { /* {{{ */
 	} /* }}} */
 
 	public function setDMS($dms) { /* {{{ */
-		$this->dms = $dms;
+		$this->_dms = $dms;
 	} /* }}} */
 
 	public function getDMS() { /* {{{ */
-		return($this->dms);
+		return($this->_dms);
 	} /* }}} */
 
 	public function getID() { /* {{{ */
@@ -201,10 +201,6 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 	 * @param object $dms object to access the underlying database
 	 * @return object instance of SeedDMS_Aro
 	 */
-	function __construct($dms, $id, $parent, $object, $alias) { /* {{{ */
-		parent::__construct($dms, $id, $parent, $object, $alias);
-	} /* }}} */
-
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 		if(is_int($id)) {
@@ -243,7 +239,8 @@ class SeedDMS_Aro extends SeedDMS_AroAco { /* {{{ */
 			$object = null;
 		}
 
-		$aro = new self($dms, $resArr["id"], $resArr['parent'], $object, $resArr['alias']);
+		$aro = new SeedDMS_Aro($dms, $resArr["id"], $resArr['parent'], $object, $resArr['alias']);
+		$aro->setDMS($dms);
 		return $aro;
 	} /* }}} */
 
@@ -268,10 +265,6 @@ class SeedDMS_Aco extends SeedDMS_AroAco{ /* {{{ */
 	 * @param object $dms object to access the underlying database
 	 * @return object instance of SeedDMS_Aco
 	 */
-//	function __construct($dms, $id, $object, $alias) { /* {{{ */
-//		parent::__construct($dms, $id, $object, $alias);
-//	} /* }}} */
-
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 		if(is_int($id)) {
