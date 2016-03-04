@@ -151,11 +151,10 @@ class SeedDMS_Core_Group {
 
 			$this->_users = array();
 
-			$classnamerole = $dms->getClassname('role');
-
+			$classnamerole = $this->_dms->getClassname('role');
 			$classname = $this->_dms->getClassname('user');
 			foreach ($resArr as $row) {
-				$role = $classnamerole::getInstance($row['role'], $dms);
+				$role = $classnamerole::getInstance($row['role'], $this->_dms);
 				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $role, $row['hidden']);
 				$user->setDMS($this->_dms);
 				array_push($this->_users, $user);
