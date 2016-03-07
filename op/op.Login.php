@@ -31,9 +31,8 @@ include("../inc/inc.ClassController.php");
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) {
-
-	global $theme;
-	$view = UI::factory($theme, 'ErrorDlg');
+	global $dms, $theme;
+	$view = UI::factory($theme, 'ErrorDlg', array('dms'=>$dms));
 	$view->exitError($heading, $message, true);
 	return;
 }
