@@ -329,7 +329,7 @@ $(document).ready(function () {
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
 			if ($i +1 < count($path)) {
-				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\">".
+				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
 					htmlspecialchars($path[$i]->getName())."</a>";
 			}
 			else {
@@ -1308,7 +1308,7 @@ $(function() {
     onCreateLi: function(node, $li) {
         // Add 'icon' span before title
 				if(node.is_folder)
-					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt table-row-folder" rel="folder_' + node.id + '" _ondragover="allowDrop(event)" _ondrop="onDrop(event)"></i> ').attr('rel', 'folder_' + node.id).attr('_ondragover', 'allowDrop(event)').attr('_ondrop', 'onDrop(event)');
+					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt table-row-folder" rel="folder_' + node.id + '"></i> ').attr('rel', 'folder_' + node.id).attr('formtoken', '<?php echo createFormKey('movefolder'); ?>');
 				else
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
@@ -1351,7 +1351,7 @@ $(function() {
 				if($folder = $dms->getFolder($folderid)) {
 					$comment = $folder->getComment();
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\">";
+					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
 					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 					if($comment) {
@@ -1378,7 +1378,7 @@ $(function() {
 						$version = $latestContent->getVersion();
 						$status = $latestContent->getStatus();
 						
-						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\">";
+						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
 
 						if (file_exists($dms->contentDir . $latestContent->getPath())) {
 							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
@@ -1626,7 +1626,7 @@ $(function() {
 		$docID = $document->getID();
 
 		if(!$skipcont)
-			$content .= "<tr id=\"table-row-document-".$docID."\" class=\"table-row-document\" rel=\"document_".$docID."\" draggable=\"true\">";
+			$content .= "<tr id=\"table-row-document-".$docID."\" class=\"table-row-document\" rel=\"document_".$docID."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 
 		if($latestContent = $document->getLatestContent()) {
 			$previewer->createPreview($latestContent);
@@ -1658,7 +1658,7 @@ $(function() {
 			} else
 				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 			
-			$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+			$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1726,7 +1726,7 @@ $(function() {
 		$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 
 		$content = '';
-		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\">";
+		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
 		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
 		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
