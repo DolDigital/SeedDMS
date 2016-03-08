@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2194), dgrutsch (21)
+//    Translators: Admin (2198), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -238,6 +238,8 @@ URL: [url]',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Kommentar zur aktuellen Version',
 'confirm_create_fulltext_index' => 'Ja, Ich möchte den Volltextindex neu erzeugen!.',
+'confirm_move_document' => 'Dokument wirklich verschieben?',
+'confirm_move_folder' => 'Ordner wirklich verschieben?',
 'confirm_pwd' => 'Passwort-Bestätigung',
 'confirm_rm_backup' => 'Möchten Sie wirklich das Backup "[arkname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_document' => 'Wollen Sie das Dokument \'[documentname]\' wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
@@ -1260,6 +1262,8 @@ URL: [url]',
 'splash_invalid_folder_id' => 'Ungültige Ordner-ID',
 'splash_invalid_searchterm' => 'Ungültiger Suchbegriff',
 'splash_moved_clipboard' => 'Inhalt der Zwischenablage in aktuellen Ordner verschoben',
+'splash_move_document' => 'Dokument verschoben',
+'splash_move_folder' => 'Ordner verschoben',
 'splash_removed_from_clipboard' => 'Aus der Zwischenablage entfernt',
 'splash_rm_attribute' => 'Attribut gelöscht',
 'splash_rm_document' => 'Dokument gelöscht',

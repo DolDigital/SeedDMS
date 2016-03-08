@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1328), dgrutsch (7), netixw (14)
+//    Translators: Admin (1332), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -238,6 +238,8 @@ URL: [url]',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Version comment',
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
+'confirm_move_document' => 'Please confirm moving the document.',
+'confirm_move_folder' => 'Please confirm moving the folder.',
 'confirm_pwd' => 'Confirm Password',
 'confirm_rm_backup' => 'Do you really want to remove the file "[arkname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_document' => 'Do you really want to remove the document \'[documentname]\'?<br>Be careful: This action cannot be undone.',
@@ -1260,6 +1262,8 @@ URL: [url]',
 'splash_invalid_folder_id' => 'Invalid folder ID',
 'splash_invalid_searchterm' => 'Invalid search term',
 'splash_moved_clipboard' => 'Clipboard moved into current folder',
+'splash_move_document' => 'Document moved',
+'splash_move_folder' => 'Folder moved',
 'splash_removed_from_clipboard' => 'Removed from clipboard',
 'splash_rm_attribute' => 'Attribute removed',
 'splash_rm_document' => 'Document removed',

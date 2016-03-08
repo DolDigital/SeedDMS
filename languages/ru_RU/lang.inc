@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1287)
+//    Translators: Admin (1288)
 
 $text = array(
 'accept' => 'Принять',
@@ -226,6 +226,8 @@ URL: [url]',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Комментарий версии',
 'confirm_create_fulltext_index' => 'Да, пересоздать полнотекстовый индекс!',
+'confirm_move_document' => '',
+'confirm_move_folder' => '',
 'confirm_pwd' => 'Подтвердите пароль',
 'confirm_rm_backup' => 'Удалить файл «[arkname]»?<br>Действие <b>необратимо</b>',
 'confirm_rm_document' => 'Удалить документ «[documentname]»?<br>Действие <b>необратимо</b>',
@@ -1219,6 +1221,8 @@ URL: [url]',
 'splash_invalid_folder_id' => 'Неверный идентификатор каталога',
 'splash_invalid_searchterm' => 'Неверный поисковый запрос',
 'splash_moved_clipboard' => 'Буфер обмена перенесён в текущий каталог',
+'splash_move_document' => '',
+'splash_move_folder' => '',
 'splash_removed_from_clipboard' => 'Удалён из буфера обмена',
 'splash_rm_attribute' => 'Атрибут удалён',
 'splash_rm_document' => 'Документ удалён',
@@ -1294,7 +1298,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Версия [version]: [status]',
 'to' => 'До',
 'toggle_manager' => 'Изменить как менеджера',
 'to_before_from' => '',

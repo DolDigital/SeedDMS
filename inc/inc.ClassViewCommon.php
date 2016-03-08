@@ -216,5 +216,13 @@ class SeedDMS_View_Common {
 		$tag .= ">".($hsc ? htmlspecialchars($link) : $link)."</a>";
 		return $tag;
 	} /* }}} */
+
+	function jsTranslations($keys) {
+		echo "var trans = {\n";
+		foreach($keys as $key) {
+			echo "	'".$key."': '".str_replace("'", "\\\'", getMLText($key))."',\n";
+		}
+		echo "};\n";
+	}
 }
 ?>

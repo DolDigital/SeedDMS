@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (905), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (906), flaviove (627), lfcristofoli (352)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -233,6 +233,8 @@ URL: [url]',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Comentário para versão atual',
 'confirm_create_fulltext_index' => 'Sim, eu gostaria de recriar o índice de texto completo!',
+'confirm_move_document' => '',
+'confirm_move_folder' => '',
 'confirm_pwd' => 'Confirme Senha',
 'confirm_rm_backup' => 'Do you really want to remove the file "[arkname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_document' => 'Deseja realmente remover o documento \'[documentname]\'?<br>Por favor, tenha cuidado porque esta ação não poderá ser desfeita.',
@@ -1226,6 +1228,8 @@ URL: [url]',
 'splash_invalid_folder_id' => 'ID de pasta inválida',
 'splash_invalid_searchterm' => 'Termo de pesquisa inválido',
 'splash_moved_clipboard' => 'Área de transferência movida para a pasta corrente',
+'splash_move_document' => '',
+'splash_move_folder' => '',
 'splash_removed_from_clipboard' => 'Remover da área de transferência',
 'splash_rm_attribute' => 'Atributo removido',
 'splash_rm_document' => 'Documento removido',
@@ -1288,7 +1292,7 @@ URL: [url]',
 'thursday' => 'Thursday',
 'thursday_abbr' => 'Th',
 'timeline' => 'Linha do Tempo',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Novo anexo',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',
