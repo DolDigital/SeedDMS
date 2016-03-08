@@ -396,37 +396,6 @@ function allowDrop(ev) {
 	return false;
 }
 
-function onDragStartDocument(ev) {
-	attr_rel = $(ev.target).attr('rel');
-	ev.dataTransfer.setData("id", attr_rel.split("_")[1]);
-	ev.dataTransfer.setData("type","document");
-}
-
-function onDragStartFolder(ev) {
-	attr_rel = $(ev.target).attr('rel');
-	ev.dataTransfer.setData("id", attr_rel.split("_")[1]);
-	ev.dataTransfer.setData("type","folder");
-}
-
-function onDrop(ev) {
-	ev.preventDefault();
-	ev.stopPropagation();
-	attr_rel = $(ev.currentTarget).attr('rel');
-	target_type = attr_rel.split("_")[0];
-	target_id = attr_rel.split("_")[1];
-	source_type = ev.dataTransfer.getData("type");
-	source_id = ev.dataTransfer.getData("id");
-	if(source_type == 'document') {
-		url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
-		document.location = url;
-	} else if(source_type == 'folder') {
-		url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
-		document.location = url;
-	}
-//	console.log(attr_rel);
-//	console.log(ev.dataTransfer.getData("type") + ev.dataTransfer.getData("id"));
-}
-
 function onAddClipboard(ev) {
 	ev.preventDefault();
 	source_type = ev.originalEvent.dataTransfer.getData("type");
@@ -624,7 +593,10 @@ $(document).ready(function() {
 	obj.on('dragenter', function (e) {
 		e.stopPropagation();
 		e.preventDefault();
-		$(this).css('border', '2px dotted #0B85A1');
+		$(this).css('border', '2px dashed #0B85A1');
+	});
+	obj.on('dragleave', function (e) {
+		$(this).css('border', '0px solid white');
 	});
 	obj.on('dragover', function (e) {
 		e.stopPropagation();
@@ -639,28 +611,108 @@ $(document).ready(function() {
 		SeedDMSUpload.handleFileUpload(files,obj);
 	});
 
-	var clipboard = $("#main-clipboard");
+	var folder = $(".table-row-folder");
+	folder.on('dragenter', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(e.currentTarget).css('border', '2px dashed #0B85A1');
+	});
+	folder.on('dragleave', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(e.currentTarget).css('border', '0px solid white');
+	});
+	folder.on('dragover', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	folder.on('drop', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		attr_rel = $(e.currentTarget).attr('rel');
+		target_type = attr_rel.split("_")[0];
+		target_id = attr_rel.split("_")[1];
+		source_type = e.originalEvent.dataTransfer.getData("type");
+		source_id = e.originalEvent.dataTransfer.getData("id");
+		if(source_type == 'document') {
+			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
+			document.location = url;
+		} else if(source_type == 'folder') {
+			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
+			document.location = url;
+		}
+	});
+	folder.on('dragstart', function (e) {
+		attr_rel = $(e.target).attr('rel');
+		if(typeof attr_rel == 'undefined')
+			return;
+		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+		e.originalEvent.dataTransfer.setData("type","folder");
+	});
+
+	var doc = $(".table-row-document");
+	doc.on('dragstart', function (e) {
+		attr_rel = $(e.target).attr('rel');
+		if(typeof attr_rel == 'undefined')
+			return;
+		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+		e.originalEvent.dataTransfer.setData("type","document");
+	});
+
+	var clipboard = $("#main-clipboard div.alert");
 	clipboard.on('dragenter', function (e) {
 		e.stopPropagation();
 		e.preventDefault();
-		$(this).css('border', '2px dotted #0B85A1');
+		$(this).css('border', '2px dashed #0B85A1');
+	});
+	clipboard.on('dragleave', function (e) {
+		$(this).css('border', '0px solid white');
+	});
+	clipboard.on('dragover', function (e) {
+		e.preventDefault();
 	});
 	clipboard.on('drop', function (e) {
 		$(this).css('border', '0px dotted #0B85A1');
 		onAddClipboard(e);
 	});
 
-	$(document).on('dragenter', function (e) {
+	$("#jqtree").on('dragenter', function (e) {
+		attr_rel = $(e.srcElement).attr('rel');
+		if(typeof attr_rel == 'undefined')
+			return;
+		$(e.srcElement).parent().css('border', '2px dashed #0B85A1');
 		e.stopPropagation();
 		e.preventDefault();
 	});
-	$(document).on('dragover', function (e) {
+	$("#jqtree").on('dragleave', function (e) {
+		attr_rel = $(e.srcElement).attr('rel');
+		if(typeof attr_rel == 'undefined')
+			return;
+		$(e.srcElement).parent().css('border', '0px solid white');
 		e.stopPropagation();
 		e.preventDefault();
 	});
-	$(document).on('drop', function (e) {
+	$("#jqtree").on('dragover', function (e) {
 		e.stopPropagation();
 		e.preventDefault();
+	});
+	$("#jqtree").on('drop', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		attr_rel = $(e.srcElement).attr('rel');
+		if(typeof attr_rel == 'undefined')
+			return;
+		target_type = attr_rel.split("_")[0];
+		target_id = attr_rel.split("_")[1];
+		source_type = e.originalEvent.dataTransfer.getData("type");
+		source_id = e.originalEvent.dataTransfer.getData("id");
+		if(source_type == 'document') {
+			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
+			document.location = url;
+		} else if(source_type == 'folder') {
+			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
+			document.location = url;
+		}
 	});
 
 	$('div.splash').each(function(index) {
