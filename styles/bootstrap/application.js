@@ -1,4 +1,3 @@
-
 $(document).ready( function() {
 	/* close popovers when clicking somewhere except in the popover or the
 	 * remove icon
@@ -625,17 +624,93 @@ $(document).ready(function() {
 	$(document).on('drop', '.table-row-folder', function (e) {
 		e.preventDefault();
 		e.stopPropagation();
+		$(e.currentTarget).css('border', '0px solid white');
 		attr_rel = $(e.currentTarget).attr('rel');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
 		source_type = e.originalEvent.dataTransfer.getData("type");
 		source_id = e.originalEvent.dataTransfer.getData("id");
+		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
+			bootbox.dialog(trans.confirm_move_document, [{
+				"label" : "<i class='icon-remove'></i> "+trans.move_document,
+				"class" : "btn-danger",
+				"callback": function() {
+					$.get('../op/op.Ajax.php',
+						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
+						function(data) {
+							if(data.success) {
+								noty({
+									text: data.message,
+									type: 'success',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 1500,
+								});
+							} else {
+								noty({
+									text: data.message,
+									type: 'error',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 3500,
+								});
+							}
+						},
+						'json'
+					);
+				}
+			}, {
+				"label" : trans.cancel,
+				"class" : "btn-cancel",
+				"callback": function() {
+				}
+			}]);
+
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
-			document.location = url;
+//			document.location = url;
 		} else if(source_type == 'folder') {
+			bootbox.dialog(trans.confirm_move_folder, [{
+				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
+				"class" : "btn-danger",
+				"callback": function() {
+					$.get('../op/op.Ajax.php',
+						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
+						function(data) {
+							if(data.success) {
+								noty({
+									text: data.message,
+									type: 'success',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 1500,
+								});
+							} else {
+								noty({
+									text: data.message,
+									type: 'error',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 3500,
+								});
+							}
+						},
+						'json'
+					);
+				}
+			}, {
+				"label" : trans.cancel,
+				"class" : "btn-cancel",
+				"callback": function() {
+				}
+			}]);
+
 			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
-			document.location = url;
+//			document.location = url;
 		}
 	});
 	$(document).on('dragstart', '.table-row-folder', function (e) {
@@ -644,6 +719,7 @@ $(document).ready(function() {
 			return;
 		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
 		e.originalEvent.dataTransfer.setData("type","folder");
+		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	$(document).on('dragstart', '.table-row-document', function (e) {
@@ -652,6 +728,7 @@ $(document).ready(function() {
 			return;
 		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
 		e.originalEvent.dataTransfer.setData("type","document");
+		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	/* Dropping item on alert below clipboard */
@@ -697,16 +774,92 @@ $(document).ready(function() {
 		attr_rel = $(e.target).attr('rel');
 		if(typeof attr_rel == 'undefined')
 			return;
+		$(e.target).parent().css('border', '0px solid white');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
 		source_type = e.originalEvent.dataTransfer.getData("type");
 		source_id = e.originalEvent.dataTransfer.getData("id");
+		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
+			bootbox.dialog(trans.confirm_move_document, [{
+				"label" : "<i class='icon-remove'></i> "+trans.move_document,
+				"class" : "btn-danger",
+				"callback": function() {
+					$.get('../op/op.Ajax.php',
+						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
+						function(data) {
+							if(data.success) {
+								noty({
+									text: data.message,
+									type: 'success',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 1500,
+								});
+							} else {
+								noty({
+									text: data.message,
+									type: 'error',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 3500,
+								});
+							}
+						},
+						'json'
+					);
+				}
+			}, {
+				"label" : trans.cancel,
+				"class" : "btn-cancel",
+				"callback": function() {
+				}
+			}]);
+
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
-			document.location = url;
+//			document.location = url;
 		} else if(source_type == 'folder') {
+			bootbox.dialog(trans.confirm_move_folder, [{
+				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
+				"class" : "btn-danger",
+				"callback": function() {
+					$.get('../op/op.Ajax.php',
+						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
+						function(data) {
+							if(data.success) {
+								noty({
+									text: data.message,
+									type: 'success',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 1500,
+								});
+							} else {
+								noty({
+									text: data.message,
+									type: 'error',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 3500,
+								});
+							}
+						},
+						'json'
+					);
+				}
+			}, {
+				"label" : trans.cancel,
+				"class" : "btn-cancel",
+				"callback": function() {
+				}
+			}]);
+
 			url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
-			document.location = url;
+//			document.location = url;
 		}
 	});
 
