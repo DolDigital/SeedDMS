@@ -167,5 +167,12 @@ class SeedDMS_View_Common {
 		return false;
 	} /* }}} */
 
+	function jsTranslations($keys) {
+		echo "var trans = {\n";
+		foreach($keys as $key) {
+			echo "	'".$key."': '".str_replace("'", "\\\'", getMLText($key))."',\n";
+		}
+		echo "};\n";
+	}
 }
 ?>
