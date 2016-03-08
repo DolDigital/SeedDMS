@@ -256,7 +256,7 @@ switch($command) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mdocument->setFolder($folder)) {
 									header('Content-Type: application/json');
-									echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_document'), 'data'=>''));
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
