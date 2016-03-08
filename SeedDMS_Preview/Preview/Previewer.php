@@ -98,6 +98,9 @@ class SeedDMS_Preview_Previewer {
 	 * @return string file name of preview image
 	 */
 	protected function getFileName($object, $width) { /* }}} */
+		if(!$object)
+			return false;
+
 		$document = $object->getDocument();
 		$dir = $this->previewDir.'/'.$document->getDir();
 		switch(get_class($object)) {
@@ -173,6 +176,9 @@ class SeedDMS_Preview_Previewer {
 	} /* }}} */
 
 	public function createPreview($object, $width=0) { /* {{{ */
+		if(!$object)
+			return false;
+
 		if($width == 0)
 			$width = $this->width;
 		else
@@ -248,6 +254,9 @@ class SeedDMS_Preview_Previewer {
 	} /* }}} */
 
 	public function hasPreview($object, $width=0) { /* {{{ */
+		if(!$object)
+			return false;
+
 		if($width == 0)
 			$width = $this->width;
 		else
