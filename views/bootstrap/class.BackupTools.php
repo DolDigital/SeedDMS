@@ -174,7 +174,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 
 		// files deletion //////////////////////////////////////////////////////////////
-
+		/*
 		$this->contentHeading(getMLText("files_deletion"));
 		$this->contentContainerStart();
 		print "<p>".getMLText("files_deletion_warning")."</p>\n";
@@ -185,6 +185,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		print "</form>\n";
 
 		$this->contentContainerEnd();
+		*/
 
 		$this->htmlEndPage();
 	} /* }}} */
