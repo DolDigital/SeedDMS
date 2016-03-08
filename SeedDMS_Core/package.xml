@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-01-21</date>
+ <date>2016-03-08</date>
  <time>07:12:53</time>
  <version>
-  <release>4.3.24</release>
-  <api>4.3.24</api>
+  <release>4.3.25</release>
+  <api>4.3.25</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,15 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- make sure boolean attribute is saved as 0/1
-- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
-- add SeedDMS_Core_User::getNotifications()
-- add SeedDMS_Core_Group::getNotifications()
-- SeedDMS_Core_DMS::getNotificationsByGroup() and
-SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
-- SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
-- add SeedDMS_Core_Group::getWorkflowStatus()
-- SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
+- rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -948,6 +940,30 @@ by a group or user right
    <notes>
 - new method SeedDMS_Core_DMS::createDump()
 - minor improvements int SeedDMS_Core_Document::getReadAccessList()
+   </notes>
+  </release>
+  <release>
+   <date>2016-01-21</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.24</release>
+    <api>4.3.24</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- make sure boolean attribute is saved as 0/1
+- add SeedDMS_Core_User::[g|s]etMandatoryWorkflows()
+- add SeedDMS_Core_User::getNotifications()
+- add SeedDMS_Core_Group::getNotifications()
+- SeedDMS_Core_DMS::getNotificationsByGroup() and
+SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
+- SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
+- add SeedDMS_Core_Group::getWorkflowStatus()
+- SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
    </notes>
   </release>
  </changelog>
