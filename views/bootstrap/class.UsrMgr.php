@@ -165,6 +165,7 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
+		$accessop = $this->params['accessobject'];
 ?>
 	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
 <?php
@@ -496,6 +497,7 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
+		$accessop = $this->params['accessobject'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -518,7 +520,9 @@ $(document).ready( function() {
 ?>
 </select>
 </div>
+<?php if($accessop->check_view_access($this, array('action'=>'info')) || $user->isAdmin()) { ?>
 <div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
+<?php } ?>
 </div>
 
 <div class="span8">

@@ -15,6 +15,7 @@
 require_once("inc.Utils.php");
 require_once("inc.ClassEmailNotify.php");
 require_once("inc.ClassSession.php");
+require_once("inc.ClassAccessOperation.php");
 
 $refer = $_SERVER["REQUEST_URI"];
 if (!strncmp("/op", $refer, 3)) {

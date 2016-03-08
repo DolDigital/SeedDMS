@@ -55,8 +55,8 @@ if(!$settings->_enableVersionModification) {
 }
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
-if (!$accessop->maySetReviewersApprovers()) {
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->maySetReviewersApprovers($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_assign_invalid_state"));
 }
 

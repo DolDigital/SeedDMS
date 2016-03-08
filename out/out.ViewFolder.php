@@ -26,7 +26,6 @@ include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.ClassAcl.php");
 
 /**
  * Include class to preview documents
@@ -35,9 +34,7 @@ require_once("SeedDMS/Preview.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-
-//$aro = SeedDMS_Aro::getInstance($user->getRole(), $dms);
-//$aco = SeedDMS_Aco::getInstance('Views/'.$tmp[1], $dms);
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
 	$folderid = $settings->_rootFolderID;
@@ -74,6 +71,7 @@ if($view) {
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewconverters', $settings->_converters['preview']);
 	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

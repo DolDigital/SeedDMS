@@ -629,6 +629,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_overrideMimeType");?>:</td>
         <td><input name="overrideMimeType" type="checkbox" <?php if ($settings->_overrideMimeType) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_advancedAcl_desc");?>">
+        <td><?php printMLText("settings_advancedAcl");?>:</td>
+        <td><input name="advancedAcl" type="checkbox" <?php if ($settings->_advancedAcl) echo "checked" ?> /></td>
+      </tr>
 
       <!--
         -- SETTINGS - ADVANCED - NOTIFICATION

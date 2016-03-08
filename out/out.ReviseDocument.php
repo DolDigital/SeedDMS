@@ -60,7 +60,7 @@ if ($latestContent->getVersion()!=$version) {
 }
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 // verify if document maybe revised
 if (!$document->mayRevise()){

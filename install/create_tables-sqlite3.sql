@@ -532,7 +532,7 @@ CREATE TABLE `tblSessions` (
   `theme` varchar(30) NOT NULL default '',
   `language` varchar(30) NOT NULL default '',
   `clipboard` text default '',
-	`su` INTEGER DEFAULT NULL,
+  `su` INTEGER DEFAULT NULL,
   `splashmsg` text default ''
 ) ;
 
@@ -723,7 +723,7 @@ CREATE TABLE tblTransmittals (
 
 CREATE TABLE `tblTransmittalItems` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-	`transmittal` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblTransmittals` (`id`) ON DELETE CASCADE,
+  `transmittal` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblTransmittals` (`id`) ON DELETE CASCADE,
   `document` INTEGER default NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` INTEGER unsigned NOT NULL default '0',
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
@@ -738,8 +738,10 @@ CREATE TABLE `tblTransmittalItems` (
 
 CREATE TABLE `tblAros` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `parent` INTEGER,
   `model` TEXT NOT NULL,
-	`foreignid` INTEGER NOT NULL DEFAULT '0'
+  `foreignid` INTEGER NOT NULL DEFAULT '0',
+  `alias` TEXT
 ) ;
 
 
@@ -751,8 +753,10 @@ CREATE TABLE `tblAros` (
 
 CREATE TABLE `tblAcos` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `parent` INTEGER,
   `model` TEXT NOT NULL,
-	`foreignid` INTEGER NOT NULL DEFAULT '0'
+  `foreignid` INTEGER NOT NULL DEFAULT '0',
+  `alias` TEXT
 ) ;
 
 -- --------------------------------------------------------
@@ -763,8 +767,12 @@ CREATE TABLE `tblAcos` (
 
 CREATE TABLE `tblArosAcos` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-	`aro` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAros` (`id`) ON DELETE CASCADE,
-	`aco` int(11) NOT NULL DEFAULT '0' REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  `aro` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblAros` (`id`) ON DELETE CASCADE,
+  `aco` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  `create` INTEGER NOT NULL DEFAULT '-1',
+  `read` INTEGER NOT NULL DEFAULT '-1',
+  `update` INTEGER NOT NULL DEFAULT '-1',
+  `delete` INTEGER NOT NULL DEFAULT '-1',
   UNIQUE (aco, aro)
 ) ;
 

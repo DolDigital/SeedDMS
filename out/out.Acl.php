@@ -1,7 +1,5 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005  Markus Westphal
-//    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -24,6 +22,7 @@ include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassAcl.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
@@ -33,16 +32,21 @@ if (!$accessop->check_view_access($view, $_GET) && !$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$categories = $dms->getDocumentCategories();
+$roles = $dms->getAllRoles();
+if (is_bool($roles)) {
+	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
+}
 
-if(isset($_GET['categoryid']) && $_GET['categoryid']) {
-	$selcat = $dms->getDocumentCategory($_GET['categoryid']);
+if(isset($_GET['roleid']) && $_GET['roleid']) {
+	$selrole = $dms->getRole($_GET['roleid']);
 } else {
-	$selcat = null;
+	$selrole = null;
 }
 
 if($view) {
-	$view->setParam('categories', $categories);
-	$view->setParam('selcategory', $selcat);
+	$view->setParam('settings', $settings);
+	$view->setParam('selrole', $selrole);
+	$view->setParam('allroles', $roles);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 }

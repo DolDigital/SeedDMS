@@ -27,6 +27,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
@@ -43,10 +46,12 @@ if ($folder->getAccessMode($user) < M_READ) {
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 $allGroups = $dms->getAllGroups();
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'allusers'=>$allUsers, 'allgroups'=>$allGroups, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('allgroups', $allGroups);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view($_GET);
 	exit;
 }
 

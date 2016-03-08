@@ -141,8 +141,11 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
-		if(method_exists($this, 'js'))
-			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+		if(method_exists($this, 'js')) {
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'js';
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+		}
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
@@ -392,7 +395,7 @@ $(document).ready(function () {
 	//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
 	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
 			if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
-			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+			if ($this->check_access('AdminTools')) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 			if($this->params['enablehelp']) {
 			$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 			echo "    <li><a href=\"../out/out.Help.php?context=".$tmp[1]."\">".getMLText("help")."</a></li>\n";
@@ -429,7 +432,7 @@ $(document).ready(function () {
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
 			if ($i +1 < count($path)) {
-				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">".
+				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
 					htmlspecialchars($path[$i]->getName())."</a>";
 			}
 			else {
@@ -576,7 +579,7 @@ $(document).ready(function () {
 					$menuitems['move_document'] = array('link'=>"../out/out.MoveDocument".$docid, 'label'=>'move_document');
 				}
 			}
-			if($this->params['accessobject']->maySetExpires()) {
+			if($this->params['accessobject']->maySetExpires($document)) {
 				$menuitems['expires'] = array('link'=>"../out/out.SetExpires".$docid, 'label'=>'expires');
 			//	$menuitems[''] = array('link'=>"", 'label'=>'');
 			}
@@ -661,70 +664,103 @@ $(document).ready(function () {
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
+		if($this->check_access(array('UsrMgr', 'RoleMgr', 'GroupMgr', 'UserList', 'Acl'))) {
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('UsrMgr')))
 		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('RoleMgr')))
 		echo "      <li><a href=\"../out/out.RoleMgr.php\">".getMLText("role_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('GroupMgr')))
 		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('UserList')))
 		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Acl')))
+		echo "      <li><a href=\"../out/out.Acl.php\">".getMLText("access_control")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
+		if($this->check_access(array('DefaultKeywords', 'Categories', 'AttributeMgr', 'WorkflowMgr', 'WorkflowStatesMgr', 'WorkflowActionsMgr'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('DefaultKeywords')))
 		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Categories')))
 		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('AttributeMgr')))
 		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
 		if($this->params['workflowmode'] == 'advanced') {
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowStatesMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('WorkflowActionsMgr')))
 			echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
 		}
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
 		if($this->params['enablefullsearch']) {
+			if($this->check_access(array('Indexer', 'CreateIndex', 'IndexInfo'))) {
 			echo "   <ul class=\"nav\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Indexer')))
 			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('CreateIndex')))
 			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('IndexInfo')))
 			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
 			echo "     </ul>\n";
 			echo "    </li>\n";
 			echo "   </ul>\n";
+			}
 		}
 
+		if($this->check_access(array('BackupTools', 'LogManagement'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('BackupTools')))
 		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
 		if ($this->params['logfileenable'])
+			if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('LogManagement')))
 			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
+		if($this->check_access(array('Statistic', 'Charts', 'Timeline', 'ObjectCheck', 'ExtensionMgr', 'Info'))) {
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Statistic')))
 		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Charts')))
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Timeline')))
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('ObjectCheck')))
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('ExtensionMgr')))
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access('Info')))
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
+		}
 
 		echo "<ul class=\"nav\">\n";
 		echo "</ul>\n";
@@ -1364,7 +1400,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		
 		$this->htmlEndPage();
 		
-		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
+//		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
 
 		if($noexit)
 			return;
@@ -1498,7 +1534,7 @@ $(function() {
     onCreateLi: function(node, $li) {
         // Add 'icon' span before title
 				if(node.is_folder)
-					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt" rel="folder_' + node.id + '" ondragover="allowDrop(event)" ondrop="onDrop(event)"></i> ').attr('rel', 'folder_' + node.id).attr('ondragover', 'allowDrop(event)').attr('ondrop', 'onDrop(event)');
+					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt table-row-folder" rel="folder_' + node.id + '"></i> ').attr('rel', 'folder_' + node.id).attr('formtoken', '<?php echo createFormKey('movefolder'); ?>');
 				else
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
@@ -1555,9 +1591,9 @@ $(function() {
 				if($folder = $dms->getFolder($folderid)) {
 					$comment = $folder->getComment();
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					$content .= "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
-					$content .= "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-					$content .= "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
+					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 					if($comment) {
 						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 					}
@@ -1581,10 +1617,10 @@ $(function() {
 						$version = $latestContent->getVersion();
 						$status = $latestContent->getStatus();
 						
-						$content .= "<tr>";
+						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
 
 						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
 							if($previewer->hasPreview($latestContent)) {
 								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -1594,7 +1630,7 @@ $(function() {
 						} else
 							$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 						
-						$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
+						$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
 						if($comment) {
 							$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 						}
@@ -1628,7 +1664,7 @@ $(function() {
 	 */
 	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
-		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
+		echo "<div id=\"main-clipboard\">\n";
 		echo $this->mainClipboard($clipboard, $previewer);
 		echo "</div>\n";
 	} /* }}} */
@@ -1829,7 +1865,7 @@ $(function() {
 		$docID = $document->getID();
 
 		if(!$skipcont)
-			$content .= "<tr id=\"table-row-document-".$docID."\">";
+			$content .= "<tr id=\"table-row-document-".$docID."\" class=\"table-row-document\" rel=\"document_".$docID."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 
 		if($version)
 			$latestContent = $document->getContentByVersion($version);
@@ -1857,7 +1893,7 @@ $(function() {
 
 			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
@@ -1869,7 +1905,7 @@ $(function() {
 			$content .= "</td>";
 
 			$content .= "<td>";	
-			$content .= "<a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1938,10 +1974,10 @@ $(function() {
 		$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 
 		$content = '';
-		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-		$content .= "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-		$content .= "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
 		$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 		if($comment) {
 			$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";

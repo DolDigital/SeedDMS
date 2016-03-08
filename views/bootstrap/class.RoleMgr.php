@@ -77,11 +77,28 @@ $(document).ready( function() {
 		if($selrole) {
 			$this->contentHeading(getMLText("role_info"));
 			$users = $selrole->getUsers();
-			echo "<table class=\"table table-condensed\">\n";
-			foreach($users as $cuser) {
-				echo "<tr><td>".htmlspecialchars($cuser->getFullName())."</td><td></td></tr>\n";
+			if($users) {
+				echo "<table class=\"table table-condensed\"><thead><tr><th>".getMLText('name')."</th><th></th></tr></thead><tbody>\n";
+				foreach($users as $currUser) {
+					echo "<tr>";
+					echo "<td>";
+					echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")";
+					echo "<br /><a href=\"mailto:".$currUser->getEmail()."\">".htmlspecialchars($currUser->getEmail())."</a>";
+					if($currUser->getComment())
+						echo "<br /><small>".htmlspecialchars($currUser->getComment())."</small>";
+					echo "</td>";
+					echo "<td>";
+					if($this->check_access(array('UsrMgr', 'RemoveUser'))) {
+						echo "<div class=\"list-action\">";
+						echo $this->html_link('UsrMgr', array('userid'=>$currUser->getID()), array(), '<i class="icon-edit"></i>', false);
+						echo $this->html_link('RemoveUser', array('userid'=>$currUser->getID()), array(), '<i class="icon-remove"></i>', false);
+						echo "</div>";
+					}
+					echo "</td>";
+					echo "</tr>";
+				}
+				echo "</tbody></table>";
 			}
-			echo "</table>";
 		}
 	} /* }}} */
 

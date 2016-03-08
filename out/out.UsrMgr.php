@@ -26,7 +26,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET) && !$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -51,10 +54,19 @@ if(isset($_GET['userid']) && $_GET['userid']) {
 	$seluser = null;
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'allroles'=>$roles, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
+	$view->setParam('seluser', $seluser);
+	$view->setParam('allusers', $users);
+	$view->setParam('allgroups', $groups);
+	$view->setParam('allroles', $roles);
+	$view->setParam('passwordstrength', $settings->_passwordStrength);
+	$view->setParam('passwordexpiration', $settings->_passwordExpiration);
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('enableuserimage', $settings->_enableUserImage);
+	$view->setParam('undeluserids', explode(',', $settings->_undelUserIds));
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('quota', $settings->_quota);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 }
-
-?>
