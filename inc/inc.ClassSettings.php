@@ -103,6 +103,8 @@ class Settings { /* {{{ */
 	var $_updateNotifyTime = 86400;
 	// files with one of the following endings can be viewed online
 	var $_viewOnlineFileTypes = array();
+	// files with one of the following endings can be edited online
+	var $_editOnlineFileTypes = array();
 	// enable/disable converting of files
 	var $_enableConverting = false;
 	// default style
@@ -311,6 +313,26 @@ class Settings { /* {{{ */
   } /* }}} */
 
 	/**
+	 * set $_editOnlineFileTypes
+	 *
+	 * @param string $stringValue string value
+	 *
+	 */
+  function setEditOnlineFileTypesFromString($stringValue) { /* {{{ */
+    $this->_editOnlineFileTypes = explode(";", $stringValue);
+  } /* }}} */
+
+	/**
+	 * get $_editOnlineFileTypes in a string value
+	 *
+	 * @return string value
+	 *
+	 */
+  function getEditOnlineFileTypesToString() { /* {{{ */
+    return implode(";", $this->_editOnlineFileTypes);
+  } /* }}} */
+
+	/**
 	 * Load config file
 	 *
 	 * @param string $configFilePath config file path
@@ -345,6 +367,7 @@ class Settings { /* {{{ */
 		$tab = $node[0]->attributes();
 		$this->_strictFormCheck = Settings::boolVal($tab["strictFormCheck"]);
 		$this->setViewOnlineFileTypesFromString(strval($tab["viewOnlineFileTypes"]));
+		$this->setEditOnlineFileTypesFromString(strval($tab["editOnlineFileTypes"]));
 		$this->_enableConverting = Settings::boolVal($tab["enableConverting"]);
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
@@ -623,6 +646,7 @@ class Settings { /* {{{ */
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');
     $this->setXMLAttributValue($node, "strictFormCheck", $this->_strictFormCheck);
     $this->setXMLAttributValue($node, "viewOnlineFileTypes", $this->getViewOnlineFileTypesToString());
+    $this->setXMLAttributValue($node, "editOnlineFileTypes", $this->getEditOnlineFileTypesToString());
     $this->setXMLAttributValue($node, "enableConverting", $this->_enableConverting);
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);

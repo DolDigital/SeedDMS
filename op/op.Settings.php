@@ -63,6 +63,7 @@ if ($action == "saveSettings")
   // SETTINGS - SITE - EDITION
   $settings->_strictFormCheck = getBoolValue("strictFormCheck");
   $settings->setViewOnlineFileTypesFromString($_POST["viewOnlineFileTypes"]);
+  $settings->setEditOnlineFileTypesFromString($_POST["editOnlineFileTypes"]);
   $settings->_enableConverting = getBoolValue("enableConverting");
   $settings->_enableEmail =getBoolValue("enableEmail");
   $settings->_enableUsersView = getBoolValue("enableUsersView");
