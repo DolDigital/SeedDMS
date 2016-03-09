@@ -53,6 +53,27 @@ class SeedDMS_AccessOperation {
 	} /* }}} */
 
 	/**
+	 * Check if editing of version is allowed
+	 *
+	 * This check can only be done for documents. Removal of versions is
+	 * only allowed if this is turned on in the settings and there are
+	 * at least 2 versions avaiable. Everybody with write access on the
+	 * document may delete versions. The admin may even delete a version
+	 * even if is disallowed in the settings.
+	 */
+	function mayEditVersion() { /* {{{ */
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			$version = $this->obj->getLatestContent();
+			if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($version->getFileType()), $this->settings->_editOnlineFileTypes))
+				return false;
+			if ($this->obj->getAccessMode($this->user) == M_ALL || $this->user->isAdmin()) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
 	 * Check if removal of version is allowed
 	 *
 	 * This check can only be done for documents. Removal of versions is
