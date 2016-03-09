@@ -96,7 +96,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<tr>\n";
 				$this->needsrepair = true;
 				$lc = $document->getLatestContent();
-				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".$this->getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
 				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 				$folder = $document->getFolder();
 				$tmppath = $folder->getPath();
@@ -124,7 +124,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 					$filepath = $dms->contentDir . $version->getPath();
 					if(!file_exists($filepath)) {
 					print "<tr>\n";
-					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
+					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".$this->getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 					$folder = $document->getFolder();
 					$tmppath = $folder->getPath();
