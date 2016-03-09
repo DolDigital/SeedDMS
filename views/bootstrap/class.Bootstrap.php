@@ -1295,11 +1295,11 @@ $('#acceptkeywords').click(function(ev) {
 		}
 	} /* }}} */
 
-	function printDropFolderChooserHtml($formName, $dropfolderfile="") { /* {{{ */
+	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
+		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
@@ -1318,7 +1318,7 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printDropFolderChooserJs($formName) { /* {{{ */
+	function printDropFolderChooserJs($formName, $showfolders=0) { /* {{{ */
 ?>
 /* Set up a callback which is called when a folder in the tree is selected */
 modalDropfolderChooser = $('#dropfolderChooser');
@@ -1326,6 +1326,12 @@ function fileSelected(name) {
 	$('#dropfolderfile<?php echo $formName ?>').val(name);
 	modalDropfolderChooser.modal('hide');
 }
+<?php if($showfolders) { ?>
+function folderSelected(name) {
+	$('#dropfolderfile<?php echo $formName ?>').val(name);
+	modalDropfolderChooser.modal('hide');
+}
+<?php } ?>
 function clearFilename<?php print $formName ?>() {
 	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
@@ -1335,12 +1341,12 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
-		$this->printDropFolderChooserHtml($formName, $dropfolderfile);
+	function printDropFolderChooser($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
+		$this->printDropFolderChooserHtml($formName, $dropfolderfile, $showfolders);
 ?>
 		<script language="JavaScript">
 <?php
-		$this->printDropFolderChooserJs($formName);
+		$this->printDropFolderChooserJs($formName, $showfolders);
 ?>
 		</script>
 <?php

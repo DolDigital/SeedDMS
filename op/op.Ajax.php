@@ -237,26 +237,26 @@ switch($command) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mfolder->setParent($folder)) {
 									header('Content-Type: application/json');
-									echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_folder'), 'data'=>''));
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
 								}
 							} else {
 								header('Content-Type: application/json');
-								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 							}
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_folder_id'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 					}
 				} else {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_folder_id'), 'data'=>''));
 				}
 			}
 		}
@@ -278,23 +278,23 @@ switch($command) {
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_document'), 'data'=>''));
 								} else {
 									header('Content-Type: application/json');
-									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+									echo json_encode(array('success'=>false, 'message'=>'Error moving document', 'data'=>''));
 								}
 							} else {
 								header('Content-Type: application/json');
-								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 							}
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_folder_id'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 					}
 				} else {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_doc_id'), 'data'=>''));
 				}
 			}
 		}
@@ -310,6 +310,21 @@ switch($command) {
 				if($folder) {
 					if ($folder->getAccessMode($user) >= M_READWRITE) {
 						if($folder->remove()) {
+							if ($notifier) {
+								$subject = "folder_deleted_email_subject";
+								$message = "folder_deleted_email_body";
+								$params = array();
+								$params['name'] = $foldername;
+								$params['folder_path'] = $parent->getFolderPathPlain();
+								$params['username'] = $user->getFullName();
+								$params['sitename'] = $settings->_siteName;
+								$params['http_root'] = $settings->_httpRoot;
+								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$parent->getID();
+								$notifier->toList($user, $nl["users"], $subject, $message, $params);
+								foreach ($nl["groups"] as $grp) {
+									$notifier->toGroup($user, $grp, $subject, $message, $params);
+								}
+							}
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
@@ -318,11 +333,11 @@ switch($command) {
 						}
 					} else {
 						header('Content-Type: application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 					}
 				} else {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_folder_id'), 'data'=>''));
 				}
 			}
 		}
@@ -382,11 +397,11 @@ switch($command) {
 						}
 					} else {
 						header('Content-Type: application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 					}
 				} else {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_doc_id'), 'data'=>''));
 				}
 			}
 		}
@@ -405,11 +420,11 @@ switch($command) {
 								echo json_encode(array('success'=>false, 'message'=>'Error unlocking document', 'data'=>''));
 							} else {
 								header('Content-Type: application/json');
-								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+								echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_unlocked'), 'data'=>''));
 							}
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 						}
 					} else {
 						if (!$document->setLocked($user)) {
@@ -417,16 +432,16 @@ switch($command) {
 							echo json_encode(array('success'=>false, 'message'=>'Error locking document', 'data'=>''));
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_locked'), 'data'=>''));
 						}
 					}
 				} else {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>getMLText('access_denied'), 'data'=>''));
 				}
 			} else {
 				header('Content-Type: application/json');
-				echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_doc_id'), 'data'=>''));
 			}
 		}
 		break; /* }}} */
