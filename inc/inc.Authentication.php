@@ -13,6 +13,7 @@
  */
 
 require_once("inc.Utils.php");
+require_once("inc.ClassNotificationService.php");
 require_once("inc.ClassEmailNotify.php");
 require_once("inc.ClassSession.php");
 
@@ -63,11 +64,9 @@ if($user->isAdmin()) {
 	}
 }
 $dms->setUser($user);
+$notifier = new SeedDMS_NotificationService();
 if($settings->_enableEmail) {
-	$notifier = new SeedDMS_EmailNotify();
-	$notifier->setSender($user);
-} else {
-	$notifier = null;
+	$notifier->addService(new SeedDMS_EmailNotify($dms));
 }
 
 /* Include the language file as specified in the session. If that is not

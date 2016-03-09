@@ -53,7 +53,7 @@ if (empty($email) || empty($login)) {
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
 	if($hash = $dms->createPasswordRequest($user)) {
-		$emailobj = new SeedDMS_EmailNotify();
+		$emailobj = new SeedDMS_EmailNotify($dms);
 		$subject = "password_forgotten_email_subject";
 		$message = "password_forgotten_email_body";
 
