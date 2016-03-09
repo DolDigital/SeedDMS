@@ -26,6 +26,7 @@
 - take out file deletion because it was (and probabbly never has been) useful
 - send notification if folder is deleted by ajax call
 - add page ImportFS for mass importing files from drop folder
+- add initial version for editing text files online
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.24
