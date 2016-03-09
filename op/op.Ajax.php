@@ -24,6 +24,7 @@ include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.ClassNotificationService.php");
 include("../inc/inc.ClassEmailNotify.php");
 include("../inc/inc.ClassUI.php");
 
@@ -55,11 +56,9 @@ if (isset($_COOKIE["mydms_session"])) {
 			$user = $dms->getUser($resArr["su"]);
 		}
 	}
+	$notifier = new SeedDMS_NotificationService();
 	if($settings->_enableEmail) {
-		$notifier = new SeedDMS_EmailNotify();
-		$notifier->setSender($user);
-	} else {
-		$notifier = null;
+		$notifier->addService(new SeedDMS_EmailNotify($dms));
 	}
 	include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 } else {

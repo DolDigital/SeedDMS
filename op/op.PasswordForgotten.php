@@ -55,7 +55,7 @@ if (empty($email) || empty($login)) {
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
 	if($hash = $dms->createPasswordRequest($user)) {
-		$emailobj = new SeedDMS_EmailNotify($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+		$emailobj = new SeedDMS_EmailNotify($dms, $settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
 		$subject = "password_forgotten_email_subject";
 		$message = "password_forgotten_email_body";
 		$params = array();

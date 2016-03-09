@@ -59,6 +59,27 @@ if($lc->getChecksum() == SeedDMS_Core_File::checksum($tmpfname)) {
 	echo json_encode(array('success'=>false, 'message'=>getMLText('identical_version')));
 } else {
 	if($document->replaceContent(0, $user, $tmpfname, $lc->getOriginalFileName(), $lc->getFileType(), $lc->getMimeType())) {
+		if($notifier) {
+			$notifyList = $folder->getNotifyList();
+
+			$subject = "replace_content_email_subject";
+			$message = "replace_content_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_name'] = $folder->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['comment'] = $document->getComment();
+			$params['version'] = $lc->getVersion();
+			$params['version_comment'] = $lc->getComment();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+		}
 		echo json_encode(array('success'=>true, 'message'=>getMLText('splash_saved_file')));
 	} else {
 		echo json_encode(array('success'=>false, 'message'=>getMLText('splash_error_saving_file')));
