@@ -38,12 +38,18 @@ if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
 else
 	$dropfolderdir = $settings->_dropFolderDir;
 
+if(isset($_GET['showfolders']) && $_GET['showfolders'])
+	$showfolders = true;
+else
+	$showfolders = false;
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$dropfolderdir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
 if($view) {
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view->setParam('showfolders', $showfolders);
 	$view($_GET);
 	exit;
 }

@@ -136,7 +136,6 @@ $(document).ready( function() {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
-				console.log(data);
 				if(data.success) {
 					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
 					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
@@ -172,7 +171,6 @@ $(document).ready( function() {
 		$.get('../op/op.Ajax.php',
 			{ command: 'removefromclipboard', type: type, id: id },
 			function(data) {
-				console.log(data);
 				if(data.success) {
 					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
 					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
@@ -207,7 +205,6 @@ $(document).ready( function() {
 		$.get('../op/op.Ajax.php',
 			{ command: 'tooglelockdocument', id: id },
 			function(data) {
-				console.log(data);
 				if(data.success) {
 					$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
 					noty({
@@ -243,7 +240,6 @@ $(document).ready( function() {
 			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
-					console.log(data);
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -268,7 +264,6 @@ $(document).ready( function() {
 			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
-					console.log(data);
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -298,7 +293,6 @@ $(document).ready( function() {
 				phrase: $(ev.target).parent().children('[name=missing-lang-translation]').val()
 			},
 			success: function(data, textStatus) {
-//				console.log(data);
 				noty({
 					text: data.message,
 					type: data.success ? 'success' : 'error',
@@ -343,7 +337,6 @@ $(document).ready( function() {
 			}
 		} else
 			url = href;
-	//	console.log('Calling '+url);
 		$.get(url, function(data) {
 			element.html(data);
 			$(".chzn-select").chosen();
@@ -367,7 +360,6 @@ $(document).ready( function() {
 		} else {
 			url += "&"+param1;
 		}
-	//	console.log("Calling: "+url);
 		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
@@ -487,7 +479,6 @@ function onAddClipboard(ev) { /* {{{ */
 			data: formData,
 			success: function(data){
 				status.setProgress(100);
-//				console.log(data);
 				if(data.success) {
 					noty({
 						text: data.message,
