@@ -36,21 +36,18 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 */
 	protected $_dms;
 
-	function __construct($dms) {
+	protected $smtp_server;
+
+	protected $smtp_port;
+
+	protected $smtp_user;
+
+	protected $smtp_password;
+
+	protected $from_address;
+
+	function __construct($dms, $from_address='', $smtp_server='', $smtp_port='', $smtp_username='', $smtp_password='') { /* {{{ */
 		$this->_dms = $dms;
-	}
-
-	var $smtp_server;
-
-	var $smtp_port;
-
-	var $smtp_user;
-
-	var $smtp_password;
-
-	var $from_address;
-
-	function __construct($from_address='', $smtp_server='', $smtp_port='', $smtp_username='', $smtp_password='') { /* {{{ */
 		$this->smtp_server = $smtp_server;
 		$this->smtp_port = $smtp_port;
 		$this->smtp_user = $smtp_username;
