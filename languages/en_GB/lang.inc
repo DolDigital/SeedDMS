@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1332), dgrutsch (7), netixw (14)
+//    Translators: Admin (1346), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -85,10 +85,10 @@ URL: [url]',
 'apply' => 'Apply',
 'approval_deletion_email' => 'Approval request deleted',
 'approval_deletion_email_body' => 'Approval request deleted
-Dokument: [name]
+Document: [name]
 Version: [version]
-Elternordner: [folder_path]
-Benutzer: [username]
+Parent folder: [folder_path]
+User: [username]
 URL: [url]',
 'approval_deletion_email_subject' => '[sitename]: [name] - Approval request deleted',
 'approval_file' => 'File',
@@ -117,7 +117,7 @@ URL: [url]',
 'approval_update_failed' => 'Error updating approval status. Update failed.',
 'approvers' => 'Approvers',
 'approver_already_assigned' => 'User is already assigned as an approver.',
-'approver_already_removed' => 'Approver has already been removed from appproval process or  has already submitted an approval.',
+'approver_already_removed' => 'Approver has already been removed from approval process or  has already submitted an approval.',
 'april' => 'April',
 'archive_creation' => 'Archive creation',
 'archive_creation_warning' => 'With this operation you can create archive containing the files of entire DMS folders. After the creation the archive will be saved in the data folder of your server.<br>WARNING: an archive created as human readable will be unusable as server backup.',
@@ -171,7 +171,7 @@ URL: [url]',
 'author' => 'Author',
 'automatic_status_update' => 'Automatic status change',
 'back' => 'Go back',
-'backup_list' => 'Existings backup list',
+'backup_list' => 'Existing backups',
 'backup_log_management' => 'Backup/Logging',
 'backup_remove' => 'Remove backup file',
 'backup_tools' => 'Backup tools',
@@ -296,7 +296,7 @@ URL: [url]',
 'documents_user_rejected' => 'Rejected documents',
 'documents_user_requiring_attention' => 'Documents owned by you that require attention',
 'document_already_checkedout' => 'This document is already checked out',
-'document_already_locked' => 'This document is aleady locked',
+'document_already_locked' => 'This document is already locked',
 'document_comment_changed_email' => 'Comment changed',
 'document_comment_changed_email_body' => 'Comment changed
 Document: [name]
@@ -406,7 +406,7 @@ URL: [url]',
 'error_add_permission' => 'Error while add permission',
 'error_no_document_selected' => 'No document selected',
 'error_no_folder_selected' => 'No folder selected',
-'error_occured' => 'An error has occured',
+'error_occured' => 'An error has occurred',
 'error_remove_permission' => 'Error while remove permission',
 'error_toogle_permission' => 'Error while changing permission',
 'es_ES' => 'Spanish',
@@ -624,7 +624,7 @@ URL: [url]',
 'needs_workflow_action' => 'This document requires your attention. Please check the workflow tab.',
 'never' => 'never',
 'new' => 'New',
-'new_attrdef' => 'Add attribute defintion',
+'new_attrdef' => 'Add attribute definition',
 'new_default_keywords' => 'Add keywords',
 'new_default_keyword_category' => 'Add category',
 'new_document_category' => 'Add category',
@@ -638,7 +638,8 @@ User: [username]
 URL: [url]',
 'new_document_email_subject' => '[sitename]: [folder_name] - New document',
 'new_file_email' => 'New attachment',
-'new_file_email_body' => 'New attachmentrnName: [name]
+'new_file_email_body' => 'New attachment
+Name: [name]
 Document: [document]
 Comment: [comment]
 User: [username]
@@ -742,7 +743,7 @@ If you have still problems to login, then please contact your administrator.',
 'password_send' => 'Password send',
 'password_send_text' => 'Your new password has been send to the given email address, if the login and email matches an existing user. If you do not receive an email within the next minutes, then make sure both login and email are correct and restart the process again.',
 'password_strength' => 'Password strength',
-'password_strength_insuffient' => 'Insuffient password strength',
+'password_strength_insuffient' => 'Insufficient password strength',
 'password_wrong' => 'Wrong password',
 'pending_approvals' => 'Pending approvals',
 'pending_reviews' => 'Pending reviews',
@@ -824,7 +825,7 @@ URL: [url]',
 'review_deletion_email_body' => 'Review request deleted
 Document: [name]
 Version: [version]
-Parentfolder: [folder_path]
+Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'review_deletion_email_subject' => '[sitename]: [name] - Review request deleted',
@@ -962,7 +963,7 @@ URL: [url]',
 'settings_activate_module' => 'Activate module',
 'settings_activate_php_extension' => 'Activate PHP extension',
 'settings_adminIP' => 'Admin IP',
-'settings_adminIP_desc' => 'If set, admin can login only by specified IP address. Leave empty to avoid lose of access. NOTE: works only with local autentication (no LDAP)',
+'settings_adminIP_desc' => 'If set, admin can login only by specified IP address. Leave empty to avoid lose of access. NOTE: works only with local authentication (no LDAP)',
 'settings_Advanced' => 'Advanced',
 'settings_apache_mod_rewrite' => 'Apache - Module Rewrite',
 'settings_Authentication' => 'Authentication settings',
@@ -979,11 +980,11 @@ URL: [url]',
 'settings_checkOutDir' => 'Directory for checked out documents',
 'settings_checkOutDir_desc' => 'This is the directory where the latest content of a document is copied if the document is checked out. If you make this directory accessible for users, they can edit the file and check it back in when finished.',
 'settings_cmdTimeout' => 'Timeout for external commands',
-'settings_cmdTimeout_desc' => 'This duration in seconds determines when an external command (e.g. for creating the full text index) will be terminatd.',
+'settings_cmdTimeout_desc' => 'This duration in seconds determines when an external command (e.g. for creating the full text index) will be terminated.',
 'settings_contentDir' => 'Content directory',
 'settings_contentDir_desc' => 'Where the uploaded files are stored (best to choose a directory that is not accessible through your web-server)',
 'settings_contentOffsetDir' => 'Content Offset Directory',
-'settings_contentOffsetDir_desc' => 'To work around limitations in the underlying file system, a new directory structure has been devised that exists within the content directory (Content Directory). This requires a base directory from which to begin. Usually leave this to the default setting, 1048576, but can  be any number or string that does not already exist within (Content Directory)',
+'settings_contentOffsetDir_desc' => 'To work around limitations in the underlying file system, a new directory structure has been devised that exists within the content directory (Content Directory). This requires a base directory from which to begin. Usually leave this to the default setting, 1048576, but can be any number or string that does not already exist within (Content Directory)',
 'settings_cookieLifetime' => 'Cookie Life time',
 'settings_cookieLifetime_desc' => 'The life time of a cookie in seconds. If set to 0 the cookie will be removed when the browser is closed.',
 'settings_coreDir' => 'Core SeedDMS directory',
@@ -1034,7 +1035,7 @@ URL: [url]',
 'settings_enableEmail' => 'Enable E-mail',
 'settings_enableEmail_desc' => 'Enable/disable automatic email notification',
 'settings_enableFolderTree' => 'Enable Folder Tree',
-'settings_enableFolderTree_desc' => 'Enabel/Disable the folder tree on the \'View Folder\' page',
+'settings_enableFolderTree_desc' => 'Enable/Disable the folder tree on the \'View Folder\' page',
 'settings_enableFullSearch' => 'Enable Full text search',
 'settings_enableFullSearch_desc' => 'Enable Full text search',
 'settings_enableGuestAutoLogin' => 'Enable auto login for guest',
@@ -1076,7 +1077,7 @@ URL: [url]',
 'settings_enableVersionModification' => 'Enable modification of versions',
 'settings_enableVersionModification_desc' => 'Enable/disable modification of a document versions by regular users after a version was uploaded. Admin may always modify the version after upload.',
 'settings_encryptionKey' => 'Encryption key',
-'settings_encryptionKey_desc' => 'This string is used for creating a unique identifier being added as a hidden field to a formular in order to prevent CSRF attacks.',
+'settings_encryptionKey_desc' => 'This string is used for creating a unique identifier being added as a hidden field to a form in order to prevent CSRF attacks.',
 'settings_error' => 'Error',
 'settings_expandFolderTree' => 'Expand Folder Tree',
 'settings_expandFolderTree_desc' => 'Expand Folder Tree',
