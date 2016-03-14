@@ -26,6 +26,9 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -63,10 +66,20 @@ $nochecksumversions = $dms->getNoChecksumDocumentContent();
 $duplicateversions = $dms->getDuplicateDocumentContent();
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'unlinkedfolders'=>$unlinkedfolders, 'unlinkeddocuments'=>$unlinkeddocuments, 'nofilesizeversions'=>$nofilesizeversions, 'nochecksumversions'=>$nochecksumversions, 'duplicateversions'=>$duplicateversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'setchecksum'=>$setchecksum, 'repair'=>$repair, 'rootfolder'=>$rootfolder));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('unlinkedcontent', $unlinkedversions);
+	$view->setParam('unlinkedfolders', $unlinkedfolders);
+	$view->setParam('unlinkeddocuments', $unlinkeddocuments);
+	$view->setParam('nofilesizeversions', $nofilesizeversions);
+	$view->setParam('nochecksumversions', $nochecksumversions);
+	$view->setParam('duplicateversions', $duplicateversions);
+	$view->setParam('unlink', $unlink);
+	$view->setParam('setfilesize', $setfilesize);
+	$view->setParam('setchecksum', $setchecksum);
+	$view->setParam('repair', $repair);
+	$view->setParam('rootfolder', $rootfolder);
+	$view($_GET);
 	exit;
 }
 
