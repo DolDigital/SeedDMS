@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 
 	function tree($dms, $folder, $repair, $path=':', $indent='') { /* {{{ */
+		global $user;
 
 		/* Don't do folderlist check for root folder */
 		if($path != ':') {
@@ -124,7 +125,8 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 					$filepath = $dms->contentDir . $version->getPath();
 					if(!file_exists($filepath)) {
 					print "<tr>\n";
-					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".$this->getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
+					print "<tr id=\"table-row-document-".$document->getID()."\" class=\"table-row-document\" rel=\"document_".$document->getID()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
+					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 					$folder = $document->getFolder();
 					$tmppath = $folder->getPath();
@@ -141,6 +143,26 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 					} else {
 						print "<td></td>\n";
 					}
+					echo "<td>";
+					echo "<div class=\"list-action\">";
+			if($document->getAccessMode($user) >= M_ALL) {
+				echo $this->printDeleteDocumentButton($document, 'splash_rm_document', true);
+			} else {
+				echo '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
+			}
+			if($document->getAccessMode($user) >= M_READWRITE) {
+				print '<a href="../out/out.EditDocument.php?documentid='.$document->getID().'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
+			} else {
+				print '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
+			}
+			if($document->getAccessMode($user) >= M_READWRITE) {
+				print $this->printLockButton($document, 'splash_document_locked', 'splash_document_unlocked', true);
+			}
+			if($this->enableClipboard) {
+				print '<a class="addtoclipboard" rel="D'.$document->getID().'" msg="'.getMLText('splash_added_to_clipboard').'" title="'.getMLText("add_to_clipboard").'"><i class="icon-copy"></i></a>';
+			}
+					echo "</div>";
+					echo "</td>";
 					print "</tr>\n";
 					}
 				}
@@ -163,6 +185,16 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		}
 	} /* }}} */
 
+	function js() { /* {{{ */
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+
+		header('Content-Type: application/javascript; charset=UTF-8');
+
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -178,6 +210,9 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$setfilesize = $this->params['setfilesize'];
 		$setchecksum = $this->params['setchecksum'];
 		$rootfolder = $this->params['rootfolder'];
+		$this->enableClipboard = $this->params['enableclipboard'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -189,7 +224,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			echo "<div class=\"alert\">".getMLText('repairing_objects')."</div>";
 		}
 		$this->contentContainerStart();
-		print "<table class=\"table-condensed\">";
+		print "<table class=\"table table-condensed\">";
 		print "<thead>\n<tr>\n";
 		print "<th></th>\n";
 		print "<th>".getMLText("name")."</th>\n";
@@ -209,7 +244,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		if($unlinkedfolders) {
 			$this->contentHeading(getMLText("unlinked_folders"));
 			$this->contentContainerStart();
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("id")."</th>\n";

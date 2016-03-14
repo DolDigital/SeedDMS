@@ -308,6 +308,8 @@ switch($command) {
 				$folder = $dms->getFolder($_REQUEST['id']);
 				if($folder) {
 					if ($folder->getAccessMode($user) >= M_READWRITE) {
+						$parent=$folder->getParent();
+						$foldername = $folder->getName();
 						if($folder->remove()) {
 							if ($notifier) {
 								$subject = "folder_deleted_email_subject";

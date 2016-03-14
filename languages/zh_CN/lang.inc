@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (629), fengjohn (5)
+//    Translators: Admin (632), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -183,13 +183,13 @@ URL: [url]',
 'change_status' => '变更状态',
 'charts' => '图表',
 'chart_docsaccumulated_title' => '文档数量',
-'chart_docspercategory_title' => '',
+'chart_docspercategory_title' => '目录文档数',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '每月创建的新文档',
 'chart_docsperstatus_title' => '',
-'chart_docsperuser_title' => '',
+'chart_docsperuser_title' => '单用户文档数',
 'chart_selection' => '选择报表',
-'chart_sizeperuser_title' => '',
+'chart_sizeperuser_title' => '单用户磁盘空间',
 'checkedout_file_has_different_version' => '',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
