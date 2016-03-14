@@ -224,7 +224,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			echo "<div class=\"alert\">".getMLText('repairing_objects')."</div>";
 		}
 		$this->contentContainerStart();
-		print "<table class=\"table-condensed\">";
+		print "<table class=\"table table-condensed\">";
 		print "<thead>\n<tr>\n";
 		print "<th></th>\n";
 		print "<th>".getMLText("name")."</th>\n";
@@ -244,7 +244,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		if($unlinkedfolders) {
 			$this->contentHeading(getMLText("unlinked_folders"));
 			$this->contentContainerStart();
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("id")."</th>\n";
