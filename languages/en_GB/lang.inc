@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1346), dgrutsch (7), netixw (14)
+//    Translators: Admin (1347), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -117,7 +117,7 @@ URL: [url]',
 'approval_update_failed' => 'Error updating approval status. Update failed.',
 'approvers' => 'Approvers',
 'approver_already_assigned' => 'User is already assigned as an approver.',
-'approver_already_removed' => 'Approver has already been removed from approval process or  has already submitted an approval.',
+'approver_already_removed' => 'Approver has already been removed from approval process or has already submitted an approval.',
 'april' => 'April',
 'archive_creation' => 'Archive creation',
 'archive_creation_warning' => 'With this operation you can create archive containing the files of entire DMS folders. After the creation the archive will be saved in the data folder of your server.<br>WARNING: an archive created as human readable will be unusable as server backup.',

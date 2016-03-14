@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1033), balan (87)
+//    Translators: Admin (1041), balan (87)
 
 $text = array(
 'accept' => 'Accept',
@@ -996,10 +996,10 @@ URL: [url]',
 'settings_dbUser' => 'Username',
 'settings_dbUser_desc' => 'Username-ul de acces la baza de date introdus în timpul procesului de instalare.  Nu editați câmpul decât dacă este absolut necesar (de exemplu transferul bazei de date la un nou Host).',
 'settings_dbVersion' => 'Schema bazei de date este prea veche',
-'settings_defaultSearchMethod' => '',
-'settings_defaultSearchMethod_desc' => '',
-'settings_defaultSearchMethod_valdatabase' => '',
-'settings_defaultSearchMethod_valfulltext' => '',
+'settings_defaultSearchMethod' => 'metoda de cautare implicita',
+'settings_defaultSearchMethod_desc' => 'Metoda de cautare implicita cand cautarea a fost initiata prin formularul de cautare din meniul principal',
+'settings_defaultSearchMethod_valdatabase' => 'baza de date',
+'settings_defaultSearchMethod_valfulltext' => 'Text complet',
 'settings_delete_install_folder' => 'Pentru a utiliza SeedDMS, trebuie să ștergeți fișierul ENABLE_INSTALL_TOOL din directorul de configurare',
 'settings_disableSelfEdit' => 'Dezactivați Auto Editarea',
 'settings_disableSelfEdit_desc' => 'Dacă este bifată, utilizatorul nu va putea să-și editeze profilul',
@@ -1028,12 +1028,12 @@ URL: [url]',
 'settings_enableFolderTree_desc' => 'Activare/dezactivare folder ierarhic în pagina \'Vizualizare Folder\'',
 'settings_enableFullSearch' => 'Activare căutare in tot textul',
 'settings_enableFullSearch_desc' => 'Activare căutare in tot textul',
-'settings_enableGuestAutoLogin' => '',
-'settings_enableGuestAutoLogin_desc' => '',
+'settings_enableGuestAutoLogin' => 'Activeaza autentificarea automata pentru Musafir',
+'settings_enableGuestAutoLogin_desc' => 'Daca autentificarea sau autentificarea automata pentru Musafir este activata, Musafir va fi autentificat automat',
 'settings_enableGuestLogin' => 'Activare Login Oaspete',
 'settings_enableGuestLogin_desc' => 'Bifați această opțiune, dacă doriți ca cineva să te poată autentifica ca oaspete. Notă: autentificare oaspete trebuie utilizată numai într-un mediu de încredere',
-'settings_enableHelp' => '',
-'settings_enableHelp_desc' => '',
+'settings_enableHelp' => 'Activeaza Help',
+'settings_enableHelp_desc' => 'Activeaza/Dezactiveaza link-ul pentru ecranul de ajutor in meniu',
 'settings_enableLanguageSelector' => 'Activare Selector Limba',
 'settings_enableLanguageSelector_desc' => 'Arată selectorul de limbă pentru interfața cu utilizatorul după ce a fost autentificat.',
 'settings_enableLargeFileUpload' => 'Activare încărcare fișier mare',
