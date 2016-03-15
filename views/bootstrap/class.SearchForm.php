@@ -273,6 +273,7 @@ function checkForm()
 </div>
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

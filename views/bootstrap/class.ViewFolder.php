@@ -321,11 +321,11 @@ function folderSelected(id, name) {
 		}
 
 		echo "</div>\n"; // End of right column div
-
-		$this->contentEnd();
+		echo "</div>\n"; // End of div around left and right column
 
 		echo $this->callHook('postContent');
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

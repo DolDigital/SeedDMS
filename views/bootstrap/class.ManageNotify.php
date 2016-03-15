@@ -224,6 +224,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		echo "</div>";
 		echo "</div>";
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

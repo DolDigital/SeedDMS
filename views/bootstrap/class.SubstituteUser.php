@@ -82,6 +82,7 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		echo "</tbody></table>";
 		$this->contentContainerEnd();
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

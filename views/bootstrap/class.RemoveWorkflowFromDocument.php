@@ -104,6 +104,7 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

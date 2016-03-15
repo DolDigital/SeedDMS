@@ -202,8 +202,8 @@ showWorkflowState(sel);
 
 </script>
 
-
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

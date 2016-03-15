@@ -158,8 +158,8 @@ class SeedDMS_View_ApprovalSummary extends SeedDMS_Bootstrap_Style {
 		}
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
-
 	} /* }}} */
 }
 ?>

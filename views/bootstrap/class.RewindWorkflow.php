@@ -104,6 +104,7 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

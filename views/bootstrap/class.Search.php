@@ -663,6 +663,7 @@ $(document).ready( function() {
 // }}}
 		echo "</div>";
 		echo "</div>";
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

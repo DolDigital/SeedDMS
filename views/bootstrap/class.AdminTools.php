@@ -137,6 +137,7 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 	</div>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -80,6 +80,7 @@ class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 		print "<p>";
 		print implode(' | ', $tmpfoot);
 		print "</p>\n";
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

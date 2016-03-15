@@ -176,51 +176,50 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 </style>
 
 <?php
+		$this->contentHeading(getMLText("folders_and_documents_statistic"));
+		echo "<div class=\"row-fluid\">\n";
+		echo "<div class=\"span8\">\n";
+		echo "<div class=\"well\">\n";
 
-$this->contentHeading(getMLText("folders_and_documents_statistic"));
-echo "<div class=\"row-fluid\">\n";
-echo "<div class=\"span8\">\n";
-echo "<div class=\"well\">\n";
+		print "<table class=\"table-condensed\"><tr><td>\n";
 
-print "<table class=\"table-condensed\"><tr><td>\n";
+		print "<ul>\n";
+		$this->printFolder($rootfolder);
+		print "</ul>\n";
 
-print "<ul>\n";
-$this->printFolder($rootfolder);
-print "</ul>\n";
+		print "</td></tr>";
 
-print "</td></tr>";
+		print "</table>\n";
+		echo "</div>\n";
+		echo "</div>\n";
 
-print "</table>\n";
-echo "</div>\n";
-echo "</div>\n";
+		echo "<div class=\"span4\">\n";
+		echo "<div class=\"well\">\n";
+		print "<legend>".getMLText("legend")."</legend>\n";
+		print "<ul class=\"unstyled\">\n";
+		print "<li><span style=\"color:black\">".getMLText("access_inheritance")." </span></li>";
+		print "<li><span style=\"color:".$this->getAccessColor(M_ALL)."\">".getMLText("access_mode_all")." </span></li>";
+		print "<li><span style=\"color:".$this->getAccessColor(M_READWRITE)."\">".getMLText("access_mode_readwrite")." </span></li>";
+		print "<li><span style=\"color:".$this->getAccessColor(M_READ)."\">".getMLText("access_mode_read")." </span></li>";
+		print "<li><span style=\"color:".$this->getAccessColor(M_NONE)."\">".getMLText("access_mode_none")." </span></li>";
+		print "</ul>\n";
 
-echo "<div class=\"span4\">\n";
-echo "<div class=\"well\">\n";
-print "<legend>".getMLText("legend")."</legend>\n";
-print "<ul class=\"unstyled\">\n";
-print "<li><span style=\"color:black\">".getMLText("access_inheritance")." </span></li>";
-print "<li><span style=\"color:".$this->getAccessColor(M_ALL)."\">".getMLText("access_mode_all")." </span></li>";
-print "<li><span style=\"color:".$this->getAccessColor(M_READWRITE)."\">".getMLText("access_mode_readwrite")." </span></li>";
-print "<li><span style=\"color:".$this->getAccessColor(M_READ)."\">".getMLText("access_mode_read")." </span></li>";
-print "<li><span style=\"color:".$this->getAccessColor(M_NONE)."\">".getMLText("access_mode_none")." </span></li>";
-print "</ul>\n";
+		print "<legend>".getMLText("statistic")."</legend>\n";
+		print "<ul class=\"unstyled\">\n";
+		print "<li>".getMLText("folders").": ".$this->folder_count."</li>\n";
+		print "<li>".getMLText("documents").": ".$this->document_count."</li>\n";
+		print "<li>".getMLText("files").": ".$this->file_count."</li>\n";
+		print "<li>".getMLText("storage_size").": ".SeedDMS_Core_File::format_filesize($this->storage_size)."</li>\n";
 
-print "<legend>".getMLText("statistic")."</legend>\n";
-print "<ul class=\"unstyled\">\n";
-print "<li>".getMLText("folders").": ".$this->folder_count."</li>\n";
-print "<li>".getMLText("documents").": ".$this->document_count."</li>\n";
-print "<li>".getMLText("files").": ".$this->file_count."</li>\n";
-print "<li>".getMLText("storage_size").": ".SeedDMS_Core_File::format_filesize($this->storage_size)."</li>\n";
+		print "</ul>\n";
 
-print "</ul>\n";
+		echo "</div>\n";
+		echo "</div>\n";
+		echo "</div>\n";
 
-echo "</div>\n";
-echo "</div>\n";
-echo "</div>\n";
-
-
-$this->contentContainerEnd();
-$this->htmlEndPage();
+		$this->contentContainerEnd();
+		$this->contentEnd();
+	$this->htmlEndPage();
 	} /* }}} */
 }
 ?>
