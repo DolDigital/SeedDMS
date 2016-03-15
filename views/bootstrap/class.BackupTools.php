@@ -187,6 +187,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 		*/
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

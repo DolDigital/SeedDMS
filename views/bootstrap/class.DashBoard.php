@@ -114,7 +114,7 @@ class SeedDMS_View_DashBoard extends SeedDMS_Bootstrap_Style {
 		</div>
 		
 <?
-
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

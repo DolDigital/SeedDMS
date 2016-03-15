@@ -166,7 +166,8 @@ $(document).ready(function () {
 	} /* }}} */
 
 	function footNote() { /* {{{ */
-		echo '<div class="row-fluid" style="padding-top: 20px;">'."\n";
+		echo "<div class=\"container-fluid\">\n";
+		echo '<div class="row-fluid">'."\n";
 		echo '<div class="span12">'."\n";
 		echo '<div class="alert alert-info">'."\n";
 		if ($this->params['printdisclaimer']){
@@ -176,6 +177,7 @@ $(document).ready(function () {
 		if (isset($this->params['footnote']) && strlen((string)$this->params['footnote'])>0) {
 			echo "<div class=\"footNote\">".(string)$this->params['footnote']."</div>";
 		}
+		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
@@ -1258,6 +1260,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		print "</div>";
 		print "<div><button class=\"btn\" onclick=\"window.history.back();\">".getMLText('back')."</button></div>";
 		
+		$this->contentEnd();
 		$this->htmlEndPage();
 		
 		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);

@@ -140,6 +140,7 @@ $(document).ready( function() {
 	</p>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 		return;
 }
@@ -292,6 +293,7 @@ $(document).ready( function() {
 
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

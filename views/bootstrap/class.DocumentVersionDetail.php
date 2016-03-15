@@ -346,6 +346,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 			</div>
 <?php
 		}
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

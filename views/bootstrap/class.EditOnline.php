@@ -116,23 +116,24 @@ $(document).ready(function()	{
 <input type="hidden" name="documentid" value="<?= $document->getId() ?>" />
 <textarea id="markdown" name="data" width="100%" rows="20">
 <?php
-	echo htmlspecialchars(file_get_contents($dms->contentDir . $version->getPath()));
+		echo htmlspecialchars(file_get_contents($dms->contentDir . $version->getPath()));
 ?>
 </textarea>
 <button id="update" type="submit" class="btn btn-primary"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
 </form>
 <?php
-echo "</div>\n";
+		echo "</div>\n";
 
-echo "<div class=\"span6\">\n";
-$this->contentHeading(getMLText("preview"));
-echo "<div class=\"ajax\" data-view=\"EditOnline\" data-action=\"preview\" data-query=\"documentid=".$document->getId()."\"></div>";
-echo "</div>\n";
+		echo "<div class=\"span6\">\n";
+		$this->contentHeading(getMLText("preview"));
+		echo "<div class=\"ajax\" data-view=\"EditOnline\" data-action=\"preview\" data-query=\"documentid=".$document->getId()."\"></div>";
+		echo "</div>\n";
 
-echo "</div>\n";
+		echo "</div>\n";
 
-$this->contentContainerEnd();
-$this->htmlEndPage();
+		$this->contentContainerEnd();
+		$this->contentEnd();
+		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

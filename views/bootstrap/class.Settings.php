@@ -716,6 +716,7 @@ if(is_writeable($settings->_configFilePath)) {
 
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

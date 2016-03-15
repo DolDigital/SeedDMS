@@ -201,45 +201,43 @@ $(document).ready( function() {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-?>
+		echo "<div class=\"row-fluid\">\n";
 
-<?php
-echo "<div class=\"row-fluid\">\n";
+		echo "<div class=\"span3\">\n";
+		$this->contentHeading(getMLText("chart_selection"));
+		echo "<div class=\"well\">\n";
+		foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus', 'docspermonth', 'docsaccumulated') as $atype) {
+			echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
+		}
+		echo "</div>\n";
+		echo "</div>\n";
 
-echo "<div class=\"span3\">\n";
-$this->contentHeading(getMLText("chart_selection"));
-echo "<div class=\"well\">\n";
-foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus', 'docspermonth', 'docsaccumulated') as $atype) {
-	echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
-}
-echo "</div>\n";
-echo "</div>\n";
-
-if(in_array($type, array('docspermonth', 'docsaccumulated'))) {
-	echo "<div class=\"span9\">\n";
-} else {
-	echo "<div class=\"span6\">\n";
-}
-$this->contentHeading(getMLText('chart_'.$type.'_title'));
-echo "<div class=\"well\">\n";
+		if(in_array($type, array('docspermonth', 'docsaccumulated'))) {
+			echo "<div class=\"span9\">\n";
+		} else {
+			echo "<div class=\"span6\">\n";
+		}
+		$this->contentHeading(getMLText('chart_'.$type.'_title'));
+		echo "<div class=\"well\">\n";
 ?>
 <div id="chart" style="height: 400px;" class="chart"></div>
 <?php
-echo "</div>\n";
-echo "</div>\n";
+		echo "</div>\n";
+		echo "</div>\n";
 
-if(!in_array($type, array('docspermonth', 'docsaccumulated'))) {
-	echo "<div class=\"span3\">\n";
-	$this->contentHeading(getMLText('legend'));
-	echo "<div class=\"well\" id=\"legend\">\n";
-	echo "</div>\n";
-	echo "</div>\n";
-}
+		if(!in_array($type, array('docspermonth', 'docsaccumulated'))) {
+			echo "<div class=\"span3\">\n";
+			$this->contentHeading(getMLText('legend'));
+			echo "<div class=\"well\" id=\"legend\">\n";
+			echo "</div>\n";
+			echo "</div>\n";
+		}
 
-echo "</div>\n";
+		echo "</div>\n";
 
-$this->contentContainerEnd();
-$this->htmlEndPage();
+		$this->contentContainerEnd();
+		$this->contentEnd();
+		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

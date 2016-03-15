@@ -112,6 +112,7 @@ function showWorkflow(selectObj) {
 	</div>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

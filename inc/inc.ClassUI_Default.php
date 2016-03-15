@@ -80,7 +80,8 @@ class UI_Default {
 	function footNote() { /* {{{ */
 		global $settings;
 		
-		echo '<div class="row-fluid" style="padding-top: 20px;">'."\n";
+		echo "<div class=\"container-fluid\" style=\"margin-top: 0px;\">\n";
+		echo '<div class="row-fluid">'."\n";
 		echo '<div class="span12">'."\n";
 		echo '<div class="alert alert-info">'."\n";
 		if ($settings->_printDisclaimer){
@@ -90,6 +91,7 @@ class UI_Default {
 		if (isset($settings->_footNote) && strlen((string)$settings->_footNote)>0) {
 			echo "<div class=\"footNote\">".(string)$settings->_footNote."</div>";
 		}
+		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
@@ -113,7 +115,7 @@ class UI_Default {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
-		echo "   <a class=\"brand\">".(strlen($settings->_sitename)>0 ? $settings->_sitename : "SeedDMS")."</a>\n";
+		echo "   <a class=\"brand\">".(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
@@ -385,7 +387,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function contentContainerStart() { /* {{{ */
+	function contentContainerStart($class="") { /* {{{ */
 
 		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
 		return;

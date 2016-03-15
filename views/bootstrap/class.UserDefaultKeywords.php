@@ -190,6 +190,7 @@ showKeywords(sel);
 </script>
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

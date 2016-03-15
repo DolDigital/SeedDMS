@@ -188,6 +188,7 @@ $(document).ready( function() {
 
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

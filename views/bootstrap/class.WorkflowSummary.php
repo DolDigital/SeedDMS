@@ -161,8 +161,8 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 			printMLText("no_docs_to_look_at");
 		}
 
-
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

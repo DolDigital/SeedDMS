@@ -67,6 +67,7 @@ class SeedDMS_View_PasswordForgotten extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">document.form1.email.focus();</script>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

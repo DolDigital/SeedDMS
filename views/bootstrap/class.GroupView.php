@@ -98,6 +98,7 @@ class SeedDMS_View_GroupView extends SeedDMS_Bootstrap_Style {
 		echo "</ul>\n";
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
