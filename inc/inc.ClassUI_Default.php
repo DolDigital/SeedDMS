@@ -80,7 +80,8 @@ class UI_Default {
 	function footNote() { /* {{{ */
 		global $settings;
 		
-		echo '<div class="row-fluid" style="padding-top: 20px;">'."\n";
+		echo "<div class=\"container-fluid\" style=\"margin-top: 0px;\">\n";
+		echo '<div class="row-fluid">'."\n";
 		echo '<div class="span12">'."\n";
 		echo '<div class="alert alert-info">'."\n";
 		if ($settings->_printDisclaimer){
@@ -90,6 +91,7 @@ class UI_Default {
 		if (isset($settings->_footNote) && strlen((string)$settings->_footNote)>0) {
 			echo "<div class=\"footNote\">".(string)$settings->_footNote."</div>";
 		}
+		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
