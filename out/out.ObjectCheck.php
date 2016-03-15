@@ -30,8 +30,8 @@ include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-
-if (!$user->isAdmin()) {
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET) && !$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
