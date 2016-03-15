@@ -248,6 +248,7 @@ $(document).ready(function () {
 		echo "</div>\n";
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

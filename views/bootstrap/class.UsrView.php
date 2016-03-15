@@ -81,6 +81,7 @@ class SeedDMS_View_UsrView extends SeedDMS_Bootstrap_Style {
 		echo "</table>\n";
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

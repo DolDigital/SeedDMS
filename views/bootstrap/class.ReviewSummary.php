@@ -161,6 +161,7 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

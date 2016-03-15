@@ -71,7 +71,7 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 		print "</form>\n";
 
 		$this->contentContainerEnd();
-
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

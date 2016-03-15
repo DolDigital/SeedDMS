@@ -72,6 +72,7 @@ class SeedDMS_View_IndexInfo extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerEnd();
 //		echo "</pre>";
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

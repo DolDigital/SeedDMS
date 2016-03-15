@@ -487,6 +487,7 @@ $(document).ready( function() {
 </div>
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

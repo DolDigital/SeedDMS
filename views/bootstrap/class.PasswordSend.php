@@ -45,6 +45,7 @@ class SeedDMS_View_PasswordSend extends SeedDMS_Bootstrap_Style {
 <?php $this->contentContainerEnd(); ?>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

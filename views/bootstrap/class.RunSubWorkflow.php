@@ -105,6 +105,7 @@ class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

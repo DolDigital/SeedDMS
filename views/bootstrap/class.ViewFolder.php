@@ -270,9 +270,9 @@ function folderSelected(id, name) {
 		}
 
 		echo "</div>\n"; // End of right column div
+		echo "</div>\n"; // End of div around left and right column
 
 		$this->contentEnd();
-
 		$this->htmlEndPage();
 	} /* }}} */
 }

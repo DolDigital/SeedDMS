@@ -66,6 +66,7 @@ class SeedDMS_View_SearchFulltext extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		if ($numResults == 0) {
 			$this->contentContainerEnd();
+			$this->contentEnd();
 			$this->htmlEndPage();
 			exit;
 		}
@@ -122,6 +123,7 @@ class SeedDMS_View_SearchFulltext extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerEnd();
 		$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $_GET);
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

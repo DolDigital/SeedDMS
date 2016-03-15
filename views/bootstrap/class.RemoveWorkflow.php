@@ -63,6 +63,7 @@ class SeedDMS_View_RemoveWorkflow extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->contentContainerEnd();
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

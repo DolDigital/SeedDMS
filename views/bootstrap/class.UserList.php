@@ -112,6 +112,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		echo "</table>";
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -50,6 +50,7 @@ class SeedDMS_View_Help extends SeedDMS_Bootstrap_Style {
 			readfile("../languages/".$this->params['session']->getLanguage()."/help.htm");
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

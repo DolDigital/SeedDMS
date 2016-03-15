@@ -132,6 +132,7 @@ function checkForm()
 			$this->contentContainerEnd();
 		}
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

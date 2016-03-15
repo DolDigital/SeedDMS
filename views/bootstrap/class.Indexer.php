@@ -102,6 +102,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 		$index->commit();
 		$index->optimize();
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

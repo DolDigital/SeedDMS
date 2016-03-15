@@ -149,6 +149,7 @@ $(document).ready( function() {
     </div>
   </div>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 		} elseif(file_exists($this->contentdir.$logname)){
 			echo $logname."<pre>\n";

@@ -131,6 +131,7 @@ function checkForm()
 	</p>
 <?php
 				$this->contentContainerEnd();
+				$this->contentEnd();
 				$this->htmlEndPage();
 				return;
 			}
@@ -277,6 +278,7 @@ function checkForm()
 
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

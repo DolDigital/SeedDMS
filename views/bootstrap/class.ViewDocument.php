@@ -337,6 +337,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			print getMLText('document_content_missing');
 			$this->contentContainerEnd();
+			$this->contentEnd();
 			$this->htmlEndPage();
 			exit;
 		}
@@ -1192,8 +1193,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  </div>
 		</div>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
-
 	} /* }}} */
 }
 ?>

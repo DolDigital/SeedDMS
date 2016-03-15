@@ -208,6 +208,7 @@ function checkGrpForm()
 <?php
 		}
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

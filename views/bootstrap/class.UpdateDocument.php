@@ -133,6 +133,7 @@ $(document).ready( function() {
 			{
 				printMLText("no_update_cause_locked");
 				print "</div>";
+				$this->contentEnd();
 				$this->htmlEndPage();
 				exit;
 			}
@@ -582,6 +583,7 @@ $(document).ready( function() {
 
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
