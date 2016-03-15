@@ -31,26 +31,14 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_Login extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$enableguestlogin = $this->params['enableguestlogin'];
-		$enablepasswordforgotten = $this->params['enablepasswordforgotten'];
-		$refer = $this->params['referrer'];
-		$themes = $this->params['themes'];
-		$languages = $this->params['languages'];
-		$enableLanguageSelector = $this->params['enablelanguageselector'];
-		$enableThemeSelector = $this->params['enablethemeselector'];
-
-		$this->htmlStartPage(getMLText("sign_in"), "login");
-		$this->globalBanner();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("sign_in"));
+	function js() { /* {{{ */
 ?>
-<script language="JavaScript">
+document.form1.login.focus();
 function checkForm()
 {
 	msg = new Array()
-	if (document.form1.login.value == "") msg.push("<?php printMLText("js_no_login");?>");
-	if (document.form1.pwd.value == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if($("#login").val() == "") msg.push("<?php printMLText("js_no_login");?>");
+	if($("#pwd").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
 	if (msg != "") {
   	noty({
   		text: msg.join('<br />'),
@@ -80,10 +68,35 @@ function guestLogin()
 	}
 	document.location.href = url;
 }
+$(document).ready( function() {
+	$('body').on('submit', '#form', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+	$('body').on('click', '#guestlogin', function(ev){
+		ev.preventDefault();
+		guestLogin();
+	});
+});
+<?php
+	} /* }}} */
 
-</script>
+	function show() { /* {{{ */
+		$enableguestlogin = $this->params['enableguestlogin'];
+		$enablepasswordforgotten = $this->params['enablepasswordforgotten'];
+		$refer = $this->params['referrer'];
+		$themes = $this->params['themes'];
+		$languages = $this->params['languages'];
+		$enableLanguageSelector = $this->params['enablelanguageselector'];
+		$enableThemeSelector = $this->params['enablethemeselector'];
+
+		$this->htmlStartPage(getMLText("sign_in"), "login");
+		$this->globalBanner();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("sign_in"));
+?>
 <?php $this->contentContainerStart(); ?>
-<form class="form-horizontal" action="../op/op.Login.php" method="post" name="form1" onsubmit="return checkForm();">
+<form class="form-horizontal" action="../op/op.Login.php" method="post" name="form1" id="form">
 <?php
 		if ($refer) {
 			echo "<input type='hidden' name='referuri' value='".sanitizeString($refer)."'/>";
@@ -147,7 +160,7 @@ function guestLogin()
 		$this->contentContainerEnd();
 		$tmpfoot = array();
 		if ($enableguestlogin)
-			$tmpfoot[] = "<a href=\"javascript:guestLogin()\">" . getMLText("guest_login") . "</a>\n";
+			$tmpfoot[] = "<a href=\"\" id=\"guestlogin\">" . getMLText("guest_login") . "</a>\n";
 		if ($enablepasswordforgotten)
 			$tmpfoot[] = "<a href=\"../out/out.PasswordForgotten.php\">" . getMLText("password_forgotten") . "</a>\n";
 		if($tmpfoot) {
@@ -155,9 +168,7 @@ function guestLogin()
 			print implode(' | ', $tmpfoot);
 			print "</p>\n";
 		}
-?>
-<script language="JavaScript">document.form1.login.focus();</script>
-<?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
