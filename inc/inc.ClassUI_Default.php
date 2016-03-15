@@ -113,7 +113,7 @@ class UI_Default {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container-fluid\">\n";
-		echo "   <a class=\"brand\">".(strlen($settings->_sitename)>0 ? $settings->_sitename : "SeedDMS")."</a>\n";
+		echo "   <a class=\"brand\">".(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
@@ -385,7 +385,7 @@ class UI_Default {
 		return;
 	} /* }}} */
 
-	function contentContainerStart() { /* {{{ */
+	function contentContainerStart($class="") { /* {{{ */
 
 		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
 		return;
