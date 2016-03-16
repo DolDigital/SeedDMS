@@ -65,6 +65,10 @@ function checkForm()
 }
 
 $(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
 	$('#new-file').click(function(event) {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
 	});
@@ -107,7 +111,7 @@ $(document).ready(function() {
 		// privileges.
 		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 ?>
-		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
+		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" id="form1" name="form1">
 		<?php echo createHiddenFieldWithKey('adddocument'); ?>
 		<input type="hidden" name="folderid" value="<?php print $folderid; ?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
