@@ -46,9 +46,20 @@ if($settings->_quota > 0) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate, 'sortusersinlist'=>$settings->_sortUsersInList, 'orderby'=>$settings->_sortFoldersDefault));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
+	$view->setParam('enableadminrevapp', $settings->_enableAdminRevApp);
+	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
+	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
+	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
+	$view->setParam('sortusersinlist', $settings->_sortUsersInList);
+	$view->setParam('orderby', $settings->_sortFoldersDefault);
+	$view($_GET);
 	exit;
 }
 
