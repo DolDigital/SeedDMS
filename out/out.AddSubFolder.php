@@ -39,9 +39,12 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'strictformcheck'=>$settings->_strictFormCheck, 'orderby'=>$settings->_sortFoldersDefault));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('orderby', $settings->_sortFoldersDefault);
+	$view($_GET);
 	exit;
 }
 

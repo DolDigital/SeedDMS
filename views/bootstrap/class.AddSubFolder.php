@@ -31,21 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_AddSubFolder extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$strictformcheck = $this->params['strictformcheck'];
-		$orderby = $this->params['orderby'];
-
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
-		$this->contentHeading(getMLText("add_subfolder"));
-		$this->contentContainerStart();
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -71,9 +59,31 @@ function checkForm()
 	else
 		return true;
 }
-</script>
+$(document).ready( function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
 
-<form action="../op/op.AddSubFolder.php" name="form1" onsubmit="return checkForm();" method="POST">
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$strictformcheck = $this->params['strictformcheck'];
+		$orderby = $this->params['orderby'];
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+		$this->contentHeading(getMLText("add_subfolder"));
+		$this->contentContainerStart();
+?>
+
+<form action="../op/op.AddSubFolder.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('addsubfolder'); ?>
 	<input type="Hidden" name="folderid" value="<?php print $folder->getId();?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
