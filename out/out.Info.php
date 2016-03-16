@@ -41,9 +41,11 @@ if(@ini_get('allow_url_fopen') == '1') {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'version'=>$v, 'availversions'=>$versions));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('version', $v);
+	$view->setParam('availversions', $versions);
+	$view($_GET);
 	exit;
 }
 

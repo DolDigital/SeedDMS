@@ -61,9 +61,11 @@ if(isset($_GET['targetid']) && $_GET['targetid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'target'=>$target));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('target', $target);
+	$view($_GET);
 	exit;
 }
 

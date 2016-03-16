@@ -29,9 +29,13 @@ if ($user->isGuest()) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'quota'=>$settings->_quota));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('enableuserimage', $settings->_enableUserImage);
+	$view->setParam('passwordexpiration', $settings->_passwordExpiration);
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('quota', $settings->_quota);
+	$view($_GET);
 	exit;
 }
 

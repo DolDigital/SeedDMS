@@ -33,7 +33,7 @@ if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
 	$view->setParam('context', $context);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

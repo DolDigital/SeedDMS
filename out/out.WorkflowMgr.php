@@ -46,9 +46,12 @@ if(isset($_GET['workflowid']) && $_GET['workflowid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selworkflow'=>$selworkflow, 'allworkflows'=>$workflows, 'allworkflowstates'=>$workflowstates));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('selworkflow', $selworkflow);
+	$view->setParam('allworkflows', $workflows);
+	$view->setParam('allworkflowstates', $workflowstates);
+	$view($_GET);
 	exit;
 }
 

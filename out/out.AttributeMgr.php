@@ -43,8 +43,10 @@ if(isset($_GET['attrdefid']) && $_GET['attrdefid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'attrdefs'=>$attrdefs, 'selattrdef'=>$selattrdef));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('attrdefs', $attrdefs);
+	$view->setParam('selattrdef', $selattrdef);
 	$view->setParam('showtree', showtree());
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);

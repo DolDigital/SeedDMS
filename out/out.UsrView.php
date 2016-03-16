@@ -36,9 +36,12 @@ if (is_bool($users)) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$users, 'enableuserimage'=>$settings->_enableUserImage, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('allusers', $users);
+	$view->setParam('enableuserimage', $settings->_enableUserImage);
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view($_GET);
 	exit;
 }
 

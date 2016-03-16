@@ -49,9 +49,12 @@ if(isset($_GET['transition']) && $_GET['transition']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'workflow'=>$workflow, 'transition'=>$transition, 'document'=>$document));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('workflow', $workflow);
+	$view->setParam('transition', $transition);
+	$view->setParam('document', $document);
+	$view($_GET);
 	exit;
 }
 

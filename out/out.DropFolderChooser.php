@@ -42,8 +42,11 @@ else
 	$showfolders = false;
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$dropfolderdir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('dropfolderdir', $dropfolderdir);
+	$view->setParam('dropfolderfile', $_GET["dropfolderfile"]);
+	$view->setParam('form', $form);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('timeout', $settings->_cmdTimeout);

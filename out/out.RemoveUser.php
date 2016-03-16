@@ -48,9 +48,11 @@ if ($rmuser->getID()==$user->getID()) {
 $allusers = $dms->getAllUsers($settings->_sortUsersInList);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rmuser'=>$rmuser, 'allusers'=>$allusers));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('rmuser', $rmuser);
+	$view->setParam('allusers', $allusers);
+	$view($_GET);
 	exit;
 }
 
