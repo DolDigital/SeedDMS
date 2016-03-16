@@ -31,19 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_AddEvent extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-
-		$this->htmlStartPage(getMLText("calendar"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation("", "calendar");
-
-		$this->contentHeading(getMLText("add_event"));
-		$this->contentContainerStart();
-
-		$expdate = date('Y-m-d');
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -69,9 +59,30 @@ function checkForm()
 	else
 		return true;
 }
-</script>
 
-<form action="../op/op.AddEvent.php" name="form1" onsubmit="return checkForm();" method="POST">
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+
+		$this->htmlStartPage(getMLText("calendar"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation("", "calendar");
+
+		$this->contentHeading(getMLText("add_event"));
+		$this->contentContainerStart();
+
+		$expdate = date('Y-m-d');
+?>
+
+<form action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
 	<table class="table-condensed">
 		<tr>
 			<td><?php printMLText("from");?>:</td>
