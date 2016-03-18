@@ -33,6 +33,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$libraryfolder = $this->params['libraryfolder'];
+		$dropfolderdir = $this->params['dropfolderdir'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm()
@@ -77,8 +78,10 @@ $(document).ready(function() {
 <?php
 			$this->printKeywordChooserJs("form1");
 			$this->printDropFolderChooserJs("form1");
-			if($libraryfolder) {
+			if($libraryfolder)
 				$this->printDocumentChooserJs("form1");
+			if($dropfolderdir) {
+				$this->printDropFolderChooserJs("form1");
 			}
 	} /* }}} */
 
