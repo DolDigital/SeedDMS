@@ -75,7 +75,9 @@ $(document).ready(function() {
 });
 <?php
 			$this->printKeywordChooserJs("form1");
-			$this->printDropFolderChooserJs("form1");
+			if($dropfolderdir) {
+				$this->printDropFolderChooserJs("form1");
+			}
 	} /* }}} */
 
 	function show() { /* {{{ */
