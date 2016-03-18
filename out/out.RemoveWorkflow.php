@@ -41,7 +41,7 @@ if (!is_object($workflow)) {
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('workflow'=>$workflow);
+	$view->setParam('workflow', $workflow);
 	$view($_GET);
 	exit;
 }
