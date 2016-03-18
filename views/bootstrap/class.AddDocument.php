@@ -76,6 +76,9 @@ $(document).ready(function() {
 <?php
 			$this->printKeywordChooserJs("form1");
 			$this->printDropFolderChooserJs("form1");
+			if($libraryfolder) {
+				$this->printDocumentChooserJs("form1");
+			}
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -225,7 +228,7 @@ $(document).ready(function() {
 <?php if($libraryfolder) { ?>
 		<tr>
 			<td><?php printMLText("librarydoc");?>:</td>
-			<td><?php $this->printDocumentChooser("form1", M_READ, -1, null, 'librarydoc', $libraryfolder, 1);?></td>
+			<td><?php $this->printDocumentChooserHtml("form1", M_READ, -1, null, 'librarydoc', $libraryfolder, 1);?></td>
 		</tr>
 <?php } ?>
 		<tr>
