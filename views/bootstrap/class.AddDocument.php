@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$dropfolderdir = $this->params['dropfolderdir'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm()
@@ -75,7 +76,9 @@ $(document).ready(function() {
 });
 <?php
 			$this->printKeywordChooserJs("form1");
-			$this->printDropFolderChooserJs("form1");
+			if($dropfolderdir) {
+				$this->printDropFolderChooserJs("form1");
+			}
 	} /* }}} */
 
 	function show() { /* {{{ */
