@@ -60,7 +60,7 @@ if ($action == "addtransmittal") {
 	add_log_line(".php&action=addtransmittal&name=".$name);
 }
 
-// delete user ------------------------------------------------------------
+// delete transmittal ------------------------------------------------------------
 else if ($action == "removetransmittal") {
 
 	/* Check if the form data comes for a trusted request */
@@ -76,11 +76,14 @@ else if ($action == "removetransmittal") {
 		UI::exitError(getMLText("my_transmittals"),getMLText("invalid_transmittal_id"));
 	}
 
-	$transmittalToRemove = $dms->getUser($transmittalid);
+	$transmittalToRemove = $dms->getTransmittal($transmittalid);
 	if (!is_object($transmittalToRemove)) {
 		UI::exitError(getMLText("my_transmittals"),getMLText("invalid_transmittal_id"));
 	}
 
+	if (!$transmittalToRemove->remove()) {
+		UI::exitError(getMLText("my_transmittals"),getMLText("error_occured"));
+	}
 	add_log_line(".php&action=removetransmittal&transmittalid=".$transmittalid);
 	
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_transmittal')));
