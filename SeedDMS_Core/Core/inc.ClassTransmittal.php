@@ -260,6 +260,17 @@ class SeedDMS_Core_Transmittal {
 		return SeedDMS_Core_TransmittalItem::getInstance($itemID, $this->_dms);
 	} /* }}} */
 
+	function remove() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "DELETE FROM tblTransmittals WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
 }
 
 /**
