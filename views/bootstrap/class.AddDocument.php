@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$libraryfolder = $this->params['libraryfolder'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm()
