@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1347), dgrutsch (7), netixw (14)
+//    Translators: Admin (1351), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -389,6 +389,7 @@ URL: [url]',
 'edit_folder_notify' => 'Folder Notification List',
 'edit_folder_props' => 'Edit folder',
 'edit_group' => 'Edit group',
+'edit_online' => 'Edit online',
 'edit_transmittal_props' => 'Edit transmittal properties',
 'edit_user' => 'Edit user',
 'edit_user_details' => 'Edit User Details',
@@ -1018,6 +1019,8 @@ URL: [url]',
 'settings_dropFolderDir' => 'Directory for drop folder',
 'settings_dropFolderDir_desc' => 'This directory can be used for dropping files on the server\'s file system and importing them from there instead of uploading via the browser. The directory must contain a sub directory for each user who is allowed to import files this way.',
 'settings_Edition' => 'Edition settings',
+'settings_editOnlineFileTypes' => 'Edit Online File Types:',
+'settings_editOnlineFileTypes_desc' => 'Files with one of the following endings can be edited online (USE ONLY LOWER CASE CHARACTERS)',
 'settings_enableAcknowledgeWorkflow' => 'Enable acknowledge of document reception',
 'settings_enableAcknowledgeWorkflow_desc' => 'Enable, to turn on the workflow to acknowledge document reception.',
 'settings_enableAdminRevApp' => 'Allow review/approval for admins',
@@ -1110,7 +1113,7 @@ URL: [url]',
 'settings_install_success' => 'The installation has been successfully completed.',
 'settings_install_welcome_text' => '<p>Before you start to install SeedDMS make sure you have created a file \'ENABLE_INSTALL_TOOL\' in your configuration directory, otherwise the installation will not work. On Unix-System this can easily be done with \'touch conf/ENABLE_INSTALL_TOOL\'. After you have finished the installation delete the file.</p><p>SeedDMS has very minimal requirements. You will need a mysql database or sqlite support and a php enabled web server. The pear package Log has to be installed too. For the lucene full text search, you will also need the Zend framework installed on disc where it can be found by php. For the WebDAV server you will also need the HTTP_WebDAV_Server. The path to it can later be set during installation.</p><p>If you like to create the database before you start installation, then just create it manually with your favorite tool, optionally create a database user with access on the database and import one of the database dumps in the configuration directory. The installation script can do that for you as well, but it will need database access with sufficient rights to create databases.</p>',
 'settings_install_welcome_title' => 'Welcome to the installation of SeedDMS',
-'settings_install_zendframework' => 'Install Zend Framework, if you intend to use the full text search engine',
+'settings_install_zendframework' => 'Install Zend Framework, if you intend to use the zend based full text search engine. Otherwise, ignore this message and continue the installation.',
 'settings_language' => 'Default language',
 'settings_language_desc' => 'Default language (name of a subfolder in folder "languages")',
 'settings_libraryFolder' => 'Library folder',

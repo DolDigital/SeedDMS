@@ -70,7 +70,6 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, $this->converters ? $this->converters : null, false, $this->timeout));
 						echo $indent."(document updated)";
 					} catch(Exception $e) {
-						print_r($e);
 						echo $indent."(updating document failed)";
 					}
 				}

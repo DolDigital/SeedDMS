@@ -31,22 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ReturnFromSubWorkflow extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$transition = $this->params['transition'];
-
-		$latestContent = $document->getLatestContent();
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("return_from_subworkflow"));
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -65,9 +52,29 @@ function checkForm()
 	else
 		return true;
 }
-</script>
-
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$transition = $this->params['transition'];
+
+		$latestContent = $document->getLatestContent();
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->contentHeading(getMLText("return_from_subworkflow"));
 
 		$currentstate = $latestContent->getWorkflowState();
 		$wkflog = $latestContent->getWorkflowLog();
@@ -93,7 +100,7 @@ function checkForm()
 ?>
 	<div class="row-fluid">
 	<div class="span4">
-	<form method="post" action="../op/op.ReturnFromSubWorkflow.php" name="form1" onsubmit="return checkForm();">
+	<form method="post" action="../op/op.ReturnFromSubWorkflow.php" id="form1" name="form1">
 	<?php echo createHiddenFieldWithKey('returnfromsubworkflow'); ?>
 	<table>
 	<tr><td><?php printMLText("comment")?>:</td>
@@ -140,4 +147,3 @@ function checkForm()
 	} /* }}} */
 }
 ?>
-

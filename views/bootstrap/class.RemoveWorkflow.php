@@ -47,7 +47,7 @@ class SeedDMS_View_RemoveWorkflow extends SeedDMS_Bootstrap_Style {
 	<div class="row-fluid">
 	<div class="span4">
 	<p><?php printMLText("rm_workflow_warning"); ?></p>
-	<form method="post" action="../op/op.RemoveWorkflow.php" name="form1" onsubmit="return checkForm();">
+	<form method="post" action="../op/op.RemoveWorkflow.php" name="form1">
 	<?php echo createHiddenFieldWithKey('removeworkflow'); ?>
 	<table>
 	<tr><td></td><td>

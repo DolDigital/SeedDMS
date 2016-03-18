@@ -39,21 +39,9 @@ class SeedDMS_View_FolderAccess extends SeedDMS_Bootstrap_Style {
 		print "</select>\n";
 	} /* }}} */
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$allUsers = $this->params['allusers'];
-		$allGroups = $this->params['allgroups'];
-		$rootfolderid = $this->params['rootfolderid'];
-
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array()
@@ -74,9 +62,28 @@ function checkForm()
 	else
 		return true;
 }
-</script>
-
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$allUsers = $this->params['allusers'];
+		$allGroups = $this->params['allgroups'];
+		$rootfolderid = $this->params['rootfolderid'];
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+
 		$this->contentHeading(getMLText("edit_folder_access"));
 		$this->contentContainerStart();
 
@@ -227,7 +234,7 @@ function checkForm()
 			print "</table><br>";
 		}
 ?>
-<form action="../op/op.FolderAccess.php" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.FolderAccess.php" id="form1" name="form1">
 <?php echo createHiddenFieldWithKey('folderaccess'); ?>
 <input type="Hidden" name="folderid" value="<?php print $folder->getID()?>">
 <input type="Hidden" name="action" value="addaccess">

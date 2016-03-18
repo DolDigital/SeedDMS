@@ -31,22 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_SearchForm extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$attrdefs = $this->params['attrdefs'];
-		$allCats = $this->params['allcategories'];
-		$allUsers = $this->params['allusers'];
-		$enablefullsearch = $this->params['enablefullsearch'];
-		$workflowmode = $this->params['workflowmode'];
-
-		$this->htmlStartPage(getMLText("search"));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation(getMLText("search"), "");
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array()
@@ -71,7 +58,32 @@ function checkForm()
 	else
 		return true;
 }
-</script>
+
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+		$this->printFolderChooserJs("form1");
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$attrdefs = $this->params['attrdefs'];
+		$allCats = $this->params['allcategories'];
+		$allUsers = $this->params['allusers'];
+		$enablefullsearch = $this->params['enablefullsearch'];
+		$workflowmode = $this->params['workflowmode'];
+
+		$this->htmlStartPage(getMLText("search"));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation(getMLText("search"), "");
+?>
   <ul class="nav nav-tabs" id="searchtab">
 	  <li class="active"><a data-target="#database" data-toggle="tab"><?php printMLText('databasesearch'); ?></a></li>
 	  <li><a data-target="#full" data-toggle="tab"><?php printMLText('fullsearch'); ?></a></li>
@@ -82,7 +94,7 @@ function checkForm()
 <?php
 	$this->contentContainerStart();
 ?>
-<form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.Search.php" id="form1" name="form1">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("search_query");?>:</td>
@@ -161,7 +173,7 @@ function checkForm()
 </tr>
 <tr>
 <td><?php printMLText("under_folder")?>:</td>
-<td><?php $this->printFolderChooser("form1", M_READ, -1, $folder);?></td>
+<td><?php $this->printFolderChooserHtml("form1", M_READ, -1, $folder);?></td>
 </tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>

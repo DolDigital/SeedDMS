@@ -73,10 +73,12 @@ if(!$approvals) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
 	$view->setParam('accessobject', $accessop);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

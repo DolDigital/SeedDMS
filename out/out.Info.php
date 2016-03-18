@@ -50,4 +50,5 @@ if($view) {
 	$view->setParam('availversions', $versions);
 	$view->setParam('accessobject', $accessop);
 	$view($_GET);
+	exit;
 }

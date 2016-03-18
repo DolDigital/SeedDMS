@@ -31,6 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_MoveFolder extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+
+		$this->printFolderChooserJs("form1");
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -46,12 +52,12 @@ class SeedDMS_View_MoveFolder extends SeedDMS_Bootstrap_Style {
 
 ?>
 <form action="../op/op.MoveFolder.php" name="form1">
-	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
+	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+	<input type="hidden" name="showtree" value="<?php echo showtree();?>">
 	<table class="table-condensed">
 		<tr>
 			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooser("form1", M_READWRITE, $folder->getID(), $target);?></td>
+			<td><?php $this->printFolderChooserHtml("form1", M_READWRITE, $folder->getID(), $target);?></td>
 		</tr>
 		<tr>
 			<td></td>

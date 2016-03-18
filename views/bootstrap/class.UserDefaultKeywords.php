@@ -31,17 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UserDefaultKeywords extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$categories = $this->params['categories'];
-
-		$this->htmlStartPage(getMLText("edit_default_keywords"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("my_account"), "my_account");
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 obj = -1;
 function showKeywords(selectObj) {
 	if (obj != -1)
@@ -54,15 +46,40 @@ function showKeywords(selectObj) {
 	obj = document.getElementById("keywords" + id);
 	obj.style.display = "";
 }
-</script>
+
+sel = document.getElementById("selector");
+sel.selectedIndex=0; //<?php print $selected ?>;
+showKeywords(sel);
+
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+	$( "#selector" ).change(function() {
+		showKeywords(this);
+//		$('div.ajax').trigger('update', {userid: $(this).val()});
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$categories = $this->params['categories'];
+
+		$this->htmlStartPage(getMLText("edit_default_keywords"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("my_account"), "my_account");
 		$this->contentHeading(getMLText("edit_default_keywords"));
 ?>
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-	<select onchange="showKeywords(this)" id="selector">
+	<select id="selector">
 		<option value="-1"><?php echo getMLText("choose_category")?>
 		<option value="0"><?php echo getMLText("new_default_keyword_category")?>
 <?php
@@ -180,14 +197,6 @@ function showKeywords(selectObj) {
 </div>
 </div>
 </div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showKeywords(sel);
-
-</script>
 
 <?php
 		$this->contentEnd();

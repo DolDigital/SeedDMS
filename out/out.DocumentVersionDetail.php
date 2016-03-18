@@ -70,10 +70,19 @@ $folder = $document->getFolder();
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'previewWidthDetail'=>$settings->_previewWidthDetail, 'previewconverters'=>$settings->_converters['preview'], 'cachedir'=>$settings->_cacheDir, 'timeout'=>$settings->_cmdTimeout));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('version', $version);
+	$view->setParam('viewonlinefiletypes', $settings->_viewOnlineFileTypes);
+	$view->setParam('enableversionmodification', $settings->_enableVersionModification);
+	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('previewconverters', $settings->_converters['preview']);
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view->setParam('accessobject', $accessop);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

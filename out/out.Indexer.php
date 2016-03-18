@@ -65,9 +65,15 @@ else {
 $folder = $dms->getFolder($folderid);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'index'=>$index, 'indexconf'=>$indexconf, 'recreate'=>(isset($_GET['create']) && $_GET['create']==1), 'folder'=>$folder, 'converters'=>$settings->_converters['fulltext'], 'timeout'=>$settings->_cmdTimeout));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('index', $index);
+	$view->setParam('indexconf', $indexconf);
+	$view->setParam('recreate', (isset($_GET['create']) && $_GET['create']==1));
+	$view->setParam('folder', $folder);
+	$view->setParam('converters', $settings->_converters['fulltext']);
+	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view($_GET);
 	exit;
 }
 

@@ -31,25 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_EditFolder extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$attrdefs = $this->params['attrdefs'];
-		$rootfolderid = $this->params['rootfolderid'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-		$orderby = $this->params['orderby'];
-
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
-		$this->contentHeading(getMLText("edit_folder_props"));
-		$this->contentContainerStart();
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-
-<script language="JavaScript">
-function checkForm() {
+function checkForm()
+{
 	msg = new Array();
 	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
@@ -72,10 +59,34 @@ function checkForm() {
 	else
 		return true;
 }
-</script>
-<form action="../op/op.EditFolder.php" name="form1" onsubmit="return checkForm();" method="post">
-<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
-<input type="hidden" name="showtree" value="<?php echo showtree();?>">
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$attrdefs = $this->params['attrdefs'];
+		$rootfolderid = $this->params['rootfolderid'];
+		$strictformcheck = $this->params['strictformcheck'];
+		$orderby = $this->params['orderby'];
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+		$this->contentHeading(getMLText("edit_folder_props"));
+		$this->contentContainerStart();
+?>
+<form action="../op/op.EditFolder.php" id="form1" name="form1" method="post">
+<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
+<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("name");?>:</td>

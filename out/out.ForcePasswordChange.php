@@ -20,9 +20,10 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'passwordstrength'=>$settings->_passwordStrength));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('passwordstrength', $settings->_passwordStrength);
+	$view($_GET);
 	exit;
 }
 

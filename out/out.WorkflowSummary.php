@@ -37,9 +37,14 @@ if ($user->isGuest()) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'cachedir'=>$settings->_cacheDir, 'workflowmode'=>$settings->_workflowMode, 'previewWidthList'=>$settings->_previewWidthList, 'previewconverters'=>$settings->_converters['preview'], 'timeout'=>$settings->_cmdTimeout));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('previewconverters', $settings->_converters['preview']);
+	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view($_GET);
 	exit;
 }
 
