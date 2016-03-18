@@ -226,7 +226,7 @@ $(document).ready(function() {
 <?php
 	$this->contentContainerStart();
 ?>
-<form action="../op/op.SearchFulltext.php" name="form2" onsubmit="return checkForm();">
+<form action="../op/op.SearchFulltext.php" id="form2" name="form2">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("search_query");?>:</td>
