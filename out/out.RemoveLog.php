@@ -49,9 +49,11 @@ foreach($lognames as $file) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'lognames'=>$lognames, 'mode'=>$mode));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('lognames', $lognames);
+	$view->setParam('mode', $mode);
+	$view($_GET);
 	exit;
 }
 

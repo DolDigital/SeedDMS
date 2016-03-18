@@ -44,9 +44,13 @@ $allUsers = $dms->getAllUsers();
 $allGroups = $dms->getAllGroups();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'allusers'=>$allUsers, 'allgroups'=>$allGroups, 'rootfolderid'=>$settings->_rootFolderID));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('allgroups', $allGroups);
+	$view->setParam('rootfolderid', $settings->_rootFolderID);
+	$view($_GET);
 	exit;
 }
 

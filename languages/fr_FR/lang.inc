@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1026), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1028), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -384,6 +384,7 @@ URL: [url]',
 'edit_folder_notify' => 'Liste de notification de dossiers',
 'edit_folder_props' => 'Modifier le dossier',
 'edit_group' => 'Modifier un groupe',
+'edit_online' => '',
 'edit_transmittal_props' => '',
 'edit_user' => 'Modifier un utilisateur',
 'edit_user_details' => 'Modifier les détails d\'utilisateur',
@@ -962,6 +963,8 @@ URL: [url]',
 'settings_dropFolderDir' => 'Répertoire de dépôt de fichier sur le serveur',
 'settings_dropFolderDir_desc' => 'Ce répertoire peut être utilisé pour déposer des fichiers sur le serveur et les importer à partir d\'ici au lieu de les charger à partir du navigateur. Le répertoire doit avoir un sous-répertoire pour chaque utilisateur autorisé à importer des fichiers de cette manière.',
 'settings_Edition' => 'Paramètres d’édition',
+'settings_editOnlineFileTypes' => 'Editer le type de fichier',
+'settings_editOnlineFileTypes_desc' => 'Editer la description du type de fichier',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Activer Admin Rev App',

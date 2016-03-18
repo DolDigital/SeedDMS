@@ -45,9 +45,11 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view($_GET);
 	exit;
 }
 

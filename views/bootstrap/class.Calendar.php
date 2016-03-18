@@ -182,6 +182,10 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 		print "</table>\n";
 	} /* }}} */
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];

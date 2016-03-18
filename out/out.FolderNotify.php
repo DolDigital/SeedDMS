@@ -44,9 +44,13 @@ $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 $allGroups = $dms->getAllGroups();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'allusers'=>$allUsers, 'allgroups'=>$allGroups, 'strictformcheck'=>$settings->_strictFormCheck));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('allgroups', $allGroups);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view($_GET);
 	exit;
 }
 

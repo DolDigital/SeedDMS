@@ -50,7 +50,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
-		if(method_exists($this, 'js')) {
+		if(1 || method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
 			 * which is evaled by jquery
@@ -76,9 +76,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
-		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 //		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
 
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";

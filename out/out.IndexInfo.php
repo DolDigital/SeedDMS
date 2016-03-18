@@ -42,9 +42,12 @@ if(!$index) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'luceneclassdir'=>$settings->_luceneClassDir, 'lucenedir'=>$settings->_luceneDir, 'index'=>$index));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('luceneclassdir', $settings->_luceneClassDir);
+	$view->setParam('lucenedir', $settings->_luceneDir);
+	$view->setParam('index', $index);
+	$view($_GET);
 	exit;
 }
 

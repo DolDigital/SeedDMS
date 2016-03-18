@@ -34,7 +34,7 @@ class SeedDMS_View_DropFolderChooser extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
 ?>
-$('#fileselect').click(function(ev) {
+$('.fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');
 	fileSelected(attr_filename);
 });
@@ -58,17 +58,6 @@ $('#folderselect').click(function(ev) {
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
-//		$this->htmlStartPage(getMLText("choose_target_file"));
-//		$this->globalBanner();
-//		$this->pageNavigation(getMLText("choose_target_file"));
-?>
-
-<script language="JavaScript">
-var targetName = document.<?php echo $form?>.dropfolderfile<?php print $form ?>;
-</script>
-<?php
-//		$this->contentContainerStart();
-
 		$dir = $dropfolderdir.'/'.$user->getLogin();
 		/* Check if we are still looking in the configured directory and
 		 * not somewhere else, e.g. if the login was '../test'
@@ -91,7 +80,7 @@ var targetName = document.<?php echo $form?>.dropfolderfile<?php print $form ?>;
 							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
 								echo "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
 							}
-							echo "</td><td><span style=\"cursor: pointer;\" id=\"fileselect\" filename=\"".$entry."\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
+							echo "</td><td><span style=\"cursor: pointer;\" class=\"fileselect\" filename=\"".$entry."\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
 						} elseif($showfolders) {
 							echo "<tr>";
 							echo "<td></td>";
@@ -105,10 +94,6 @@ var targetName = document.<?php echo $form?>.dropfolderfile<?php print $form ?>;
 				echo '<script src="../out/out.DropFolderChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
 			}
 		}
-
-//		$this->contentContainerEnd();
-//		echo "</body>\n</html>\n";
-//		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

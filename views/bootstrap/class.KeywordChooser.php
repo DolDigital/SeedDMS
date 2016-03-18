@@ -198,7 +198,7 @@ myTA.focus();
 					else {	
 						print "<ul>";
 						foreach ($lists as $list) {
-							print "<li><a href='javascript:insertKeywords(\"".htmlspecialchars($list["keywords"])."\");'>".htmlspecialchars($list["keywords"])."</a></li>";
+							print "<li><a class=\"insertkeyword\" keyword=\"".htmlspecialchars($list["keywords"])."\">".htmlspecialchars($list["keywords"])."</a></li>";
 						}
 						print "</ul>";
 					}

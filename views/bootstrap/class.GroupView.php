@@ -31,6 +31,17 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_GroupView extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+?>
+$(document).ready( function() {
+	$( "#selector" ).change(function() {
+		$('#form').submit();
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -75,15 +86,15 @@ class SeedDMS_View_GroupView extends SeedDMS_Bootstrap_Style {
 					if($manager->getId() == $member->getId())
 						echo ", ".getMLText("manager");
 				if($ismanager) {
-					echo ' <a href="../op/op.GroupView.php?action=del&groupid='.$group->getId().'&userid='.$member->getId().'"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> '.getMLText("rm_user").'</a>';
+					echo ' <a href="../op/op.GroupView.php?action=del&groupid='.$group->getId().'&userid='.$member->getId().'" class="btn btn-mini"><i class="icon-remove"></i> '.getMLText("rm_user").'</a>';
 				}
 				echo "</li>";
 			}
 			if($ismanager) {
 				echo "<li>".getMLText("add_user_to_group").":";
-				echo "<form action=\"../op/op.GroupView.php\">";
+				echo "<form id=\"form\" action=\"../op/op.GroupView.php\">";
 				echo "<input type=\"hidden\" name=\"action\" value=\"add\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getId()."\" />";
-				echo "<select name=\"userid\" onChange=\"javascript: submit();\">";
+				echo "<select id=\"selector\" name=\"userid\" _onChange=\"javascript: submit();\">";
 				echo "<option value=\"\"></option>";
 				foreach($allUsers as $u) {
 					if(!$u->isAdmin() && !$u->isGuest() && !in_array($u->getId(), $memberids))

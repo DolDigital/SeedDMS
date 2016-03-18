@@ -48,8 +48,12 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 $accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
 	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;

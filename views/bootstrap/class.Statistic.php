@@ -219,7 +219,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerEnd();
 		$this->contentEnd();
-	$this->htmlEndPage();
+		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

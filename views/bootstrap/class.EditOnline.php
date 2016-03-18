@@ -36,6 +36,32 @@ class SeedDMS_View_EditOnline extends SeedDMS_Bootstrap_Style {
 	var $file_count;
 	var $storage_size;
 
+	function js() { /* {{{ */
+		$document = $this->params['document'];
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+$(document).ready(function()	{
+	$('#markdown').markItUp(mySettings);
+
+	$('#update').click(function(event) {
+		event.preventDefault();
+		$.post("../op/op.EditOnline.php", $('#form1').serialize(), function(response) {
+			noty({
+				text: response.message,
+				type: response.success === true ? 'success' : 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+			$('div.ajax').trigger('update', {documentid: <?= $document->getId() ?>});
+		}, "json");
+		return false;
+	});
+});
+<?php
+	} /* }}} */
+
 	function preview() { /* {{{ */
 		$dms = $this->params['dms'];
 		$document = $this->params['document'];
@@ -91,27 +117,6 @@ echo "<div class=\"row-fluid\">\n";
 echo "<div class=\"span6\">\n";
 $this->contentHeading(getMLText("content"));
 ?>
-<script language="javascript">
-$(document).ready(function()	{
-	$('#markdown').markItUp(mySettings);
-
-	$('#update').click(function(event) {
-		event.preventDefault();
-		$.post("../op/op.EditOnline.php", $('#form1').serialize(), function(response) {
-			noty({
-				text: response.message,
-				type: response.success === true ? 'success' : 'error',
-				dismissQueue: true,
-				layout: 'topRight',
-				theme: 'defaultTheme',
-				timeout: 1500,
-			});
-			$('div.ajax').trigger('update', {documentid: <?= $document->getId() ?>});
-		}, "json");
-		return false;
-	});
-});
-</script>
 <form action="../op/op.EditOnline.php" id="form1" method="post">
 <input type="hidden" name="documentid" value="<?= $document->getId() ?>" />
 <textarea id="markdown" name="data" width="100%" rows="20">

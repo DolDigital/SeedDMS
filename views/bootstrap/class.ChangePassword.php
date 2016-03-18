@@ -31,6 +31,13 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ChangePassword extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+document.form1.newpassword.focus();
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$referuri = $this->params['referuri'];
@@ -43,7 +50,7 @@ class SeedDMS_View_ChangePassword extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation(getMLText("change_password"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.ChangePassword.php" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.ChangePassword.php" method="post" name="form1">
 <?php
 		if ($referuri) {
 			echo "<input type='hidden' name='referuri' value='".$referuri."'/>";
@@ -80,7 +87,6 @@ class SeedDMS_View_ChangePassword extends SeedDMS_Bootstrap_Style {
 	</table>
 </form>
 <?php $this->contentContainerEnd(); ?>
-<script language="JavaScript">document.form1.newpassword.focus();</script>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
 		$this->contentEnd();

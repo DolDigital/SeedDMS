@@ -31,28 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ReviewDocument extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$content = $this->params['version'];
-
-		$reviews = $content->getReviewStatus();
-		foreach($reviews as $review) {
-			if($review['reviewID'] == $_GET['reviewid']) {
-				$reviewStatus = $review;
-				break;
-			}
-		}
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("submit_review"));
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkIndForm()
 {
 	msg = new Array();
@@ -75,20 +56,57 @@ function checkIndForm()
 function checkGrpForm()
 {
 	msg = "";
-	if (document.form1.reviewGroup.value == "") msg += "<?php printMLText("js_no_review_group");?>\n";
-	if (document.form1.reviewStatus.value == "") msg += "<?php printMLText("js_no_review_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (document.form2.reviewGroup.value == "") msg += "<?php printMLText("js_no_review_group");?>\n";
+	if (document.form2.reviewStatus.value == "") msg += "<?php printMLText("js_no_review_status");?>\n";
+	if (document.form2.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
 		return true;
 }
-</script>
-
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkIndForm()) return;
+		event.preventDefault();
+	});
+	$('body').on('submit', '#form2', function(ev){
+		if(checkGrpForm()) return;
+		event.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$content = $this->params['version'];
+
+		$reviews = $content->getReviewStatus();
+		foreach($reviews as $review) {
+			if($review['reviewID'] == $_GET['reviewid']) {
+				$reviewStatus = $review;
+				break;
+			}
+		}
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->contentHeading(getMLText("submit_review"));
 		$this->contentContainerStart();
 
 		// Display the Review form.
@@ -109,7 +127,7 @@ function checkGrpForm()
 				print "</tr></tbody></table><br>";
 			}
 ?>
-	<form method="post" action="../op/op.ReviewDocument.php" name="form1" enctype="multipart/form-data" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ReviewDocument.php" id="form1" name="form1" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
 	<table class="table-condensed">
 		<tr>
@@ -167,7 +185,7 @@ function checkGrpForm()
 			}
 
 ?>
-	<form method="post" action="../op/op.ReviewDocument.php" name="form1" enctype="multipart/form-data" onsubmit="return checkGrpForm();">
+	<form method="post" action="../op/op.ReviewDocument.php" id="form2" name="form2" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
 	<table class="table-condensed">
 		<tr>
