@@ -31,6 +31,28 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_SetWorkflow extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$document = $this->params['document'];
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+function showWorkflow(selectObj) {
+	id = selectObj.options[selectObj.selectedIndex].value;
+	if (id > 0) {
+		$('#workflowgraph').show();
+		$('#workflowgraph iframe').attr('src', 'out.WorkflowGraph.php?documentid=<?php echo $document->getID(); ?>&workflow='+id);
+	} else {
+		$('#workflowgraph').hide();
+	}
+
+}
+$(document).ready( function() {
+	$( "#selector" ).change(function() {
+		showWorkflow(this);
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -48,18 +70,6 @@ class SeedDMS_View_SetWorkflow extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		// Display the Workflow form.
 ?>
-<script language="JavaScript">
-function showWorkflow(selectObj) {
-	id = selectObj.options[selectObj.selectedIndex].value;
-	if (id > 0) {
-		$('#workflowgraph').show();
-		$('#workflowgraph iframe').attr('src', 'out.WorkflowGraph.php?documentid=<?php echo $document->getID(); ?>&workflow='+id);
-	} else {
-		$('#workflowgraph').hide();
-	}
-
-}
-</script>
 	<div class="row-fluid">
 	<div class="span4">
 <?php
@@ -78,7 +88,7 @@ function showWorkflow(selectObj) {
       </td>
       <td>
 <?php
-					echo "<select onchange=\"showWorkflow(this)\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
+					echo "<select id=\"selector\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
 					$workflows=$dms->getAllWorkflows();
 					foreach ($workflows as $workflow) {

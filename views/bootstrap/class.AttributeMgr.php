@@ -162,7 +162,7 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-				<table class="table-condensed">
+				<table class="table table-condensed">
 					<tr>
 						<td>
 								<?php printMLText("attrdef_name");?>:
@@ -313,6 +313,8 @@ $(document).ready( function() {
 	<div class="well">
 		<div class="ajax" data-view="AttributeMgr" data-action="form" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
 	</div>
+</div>
+
 </div>
 
 <?php

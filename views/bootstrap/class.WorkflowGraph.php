@@ -31,6 +31,39 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_WorkflowGraph extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$this->workflow = $this->params['workflow'];
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+$(document).ready(function() {
+  var width = $('#canvas').width();
+  var height = $('#canvas').height();;
+  var ggg = new Graph();
+  ggg.edgeFactory.template.style.directed = true;
+
+  var render_action = function(r, n) {
+		/* the Raphael set is obligatory, containing all you want to display */
+		var set = r.set().push(
+			/* custom objects go here */
+			r.rect(n.point[0]-45, n.point[1]-13, 90, 44).attr({"fill": (n.color == undefined ? "#feb" : n.color), r : "12px", "stroke-width" : "1px" })).push(
+			r.text(n.point[0], n.point[1] + 10, (n.label || n.id) + "\n(" + (n.maxtime == undefined ? "Infinity" : n.maxtime) + ")"));
+		return set;
+	};
+
+<?php
+		$this->seentrans = array();
+		$state = $this->workflow->getInitState();
+		$this->states = array();
+		$this->actions = array();
+		$this->printGraph();
+?>
+    var layouter = new Graph.Layout.Spring(ggg);
+    var renderer = new Graph.Renderer.Raphael('canvas', ggg, width, height);
+});
+
+<?php
+	} /* }}} */
+
 	function printGraph() { /* {{{ */
 		$transitions = $this->workflow->getTransitions();	
 		if($transitions) {
@@ -112,42 +145,20 @@ class SeedDMS_View_WorkflowGraph extends SeedDMS_Bootstrap_Style {
 			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_graffle.js"></script>'."\n".
 			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_graph.js"></script>'."\n".
 			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_algorithms.js"></script>'."\n");
+		$this->htmlAddHeader('
+<style type="text/css">
+body {padding: 0px;}
+</style>
+', 'css');
 		$this->htmlStartPage(getMLText("admin_tools"));
 //		$this->contentContainerStart();
 
 ?>
-<div id="canvas" style="width: 100%; height:480px; _border: 1px solid #bbb;"></div>
-<script language="JavaScript">
-$(document).ready(function() {
-  var width = $('#canvas').width();
-  var height = $('#canvas').height();;
-  var ggg = new Graph();
-  ggg.edgeFactory.template.style.directed = true;
-
-  var render_action = function(r, n) {
-		/* the Raphael set is obligatory, containing all you want to display */
-		var set = r.set().push(
-			/* custom objects go here */
-			r.rect(n.point[0]-45, n.point[1]-13, 90, 44).attr({"fill": (n.color == undefined ? "#feb" : n.color), r : "12px", "stroke-width" : "1px" })).push(
-			r.text(n.point[0], n.point[1] + 10, (n.label || n.id) + "\n(" + (n.maxtime == undefined ? "Infinity" : n.maxtime) + ")"));
-		return set;
-	};
-
-<?php
-		$this->seentrans = array();
-		$state = $this->workflow->getInitState();
-		$this->states = array();
-		$this->actions = array();
-		$this->printGraph();
-?>
-    var layouter = new Graph.Layout.Spring(ggg);
-    var renderer = new Graph.Renderer.Raphael('canvas', ggg, width, height);
-});
-
-</script>
-
+<div id="canvas" style="width: 100%; height:546px; _border: 1px solid #bbb;"></div>
 <?php
 //		$this->contentContainerEnd();
+		if(method_exists($this, 'js'))
+			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
 		echo "</body>\n</html>\n";
 	} /* }}} */
 }
