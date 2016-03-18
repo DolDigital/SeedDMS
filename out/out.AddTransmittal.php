@@ -31,7 +31,7 @@ include("../inc/inc.Authentication.php");
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('strictformcheck'=>$settings->_strictFormCheck);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
 	$view($_GET);
 	exit;
 }
