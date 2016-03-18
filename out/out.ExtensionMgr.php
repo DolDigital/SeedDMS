@@ -32,9 +32,11 @@ if (!$user->isAdmin()) {
 $v = new SeedDMS_Version;
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'httproot'=>$settings->_httpRoot, 'version'=>$v));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('version', $v);
+	$view($_GET);
 	exit;
 }
 

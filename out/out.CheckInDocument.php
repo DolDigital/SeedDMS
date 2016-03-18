@@ -63,10 +63,20 @@ $folder = $document->getFolder();
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
+	$view->setParam('enableadminrevapp', $settings->_enableAdminRevApp);
+	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
+	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
+	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
 	$view->setParam('accessobject', $accessop);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

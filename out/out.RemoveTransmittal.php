@@ -40,9 +40,10 @@ if (!is_object($rmtransmittal)) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rmtransmittal'=>$rmtransmittal));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('rmtransmittal', $rmtransmittal);
+	$view($_GET);
 	exit;
 }
 
