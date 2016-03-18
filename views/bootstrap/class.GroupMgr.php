@@ -219,7 +219,7 @@ $(document).ready( function() {
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
 		
-		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2" _onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
