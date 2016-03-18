@@ -290,6 +290,7 @@ switch($command) {
 				if($folder) {
 					if ($folder->getAccessMode($user) >= M_READWRITE) {
 						$parent=$folder->getParent();
+						$nl =	$folder->getNotifyList();
 						$foldername = $folder->getName();
 						if($folder->remove()) {
 							if ($notifier) {
