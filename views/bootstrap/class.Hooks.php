@@ -75,6 +75,7 @@ class SeedDMS_View_Hooks extends SeedDMS_Bootstrap_Style {
 
 		self::list_hooks();
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
