@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-make it work with sqlite3 < 3.8.0
+make it work with sqlite3 &lt; 3.8.0
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
