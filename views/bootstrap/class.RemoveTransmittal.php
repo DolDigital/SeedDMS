@@ -57,6 +57,7 @@ class SeedDMS_View_RemoveTransmittal extends SeedDMS_Bootstrap_Style {
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
