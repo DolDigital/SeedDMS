@@ -1613,6 +1613,45 @@ $(function() {
 	} /* }}} */
 
 	/**
+	 * Output left-arrow with link which takes over a number of ids into
+	 * a select box.
+	 *
+	 * Clicking in the button will preset the comma seperated list of ids
+	 * in data-ref as options in the select box with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param array $ids list of option values
+	 */
+	function printSelectPresetButtonHtml($name, $ids) { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="selectpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>" data-ref="<?php echo $name; ?>" data-ids="<?php echo implode(",", $ids);?>"><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for select preset button
+	 */
+	function printSelectPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.selectpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('ids') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			// Use attr() instead of data() because data() converts to int which cannot be split
+			items = $(ev.currentTarget).attr('data-ids');
+			arr = items.split(",");
+			for(var i in arr) {
+				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
+			}
+			$("#"+target).trigger("chosen:updated");
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
 	 * Return HTML of a single row in the document list table
 	 *
 	 * @param object $document

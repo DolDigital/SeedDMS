@@ -31,30 +31,12 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 
-	function __takeOverButton($name, $users) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>"><i class="icon-arrow-left"></i></span>
-<script>
-$(document).ready( function() {
-	$('#<?php echo $name; ?>_btn').click(function(ev){
-		ev.preventDefault();
-<?php
-		foreach($users as $_id) {
-			echo "$(\"#".$name." option[value='".$_id."']\").attr(\"selected\", \"selected\");\n";
-		}
-?>
-		$("#<?php echo $name; ?>").trigger("chosen:updated");
-	});
-});
-</script>
-<?php
-	} /* }}} */
-
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
 		header('Content-Type: application/javascript');
 		$this->printDropFolderChooserJs("form1");
+		$this->printSelectPresetButtonJs();
 ?>
 function checkForm()
 {
@@ -263,7 +245,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("IndReviewer", $tmp);
+					$this->printSelectPresetButtonHtml("IndReviewer", $tmp);
 				}
 				/* List all mandatory reviewers */
 				if($res) {
@@ -332,7 +314,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("GrpReviewer", $tmp);
+					$this->printSelectPresetButtonHtml("GrpReviewer", $tmp);
 				}
 				/* List all mandatory groups of reviewers */
 				if($res) {
@@ -410,7 +392,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("IndApprover", $tmp);
+					$this->printSelectPresetButtonHtml("IndApprover", $tmp);
 				}
 				/* List all mandatory approvers */
 				if($res) {
@@ -480,7 +462,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("GrpApprover", $tmp);
+					$this->printSelectPresetButtonHtml("GrpApprover", $tmp);
 				}
 				/* List all mandatory groups of approvers */
 				if($res) {
