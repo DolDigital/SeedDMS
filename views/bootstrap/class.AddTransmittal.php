@@ -31,19 +31,10 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_AddTransmittal extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-
-		$this->htmlStartPage(getMLText("my_documents"));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation(getMLText("my_documents"), "my_documents");
-		$this->contentHeading(getMLText("add_transmittal"));
-		$this->contentContainerStart();
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -69,9 +60,29 @@ function checkForm()
 	else
 		return true;
 }
-</script>
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
 
-<form action="../op/op.AddTransmittal.php" name="form1" onsubmit="return checkForm();" method="post">
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		$this->htmlStartPage(getMLText("my_documents"));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation(getMLText("my_documents"), "my_documents");
+		$this->contentHeading(getMLText("add_transmittal"));
+		$this->contentContainerStart();
+?>
+
+<form action="../op/op.AddTransmittal.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('addtransmittal'); ?>
 	<table class="table-condensed">
 		<tr>

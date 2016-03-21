@@ -27,6 +27,50 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_CheckInDocument extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+function checkForm()
+{
+	msg = new Array();
+<?php if($dropfolderdir) { ?>
+	if (document.form1.userfile.value == "" && document.form1.dropfolderfileform1.value == "") msg.push("<?php printMLText("js_no_file");?>");
+<?php } else { ?>
+	if (document.form1.userfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
+<?php } ?>
+<?php
+	if ($strictformcheck) {
+	?>
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+<?php
+	}
+?>
+	if (msg != "")
+	{
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
+?>
 	function __takeOverButton($name, $users) { /* {{{ */
 ?>
 	<span id="<?php echo $name; ?>_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>"><i class="icon-arrow-left"></i></span>
@@ -66,42 +110,7 @@ $(document).ready( function() {
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 		$this->contentHeading(getMLText("checkin_document"));
-?>
 
-<script language="JavaScript">
-function checkForm()
-{
-	msg = new Array();
-<?php if($dropfolderdir) { ?>
-	if (document.form1.userfile.value == "" && document.form1.dropfolderfileform1.value == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } else { ?>
-	if (document.form1.userfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } ?>
-<?php
-	if ($strictformcheck) {
-	?>
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-<?php
-	}
-?>
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-</script>
-
-<?php
 		if ($document->isLocked()) {
 
 			$lockingUser = $document->getLockingUser();
@@ -162,7 +171,7 @@ function checkForm()
 		$this->contentContainerStart();
 ?>
 
-<form action="../op/op.CheckInDocument.php" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.CheckInDocument.php" method="post" id="form1" name="form1">
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table class="table-condensed">
 	
@@ -564,6 +573,7 @@ function checkForm()
 	<input type="submit" class="btn" value="<?php printMLText("reset_checkout"); ?>">
 <?php
 		}
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -44,7 +44,7 @@ class SeedDMS_View_RemoveTransmittal extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 
 ?>
-<form action="../op/op.UsrMgr.php" name="form1" method="post">
+<form action="../op/op.TransmittalMgr.php" name="form1" method="post">
 <input type="hidden" name="transmittalid" value="<?php print $rmtransmittal->getID();?>">
 <input type="hidden" name="action" value="removetransmittal">
 <?php echo createHiddenFieldWithKey('removetransmittal'); ?>

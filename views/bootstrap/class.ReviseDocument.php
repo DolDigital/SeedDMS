@@ -31,6 +31,62 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ReviseDocument extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+function checkIndForm()
+{
+	msg = new Array();
+	if (document.form1.revisionStatus.value == "") msg.push("<?php printMLText("js_no_revision_status");?>");
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+function checkGrpForm()
+{
+	msg = "";
+	if (document.form2.revisionGroup.value == "") msg += "<?php printMLText("js_no_revision_group");?>\n";
+	if (document.form2.revisionSatus.value == "") msg += "<?php printMLText("js_no_revision_status");?>\n";
+	if (document.form2.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (msg != "")
+	{
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkIndForm()) return;
+		event.preventDefault();
+	});
+	$('body').on('submit', '#form2', function(ev){
+		if(checkGrpForm()) return;
+		event.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -52,44 +108,6 @@ class SeedDMS_View_ReviseDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 		$this->contentHeading(getMLText("submit_review"));
-?>
-<script language="JavaScript">
-function checkIndForm()
-{
-	msg = new Array();
-	if (document.form1.revisionStatus.value == "") msg.push("<?php printMLText("js_no_review_status");?>");
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (msg != "") {
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-function checkGrpForm()
-{
-	msg = "";
-	if (document.form1.revisionGroup.value == "") msg += "<?php printMLText("js_no_revision_group");?>\n";
-	if (document.form1.revisionStatus.value == "") msg += "<?php printMLText("js_no_revision_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
-		return false;
-	}
-	else
-		return true;
-}
-</script>
-
-<?php
 		$this->contentContainerStart();
 
 		// Display the Revision form.
@@ -110,7 +128,7 @@ function checkGrpForm()
 				print "</tr></tbody></table><br>";
 			}
 ?>
-	<form method="post" action="../op/op.ReviseDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ReviseDocument.php" id="form1" name="form1">
 	<?php echo createHiddenFieldWithKey('revisedocument'); ?>
 	<table class="table-condensed">
 		<tr>
@@ -160,7 +178,7 @@ function checkGrpForm()
 			}
 
 ?>
-	<form method="post" action="../op/op.ReviseDocument.php" name="form1" onsubmit="return checkGrpForm();">
+	<form method="post" action="../op/op.ReviseDocument.php" id="form2" name="form2">
 	<?php echo createHiddenFieldWithKey('revisedocument'); ?>
 	<table class="table-condensed">
 		<tr>
