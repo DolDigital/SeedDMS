@@ -70,7 +70,6 @@ $(document).ready(function() {
 <?php
 	} /* }}} */
 
-?>
 	function __takeOverButton($name, $users) { /* {{{ */
 ?>
 	<span id="<?php echo $name; ?>_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>"><i class="icon-arrow-left"></i></span>
