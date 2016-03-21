@@ -111,10 +111,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$document = $this->params['document'];
 
 		header('Content-Type: application/javascript');
-		$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+		if($user->isAdmin()) {
+			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+		}
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
