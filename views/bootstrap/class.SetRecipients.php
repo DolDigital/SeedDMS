@@ -135,6 +135,7 @@ class SeedDMS_View_SetRecipients extends SeedDMS_Bootstrap_Style {
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

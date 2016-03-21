@@ -140,6 +140,7 @@ class SeedDMS_View_ReceiptSummary extends SeedDMS_Bootstrap_Style {
 
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

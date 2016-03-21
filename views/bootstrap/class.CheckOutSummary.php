@@ -136,8 +136,8 @@ class SeedDMS_View_CheckOutSummary extends SeedDMS_Bootstrap_Style {
 			printMLText("empty_notify_list");
 		}
 
-
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
