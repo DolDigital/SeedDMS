@@ -567,9 +567,10 @@ $(document).ready( function() {
 		$this->contentContainerEnd();
 		} else {
 ?>
-<form action="../op/op.CheckInDocument.php" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.CheckInDocument.php" method="post">
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<input type="submit" class="btn" value="<?php printMLText("reset_checkout"); ?>">
+</form>
 <?php
 		}
 		$this->contentEnd();
