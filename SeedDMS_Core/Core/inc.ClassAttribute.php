@@ -79,7 +79,7 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	 * @param SeedDMS_Core_AttributeDefinition $attrdef reference to the attribute definition
 	 * @param string $value value of the attribute
 	 */
-	function SeedDMS_Core_Attribute($id, $obj, $attrdef, $value) { /* {{{ */
+	function __construct($id, $obj, $attrdef, $value) { /* {{{ */
 		$this->_id = $id;
 		$this->_obj = $obj;
 		$this->_attrdef = $attrdef;
@@ -395,7 +395,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 * @param string $valueset separated list of allowed values, the first char
 	 *        is taken as the separator
 	 */
-	function SeedDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
+	function __construct($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_type = $type;

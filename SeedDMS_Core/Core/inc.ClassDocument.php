@@ -150,7 +150,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 */
 	protected $_sequence;
 
-	function SeedDMS_Core_Document($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
+	function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
 		parent::__construct($id);
 		$this->_name = $name;
 		$this->_comment = $comment;
@@ -2261,7 +2261,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		else $this->setStatus(S_RELEASED,$msg,$user);
 	} /* }}} */
 
-	function SeedDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0, $checksum='') { /* {{{ */
+	function __construct($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0, $checksum='') { /* {{{ */
 		parent::__construct($id);
 		$this->_document = $document;
 		$this->_version = (int) $version;
@@ -4214,7 +4214,7 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	 */
 	protected $_public;
 
-	function SeedDMS_Core_DocumentLink($id, $document, $target, $userID, $public) {
+	function __construct($id, $document, $target, $userID, $public) {
 		$this->_id = $id;
 		$this->_document = $document;
 		$this->_target = $target;
@@ -4313,7 +4313,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 */
 	protected $_name;
 
-	function SeedDMS_Core_DocumentFile($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name) {
+	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name) {
 		$this->_id = $id;
 		$this->_document = $document;
 		$this->_userID = $userID;
@@ -4381,7 +4381,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	 */
 	protected $_dms;
 
-	function SeedDMS_Core_AddContentResultSet($content) { /* {{{ */
+	function __construct($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
 		$this->_grpReviewers = null;

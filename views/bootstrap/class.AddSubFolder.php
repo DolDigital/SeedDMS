@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddSubFolder extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript');
 ?>
 function checkForm()
@@ -62,7 +63,7 @@ function checkForm()
 $(document).ready( function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 });
 <?php

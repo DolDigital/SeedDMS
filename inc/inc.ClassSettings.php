@@ -240,7 +240,7 @@ class Settings { /* {{{ */
 	 *
 	 * @param string $configFilePath path to config file
 	 */
-	function Settings($configFilePath='') { /* {{{ */
+	function __construct($configFilePath='') { /* {{{ */
 		if($configFilePath=='') {
 			$configFilePath = $this->searchConfigFilePath();
 

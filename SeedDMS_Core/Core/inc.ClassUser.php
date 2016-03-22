@@ -134,7 +134,7 @@ class SeedDMS_Core_User { /* {{{ */
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='0000-00-00 00:00:00', $loginFailures=0, $quota=0, $homeFolder=null) {
+	function __construct($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='0000-00-00 00:00:00', $loginFailures=0, $quota=0, $homeFolder=null) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;

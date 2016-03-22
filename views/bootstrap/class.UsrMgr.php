@@ -71,7 +71,7 @@ function checkForm()
 $(document).ready( function() {
 	$('body').on('submit', '#form', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {userid: $(this).val()});

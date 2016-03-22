@@ -85,13 +85,13 @@ $(document).ready( function() {
 	$('body').on('submit', '#form_1', function(ev){
 		if(checkForm1())
 			return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 
 	$('body').on('submit', '#form_2', function(ev){
 		if(checkForm2())
 			return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 
 	$( "#selector" ).change(function() {

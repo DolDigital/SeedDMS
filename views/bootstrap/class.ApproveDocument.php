@@ -77,11 +77,11 @@ function checkGrpForm()
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkIndForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$('body').on('submit', '#form2', function(ev){
 		if(checkGrpForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 });
 <?php
