@@ -43,7 +43,7 @@ class SeedDMS_Core_Group {
 	 */
 	protected $_dms;
 
-	function SeedDMS_Core_Group($id, $name, $comment) { /* {{{ */
+	function __construct($id, $name, $comment) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_comment = $comment;

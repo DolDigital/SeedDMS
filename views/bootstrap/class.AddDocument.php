@@ -70,7 +70,7 @@ function checkForm()
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$('#new-file').click(function(event) {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');

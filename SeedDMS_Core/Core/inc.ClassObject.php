@@ -38,7 +38,7 @@ class SeedDMS_Core_Object { /* {{{ */
 	 */
 	public $_dms;
 
-	function SeedDMS_Core_Object($id) { /* {{{ */
+	function __construct($id) { /* {{{ */
 		$this->_id = $id;
 		$this->_dms = null;
 	} /* }}} */
