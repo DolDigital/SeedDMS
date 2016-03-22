@@ -100,15 +100,15 @@ function checkKeywordForm()
 $(document).ready( function() {
 	$('body').on('submit', '#form', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$('body').on('submit', '.formk', function(ev){
 		if(checkKeywordForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$('body').on('submit', '.formn', function(ev){
 		if(checkFormName()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {categoryid: $(this).val()});

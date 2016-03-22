@@ -39,7 +39,7 @@ class SeedDMS_View_AttributeMgr extends SeedDMS_Bootstrap_Style {
 $(document).ready( function() {
 	$('body').on('submit', '#form', function(ev){
 //		if(checkForm()) return;
-//		event.preventDefault();
+//		ev.preventDefault();
 	});
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {attrdefid: $(this).val()});

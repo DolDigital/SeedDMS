@@ -60,7 +60,7 @@ function checkForm(num)
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {workflowid: $(this).val()});

@@ -63,7 +63,7 @@ function checkForm()
 $(document).ready(function() {
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 });
 <?php
