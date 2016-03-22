@@ -128,7 +128,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @param string $passw password of user
 	 * @param string $database name of database
 	 */
-	function SeedDMS_Core_DatabaseAccess($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
+	function __construct($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
 		$this->_driver = $driver;
 		$tmp = explode(":", $hostname);
 		$this->_hostname = $tmp[0];
