@@ -221,8 +221,8 @@ $(document).ready(function () {
 		}
 		$content = '';
 		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
-		$content .= "    <li class=\"dropdown\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "    <li class=\"dropdown add-clipboard-area\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-clipboard-area\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($clipboard['folders'] as $folderid) {
 			if($folder = $this->params['dms']->getFolder($folderid))
@@ -1506,7 +1506,7 @@ $(function() {
 			$content .= "</table>";
 		} else {
 		}
-			$content .= "<div class=\"alert\">".getMLText("drag_icon_here")."</div>";
+		$content .= "<div class=\"alert add-clipboard-area\">".getMLText("drag_icon_here")."</div>";
 		return $content;
 	} /* }}} */
 

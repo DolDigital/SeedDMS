@@ -40,7 +40,7 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		$previewwidthdetail = $this->params['previewWidthDetail'];
 		$timeout = $this->params['timeout'];
 
-		if($document) {
+		if($document && $version) {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
 			$previewer->createPreview($version);
 
