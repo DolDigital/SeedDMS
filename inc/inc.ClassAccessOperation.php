@@ -167,7 +167,7 @@ class SeedDMS_AccessOperation {
 		if(get_class($document) == $this->dms->getClassname('document')) {
 			$latestContent = $document->getLatestContent();
 			$status = $latestContent->getStatus();
-			if (($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin() /* && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)*/) {
+			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)) {
 				return true;
 			}
 		}
@@ -317,7 +317,7 @@ class SeedDMS_AccessOperation {
 	 * Check if document content may be revised
 	 *
 	 * Revising a document content is only allowed if the document was not
-	 * obsoleted. There are other requirements which are not taken into
+	 * obsoleted. There may be other requirements which are not taken into
 	 * account here.
 	 */
 	function mayRevise($document) { /* {{{ */
