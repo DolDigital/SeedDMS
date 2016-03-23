@@ -25,6 +25,8 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
+- use __construct() for all constructors
+- fix setting multi value attributes for versions
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
