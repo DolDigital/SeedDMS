@@ -1204,7 +1204,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
-				if(trim($attribute))
+				/* $attribute can be a string or an array */
+				if($attribute)
 					if(!$content->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
 						$this->removeContent($content);
 						$db->rollbackTransaction();
