@@ -194,6 +194,10 @@ else if ($action == "edituser") {
 
 	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
+	if(isset($_POST['clearpwd']) && $_POST['clearpwd'])
+		$clearpwd = 1;
+	else
+		$clearpwd = 0;
 	if(isset($_POST["pwdexpiration"]))
 		$pwdexpiration = $_POST["pwdexpiration"];
 	else
@@ -209,25 +213,28 @@ else if ($action == "edituser") {
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
 	
-	if ($editedUser->getLogin() != $login)
-		$editedUser->setLogin($login);
-	if($pwdexpiration)
-		$editedUser->setPwdExpiration($pwdexpiration);
 	if (isset($pwd) && ($pwd != "")) {
 		if($settings->_passwordStrength) {
 			$ps = new Password_Strength();
-			$ps->set_password($_POST["pwd"]);
+			$ps->set_password($pwd);
 			if($settings->_passwordStrengthAlgorithm == 'simple')
 				$ps->simple_calculate();
 			else
 				$ps->calculate();
 			$score = $ps->get_score();
-			if($score >= $settings->_passwordStrength) {
-				$editedUser->setPwd(md5($pwd));
-			} else {
+			if($score < $settings->_passwordStrength) {
 				UI::exitError(getMLText("set_password"),getMLText("password_strength_insuffient"));
 			}
-		} else {
+		}
+	}
+	if ($editedUser->getLogin() != $login)
+		$editedUser->setLogin($login);
+	if($pwdexpiration)
+		$editedUser->setPwdExpiration($pwdexpiration);
+	if(($role == SeedDMS_Core_User::role_guest) && $clearpwd) {
+		$editedUser->setPwd('');
+	} else {
+		if (isset($pwd) && ($pwd != "")) {
 			$editedUser->setPwd(md5($pwd));
 		}
 	}

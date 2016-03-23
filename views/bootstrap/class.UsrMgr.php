@@ -194,7 +194,7 @@ $(document).ready( function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"></td>
+			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"><?php if($currUser && $currUser->isGuest()) echo ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password'); ?></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {
