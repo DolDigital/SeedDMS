@@ -723,18 +723,18 @@ $(document).ready(function() {
 	});
 
 	/* Dropping item on alert below clipboard */
-	$(document).on('dragenter', '#main-clipboard div.alert', function (e) {
+	$(document).on('dragenter', '.add-clipboard-area', function (e) {
 		e.stopPropagation();
 		e.preventDefault();
 		$(this).css('border', '2px dashed #0B85A1');
 	});
-	$(document).on('dragleave', '#main-clipboard div.alert', function (e) {
+	$(document).on('dragleave', '.add-clipboard-area', function (e) {
 		$(this).css('border', '0px solid white');
 	});
-	$(document).on('dragover', '#main-clipboard div.alert', function (e) {
+	$(document).on('dragover', '.add-clipboard-area', function (e) {
 		e.preventDefault();
 	});
-	$(document).on('drop', '#main-clipboard div.alert', function (e) {
+	$(document).on('drop', '.add-clipboard-area', function (e) {
 		$(this).css('border', '0px dotted #0B85A1');
 		onAddClipboard(e);
 	});

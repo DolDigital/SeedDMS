@@ -987,8 +987,6 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
-<<<<<<< HEAD
-=======
    <date>2016-01-21</date>
    <time>07:12:53</time>
    <version>

@@ -33,10 +33,10 @@ $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_cleared
 
 add_log_line();
 
-if($_GET['refferer'])
+if(isset($_GET['refferer']) && $_GET['refferer'])
 	header("Location:".urldecode($_GET['refferer']));
-else {
-	$folderid = $_GET['folderid'];
-	header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
-}
+elseif(isset($_GET['folderid']) && is_numeric($_GET['folderid']))
+	header("Location:../out/out.ViewFolder.php?folderid=".$_GET['folderid']);
+else
+	header("Location:../index.php");
 ?>
