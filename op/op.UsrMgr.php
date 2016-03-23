@@ -245,7 +245,7 @@ else if ($action == "edituser") {
 		$editedUser->setLogin($login);
 	if($pwdexpiration)
 		$editedUser->setPwdExpiration($pwdexpiration);
-	if(($role == SeedDMS_Core_User::role_guest) && $clearpwd) {
+	if($role->isGuest() && $clearpwd) {
 		$editedUser->setPwd('');
 	} else {
 		if (isset($pwd) && ($pwd != "")) {
