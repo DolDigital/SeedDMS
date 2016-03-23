@@ -278,6 +278,7 @@ $(document).ready( function() {
 </div>
 </div>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

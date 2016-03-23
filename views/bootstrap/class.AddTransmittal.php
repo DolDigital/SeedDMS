@@ -99,8 +99,8 @@ $(document).ready(function() {
 	</table>
 </form>
 <?php
-		$this->contentEnd();
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
