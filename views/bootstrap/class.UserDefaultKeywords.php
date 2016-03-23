@@ -48,7 +48,7 @@ function showKeywords(selectObj) {
 }
 
 sel = document.getElementById("selector");
-sel.selectedIndex=0; //<?php print $selected ?>;
+sel.selectedIndex=0;
 showKeywords(sel);
 
 $(document).ready(function() {
