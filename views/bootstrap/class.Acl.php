@@ -265,14 +265,16 @@ $(document).ready( function() {
 <?php
 		$this->contentHeading(getMLText("access_control"));
 
-		$aro = SeedDMS_Aro::getInstance($selrole, $dms);
-		if(!$aro) {
-			$this->warningMsg(getMLText("missing_request_object"));
-			echo "<button id=\"add_aro\" class=\"btn btn-primary\" data-roleid=\"".$selrole->getID()."\">".getMLText('add')."</button>";
-		} else {
+		if($selrole) {
+			$aro = SeedDMS_Aro::getInstance($selrole, $dms);
+			if(!$aro) {
+				$this->warningMsg(getMLText("missing_request_object"));
+				echo "<button id=\"add_aro\" class=\"btn btn-primary\" data-roleid=\"".$selrole->getID()."\">".getMLText('add')."</button>";
+			} else {
 ?>
 	<div id="acostree" data-url="out.Acl.php?action=tree&roleid=<?= ($selrole ? $selrole->getID() : 0) ?>">Berechtigungen werden geladen ...</div>
 <?php
+			}
 		}
 ?>
 </div>
