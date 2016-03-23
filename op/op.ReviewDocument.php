@@ -160,7 +160,7 @@ if($olddocstatus['status'] != $newdocstatus['status']) {
 }
 
 // Notify approvers, if necessary.
-if ($newStatus == S_DRAFT_APP) {
+if ($newdocstatus == S_DRAFT_APP) {
 	$requestUser = $document->getOwner();
 
 	if($notifier) {
