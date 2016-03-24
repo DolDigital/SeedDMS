@@ -2984,7 +2984,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$this->getStatus();
 		}
 		if ($this->_status["status"]==$status) {
-			return false;
+			return true;
 		}
 		if($date)
 			$ddate = $db->qstr($date);
@@ -4631,6 +4631,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		 * this may not be possible.
 		 */
 		$db->startTransaction();
+		/* Does it make sense to put all revisions into sleeping mode? I guess
+		 * not. If a document was released or rejected the revision are useless
+		 * anyway 
 		foreach($revisionStatus as $status) {
 			if($status['status'] != S_LOG_SLEEPING && $status['status'] != S_LOG_USER_REMOVED) {
 				$queryStr = "INSERT INTO `tblDocumentRevisionLog` (`revisionID`, `status`,
@@ -4645,6 +4648,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				}
 			}
 		}
+		 */
 		if(!$this->setStatus($docstatus, $docmsg, $requestUser)) {
 			$db->rollbackTransaction();
 			return false;
