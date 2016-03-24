@@ -999,9 +999,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<td width='20%'></td>\n";
 			print "</tr>\n";
 
+			$stat = array('-1'=>0, '0'=>0, '1'=>0);
 			foreach ($receiptStatus as $r) {
 				$required = null;
 				$is_recipient = false;
+				$stat[''.$r['status']]++;
 				switch ($r["type"]) {
 					case 0: // Reviewer is an individual.
 						$required = $dms->getUser($r["required"]);
@@ -1050,10 +1052,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		</table>
 <?php
-
 			$this->contentContainerEnd();
 			if($user->isAdmin()) {
 ?>
+			<div class="row-fluid">
+			<div class="span12">
+<div class="progress">
+<div class="bar bar-success" style="width: <?php echo round($stat['1']/count($receiptStatus)*100); ?>%;"></div>
+<!-- div class="bar bar-warning" style="width: <?php echo round($stat['0']/count($receiptStatus)*100); ?>%;"></div -->
+	<div class="bar bar-danger" style="width: <?php echo round($stat['-1']/count($receiptStatus)*100); ?>%;"></div>
+</div>
+			</div>
+			</div>
 			<div class="row-fluid">
 			<div class="span12">
 <?php
