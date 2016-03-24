@@ -87,6 +87,8 @@ class SeedDMS_View_SetRevisors extends SeedDMS_Bootstrap_Style {
 				switch ($revisionIndex["i"][$usr->getID()]["status"]) {
 					case S_LOG_WAITING:
 					case S_LOG_SLEEPING:
+					case S_LOG_ACCEPTED:
+					case S_LOG_REJECTED:
 						print "<option value='". $usr->getID() ."' selected='selected'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 						break;
 					case S_LOG_USER_REMOVED:
