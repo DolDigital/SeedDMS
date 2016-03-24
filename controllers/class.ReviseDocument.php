@@ -64,7 +64,7 @@ class SeedDMS_Controller_ReviseDocument extends SeedDMS_Controller_Common {
 		$result = $this->callHook('reviseUpdateDocumentStatus', $content);
 		if($result === null) {
 			if ($revisionstatus == -1){
-				if($content->setStatus(S_REJECTED,$comment,$user)) {
+				if(!$content->setStatus(S_REJECTED,$comment,$user)) {
 					$this->error = 1;
 					$this->errormsg = "revision_update_failed";
 					return false;
@@ -94,7 +94,7 @@ class SeedDMS_Controller_ReviseDocument extends SeedDMS_Controller_Common {
 					}
 				} else {
 					$newStatus=S_IN_REVISION;
-					if($content->setStatus($newStatus,$comment,$user)) {
+					if(!$content->setStatus($newStatus,$comment,$user)) {
 						$this->error = 1;
 						$this->errormsg = "revision_update_failed";
 						return false;
