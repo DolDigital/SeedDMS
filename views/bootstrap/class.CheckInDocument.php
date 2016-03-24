@@ -29,6 +29,7 @@ class SeedDMS_View_CheckInDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
+		$dropfolderdir = $this->params['dropfolderdir'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm()
