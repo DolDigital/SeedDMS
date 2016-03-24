@@ -44,7 +44,7 @@ class SeedDMS_View_SetRecipients extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation($folder);
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("change_assignments"));
+		$this->contentHeading(getMLText("change_recipients"));
 
 		// Retrieve a list of all users and groups that have receipt privileges.
 		$docAccess = $document->getReadAccessList();
