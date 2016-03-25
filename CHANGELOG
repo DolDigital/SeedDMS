@@ -1,6 +1,11 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.0.1
 --------------------------------------------------------------------------------
+- merged changes from 4.3.25
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.1
+--------------------------------------------------------------------------------
 - merged changes from 4.3.24
 - fixed sending test mail
 - fixed sending password forgotten mail
@@ -12,6 +17,17 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.25
+--------------------------------------------------------------------------------
+- much more consistent drag & drop
+- various translation updates
+- take out file deletion because it was (and probabbly never has been) useful
+- send notification if folder is deleted by ajax call
+- add page ImportFS for mass importing files from drop folder
+- add initial version for editing text files online
+- further pages with content security policy turned on
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.24

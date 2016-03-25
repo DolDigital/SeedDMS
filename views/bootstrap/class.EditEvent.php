@@ -31,21 +31,10 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_EditEvent extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$event = $this->params['event'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-
-		$this->htmlStartPage(getMLText("calendar"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("calendar"), "calendar");
-
-		$this->contentHeading(getMLText("edit_event"));
-		$this->contentContainerStart();
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array()
@@ -71,9 +60,31 @@ function checkForm()
 	else
 		return true;
 }
-</script>
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
 
-<form action="../op/op.EditEvent.php" name="form1" onsubmit="return checkForm();" method="POST">
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$event = $this->params['event'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		$this->htmlStartPage(getMLText("calendar"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("calendar"), "calendar");
+
+		$this->contentHeading(getMLText("edit_event"));
+		$this->contentContainerStart();
+?>
+
+<form action="../op/op.EditEvent.php" id="form1" name="form1" method="POST">
   <?php echo createHiddenFieldWithKey('editevent'); ?>
 
 	<input type="Hidden" name="eventid" value="<?php echo (int) $event["id"]; ?>">
@@ -113,6 +124,7 @@ function checkForm()
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

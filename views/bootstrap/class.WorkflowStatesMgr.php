@@ -31,27 +31,15 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_WorkflowStatesMgr extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$selworkflowstate = $this->params['selworkflowstate'];
-
-		$workflowstates = $dms->getAllWorkflowStates();
-
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 
 function checkForm(num)
 {
 	msg = new Array();
-	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
 	if (msg != "")
 	{
   	noty({
@@ -68,87 +56,26 @@ function checkForm(num)
 		return true;
 }
 
-
-obj = -1;
-function showWorkflowState(selectObj) {
-	if (obj != -1) {
-		obj.style.display = "none";
-	}
-
-	id = selectObj.options[selectObj.selectedIndex].value;
-	if (id == -1)
-		return;
-
-	obj = document.getElementById("keywords" + id);
-	obj.style.display = "";
-
-}
-</script>
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {workflowstateid: $(this).val()});
+	});
+});
 <?php
-		$this->contentHeading(getMLText("workflow_states_management"));
-?>
+	} /* }}} */
 
-<div class="row-fluid">
-<div class="span4">
-<div class="well">
-<?php echo getMLText("selection")?>:
-<select onchange="showWorkflowState(this)" id="selector" class="span9">
-<option value="-1"><?php echo getMLText("choose_workflow_state")?>
-<option value="0"><?php echo getMLText("add_workflow_state")?>
-<?php
-		$selected=0;
-		$count=2;
-		foreach ($workflowstates as $currWorkflowState) {
-			if ($selworkflowstate && $currWorkflowState->getID()==$selworkflowstate->getID()) $selected=$count;
-			print "<option value=\"".$currWorkflowState->getID()."\">" . htmlspecialchars($currWorkflowState->getName());
-			$count++;
-		}
-?>
-</select>
-</div>
-</div>
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+	} /* }}} */
 
-<div class="span8">
-<div class="well">
-<table class="table-condensed">
-	<tr>
-	<td id="keywords0" style="display : none;">
-
-	<form action="../op/op.WorkflowStatesMgr.php" method="post" name="form0" onsubmit="return checkForm('0');">
-  <?php echo createHiddenFieldWithKey('addworkflowstate'); ?>
-	<input type="Hidden" name="action" value="addworkflowstate">
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("workflow_state_name");?>:</td>
-			<td><input type="text" name="name"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("workflow_state_docstatus");?>:</td>
-			<td><select name="docstatus">
-				<option value=""><?php printMLText('keep_doc_status'); ?></option>
-				<option value="<?php echo S_RELEASED; ?>"><?php printMLText('released'); ?></option>
-				<option value="<?php echo S_REJECTED; ?>"><?php printMLText('rejected'); ?></option>
-			</select></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type="submit" class="btn" value="<?php printMLText("add_workflow_state");?>"></td>
-		</tr>
-	</table>
-	</form>
-	</td>
-
-<?php
-		foreach ($workflowstates as $currWorkflowState) {
-
-			print "<td id=\"keywords".$currWorkflowState->getID()."\" style=\"display : none;\">";
-?>
-	<table class="table-condensed">
-		<tr>
-			<td></td>
-			<td>
-<?php
-			if($currWorkflowState->isUsed()) {
+	function showWorkflowStateForm($state) { /* {{{ */
+		if($state) {
+			if($state->isUsed()) {
 ?>
 				<p><?php echo getMLText('workflow_state_in_use') ?></p>
 <?php
@@ -156,54 +83,100 @@ function showWorkflowState(selectObj) {
 ?>
 <form class="form-inline" action="../op/op.RemoveWorkflowState.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowstate'); ?>
-	<input type="hidden" name="workflowstateid" value="<?php print $currWorkflowState->getID();?>">
+	<input type="hidden" name="workflowstateid" value="<?php print $state->getID();?>">
 	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_state");?></button>
 </form>
 <?php
 			}
+		}
 ?>
-			</td>
-		</tr>
-	<form action="../op/op.WorkflowStatesMgr.php" method="post" name="form<?php print $currWorkflowState->getID();?>" onsubmit="return checkForm('<?php print $currWorkflowState->getID();?>');">
-	<?php echo createHiddenFieldWithKey('editworkflowstate'); ?>
-	<input type="Hidden" name="workflowstateid" value="<?php print $currWorkflowState->getID();?>">
+	<form action="../op/op.WorkflowStatesMgr.php" method="post" class="form-horizontal">
+<?php
+		if($state) {
+			echo createHiddenFieldWithKey('editworkflowstate');
+?>
+	<input type="Hidden" name="workflowstateid" value="<?php print $state->getID();?>">
 	<input type="Hidden" name="action" value="editworkflowstate">
-		<tr>
-			<td><?php printMLText("workflow_state_name");?>:</td>
-			<td><input type="text" name="name" value="<?php print htmlspecialchars($currWorkflowState->getName());?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("workflow_state_docstatus");?>:</td>
-			<td><select name="docstatus">
+<?php
+		} else {
+			echo createHiddenFieldWithKey('addworkflowstate');
+?>
+			<input type="hidden" name="action" value="addworkflowstate">
+<?php
+		}
+?>
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("workflow_state_name");?>:</label>
+		<div class="controls">
+			<input type="text" id="name" name="name" value="<?php print $state ? htmlspecialchars($state->getName()) : '';?>">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("workflow_state_docstatus");?>:</label>
+		<div class="controls">
+			<select name="docstatus">
 				<option value=""><?php printMLText('keep_doc_status'); ?></option>
-				<option value="<?php echo S_RELEASED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_RELEASED) echo "selected"; ?>><?php printMLText('released'); ?></option>
-				<option value="<?php echo S_REJECTED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_REJECTED) echo "selected"; ?>><?php printMLText('rejected'); ?></option>
-			</select></td>
-		</tr>
-
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-		</tr>
+				<option value="<?php echo S_RELEASED; ?>" <?php if($state && $state->getDocumentStatus() == S_RELEASED) echo "selected"; ?>><?php printMLText('released'); ?></option>
+				<option value="<?php echo S_REJECTED; ?>" <?php if($state && $state->getDocumentStatus() == S_REJECTED) echo "selected"; ?>><?php printMLText('rejected'); ?></option>
+			</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="login"></label>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		</div>
+	</div>
 	</form>
-	</table>
-</td>
-<?php  } ?>
-</tr></table>
+<?php
+	} /* }}} */
+
+	function form() { /* {{{ */
+		$selworkflowstate = $this->params['selworkflowstate'];
+
+		$this->showWorkflowStateForm($selworkflowstate);
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selworkflowstate = $this->params['selworkflowstate'];
+
+		$workflowstates = $dms->getAllWorkflowStates();
+
+		$this->htmlStartPage(getMLText("admin_tools"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+		$this->contentHeading(getMLText("workflow_states_management"));
+?>
+
+<div class="row-fluid">
+<div class="span4">
+<div class="well">
+<?php echo getMLText("selection")?>:
+<select id="selector" class="span9">
+<option value="-1"><?php echo getMLText("choose_workflow_state")?>
+<option value="0"><?php echo getMLText("add_workflow_state")?>
+<?php
+		foreach ($workflowstates as $currWorkflowState) {
+			print "<option value=\"".$currWorkflowState->getID()."\" ".($selworkflowstate && $currWorkflowState->getID()==$selworkflowstate->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowState->getName());
+		}
+?>
+</select>
+</div>
+<div class="ajax" data-view="WorkflowStatesMgr" data-action="info" <?php echo ($selworkflowstate ? "data-query=\"workflowstateid=".$selworkflowstate->getID()."\"" : "") ?>></div>
+</div>
+
+<div class="span8">
+	<div class="well">
+		<div class="ajax" data-view="WorkflowStatesMgr" data-action="form" <?php echo ($selworkflowstate ? "data-query=\"workflowstateid=".$selworkflowstate->getID()."\"" : "") ?>></div>
+	</div>
 </div>
 </div>
-</div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showWorkflowState(sel);
-
-</script>
-
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

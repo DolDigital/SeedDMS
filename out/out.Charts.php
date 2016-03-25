@@ -25,6 +25,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -42,10 +45,11 @@ switch($type) {
 		}
 		break;
 }
-//print_r($data);
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rootfolder'=>$rootfolder, 'type'=>$type, 'data'=>$data));
+
 if($view) {
+	$view->setParam('rootfolder', $rootfolder);
+	$view->setParam('type', $type);
+	$view->setParam('data', $data);
 	$view($_GET);
 	exit;
 }

@@ -117,6 +117,7 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 		print "</div>\n";
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

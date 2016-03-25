@@ -69,7 +69,7 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 	<div class="row-fluid">
 	<div class="span4">
 	<p><?php printMLText("rewind_workflow_warning"); ?></p>
-	<form method="post" action="../op/op.RewindWorkflow.php" name="form1" onsubmit="return checkForm();">
+	<form method="post" action="../op/op.RewindWorkflow.php" name="form1">
 	<?php echo createHiddenFieldWithKey('rewindworkflow'); ?>
 	<table>
 	<tr><td></td><td>
@@ -104,6 +104,7 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

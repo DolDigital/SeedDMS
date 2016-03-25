@@ -65,7 +65,7 @@ function checkForm()
 $(document).ready( function() {
 	$('body').on('submit', '#fileupload', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 });
 <?php
@@ -125,6 +125,7 @@ $(document).ready( function() {
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 
 	} /* }}} */

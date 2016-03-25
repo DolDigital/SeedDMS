@@ -50,7 +50,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
-		if(method_exists($this, 'js')) {
+		if(1 || method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
 			 * which is evaled by jquery
@@ -76,9 +76,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
-		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 //		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
 
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
@@ -141,8 +141,11 @@ $(document).ready(function () {
 //]]>
 </script>";
 		}
-		if(method_exists($this, 'js'))
-			echo '<script src="../out/out.'.$this->params['class'].'.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+		if(method_exists($this, 'js')) {
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'js';
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+		}
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
@@ -163,7 +166,8 @@ $(document).ready(function () {
 	} /* }}} */
 
 	function footNote() { /* {{{ */
-		echo '<div class="row-fluid" style="padding-top: 20px;">'."\n";
+		echo "<div class=\"container-fluid\">\n";
+		echo '<div class="row-fluid">'."\n";
 		echo '<div class="span12">'."\n";
 		echo '<div class="alert alert-info">'."\n";
 		if ($this->params['printdisclaimer']){
@@ -173,6 +177,7 @@ $(document).ready(function () {
 		if (isset($this->params['footnote']) && strlen((string)$this->params['footnote'])>0) {
 			echo "<div class=\"footNote\">".(string)$this->params['footnote']."</div>";
 		}
+		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
 		echo "</div>\n";
@@ -216,8 +221,8 @@ $(document).ready(function () {
 		}
 		$content = '';
 		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
-		$content .= "    <li class=\"dropdown\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "    <li class=\"dropdown add-clipboard-area\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-clipboard-area\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($clipboard['folders'] as $folderid) {
 			if($folder = $this->params['dms']->getFolder($folderid))
@@ -340,7 +345,7 @@ $(document).ready(function () {
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
 			if ($i +1 < count($path)) {
-				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">".
+				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" class=\"table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">".
 					htmlspecialchars($path[$i]->getName())."</a>";
 			}
 			else {
@@ -1102,6 +1107,7 @@ $('#acceptkeywords').click(function(ev) {
 			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
+				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
         <span class="input-append date datepicker" style="display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
 					<input class="span4" size="16" name="<?= $fieldname ?>[<?= $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
@@ -1145,11 +1151,11 @@ $('#acceptkeywords').click(function(ev) {
 		}
 	} /* }}} */
 
-	function printDropFolderChooserHtml($formName, $dropfolderfile="") { /* {{{ */
+	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
+		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
@@ -1168,7 +1174,7 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printDropFolderChooserJs($formName) { /* {{{ */
+	function printDropFolderChooserJs($formName, $showfolders=0) { /* {{{ */
 ?>
 /* Set up a callback which is called when a folder in the tree is selected */
 modalDropfolderChooser = $('#dropfolderChooser');
@@ -1176,6 +1182,12 @@ function fileSelected(name) {
 	$('#dropfolderfile<?php echo $formName ?>').val(name);
 	modalDropfolderChooser.modal('hide');
 }
+<?php if($showfolders) { ?>
+function folderSelected(name) {
+	$('#dropfolderfile<?php echo $formName ?>').val(name);
+	modalDropfolderChooser.modal('hide');
+}
+<?php } ?>
 function clearFilename<?php print $formName ?>() {
 	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
@@ -1185,12 +1197,12 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
-		$this->printDropFolderChooserHtml($formName, $dropfolderfile);
+	function printDropFolderChooser($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
+		$this->printDropFolderChooserHtml($formName, $dropfolderfile, $showfolders);
 ?>
 		<script language="JavaScript">
 <?php
-		$this->printDropFolderChooserJs($formName);
+		$this->printDropFolderChooserJs($formName, $showfolders);
 ?>
 		</script>
 <?php
@@ -1248,6 +1260,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		print "</div>";
 		print "<div><button class=\"btn\" onclick=\"window.history.back();\">".getMLText('back')."</button></div>";
 		
+		$this->contentEnd();
 		$this->htmlEndPage();
 		
 		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
@@ -1374,7 +1387,7 @@ $(function() {
     onCreateLi: function(node, $li) {
         // Add 'icon' span before title
 				if(node.is_folder)
-					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt" rel="folder_' + node.id + '" ondragover="allowDrop(event)" ondrop="onDrop(event)"></i> ').attr('rel', 'folder_' + node.id).attr('ondragover', 'allowDrop(event)').attr('ondrop', 'onDrop(event)');
+					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt table-row-folder" rel="folder_' + node.id + '"></i> ').attr('rel', 'folder_' + node.id).attr('formtoken', '<?php echo createFormKey('movefolder'); ?>');
 				else
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
@@ -1431,9 +1444,9 @@ $(function() {
 				if($folder = $dms->getFolder($folderid)) {
 					$comment = $folder->getComment();
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					$content .= "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
-					$content .= "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-					$content .= "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
+					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 					if($comment) {
 						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 					}
@@ -1457,10 +1470,10 @@ $(function() {
 						$version = $latestContent->getVersion();
 						$status = $latestContent->getStatus();
 						
-						$content .= "<tr>";
+						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
 
 						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
 							if($previewer->hasPreview($latestContent)) {
 								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
@@ -1470,7 +1483,7 @@ $(function() {
 						} else
 							$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 						
-						$content .= "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
+						$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
 						if($comment) {
 							$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 						}
@@ -1493,7 +1506,7 @@ $(function() {
 			$content .= "</table>";
 		} else {
 		}
-			$content .= "<div class=\"alert\">".getMLText("drag_icon_here")."</div>";
+		$content .= "<div class=\"alert add-clipboard-area\">".getMLText("drag_icon_here")."</div>";
 		return $content;
 	} /* }}} */
 
@@ -1504,7 +1517,7 @@ $(function() {
 	 */
 	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
-		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
+		echo "<div id=\"main-clipboard\">\n";
 		echo $this->mainClipboard($clipboard, $previewer);
 		echo "</div>\n";
 	} /* }}} */
@@ -1683,6 +1696,45 @@ $(function() {
 	} /* }}} */
 
 	/**
+	 * Output left-arrow with link which takes over a number of ids into
+	 * a select box.
+	 *
+	 * Clicking in the button will preset the comma seperated list of ids
+	 * in data-ref as options in the select box with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param array $ids list of option values
+	 */
+	function printSelectPresetButtonHtml($name, $ids) { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="selectpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>" data-ref="<?php echo $name; ?>" data-ids="<?php echo implode(",", $ids);?>"><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for select preset button
+	 */
+	function printSelectPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.selectpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('ids') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			// Use attr() instead of data() because data() converts to int which cannot be split
+			items = $(ev.currentTarget).attr('data-ids');
+			arr = items.split(",");
+			for(var i in arr) {
+				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
+			}
+			$("#"+target).trigger("chosen:updated");
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
 	 * Return HTML of a single row in the document list table
 	 *
 	 * @param object $document
@@ -1705,7 +1757,7 @@ $(function() {
 		$docID = $document->getID();
 
 		if(!$skipcont)
-			$content .= "<tr id=\"table-row-document-".$docID."\">";
+			$content .= "<tr id=\"table-row-document-".$docID."\" class=\"table-row-document\" rel=\"document_".$docID."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 
 		if($version)
 			$latestContent = $document->getContentByVersion($version);
@@ -1733,7 +1785,7 @@ $(function() {
 
 			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
-				$content .= "<a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+				$content .= "<a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
@@ -1745,7 +1797,7 @@ $(function() {
 			$content .= "</td>";
 
 			$content .= "<td>";	
-			$content .= "<a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1814,10 +1866,10 @@ $(function() {
 		$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 
 		$content = '';
-		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-		$content .= "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-		$content .= "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
 		$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 		if($comment) {
 			$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";

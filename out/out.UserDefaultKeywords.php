@@ -32,9 +32,10 @@ if ($user->isGuest()) {
 $categories = $dms->getAllUserKeywordCategories($user->getID());
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('categories', $categories);
+	$view($_GET);
 	exit;
 }
 

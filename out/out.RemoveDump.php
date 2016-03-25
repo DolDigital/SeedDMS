@@ -35,9 +35,10 @@ if (!isset($_GET["dumpname"]) || !file_exists($settings->_contentDir.$_GET["dump
 $dumpname = $_GET["dumpname"];
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dumpfile'=>$dumpname));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('dumpfile', $dumpname);
+	$view($_GET);
 	exit;
 }
 

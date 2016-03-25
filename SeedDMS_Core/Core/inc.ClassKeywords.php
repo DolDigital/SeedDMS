@@ -47,7 +47,7 @@ class SeedDMS_Core_KeywordCategory {
 	 */
 	protected $_dms;
 
-	function SeedDMS_Core_KeywordCategory($id, $ownerID, $name) {
+	function __construct($id, $ownerID, $name) {
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_ownerID = $ownerID;

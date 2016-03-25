@@ -78,11 +78,12 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$enableDropUpload = $this->params['enableDropUpload'];
 
-		header('Content-Type: application/javascript');
+		header('Content-Type: application/javascript; charset=UTF-8');
+		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 ?>
-		function folderSelected(id, name) {
-			window.location = '../out/out.ViewFolder.php?folderid=' + id;
-		}
+function folderSelected(id, name) {
+	window.location = '../out/out.ViewFolder.php?folderid=' + id;
+}
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
@@ -318,11 +319,11 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 
 		echo "</div>\n"; // End of right column div
-
-		$this->contentEnd();
+		echo "</div>\n"; // End of div around left and right column
 
 		echo $this->callHook('postContent');
 
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

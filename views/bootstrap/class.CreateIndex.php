@@ -31,6 +31,10 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_CreateIndex extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -43,6 +47,7 @@ class SeedDMS_View_CreateIndex extends SeedDMS_Bootstrap_Style {
 		echo '<a href="out.Indexer.php?create=1&confirm=1" class="btn">'.getMLText('confirm_create_fulltext_index').'</a>';
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

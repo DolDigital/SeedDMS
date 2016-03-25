@@ -67,7 +67,7 @@ class SeedDMS_Core_Notification { /* {{{ */
 	 * @param integer $groupid id of group. The id is -1 if the notification is
 	 * for a user.
 	 */
-	function SeedDMS_Core_Notification($target, $targettype, $userid, $groupid) { /* {{{ */
+	function __construct($target, $targettype, $userid, $groupid) { /* {{{ */
 		$this->_target = $target;
 		$this->_targettype = $targettype;
 		$this->_userid = $userid;

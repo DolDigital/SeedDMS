@@ -48,6 +48,7 @@ class SeedDMS_View_AddFile2 extends SeedDMS_Bootstrap_Style {
 		$this->printUploadApplet('../op/op.AddFile2.php', array('documentid'=>$document->getId()), 1, array('name'=>1, 'comment'=>1));
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

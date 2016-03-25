@@ -71,7 +71,7 @@ function checkForm()
 $(document).ready( function() {
 	$('body').on('submit', '#form', function(ev){
 		if(checkForm()) return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 	$( "#selector" ).change(function() {
 		$('div.ajax').trigger('update', {userid: $(this).val()});
@@ -194,7 +194,7 @@ $(document).ready( function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"></td>
+			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"><?php if($currUser && $currUser->isGuest()) echo ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password'); ?></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {
@@ -489,8 +489,10 @@ $(document).ready( function() {
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	</div>
 </div>
+</div>
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

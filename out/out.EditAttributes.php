@@ -51,10 +51,14 @@ $accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 $attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'attrdefs'=>$attrdefs));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('version', $version);
+	$view->setParam('attrdefs', $attrdefs);
 	$view->setParam('accessobject', $accessop);
-	$view->show();
+	$view($_GET);
 	exit;
 }
 

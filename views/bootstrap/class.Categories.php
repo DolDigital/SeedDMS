@@ -62,7 +62,12 @@ $(document).ready( function() {
 				<tr>
 					<td></td><td>
 <?php
-		if($category && !$category->isUsed()) {
+		if($category) {
+		if($category && $category->isUsed()) {
+?>
+						<p><?php echo getMLText('category_in_use') ?></p>
+<?php
+		} else {
 ?>
 						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
@@ -71,10 +76,7 @@ $(document).ready( function() {
 						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php
-		} else {
-?>
-						<p><?php echo getMLText('category_in_use') ?></p>
-<?php
+		}
 		}
 ?>
 					</td>
@@ -146,6 +148,7 @@ $(document).ready( function() {
 </div>
 	
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

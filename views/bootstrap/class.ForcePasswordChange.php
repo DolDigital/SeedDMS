@@ -31,6 +31,42 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
+
+		header('Content-Type: application/javascript');
+?>
+function checkForm()
+{
+	msg = new Array();
+
+	if($("#currentpwd").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if($("#pwd").val() == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if($("#pwd").val() != $("#pwdconf").val()) msg.push("<?php printMLText("js_pwd_not_conf");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
+$(document).ready( function() {
+	$('body').on('submit', '#form', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -43,7 +79,7 @@ class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 		echo "<div class=\"alert\">".getMLText('password_expiration_text')."</div>";
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditUserData.php" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.EditUserData.php" method="post" id="form" name="form1">
 <table>
 	<tr>
 		<td><?php printMLText("current_password");?>:</td>
@@ -51,7 +87,7 @@ class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 	</tr>
 	<tr>
 		<td><?php printMLText("password");?>:</td>
-		<td><input class="pwd" type="Password" rel="strengthbar" name="pwd" size="30"></td>
+		<td><input id="pwd" class="pwd" type="Password" rel="strengthbar" name="pwd" size="30"></td>
 	</tr>
 		<tr>
 			<td><?php printMLText("password_strength");?>:</td>
@@ -80,6 +116,7 @@ class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 		print "<p>";
 		print implode(' | ', $tmpfoot);
 		print "</p>\n";
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

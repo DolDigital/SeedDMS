@@ -31,27 +31,14 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_WorkflowActionsMgr extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$selworkflowaction = $this->params['selworkflowaction'];
-
-		$workflowactions = $dms->getAllWorkflowActions();
-
-		$this->htmlStartPage(getMLText("admin_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
-
 function checkForm(num)
 {
 	msg = new Array()
-	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
 	if (msg != "")
 	{
   	noty({
@@ -68,79 +55,26 @@ function checkForm(num)
 		return true;
 }
 
-
-obj = -1;
-function showWorkflowAction(selectObj) {
-	if (obj != -1) {
-		obj.style.display = "none";
-	}
-
-	id = selectObj.options[selectObj.selectedIndex].value;
-	if (id == -1)
-		return;
-
-	obj = document.getElementById("keywords" + id);
-	obj.style.display = "";
-
-}
-</script>
+$(document).ready( function() {
+	$('body').on('submit', '#form', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+	$( "#selector" ).change(function() {
+		$('div.ajax').trigger('update', {workflowactionid: $(this).val()});
+	});
+});
 <?php
-		$this->contentHeading(getMLText("workflow_actions_management"));
-?>
+	} /* }}} */
 
-<div class="row-fluid">
-<div class="span4">
-<div class="well">
-<?php echo getMLText("selection")?>:
-<select onchange="showWorkflowAction(this)" id="selector" class="span9">
-<option value="-1"><?php echo getMLText("choose_workflow_action")?>
-<option value="0"><?php echo getMLText("add_workflow_action")?>
-<?php
-		$selected=0;
-		$count=2;
-		foreach ($workflowactions as $currWorkflowAction) {
-			if ($selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID()) $selected=$count;
-			print "<option value=\"".$currWorkflowAction->getID()."\">" . htmlspecialchars($currWorkflowAction->getName());
-			$count++;
-		}
-?>
-</select>
-</div>
-</div>
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+	} /* }}} */
 
-<div class="span8">
-<div class="well">
-<table class="table-condensed">
-	<tr>
-	<td id="keywords0" style="display : none;">
-
-	<form action="../op/op.WorkflowActionsMgr.php" method="post" name="form0" onsubmit="return checkForm('0');">
-  <?php echo createHiddenFieldWithKey('addworkflowaction'); ?>
-	<input type="Hidden" name="action" value="addworkflowaction">
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("workflow_action_name");?>:</td>
-			<td><input type="text" name="name"></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type="submit" class="btn" value="<?php printMLText("add_workflow_action");?>"></td>
-		</tr>
-	</table>
-	</form>
-	</td>
-
-<?php
-		foreach ($workflowactions as $currWorkflowAction) {
-
-			print "<td id=\"keywords".$currWorkflowAction->getID()."\" style=\"display : none;\">";
-?>
-	<table class="table-condensed">
-		<tr>
-			<td></td>
-			<td>
-<?php
-			if($currWorkflowAction->isUsed()) {
+	function showWorkflowActionForm($action) { /* {{{ */
+		if($action) {
+			if($action->isUsed()) {
 ?>
 				<p><?php echo getMLText('workflow_action_in_use') ?></p>
 <?php
@@ -148,45 +82,90 @@ function showWorkflowAction(selectObj) {
 ?>
 <form class="form-inline" action="../op/op.RemoveWorkflowAction.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowaction'); ?>
-	<input type="hidden" name="workflowactionid" value="<?php print $currWorkflowAction->getID();?>">
+	<input type="hidden" name="workflowactionid" value="<?php print $action->getID();?>">
 	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_action");?></button>
 </form>
 <?php
 			}
+		}
 ?>
-			</td>
-		</tr>
-	<form action="../op/op.WorkflowActionsMgr.php" method="post" name="form<?php print $currWorkflowAction->getID();?>" onsubmit="return checkForm('<?php print $currWorkflowAction->getID();?>');">
-	<?php echo createHiddenFieldWithKey('editworkflowaction'); ?>
-	<input type="Hidden" name="workflowactionid" value="<?php print $currWorkflowAction->getID();?>">
-	<input type="Hidden" name="action" value="editworkflowaction">
-		<tr>
-			<td><?php printMLText("workflow_action_name");?>:</td>
-			<td><input type="text" name="name" value="<?php print htmlspecialchars($currWorkflowAction->getName());?>"></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-		</tr>
-	</form>
-	</table>
-</td>
-<?php  } ?>
-</tr></table>
-</div>
-</div>
-</div>
-
-<script language="JavaScript">
-
-sel = document.getElementById("selector");
-sel.selectedIndex=<?php print $selected ?>;
-showWorkflowAction(sel);
-
-</script>
-
-
+<form action="../op/op.WorkflowActionsMgr.php" method="post" class="form-horizontal">
 <?php
+		if($action) {
+			echo createHiddenFieldWithKey('editworkflowaction');
+?>
+	<input type="hidden" name="workflowactionid" value="<?php print $action->getID();?>">
+	<input type="hidden" name="action" value="editworkflowaction">
+<?php
+		} else {
+			echo createHiddenFieldWithKey('addworkflowaction');
+?>
+			<input type="hidden" name="action" value="addworkflowaction">
+<?php
+		}
+?>
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("workflow_action_name");?>:</label>
+		<div class="controls">
+			<input type="text" id="name" name="name" value="<?php print $action ? htmlspecialchars($action->getName()) : '';?>">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="login"></label>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		</div>
+	</div>
+	</form>
+<?php
+	} /* }}} */
+
+	function form() { /* {{{ */
+		$selworkflowaction = $this->params['selworkflowaction'];
+
+		$this->showWorkflowActionForm($selworkflowaction);
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selworkflowaction = $this->params['selworkflowaction'];
+
+		$workflowactions = $dms->getAllWorkflowActions();
+
+		$this->htmlStartPage(getMLText("admin_tools"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+		$this->contentHeading(getMLText("workflow_actions_management"));
+?>
+
+<div class="row-fluid">
+<div class="span4">
+<div class="well">
+<?php echo getMLText("selection")?>:
+<select id="selector" class="span9">
+<option value="-1"><?php echo getMLText("choose_workflow_action")?>
+<option value="0"><?php echo getMLText("add_workflow_action")?>
+<?php
+		foreach ($workflowactions as $currWorkflowAction) {
+			print "<option value=\"".$currWorkflowAction->getID()."\" ".($selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowAction->getName());
+		}
+?>
+</select>
+</div>
+<div class="ajax" data-view="WorkflowActionsMgr" data-action="info" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
+</div>
+
+<div class="span8">
+	<div class="well">
+		<div class="ajax" data-view="WorkflowActionsMgr" data-action="form" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
+	</div>
+</div>
+
+</div>
+<?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

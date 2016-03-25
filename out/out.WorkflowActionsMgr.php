@@ -43,9 +43,11 @@ if (is_bool($workflowactions)) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allworkflowactions'=>$workflowactions, 'selworkflowaction'=>$selworkflowaction));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('allworkflowactions', $workflowactions);
+	$view->setParam('selworkflowaction', $selworkflowaction);
+	$view($_GET);
 	exit;
 }
 

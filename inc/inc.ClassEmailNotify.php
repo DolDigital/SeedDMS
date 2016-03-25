@@ -31,27 +31,23 @@ require_once("Mail.php");
  * @version    Release: @package_version@
  */
 class SeedDMS_EmailNotify extends SeedDMS_Notify {
-	/* User sending the notification
-	 * Will only be used if the sender of one of the notify methods
-	 * is not set
+	/**
+	 * Instanz of DMS
 	 */
-	protected $sender;
+	protected $_dms;
 
-	function setSender($user) {
-		$this->sender = $user;
-	}
+	protected $smtp_server;
 
-	var $smtp_server;
+	protected $smtp_port;
 
-	var $smtp_port;
+	protected $smtp_user;
 
-	var $smtp_user;
+	protected $smtp_password;
 
-	var $smtp_password;
+	protected $from_address;
 
-	var $from_address;
-
-	function __construct($from_address='', $smtp_server='', $smtp_port='', $smtp_username='', $smtp_password='') { /* {{{ */
+	function __construct($dms, $from_address='', $smtp_server='', $smtp_port='', $smtp_username='', $smtp_password='') { /* {{{ */
+		$this->_dms = $dms;
 		$this->smtp_server = $smtp_server;
 		$this->smtp_port = $smtp_port;
 		$this->smtp_user = $smtp_username;

@@ -31,21 +31,10 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_EditComment extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$version = $this->params['version'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -70,13 +59,32 @@ function checkForm()
 	}
 	else return true;
 }
-</script>
-
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$version = $this->params['version'];
+		$strictformcheck = $this->params['strictformcheck'];
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
 		$this->contentHeading(getMLText("edit_comment"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditComment.php" name="form1" onsubmit="return checkForm();" method="POST">
+<form action="../op/op.EditComment.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('editcomment'); ?>
 	<input type="Hidden" name="documentid" value="<?php print $document->getID();?>">
 	<input type="Hidden" name="version" value="<?php print $version->getVersion();?>">
@@ -93,6 +101,7 @@ function checkForm()
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

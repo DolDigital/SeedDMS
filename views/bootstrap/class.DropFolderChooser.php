@@ -34,9 +34,13 @@ class SeedDMS_View_DropFolderChooser extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
 ?>
-$('#fileselect').click(function(ev) {
+$('.fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');
 	fileSelected(attr_filename);
+});
+$('#folderselect').click(function(ev) {
+	attr_foldername = $(ev.currentTarget).attr('foldername');
+	folderSelected(attr_foldername);
 });
 <?php
 	} /* }}} */
@@ -50,19 +54,9 @@ $('#fileselect').click(function(ev) {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 		$timeout = $this->params['timeout'];
+		$showfolders = $this->params['showfolders'];
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
-
-//		$this->htmlStartPage(getMLText("choose_target_file"));
-//		$this->globalBanner();
-//		$this->pageNavigation(getMLText("choose_target_file"));
-?>
-
-<script language="JavaScript">
-var targetName = document.<?php echo $form?>.dropfolderfile<?php print $form ?>;
-</script>
-<?php
-//		$this->contentContainerStart();
 
 		$dir = $dropfolderdir.'/'.$user->getLogin();
 		/* Check if we are still looking in the configured directory and
@@ -79,26 +73,27 @@ var targetName = document.<?php echo $form?>.dropfolderfile<?php print $form ?>;
 				$finfo = finfo_open(FILEINFO_MIME_TYPE);
 				while (false !== ($entry = $d->read())) {
 					if($entry != '..' && $entry != '.') {
-						if(!is_dir($entry)) {
+						if(!is_dir($dir.'/'.$entry)) {
 							$mimetype = finfo_file($finfo, $dir.'/'.$entry);
 							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
 							echo "<tr><td style=\"min-width: ".$previewwidth."px;\">";
 							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
 								echo "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
 							}
-							echo "</td><td><span style=\"cursor: pointer;\" id=\"fileselect\" filename=\"".$entry."\" _onClick=\"fileSelected('".$entry."');\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
+							echo "</td><td><span style=\"cursor: pointer;\" class=\"fileselect\" filename=\"".$entry."\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
+						} elseif($showfolders) {
+							echo "<tr>";
+							echo "<td></td>";
+							echo "<td><span style=\"cursor: pointer;\" id=\"folderselect\" foldername=\"".$entry."\" >".$entry."</span></td><td align=\"right\"></td><td></td>";
+							echo "</tr>\n";
 						}
 					}
 				}
 				echo "</tbody>\n";
 				echo "</table>\n";
-		echo '<script src="../out/out.DropFolderChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+				echo '<script src="../out/out.DropFolderChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
 			}
 		}
-
-//		$this->contentContainerEnd();
-//		echo "</body>\n</html>\n";
-//		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

@@ -30,9 +30,12 @@ $selcats = preg_replace('/[^0-9,]+/', '', $_GET["cats"]);
 $categories = $dms->getDocumentCategories();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories, 'form'=>$form, 'selcats'=>$selcats));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('categories', $categories);
+	$view->setParam('form', $form);
+	$view->setParam('selcats', $selcats);
+	$view($_GET);
 	exit;
 }
 

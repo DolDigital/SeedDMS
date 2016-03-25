@@ -85,13 +85,13 @@ $(document).ready( function() {
 	$('body').on('submit', '#form_1', function(ev){
 		if(checkForm1())
 			return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 
 	$('body').on('submit', '#form_2', function(ev){
 		if(checkForm2())
 			return;
-		event.preventDefault();
+		ev.preventDefault();
 	});
 
 	$( "#selector" ).change(function() {
@@ -219,7 +219,7 @@ $(document).ready( function() {
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
 		
-		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2" _onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form_2" id="form_2">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
@@ -296,6 +296,7 @@ $(document).ready( function() {
 
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

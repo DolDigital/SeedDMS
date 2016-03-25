@@ -31,26 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_OverrideContentStatus extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-		$content = $this->params['version'];
-
-		$overallStatus = $content->getStatus();
-		$reviewStatus = $content->getReviewStatus();
-		$approvalStatus = $content->getApprovalStatus();
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-
-		$this->contentHeading(getMLText("change_status"));
-
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 {
 	msg = new Array();
@@ -70,14 +53,38 @@ function checkForm()
 	else
 		return true;
 }
-</script>
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+		$content = $this->params['version'];
+
+		$overallStatus = $content->getStatus();
+		$reviewStatus = $content->getReviewStatus();
+		$approvalStatus = $content->getApprovalStatus();
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+
+		$this->contentHeading(getMLText("change_status"));
 
 		$this->contentContainerStart();
 
 // Display the Review form.
 ?>
-<form method="post" action="../op/op.OverrideContentStatus.php" name="form1" onsubmit="return checkForm();">
+<form method="post" action="../op/op.OverrideContentStatus.php" id="form1" name="form1">
 <table class="table-condensed">
 <tr><td><?php echo(printMLText("comment")); ?>:</td>
 <td><textarea name="comment" cols="40" rows="4"></textarea>
@@ -100,6 +107,7 @@ function checkForm()
 </form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

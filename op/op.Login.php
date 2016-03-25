@@ -31,9 +31,8 @@ include("../inc/inc.ClassController.php");
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) {
-
-	global $theme;
-	$view = UI::factory($theme, 'ErrorDlg');
+	global $dms, $theme;
+	$view = UI::factory($theme, 'ErrorDlg', array('dms'=>$dms));
 	$view->exitError($heading, $message, true);
 	return;
 }
@@ -219,7 +218,7 @@ if (is_bool($user)) {
 	// Check if password matches (if not a guest user)
 	// Assume that the password has been sent via HTTP POST. It would be careless
 	// (and dangerous) for passwords to be sent via GET.
-	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd())) {
+	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
 		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
 		/* if counting of login failures is turned on, then increment its value */
 		if($settings->_loginFailure) {

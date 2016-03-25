@@ -63,9 +63,13 @@ if(isset($_POST["transition"]) && $_POST["transition"]) {
 $folder = $document->getFolder();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'transition'=>$transition));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('version', $version);
+	$view->setParam('transition', $transition);
+	$view($_GET);
 	exit;
 }
 

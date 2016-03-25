@@ -38,9 +38,10 @@ if(isset($_GET['workflowstateid']) && $_GET['workflowstateid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selworkflowstate'=>$selworkflowstate));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('selworkflowstate', $selworkflowstate);
+	$view($_GET);
 	exit;
 }
 

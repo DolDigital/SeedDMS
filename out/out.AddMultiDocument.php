@@ -49,9 +49,13 @@ if ($remain < 0) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->show();
+	$view->setParam('folder', $folder);
+	$view->setParam('enableadminrevapp', $settings->_enableAdminRevApp);
+	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
+	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
+	$view($_GET);
 	exit;
 }
 

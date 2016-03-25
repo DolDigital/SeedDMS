@@ -56,18 +56,18 @@ function chooseCategory(form, cats) {
 </script>
 
 <?php
-	$this->contentHeading(getMLText("add_document"));
-	$this->contentContainerStart();
+		$this->contentHeading(getMLText("add_document"));
+		$this->contentContainerStart();
 
-	// Retrieve a list of all users and groups that have review / approve
-	// privileges.
-	$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
+		// Retrieve a list of all users and groups that have review / approve
+		// privileges.
+		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 
-	$this->printUploadApplet('../op/op.AddMultiDocument.php', array('folderid'=>$folder->getId()));
+		$this->printUploadApplet('../op/op.AddMultiDocument.php', array('folderid'=>$folder->getId()));
 
-	$this->contentContainerEnd();
-	$this->htmlEndPage();
-
+		$this->contentContainerEnd();
+		$this->contentEnd();
+		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

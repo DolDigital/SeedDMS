@@ -31,29 +31,9 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ApproveDocument extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
-
-		$latestContent = $document->getLatestContent();
-		$approvals = $latestContent->getApprovalStatus();
-
-		foreach($approvals as $approval) {
-			if($approval['approveID'] == $_GET['approveid']) {
-				$approvalStatus = $approval;
-				break;
-			}
-		}
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
-		$this->contentHeading(getMLText("add_approval"));
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkIndForm()
 {
 	msg = new Array();
@@ -76,9 +56,9 @@ function checkIndForm()
 function checkGrpForm()
 {
 	msg = new Array();
-//	if (document.form1.approvalGroup.value == "") msg.push("<?php printMLText("js_no_approval_group");?>");
-	if (document.form1.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+//	if (document.form2.approvalGroup.value == "") msg.push("<?php printMLText("js_no_approval_group");?>");
+	if (document.form2.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
+	if (document.form2.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "")
 	{
   	noty({
@@ -94,9 +74,40 @@ function checkGrpForm()
 	else
 		return true;
 }
-</script>
-
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkIndForm()) return;
+		ev.preventDefault();
+	});
+	$('body').on('submit', '#form2', function(ev){
+		if(checkGrpForm()) return;
+		ev.preventDefault();
+	});
+});
 <?php
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$document = $this->params['document'];
+
+		$latestContent = $document->getLatestContent();
+		$approvals = $latestContent->getApprovalStatus();
+
+		foreach($approvals as $approval) {
+			if($approval['approveID'] == $_GET['approveid']) {
+				$approvalStatus = $approval;
+				break;
+			}
+		}
+
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+		$this->contentHeading(getMLText("add_approval"));
 
 		$this->contentContainerStart();
 
@@ -118,7 +129,7 @@ function checkGrpForm()
 				print "</tr></tbody></table><br>\n";
 			}
 ?>
-	<form method="post" action="../op/op.ApproveDocument.php" name="form1" enctype="multipart/form-data" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ApproveDocument.php" id="form1" name="form1" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
 	<table>
 		<tr>
@@ -170,7 +181,7 @@ function checkGrpForm()
 			}
 
 ?>
-	<form method="POST" action="../op/op.ApproveDocument.php" name="form1" enctype="multipart/form-data" onsubmit="return checkGrpForm();">
+	<form method="POST" action="../op/op.ApproveDocument.php" id="form2" name="form2" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
 	<table>
 	<tr><td><?php printMLText("comment")?>:</td>
@@ -207,6 +218,7 @@ function checkGrpForm()
 		}
 
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

@@ -149,10 +149,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$document = $this->params['document'];
 
 		header('Content-Type: application/javascript');
-		$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+		if($user->isAdmin()) {
+			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
+		}
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
@@ -395,6 +399,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			print getMLText('document_content_missing');
 			$this->contentContainerEnd();
+			$this->contentEnd();
 			$this->htmlEndPage();
 			exit;
 		}
@@ -490,6 +495,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
+		if($accessop->mayEditVersion()) {
+			print "<li><a href=\"out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+		}
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
@@ -608,9 +616,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							if($required->getId() == $user->getId() && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
+								$is_reviewer = true;
 						}
-						if($r["required"] == $user->getId() && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
-							$is_reviewer = true;
 						break;
 					case 1: // Reviewer is a group.
 						$required = $dms->getGroup($r["required"]);
@@ -677,9 +685,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							if($required->getId() == $user->getId())
+								$is_approver = true;
 						}
-						if($a["required"] == $user->getId())
-							$is_approver = true;
 						break;
 					case 1: // Approver is a group.
 						$required = $dms->getGroup($a["required"]);
@@ -688,9 +696,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
+								$is_approver = true;
 						}
-						if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
-							$is_approver = true;
 						break;
 				}
 				print "<tr>\n";
@@ -1259,8 +1267,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  </div>
 		</div>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
-
 	} /* }}} */
 }
 ?>

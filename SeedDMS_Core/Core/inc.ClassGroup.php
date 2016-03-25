@@ -43,7 +43,7 @@ class SeedDMS_Core_Group {
 	 */
 	protected $_dms;
 
-	function SeedDMS_Core_Group($id, $name, $comment) { /* {{{ */
+	function __construct($id, $name, $comment) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_comment = $comment;
@@ -415,7 +415,7 @@ class SeedDMS_Core_Group {
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
 	 * @return array array of notifications
 	 */
-	function getNotificationsByGroup($type=0) { /* {{{ */
+	function getNotifications($type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
 		 "WHERE `tblNotify`.`groupID` = ". $this->_id;

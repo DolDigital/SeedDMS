@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-02-01</date>
- <time>09:15:01</time>
+ <date>2016-03-15</date>
+ <time>15:59:07</time>
  <version>
-  <release>1.0.3</release>
+  <release>1.0.4</release>
   <api>1.0.1</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add command for indexing postѕcript files
+make it work with sqlite3 &lt; 3.8.0
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -112,6 +112,22 @@ add __get() to SQLiteFTS_Document because class.IndexInfo.php access class varia
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 check if index exists before removing it when creating a new one
+   </notes>
+  </release>
+  <release>
+   <date>2016-02-01</date>
+   <time>09:15:01</time>
+   <version>
+    <release>1.0.3</release>
+    <api>1.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add command for indexing postѕcript files
    </notes>
   </release>
  </changelog>

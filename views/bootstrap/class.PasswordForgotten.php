@@ -31,6 +31,38 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_PasswordForgotten extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript; charset=UTF-8');
+?>
+function checkForm()
+{
+	msg = new Array();
+	if (document.form1.login.value == "") msg.push("<?php printMLText("js_no_login");?>");
+	if (document.form1.email.value == "") msg.push("<?php printMLText("js_no_email");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
+document.form1.email.focus();
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$referrer = $this->params['referrer'];
 
@@ -41,7 +73,7 @@ class SeedDMS_View_PasswordForgotten extends SeedDMS_Bootstrap_Style {
 ?>
 
 <?php $this->contentContainerStart(); ?>
-<form action="../op/op.PasswordForgotten.php" method="post" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.PasswordForgotten.php" method="post" id="form1" name="form1">
 <?php
 		if ($referrer) {
 			echo "<input type='hidden' name='referuri' value='".$referrer."'/>";
@@ -64,9 +96,9 @@ class SeedDMS_View_PasswordForgotten extends SeedDMS_Bootstrap_Style {
 	</table>
 </form>
 <?php $this->contentContainerEnd(); ?>
-<script language="JavaScript">document.form1.email.focus();</script>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

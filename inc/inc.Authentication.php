@@ -13,6 +13,7 @@
  */
 
 require_once("inc.Utils.php");
+require_once("inc.ClassNotificationService.php");
 require_once("inc.ClassEmailNotify.php");
 require_once("inc.ClassSession.php");
 
@@ -90,12 +91,29 @@ $theme = $resArr["theme"];
 $lang = $resArr["language"];
 
 $dms->setUser($user);
-if($settings->_enableEmail) {
-	$notifier = new SeedDMS_EmailNotify($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
-	$notifier->setSender($user);
-} else {
-	$notifier = null;
+
+$notifier = new SeedDMS_NotificationService();
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
+		if(method_exists($notificationObj, 'preAddService')) {
+			$notificationObj->postAddService($dms, $settings, $notifier);
+		}
+	}
 }
+
+if($settings->_enableEmail) {
+	$notifier->addService(new SeedDMS_EmailNotify($dms, $settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword));
+}
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
+		if(method_exists($notificationObj, 'postAddService')) {
+			$notificationObj->postAddService($dms, $settings, $notifier);
+		}
+	}
+}
+
 
 /* Include the language file as specified in the session. If that is not
  * available use the language from the settings

@@ -187,6 +187,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_viewOnlineFileTypes");?>:</td>
 				<td><?php $this->showTextField("viewOnlineFileTypes", $settings->getViewOnlineFileTypesToString()); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_editOnlineFileTypes_desc");?>">
+        <td><?php printMLText("settings_editOnlineFileTypes");?>:</td>
+				<td><?php $this->showTextField("editOnlineFileTypes", $settings->getEditOnlineFileTypesToString()); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableConverting_desc");?>">
         <td><?php printMLText("settings_enableConverting");?>:</td>
         <td><input name="enableConverting" type="checkbox" <?php if ($settings->_enableConverting) echo "checked" ?> /></td>
@@ -712,6 +716,7 @@ if(is_writeable($settings->_configFilePath)) {
 
 
 <?php
+		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

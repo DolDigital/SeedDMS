@@ -61,7 +61,11 @@ class SeedDMS_SQLiteFTS_Indexer {
 		/* Make sure the sequence of fields is identical to the field list
 		 * in SeedDMS_SQLiteFTS_Term
 		 */
-		$sql = 'CREATE VIRTUAL TABLE docs USING fts4(title, comment, keywords, category, mimetype, origfilename, owner, content, created, notindexed=created, matchinfo=fts3)';
+		$version = SQLite3::version();
+		if($version['versionNumber'] >= 3008000)
+			$sql = 'CREATE VIRTUAL TABLE docs USING fts4(title, comment, keywords, category, mimetype, origfilename, owner, content, created, notindexed=created, matchinfo=fts3)';
+		else
+			$sql = 'CREATE VIRTUAL TABLE docs USING fts4(title, comment, keywords, category, mimetype, origfilename, owner, content, created, matchinfo=fts3)';
 		$res = $index->_conn->exec($sql);
 		if($res === false) {
 			return null;

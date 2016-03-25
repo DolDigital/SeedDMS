@@ -115,7 +115,7 @@ else if ($action == "editworkflowaction") {
 	if ($editedWorkflowAction->getName() != $name)
 		$editedWorkflowAction->setName($name);
 	
-	add_log_line(".php&action=editworkflowaction&workflowactionid=".$workflow);
+	add_log_line(".php&action=editworkflowaction&workflowactionid=".$workflowactionid);
 
 }
 else UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));

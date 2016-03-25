@@ -31,29 +31,11 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$enablelargefileupload = $this->params['enablelargefileupload'];
-		$enableadminrevapp = $this->params['enableadminrevapp'];
-		$enableownerrevapp = $this->params['enableownerrevapp'];
-		$enableselfrevapp = $this->params['enableselfrevapp'];
+	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
-		$workflowmode = $this->params['workflowmode'];
-		$presetexpiration = $this->params['presetexpiration'];
-		$sortusersinlist = $this->params['sortusersinlist'];
-		$orderby = $this->params['orderby'];
-		$folderid = $folder->getId();
-
-		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
-		$this->globalNavigation($folder);
-		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
-		
+		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
-<script language="JavaScript">
 function checkForm()
 	{
 	msg = new Array();
@@ -85,14 +67,42 @@ function checkForm()
 }
 
 $(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
 	$('#new-file').click(function(event) {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
 	});
 });
-
-</script>
-
 <?php
+			$this->printKeywordChooserJs("form1");
+			if($dropfolderdir) {
+				$this->printDropFolderChooserJs("form1");
+			}
+	} /* }}} */
+
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
+		$strictformcheck = $this->params['strictformcheck'];
+		$dropfolderdir = $this->params['dropfolderdir'];
+		$workflowmode = $this->params['workflowmode'];
+		$presetexpiration = $this->params['presetexpiration'];
+		$sortusersinlist = $this->params['sortusersinlist'];
+		$orderby = $this->params['orderby'];
+		$folderid = $folder->getId();
+
+		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
+		$this->globalNavigation($folder);
+		$this->contentStart();
+		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
+		
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
 		if($enablelargefileupload) {
 			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree())."</p>";
@@ -105,7 +115,7 @@ $(document).ready(function() {
 		// privileges.
 		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 ?>
-		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
+		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" id="form1" name="form1">
 		<?php echo createHiddenFieldWithKey('adddocument'); ?>
 		<input type="hidden" name="folderid" value="<?php print $folderid; ?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
@@ -125,7 +135,7 @@ $(document).ready(function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("keywords");?>:</td>
-			<td><?php $this->printKeywordChooser("form1");?></td>
+			<td><?php $this->printKeywordChooserHtml("form1");?></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
@@ -212,7 +222,7 @@ $(document).ready(function() {
 <?php if($dropfolderdir) { ?>
 		<tr>
 			<td><?php printMLText("dropfolder_file");?>:</td>
-			<td><?php $this->printDropFolderChooser("form1");?></td>
+			<td><?php $this->printDropFolderChooserHtml("form1");?></td>
 		</tr>
 <?php } ?>
 		<tr>
@@ -566,6 +576,7 @@ $(document).ready(function() {
 		</form>
 <?php
 		$this->contentContainerEnd();
+		$this->contentEnd();
 		$this->htmlEndPage();
 
 	} /* }}} */
