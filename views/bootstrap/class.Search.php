@@ -628,4 +628,3 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 }
 ?>
-
