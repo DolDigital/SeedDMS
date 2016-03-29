@@ -958,6 +958,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
+	/**
+	 * Do not use anymore. Was previously used to show the category
+	 * chooser. It has been replaced by a select box
+	 */
 	function printCategoryChooser($formName, $categories=array()) { /* {{{ */
 ?>
 <script language="JavaScript">
@@ -1115,7 +1119,6 @@ $('#acceptkeywords').click(function(ev) {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-<!--    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button> -->
   </div>
 </div>
 <?php
