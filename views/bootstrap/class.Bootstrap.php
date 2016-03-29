@@ -1195,7 +1195,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		print "<h4>".getMLText('error')."!</h4>";
 		print htmlspecialchars($error);
 		print "</div>";
-		print "<div><button class=\"btn\" onclick=\"window.history.back();\">".getMLText('back')."</button></div>";
+		print "<div><button class=\"btn history-back\">".getMLText('back')."</button></div>";
 		
 		$this->contentEnd();
 		$this->htmlEndPage();
