@@ -1063,7 +1063,7 @@ $('#acceptkeywords').click(function(ev) {
 		case SeedDMS_Core_AttributeDefinition::type_date:
 ?>
         <span class="input-append date datepicker" style="display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input class="span4" size="16" name="<?= $fieldname ?>[<?= $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
@@ -2273,7 +2273,7 @@ mayscript>
 			'editable': false,
 			'selectable': true,
 			'style': 'box',
-			'locale': '<?= $this->params['session']->getLanguage() ?>'
+			'locale': '<?php echo $this->params['session']->getLanguage() ?>'
 		};
 
 		function onselect() {
@@ -2292,7 +2292,7 @@ mayscript>
 		timeline = new links.Timeline(document.getElementById('timeline'), options);
 		links.events.addListener(timeline, 'select', onselect);
 		$.getJSON(
-			'<?= $timelineurl ?>', 
+			'<?php echo $timelineurl ?>', 
 			function(data) {
 				$.each( data, function( key, val ) {
 					val.start = new Date(val.start);
@@ -2306,7 +2306,7 @@ mayscript>
 
 	protected function printTimelineHtml($height) { /* {{{ */
 ?>
-	<div id="timeline" style="height: <?= $height ?>px;"></div>
+	<div id="timeline" style="height: <?php echo $height ?>px;"></div>
 <?php
 	} /* }}} */
 
