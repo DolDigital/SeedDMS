@@ -98,6 +98,11 @@ div.statusbar a.btn {
 	margin-bottom: 10px;
 }
 
+#database .chosen-container,
+#fulltext .chosen-container {
+	width: 95% !important;
+}
+
 .chosen-container-multi .chosen-choices {
 	border: 1px solid #cccccc;
 	border-radius: 4px;
