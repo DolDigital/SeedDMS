@@ -205,7 +205,7 @@ $(document).ready(function () {
 ?>
 <form action="../out/out.Timeline.php" class="form form-inline" name="form1" id="form1">
 	<div class="control-group">
-		<label class="control-label" for="startdate"><?= getMLText('date') ?></label>
+		<label class="control-label" for="startdate"><?php printMLText('date') ?></label>
 		<div class="controls">
        <span class="input-append date" style="display: inline;" id="fromdate" data-date="<?php echo date('Y-m-d', $from); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
 			 <input type="text" class="input-small" name="fromdate" value="<?php echo date('Y-m-d', $from); ?>"/>
@@ -218,15 +218,15 @@ $(document).ready(function () {
 		</div>
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="skip"><?= getMLText('exclude_items') ?></label>
+		<label class="control-label" for="skip"><?php printMLText('exclude_items') ?></label>
 		<div class="controls">
-			<input type="checkbox" name="skip[]" value="add_file" <?= ($skip &&  in_array('add_file', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_add_file') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_0" <?= ($skip && in_array('status_change_0', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_0') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_1" <?= ($skip && in_array('status_change_1', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_1') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_2" <?= ($skip && in_array('status_change_2', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_2') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_3" <?= ($skip && in_array('status_change_3', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_3') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_-1" <?= ($skip && in_array('status_change_-1', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_-1') ?><br />
-			<input type="checkbox" name="skip[]" value="status_change_-3" <?= ($skip && in_array('status_change_-3', $skip)) ? 'checked' : '' ?>> <?= getMLText('timeline_skip_status_change_-3') ?><br />
+			<input type="checkbox" name="skip[]" value="add_file" <?php echo ($skip &&  in_array('add_file', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_add_file') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_0" <?php echo ($skip && in_array('status_change_0', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_0') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_1" <?php echo ($skip && in_array('status_change_1', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_1') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_2" <?php echo ($skip && in_array('status_change_2', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_2') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_3" <?php echo ($skip && in_array('status_change_3', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_3') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_-1" <?php echo ($skip && in_array('status_change_-1', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_-1') ?><br />
+			<input type="checkbox" name="skip[]" value="status_change_-3" <?php echo ($skip && in_array('status_change_-3', $skip)) ? 'checked' : '' ?>> <?php printMLText('timeline_skip_status_change_-3') ?><br />
 		</div>
 	</div>
 	<div class="control-group">
