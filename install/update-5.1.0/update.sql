@@ -111,6 +111,38 @@ ALTER TABLE tblUsers CHANGE role role int(11) NOT NULL;
 UPDATE `tblUsers` SET role=3 WHERE role=0;
 ALTER TABLE tblUsers ADD CONSTRAINT `tblUsers_role` FOREIGN KEY (`role`) REFERENCES `tblRoles` (`id`);
 
+CREATE TABLE `tblAros` (
+  `id` int(11) NOT NULL auto_increment,
+  `parent` int(11),
+  `model` text NOT NULL,
+  `foreignid` int(11) NOT NULL DEFAULT '0',
+  `alias` varchar(255),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tblAcos` (
+  `id` int(11) NOT NULL auto_increment,
+  `parent` int(11),
+  `model` text NOT NULL,
+  `foreignid` int(11) NOT NULL DEFAULT '0',
+  `alias` varchar(255),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tblArosAcos` (
+  `id` int(11) NOT NULL auto_increment,
+  `aro` int(11) NOT NULL DEFAULT '0',
+  `aco` int(11) NOT NULL DEFAULT '0',
+  `create` tinyint(4) NOT NULL DEFAULT '-1',
+  `read` tinyint(4) NOT NULL DEFAULT '-1',
+  `update` tinyint(4) NOT NULL DEFAULT '-1',
+  `delete` tinyint(4) NOT NULL DEFAULT '-1',
+  PRIMARY KEY (`id`),
+  UNIQUE (aco, aro),
+  CONSTRAINT `tblArosAcos_acos` FOREIGN KEY (`aco`) REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblArosAcos_aros` FOREIGN KEY (`aro`) REFERENCES `tblAros` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;

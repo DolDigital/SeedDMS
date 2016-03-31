@@ -111,6 +111,33 @@ DROP TABLE tblUsers;
 
 ALTER TABLE new_tblUsers RENAME TO tblUsers;
 
+CREATE TABLE `tblAros` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `parent` INTEGER,
+  `model` TEXT NOT NULL,
+  `foreignid` INTEGER NOT NULL DEFAULT '0',
+  `alias` TEXT
+) ;
+
+CREATE TABLE `tblAcos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `parent` INTEGER,
+  `model` TEXT NOT NULL,
+  `foreignid` INTEGER NOT NULL DEFAULT '0',
+  `alias` TEXT
+) ;
+
+CREATE TABLE `tblArosAcos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `aro` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblAros` (`id`) ON DELETE CASCADE,
+  `aco` INTEGER NOT NULL DEFAULT '0' REFERENCES `tblAcos` (`id`) ON DELETE CASCADE,
+  `create` INTEGER NOT NULL DEFAULT '-1',
+  `read` INTEGER NOT NULL DEFAULT '-1',
+  `update` INTEGER NOT NULL DEFAULT '-1',
+  `delete` INTEGER NOT NULL DEFAULT '-1',
+  UNIQUE (aco, aro)
+) ;
+
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;
