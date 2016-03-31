@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-02-01</date>
- <time>09:14:07</time>
+ <date>2016-03-29</date>
+ <time>08:11:19</time>
  <version>
-  <release>1.1.7</release>
+  <release>1.1.8</release>
   <api>1.1.7</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add command for indexing postѕcript files
+set last parameter of stream_select() to 200000 micro sec. in case the timeout in sec. is set to 0
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -200,6 +200,22 @@ declare SeeDMS_Lucene_Indexer::open() static
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 run external commands with a timeout
+   </notes>
+  </release>
+  <release>
+   <date>2016-02-01</date>
+   <time>09:14:07</time>
+   <version>
+    <release>1.1.7</release>
+    <api>1.1.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add command for indexing postѕcript files
    </notes>
   </release>
  </changelog>
