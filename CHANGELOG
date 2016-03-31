@@ -1,4 +1,9 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.2
+--------------------------------------------------------------------------------
+- merged changes from 4.3.26
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.1
 --------------------------------------------------------------------------------
 - merged changes from 4.3.25
@@ -17,6 +22,13 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.26
+--------------------------------------------------------------------------------
+- move some left over javascript from html code into application.js (Closes #253)
+- take out last empty line from view/bootstrap/class.Search.php which causes a
+  header to be send to early (Closes: #252, #254) 
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25

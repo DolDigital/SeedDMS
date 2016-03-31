@@ -668,4 +668,3 @@ $(document).ready( function() {
 	} /* }}} */
 }
 ?>
-

@@ -382,6 +382,9 @@ $(document).ready( function() {
 		});
 	});
 
+	$('button.history-back').on('click', function(event) {
+		window.history.back();
+	});
 });
 
 function onAddClipboard(ev) { /* {{{ */
