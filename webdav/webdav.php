@@ -668,9 +668,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		} else {
 			// check if user is admin
 			// only admins may delete documents
+			/* There is not reason to allow only admins to remove a document
 			if(!$this->user->isAdmin()) {
 				return "403 Forbidden";				 
 			}
+			 */
 
 			if(!$obj->remove()) {
 				return "409 Conflict";
