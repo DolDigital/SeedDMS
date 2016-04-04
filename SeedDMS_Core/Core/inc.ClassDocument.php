@@ -2227,7 +2227,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$db->startTransaction();
 
-		// FIXME: call a new function removeContent instead
+		// remove content of document
 		foreach ($this->_content as $version) {
 			if (!$this->removeContent($version)) {
 				$db->rollbackTransaction();

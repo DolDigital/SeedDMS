@@ -531,6 +531,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 
 		$db->commitTransaction();
+
+		/* Check if 'onPostAddSubFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddSubFolder'])) {
+			$callback = $this->_dms->callbacks['onPostAddSubFolder'];
+			if(!call_user_func($callback[0], $callback[1], $newFolder)) {
+			}
+		}
+
 		return $newFolder;
 	} /* }}} */
 
@@ -843,6 +851,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 
 		$db->commitTransaction();
+
+		/* Check if 'onPostAddDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddDocument'])) {
+			$callback = $this->_dms->callbacks['onPostAddDocument'];
+			if(!call_user_func($callback[0], $callback[1], $document)) {
+			}
+		}
+
 		return array($document, $res);
 	} /* }}} */
 
@@ -858,6 +874,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	protected function removeFromDatabase() { /* {{{ */
 		$db = $this->_dms->getDB();
 
+		/* Check if 'onPreRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
+			$callback = $this->_dms->callbacks['onPreRemoveFolder'];
+			if(!call_user_func($callback[0], $callback[1], $this)) {
+				return false;
+			}
+		}
+
 		$db->startTransaction();
 		// unset homefolder as it will no longer exist
 		$queryStr = "UPDATE tblUsers SET homefolder=NULL WHERE homefolder =  " . $this->_id;
@@ -865,6 +889,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$db->rollbackTransaction();
 			return false;
 		}
+
 		// Remove database entries
 		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
 		if (!$db->getResult($queryStr)) {
@@ -888,6 +913,13 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 		}
 		$db->commitTransaction();
+
+		/* Check if 'onPostRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
+			$callback = $this->_dms->callbacks['onPostRemoveFolder'];
+			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			}
+		}
 
 		return true;
 	} /* }}} */
