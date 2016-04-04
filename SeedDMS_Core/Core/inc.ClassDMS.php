@@ -1287,7 +1287,16 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		return $this->getUser($this->db->getInsertID());
+		$user = $this->getUser($this->db->getInsertID());
+
+		/* Check if 'onPostAddUser' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddUser'])) {
+			$callback = $this->_dms->callbacks['onPostUser'];
+			if(!call_user_func($callback[0], $callback[1], $user)) {
+			}
+		}
+
+		return $user;
 	} /* }}} */
 
 	/**
@@ -1378,7 +1387,16 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		return $this->getGroup($this->db->getInsertID());
+		$group = $this->getGroup($this->db->getInsertID());
+
+		/* Check if 'onPostAddGroup' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddGroup'])) {
+			$callback = $this->_dms->callbacks['onPostAddGroup'];
+			if(!call_user_func($callback[0], $callback[1], $group)) {
+			}
+		}
+
+		return $group;
 	} /* }}} */
 
 	function getKeywordCategory($id) { /* {{{ */
@@ -1457,7 +1475,16 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		return $this->getKeywordCategory($this->db->getInsertID());
+		$category = $this->getKeywordCategory($this->db->getInsertID());
+
+		/* Check if 'onPostAddKeywordCategory' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddKeywordCategory'])) {
+			$callback = $this->_dms->callbacks['onPostAddKeywordCategory'];
+			if(!call_user_func($callback[0], $callback[1], $category)) {
+			}
+		}
+
+		return $category;
 	} /* }}} */
 
 	function getDocumentCategory($id) { /* {{{ */
@@ -1523,7 +1550,16 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		return $this->getDocumentCategory($this->db->getInsertID());
+		$category = $this->getDocumentCategory($this->db->getInsertID());
+
+		/* Check if 'onPostAddDocumentCategory' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddDocumentCategory'])) {
+			$callback = $this->_dms->callbacks['onPostAddDocumentCategory'];
+			if(!call_user_func($callback[0], $callback[1], $category)) {
+			}
+		}
+
+		return $category;
 	} /* }}} */
 
 	/**

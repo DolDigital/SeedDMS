@@ -482,6 +482,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 
 		$db->commitTransaction();
+
+		/* Check if 'onPostAddSubFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddSubFolder'])) {
+			$callback = $this->_dms->callbacks['onPostAddSubFolder'];
+			if(!call_user_func($callback[0], $callback[1], $newFolder)) {
+			}
+		}
+
 		return $newFolder;
 	} /* }}} */
 
@@ -791,11 +799,27 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 
 		$db->commitTransaction();
+
+		/* Check if 'onPostAddDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPostAddDocument'])) {
+			$callback = $this->_dms->callbacks['onPostAddDocument'];
+			if(!call_user_func($callback[0], $callback[1], $document)) {
+			}
+		}
+
 		return array($document, $res);
 	} /* }}} */
 
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
+
+		/* Check if 'onPreRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
+			$callback = $this->_dms->callbacks['onPreRemoveFolder'];
+			if(!call_user_func($callback[0], $callback[1], $this)) {
+				return false;
+			}
+		}
 
 		// Do not delete the root folder.
 		if ($this->_id == $this->_dms->rootFolderID || !isset($this->_parentID) || ($this->_parentID == null) || ($this->_parentID == "") || ($this->_parentID == 0)) {
@@ -846,6 +870,13 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 		}
 		$db->commitTransaction();
+
+		/* Check if 'onPostRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
+			$callback = $this->_dms->callbacks['onPostRemoveFolder'];
+			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			}
+		}
 
 		return true;
 	} /* }}} */
