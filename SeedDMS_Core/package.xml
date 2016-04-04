@@ -1011,6 +1011,24 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
+   <date>2016-03-08</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.25</release>
+    <api>4.3.25</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
+- use __construct() for all constructors
+- fix setting multi value attributes for versions
+   </notes>
+  </release>
+  <release>
    <date>2016-01-22</date>
    <time>14:34:58</time>
    <version>
@@ -1040,6 +1058,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - all changes from 4.3.25 merged
+   </notes>
+  </release>
+  <release>
+   <date>2016-04-04</date>
+   <time>14:34:58</time>
+   <version>
+    <release>5.0.3</release>
+    <api>5.0.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.26 merged
    </notes>
   </release>
  </changelog>
