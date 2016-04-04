@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-03-09</date>
- <time>14:34:58</time>
+ <date>2016-04-04</date>
+ <time>08:56:33</time>
  <version>
-  <release>5.0.2</release>
-  <api>5.0.2</api>
+  <release>5.0.3</release>
+  <api>5.0.3</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- all changes from 4.3.25 merged
-- rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
-- use __construct() for all constructors
-- fix setting multi value attributes for versions
+- all changes from 4.3.26 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1008,6 +1005,24 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - SeedDMS_Core_DocumentCategory::getDocumentsByCategory() now returns the documents
 - add SeedDMS_Core_Group::getWorkflowStatus()
 - SeedDMS_Core_User::getDocumentsLocked() sets locking user propperly
+   </notes>
+  </release>
+  <release>
+   <date>2016-03-08</date>
+   <time>07:12:53</time>
+   <version>
+    <release>4.3.25</release>
+    <api>4.3.25</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
+- use __construct() for all constructors
+- fix setting multi value attributes for versions
    </notes>
   </release>
   <release>

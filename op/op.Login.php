@@ -303,7 +303,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot, null, null, !$settings->_enableLargeFileUpload);
 }
 
-// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded.
+// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST are already decoded.
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
 
 if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {

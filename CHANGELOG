@@ -30,6 +30,7 @@
 - move some left over javascript from html code into application.js (Closes #253)
 - take out last empty line from view/bootstrap/class.Search.php which causes a
   header to be send to early (Closes: #252, #254) 
+- regular users with sufficient access rights may remove documents via webdav
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
