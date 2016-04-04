@@ -97,7 +97,7 @@ $notifier = new SeedDMS_NotificationService();
 if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
 		if(method_exists($notificationObj, 'preAddService')) {
-			$notificationObj->postAddService($dms, $settings, $notifier);
+			$notificationObj->preAddService($dms, $settings, $notifier);
 		}
 	}
 }
