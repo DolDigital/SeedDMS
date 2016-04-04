@@ -64,7 +64,7 @@ if(isset($_POST['pwd'])) {
 
 if($settings->_enableGuestLogin && (int) $settings->_guestID) {
 	$guestUser = $dms->getUser((int) $settings->_guestID);
-	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
+	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin())) {
 		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text")."\n");
 		exit;
 	}
@@ -161,7 +161,7 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 				if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
 					$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
 				} else {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login); 
+					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
 				}
 
 				if (!is_bool($search)) {
