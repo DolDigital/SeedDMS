@@ -1062,7 +1062,7 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
   </release>
   <release>
    <date>2016-04-04</date>
-   <time>08:56:33</time>
+   <time>14:34:58</time>
    <version>
     <release>5.0.3</release>
     <api>5.0.3</api>
