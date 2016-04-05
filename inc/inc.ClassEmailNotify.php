@@ -71,18 +71,11 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
 
-		if(!is_object($recipient) && strcasecmp(get_class($recipient), "SeedDMS_Core_User")) {
+		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
 			return -1;
 		}
-		if (is_object($sender) && !strcasecmp(get_class($sender), "SeedDMS_Core_User")) {
-			$from = $sender->getFullName() ." <". $sender->getEmail() .">";
-		} elseif(is_string($sender) && trim($sender) != "") {
-			$from = $sender;
-		} else
-			return -1;
 
-
-		if(is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) {
+		if(is_object($sender) && !strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) {
 			$from = $sender->getFullName() ." <". $sender->getEmail() .">";
 		} elseif(is_string($sender) && trim($sender) != "") {
 			$from = $sender;
@@ -143,8 +136,8 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
-		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
-				(!is_object($groupRecipient) && strcasecmp(get_class($groupRecipient), "SeedDMS_Core_Group"))) {
+		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
+				(!is_object($groupRecipient) || strcasecmp(get_class($groupRecipient), $this->_dms->getClassname('group')))) {
 			return -1;
 		}
 
@@ -156,7 +149,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	} /* }}} */
 
 	function toList($sender, $recipients, $subject, $message, $params=array()) { /* {{{ */
-		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
+		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
 				(!is_array($recipients) && count($recipients)==0)) {
 			return -1;
 		}
