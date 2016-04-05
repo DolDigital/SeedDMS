@@ -5,6 +5,7 @@
 - take out last empty line from view/bootstrap/class.Search.php which causes a
   header to be send to early (Closes: #252, #254) 
 - regular users with sufficient access rights may remove documents via webdav
+- fix error in utils/indexer.php when new documents were indexed
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
