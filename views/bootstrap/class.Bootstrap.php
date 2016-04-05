@@ -261,8 +261,18 @@ $(document).ready(function () {
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 			if (!$this->params['user']->isGuest()) {
-				echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
-				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
+				$menuitems = array();
+				$menuitems['my_documents'] = array('link'=>"../out/out.MyDocuments.php?inProcess=1", 'label'=>'my_documents');
+				$menuitems['my_account'] = array('link'=>"../out/out.MyAccount.php", 'label'=>'my_account');
+				$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
+				foreach($hookObjs as $hookObj) {
+					if (method_exists($hookObj, 'userMenuItems')) {
+						$menuitems = $hookObj->userMenuItems($this, $menuitems);
+					}
+				}
+				foreach($menuitems as $menuitem) {
+					echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+				}
 				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
