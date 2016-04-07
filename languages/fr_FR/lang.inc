@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1028), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1029), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -371,7 +371,7 @@ URL: [url]',
 'dump_creation_warning' => 'Avec cette opération, vous pouvez créer une sauvegarde du contenu de votre base de données. Après la création, le fichier de sauvegarde sera sauvegardé dans le dossier de données de votre serveur.',
 'dump_list' => 'Fichiers de sauvegarde existants',
 'dump_remove' => 'Supprimer fichier de sauvegarde',
-'duplicate_content' => '',
+'duplicate_content' => 'Contenu en double',
 'edit' => 'Modifier',
 'edit_attributes' => 'Modifier les attributs',
 'edit_comment' => 'Modifier le commentaire',
@@ -390,6 +390,7 @@ URL: [url]',
 'edit_transmittal_props' => '',
 'edit_user' => 'Modifier un utilisateur',
 'edit_user_details' => 'Modifier les détails d\'utilisateur',
+'edit_version' => '',
 'email' => 'E-mail',
 'email_error_title' => 'Aucun e-mail indiqué',
 'email_footer' => 'Vous pouvez modifier les paramètres de messagerie via \'Mon compte\'.',

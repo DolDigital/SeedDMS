@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (731), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (733), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -383,6 +383,7 @@ URL: [url]',
 'edit_transmittal_props' => '',
 'edit_user' => 'Edytuj użytkownika',
 'edit_user_details' => 'Zmień dane użytkownika',
+'edit_version' => '',
 'email' => 'Email',
 'email_error_title' => 'Nie wprowadzono adresu email',
 'email_footer' => 'W każdej chwili możesz zmienić swój email używając zakładki \'Moje konto\'.',
@@ -934,8 +935,8 @@ URL: [url]',
 'settings_cannot_disable' => 'Plik ENABLE_INSTALL_TOOL nie może zostać usunięty',
 'settings_checkOutDir' => '',
 'settings_checkOutDir_desc' => '',
-'settings_cmdTimeout' => '',
-'settings_cmdTimeout_desc' => '',
+'settings_cmdTimeout' => 'Przekroczony czas wykonania zewnętrznego polecenia',
+'settings_cmdTimeout_desc' => 'Ten czas w sekundach określa kiedy zewnętrzne polecenie (np. do tworzenia indeksu) zostanie przerwany',
 'settings_contentDir' => 'Katalog treści',
 'settings_contentDir_desc' => 'Miejsce, gdzie będą przechowywane wczytane pliki (najlepien wybrać katalog, który nie jest dostępny dla serwera http)',
 'settings_contentOffsetDir' => 'Offset katalogu treści',
