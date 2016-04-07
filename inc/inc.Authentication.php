@@ -61,10 +61,17 @@ if (!is_object($user)) {
 if($user->isAdmin()) {
 	if($resArr["su"]) {
 		$user = $dms->getUser($resArr["su"]);
+	} else {
+		$session->resetSu();
 	}
 }
+$theme = $resArr["theme"];
+$lang = $resArr["language"];
+
 $dms->setUser($user);
+
 $notifier = new SeedDMS_NotificationService();
+
 if($settings->_enableEmail) {
 	$notifier->addService(new SeedDMS_EmailNotify($dms));
 }
@@ -82,9 +89,8 @@ if(file_exists($settings->_rootDir . "languages/" . $resArr["language"] . "/lang
 }
 */
 
-$theme = $resArr["theme"];
-if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc")) {
-	include $settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc";
+if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $lang . "/lang.inc")) {
+	include $settings->_rootDir . "view/".$theme."/languages/" . $lang . "/lang.inc";
 }
 
 /* Check if password needs to be changed because it expired. If it needs
