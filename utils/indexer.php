@@ -98,13 +98,12 @@ function tree($dms, $index, $indexconf, $folder, $indent='') { /* {{{ */
 			if($created >= $content->getDate()) {
 				echo " (Document unchanged)\n";
 			} else {
-				if($index->delete($hit->id)) {
-					try {
-						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout));
-						echo " (Document updated)\n";
-					} catch(Exception $e) {
-						echo " (Timeout)\n";
-					}
+				$index->delete($hit->id);
+				try {
+					$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout));
+					echo " (Document updated)\n";
+				} catch(Exception $e) {
+					echo " (Timeout)\n";
 				}
 			}
 		}
