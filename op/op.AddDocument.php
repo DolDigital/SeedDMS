@@ -286,7 +286,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-			if (method_exists($hookObj, 'pretAddDocument')) {
+			if (method_exists($hookObj, 'preAddDocument')) {
 				$hookObj->preAddDocument(array('name'=>&$name, 'comment'=>&$comment));
 			}
 		}
