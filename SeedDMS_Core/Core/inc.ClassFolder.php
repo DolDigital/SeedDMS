@@ -92,14 +92,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return string name of folder
 	 */
-	function getName() { return $this->_name; }
+	public function getName() { return $this->_name; }
 
 	/*
 	 * Set the name of the folder.
 	 *
 	 * @param string $newName set a new name of the folder
 	 */
-	function setName($newName) { /* {{{ */
+	public function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblFolders SET name = " . $db->qstr($newName) . " WHERE id = ". $this->_id;
@@ -111,9 +111,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
-	function getComment() { return $this->_comment; }
+	public function getComment() { return $this->_comment; }
 
-	function setComment($newComment) { /* {{{ */
+	public function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblFolders SET comment = " . $db->qstr($newComment) . " WHERE id = ". $this->_id;
@@ -129,7 +129,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return integer unix timestamp of creation date
 	 */
-	function getDate() { /* {{{ */
+	public function getDate() { /* {{{ */
 		return $this->_date;
 	} /* }}} */
 
@@ -162,7 +162,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return object parent folder or false if there is no parent folder
 	 */
-	function getParent() { /* {{{ */
+	public function getParent() { /* {{{ */
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
 			return false;
 		}
@@ -200,7 +200,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param object $newParent new parent folder
 	 * @return boolean true if operation was successful otherwise false
 	 */
-	function setParent($newParent) { /* {{{ */
+	public function setParent($newParent) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
@@ -274,7 +274,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @return object owner of the folder
 	 */
-	function getOwner() { /* {{{ */
+	public function getOwner() { /* {{{ */
 		if (!isset($this->_owner))
 			$this->_owner = $this->_dms->getUser($this->_ownerID);
 		return $this->_owner;
@@ -427,7 +427,6 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 			$this->_subFolders = array();
 			for ($i = 0; $i < count($resArr); $i++)
-//				$this->_subFolders[$i] = new SeedDMS_Core_Folder($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["parent"], $resArr[$i]["comment"], $resArr[$i]["owner"], $resArr[$i]["inheritAccess"], $resArr[$i]["defaultAccess"], $resArr[$i]["sequence"]);
 				$this->_subFolders[$i] = $this->_dms->getFolder($resArr[$i]["id"]);
 		}
 
@@ -743,6 +742,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *        must be the id of the attribute definition.
 	 * @param array $version_attributes list of document version attributes.
 	 *        The element key must be the id of the attribute definition.
+	 * @param object $workflow
 	 * @return array/boolean false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
 	 *        second one is the result set returned when inserting the content.
@@ -810,6 +810,13 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return array($document, $res);
 	} /* }}} */
 
+	/**
+	 * Remove recursively a folder
+	 *
+	 * Removes a folder, all its subfolders and documents
+	 *
+	 * @return boolean true on success, false in case of an error
+	 */
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 

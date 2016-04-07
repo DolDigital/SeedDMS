@@ -30,7 +30,7 @@ define("S_DRAFT_APP", 1);
 /*
  * Document is released. A document is in release state either when
  * it needs no review or approval after uploaded or has been reviewed
- * and/or approved..
+ * and/or approved.
  */
 define("S_RELEASED",  2);
 
@@ -2427,6 +2427,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * then its status is set to S_RELEASED immediately. Any change of
 	 * the status is monitored in the table tblDocumentStatusLog. This
 	 * function will always return the latest entry for the content.
+	 *
+	 * @return array latest record from tblDocumentStatusLog
 	 */
 	function getStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -2436,20 +2438,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		// Retrieve the current overall status of the content represented by
 		// this object.
 		if (!isset($this->_status)) {
-		/*
-			if (!$db->createTemporaryTable("ttstatid", $forceTemporaryTable)) {
-				return false;
-			}
-			$queryStr="SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
-				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
-				"`tblDocumentStatusLog`.`userID` ".
-				"FROM `tblDocumentStatus` ".
-				"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
-				"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-				"AND `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ";
-		*/
 			$queryStr=
 				"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
@@ -2545,7 +2533,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		unset($this->_status);
-
 		return true;
 	} /* }}} */
 
@@ -3344,8 +3331,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function delIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
-		$userID = $user->getID();
-
 		// Check to see if the user can be removed from the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
 		if (is_bool($reviewStatus) && !$reviewStatus) {
@@ -3354,7 +3339,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus["indstatus"])==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($reviewStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3386,7 +3371,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($reviewStatus)==0) {
 			// User is not assigned to review this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($reviewStatus[0]["status"]!=0) {
 			// User has already submitted a review or has already been deleted;
@@ -3417,7 +3402,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus["indstatus"])==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		$indstatus = array_pop($approvalStatus["indstatus"]);
 		if ($indstatus["status"]!=0) {
@@ -3449,7 +3434,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (count($approvalStatus)==0) {
 			// User is not assigned to approve this document. No action required.
 			// Return an error.
-			return -3;
+			return -2;
 		}
 		if ($approvalStatus[0]["status"]!=0) {
 			// User has already submitted an approval or has already been deleted;

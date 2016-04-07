@@ -22,7 +22,7 @@
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Core_User {
+class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * @var integer id of user
 	 *
@@ -67,9 +67,7 @@ class SeedDMS_Core_User {
 
 	/**
 	 * @var string prefered language of user
-	 *      possible values are 'English', 'German', 'Chinese_ZH_TW', 'Czech'
-	 *      'Francais', 'Hungarian', 'Italian', 'Portuguese_BR', 'Slovak', 
-	 *      'Spanish'
+	 *      possible values are subdirectories within the language directory
 	 *
 	 * @access protected
 	 */
@@ -771,8 +769,6 @@ class SeedDMS_Core_User {
 
 	/**
 	 * Returns all documents locked by a given user
-	 * FIXME: Not full implemented. Do not use, because it still requires the
-	 * temporary tables!
 	 *
 	 * @param object $user
 	 * @return array list of documents
@@ -802,7 +798,7 @@ class SeedDMS_Core_User {
 	 * Get a list of reviews
 	 * This function returns a list of all reviews seperated by individual
 	 * and group reviews. If the document id
-	 * is passed, then only this document will be checked for approvals. The
+	 * is passed, then only this document will be checked for reviews. The
 	 * same is true for the version of a document which limits the list
 	 * further.
 	 *
@@ -818,11 +814,6 @@ class SeedDMS_Core_User {
 	function getReviewStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-/*
-		if (!$db->createTemporaryTable("ttreviewid")) {
-			return false;
-		}
-*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
 
 		// See if the user is assigned as an individual reviewer.
@@ -912,27 +903,7 @@ class SeedDMS_Core_User {
 	function getApprovalStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-/*
-		if (!$db->createTemporaryTable("ttapproveid")) {
-			return false;
-		}
-*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
-
-		// See if the user is assigned as an individual approver.
-		/*
-		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-			"`tblDocumentApproveLog`.`userID` ".
-			"FROM `tblDocumentApprovers` ".
-			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-			"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
-			"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
-			"AND `tblDocumentApprovers`.`type`='0' ".
-			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ";
-*/
 		$queryStr =
    "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
@@ -962,20 +933,6 @@ class SeedDMS_Core_User {
 
 		// See if the user is the member of a group that has been assigned to
 		// approve the document version.
-		/*
-		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-			"`tblDocumentApproveLog`.`userID` ".
-			"FROM `tblDocumentApprovers` ".
-			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentApprovers`.`required` ".
-			"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
-			"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
-			"AND `tblDocumentApprovers`.`type`='1' ".
-			"AND `tblGroupMembers`.`userID`='". $this->_id ."'";
-			*/
 		$queryStr =
 			"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
@@ -1315,5 +1272,5 @@ class SeedDMS_Core_User {
 		return $notifications;
 	} /* }}} */
 
-}
+} /* }}} */
 ?>
