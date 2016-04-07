@@ -26,7 +26,7 @@ if (!isset($theme) || strlen($theme)==0) {
 	$theme = $settings->_theme;
 }
 if (strlen($theme)==0) {
-	$theme="blue";
+	$theme="bootstrap";
 }
 
 /* Sooner or later the parent will be removed, because all output will
@@ -60,6 +60,7 @@ class UI extends UI_Default {
 			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
 			$view->setParam('class', $class);
 			$view->setParam('session', $session);
+			$view->setParam('settings', $settings);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);
 			$view->setParam('disableselfedit', $settings->_disableSelfEdit);
