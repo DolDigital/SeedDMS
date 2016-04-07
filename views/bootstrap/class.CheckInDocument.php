@@ -31,6 +31,7 @@ class SeedDMS_View_CheckInDocument extends SeedDMS_Bootstrap_Style {
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
 		header('Content-Type: application/javascript; charset=UTF-8');
+		$this->printSelectPresetButtonJs();
 ?>
 function checkForm()
 {
@@ -68,25 +69,6 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 });
-<?php
-	} /* }}} */
-
-	function __takeOverButton($name, $users) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>"><i class="icon-arrow-left"></i></span>
-<script>
-$(document).ready( function() {
-	$('#<?php echo $name; ?>_btn').click(function(ev){
-		ev.preventDefault();
-<?php
-		foreach($users as $_id) {
-			echo "$(\"#".$name." option[value='".$_id."']\").attr(\"selected\", \"selected\");\n";
-		}
-?>
-		$("#<?php echo $name; ?>").trigger("chosen:updated");
-	});
-});
-</script>
 <?php
 	} /* }}} */
 
@@ -260,7 +242,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("IndReviewer", $tmp);
+					$this->printSelectPresetButtonHtml("IndReviewer", $tmp);
 				}
 				/* List all mandatory reviewers */
 				if($res) {
@@ -294,6 +276,20 @@ $(document).ready( function() {
 ?>
       </td>
     </tr>
+      <tr>
+        <td>
+			<div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups");?>:</div>
+        </td>
+        <td>
+        <select class="chzn-select span9" name="grpIndReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_ind_reviewers'); ?>">
+<?php
+			foreach ($docAccess["groups"] as $grp) {
+				print "<option value=\"".$grp->getID()."\">".htmlspecialchars($grp->getName())."</option>";
+			}
+?>
+			</select>
+			</td>
+			</tr>
     <tr>
       <td>
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
@@ -329,7 +325,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("GrpReviewer", $tmp);
+					$this->printSelectPresetButtonHtml("GrpReviewer", $tmp);
 				}
 				/* List all mandatory groups of reviewers */
 				if($res) {
@@ -407,7 +403,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("IndApprover", $tmp);
+					$this->printSelectPresetButtonHtml("IndApprover", $tmp);
 				}
 				/* List all mandatory approvers */
 				if($res) {
@@ -441,7 +437,22 @@ $(document).ready( function() {
 				}
 ?>
       </td>
-    </tr>
+		</tr>
+		  <tr>	
+        <td>
+			<div class="cbSelectTitle"><?php printMLText("indivіduals_in_groups");?>:</div>
+        </td>
+        <td>
+      <select class="chzn-select span9" name="grpIndApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_ind_approvers'); ?>">
+<?php
+			foreach ($docAccess["groups"] as $grp) {
+				print "<option value=\"". $grp->getID() ."\">".htmlspecialchars($grp->getName())."</option>";
+			}
+?>
+			</select>
+				</td>
+			</tr>	
+		<tr>
       <td>
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
       </td>
@@ -477,7 +488,7 @@ $(document).ready( function() {
 					}
 				}
 				if($tmp) {
-					$this->__takeOverButton("GrpApprover", $tmp);
+					$this->printSelectPresetButtonHtml("GrpApprover", $tmp);
 				}
 				/* List all mandatory groups of approvers */
 				if($res) {
