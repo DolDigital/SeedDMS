@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (705), kreml (455)
+//    Translators: Admin (706), kreml (455)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -390,6 +390,7 @@ URL: [url]',
 'edit_transmittal_props' => '',
 'edit_user' => 'Upravit uživatele',
 'edit_user_details' => 'Upravit podrobnosti uživatele',
+'edit_version' => '',
 'email' => 'E-mail',
 'email_error_title' => 'Není zadána emailová adresa',
 'email_footer' => 'Změnu nastavení e-mailu můžete kdykoliv provést pomocí funkce\'Můj účet\'',
@@ -1303,7 +1304,7 @@ URL: [url]',
 'thursday' => 'Čtvrtek',
 'thursday_abbr' => 'Čt',
 'timeline' => 'časová os',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Nová příloha',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',
