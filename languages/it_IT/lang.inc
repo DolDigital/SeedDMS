@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1524), s.pnt (26)
+//    Translators: Admin (1525), s.pnt (26)
 
 $text = array(
 'accept' => 'Accetta',
@@ -396,6 +396,7 @@ URL: [url]',
 'edit_transmittal_props' => 'Modifica proprietà trasmissione',
 'edit_user' => 'Modifica l\'utente',
 'edit_user_details' => 'Modifica i dettagli utente',
+'edit_version' => '',
 'email' => 'Email',
 'email_error_title' => 'Nessuna email immessa',
 'email_footer' => 'Puoi cambiare l\'impostazione della tua email utilizzando le funzioni del menu \'Account personale\'',
@@ -1017,7 +1018,7 @@ URL: [url]',
 'settings_dropFolderDir' => 'Cartella per il drop',
 'settings_dropFolderDir_desc' => 'Questa cartella viene utilizzata per rilasciare (drop) files sul server per importarli direttamente anziché caricarli attraverso il browser. La cartella deve contenere una sottocartella per ciascun utente autorizzato ad importare files in questo modo.',
 'settings_Edition' => 'Impostazioni di edizione',
-'settings_editOnlineFileTypes' => '',
+'settings_editOnlineFileTypes' => 'Tipi di files modificabili Online',
 'settings_editOnlineFileTypes_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Abilitare per notifiche',
 'settings_enableAcknowledgeWorkflow_desc' => 'Abilitare per attivare sul workflow le ricevute di notifica.',

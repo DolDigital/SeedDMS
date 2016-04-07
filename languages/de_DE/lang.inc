@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2218), dgrutsch (21)
+//    Translators: Admin (2219), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -395,6 +395,7 @@ URL: [url]',
 'edit_transmittal_props' => 'Attribute der Dokumentenliste bearbeiten',
 'edit_user' => 'Benutzer bearbeiten',
 'edit_user_details' => 'Benutzerdetails bearbeiten',
+'edit_version' => 'Version editieren',
 'email' => 'Email',
 'email_error_title' => 'Keine E-Mail-Adresse eingegeben',
 'email_footer' => 'Sie können zu jeder Zeit Ihre E-Mail-Adresse über \'Mein Profil\' ändern.',
