@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (990), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (991), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -390,6 +390,7 @@ URL: [url]',
 'edit_transmittal_props' => '',
 'edit_user' => 'Editar usuario...',
 'edit_user_details' => 'Editar detalles de usuario',
+'edit_version' => '',
 'email' => 'Email',
 'email_error_title' => 'No ha introducido un correo',
 'email_footer' => 'Siempre se puede cambiar la configuración de correo electrónico utilizando las funciones de «Mi cuenta»',
@@ -1301,7 +1302,7 @@ URL: [url]',
 'takeOverGrpApprover' => '',
 'takeOverGrpReviewer' => '',
 'takeOverIndApprover' => '',
-'takeOverIndReviewer' => '',
+'takeOverIndReviewer' => 'Tomar control de la revisión de la última versión',
 'tasks' => '',
 'testmail_body' => 'El propósito de este e-mail es probar la configuración del DMS',
 'testmail_subject' => 'E-mail de prueba',
