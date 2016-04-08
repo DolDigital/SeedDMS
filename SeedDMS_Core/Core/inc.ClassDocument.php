@@ -3066,21 +3066,81 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * @return integer mode
 	 */
 	function getAccessMode($u) { /* {{{ */
-		if(!$this->_workflow)
-			$this->getWorkflow();
+		$dms = $this->_document->_dms;
+		$db = $dms->getDB();
 
-		if($this->_workflow) {
-			if (!$this->_workflowState)
-				$this->getWorkflowState();
-			$transitions = $this->_workflow->getNextTransitions($this->_workflowState);
-			foreach($transitions as $transition) {
-				if($this->triggerWorkflowTransitionIsAllowed($u, $transition))
-					return M_READ;
+		/* If read access isn't further restricted by status, than grant read access */
+		if(!$dms->noReadForStatus)
+			return M_READ;
+
+		/* If the current status is not in list of status without read access, then grant read access */
+		if(!in_array($this->getStatus(), $dms->noReadForStatus))
+			return M_READ;
+
+		/* At this point the current status is in the list of status without read access.
+		 * The only way to still gain read access is, if the user is involved in the
+		 * process, e.g. is a reviewer, approver or an active person in the workflow.
+		 */
+		switch($this->getStatus) {
+		case S_DRAFT_REV:
+			$status = $this->getReviewStatus();
+			foreach ($status as $r) {
+				switch ($r["type"]) {
+				case 0: // Reviewer is an individual.
+					if($u->getId() == $r["required"])
+						return M_READ;
+					break;
+				case 1: // Reviewer is a group.
+					$required = $dms->getGroup($r["required"]);
+					if (is_object($required) && $required->isMember($u))
+						return M_READ;
+					break;
+				}
 			}
-			return M_NONE;
+			break;
+		case S_DRAFT_APP:
+			$status = $this->getApprovalStatus();
+			foreach ($status as $r) {
+				switch ($r["type"]) {
+				case 0: // Reviewer is an individual.
+					if($u->getId() == $r["required"])
+						return M_READ;
+					break;
+				case 1: // Reviewer is a group.
+					$required = $dms->getGroup($r["required"]);
+					if (is_object($required) && $required->isMember($u))
+						return M_READ;
+					break;
+				}
+			}
+			break;
+		case S_RELEASED:
+			break;
+		case S_IN_WORKFLOW:
+			if(!$this->_workflow)
+				$this->getWorkflow();
+
+			if($this->_workflow) {
+				if (!$this->_workflowState)
+					$this->getWorkflowState();
+				$transitions = $this->_workflow->getNextTransitions($this->_workflowState);
+				foreach($transitions as $transition) {
+					if($this->triggerWorkflowTransitionIsAllowed($u, $transition))
+						return M_READ;
+				}
+			}
+			break;
+		case S_IN_REVISION:
+			break;
+		case S_REJECTED:
+			break;
+		case S_OBSOLETE:
+			break;
+		case S_EXPIRED:
+			break;
 		}
 
-		return M_READ;
+		return M_NONE;
 	} /* }}} */
 
 	/**
