@@ -24,6 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+- use classname from SeedDMS_Core_DMS::_classnames for SeedDMS_Core_DocumentContent
 - all changes from 4.3.26 merged
  </notes>
  <contents>
