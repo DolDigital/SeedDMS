@@ -1425,8 +1425,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 
 			$this->_content = array();
+			$classname = $this->_dms->getClassname('documentcontent');
 			foreach ($resArr as $row)
-				array_push($this->_content, new SeedDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']));
+				array_push($this->_content, new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']));
 		}
 
 		return $this->_content;
@@ -1458,7 +1459,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$resArr = $resArr[0];
-		return new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
+		$classname = $this->_dms->getClassname('documentcontent');
+		return new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
 	} /* }}} */
 
 	function getLatestContent() { /* {{{ */
@@ -1472,7 +1474,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 
 			$resArr = $resArr[0];
-			$this->_latestContent = new SeedDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
+			$classname = $this->_dms->getClassname('documentcontent');
+			$this->_latestContent = new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
 		}
 		return $this->_latestContent;
 	} /* }}} */
