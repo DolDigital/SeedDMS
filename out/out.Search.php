@@ -143,9 +143,11 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 				foreach($hits as $hit) {
 					if($tmp = $dms->getDocument($hit['document_id'])) {
 						if($tmp->getAccessMode($user) >= M_READ) {
-							$tmp->verifyLastestContentExpriry();
-							$entries[] = $tmp;
-							$dcount++;
+							if($tmp->getLatestContent()) {
+								$tmp->verifyLastestContentExpriry();
+								$entries[] = $tmp;
+								$dcount++;
+							}
 						}
 					}
 				}
@@ -383,9 +385,11 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 	if($resArr['docs']) {
 		foreach ($resArr['docs'] as $entry) {
 			if ($entry->getAccessMode($user) >= M_READ) {
-				$entry->verifyLastestContentExpriry();
-				$entries[] = $entry;
-				$dcount++;
+				if($entry->getLatestContent()) {
+					$entry->verifyLastestContentExpriry();
+					$entries[] = $entry;
+					$dcount++;
+				}
 			}
 		}
 	}
