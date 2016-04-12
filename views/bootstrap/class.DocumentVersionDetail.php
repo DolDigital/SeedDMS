@@ -53,9 +53,12 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation($folder);
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
+?>
+<div class="row-fluid">
+<div class="span3">
+<?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
-
 ?>
 <table class="table-condensed">
 <tr>
@@ -131,6 +134,10 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 </table>
 <?php
 		$this->contentContainerEnd();
+?>
+</div>
+<div class="span9">
+<?php
 
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $version->getPath());
@@ -348,6 +355,9 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 			</div>
 <?php
 		}
+?>
+</div>
+<?php
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
