@@ -146,7 +146,7 @@ $(document).ready( function() {
 			<td><input type="text" name="name" id="name" value="<?php print $currRole ? htmlspecialchars($currRole->getName()) : "";?>"></td>
 		</tr>
 		<tr>
-			<td><?php printMLText("type");?>:</td>
+			<td><?php printMLText("role_type");?>:</td>
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_Role::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_admin ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_guest ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 		<tr>
