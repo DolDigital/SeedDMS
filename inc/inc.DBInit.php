@@ -56,6 +56,7 @@ $dms->setRootFolderID($settings->_rootFolderID);
 $dms->setMaxDirID($settings->_maxDirID);
 $dms->setEnableConverting($settings->_enableConverting);
 $dms->setViewOnlineFileTypes($settings->_viewOnlineFileTypes);
+//$dms->noReadForStatus = array(S_DRAFT, S_DRAFT_REV/*, S_DRAFT_APP*/);
 
 if(isset($GLOBALS['SEEDDMS_HOOKS']['initDMS'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['initDMS'] as $hookObj) {
