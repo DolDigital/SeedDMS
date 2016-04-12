@@ -1605,6 +1605,7 @@ $(function() {
 	 */
 	function mainClipboard($clipboard, $previewer){ /* {{{ */
 		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 		$content = '';
 		$foldercount = $doccount = 0;
 		if($clipboard['folders']) {
