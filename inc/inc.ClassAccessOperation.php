@@ -64,11 +64,12 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayEditVersion($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$version = $document->getLatestContent();
-			if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($version->getFileType()), $this->settings->_editOnlineFileTypes))
-				return false;
-			if ($document->getAccessMode($this->user) == M_ALL || $this->user->isAdmin()) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($latestContent->getFileType()), $this->settings->_editOnlineFileTypes))
+					return false;
+				if ($document->getAccessMode($this->user) == M_ALL || $this->user->isAdmin()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -105,10 +106,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayOverrideStatus($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT || $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE)) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT || $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -125,10 +127,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function maySetReviewersApprovers($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status['status']==S_DRAFT || $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP && $this->settings->_workflowMode == 'traditional_only_approval')) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status['status']==S_DRAFT || $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP && $this->settings->_workflowMode == 'traditional_only_approval')) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -145,10 +148,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function maySetRecipients($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED)) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -165,10 +169,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function maySetRevisors($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_IN_REVISION)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -185,10 +190,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function maySetWorkflow($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$workflow = $latestContent->getWorkflow();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (!$workflow || ($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$workflow = $latestContent->getWorkflow();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (!$workflow || ($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -202,10 +208,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function maySetExpires($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($document->getAccessMode($this->user) == M_ALL) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($document->getAccessMode($this->user) == M_ALL) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -228,10 +235,11 @@ class SeedDMS_AccessOperation {
 					return false;
 				}
 			}
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -248,11 +256,12 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayEditAttributes($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			$workflow = $latestContent->getWorkflow();
-			if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV || ($workflow && $workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				$workflow = $latestContent->getWorkflow();
+				if ((($this->settings->_enableVersionModification && ($document->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV || ($workflow && $workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -267,10 +276,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayReview($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ($status["status"]!=S_OBSOLETE) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -286,10 +296,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayApprove($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV && $status["status"]!=S_REJECTED) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV && $status["status"]!=S_REJECTED) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -304,10 +315,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayReceipt($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ($status["status"]!=S_OBSOLETE) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -322,10 +334,11 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayRevise($document) { /* {{{ */
 		if(get_class($document) == $this->dms->getClassname('document')) {
-			$latestContent = $document->getLatestContent();
-			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE) {
-				return true;
+			if($latestContent = $document->getLatestContent()) {
+				$status = $latestContent->getStatus();
+				if ($status["status"]!=S_OBSOLETE) {
+					return true;
+				}
 			}
 		}
 		return false;
