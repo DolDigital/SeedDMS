@@ -731,6 +731,7 @@ $text = array(
 'role_info' => '',
 'role_management' => '',
 'role_name' => '',
+'role_type' => '',
 'role_user' => 'Потребител',
 'ro_RO' => '',
 'run_subworkflow' => 'Пусни под-процес',

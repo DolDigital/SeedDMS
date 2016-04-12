@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2219), dgrutsch (21)
+//    Translators: Admin (2220), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -905,6 +905,7 @@ URL: [url]',
 'role_info' => 'Information',
 'role_management' => 'Rollenverwaltung',
 'role_name' => 'Name',
+'role_type' => 'Typ der Rolle',
 'role_user' => 'Benutzer',
 'ro_RO' => 'Rumänisch',
 'run_subworkflow' => 'Sub-Workflow starten',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1365), dgrutsch (7), netixw (14)
+//    Translators: Admin (1366), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -906,6 +906,7 @@ URL: [url]',
 'role_info' => 'Information',
 'role_management' => 'Role management',
 'role_name' => 'Name',
+'role_type' => 'Typ of role',
 'role_user' => 'User',
 'ro_RO' => 'Romanian',
 'run_subworkflow' => 'Run sub workflow',
