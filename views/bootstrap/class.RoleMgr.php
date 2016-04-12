@@ -150,7 +150,7 @@ $(document).ready( function() {
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_Role::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_admin ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_guest ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 <?php
-		if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_user) {
+		if($currRole && $currRole->getRole() != SeedDMS_Core_Role::role_admin) {
 			echo "<tr>";
 			echo "<td>".getMLText('restrict_access')."</td>";
 			echo "<td>";
