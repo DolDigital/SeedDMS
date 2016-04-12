@@ -23,16 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-<<<<<<< HEAD
-- Converters to create preview images are no longer fixed. Those which has been hardcoded before remain the predefined converters, but they can also be changed.
-- command for creating the preview will be called with a given timeout
-add method getFilesize()
-timeout for external commands can be passed to contructor of SeedDMS_Preview_Previewer
-check if object passed to createPreview(), hasPreview() is not null
-set last parameter of stream_select() to 200000 micro sec. in case the timeout in sec. is set to 0
-=======
 pass variables to stream_select (required by php7)
->>>>>>> seeddms-5.0.x
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
