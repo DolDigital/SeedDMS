@@ -147,6 +147,13 @@ class SeedDMS_Core_DMS {
 	public $viewOnlineFileTypes;
 
 	/**
+	 * @var array $noReadForStatus list of status without read right
+	 *      online
+	 * @access public
+	 */
+	public $noReadForStatus;
+
+	/**
 	 * @var string $version version of pear package
 	 * @access public
 	 */
@@ -231,6 +238,12 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Filter objects out which are not accessible in a given mode by a user.
 	 *
+	 * This function can be used for documents and folders and calls
+	 * {@link SeedDMS_Core_Folder::getAccessMode()} or
+	 * {@link SeedDMS_Core_Document::getAccessMode()}. A document is also
+	 * filtered out if it has no latest content, which can happen if access
+	 * on documents in a certain state has been restricted.
+	 *
 	 * @param array $objArr list of objects (either documents or folders)
 	 * @param object $user user for which access is checked
 	 * @param integer $minMode minimum access mode required
@@ -242,8 +255,15 @@ class SeedDMS_Core_DMS {
 		}
 		$newArr = array();
 		foreach ($objArr as $obj) {
-			if ($obj->getAccessMode($user) >= $minMode)
-				array_push($newArr, $obj);
+			if ($obj->getAccessMode($user) >= $minMode) {
+				$dms = $obj->_dms;
+				if(get_class($obj) == $dms->getClassname('document')) {
+					if($obj->getLatestContent())
+						array_push($newArr, $obj);
+				} else {
+					array_push($newArr, $obj);
+				}
+			}
 		}
 		return $newArr;
 	} /* }}} */
@@ -358,6 +378,7 @@ class SeedDMS_Core_DMS {
 		$this->forceRename = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
+		$this->noReadForStatus = array();
 		$this->classnames = array();
 		$this->classnames['folder'] = 'SeedDMS_Core_Folder';
 		$this->classnames['document'] = 'SeedDMS_Core_Document';
@@ -561,6 +582,19 @@ class SeedDMS_Core_DMS {
 	 */
 	function setUser($user) { /* {{{ */
 		$this->user = $user;
+	} /* }}} */
+
+	/**
+	 * Get the logged in user
+	 *
+	 * If user authentication was done externally, this function can
+	 * be used to tell the dms who is currently logged in.
+	 *
+	 * @return object $user
+	 *
+	 */
+	function getLoggedInUser() { /* {{{ */
+		return $this->user;
 	} /* }}} */
 
 	/**
