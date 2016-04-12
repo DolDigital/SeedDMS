@@ -98,6 +98,7 @@ CREATE TABLE `tblRoles` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   `role` smallint(1) NOT NULL default '0',
+  `noaccess` varchar(30) NOT NULL default '',
   PRIMARY KEY (`id`),
   UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
