@@ -116,11 +116,13 @@ else if ($action == "editrole") {
 
 	$name    = $_POST["name"];
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
+	$noaccess = isset($_POST['noaccess']) ? $_POST['noaccess'] : null;
 	
 	if ($editedRole->getName() != $name)
 		$editedRole->setName($name);
 	if ($editedRole->getRole() != $role)
 		$editedRole->setRole($role);
+	$editedRole->setNoAccess($noaccess);
 
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_role')));
 	add_log_line(".php&action=editrole&roleid=".$roleid);
