@@ -92,6 +92,8 @@ $theme = $resArr["theme"];
 $lang = $resArr["language"];
 
 $dms->setUser($user);
+$role = $user->getRole();
+$dms->noReadForStatus = $role->getNoAccess();
 
 $notifier = new SeedDMS_NotificationService();
 

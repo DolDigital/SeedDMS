@@ -45,6 +45,13 @@ class SeedDMS_Core_Role { /* {{{ */
 	var $_role;
 
 	/**
+	 * @var array list of status without access
+	 *
+	 * @access protected
+	 */
+	var $_noaccess;
+
+	/**
 	 * @var object reference to the dms instance this user belongs to
 	 *
 	 * @access protected
@@ -55,10 +62,11 @@ class SeedDMS_Core_Role { /* {{{ */
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function SeedDMS_Core_Role($id, $name, $role) { /* {{{ */
+	function SeedDMS_Core_Role($id, $name, $role, $noaccess=array()) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_role = $role;
+		$this->_noaccess = $noaccess;
 		$this->_dms = $role;
 	} /* }}} */
 
@@ -91,7 +99,7 @@ class SeedDMS_Core_Role { /* {{{ */
 
 		$resArr = $resArr[0];
 
-		$role = new self($resArr["id"], $resArr["name"], $resArr["role"]);
+		$role = new self($resArr["id"], $resArr["name"], $resArr["role"], $resArr['noaccess'] ? explode(',', $resArr['noaccess']) : array());
 		$role->setDMS($dms);
 		return $role;
 	} /* }}} */
@@ -111,7 +119,7 @@ class SeedDMS_Core_Role { /* {{{ */
 		$roles = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$role = new self($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["role"]);
+			$role = new self($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["role"], explode(',', $resArr[$i]['noaccess']));
 			$role->setDMS($dms);
 			$roles[$i] = $role;
 		}
@@ -153,6 +161,19 @@ class SeedDMS_Core_Role { /* {{{ */
 			return false;
 
 		$this->_role = $newrole;
+		return true;
+	} /* }}} */
+
+	function getNoAccess() { return $this->_noaccess; }
+
+	function setNoAccess($noaccess) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblRoles SET noaccess = " . $db->qstr(implode(',',$noaccess)) . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_noaccess = $noaccess;
 		return true;
 	} /* }}} */
 

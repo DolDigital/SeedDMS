@@ -149,6 +149,18 @@ $(document).ready( function() {
 			<td><?php printMLText("role_type");?>:</td>
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_Role::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_admin ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_guest ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
+<?php
+		if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_user) {
+			echo "<tr>";
+			echo "<td>".getMLText('restrict_access')."</td>";
+			echo "<td>";
+			foreach(array(S_DRAFT_REV, S_DRAFT_APP, S_IN_WORKFLOW, S_REJECTED, S_RELEASED, S_IN_REVISION, S_DRAFT, S_OBSOLETE) as $status) {
+				echo "<input type=\"checkbox\" name=\"noaccess[]\" value=\"".$status."\" ".(in_array($status, $currRole->getNoAccess()) ? "checked" : "")."> ".getOverallStatusText($status)."<br />";
+			}
+			echo "</td>";
+			echo "</tr>";
+		}
+?>
 		<tr>
 			<td></td>
 			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText($currRole ? "save" : "add_role")?></button></td>

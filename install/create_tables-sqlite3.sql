@@ -51,6 +51,7 @@ CREATE TABLE `tblRoles` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` varchar(50) default NULL,
   `role` INTEGER NOT NULL default '0',
+  `noaccess` varchar(30) NOT NULL default '',
   UNIQUE (`name`)
 ) ;
 
