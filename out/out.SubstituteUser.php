@@ -26,18 +26,21 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1]);
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+
 if ($user->isAdmin()) {
 	$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 } else {
 	$allUsers = $user->getReverseSubstitutes();
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1]);
 if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
 	$view->setParam('allusers', $allUsers);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }
