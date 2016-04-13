@@ -414,7 +414,8 @@ class SeedDMS_AccessOperation {
 			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
 		foreach($scripts as $script) {
 			$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
-			if($acl->check($this->_aro, $aco))
+			$ll = $acl->check($this->_aro, $aco);
+			if($ll === 1 && !$this->user->isAdmin() || $ll !== -1 && $this->user->isAdmin())
 				return true;
 		}
 		return false;
