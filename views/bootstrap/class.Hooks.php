@@ -39,7 +39,7 @@ class SeedDMS_View_Hooks extends SeedDMS_Bootstrap_Style {
 
 		echo "<table class=\"table\">\n";
 		echo "<thead>";
-		echo "<tr><th>Type</th><th>Name of hook</th><th>Name of class</th><th>File</th></tr>\n";
+		echo "<tr><th>".getMLText('type_of_hook')."</th><th>".getMLText('hook_name')."</th><th>".getMLText('class_name')."</th><th>".getMLText('file')."</th></tr>\n";
 		echo "</thead>";
 		echo "<tbody>";
 		foreach(array('controller', 'view') as $type) {
@@ -71,7 +71,7 @@ class SeedDMS_View_Hooks extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading("Hooks");
+		$this->contentHeading(getMLText("list_hooks"));
 
 		self::list_hooks();
 
