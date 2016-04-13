@@ -41,6 +41,24 @@ class SeedDMS_Controller_Common {
 		$this->errormsg = '';
 	}
 
+	/**
+	 * Call methods with name in $get['action']
+	 *
+	 * @params array $get $_GET or $_POST variables
+	 * @return mixed return value of called method
+	 */
+	function __invoke($get=array()) {
+		if(isset($get['action']) && $get['action']) {
+			if(method_exists($this, $get['action'])) {
+				return $this->{$get['action']}();
+			} else {
+				echo "Missing action '".$get['action']."'";
+				return false;
+			}
+		} else
+			return $this->run();
+	}
+
 	function setParams($params) {
 		$this->params = $params;
 	}
