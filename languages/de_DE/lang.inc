@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2223), dgrutsch (21)
+//    Translators: Admin (2227), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -231,6 +231,7 @@ URL: [url]',
 'choose_workflow' => 'Workflow wählen',
 'choose_workflow_action' => 'Workflow-Aktion wählen',
 'choose_workflow_state' => 'Workflow-Status wählen',
+'class_name' => 'Klassenname',
 'clear_clipboard' => 'Zwischenablage leeren',
 'clear_password' => 'Passwort löschen',
 'clipboard' => 'Zwischenablage',
@@ -501,6 +502,7 @@ URL: [url]',
 'guest_login_disabled' => 'Anmeldung als Gast ist gesperrt.',
 'help' => 'Hilfe',
 'home_folder' => 'Heimatordner',
+'hook_name' => 'Name des Aufrufs',
 'hourly' => 'stündlich',
 'hours' => 'Stunden',
 'hr_HR' => 'Kroatisch',
@@ -508,6 +510,7 @@ URL: [url]',
 'hu_HU' => 'Ungarisch',
 'id' => 'ID',
 'identical_version' => 'Neue Version ist identisch zu aktueller Version.',
+'import' => 'Importiere',
 'importfs' => 'Importiere aus Dateisystem',
 'include_content' => 'Inhalte mit exportieren',
 'include_documents' => 'Dokumente miteinbeziehen',
@@ -1385,6 +1388,7 @@ URL: [url]',
 'tr_TR' => 'Türkisch',
 'tuesday' => 'Dienstag',
 'tuesday_abbr' => 'Di',
+'type_of_hook' => 'Typ',
 'type_to_search' => 'Hier tippen zum Suchen',
 'uk_UA' => 'Ukrainisch',
 'under_folder' => 'In Ordner',
