@@ -30,7 +30,10 @@ include("../inc/inc.Authentication.php");
  */
 require_once("SeedDMS/Preview.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
@@ -53,8 +56,6 @@ if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) 
 } else
 	$content = null;
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('fromdate', isset($_GET['fromdate']) ? $_GET['fromdate'] : '');
 	$view->setParam('todate', isset($_GET['todate']) ? $_GET['todate'] : '');
@@ -65,6 +66,7 @@ if($view) {
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
 	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

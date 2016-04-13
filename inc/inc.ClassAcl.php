@@ -42,6 +42,15 @@ class SeedDMS_Acl { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
+	/**
+	 * Check if Aro has access on Aco
+	 *
+	 * @param object $aro access request object
+	 * @param object $aco access control object
+	 * @return integer/boolean -1 if access is explictly denied, 1 if access
+	 * is explictly allow, 0 if no access restrictions exists, false if
+	 * an error occured.
+	 */
 	public function check($aro, $aco) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -52,12 +61,12 @@ class SeedDMS_Acl { /* {{{ */
 			if (is_bool($resArr) && $resArr === false)
 				return false;
 			if (count($resArr) == 1)
-				return($resArr[0]['read'] == 1 ? true : false);
+				return((int) $resArr[0]['read']);
 
 			$aco = $aco->getParent();
 		}
 
-		return false;
+		return 0;
 	} /* }}} */
 
 	public function toggle($aro, $aco) { /* {{{ */

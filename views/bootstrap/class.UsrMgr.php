@@ -185,7 +185,7 @@ $(document).ready( function() {
 ?>
 	<table class="table-condensed">
 <?php
-	if($currUser && !in_array($currUser->getID(), $undeluserids)) {
+	if($currUser && !in_array($currUser->getID(), $undeluserids) && $this->check_access('RemoveUser')) {
 ?>
 		<tr>
 			<td></td>

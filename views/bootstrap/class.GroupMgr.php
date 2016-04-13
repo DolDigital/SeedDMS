@@ -165,7 +165,7 @@ $(document).ready( function() {
 ?>
 	<table class="table-condensed">
 <?php
-		if($group) {
+		if($group && $this->check_access('RemoveGroup')) {
 ?>
 		<tr>
 			<td></td>

@@ -32,7 +32,10 @@ include("../inc/inc.Authentication.php");
  */
 require_once("SeedDMS/Preview.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -44,8 +47,6 @@ if(isset($_GET['attrdefid']) && $_GET['attrdefid']) {
 	$selattrdef = null;
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('attrdefs', $attrdefs);
 	$view->setParam('selattrdef', $selattrdef);
@@ -55,6 +56,7 @@ if($view) {
 	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 }
 

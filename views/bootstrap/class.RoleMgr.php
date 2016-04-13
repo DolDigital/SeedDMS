@@ -111,9 +111,10 @@ $(document).ready( function() {
 	function showRoleForm($currRole) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$accessop = $this->params['accessobject'];
 		$roles = $this->params['allroles'];
 
-		if($currRole && !$currRole->isUsed()) {
+		if($currRole && !$currRole->isUsed() && $accessop->check_controller_access('RoleMgr', array('action'=>'removerole'))) {
 ?>
 			<form style="display: inline-block;" method="post" action="../op/op.RoleMgr.php" >
 				<?php echo createHiddenFieldWithKey('removerole'); ?>
@@ -150,7 +151,7 @@ $(document).ready( function() {
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_Role::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_admin ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_Role::role_guest ?>" <?php if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 <?php
-		if($currRole && $currRole->getRole() == SeedDMS_Core_Role::role_user) {
+		if($currRole && $currRole->getRole() != SeedDMS_Core_Role::role_admin) {
 			echo "<tr>";
 			echo "<td>".getMLText('restrict_access')."</td>";
 			echo "<td>";
@@ -160,11 +161,15 @@ $(document).ready( function() {
 			echo "</td>";
 			echo "</tr>";
 		}
+		if($currRole && $accessop->check_controller_access('RoleMgr', array('action'=>'editrole')) || !$currRole && $accessop->check_controller_access('RoleMgr', array('action'=>'addrole'))) {
 ?>
 		<tr>
 			<td></td>
 			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText($currRole ? "save" : "add_role")?></button></td>
 		</tr>
+<?php
+		}
+?>
 	</table>
 	</form>
 <?php
@@ -173,6 +178,7 @@ $(document).ready( function() {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$accessop = $this->params['accessobject'];
 		$selrole = $this->params['selrole'];
 		$roles = $this->params['allroles'];
 
@@ -189,7 +195,9 @@ $(document).ready( function() {
 <?php echo getMLText("selection")?>:
 <select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_role")?>
+<?php if($accessop->check_controller_access('RoleMgr', array('action'=>'addrole'))) { ?>
 <option value="0"><?php echo getMLText("add_role")?>
+<?php } ?>
 <?php
 		foreach ($roles as $currRole) {
 			print "<option value=\"".$currRole->getID()."\" ".($selrole && $currRole->getID()==$selrole->getID() ? 'selected' : '').">" . htmlspecialchars($currRole->getName());

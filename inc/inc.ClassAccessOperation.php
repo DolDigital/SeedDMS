@@ -348,11 +348,16 @@ class SeedDMS_AccessOperation {
 	 * Check for access permission on view
 	 *
 	 * If the parameter $view is an array then each element is considered the
-	 * name of a view and true will be returned if one is accesible.
+	 * name of a view and true will be returned if one is accessible.
+	 * Whether access is allowed also depends on the currently logged in user
+	 * stored in the view object. If the user is an admin the access 
+	 * on a view must be explicitly disallowed. For regular users the access
+	 * must be explicitly allowed.
 	 *
 	 * @param mixed $view Instanz of view, name of view or array of view names
 	 * @param string $get query parameters
-	 * @return boolean true if access is allowed otherwise false
+	 * @return boolean true if access is allowed, false if access is disallowed
+	 * no specific access right is set, otherwise false
 	 */
 	function check_view_access($view, $get=array()) { /* {{{ */
 		if(!$this->settings->_advancedAcl)
@@ -373,7 +378,8 @@ class SeedDMS_AccessOperation {
 			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
 		foreach($scripts as $script) {
 			$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
-			if($acl->check($this->_aro, $aco))
+			$ll = $acl->check($this->_aro, $aco);
+			if($ll === 1 && !$this->user->isAdmin() || $ll !== -1 && $this->user->isAdmin())
 				return true;
 		}
 		return false;
@@ -408,7 +414,8 @@ class SeedDMS_AccessOperation {
 			$this->_aro = SeedDMS_Aro::getInstance($this->user->getRole(), $this->dms);
 		foreach($scripts as $script) {
 			$aco = SeedDMS_Aco::getInstance($scope.'/'.$script.'/'.$action, $this->dms);
-			if($acl->check($this->_aro, $aco))
+			$ll = $acl->check($this->_aro, $aco);
+			if($ll === 1 && !$this->user->isAdmin() || $ll !== -1 && $this->user->isAdmin())
 				return true;
 		}
 		return false;

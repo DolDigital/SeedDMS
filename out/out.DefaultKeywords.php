@@ -26,7 +26,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -37,9 +40,10 @@ else
 
 $categories = $dms->getAllUserKeywordCategories($user->getID());
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories, 'selcategoryid'=>$selcategoryid));
 if($view) {
+	$view->setParam('categories', $categories);
+	$view->setParam('selcategoryid', $selcategoryid);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

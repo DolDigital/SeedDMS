@@ -106,7 +106,8 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "<td>";
 			echo "<div class=\"list-action\">";
-     	echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
+			echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
+			if ($this->check_access('RemoveUser'))
      	echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
 			echo "</div>";
 			echo "</td>";

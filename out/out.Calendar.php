@@ -25,6 +25,13 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
+	UI::exitError(getMLText("calendar"),getMLText("access_denied"));
+}
+
 if ($_GET["mode"]) $mode=$_GET["mode"];
 
 // get required date else use current
@@ -37,8 +44,6 @@ else $month = (int)date("m", $currDate);
 if (isset($_GET["day"])&&is_numeric($_GET["day"])) $day=$_GET["day"];
 else $day = (int)date("d", $currDate);
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('mode', $mode);
 	$view->setParam('year', $year);

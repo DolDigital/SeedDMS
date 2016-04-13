@@ -169,7 +169,7 @@ class SeedDMS_Core_Role { /* {{{ */
 	function setNoAccess($noaccess) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblRoles SET noaccess = " . $db->qstr(implode(',',$noaccess)) . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblRoles SET noaccess = " . $db->qstr($noaccess ? implode(',',$noaccess) : '') . " WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 

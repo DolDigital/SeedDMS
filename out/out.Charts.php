@@ -27,10 +27,11 @@ include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-
-if (!$user->isAdmin()) {
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
+
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
 $type = 'docsperuser';
@@ -50,6 +51,7 @@ if($view) {
 	$view->setParam('rootfolder', $rootfolder);
 	$view->setParam('type', $type);
 	$view->setParam('data', $data);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }
