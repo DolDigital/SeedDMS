@@ -33,6 +33,7 @@ if (!$accessop->check_view_access($view, $_GET)) {
 
 if($view) {
 	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }
