@@ -26,7 +26,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -39,8 +42,6 @@ if (!is_object($group)) {
 	UI::exitError(getMLText("rm_group"),getMLText("invalid_group_id"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('group', $group);
 	$view($_GET);

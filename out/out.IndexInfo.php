@@ -28,7 +28,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -41,12 +44,11 @@ if(!$index) {
 	UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('luceneclassdir', $settings->_luceneClassDir);
 	$view->setParam('lucenedir', $settings->_luceneDir);
 	$view->setParam('index', $index);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

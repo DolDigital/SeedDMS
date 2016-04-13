@@ -28,7 +28,7 @@ include("../inc/inc.ClassPasswordStrength.php");
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
-if (!$accessop->check_view_access($view, $_GET) && !$user->isAdmin()) {
+if (!$accessop->check_view_access($view, $_GET)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
@@ -39,6 +39,7 @@ if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
 	$view->setParam('quota', $settings->_quota);
 	$view->setParam('pwdexpiration', $settings->_passwordExpiration);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }
