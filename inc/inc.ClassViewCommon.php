@@ -171,13 +171,30 @@ class SeedDMS_View_Common {
 	 * Check if the access on the view with given name or the current view itself
 	 * may be accessed.
 	 *
+	 * The function behaves differently for admins and other users. For admins
+	 * a view must be explitly disallowed for this function to return false.
+	 * For other users access on a view must be explicitly allow for the this
+	 * function to return true.
+	 *
 	 * @param string|array $name name of view or list of view names
 	 * @return boolean true if access is allowed otherwise false
 	 */
 	protected function check_access($name='') { /* {{{ */
 		if(!$name)
 			$name = $this;
-		return ((isset($this->params['user']) && $this->params['user']->isAdmin()) || (isset($this->params['accessobject']) && $this->params['accessobject']->check_view_access($name)));
+		if(!isset($this->params['accessobject']))
+			return false;
+		$access = $this->params['accessobject']->check_view_access($name);
+		return $access;
+
+		if(isset($this->params['user']) && $this->params['user']->isAdmin()) {
+			if($access === -1)
+				return false;
+			else
+				return true;
+		}
+
+		return ($access === 1);
 	} /* }}} */
 
 	/**
