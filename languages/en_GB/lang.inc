@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1366), dgrutsch (7), netixw (14)
+//    Translators: Admin (1369), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -273,6 +273,7 @@ URL: [url]',
 'databasesearch' => 'Database search',
 'date' => 'Date',
 'days' => 'days',
+'debug' => 'Debug',
 'december' => 'December',
 'default_access' => 'Default Access Mode',
 'default_keywords' => 'Available keywords',
@@ -507,6 +508,7 @@ URL: [url]',
 'hu_HU' => 'Hungarian',
 'id' => 'ID',
 'identical_version' => 'New version is identical to current version.',
+'importfs' => 'Import from Filesystem',
 'include_content' => 'Include content',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
@@ -578,6 +580,7 @@ URL: [url]',
 'linked_documents' => 'Related Documents',
 'linked_files' => 'Attachments',
 'link_alt_updatedocument' => 'If you would like to upload files bigger than the current maximum upload size, please use the alternative <a href="%s">upload page</a>.',
+'list_hooks' => 'List hooks',
 'local_file' => 'Local file',
 'locked_by' => 'Locked by',
 'lock_document' => 'Lock',

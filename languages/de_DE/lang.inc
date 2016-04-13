@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2220), dgrutsch (21)
+//    Translators: Admin (2223), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -273,6 +273,7 @@ URL: [url]',
 'databasesearch' => 'Datenbanksuche',
 'date' => 'Datum',
 'days' => 'Tage',
+'debug' => 'Debug',
 'december' => 'Dezember',
 'default_access' => 'Standardberechtigung',
 'default_keywords' => 'Verfügbare Schlüsselworte',
@@ -507,6 +508,7 @@ URL: [url]',
 'hu_HU' => 'Ungarisch',
 'id' => 'ID',
 'identical_version' => 'Neue Version ist identisch zu aktueller Version.',
+'importfs' => 'Importiere aus Dateisystem',
 'include_content' => 'Inhalte mit exportieren',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
@@ -578,6 +580,7 @@ URL: [url]',
 'linked_documents' => 'verknüpfte Dokumente',
 'linked_files' => 'Anhänge',
 'link_alt_updatedocument' => 'Wenn Sie ein Dokument hochladen möchten, das größer als die maximale Dateigröße ist, dann benutzen Sie bitte die alternative <a href="%s">Upload-Seite</a>.',
+'list_hooks' => 'Liste interne Aufrufe',
 'local_file' => 'Lokale Datei',
 'locked_by' => 'Gesperrt von',
 'lock_document' => 'Sperren',
