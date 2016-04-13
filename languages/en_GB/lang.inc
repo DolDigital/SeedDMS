@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1369), dgrutsch (7), netixw (14)
+//    Translators: Admin (1373), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -231,6 +231,7 @@ URL: [url]',
 'choose_workflow' => 'Choose workflow',
 'choose_workflow_action' => 'Choose workflow action',
 'choose_workflow_state' => 'Choose workflow state',
+'class_name' => 'Name of class',
 'clear_clipboard' => 'Clear clipboard',
 'clear_password' => 'Clear password',
 'clipboard' => 'Clipboard',
@@ -501,6 +502,7 @@ URL: [url]',
 'guest_login_disabled' => 'Guest login is disabled.',
 'help' => 'Help',
 'home_folder' => 'Home folder',
+'hook_name' => 'Name of hook',
 'hourly' => 'Hourly',
 'hours' => 'hours',
 'hr_HR' => 'Croatian',
@@ -508,6 +510,7 @@ URL: [url]',
 'hu_HU' => 'Hungarian',
 'id' => 'ID',
 'identical_version' => 'New version is identical to current version.',
+'import' => 'Import',
 'importfs' => 'Import from Filesystem',
 'include_content' => 'Include content',
 'include_documents' => 'Include documents',
@@ -1386,6 +1389,7 @@ URL: [url]',
 'tr_TR' => 'Turkish',
 'tuesday' => 'Tuesday',
 'tuesday_abbr' => 'Tu',
+'type_of_hook' => 'Type',
 'type_to_search' => 'Type to search',
 'uk_UA' => 'Ukrainian',
 'under_folder' => 'In Folder',
