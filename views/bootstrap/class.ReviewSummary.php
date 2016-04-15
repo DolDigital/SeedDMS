@@ -36,9 +36,11 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
+		$previewconverters = $this->params['previewconverters'];
 		$timeout = $this->params['timeout'];
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+		$previewer->setConverters($previewconverters);
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
