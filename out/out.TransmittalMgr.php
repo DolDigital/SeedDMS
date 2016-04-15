@@ -31,6 +31,10 @@ include("../inc/inc.Authentication.php");
  */
 require_once("SeedDMS/Preview.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("my_transmittals"),getMLText("access_denied"));
 }
@@ -41,13 +45,12 @@ if(isset($_GET['transmittalid']) && $_GET['transmittalid']) {
 	$seltransmittal = null;
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('seltransmittal', $seltransmittal);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewconverters', $settings->_converters['preview']);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

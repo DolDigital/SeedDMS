@@ -230,9 +230,9 @@ class SeedDMS_View_TransmittalMgr extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidth = $this->params['previewWidthList'];
 		$previewconverters = $this->params['previewconverters'];
+		$timeout = $this->params['timeout'];
 
-		$db = $dms->getDB();
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 		$previewer->setConverters($previewconverters);
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
