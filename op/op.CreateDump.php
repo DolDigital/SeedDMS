@@ -33,7 +33,7 @@ if (!$user->isAdmin()) {
 if($settings->_backupDir && file_exists($settings->_backupDir))
 	$basedir = $settings->_backupDir;
 else
-	$basedir = $setting->_contentDir;
+	$basedir = $settings->_contentDir;
 
 $v = new SeedDMS_Version;
 $dump_name = $basedir.date('Y-m-d\TH:i:s')."_".$v->_number.".sql";

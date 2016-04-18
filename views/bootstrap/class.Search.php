@@ -49,10 +49,51 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
-
+?>
+$(document).ready( function() {
+	$('#export').on('click', function(e) {
+		e.preventDefault();
+		window.location.href = $(this).attr('href')+'&includecontent='+($('#includecontent').prop('checked') ? '1' : '0');
+	});
+});
+<?php
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
+	function export() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$entries = $this->params['searchhits'];
+
+		include("../inc/inc.ClassDownloadMgr.php");
+		$downmgr = new SeedDMS_Download_Mgr();
+		foreach($entries as $entry) {
+			if(get_class($entry) == $dms->getClassname('document')) {
+				$extracols = $this->callHook('extraDownloadColumns', $entry);
+				$downmgr->addItem($entry->getLatestContent(), $extracols);
+			}
+		}
+		$filename = tempnam('/tmp', '');
+		if(isset($_GET['includecontent']) && $_GET['includecontent']) {
+			$downmgr->createArchive($filename);
+			header("Content-Transfer-Encoding: binary");
+			header("Content-Length: " . filesize($filename));
+			header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".zip\"");
+			header("Content-Type: application/zip");
+			header("Cache-Control: must-revalidate");
+		} else {
+			$downmgr->createToc($filename);
+			header("Content-Transfer-Encoding: binary");
+			header("Content-Length: " . filesize($filename));
+			header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".xls\"");
+			header("Content-Type: application/vnd.ms-excel");
+			header("Cache-Control: must-revalidate");
+		}
+
+		readfile($filename);
+		unlink($filename);
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -61,6 +102,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$fullsearch = $this->params['fullsearch'];
 		$totaldocs = $this->params['totaldocs'];
 		$totalfolders = $this->params['totalfolders'];
+		$limit = $this->params['limit'];
 		$attrdefs = $this->params['attrdefs'];
 		$allCats = $this->params['allcategories'];
 		$allUsers = $this->params['allusers'];
@@ -91,6 +133,20 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$previewwidth = $this->params['previewWidthList'];
 		$previewconverters = $this->params['previewconverters'];
 		$timeout = $this->params['timeout'];
+
+		if(count($entries) == 1) {
+			$entry = $entries[0];
+			if(get_class($entry) == $dms->getClassname('document')) {
+				header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
+				exit;
+			} elseif(get_class($entry) == $dms->getClassname('folder')) {
+				header('Location: ../out/out.ViewFolder.php?folderid='.$entry->getID());
+				exit;
+			}
+		}
+
+		if ($pageNumber != 'all')
+			$entries = array_slice($entries, ($pageNumber-1)*$limit, $limit);
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
@@ -249,17 +305,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <td><?= getMLText('content') ?></td><td><label class="checkbox inline"><input id="includecontent" type="checkbox" name="includecontent" value="1"> <?php printMLText("include_content"); ?></label></td>
 </tr>
 <tr>
-<td></td><td><a id="export" class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a></td>
+<td></td><td><a id="export" class="btn" href="<?= $_SERVER['REQUEST_URI']."&action=export" ?>"><i class="icon-download"></i> Export</a></td>
 </tr>
 </table>
-<script>
-$(document).ready( function() {
-	$('#export').on('click', function(e) {
-		e.preventDefault();
-		window.location.href = $(this).attr('href')+'&includecontent='+($('#includecontent').prop('checked') ? '1' : '0');
-	});
-});		
-</script>
       </div>
     </div>
   </div>
