@@ -444,8 +444,17 @@ if(count($entries) == 1) {
 	}
 } else {
 	$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'query'=>$query, 'searchhits'=>$entries, 'totalpages'=>$totalPages, 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'cachedir'=>$settings->_cacheDir));
+	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+	$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 	if($view) {
+		$view->setParam('accessobject', $accessop);
+		$view->setParam('query', $query);
+		$view->setParam('searchhits', $entries);
+		$view->setParam('totalpages', $totalPages);
+		$view->setParam('pagenumber', $pageNumber);
+		$view->setParam('searchtime', $searchTime);
+		$view->setParam('urlparams', $_GET);
+		$view->setParam('cachedir', $settings->_cacheDir);
 		$view->setParam('totaldocs', $dcount /*resArr['totalDocs']*/);
 		$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
 		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) ? true : false);

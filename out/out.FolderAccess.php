@@ -27,6 +27,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+
 if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
@@ -43,13 +47,12 @@ if ($folder->getAccessMode($user) < M_ALL) {
 $allUsers = $dms->getAllUsers();
 $allGroups = $dms->getAllGroups();
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('allusers', $allUsers);
 	$view->setParam('allgroups', $allGroups);
 	$view->setParam('rootfolderid', $settings->_rootFolderID);
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }
