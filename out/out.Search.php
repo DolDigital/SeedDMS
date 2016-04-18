@@ -360,7 +360,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 			$pageNumber = (int) $_GET["pg"];
 		}
 		elseif (!strcasecmp($_GET["pg"], "all")) {
-		//	$limit = 0;
+			$pageNumber = "all";
 		}
 	}
 
@@ -393,99 +393,58 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 			}
 		}
 	}
-	if(isset($_GET['export']) && $_GET['export']) {
-		include("../inc/inc.ClassDownloadMgr.php");
-		$downmgr = new SeedDMS_Download_Mgr();
-		foreach($entries as $entry) {
-			if(get_class($entry) == $dms->getClassname('document')) {
-				$downmgr->addItem($entry->getLatestContent());
-			}
-		}
-		$filename = tempnam('/tmp', '');
-		if(isset($_GET['includecontent']) && $_GET['includecontent']) {
-			$downmgr->createArchive($filename);
-			header("Content-Transfer-Encoding: binary");
-			header("Content-Length: " . filesize($filename));
-			header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".zip\"");
-			header("Content-Type: application/zip");
-			header("Cache-Control: must-revalidate");
-		} else {
-			$downmgr->createToc($filename);
-			header("Content-Transfer-Encoding: binary");
-			header("Content-Length: " . filesize($filename));
-			header("Content-Disposition: attachment; filename=\"export-" .date('Y-m-d') . ".xls\"");
-			header("Content-Type: application/vnd.ms-excel");
-			header("Cache-Control: must-revalidate");
-		}
-
-		readfile($filename);
-		unlink($filename);
-		exit;
-	}
 
 	$totalPages = (int) (count($entries)/$limit);
 	if(count($entries)%$limit)
 		$totalPages++;
-	if (!isset($_GET["pg"]) || strcasecmp($_GET["pg"], "all"))
-		$entries = array_slice($entries, ($pageNumber-1)*$limit, $limit);
 // }}}
 }
 
 // -------------- Output results --------------------------------------------
 
-if(count($entries) == 1) {
-	$entry = $entries[0];
-	if(get_class($entry) == $dms->getClassname('document')) {
-		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
-		exit;
-	} elseif(get_class($entry) == $dms->getClassname('folder')) {
-		header('Location: ../out/out.ViewFolder.php?folderid='.$entry->getID());
-		exit;
-	}
-} else {
-	$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-	$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
-	if($view) {
-		$view->setParam('accessobject', $accessop);
-		$view->setParam('query', $query);
-		$view->setParam('searchhits', $entries);
-		$view->setParam('totalpages', $totalPages);
-		$view->setParam('pagenumber', $pageNumber);
-		$view->setParam('searchtime', $searchTime);
-		$view->setParam('urlparams', $_GET);
-		$view->setParam('cachedir', $settings->_cacheDir);
-		$view->setParam('totaldocs', $dcount /*resArr['totalDocs']*/);
-		$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
-		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) ? true : false);
-		$view->setParam('mode', isset($mode) ? $mode : '');
-		$view->setParam('defaultsearchmethod', $settings->_defaultSearchMethod);
-		$view->setParam('resultmode', isset($resultmode) ? $resultmode : '');
-		$view->setParam('searchin', isset($searchin) ? $searchin : array());
-		$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
-		$view->setParam('owner', $owner);
-		$view->setParam('startdate', isset($startdate) ? $startdate : array());
-		$view->setParam('stopdate', isset($stopdate) ? $stopdate : array());
-		$view->setParam('expstartdate', isset($expstartdate) ? $expstartdate : array());
-		$view->setParam('expstopdate', isset($expstopdate) ? $expstopdate : array());
-		$view->setParam('creationdate', isset($creationdate) ? $creationdate : '');
-		$view->setParam('expirationdate', isset($expirationdate) ? $expirationdate: '');
-		$view->setParam('status', isset($status) ? $status : array());
-		$view->setParam('categories', isset($categories) ? $categories : '');
-		$view->setParam('attributes', isset($attributes) ? $attributes : '');
-		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
-		$view->setParam('attrdefs', $attrdefs);
-		$allCats = $dms->getDocumentCategories();
-		$view->setParam('allcategories', $allCats);
-		$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
-		$view->setParam('allusers', $allUsers);
-		$view->setParam('workflowmode', $settings->_workflowMode);
-		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
-		$view->setParam('previewWidthList', $settings->_previewWidthList);
-		$view->setParam('previewconverters', $settings->_converters['preview']);
-		$view->setParam('timeout', $settings->_cmdTimeout);
-		$view($_GET);
-		exit;
-	}
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if($view) {
+	$view->setParam('accessobject', $accessop);
+	$view->setParam('query', $query);
+	$view->setParam('searchhits', $entries);
+	$view->setParam('totalpages', $totalPages);
+	$view->setParam('pagenumber', $pageNumber);
+	$view->setParam('limit', $limit);
+	$view->setParam('searchtime', $searchTime);
+	$view->setParam('urlparams', $_GET);
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('totaldocs', $dcount /*resArr['totalDocs']*/);
+	$view->setParam('totalfolders', $fcount /*resArr['totalFolders']*/);
+	$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSearch) ? true : false);
+	$view->setParam('mode', isset($mode) ? $mode : '');
+	$view->setParam('defaultsearchmethod', $settings->_defaultSearchMethod);
+	$view->setParam('resultmode', isset($resultmode) ? $resultmode : '');
+	$view->setParam('searchin', isset($searchin) ? $searchin : array());
+	$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
+	$view->setParam('owner', $owner);
+	$view->setParam('startdate', isset($startdate) ? $startdate : array());
+	$view->setParam('stopdate', isset($stopdate) ? $stopdate : array());
+	$view->setParam('expstartdate', isset($expstartdate) ? $expstartdate : array());
+	$view->setParam('expstopdate', isset($expstopdate) ? $expstopdate : array());
+	$view->setParam('creationdate', isset($creationdate) ? $creationdate : '');
+	$view->setParam('expirationdate', isset($expirationdate) ? $expirationdate: '');
+	$view->setParam('status', isset($status) ? $status : array());
+	$view->setParam('categories', isset($categories) ? $categories : '');
+	$view->setParam('attributes', isset($attributes) ? $attributes : '');
+	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
+	$view->setParam('attrdefs', $attrdefs);
+	$allCats = $dms->getDocumentCategories();
+	$view->setParam('allcategories', $allCats);
+	$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('enablefullsearch', $settings->_enableFullSearch);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('previewconverters', $settings->_converters['preview']);
+	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view($_GET);
+	exit;
 }
 ?>
