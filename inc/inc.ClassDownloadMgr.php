@@ -39,13 +39,21 @@ class SeedDMS_Download_Mgr {
 	 */
 	protected $items;
 
+	/**
+	 * @var array $extracols list of arrays with extra columns per item
+	 * @access protected
+	 */
+	protected $extracols;
+
 	function __construct($tmpdir = '') {
 		$this->tmpdir = $tmpdir;
 		$this->items = array();
+		$this->extracols = array();
 	}
 
-	public function addItem($item) { /* {{{ */
+	public function addItem($item, $extracols) { /* {{{ */
 		$this->items[$item->getID()] = $item;
+		$this->extracols[$item->getID()] = $extracols;
 	} /* }}} */
 
 	public function createToc($file) { /* {{{ */
@@ -113,9 +121,9 @@ class SeedDMS_Download_Mgr {
 					$sheet->setCellValueByColumnAndRow($tcol++, $l, getReviewStatusText($r["status"]));
 					$l++;
 				}
-				$col = $tcol;
 				$l--;
 			}
+			$col += 4;
 			if($approvalStatus) {
 				foreach ($approvalStatus as $r) {
 					switch ($r["type"]) {
@@ -144,8 +152,12 @@ class SeedDMS_Download_Mgr {
 					$sheet->setCellValueByColumnAndRow($tcol++, $k, getApprovalStatusText($r["status"]));
 					$k++;
 				}
-				$col = $tcol;
 				$k--;
+			}
+			$col += 4;
+			if(isset($this->extracols[$item->getID()]) && $this->extracols[$item->getID()]) {
+				foreach($this->extracols[$item->getID()] as $column)
+					$sheet->setCellValueByColumnAndRow($col++, $i, $column);
 			}
 			$i = max($l, $k);
 			$i++;
