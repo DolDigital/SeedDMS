@@ -49,7 +49,14 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
-
+?>
+$(document).ready( function() {
+	$('#export').on('click', function(e) {
+		e.preventDefault();
+		window.location.href = $(this).attr('href')+'&includecontent='+($('#includecontent').prop('checked') ? '1' : '0');
+	});
+});
+<?php
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
@@ -252,14 +259,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <td></td><td><a id="export" class="btn" href="<?= $_SERVER['REQUEST_URI']."&export=1" ?>"><i class="icon-download"></i> Export</a></td>
 </tr>
 </table>
-<script>
-$(document).ready( function() {
-	$('#export').on('click', function(e) {
-		e.preventDefault();
-		window.location.href = $(this).attr('href')+'&includecontent='+($('#includecontent').prop('checked') ? '1' : '0');
-	});
-});		
-</script>
       </div>
     </div>
   </div>
