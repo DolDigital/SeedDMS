@@ -189,7 +189,7 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td></td>
-			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
+			<td><?php echo $this->html_link('RemoveUser', array('userid'=>$currUser->getID()), array('class'=>'btn'), '<i class="icon-remove"></i> '.getMLText("rm_user"), false); ?></td>
 		</tr>
 <?php
 	}
@@ -292,7 +292,7 @@ $(document).ready( function() {
 			<td>
 <?php
 					if ($currUser->hasImage())
-						print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
+						print "<img src=\"".$this->html_url('UserImage', array('userid'=>$currUser->getId()))."\" >";
 					else
 						printMLText("no_user_image");
 ?>
