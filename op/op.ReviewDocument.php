@@ -341,6 +341,7 @@ if ($_POST["reviewStatus"]==-1){
 					$params['username'] = $user->getFullName();
 					$params['sitename'] = $settings->_siteName;
 					$params['http_root'] = $settings->_httpRoot;
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 					foreach ($docApprovalStatus as $dastat) {
 					
 						if ($dastat["status"] == 0) {
