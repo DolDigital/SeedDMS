@@ -169,7 +169,7 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td></td>
-			<td><a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a></td>
+			<td><?php echo $this->html_link('RemoveGroup', array('groupid'=>$group->getID()), array('class'=>'btn'), '<i class="icon-remove"></i> '.getMLText("rm_group"), false); ?></td>
 		</tr>
 <?php
 		}

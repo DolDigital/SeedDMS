@@ -38,6 +38,7 @@ if(!trim($settings->_encryptionKey))
 if($view) {
 	$view->setParam('settings', $settings);
 	$view->setParam('currenttab', (isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : ''));
+	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
 }

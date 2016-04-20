@@ -56,7 +56,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			echo "<tr>";
 			echo "<td>";
 			if ($currUser->hasImage())
-				print "<img width=\"50\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
+				print "<img width=\"50\" src=\"".$this->html_url('UserImage', array('userid'=>$currUser->getId()))."\" >";
 			echo "</td>";
 			echo "<td>";
 			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
@@ -105,11 +105,12 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</td>";
 			echo "<td>";
-			echo "<div class=\"list-action\">";
-			echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
-			if ($this->check_access('RemoveUser'))
-     	echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
-			echo "</div>";
+			if($this->check_access(array('UsrMgr', 'RemoveUser'))) {
+				echo "<div class=\"list-action\">";
+				echo $this->html_link('UsrMgr', array('userid'=>$currUser->getID()), array(), '<i class="icon-edit"></i>', false);
+				echo $this->html_link('RemoveUser', array('userid'=>$currUser->getID()), array(), '<i class="icon-remove"></i>', false);
+				echo "</div>";
+			}
 			echo "</td>";
 			echo "</tr>";
 		}
