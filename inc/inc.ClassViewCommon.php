@@ -229,7 +229,8 @@ class SeedDMS_View_Common {
 		$url = $this->html_url($view, $urlparams);
 		$tag = "<a href=\"".$url."\"";
 		if($linkparams)
-			array_walk($linkparams, function($v, $k) {$tag .= " ".$k."=\"".$v."\"";});
+			foreach($linkparams as $k=>$v)
+				$tag .= " ".$k."=\"".$v."\"";
 		$tag .= ">".($hsc ? htmlspecialchars($link) : $link)."</a>";
 		return $tag;
 	} /* }}} */
