@@ -20,14 +20,19 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
-$documentid = $_GET["documentid"];
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
+$documentid = $_GET["documentid"];
 if (!isset($documentid) || !is_numeric($documentid) || intval($documentid)<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -72,13 +77,8 @@ if (!isset($settings->_editOnlineFileTypes) || !is_array($settings->_editOnlineF
 }
  */
 
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
-
 $folder = $document->getFolder();
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('document', $document);
 	$view->setParam('version', $content);
