@@ -223,9 +223,10 @@ class SeedDMS_View_Common {
 	 * @param boolean $hsc set to false if htmlspecialchars() shall not be called
 	 * @return string link
 	 */
-	protected function html_link($view='', $urlparams=array(), $linkparams=array(), $link, $hsc=true) { /* {{{ */
-		if(!$this->check_access($view))
-			return '';
+	protected function html_link($view='', $urlparams=array(), $linkparams=array(), $link, $hsc=true, $nocheck=false) { /* {{{ */
+		if(!$nocheck)
+			if(!$this->check_access($view))
+				return '';
 		$url = $this->html_url($view, $urlparams);
 		$tag = "<a href=\"".$url."\"";
 		if($linkparams)
