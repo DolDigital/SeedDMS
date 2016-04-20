@@ -6,6 +6,7 @@
   header to be send to early (Closes: #252, #254) 
 - regular users with sufficient access rights may remove documents via webdav
 - fix error in utils/indexer.php when new documents were indexed
+- set url in approval request email after reviewing a document (Closes #259)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
