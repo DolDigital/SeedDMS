@@ -524,51 +524,51 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
 		if($accessop->mayEditVersion($document)) {
-			print "<li><a href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+			print "<li>".$this->html_link('EditOnline', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-edit\"></i>".getMLText("edit_version"), false, true)."</li>";
 		}
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
 		if($accessop->mayRemoveVersion($document)) {
-			print "<li><a href=\"../out/out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
+			print "<li>".$this->html_link('RemoveVersion', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-remove\"></i>".getMLText("rm_version"), false, true)."</li>";
 		}
 		if($accessop->mayOverrideStatus($document)) {
-			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-align-justify\"></i>".getMLText("change_status")."</a></li>";
+			print "<li>".$this->html_link('OverrideContentStatus', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-align-justify\"></i>".getMLText("change_status"), false, true)."</li>";
 		}
 		if($accessop->maySetRecipients($document)) {
-			print "<li><a href='../out/out.SetRecipients.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-check\"></i>".getMLText("change_recipients")."</a></li>";
+			print "<li>".$this->html_link('SetRecipients', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-check\"></i>".getMLText("change_recipients"), false, true)."</li>";
 		}
 		if($accessop->maySetRevisors($document)) {
-			print "<li><a href='../out/out.SetRevisors.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-refresh\"></i>".getMLText("change_revisors")."</a></li>";
+			print "<li>".$this->html_link('SetRevisors', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-refresh\"></i>".getMLText("change_revisors"), false, true)."</li>";
 		}
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 			// Allow changing reviewers/approvals only if not reviewed
 			if($accessop->maySetReviewersApprovers($document)) {
-				print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-edit\"></i>".getMLText("change_assignments")."</a></li>";
+				print "<li>".$this->html_link('SetReviewersApprovers', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-edit\"></i>".getMLText("change_assignments"), false, true)."</li>";
 			}
 		} else {
 			if($accessop->maySetWorkflow($document)) {
 				if(!$workflow) {
-					print "<li><a href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-random\"></i>".getMLText("set_workflow")."</a></li>";
+					print "<li>".$this->html_link('SetWorkflow', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-random\"></i>".getMLText("set_workflow"), false, true)."</li>";
 				}
 			}
 		}
 		/*
 		if($accessop->maySetExpires($document)) {
-			print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'><i class=\"icon-time\"></i>".getMLText("set_expiry")."</a></li>";
+			print "<li>".$this->html_link('SetExpires', array('documentid'=>$documentid), array(), "<i class=\"icon-time\"></i>".getMLText("set_expiry"), false, true)."</li>";
 		}
 		 */
 		if($dms->getAllTransmittals($user)) {
-			print "<li><a href=\"out.AddToTransmittal.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-list\"></i>".getMLText("add_to_transmittal")."</a></li>";
+			print "<li>".$this->html_link('AddToTransmittal', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-list\"></i>".getMLText("add_to_transmittal"), false, true)."</li>";
 		}
 		if($accessop->mayEditComment($document)) {
-			print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
+			print "<li>".$this->html_link('EditComment', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-comment\"></i>".getMLText("edit_comment"), false, true)."</li>";
 		}
 		if($accessop->mayEditAttributes($document)) {
-			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
+			print "<li>".$this->html_link('EditAttributes', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion()), array(), "<i class=\"icon-edit\"></i>".getMLText("edit_attributes"), false, true)."</li>";
 		}
 
-		//print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
+		//print "<li>".$this->html_link('Download', array('documentid'=>$documentid, 'vfile'=>1), array(), "<i class=\"icon-info-sign\"></i>".getMLText("versioning_info"), false, true)."</li>";	
 
 		print "</ul>";
 		echo "</td>";
@@ -686,9 +686,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if($accessop->mayReview($document)) {
 					if ($is_reviewer && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
+						print "<li>".$this->html_link('ReviewDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'reviewid'=>$r['reviewID']), array('class'=>'btn btn-mini'), getMLText("add_review"), false, true)."</li>";
 					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						print "<li>".$this->html_link('ReviewDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'reviewid'=>$r['reviewID']), array('class'=>'btn btn-mini'), getMLText("edit"), false, true)."</li>";
 					}
 				}
 
@@ -755,9 +755,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if($accessop->mayApprove($document)) {
 					if ($is_approver && $a['status'] == 0 /*$status["status"]==S_DRAFT_APP*/) {
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
+						print "<li>".$this->html_link('ApproveDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'approveid'=>$a['approveID']), array('class'=>'btn btn-mini'), getMLText("add_approval"), false, true)."</li>";
 					}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+						print "<li>".$this->html_link('ApproveDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'approveid'=>$a['approveID']), array('class'=>'btn btn-mini'), getMLText("edit"), false, true)."</li>";
 					}
 				}
 
@@ -1040,9 +1040,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if($accessop->mayReceipt($document)) {
 					if ($is_recipient && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReceiptDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&receiptid=".$r['receiptID']."\" class=\"btn btn-mini\">".getMLText("add_receipt")."</a></li>";
+						print "<li>".$this->html_link('ReceiptDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'receiptid'=>$r['receiptID']), array('class'=>'btn btn-mini'), getMLText("add_receipt"), false, true)."</li>";
 					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReceiptDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&receiptid=".$r['receiptID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						print "<li>".$this->html_link('ReceiptDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'receiptid'=>$r['receiptID']), array('class'=>'btn btn-mini'), getMLText("edit"), false, true)."</li>";
 					}
 				}
 
@@ -1150,9 +1150,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				if($accessop->mayRevise($document)) {
 					if ($is_recipient && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&revisionid=".$r['revisionID']."\" class=\"btn btn-mini\">".getMLText("add_revision")."</a></li>";
+						print "<li>".$this->html_link('ReviseDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'revisionid'=>$r['revisionID']), array('class'=>'btn btn-mini'), getMLText("add_revision"), false, true)."</li>";
 					} elseif (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReviseDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&revisionid=".$r['revisionID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						print "<li>".$this->html_link('ReviseDocument', array('documentid'=>$documentid, 'version'=>$latestContent->getVersion(), 'revisionid'=>$r['revisionID']), array('class'=>'btn btn-mini'), getMLText("edit"), false, true)."</li>";
 					}
 				}
 
@@ -1261,15 +1261,15 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				 * user if enableVersionDeletion is on
 				 */
 				if($accessop->mayRemoveVersion($document)) {
-					print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
+					print "<li>".$this->html_link('RemoveVersion', array('documentid'=>$documentid, 'version'=>$version->getVersion()), array(), "<i class=\"icon-remove\"></i>".getMLText("rm_version"), false, true)."</li>";
 				}
 				if($accessop->mayEditComment($document)) {
-					print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
+					print "<li>".$this->html_link('EditComment', array('documentid'=>$documentid, 'version'=>$version->getVersion()), array(), "<i class=\"icon-comment\"></i>".getMLText("edit_comment"), false, true)."</li>";
 				}
 				if($accessop->mayEditAttributes($document)) {
-					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
+					print "<li>".$this->html_link('EditAttributes', array('documentid'=>$documentid, 'version'=>$version->getVersion()), array(), "<i class=\"icon-edit\"></i>".getMLText("edit_attributes"), false, true)."</li>";
 				}
-				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i>".getMLText("details")."</a></li>";
+				print "<li>".$this->html_link('DocumentVersionDetail', array('documentid'=>$documentid, 'version'=>$version->getVersion()), array(), "<i class=\"icon-info-sign\"></i>".getMLText("details"), false, true)."</li>";
 				print "</ul>";
 				print "</td>\n</tr>\n";
 			}
@@ -1351,7 +1351,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		else printMLText("no_attached_files");
 
 		if ($document->getAccessMode($user) >= M_READWRITE){
-			print "<ul class=\"unstyled\"><li><a href=\"../out/out.AddFile.php?documentid=".$documentid."\" class=\"btn\">".getMLText("add")."</a></ul>\n";
+			print "<ul class=\"unstyled\"><li>".$this->html_link('AddFile', array('documentid'=>$documentid), array('class'=>'btn'), getMLText("add"), false, true)."</li></ul>\n";
 		}
 		$this->contentContainerEnd();
 ?>
