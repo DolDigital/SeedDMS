@@ -118,7 +118,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "5.0.2");
+define("SEEDDMS_VERSION", "5.1.0");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -362,7 +362,7 @@ if ($action=="setSettings") {
 									if(file_exists('update-'.$updatedir.'/update.txt')) {
 										print "<p>Please read the comments on updating this version. <a href=\"update-".$updatedir."/update.txt\" target=\"_blank\">Read now</a></p>";
 									}
-									print "<p>Run the <a href=\"update.php?version=".$updatedir."\">update script</a>.</p>";
+									print "<p><a href=\"update.php?version=".$updatedir."\" class=\"btn btn-primary\">Run the update script</a>.</p>";
 								}
 							}
 						} else {
