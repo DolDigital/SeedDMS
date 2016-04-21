@@ -360,8 +360,12 @@ class SeedDMS_AccessOperation {
 	 * no specific access right is set, otherwise false
 	 */
 	function check_view_access($view, $get=array()) { /* {{{ */
-		if(!$this->settings->_advancedAcl)
-			return true;
+		if(!$this->settings->_advancedAcl) {
+			if($this->user->isAdmin())
+				return true;
+			else
+				return false;
+		}
 		if(is_string($view)) {
 			$scripts = array($view);
 		} elseif(is_array($view)) {
