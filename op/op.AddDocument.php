@@ -333,7 +333,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 		// Send notification to subscribers of folder.
 		if($notifier) {
-			$notifyList = $folder->getNotifyList();
+			$notifyList1 = $folder->getNotifyList();
+			$notifyList2 = $document->getNotifyList();
 
 			$subject = "new_document_email_subject";
 			$message = "new_document_email_body";
@@ -347,8 +348,12 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-			foreach ($notifyList["groups"] as $grp) {
+			$notifier->toList($user, $notifyList1["users"], $subject, $message, $params);
+			foreach ($notifyList1["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			$notifier->toList($user, $notifyList2["users"], $subject, $message, $params);
+			foreach ($notifyList2["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 
