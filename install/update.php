@@ -33,11 +33,13 @@ if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 	exit;
 }
 
-$theme = "blue";
+$theme = "bootstrap";
 require_once("../inc/inc.Language.php");
 require_once("../inc/inc.ClassUI.php");
 
 UI::htmlStartPage('Database update');
+UI::globalBanner();
+UI::contentStart();
 UI::contentHeading("SeedDMS Installation for version ".$_GET['version']);
 UI::contentContainerStart();
 
@@ -77,7 +79,7 @@ if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 						echo $query."<br />";
 						if(false === $db->exec($query)) {
 							$e = $db->ErrorInfo();
-							$errorMsg .= $e[2] . "<br/>";
+							$errorMsg .= $query.": ".$e[2] . "<br/>";
 						}
 					}
 				}
@@ -98,12 +100,13 @@ if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 	} else {
 		echo $errorMsg;
 	}
-	echo "<p><a href=\"install.php\">Go back to installation and recheck.</a></p>";
+	echo "<p><a href=\"install.php\" class=\"btn btn-primary\">Go back to installation and recheck.</a></p>";
 } else {
 	echo "<p>Could not determine database schema version.</p>";
 }
 $db = null;
 
 UI::contentContainerEnd();
+UI::contentEnd();
 UI::htmlEndPage();
 ?>

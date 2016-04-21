@@ -108,7 +108,7 @@ CREATE TABLE `new_tblUsers` (
 
 INSERT INTO new_tblUsers SELECT * FROM tblUsers;
 
-DROP TABLE tblUsers;
+ALTER TABLE tblUsers RENAME TO old_tblUsers;
 
 ALTER TABLE new_tblUsers RENAME TO tblUsers;
 
