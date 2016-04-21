@@ -361,7 +361,7 @@ class SeedDMS_AccessOperation {
 	 */
 	function check_view_access($view, $get=array()) { /* {{{ */
 		if(!$this->settings->_advancedAcl)
-			return false;
+			return true;
 		if(is_string($view)) {
 			$scripts = array($view);
 		} elseif(is_array($view)) {
