@@ -33,6 +33,7 @@
 - regular users with sufficient access rights may remove documents via webdav
 - fix error in utils/indexer.php when new documents were indexed
 - set url in approval request email after reviewing a document (Closes #259)
+- inform groups and users watching a new document too (Closes #260)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
