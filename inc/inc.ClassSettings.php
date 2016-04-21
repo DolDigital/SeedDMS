@@ -843,7 +843,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "smtpPassword", $this->_smtpPassword);
 
     // XML Path: /configuration/advanced/display
-    $this->getXMLNode($xml, '/configuration', 'advanced');
+    $advnode = $this->getXMLNode($xml, '/configuration', 'advanced');
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'display');
     $this->setXMLAttributValue($node, "siteDefaultPage", $this->_siteDefaultPage);
     $this->setXMLAttributValue($node, "rootFolderID", $this->_rootFolderID);
@@ -889,6 +889,12 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
     $this->setXMLAttributValue($node, "cmdTimeout", $this->_cmdTimeout);
 
+		/* Check if there is still a converters list with a target attribute */
+		$node = $xml->xpath('/configuration/advanced/converters[count(@*)=0]');
+		if (count($node)>0) {
+			$this->setXMLAttributValue($node[0], 'target', 'fulltext');
+		}
+
 		// XML Path: /configuration/advanced/converters
 		foreach($this->_converters as $type=>$converters) {
 			foreach($this->_converters[$type] as $mimeType => $cmd) {
@@ -907,6 +913,10 @@ class Settings { /* {{{ */
 				} else {
 					if(trim($cmd)) {
 						$nodeParent = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]');
+						if(count($nodeParent) == 0) {
+							$nodeParent = array($advnode->addChild("converters"));
+							$this->setXMLAttributValue($nodeParent[0], 'target', $type);
+						}
 						$node = $nodeParent[0]->addChild("converter");
 						$node[0] = $cmd;
 						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
