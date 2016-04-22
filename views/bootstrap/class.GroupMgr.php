@@ -257,6 +257,7 @@ $(document).ready( function() {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$accessop = $this->params['accessobject'];
 		$selgroup = $this->params['selgroup'];
 		$allUsers = $this->params['allusers'];
 		$allGroups = $this->params['allgroups'];
@@ -284,18 +285,22 @@ $(document).ready( function() {
 ?>
 </select>
 </div>
-<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
+<?php if($accessop->check_view_access($this, array('action'=>'info'))) { ?>
+	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
+<?php } ?>
 </div>
 
 <div class="span8">
-<div class="well">
-<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
+	<div class="well">
+<?php if($accessop->check_view_access($this, array('action'=>'form'))) { ?>
+		<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
+<?php } ?>
+	</div>
 </div>
-</div>
+
 </div>
 
 <?php
-		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

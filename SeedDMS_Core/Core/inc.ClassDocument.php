@@ -3169,7 +3169,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if ($u->getID() == $owner->getID()) return M_READ;
 
 		/* Read/Write access on the document will also grant access on the version */
-		if($this->_document->getAccessMode($user) >= M_READWRITE) return M_READ;
+		if($this->_document->getAccessMode($u) >= M_READWRITE) return M_READ;
 
 		/* At this point the current status is in the list of status without read access.
 		 * The only way to still gain read access is, if the user is involved in the

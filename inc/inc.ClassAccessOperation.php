@@ -348,20 +348,27 @@ class SeedDMS_AccessOperation {
 	 * Check for access permission on view
 	 *
 	 * If the parameter $view is an array then each element is considered the
-	 * name of a view and true will be returned if one is accessible.
+	 * name of a view and true will be returned if one of them is accessible.
 	 * Whether access is allowed also depends on the currently logged in user
 	 * stored in the view object. If the user is an admin the access 
 	 * on a view must be explicitly disallowed. For regular users the access
 	 * must be explicitly allowed.
 	 *
+	 * If advanced access control is turn off, this function will always return
+	 * true for admins and false for other users.
+	 *
 	 * @param mixed $view Instanz of view, name of view or array of view names
-	 * @param string $get query parameters
+	 * @param string $get query parameters possible containing the element 'action'
 	 * @return boolean true if access is allowed, false if access is disallowed
 	 * no specific access right is set, otherwise false
 	 */
 	function check_view_access($view, $get=array()) { /* {{{ */
-		if(!$this->settings->_advancedAcl)
-			return true;
+		if(!$this->settings->_advancedAcl) {
+			if($this->user->isAdmin())
+				return true;
+			else
+				return false;
+		}
 		if(is_string($view)) {
 			$scripts = array($view);
 		} elseif(is_array($view)) {

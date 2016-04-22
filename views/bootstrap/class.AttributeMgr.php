@@ -306,12 +306,16 @@ $(document).ready( function() {
 ?>
 	</select>
 </div>
-<div class="ajax" data-view="AttributeMgr" data-action="info" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
+<?php if($accessop->check_view_access($this, array('action'=>'info'))) { ?>
+	<div class="ajax" data-view="AttributeMgr" data-action="info" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
+<?php } ?>
 </div>
 
 <div class="span6">
 	<div class="well">
+<?php if($accessop->check_view_access($this, array('action'=>'form'))) { ?>
 		<div class="ajax" data-view="AttributeMgr" data-action="form" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
+<?php } ?>
 	</div>
 </div>
 

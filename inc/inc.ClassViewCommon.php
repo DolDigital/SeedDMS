@@ -171,10 +171,10 @@ class SeedDMS_View_Common {
 	 * Check if the access on the view with given name or the current view itself
 	 * may be accessed.
 	 *
-	 * The function behaves differently for admins and other users. For admins
-	 * a view must be explitly disallowed for this function to return false.
-	 * For other users access on a view must be explicitly allow for the this
-	 * function to return true.
+	 * The function requires the parameter 'accessobject' to be available in the
+	 * view, because it calls SeedDMS_AccessOperation::check_view_access()
+	 * to check access rights. If the the optional $name is not set the
+	 * current view is used.
 	 *
 	 * @param string|array $name name of view or list of view names
 	 * @return boolean true if access is allowed otherwise false

@@ -520,14 +520,16 @@ $(document).ready( function() {
 ?>
 </select>
 </div>
-<?php if($accessop->check_view_access($this, array('action'=>'info')) || $user->isAdmin()) { ?>
-<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
+<?php if($accessop->check_view_access($this, array('action'=>'info'))) { ?>
+	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 <?php } ?>
 </div>
 
 <div class="span8">
 	<div class="well">
+<?php if($accessop->check_view_access($this, array('action'=>'form'))) { ?>
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
+<?php } ?>
 	</div>
 </div>
 </div>
