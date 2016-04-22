@@ -280,17 +280,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText('default_access').":</td>";
+			echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
+			echo "</tr>";
 			if($document->inheritsAccess()) {
 				echo "<tr>";
 				echo "<td>".getMLText("access_mode").":</td>\n";
 				echo "<td>";
-				echo getMLText("inherited");
+				echo getMLText("inherited")."<br />";
+				$this->printAccessList($document);
 				echo "</tr>";
 			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
-				echo "</tr>";
 				echo "<tr>";
 				echo "<td>".getMLText('access_mode').":</td>";
 				echo "<td>";
@@ -496,13 +497,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
 		if($accessop->mayEditVersion()) {
-			print "<li><a href=\"out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+			print "<li><a href=\"../out/out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
 		}
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
 		if($accessop->mayRemoveVersion()) {
-			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
+			print "<li><a href=\"../out/out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
 		}
 		if($accessop->mayOverwriteStatus()) {
 			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-align-justify\"></i>".getMLText("change_status")."</a></li>";
@@ -1030,7 +1031,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
 				}
 				if($accessop->mayEditAttributes()) {
-					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
+					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 				}
 				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i>".getMLText("details")."</a></li>";
 				print "</ul>";

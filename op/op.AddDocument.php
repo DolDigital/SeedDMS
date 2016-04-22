@@ -57,12 +57,12 @@ if($settings->_quota > 0) {
 	}
 }
 
-$comment  = $_POST["comment"];
-$version_comment = $_POST["version_comment"];
+$comment  = trim($_POST["comment"]);
+$version_comment = trim($_POST["version_comment"]);
 if($version_comment == "" && isset($_POST["use_comment"]))
 	$version_comment = $comment;
 
-$keywords = $_POST["keywords"];
+$keywords = trim($_POST["keywords"]);
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
@@ -267,7 +267,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
-		$name = $_POST["name"];
+		$name = trim($_POST["name"]);
 	else $name = basename($userfilename);
 
 	/* Check if name already exists in the folder */
@@ -286,7 +286,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-			if (method_exists($hookObj, 'pretAddDocument')) {
+			if (method_exists($hookObj, 'preAddDocument')) {
 				$hookObj->preAddDocument(array('name'=>&$name, 'comment'=>&$comment));
 			}
 		}
@@ -343,7 +343,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 		// Send notification to subscribers of folder.
 		if($notifier) {
-			$notifyList = $folder->getNotifyList();
+			$notifyList1 = $folder->getNotifyList();
+			$notifyList2 = $document->getNotifyList();
 
 			$subject = "new_document_email_subject";
 			$message = "new_document_email_body";
@@ -357,8 +358,12 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-			foreach ($notifyList["groups"] as $grp) {
+			$notifier->toList($user, $notifyList1["users"], $subject, $message, $params);
+			foreach ($notifyList1["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			$notifier->toList($user, $notifyList2["users"], $subject, $message, $params);
+			foreach ($notifyList2["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 

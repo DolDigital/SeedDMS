@@ -64,7 +64,7 @@ if(isset($_POST['pwd'])) {
 
 if($settings->_enableGuestLogin && (int) $settings->_guestID) {
 	$guestUser = $dms->getUser((int) $settings->_guestID);
-	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
+	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin())) {
 		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text")."\n");
 		exit;
 	}
@@ -129,11 +129,11 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 		$dn = false;
 		/* If bind succeed, then get the dn of for the user */
 		if ($bind) {
-            if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-			    $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-            } else {
-			    $search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-            }
+			if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
+				$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
+			} else {
+				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+			}
 			if (!is_bool($search)) {
 				$info = ldap_get_entries($ds, $search);
 				if (!is_bool($info) && $info["count"]>0) {
@@ -158,39 +158,24 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 			$user = $dms->getUserByLogin($login);
 			if (is_bool($user) && !$settings->_restricted) {
 				// Retrieve the user's LDAP information.
-        if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-			    $search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-        } else {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
+				if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
+					$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
+				} else {
+					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
 				}
-			}
-			$bind = @ldap_bind($ds, $dn, $pwd);
-			if ($bind) {
-				// Successfully authenticated. Now check to see if the user exists within
-				// the database. If not, add them in, but do not add their password.
-				$user = $dms->getUserByLogin($login);
-				if (is_bool($user) && !$settings->_restricted) {
-					// Retrieve the user's LDAP information.
-					
-					
-					/* new code by doudoux  - TO BE TESTED */
-					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
-					/* old code */
-					//$search = ldap_search($ds, $dn, "uid=".$login);
-					
-					if (!is_bool($search)) {
-						$info = ldap_get_entries($ds, $search);
-						if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-							$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
-						}
+
+				if (!is_bool($search)) {
+					$info = ldap_get_entries($ds, $search);
+					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
+						$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
 					}
 				}
-				if (!is_bool($user)) {
-					$userid = $user->getID();
-				}
 			}
-			ldap_close($ds);
+			if (!is_bool($user)) {
+				$userid = $user->getID();
+			}
 		}
+		ldap_close($ds);
 	}
 }
 }
@@ -318,7 +303,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot, null, null, !$settings->_enableLargeFileUpload);
 }
 
-// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded.
+// TODO: by the PHP manual: The superglobals $_GET and $_REQUEST are already decoded.
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
 
 if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {

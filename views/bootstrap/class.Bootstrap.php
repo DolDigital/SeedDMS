@@ -261,8 +261,18 @@ $(document).ready(function () {
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 			if (!$this->params['user']->isGuest()) {
-				echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
-				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
+				$menuitems = array();
+				$menuitems['my_documents'] = array('link'=>"../out/out.MyDocuments.php?inProcess=1", 'label'=>'my_documents');
+				$menuitems['my_account'] = array('link'=>"../out/out.MyAccount.php", 'label'=>'my_account');
+				$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
+				foreach($hookObjs as $hookObj) {
+					if (method_exists($hookObj, 'userMenuItems')) {
+						$menuitems = $hookObj->userMenuItems($this, $menuitems);
+					}
+				}
+				foreach($menuitems as $menuitem) {
+					echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+				}
 				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
@@ -1008,6 +1018,10 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
+	/**
+	 * Do not use anymore. Was previously used to show the category
+	 * chooser. It has been replaced by a select box
+	 */
 	function printCategoryChooser($formName, $categories=array()) { /* {{{ */
 ?>
 <script language="JavaScript">
@@ -1110,7 +1124,7 @@ $('#acceptkeywords').click(function(ev) {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
         <span class="input-append date datepicker" style="display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input class="span4" size="16" name="<?= $fieldname ?>[<?= $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
@@ -1168,7 +1182,6 @@ $('#acceptkeywords').click(function(ev) {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-<!--    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button> -->
   </div>
 </div>
 <?php
@@ -1258,7 +1271,7 @@ $('#clearfilename<?php print $formName ?>').click(function(ev) {
 		print "<h4>".getMLText('error')."!</h4>";
 		print htmlspecialchars($error);
 		print "</div>";
-		print "<div><button class=\"btn\" onclick=\"window.history.back();\">".getMLText('back')."</button></div>";
+		print "<div><button class=\"btn history-back\">".getMLText('back')."</button></div>";
 		
 		$this->contentEnd();
 		$this->htmlEndPage();
@@ -2366,7 +2379,7 @@ mayscript>
 			'editable': false,
 			'selectable': true,
 			'style': 'box',
-			'locale': '<?= $this->params['session']->getLanguage() ?>'
+			'locale': '<?php echo $this->params['session']->getLanguage() ?>'
 		};
 
 		function onselect() {
@@ -2385,7 +2398,7 @@ mayscript>
 		timeline = new links.Timeline(document.getElementById('timeline'), options);
 		links.events.addListener(timeline, 'select', onselect);
 		$.getJSON(
-			'<?= $timelineurl ?>', 
+			'<?php echo $timelineurl ?>', 
 			function(data) {
 				$.each( data, function( key, val ) {
 					val.start = new Date(val.start);
@@ -2399,7 +2412,7 @@ mayscript>
 
 	protected function printTimelineHtml($height) { /* {{{ */
 ?>
-	<div id="timeline" style="height: <?= $height ?>px;"></div>
+	<div id="timeline" style="height: <?php echo $height ?>px;"></div>
 <?php
 	} /* }}} */
 

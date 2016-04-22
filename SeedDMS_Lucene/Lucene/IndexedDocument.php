@@ -42,7 +42,7 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		do {
 			$timeleft = $timeout - time();
 			$read = array($pipes[1]);
-			stream_select($read, $write = NULL, $exeptions = NULL, $timeleft, NULL);
+			stream_select($read, $write = NULL, $exeptions = NULL, $timeleft, 200000);
 					 
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
