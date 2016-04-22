@@ -229,17 +229,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText('default_access').":</td>";
+			echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
+			echo "</tr>";
 			if($document->inheritsAccess()) {
 				echo "<tr>";
 				echo "<td>".getMLText("access_mode").":</td>\n";
 				echo "<td>";
-				echo getMLText("inherited");
+				echo getMLText("inherited")."<br />";
+				$this->printAccessList($document);
 				echo "</tr>";
 			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
-				echo "</tr>";
 				echo "<tr>";
 				echo "<td>".getMLText('access_mode').":</td>";
 				echo "<td>";

@@ -185,17 +185,18 @@ function folderSelected(id, name) {
 		echo "</tr>";
 
 		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText('default_access').":</td>";
+			echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
+			echo "</tr>";
 			if($folder->inheritsAccess()) {
 				echo "<tr>";
 				echo "<td>".getMLText("access_mode").":</td>\n";
 				echo "<td>";
-				echo getMLText("inherited");
+				echo getMLText("inherited")."<br />";
+				$this->printAccessList($folder);
 				echo "</tr>";
 			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
-				echo "</tr>";
 				echo "<tr>";
 				echo "<td>".getMLText('access_mode').":</td>";
 				echo "<td>";
