@@ -52,9 +52,9 @@ if($document->isLocked()) {
 	}
 }
 
-$name =     isset($_POST['name']) ? $_POST["name"] : "";
-$comment =  isset($_POST['comment']) ? $_POST["comment"] : "";
-$keywords = isset($_POST["keywords"]) ? $_POST["keywords"] : "";
+$name =     isset($_POST['name']) ? trim($_POST["name"]) : "";
+$comment =  isset($_POST['comment']) ? trim($_POST["comment"]) : "";
+$keywords = isset($_POST["keywords"]) ? trim($_POST["keywords"]) : "";
 if(isset($_POST['categoryidform1'])) {
 	$categories = explode(',', preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]));
 } elseif(isset($_POST["categories"])) { 
