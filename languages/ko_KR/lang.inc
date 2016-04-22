@@ -24,6 +24,7 @@
 $text = array(
 'accept' => '동의',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => '접근가 거부되었습니다.',
 'access_inheritance' => '접근 상속',
 'access_mode' => '접근 모드',
@@ -804,6 +805,7 @@ URL: [url]',
 URL: [url]',
 'request_workflow_action_email_subject' => '워크플로우 작업 필요',
 'reset_checkout' => '체크아웃 마감',
+'restrict_access' => '',
 'results_page' => '결과 페이지',
 'return_from_subworkflow' => '서브 워크플로우에서 반환',
 'return_from_subworkflow_email_body' => '서브 워크플로우에서 복귀

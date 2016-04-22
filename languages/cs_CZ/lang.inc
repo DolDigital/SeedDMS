@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Přijmout',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Přístup zamítnut.',
 'access_inheritance' => 'Dědičnost přístupu',
 'access_mode' => 'Režim přístupu',
@@ -795,6 +796,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Stránka s výsledky',
 'return_from_subworkflow' => 'Návrat z vedlejšího pracovního postupu',
 'return_from_subworkflow_email_body' => 'Návrat z vedlejšího pracovního postupu

@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Принять',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Доступ запрещён',
 'access_inheritance' => 'Наследование доступа',
 'access_mode' => 'Режим доступа',
@@ -814,6 +815,7 @@ URL: [url]',
 URL: [url]',
 'request_workflow_action_email_subject' => 'Требуется действие по процессу',
 'reset_checkout' => 'Завершить проверку',
+'restrict_access' => '',
 'results_page' => 'Страница результатов',
 'return_from_subworkflow' => 'Выход из подпроцесса',
 'return_from_subworkflow_email_body' => 'Выход из подпроцесса

@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Prihvati',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Odbijen pristup.',
 'access_inheritance' => 'Nasljedivost razine pristupa',
 'access_mode' => 'Način pristupa',
@@ -811,6 +812,7 @@ Korisnik: [username]
 URL poveznica: [url]',
 'request_workflow_action_email_subject' => 'Zahtijeva se aktivnost po poslovnom toku',
 'reset_checkout' => 'Dovršite odjavu',
+'restrict_access' => '',
 'results_page' => 'Stranica rezultata',
 'return_from_subworkflow' => 'Povratak iz pod-toka rada',
 'return_from_subworkflow_email_body' => 'Povratak iz toka rada

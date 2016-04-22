@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Aceitar',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Acesso Negado.',
 'access_inheritance' => 'access Inheritance',
 'access_mode' => 'Modo de acesso',
@@ -798,6 +799,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Results Page',
 'return_from_subworkflow' => 'Retorno de sub fluxo de trabalho',
 'return_from_subworkflow_email_body' => 'Retorno de sub fluxo de trabalho

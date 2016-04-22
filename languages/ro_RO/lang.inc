@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Accept',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Acces interzis.',
 'access_inheritance' => 'Mostenire acces',
 'access_mode' => 'Mod de acces',
@@ -812,6 +813,7 @@ Utilizator: [username]
 URL: [url]',
 'request_workflow_action_email_subject' => 'Actiune workflow necesara',
 'reset_checkout' => 'Termina verificarea',
+'restrict_access' => '',
 'results_page' => 'Pagina rezultate',
 'return_from_subworkflow' => 'Întoarcere din subworkflow',
 'return_from_subworkflow_email_body' => 'Întoarcere din subworkflow
