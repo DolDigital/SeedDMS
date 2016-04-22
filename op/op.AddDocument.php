@@ -57,12 +57,12 @@ if($settings->_quota > 0) {
 	}
 }
 
-$comment  = $_POST["comment"];
-$version_comment = $_POST["version_comment"];
+$comment  = trim($_POST["comment"]);
+$version_comment = trim($_POST["version_comment"]);
 if($version_comment == "" && isset($_POST["use_comment"]))
 	$version_comment = $comment;
 
-$keywords = $_POST["keywords"];
+$keywords = trim($_POST["keywords"]);
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
@@ -267,7 +267,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
-		$name = $_POST["name"];
+		$name = trim($_POST["name"]);
 	else $name = basename($userfilename);
 
 	/* Check if name already exists in the folder */
