@@ -205,13 +205,18 @@ $(document).ready( function() {
 ?>
 </select>
 </div>
-<div class="ajax" data-view="RoleMgr" data-action="info" <?php echo ($selrole ? "data-query=\"roleid=".$selrole->getID()."\"" : "") ?>></div>
+<?php if($accessop->check_view_access($this, array('action'=>'info'))) { ?>
+	<div class="ajax" data-view="RoleMgr" data-action="info" <?php echo ($selrole ? "data-query=\"roleid=".$selrole->getID()."\"" : "") ?>></div>
+<?php } ?>
 </div>
 
 <div class="span8">
 	<div class="well">
+<?php if($accessop->check_view_access($this, array('action'=>'form'))) { ?>
 		<div class="ajax" data-view="RoleMgr" data-action="form" <?php echo ($selrole ? "data-query=\"roleid=".$selrole->getID()."\"" : "") ?>></div>
+<?php } ?>
 	</div>
+</div>
 </div>
 
 <?php
