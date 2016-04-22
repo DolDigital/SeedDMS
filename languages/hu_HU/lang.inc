@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Elfogad',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Hozzáférés megtagadva.',
 'access_inheritance' => 'Hozzáférés öröklés',
 'access_mode' => 'Hozzáférési mód',
@@ -800,6 +801,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Találati oldal',
 'return_from_subworkflow' => 'Visszatérés a segéd munkafolyamatból',
 'return_from_subworkflow_email_body' => 'Visszatérés segéd munkafolyamatból

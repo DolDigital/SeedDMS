@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Accetta',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Accesso negato',
 'access_inheritance' => 'Permessi ereditari',
 'access_mode' => 'Permessi',
@@ -813,6 +814,7 @@ Utente: [username]
 URL: [url]',
 'request_workflow_action_email_subject' => 'Richiesta di azione in un flusso di lavoro',
 'reset_checkout' => 'Check Out terminato',
+'restrict_access' => '',
 'results_page' => 'Pagina dei risultati',
 'return_from_subworkflow' => 'Ritorno dal sotto-flusso di lavoro',
 'return_from_subworkflow_email_body' => 'Ritorno dal sotto-flusso di lavoro

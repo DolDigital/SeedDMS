@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Accept',
 'access_control' => 'Toegangscontrole',
+'access_control_is_off' => '',
 'access_denied' => 'Geen toegang.',
 'access_inheritance' => 'Toegang overgeërfd',
 'access_mode' => 'Toegang modus',
@@ -809,6 +810,7 @@ Gebruiker: [username]
 URL: [url]',
 'request_workflow_action_email_subject' => 'Workflow – actie vereist',
 'reset_checkout' => 'Beëindig het gebruik van het document',
+'restrict_access' => '',
 'results_page' => 'Resultaten pagina',
 'return_from_subworkflow' => 'Terug uit subworkflow',
 'return_from_subworkflow_email_body' => 'Terug uit subworkflow
