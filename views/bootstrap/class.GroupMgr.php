@@ -295,7 +295,6 @@ $(document).ready( function() {
 </div>
 
 <?php
-		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
