@@ -58,7 +58,8 @@ if($settings->_libraryFolder) {
 	}
 
 	if ($libfolder->getAccessMode($user) < M_READ) {
-		UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($libfolder->getName()))), getMLText("access_denied"));
+		$libfolder = null;
+//		UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($libfolder->getName()))), getMLText("access_denied"));
 	}
 } else {
 	$libfolder = null;

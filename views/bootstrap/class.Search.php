@@ -69,6 +69,8 @@ $(document).ready( function() {
 
 		include("../inc/inc.ClassDownloadMgr.php");
 		$downmgr = new SeedDMS_Download_Mgr();
+		if($extraheader = $this->callHook('extraDownloadHeader'))
+			$downmgr->addHeader($extraheader);
 		foreach($entries as $entry) {
 			if(get_class($entry) == $dms->getClassname('document')) {
 				$extracols = $this->callHook('extraDownloadColumns', $entry);

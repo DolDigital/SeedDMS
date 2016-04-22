@@ -28,6 +28,10 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -57,12 +61,17 @@ if($settings->_quota > 0) {
 
 $folder = $document->getFolder();
 
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp, 'dropfolderdir'=>$settings->_dropFolderDir, 'workflowmode'=>$settings->_workflowMode, 'presetexpiration'=>$settings->_presetExpirationDate));
 if($view) {
+	$view->setParam('folder', $folder);
+	$view->setParam('document', $document);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
+	$view->setParam('enableadminrevapp', $settings->_enableAdminRevApp);
+	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
+	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
+	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
 	$view->setParam('accessobject', $accessop);
 	$view($_GET);
 	exit;
