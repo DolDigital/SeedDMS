@@ -48,8 +48,14 @@ class SeedDMS_Download_Mgr {
 	function __construct($tmpdir = '') {
 		$this->tmpdir = $tmpdir;
 		$this->items = array();
+		$this->header = array('Dokumenten-Nr.', 'Dokumentenname', 'Dateiname', 'Status', 'Int. Version', 'Prüfer', 'Prüfdatum', 'Prüfkommentar', 'Prüfstatus', 'Freigeber', 'Freigabedatum', 'Freigabekommentar', 'Freigabestatus');
 		$this->extracols = array();
+		$this->extraheader = array();
 	}
+
+	public function addHeader($extraheader) { /* {{{ */
+		$this->extraheader = $extraheader;
+	} /* }}} */
 
 	public function addItem($item, $extracols) { /* {{{ */
 		$this->items[$item->getID()] = $item;
@@ -64,19 +70,10 @@ class SeedDMS_Download_Mgr {
 
 		$i = 1;
 		$col = 0;
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dokumenten-Nr.');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dokumentenname');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Dateiname');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Status');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Int. Version');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfer');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfdatum');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfkommentar');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Prüfstatus');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigeber');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabedatum');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabekommentar');
-		$sheet->setCellValueByColumnAndRow($col++, $i, 'Freigabestatus');
+		foreach($this->header as $h)
+			$sheet->setCellValueByColumnAndRow($col++, $i, $h);
+		foreach($this->extraheader as $h)
+			$sheet->setCellValueByColumnAndRow($col++, $i, $h);
 		$i++;
 		foreach($items as $item) {
 			$document = $item->getDocument();
