@@ -8,6 +8,7 @@
 - fix error in utils/indexer.php when new documents were indexed
 - set url in approval request email after reviewing a document (Closes #259)
 - inform groups and users watching a new document too (Closes #260)
+- use bootstrap theme for all steps in install tool
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
