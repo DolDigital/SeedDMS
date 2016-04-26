@@ -417,7 +417,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
 			}
 		}
-		print "</ul>\n";
+		print "</ul></td>\n";
 
 		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
@@ -599,7 +599,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 
 				print "</ul></td>\n";	
-				print "</td>\n</tr>\n";
+				print "</tr>\n";
 			}
 		}
 
@@ -668,7 +668,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 
 				print "</ul>";
-				print "</td>\n";	
 				print "</td>\n</tr>\n";
 			}
 		}
@@ -946,7 +945,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
 					}
 				}
-				print "</ul>\n";
+				print "</ul></td>\n";
 				print "<td>".htmlspecialchars($version->getComment())."</td>";
 				print "<td>".getOverallStatusText($vstat["status"])."</td>";
 				print "<td>";
@@ -1030,7 +1029,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
-
+				print "</ul></td>";
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
 			
 				print "<td><ul class=\"unstyled actions\">";
