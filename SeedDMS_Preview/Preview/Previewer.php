@@ -93,13 +93,13 @@ class SeedDMS_Preview_Previewer {
 	} /* }}} */
 
 	/**
-	 * Retrieve the physical filename of the preview image on disk
+	 * Return the physical filename of the preview image on disk
 	 *
 	 * @param object $object document content or document file
 	 * @param integer $width width of preview image
 	 * @return string file name of preview image
 	 */
-	protected function getFileName($object, $width) { /* }}} */
+	protected function getFileName($object, $width) { /* {{{ */
 		if(!$object)
 			return false;
 
@@ -121,10 +121,18 @@ class SeedDMS_Preview_Previewer {
 	/**
 	 * Create a preview image for a given file
 	 *
+	 * This method creates a preview image in png format for a regular file
+	 * in the file system and stores the result in the directory $dir relative
+	 * to the configured preview directory. The filename of the resulting preview
+	 * image is either $target.png (if set) or md5($infile)-$width.png.
+	 * The $mimetype is used to select the propper conversion programm.
+	 * An already existing preview image is replaced.
+	 *
 	 * @param string $infile name of input file including full path
 	 * @param string $dir directory relative to $this->previewDir
 	 * @param string $mimetype MimeType of input file
 	 * @param integer $width width of generated preview image
+	 * @param string $target optional name of preview image (without extension)
 	 * @return boolean true on success, false on failure
 	 */
 	public function createRawPreview($infile, $dir, $mimetype, $width=0, $target='') { /* {{{ */
@@ -177,6 +185,19 @@ class SeedDMS_Preview_Previewer {
 			
 	} /* }}} */
 
+	/**
+	 * Create preview image
+	 *
+	 * This function creates a preview image for the given document
+	 * content or document file. It internally uses
+	 * {@link SeedDMS_Preview::createRawPreview()}. The filename of the
+	 * preview image is created by {@link SeedDMS_Preview_Previewer::getFileName()}
+	 *
+	 * @param object $object instance of SeedDMS_Core_DocumentContent
+	 * or SeedDMS_Core_DocumentFile
+	 * @param integer $width desired width of preview image
+	 * @return boolean true on success, false on failure
+	 */
 	public function createPreview($object, $width=0) { /* {{{ */
 		if(!$object)
 			return false;
@@ -189,58 +210,19 @@ class SeedDMS_Preview_Previewer {
 		$file = $document->_dms->contentDir.$object->getPath();
 		$target = $this->getFileName($object, $width);
 		return $this->createRawPreview($file, $document->getDir(), $object->getMimeType(), $width, $target);
-
-		if($width == 0)
-			$width = $this->width;
-		else
-			$width = intval($width);
-		if(!$this->previewDir)
-			return false;
-		$document = $object->getDocument();
-		$dir = $this->previewDir.'/'.$document->getDir();
-		if(!is_dir($dir)) {
-			if (!SeedDMS_Core_File::makeDir($dir)) {
-				return false;
-			}
-		}
-		$file = $document->_dms->contentDir.$object->getPath();
-		if(!file_exists($file))
-			return false;
-		$target = $this->getFileName($object, $width);
-		if($target !== false && (!file_exists($target.'.png') || filectime($target.'.png') < $object->getDate())) {
-			$cmd = '';
-			switch($object->getMimeType()) {
-				case "image/png":
-				case "image/gif":
-				case "image/jpeg":
-				case "image/jpg":
-				case "image/svg+xml":
-					$cmd = 'convert -resize '.$width.'x '.$file.' '.$target.'.png';
-					break;
-				case "application/pdf":
-				case "application/postscript":
-					$cmd = 'convert -density 100 -resize '.$width.'x '.$file.'[0] '.$target.'.png';
-					break;
-				case "text/plain":
-					$cmd = 'convert -resize '.$width.'x '.$file.'[0] '.$target.'.png';
-					break;
-				case "application/x-compressed-tar":
-					$cmd = 'tar tzvf '.$file.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target.'.png';
-					break;
-			}
-			if($cmd) {
-				//exec($cmd);
-				try {
-					self::execWithTimeout($cmd, $this->timeout);
-				} catch(Exception $e) {
-				}
-			}
-			return true;
-		}
-		return true;
 			
 	} /* }}} */
 
+	/**
+	 * Check if a preview image already exists.
+	 *
+	 * This function is a companion to {@link SeedDMS_Preview_Previewer::createRawPreview()}.
+	 *
+	 * @param string $infile name of input file including full path
+	 * @param string $dir directory relative to $this->previewDir
+	 * @param integer $width desired width of preview image
+	 * @return boolean true if preview exists, otherwise false
+	 */
 	public function hasRawPreview($infile, $dir, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
@@ -255,6 +237,16 @@ class SeedDMS_Preview_Previewer {
 		return false;
 	} /* }}} */
 
+	/**
+	 * Check if a preview image already exists.
+	 *
+	 * This function is a companion to {@link SeedDMS_Preview_Previewer::createPreview()}.
+	 *
+	 * @param object $object instance of SeedDMS_Core_DocumentContent
+	 * or SeedDMS_Core_DocumentFile
+	 * @param integer $width desired width of preview image
+	 * @return boolean true if preview exists, otherwise false
+	 */
 	public function hasPreview($object, $width=0) { /* {{{ */
 		if(!$object)
 			return false;
@@ -272,6 +264,16 @@ class SeedDMS_Preview_Previewer {
 		return false;
 	} /* }}} */
 
+	/**
+	 * Return a preview image.
+	 *
+	 * This function returns the content of a preview image if it exists..
+	 *
+	 * @param string $infile name of input file including full path
+	 * @param string $dir directory relative to $this->previewDir
+	 * @param integer $width desired width of preview image
+	 * @return boolean/string image content if preview exists, otherwise false
+	 */
 	public function getRawPreview($infile, $dir, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
@@ -286,6 +288,16 @@ class SeedDMS_Preview_Previewer {
 		}
 	} /* }}} */
 
+	/**
+	 * Return a preview image.
+	 *
+	 * This function returns the content of a preview image if it exists..
+	 *
+	 * @param object $object instance of SeedDMS_Core_DocumentContent
+	 * or SeedDMS_Core_DocumentFile
+	 * @param integer $width desired width of preview image
+	 * @return boolean/string image content if preview exists, otherwise false
+	 */
 	public function getPreview($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
@@ -300,6 +312,15 @@ class SeedDMS_Preview_Previewer {
 		}
 	} /* }}} */
 
+	/**
+	 * Return file size preview image.
+	 *
+	 * @param object $object instance of SeedDMS_Core_DocumentContent
+	 * or SeedDMS_Core_DocumentFile
+	 * @param integer $width desired width of preview image
+	 * @return boolean/integer size of preview image or false if image
+	 * does not exist
+	 */
 	public function getFilesize($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
@@ -314,8 +335,15 @@ class SeedDMS_Preview_Previewer {
 
 	} /* }}} */
 
-
-	public function deletePreview($document, $object, $width=0) { /* {{{ */
+	/**
+	 * Delete preview image.
+	 *
+	 * @param object $object instance of SeedDMS_Core_DocumentContent
+	 * or SeedDMS_Core_DocumentFile
+	 * @param integer $width desired width of preview image
+	 * @return boolean true if deletion succeded or false if file does not exist
+	 */
+	public function deletePreview($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
 		else
@@ -324,6 +352,38 @@ class SeedDMS_Preview_Previewer {
 			return false;
 
 		$target = $this->getFileName($object, $width);
+		if($target && file_exists($target.'.png')) {
+			return(unlink($target.'.png'));
+		} else {
+			return false;
+		}
+	} /* }}} */
+
+	/**
+	 * Delete all preview images belonging to a document
+	 *
+	 * This function removes the preview images of all versions and
+	 * files of a document including the directory. It actually just
+	 * removes the directory for the document in the cache.
+	 *
+	 * @param object $document instance of SeedDMS_Core_Document
+	 * @return boolean true if deletion succeded or false if file does not exist
+	 */
+	public function deleteDocumentPreviews($document) { /* {{{ */
+		if(!$this->previewDir)
+			return false;
+
+		function recurseRmdir($dir) {
+			$files = array_diff(scandir($dir), array('.','..'));
+			foreach ($files as $file) {
+				(is_dir("$dir/$file")) ? recurseRmdir("$dir/$file") : unlink("$dir/$file");
+			}
+			return rmdir($dir);
+		}
+
+		$dir = $this->previewDir.'/'.$document->getDir();
+		return recurseRmdir($dir);
+
 	} /* }}} */
 }
 ?>
