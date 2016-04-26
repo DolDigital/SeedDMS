@@ -484,7 +484,8 @@ switch($command) {
 				$revisions = array();
 				$resArr = $dms->getDocumentList('AppRevByMe', $user);
 				if($resArr) {
-					foreach ($resArr as $res) { if($res["status"]==S_DRAFT_REV)
+					foreach ($resArr as $res) {
+						if($res["status"]==S_DRAFT_REV)
 							$reviews[] = $res['id'];
 						if($res["status"]==S_DRAFT_APP)
 							$approvals[] = $res['id'];
