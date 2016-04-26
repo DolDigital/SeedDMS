@@ -3146,6 +3146,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * It is also used by {@link SeedDMS_Core_Document::getAccessMode()} to
 	 * prevent access on the whole document if there is no accessible version.
 	 *
+	 * FIXME: This function only works propperly if $u is the currently logged in
+	 * user, because noReadForStatus will be set for this user. 
+	 *
 	 * @param object $u user
 	 * @return integer either M_NONE or M_READ
 	 */
