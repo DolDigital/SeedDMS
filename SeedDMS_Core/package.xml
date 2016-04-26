@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-04-04</date>
- <time>07:38:23</time>
+ <date>2016-04-26</date>
+ <time>12:04:59</time>
  <version>
-  <release>4.3.26</release>
-  <api>4.3.26</api>
+  <release>4.3.27</release>
+  <api>4.3.27</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- add more callbacks
+callbacks can have more then one user function
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -982,6 +982,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - rename SeedDMS_Core_Group::getNotificationsByGroup() to getNotifications()
 - use __construct() for all constructors
 - fix setting multi value attributes for versions
+   </notes>
+  </release>
+  <release>
+   <date>2016-04-04</date>
+   <time>07:38:23</time>
+   <version>
+    <release>4.3.26</release>
+    <api>4.3.26</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- add more callbacks
    </notes>
   </release>
  </changelog>
