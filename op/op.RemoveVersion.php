@@ -58,37 +58,16 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
+require_once("SeedDMS/Preview.php");
+$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
 if (count($document->getContent())==1) {
+	$previewer->deleteDocumentPreviews($document);
 	$nl = $document->getNotifyList();
 	$docname = $document->getName();
 	if (!$document->remove()) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} else {
 		if ($notifier){
-/*
-			$path = "";
-			$folder = $document->getFolder();
-			$folderPath = $folder->getPath();
-			for ($i = 0; $i  < count($folderPath); $i++) {
-				$path .= $folderPath[$i]->getName();
-				if ($i +1 < count($folderPath))
-					$path .= " / ";
-			}
-		
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_deleted_email");
-			$message = getMLText("document_deleted_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$path."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
-			// Send notification to subscribers.
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "document_deleted_email_subject";
 			$message = "document_deleted_email_body";
 			$params = array();
@@ -131,6 +110,8 @@ else {
 		}
 	}
 
+	$previewer->deletePreview($version, $settings->_previewWidthDetail);
+	$previewer->deletePreview($version, $settings->_previewWidthList);
 	if (!$document->removeContent($version)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} else {
