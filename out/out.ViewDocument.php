@@ -35,7 +35,7 @@ include("../inc/inc.Authentication.php");
 require_once("SeedDMS/Preview.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1]);
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
@@ -50,6 +50,11 @@ if (!is_object($document)) {
 $folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ) {
+	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+}
+
+/* Could be that the advanced access rights prohibit access on the content */
+if (!$document->getLatestContent()) {
 	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
@@ -69,8 +74,6 @@ if ($document->checkForDueRevisionWorkflow($user)){
 }
 
 if($view) {
-	$view->setParam('dms', $dms);
-	$view->setParam('user', $user);
 	$view->setParam('folder', $folder);
 	$view->setParam('document', $document);
 	$view->setParam('accessobject', $accessop);
