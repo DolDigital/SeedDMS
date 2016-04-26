@@ -25,11 +25,6 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/**
- * Include class to preview documents
- */
-require_once("SeedDMS/Preview.php");
-
 if ($user->isGuest()) {
 	UI::exitError(getMLText("my_documents"),getMLText("access_denied"));
 }

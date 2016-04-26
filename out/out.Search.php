@@ -26,11 +26,6 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
-/**
- * Include class to preview documents
- */
-require_once("SeedDMS/Preview.php");
-
 function getTime() {
 	if (function_exists('microtime')) {
 		$tm = microtime();

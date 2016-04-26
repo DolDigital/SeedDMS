@@ -24,11 +24,6 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Authentication.php");
 
-/**
- * Include class to preview documents
- */
-require_once("SeedDMS/Preview.php");
-
 $form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 
 if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
