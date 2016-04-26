@@ -68,25 +68,21 @@ if($settings->_enableFullSearch) {
 		$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', array($index, $indexconf));
 }
 
+function removePreviews($arr, $document) {
+	$previewer = $arr[0];
+
+	$previewer->deleteDocumentPreviews($document);
+	return true;
+}
+require_once("SeedDMS/Preview.php");
+$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
+$dms->addCallback('onPreRemoveDocument', 'removePreviews', array($previewer));
+
 $nl =	$folder->getNotifyList();
 $foldername = $folder->getName();
 if ($folder->remove()) {
 	// Send notification to subscribers.
 	if ($notifier) {
-/*
-		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_deleted_email");
-		$message = getMLText("folder_deleted_email")."\r\n";
-		$message .= 
-			getMLText("name").": ".$folder->getName()."\r\n".
-			getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$folder->getComment()."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-		foreach ($folder->_notifyList["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
 		$subject = "folder_deleted_email_subject";
 		$message = "folder_deleted_email_body";
 		$params = array();
