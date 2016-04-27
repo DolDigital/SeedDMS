@@ -167,7 +167,7 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-				<table class="table table-condensed">
+				<table class="table-condensed">
 					<tr>
 						<td>
 								<?php printMLText("attrdef_name");?>:
