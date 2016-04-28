@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Kabul',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Erişim engellendi.',
 'access_inheritance' => 'Devredilen Erişim',
 'access_mode' => 'Erişim modu',
@@ -801,6 +802,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Sonuç Sayfası',
 'return_from_subworkflow' => 'Alt iş akış dönüşü',
 'return_from_subworkflow_email_body' => 'Alt iş akış dönüşü

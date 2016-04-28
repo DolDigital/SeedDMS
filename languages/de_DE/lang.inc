@@ -19,11 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2227), dgrutsch (21)
+//    Translators: Admin (2229), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
 'access_control' => 'Zugriffskontrolle',
+'access_control_is_off' => 'Erweiterte Zugriffskontrolle ist ausgeschaltet',
 'access_denied' => 'Zugriff verweigert',
 'access_inheritance' => 'Zugriff vererben',
 'access_mode' => 'Berechtigung',
@@ -816,6 +817,7 @@ Benutzer: [username]
 URL: [url]',
 'request_workflow_action_email_subject' => 'Workflow-Aktion benötigt',
 'reset_checkout' => 'Auschecken beenden',
+'restrict_access' => 'Kein Zugriff auf',
 'results_page' => 'Ergebnis-Seite',
 'return_from_subworkflow' => 'Rückkehr aus Sub-Workflow',
 'return_from_subworkflow_email_body' => 'Rückkehr vom Subworkflow

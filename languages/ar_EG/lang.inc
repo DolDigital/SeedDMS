@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'وافق',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'دخول غير مصرح به.',
 'access_inheritance' => 'صلاحيات موروثة',
 'access_mode' => 'نوع الدخول',
@@ -785,6 +786,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'صفحة النتائج',
 'return_from_subworkflow' => 'العودة من مسار العمل الفرعي',
 'return_from_subworkflow_email_body' => 'عودة من مسار عمل فرعي

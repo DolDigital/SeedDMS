@@ -19,11 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (492), destinqo (19)
+//    Translators: Admin (493), destinqo (19)
 
 $text = array(
 'accept' => 'Prijať',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'Prístup zamietnutý.',
 'access_inheritance' => 'Dedičnosť prístupu',
 'access_mode' => 'Režim prístupu',
@@ -154,7 +155,7 @@ URL: [url]',
 'backup_tools' => 'Zálohovacie nástroje',
 'between' => 'medzi',
 'bg_BG' => 'Bulharsky',
-'browse' => '',
+'browse' => 'Prehľadávať',
 'calendar' => 'Kalendár',
 'calendar_week' => '',
 'cancel' => 'Zrušiť',
@@ -681,6 +682,7 @@ URL: [url]',
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Výsledky',
 'return_from_subworkflow' => '',
 'return_from_subworkflow_email_body' => '',

@@ -24,6 +24,7 @@
 $text = array(
 'accept' => 'Приеми',
 'access_control' => '',
+'access_control_is_off' => '',
 'access_denied' => 'достъп забранен',
 'access_inheritance' => 'Наследване на достъпа',
 'access_mode' => 'Режим на достъп',
@@ -677,6 +678,7 @@ $text = array(
 'request_workflow_action_email_body' => '',
 'request_workflow_action_email_subject' => '',
 'reset_checkout' => '',
+'restrict_access' => '',
 'results_page' => 'Страница с резултати',
 'return_from_subworkflow' => 'Връщане от под-процес',
 'return_from_subworkflow_email_body' => '',
