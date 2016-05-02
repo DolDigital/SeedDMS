@@ -22,7 +22,7 @@
 --------------------------------------------------------------------------------
 - much more consistent drag & drop
 - various translation updates
-- take out file deletion because it was (and probabbly never has been) useful
+- take out file deletion because it was not (and probabbly never has been) useful
 - send notification if folder is deleted by ajax call
 - add page ImportFS for mass importing files from drop folder
 - add initial version for editing text files online
