@@ -249,6 +249,7 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$attrdefs = $this->params['attrdefs'];
 		$selattrdef = $this->params['selattrdef'];
+		$accessop = $this->params['accessobject'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
