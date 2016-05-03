@@ -75,7 +75,7 @@ $(document).ready( function() {
 		$this->htmlStartPage(getMLText("sign_in"), "forcepasswordchange");
 		$this->globalBanner();
 		$this->contentStart();
-		echo "<h3>".getMLText('password_expiration')."</h3>";
+		$this->contentHeading(getMLText('password_expiration'));
 		echo "<div class=\"alert\">".getMLText('password_expiration_text')."</div>";
 		$this->contentContainerStart();
 ?>
