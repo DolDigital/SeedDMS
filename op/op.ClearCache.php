@@ -1,6 +1,6 @@
 <?php
-//    MyDMS. Document Management System
-//    Copyright (C) 2006-2008 Malcolm Cowe
+//    SeedDMS. Document Management System
+//    Copyright (C) 2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,20 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.Language.php");
-include("../inc/inc.Init.php");
-include("../inc/inc.Extension.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if ($user->isGuest()) {
-	UI::exitError(getMLText("my_account"),getMLText("access_denied"));
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('clearcache')) {
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList, 'previewconverters'=>$settings->_converters['preview'], 'timeout'=>$settings->_cmdTimeout));
-if($view) {
-	$view($_GET);
-	exit;
-}
+$cmd = 'rm -rf '.$settings->_cacheDir.'/*';
+system($cmd);
+add_log_line("");
 
-?>
+header("Location:../out/out.AdminTools.php");
+

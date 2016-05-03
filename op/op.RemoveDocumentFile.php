@@ -57,26 +57,18 @@ if (($document->getAccessMode($user) < M_ALL)&&($user->getID()!=$file->getUserID
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
+/* Remove preview image. */
+require_once("SeedDMS/Preview.php");
+$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
+$previewer->deletePreview($file, $settings->_previewWidthDetail);
+
 if (!$document->removeDocumentFile($fileid)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 } else {
 	// Send notification to subscribers.
 	if($notifier) {
 		$notifyList = $document->getNotifyList();
-/*
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("removed_file_email");
-		$message = getMLText("removed_file_email")."\r\n";
-		$message .= 
-			getMLText("name").": ".$document->getName()."\r\n".
-			getMLText("file").": ".$file->getOriginalFileName()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".	
-			"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-		$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-		foreach ($document->_notifyList["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
 		$subject = "removed_file_email_subject";
 		$message = "removed_file_email_body";
 		$params = array();

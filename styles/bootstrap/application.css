@@ -171,6 +171,10 @@ div.splash {
 	display: none;
 }
 
+ul.jqtree-tree li.jqtree_common > .jqtree-element:hover {
+    background-color: #E0E0E0;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

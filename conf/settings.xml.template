@@ -267,7 +267,7 @@
        -                   directory ($_contentDir). This requires a base directory from which
        -                   to begin. Usually leave this to the default setting, 1048576, but can
        -                   be any number or string that does not already exist within $_contentDir.
-       - maxDirID: Maximum number of sub-directories per parent directory. Default: 32700.
+       - maxDirID: Maximum number of sub-directories per parent directory. Default: 0.
        - updateNotifyTime: users are notified about document-changes that took place within the last "updateNotifyTime" seconds
        - extraPath: XXX
        - maxExecutionTime: XXX
