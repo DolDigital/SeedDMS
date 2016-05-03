@@ -32,8 +32,6 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		$strictformcheck = $this->params['strictformcheck'];
-
 		header('Content-Type: application/javascript');
 ?>
 function checkForm()
