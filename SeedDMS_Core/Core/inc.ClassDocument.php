@@ -1820,9 +1820,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		/* Check if 'onPreRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
-			$callback = $this->_dms->callbacks['onPreRemoveDocument'];
-			if(!call_user_func($callback[0], $callback[1], $this)) {
-				return false;
+			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this)) {
+					return false;
+				}
 			}
 		}
 
@@ -1907,8 +1908,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		/* Check if 'onPostRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPostRemoveDocument'])) {
-			$callback = $this->_dms->callbacks['onPostRemoveDocument'];
-			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			foreach($this->_dms->callbacks['onPostRemoveDocument'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+				}
 			}
 		}
 

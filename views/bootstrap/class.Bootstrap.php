@@ -630,6 +630,7 @@ $(document).ready(function () {
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
