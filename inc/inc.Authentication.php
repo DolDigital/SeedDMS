@@ -76,19 +76,9 @@ if($settings->_enableEmail) {
 	$notifier->addService(new SeedDMS_EmailNotify($dms));
 }
 
-/* Include the language file as specified in the session. If that is not
- * available use the language from the settings
+/* Include additional language file for view
+ * This file must set $LANG[xx][]
  */
-/*
-if(file_exists($settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc")) {
-	include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
-	$session->setLanguage($resArr["language"]);
-} else {
-	include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
-	$session->setLanguage($settings->_language);
-}
-*/
-
 if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $lang . "/lang.inc")) {
 	include $settings->_rootDir . "view/".$theme."/languages/" . $lang . "/lang.inc";
 }
