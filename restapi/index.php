@@ -215,6 +215,29 @@ function getFolderPath($id) { /* {{{ */
 	echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
+function getFolderAttributes($id) { /* {{{ */
+	global $app, $dms, $userobj;
+	$folder = $dms->getFolder($id);
+
+	if($folder) {
+		if ($folder->getAccessMode($userobj) >= M_READ) {
+			$recs = array();
+			$attributes = $folder->getAttributes();
+			foreach($attributes as $attribute) {
+				$recs[] = array(
+					'id'=>$attribute->getId(),
+					'value'=>$attribute->getValue(),
+					'name'=>$attribute->getAttributeDefinition()->getName(),
+				);
+			}
+			$app->response()->header('Content-Type', 'application/json');
+			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
+		} else {
+			$app->response()->status(404);
+		}
+	}
+} /* }}} */
+
 function getFolderChildren($id) { /* {{{ */
 	global $app, $dms, $userobj;
 	if($id == 0) {
@@ -649,6 +672,29 @@ function getDocumentLinks($id) { /* {{{ */
 	}
 } /* }}} */
 
+function getDocumentAttributes($id) { /* {{{ */
+	global $app, $dms, $userobj;
+	$document = $dms->getDocument($id);
+
+	if($document) {
+		if ($document->getAccessMode($userobj) >= M_READ) {
+			$recs = array();
+			$attributes = $document->getAttributes();
+			foreach($attributes as $attribute) {
+				$recs[] = array(
+					'id'=>$attribute->getId(),
+					'value'=>$attribute->getValue(),
+					'name'=>$attribute->getAttributeDefinition()->getName(),
+				);
+			}
+			$app->response()->header('Content-Type', 'application/json');
+			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
+		} else {
+			$app->response()->status(404);
+		}
+	}
+} /* }}} */
+
 function getAccount() { /* {{{ */
 	global $app, $dms, $userobj;
 	if($userobj) {
@@ -838,8 +884,7 @@ function doSearchByAttr() { /* {{{ */
 	echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
 } /* }}} */
 
-function checkIfAdmin()
-{
+function checkIfAdmin() { /* {{{ */
     global $app, $dms, $userobj;
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
@@ -853,8 +898,7 @@ function checkIfAdmin()
     }
 
     return true;
-}
-
+} /* }}} */
 
 function createAccount() { /* {{{ */
     global $app, $dms, $userobj;
@@ -1063,7 +1107,7 @@ function changeGroupMembership($id, $operationType) { /* {{{ */
 
 function addUserToGroup($id) { /* {{{ */
     changeGroupMembership($id, 'add');
-}
+} /* }}} */
 
 function removeUserFromGroup($id) { /* {{{ */
     changeGroupMembership($id, 'remove');   
@@ -1231,7 +1275,6 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
-
 function clearFolderAccessList($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
@@ -1289,6 +1332,7 @@ $app->delete('/folder/:id', 'deleteFolder');
 $app->get('/folder/:id/children', 'getFolderChildren');
 $app->get('/folder/:id/parent', 'getFolderParent');
 $app->get('/folder/:id/path', 'getFolderPath');
+$app->get('/folder/:id/attributes', 'getFolderAttributes');
 $app->post('/folder/:id/createfolder', 'createFolder');
 $app->put('/folder/:id/document', 'uploadDocument');
 $app->get('/document/:id', 'getDocument');
@@ -1300,6 +1344,7 @@ $app->get('/document/:id/version/:version', 'getDocumentVersion');
 $app->get('/document/:id/files', 'getDocumentFiles');
 $app->get('/document/:id/file/:fileid', 'getDocumentFile');
 $app->get('/document/:id/links', 'getDocumentLinks');
+$app->get('/document/:id/attributes', 'getDocumentAttributes');
 $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
 $app->get('/account/locked', 'getLockedDocuments');
