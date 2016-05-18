@@ -248,7 +248,7 @@ function folderSelected(id, name) {
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
-			print "<table id=\"viewfolder-table\" class=\"table\">";
+			print "<table id=\"viewfolder-table\" class=\"table table-hover\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";	
 			print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";

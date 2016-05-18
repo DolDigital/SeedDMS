@@ -450,7 +450,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
 
-			print "<table class=\"table\">";
+			print "<table class=\"table table-hover\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("name")."</th>\n";
