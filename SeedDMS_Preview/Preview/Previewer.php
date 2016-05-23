@@ -445,6 +445,14 @@ class SeedDMS_Preview_Previewer {
 		}
 	} /* }}} */
 
+	static function recurseRmdir($dir) {
+		$files = array_diff(scandir($dir), array('.','..'));
+		foreach ($files as $file) {
+			(is_dir("$dir/$file")) ? SeedDMS_Preview_Previewer::recurseRmdir("$dir/$file") : unlink("$dir/$file");
+		}
+		return rmdir($dir);
+	}
+
 	/**
 	 * Delete all preview images belonging to a document
 	 *
@@ -459,16 +467,8 @@ class SeedDMS_Preview_Previewer {
 		if(!$this->previewDir)
 			return false;
 
-		function recurseRmdir($dir) {
-			$files = array_diff(scandir($dir), array('.','..'));
-			foreach ($files as $file) {
-				(is_dir("$dir/$file")) ? recurseRmdir("$dir/$file") : unlink("$dir/$file");
-			}
-			return rmdir($dir);
-		}
-
 		$dir = $this->previewDir.'/'.$document->getDir();
-		return recurseRmdir($dir);
+		return SeedDMS_Preview_Previewer::recurseRmdir($dir);
 
 	} /* }}} */
 }

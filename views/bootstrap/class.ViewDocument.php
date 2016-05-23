@@ -165,6 +165,23 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
+	function preview() { /* {{{ */
+		$document = $this->params['document'];
+		$latestContent = $document->getLatestContent();
+		switch($latestContent->getMimeType()) {
+		case 'audio/mpeg':
+		case 'audio/ogg':
+		case 'audio/wav':
+			$this->contentHeading(getMLText("preview"));
+?>
+		<audio controls style="width: 100%;">
+		<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
+		</audio>
+<?php
+			break;
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		parent::show();
 		$dms = $this->params['dms'];
@@ -387,6 +404,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(is_string($txt))
 			echo $txt;
 		$this->contentContainerEnd();
+//		$this->preview();
 ?>
 </div>
 <div class="span9">
