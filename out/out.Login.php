@@ -23,7 +23,6 @@ include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.Utils.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
