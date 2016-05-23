@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (632), fengjohn (5)
+//    Translators: Admin (633), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -882,7 +882,7 @@ URL: [url]',
 'settings_enableDuplicateDocNames_desc' => '',
 'settings_enableEmail' => '开启邮件',
 'settings_enableEmail_desc' => '开启/关闭邮件自动提醒',
-'settings_enableFolderTree' => '',
+'settings_enableFolderTree' => '开启目录树',
 'settings_enableFolderTree_desc' => '',
 'settings_enableFullSearch' => '允许全文搜索',
 'settings_enableFullSearch_desc' => '允许全文搜索',

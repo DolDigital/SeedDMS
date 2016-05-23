@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1032), aydin (83)
+//    Translators: Admin (1036), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -52,7 +52,7 @@ URL: [url]',
 'add_approval' => 'Onay ver',
 'add_document' => 'Doküman ekle',
 'add_document_link' => 'Link ekle',
-'add_document_notify' => '',
+'add_document_notify' => 'Hatırlatma ekte',
 'add_doc_reviewer_approver_warning' => 'NOT: Dokümanlara onay veren veya gözden geçiren kimse atanmamışsa otomatik olarak yayınlanırlar.',
 'add_doc_workflow_warning' => 'NOT: Dokümanlara iş akışı atanmamışsa otomatik olarak yayınlanırlar.',
 'add_event' => 'Etkinlik ekle',
@@ -571,7 +571,7 @@ URL: [url]',
 'keep' => 'Değiştirmeyin',
 'keep_doc_status' => 'Doküman durumunu değiştirme',
 'keywords' => 'Anahtar kelimeler',
-'keywords_loading' => '',
+'keywords_loading' => 'Anahtar sözcük listesi yüklenene kadar lütfen bekleyin...',
 'keyword_exists' => 'Anahtar kelime zaten mevcut',
 'ko_KR' => 'Korece',
 'language' => 'Dil',
@@ -929,12 +929,12 @@ URL: [url]',
 'select_grp_ind_notification' => '',
 'select_grp_ind_recipients' => '',
 'select_grp_ind_reviewers' => '',
-'select_grp_notification' => '',
+'select_grp_notification' => 'Gruplar için hatırlatma seçmek için tıklayın',
 'select_grp_recipients' => '',
 'select_grp_reviewers' => 'Grup kontrol edeni seçmek için tıklayın',
 'select_grp_revisors' => '',
 'select_ind_approvers' => 'Bireysel onaylanı seçmek için tıklayın',
-'select_ind_notification' => '',
+'select_ind_notification' => 'Bireysel hatırlatma seçmek için tıklayın',
 'select_ind_recipients' => '',
 'select_ind_reviewers' => 'Biresysel kontrol edeni seçmek için tıklayın',
 'select_ind_revisors' => '',

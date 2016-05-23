@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2355)
+//    Translators: Admin (2359)
 
 $text = array(
 'accept' => '接受',
@@ -125,12 +125,12 @@ URL: [url]',
 'attrdef_objtype' => '類別',
 'attrdef_regex' => '規則運算式',
 'attrdef_type' => '類型',
-'attrdef_type_boolean' => '',
+'attrdef_type_boolean' => '布林數',
 'attrdef_type_date' => '日期',
 'attrdef_type_email' => '',
-'attrdef_type_float' => '',
-'attrdef_type_int' => '',
-'attrdef_type_string' => '',
+'attrdef_type_float' => '浮點數',
+'attrdef_type_int' => '整數',
+'attrdef_type_string' => '字串',
 'attrdef_type_url' => '',
 'attrdef_valueset' => '屬性值',
 'attributes' => '屬性',
