@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
 --------------------------------------------------------------------------------
+- file from drop folder can be removed after successful upload
 - remove preview images when document or document content is removed (Closes #262)
 - add clear cache operation in admin tools
 - fix strict standard error in SeedDMS_Lucene (Closes #263)
