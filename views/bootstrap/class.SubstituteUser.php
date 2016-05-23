@@ -48,7 +48,10 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 ?>
 	<table class="table table-condensed">
-	  <thead><tr><th><?php printMLText('name'); ?></th><th><?php printMLText('email');?></th><th><?php printMLText('role'); ?></th><th><?php printMLText('groups'); ?></th><th></th></tr></thead><tbody>
+		<thead>
+		<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('email');?></th><th><?php printMLText('role'); ?></th><th><?php printMLText('groups'); ?></th><th></th></tr>
+		</thead>
+		<tbody>
 <?php
 		foreach ($allUsers as $currUser) {
 			echo "<tr>";
@@ -79,7 +82,8 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "</tr>";
 		}
-		echo "</tbody></table>";
+		echo "</tbody>";
+		echo "</table>";
 		$this->contentContainerEnd();
 
 		$this->contentEnd();

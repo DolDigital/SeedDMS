@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-03-09</date>
+ <date>2016-05-03</date>
  <time>09:28:28</time>
  <version>
-  <release>5.1.0</release>
-  <api>5.1.0</api>
+  <release>5.1.1</release>
+  <api>5.1.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,9 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- add roles
-- use classname from SeedDMS_Core_DMS::_classnames for SeedDMS_Core_DocumentContent
-- all changes from 4.3.26 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1031,6 +1028,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
+   <date>2016-04-04</date>
+   <time>07:38:23</time>
+   <version>
+    <release>4.3.26</release>
+    <api>4.3.26</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- add more callbacks
+	 </notes>
+  </release>
+  <release>
    <date>2016-01-22</date>
    <time>14:34:58</time>
    <version>
@@ -1075,6 +1088,57 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
+- all changes from 4.3.26 merged
+   </notes>
+  </release>
+  <release>
+   <date>2016-04-26</date>
+   <time>12:04:59</time>
+   <version>
+    <release>5.0.2</release>
+    <api>5.0.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.25 merged
+	 </notes>
+  </release>
+  <release>
+   <date>2016-04-04</date>
+   <time>08:56:33</time>
+   <version>
+    <release>5.0.3</release>
+    <api>5.0.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- use classname from SeedDMS_Core_DMS::_classnames for SeedDMS_Core_DocumentContent
+- all changes from 4.3.26 merged
+   </notes>
+  </release>
+  <release>
+   <date>2016-03-09</date>
+   <time>09:28:28</time>
+   <version>
+    <release>5.1.0</release>
+    <api>5.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- add roles
+- use classname from SeedDMS_Core_DMS::_classnames for SeedDMS_Core_DocumentContent
 - all changes from 4.3.26 merged
    </notes>
   </release>

@@ -27,11 +27,6 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
-/**
- * Include class to preview documents
- */
-require_once("SeedDMS/Preview.php");
-
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);

@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for ViewFolder view
  *
  * @category   DMS
@@ -208,17 +213,18 @@ function folderSelected(id, name) {
 			}
 
 			if($user->isAdmin()) {
+				echo "<tr>";
+				echo "<td>".getMLText('default_access').":</td>";
+				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
+				echo "</tr>";
 				if($folder->inheritsAccess()) {
 					echo "<tr>";
 					echo "<td>".getMLText("access_mode").":</td>\n";
 					echo "<td>";
-					echo getMLText("inherited");
+					echo getMLText("inherited")."<br />";
+					$this->printAccessList($folder);
 					echo "</tr>";
 				} else {
-					echo "<tr>";
-					echo "<td>".getMLText('default_access').":</td>";
-					echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
-					echo "</tr>";
 					echo "<tr>";
 					echo "<td>".getMLText('access_mode').":</td>";
 					echo "<td>";
@@ -279,7 +285,7 @@ function folderSelected(id, name) {
 			if(is_string($txt))
 				echo $txt;
 			else {
-				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed table-hover\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
 				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";

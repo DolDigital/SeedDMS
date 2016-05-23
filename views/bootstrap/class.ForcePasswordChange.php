@@ -32,8 +32,6 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		$strictformcheck = $this->params['strictformcheck'];
-
 		header('Content-Type: application/javascript');
 ?>
 function checkForm()
@@ -75,7 +73,7 @@ $(document).ready( function() {
 		$this->htmlStartPage(getMLText("sign_in"), "forcepasswordchange");
 		$this->globalBanner();
 		$this->contentStart();
-		echo "<h3>".getMLText('password_expiration')."</h3>";
+		$this->contentHeading(getMLText('password_expiration'));
 		echo "<div class=\"alert\">".getMLText('password_expiration_text')."</div>";
 		$this->contentContainerStart();
 ?>

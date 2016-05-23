@@ -60,6 +60,16 @@ if($settings->_enableFullSearch) {
 	$index = null;
 }
 
+function removePreviews($arr, $document) {
+	$previewer = $arr[0];
+
+	$previewer->deleteDocumentPreviews($document);
+	return true;
+}
+require_once("SeedDMS/Preview.php");
+$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
+$dms->addCallback('onPreRemoveDocument', 'removePreviews', array($previewer));
+
 /* save this for notification later on */
 $nl =	$folder->getNotifyList();
 $parent=$folder->getParent();

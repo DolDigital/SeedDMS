@@ -11,11 +11,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-04-05</date>
+ <date>2016-04-26</date>
  <time>15:17:11</time>
  <version>
-  <release>1.1.8</release>
-  <api>1.1.8</api>
+  <release>1.1.9</release>
+  <api>1.1.9</api>
  </version>
  <stability>
   <release>stable</release>
@@ -23,7 +23,9 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-pass variables to stream_select (required by php7)
+add more documentation
+finished deletePreview()
+add new method deleteDocumentPreviews()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -194,6 +196,22 @@ check if object passed to createPreview(), hasPreview() is not null
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 set last parameter of stream_select() to 200000 micro sec. in case the timeout in sec. is set to 0
+   </notes>
+  </release>
+  <release>
+   <date>2016-04-05</date>
+   <time>15:17:11</time>
+   <version>
+    <release>1.1.8</release>
+    <api>1.1.8</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+pass variables to stream_select (required by php7)
    </notes>
   </release>
  </changelog>

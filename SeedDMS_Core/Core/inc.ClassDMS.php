@@ -388,9 +388,10 @@ class SeedDMS_Core_DMS {
 		$this->classnames['group'] = 'SeedDMS_Core_Group';
 		$this->classnames['transmittal'] = 'SeedDMS_Core_Transmittal';
 		$this->classnames['transmittalitem'] = 'SeedDMS_Core_TransmittalItem';
+		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.1.0';
+			$this->version = '5.1.1';
 	} /* }}} */
 
 	/**
@@ -1648,8 +1649,9 @@ class SeedDMS_Core_DMS {
 
 		/* Check if 'onPostAddUser' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddUser'])) {
-			$callback = $this->_dms->callbacks['onPostUser'];
-			if(!call_user_func($callback[0], $callback[1], $user)) {
+			foreach($this->_dms->callbacks['onPostUser'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $user)) {
+				}
 			}
 		}
 
@@ -1709,8 +1711,9 @@ class SeedDMS_Core_DMS {
 
 		/* Check if 'onPostAddGroup' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddGroup'])) {
-			$callback = $this->_dms->callbacks['onPostAddGroup'];
-			if(!call_user_func($callback[0], $callback[1], $group)) {
+			foreach($this->_dms->callbacks['onPostAddGroup'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $group)) {
+				}
 			}
 		}
 
@@ -1901,8 +1904,9 @@ class SeedDMS_Core_DMS {
 
 		/* Check if 'onPostAddKeywordCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddKeywordCategory'])) {
-			$callback = $this->_dms->callbacks['onPostAddKeywordCategory'];
-			if(!call_user_func($callback[0], $callback[1], $category)) {
+			foreach($this->_dms->callbacks['onPostAddKeywordCategory'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $category)) {
+				}
 			}
 		}
 
@@ -1976,8 +1980,9 @@ class SeedDMS_Core_DMS {
 
 		/* Check if 'onPostAddDocumentCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddDocumentCategory'])) {
-			$callback = $this->_dms->callbacks['onPostAddDocumentCategory'];
-			if(!call_user_func($callback[0], $callback[1], $category)) {
+			foreach($this->_dms->callbacks['onPostAddDocumentCategory'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $category)) {
+				}
 			}
 		}
 
@@ -2694,7 +2699,20 @@ class SeedDMS_Core_DMS {
 	 */
 	function setCallback($name, $func, $params=null) { /* {{{ */
 		if($name && $func)
-			$this->callbacks[$name] = array($func, $params);
+			$this->callbacks[$name] = array(array($func, $params));
+	} /* }}} */
+
+	/**
+	 * Add a callback function
+	 *
+	 * @param string $name internal name of callback
+	 * @param mixed $func function name as expected by {call_user_method}
+	 * @param mixed $params parameter passed as the first argument to the
+	 *        callback
+	 */
+	function addCallback($name, $func, $params=null) { /* {{{ */
+		if($name && $func)
+			$this->callbacks[$name][] = array($func, $params);
 	} /* }}} */
 
 	/**

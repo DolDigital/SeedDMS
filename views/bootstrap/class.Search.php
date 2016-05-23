@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for Search result view
  *
  * @category   DMS
@@ -530,7 +535,7 @@ $(document).ready( function() {
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
 
-			print "<table class=\"table\">";
+			print "<table class=\"table table-hover\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("name")."</th>\n";

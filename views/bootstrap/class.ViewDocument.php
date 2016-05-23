@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for ViewDocument view
  *
  * @category   DMS
@@ -160,6 +165,23 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
+	function preview() { /* {{{ */
+		$document = $this->params['document'];
+		$latestContent = $document->getLatestContent();
+		switch($latestContent->getMimeType()) {
+		case 'audio/mpeg':
+		case 'audio/ogg':
+		case 'audio/wav':
+			$this->contentHeading(getMLText("preview"));
+?>
+		<audio controls style="width: 100%;">
+		<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
+		</audio>
+<?php
+			break;
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		parent::show();
 		$dms = $this->params['dms'];
@@ -296,17 +318,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText('default_access').":</td>";
+			echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
+			echo "</tr>";
 			if($document->inheritsAccess()) {
 				echo "<tr>";
 				echo "<td>".getMLText("access_mode").":</td>\n";
 				echo "<td>";
-				echo getMLText("inherited");
+				echo getMLText("inherited")."<br />";
+				$this->printAccessList($document);
 				echo "</tr>";
 			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
-				echo "</tr>";
 				echo "<tr>";
 				echo "<td>".getMLText('access_mode').":</td>";
 				echo "<td>";
@@ -381,6 +404,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(is_string($txt))
 			echo $txt;
 		$this->contentContainerEnd();
+//		$this->preview();
 ?>
 </div>
 <div class="span9">
@@ -502,7 +526,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 			}
 		}
-		print "</ul>\n";
+		print "</ul></td>\n";
 
 //		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
@@ -693,7 +717,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 
 				print "</ul></td>\n";	
-				print "</td>\n</tr>\n";
+				print "</tr>\n";
 			}
 		}
 
@@ -763,7 +787,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				print "</ul>";
 				print "</td>\n";	
-				print "</td>\n</tr>\n";
+				print "</tr>\n";
 			}
 		}
 
@@ -1047,7 +1071,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 
 				print "</ul></td>\n";	
-				print "</td>\n</tr>\n";
+				print "</tr>\n";
 			}
 ?>
 		</table>
@@ -1157,7 +1181,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 
 				print "</ul></td>\n";	
-				print "</td>\n</tr>\n";
+				print "</tr>\n";
 			}
 ?>
 		</table>
@@ -1245,7 +1269,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 					}
 				}
-				print "</ul>\n";
+				print "</ul></td>\n";
 //				print "<td>".htmlspecialchars($version->getComment())."</td>";
 				print "<td>".getOverallStatusText($vstat["status"])."</td>";
 				print "<td>";
@@ -1329,7 +1353,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
-
+				print "</ul></td>";
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
 			
 				print "<td><ul class=\"unstyled actions\">";

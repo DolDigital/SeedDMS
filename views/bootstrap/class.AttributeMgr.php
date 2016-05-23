@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for AttributeMgr view
  *
  * @category   DMS
@@ -162,7 +167,7 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-				<table class="table table-condensed">
+				<table class="table-condensed">
 					<tr>
 						<td>
 								<?php printMLText("attrdef_name");?>:
@@ -249,6 +254,7 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$attrdefs = $this->params['attrdefs'];
 		$selattrdef = $this->params['selattrdef'];
+		$accessop = $this->params['accessobject'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 

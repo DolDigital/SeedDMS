@@ -1,4 +1,11 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.4
+--------------------------------------------------------------------------------
+- merged changes from 4.3.27
+- much better dependency checking for extensions, turn off extensions which
+  do not match seeddms version dependency
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.3
 --------------------------------------------------------------------------------
 - merged changes from 4.3.26
@@ -25,6 +32,13 @@
 - add home folder for users
 
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.27
+--------------------------------------------------------------------------------
+- remove preview images when document or document content is removed (Closes #262)
+- add clear cache operation in admin tools
+- fix strict standard error in SeedDMS_Lucene (Closes #263)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.26
 --------------------------------------------------------------------------------
 - move some left over javascript from html code into application.js (Closes #253)
@@ -34,13 +48,14 @@
 - fix error in utils/indexer.php when new documents were indexed
 - set url in approval request email after reviewing a document (Closes #259)
 - inform groups and users watching a new document too (Closes #260)
+- use bootstrap theme for all steps in install tool
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.25
 --------------------------------------------------------------------------------
 - much more consistent drag & drop
 - various translation updates
-- take out file deletion because it was (and probabbly never has been) useful
+- take out file deletion because it was not (and probabbly never has been) useful
 - send notification if folder is deleted by ajax call
 - add page ImportFS for mass importing files from drop folder
 - add initial version for editing text files online

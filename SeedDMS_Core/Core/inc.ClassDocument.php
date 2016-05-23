@@ -2300,9 +2300,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		/* Check if 'onPreRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
-			$callback = $this->_dms->callbacks['onPreRemoveDocument'];
-			if(!call_user_func($callback[0], $callback[1], $this)) {
-				return false;
+			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this)) {
+					return false;
+				}
 			}
 		}
 
@@ -2392,8 +2393,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		/* Check if 'onPostRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPostRemoveDocument'])) {
-			$callback = $this->_dms->callbacks['onPostRemoveDocument'];
-			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			foreach($this->_dms->callbacks['onPostRemoveDocument'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+				}
 			}
 		}
 
@@ -3145,6 +3147,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * {@link SeedDMS_Core_Document::getLatestContent()}
 	 * It is also used by {@link SeedDMS_Core_Document::getAccessMode()} to
 	 * prevent access on the whole document if there is no accessible version.
+	 *
+	 * FIXME: This function only works propperly if $u is the currently logged in
+	 * user, because noReadForStatus will be set for this user. 
 	 *
 	 * @param object $u user
 	 * @return integer either M_NONE or M_READ

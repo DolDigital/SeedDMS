@@ -1,9 +1,8 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005 Markus Westphal
+//    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
-//    Copyright (C) 2009-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,40 +18,23 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
-include("../inc/inc.Language.php");
-include("../inc/inc.Init.php");
-include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
-$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
-if (!$accessop->check_view_access($view, $_GET)) {
+if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$attrdefs = $dms->getAllAttributeDefinitions();
-
-if(isset($_GET['attrdefid']) && $_GET['attrdefid']) {
-	$selattrdef = $dms->getAttributeDefinition($_GET['attrdefid']);
-} else {
-	$selattrdef = null;
-}
-
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('attrdefs', $attrdefs);
-	$view->setParam('selattrdef', $selattrdef);
-	$view->setParam('showtree', showtree());
 	$view->setParam('cachedir', $settings->_cacheDir);
-	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);
-	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
-	$view->setParam('previewWidthList', $settings->_previewWidthList);
-	$view->setParam('timeout', $settings->_cmdTimeout);
-	$view->setParam('accessobject', $accessop);
 	$view($_GET);
+	exit;
 }
 
 ?>

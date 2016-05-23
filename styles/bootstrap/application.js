@@ -665,7 +665,7 @@ $(document).ready(function() {
 
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
 //			document.location = url;
-		} else if(source_type == 'folder') {
+		} else if(source_type == 'folder' && source_id != target_id) {
 			bootbox.dialog(trans.confirm_move_folder, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
 				"class" : "btn-danger",
@@ -814,7 +814,7 @@ $(document).ready(function() {
 
 			url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
 //			document.location = url;
-		} else if(source_type == 'folder') {
+		} else if(source_type == 'folder' && source_id != target_id) {
 			bootbox.dialog(trans.confirm_move_folder, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_folder,
 				"class" : "btn-danger",

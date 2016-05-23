@@ -769,6 +769,8 @@ $(document).ready(function () {
 		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("importfs")."</a></li>\n";
 		if ($this->check_access('ExtensionMgr'))
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
+		if ($this->check_access('ClearCache'))
+		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
 		if ($this->check_access('Info'))
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
