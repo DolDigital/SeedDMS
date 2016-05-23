@@ -85,6 +85,8 @@ class Settings { /* {{{ */
 	var $_luceneDir = null;
 	// Where the drop folders are located
 	var $_dropFolderDir = null;
+	// enable removal of file from dropfolder after success import
+	var $_removeFromDropFolder = false;
 	// Where the stop word file is located
 	var $_stopWordsFile = null;
 	// enable/disable lucene fulltext search
@@ -529,6 +531,7 @@ class Settings { /* {{{ */
 		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
 		$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
 		$this->_overrideMimeType = Settings::boolval($tab["overrideMimeType"]);
+		$this->_removeFromDropFolder = Settings::boolval($tab["removeFromDropFolder"]);
 
 		// XML Path: /configuration/advanced/notification
 		$node = $xml->xpath('/configuration/advanced/notification');
@@ -795,6 +798,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
     $this->setXMLAttributValue($node, "enableDuplicateDocNames", $this->_enableDuplicateDocNames);
     $this->setXMLAttributValue($node, "overrideMimeType", $this->_overrideMimeType);
+    $this->setXMLAttributValue($node, "removeFromDropFolder", $this->_removeFromDropFolder);
 
     // XML Path: /configuration/advanced/notification
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'notification');
