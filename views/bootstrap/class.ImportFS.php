@@ -52,12 +52,12 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 
 		print "<form class=\"form-horizontal\" action=\"../op/op.ImportFS.php\" name=\"form1\">";
-		print "<div class=\"control-group\"><label class=\"control-label\"></label><div class=\"controls\">";
+		print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('choose_target_folder')."</label><div class=\"controls\">";
 		$this->printFolderChooserHtml("form1",M_READWRITE);
 		print "</div></div>";
 		if($dropfolderdir) {
 			print "<div class=\"control-group\"><label class=\"control-label\">";
-			printMLText("dropfolder_file");
+			printMLText("dropfolder_folder");
 			echo ": ";
 			print "</label><div class=\"controls\">";
 			/* Setting drop folder dir to "" will force to take the default from settings.xml */

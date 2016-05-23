@@ -283,7 +283,7 @@ function folderSelected(id, name) {
 			if(is_string($txt))
 				echo $txt;
 			else {
-				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed table-hover\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
 				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
