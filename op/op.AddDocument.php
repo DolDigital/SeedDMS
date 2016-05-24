@@ -436,6 +436,11 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				}
 			}
 		}
+		if($settings->_removeFromDropFolder) {
+			if(file_exists($userfiletmp)) {
+				unlink($userfiletmp);
+			}
+		}
 	}
 	
 	add_log_line("?name=".$name."&folderid=".$folderid);

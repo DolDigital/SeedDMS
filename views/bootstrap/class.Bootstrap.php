@@ -152,16 +152,20 @@ $(document).ready(function () {
 	function missingḺanguageKeys() { /* {{{ */
 		global $MISSING_LANG, $LANG;
 		if($MISSING_LANG) {
+			echo '<div class="container-fluid">'."\n";
+			echo '<div class="row-fluid">'."\n";
 			echo '<div class="alert alert-error">'."\n";
 			echo "<p><strong>This page contains missing translations in the selected language. Please help to improve SeedDMS and provide the translation.</strong></p>";
 			echo "</div>";
 			echo "<table class=\"table table-condensed\">";
 			echo "<tr><th>Key</th><th>engl. Text</th><th>Your translation</th></tr>\n";
 			foreach($MISSING_LANG as $key=>$lang) {
-				echo "<tr><td>".$key."</td><td>".$LANG['en_GB'][$key]."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
+				echo "<tr><td>".$key."</td><td>".(isset($LANG['en_GB'][$key]) ? $LANG['en_GB'][$key] : '')."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
 			}
 			echo "</table>";
 			echo "<div class=\"splash\" data-type=\"error\" data-timeout=\"5500\"><b>There are missing translations on this page!</b><br />Please check the bottom of the page.</div>\n";
+			echo "</div>\n";
+			echo "</div>\n";
 		}
 	} /* }}} */
 

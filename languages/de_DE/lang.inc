@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2234), dgrutsch (21)
+//    Translators: Admin (2236), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -1190,6 +1190,8 @@ URL: [url]',
 'settings_printDisclaimer_desc' => 'Anwählen, um die rechtlichen Hinweise am Ende jeder Seite anzuzeigen.',
 'settings_quota' => 'User\'s quota',
 'settings_quota_desc' => 'Die maximale Anzahl Bytes, die ein Benutzer belegen darf. Setzen Sie diesen Wert auf 0 für unbeschränkten Plattenplatz. Dieser Wert kann individuell in den Benutzereinstellungen überschrieben werden.',
+'settings_removeFromDropFolder' => 'Datei aus Ablageordner nach erfolgreichem Hochladen löschen',
+'settings_removeFromDropFolder_desc' => 'Schalten Sie dies ein, wenn eine Datei aus dem Ablageordner nach erfolgreichem Hochladen gelöscht werden soll.',
 'settings_restricted' => 'Beschränkter Zugriff',
 'settings_restricted_desc' => 'Nur Benutzer, die einen Eintrag in der Benutzerdatenbank haben dürfen sich anmelden (unabhängig von einer erfolgreichen Authentifizierung über LDAP)',
 'settings_rootDir' => 'Wurzelverzeichnis',
