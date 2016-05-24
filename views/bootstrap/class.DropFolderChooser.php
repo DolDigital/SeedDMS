@@ -43,7 +43,7 @@ $('.fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');
 	fileSelected(attr_filename);
 });
-$('#folderselect').click(function(ev) {
+$('.folderselect').click(function(ev) {
 	attr_foldername = $(ev.currentTarget).attr('foldername');
 	folderSelected(attr_foldername);
 });
@@ -89,7 +89,7 @@ $('#folderselect').click(function(ev) {
 						} elseif($showfolders) {
 							echo "<tr>";
 							echo "<td></td>";
-							echo "<td><span style=\"cursor: pointer;\" id=\"folderselect\" foldername=\"".$entry."\" >".$entry."</span></td><td align=\"right\"></td><td></td>";
+							echo "<td><span style=\"cursor: pointer;\" class=\"folderselect\" foldername=\"".$entry."\" >".$entry."</span></td><td align=\"right\"></td><td></td>";
 							echo "</tr>\n";
 						}
 					}
