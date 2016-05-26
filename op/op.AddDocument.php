@@ -82,6 +82,8 @@ foreach($attributes as $attrdefid=>$attribute) {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
 			}
 		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
 
@@ -105,9 +107,10 @@ foreach($attributes_version as $attrdefid=>$attribute) {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
 			}
 		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
-
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;

@@ -65,7 +65,15 @@ if($attributes) {
 		if($attribute) {
 			if($attrdef->getRegex()) {
 				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
+					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
+				}
+				if(is_array($attribute)) {
+					if($attrdef->getMinValues() > count($attribute)) {
+						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
+					}
+					if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
+						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
+					}
 				}
 			}
 			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
@@ -97,6 +105,8 @@ if($attributes) {
 					}
 				}
 			}
+		} elseif($attrdef->getMinValues() > 0) {
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 		} elseif(isset($oldattributes[$attrdefid])) {
 			if(!$version->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("error_occured"));
