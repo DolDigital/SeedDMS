@@ -158,8 +158,8 @@ if ($action == "saveSettings")
   $settings->_presetExpirationDate = $_POST["presetExpirationDate"];
   $settings->_initialDocumentStatus = $_POST["initialDocumentStatus"];
   $settings->_workflowMode = $_POST["workflowMode"];
-  $settings->_enableAcknowledgeWorkflow = $_POST["enableAcknowledgeWorkflow"];
-  $settings->_enableRevisionWorkflow = $_POST["enableRevisionWorkflow"];
+  $settings->_enableAcknowledgeWorkflow = getBoolValue("enableAcknowledgeWorkflow");
+  $settings->_enableRevisionWorkflow = getBoolValue("enableRevisionWorkflow");
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
   $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");
