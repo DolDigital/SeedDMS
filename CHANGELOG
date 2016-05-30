@@ -34,6 +34,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
 --------------------------------------------------------------------------------
+- check for minimum number of attribute values for each attribute type
 - fix selection of imported folder in ImportFS
 - file from drop folder can be removed after successful upload
 - remove preview images when document or document content is removed (Closes #262)

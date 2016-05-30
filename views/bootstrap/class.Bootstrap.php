@@ -1136,6 +1136,7 @@ $('#acceptkeywords').click(function(ev) {
 			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
+				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
 				echo "<select name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
