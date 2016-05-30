@@ -863,8 +863,10 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 				$values = explode($attrvalue[0], substr($attrvalue, 1));
 			else
 				$values = $attrvalue;
-		} else {
+		} elseif($attrvalue) {
 			$values = array($attrvalue);
+		} else {
+			$values = array();
 		}
 
 		$this->_validation_error = 0;

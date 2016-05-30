@@ -280,31 +280,19 @@ if($attributes) {
 					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 				}
 			}
-			/*
-			if($attrdef->getRegex()) {
-				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
-				}
-			}
-			if(is_array($attribute)) {
-				if($attrdef->getMinValues() > count($attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-				}
-				if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-				}
-			}
-			 */
 			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
 				if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
 					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
+		} elseif($attrdef->getMinValues() > 0) {
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 		} elseif(isset($oldattributes[$attrdefid])) {
 			if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
 	}
 }
+
 foreach($oldattributes as $attrdefid=>$oldattribute) {
 	if(!isset($attributes[$attrdefid])) {
 		if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))

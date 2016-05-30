@@ -249,21 +249,6 @@ if ($_FILES['userfile']['error'] == 0) {
 						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 					}
 				}
-				/*
-				if($attrdef->getRegex()) {
-					if(!preg_match($attrdef->getRegex(), $attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("attr_no_regex_match"));
-					}
-				}
-				if(is_array($attribute)) {
-					if($attrdef->getMinValues() > count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-					}
-					if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-					}
-				}
-				 */
 			} elseif($attrdef->getMinValues() > 0) {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 			}
