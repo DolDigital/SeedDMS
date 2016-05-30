@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1380), dgrutsch (7), netixw (14)
+//    Translators: Admin (1383), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -1191,6 +1191,8 @@ URL: [url]',
 'settings_printDisclaimer_desc' => 'If enabled, the disclaimer message will be printed on the bottom of every page',
 'settings_quota' => 'User\'s quota',
 'settings_quota_desc' => 'The maximum number of bytes a user may use on disk. Set this to 0 for unlimited disk space. This value can be overridden for each user in his profile.',
+'settings_removeFromDropFolder' => 'Remove file from drop folder after successful upload',
+'settings_removeFromDropFolder_desc' => 'Enable this, if a file taken from the drop folder shall be deleted after successful upload.',
 'settings_restricted' => 'Restricted access',
 'settings_restricted_desc' => 'Only allow users to log in if they have an entry in the local database (irrespective of successful authentication with LDAP)',
 'settings_rootDir' => 'Root directory',

@@ -168,6 +168,7 @@ if ($action == "saveSettings")
   $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");
   $settings->_overrideMimeType = getBoolValue("overrideMimeType");
   $settings->_advancedAcl = getBoolValue("advancedAcl");
+  $settings->_removeFromDropFolder = getBoolValue("removeFromDropFolder");
 
   // SETTINGS - ADVANCED - NOTIFICATION
   $settings->_enableOwnerNotification = getBoolValue("enableOwnerNotification");
