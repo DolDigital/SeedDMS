@@ -932,6 +932,9 @@ CREATE TABLE `tblVersion` (
 -- Initial content for database
 --
 
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (1, 'Admin', 1);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (2, 'Guest', 2);
+INSERT INTO `tblRoles` (`id`, `name`, `role`) VALUES (3, 'User', 0);
 INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '0000-00-00 00:00:00', 0, 0, 0, NULL);
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '0000-00-00 00:00:00', 0, 0, 0, NULL);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
