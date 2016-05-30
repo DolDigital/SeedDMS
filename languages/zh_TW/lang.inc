@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2359)
+//    Translators: Admin (2360)
 
 $text = array(
 'accept' => '接受',
@@ -218,6 +218,7 @@ URL: [url]',
 'comment' => '說明',
 'comment_changed_email' => '',
 'comment_for_current_version' => '版本說明',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '確認已新增之全文索引',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -515,7 +516,7 @@ URL: [url]',
 'local_file' => '本地檔',
 'locked_by' => '鎖定人',
 'lock_document' => '鎖定',
-'lock_message' => '此文檔已被 <a href="mailto:[email]">[username]</a>鎖定. 只有授權使用者才能解鎖.',
+'lock_message' => '此文檔已被 [username] 鎖定. 只有授權使用者才能解鎖.',
 'lock_status' => '鎖定狀態',
 'login' => '',
 'login_disabled_text' => '',

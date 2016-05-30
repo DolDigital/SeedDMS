@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1041), balan (87)
+//    Translators: Admin (1042), balan (87)
 
 $text = array(
 'accept' => 'Accept',
@@ -241,6 +241,7 @@ URL: [url]',
 'comment' => 'Comentariu',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Comentariu versiune',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Da, aș dori să recreeze indexul pentru tot textul!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => 'Fișier local',
 'locked_by' => 'Blocat de',
 'lock_document' => 'Blocare',
-'lock_message' => 'Acest document este blocat de <a href="mailto:[email]">[username]</a>. Numai utilizatorii autorizați pot debloca acest document.',
+'lock_message' => 'Acest document este blocat de [username]. Numai utilizatorii autorizați pot debloca acest document.',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Contul dumneavoastră este dezactivat, probabil din cauza prea multor login-uri eșuate.',

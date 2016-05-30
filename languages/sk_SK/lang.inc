@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (493), destinqo (19)
+//    Translators: Admin (494), destinqo (19)
 
 $text = array(
 'accept' => 'Prijať',
@@ -218,6 +218,7 @@ URL: [url]',
 'comment' => 'Komentár',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Version comment',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -515,7 +516,7 @@ URL: [url]',
 'local_file' => 'Lokálny súbor',
 'locked_by' => 'Uzamkol',
 'lock_document' => 'Zamknúť',
-'lock_message' => 'Tento dokument zamkol <a href="mailto:[email]">[username]</a>.<br>Iba oprávnení používatelia ho môžu odomknúť (pozri koniec stránky).',
+'lock_message' => 'Tento dokument zamkol [username]. Iba oprávnení používatelia ho môžu odomknúť (pozri koniec stránky).',
 'lock_status' => 'Stav',
 'login' => '',
 'login_disabled_text' => 'Vaše konto bolo zakázané, pravdepodobne veľa pokusov o prihlásenie zlyhalo.',

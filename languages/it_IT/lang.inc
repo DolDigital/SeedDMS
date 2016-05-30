@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1525), s.pnt (26)
+//    Translators: Admin (1526), s.pnt (26)
 
 $text = array(
 'accept' => 'Accetta',
@@ -242,6 +242,7 @@ URL: [url]',
 'comment' => 'Commento',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Commento per la versione',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Sì, desidero ricreare l\'indice fulltext!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -593,7 +594,7 @@ URL: [url]',
 'local_file' => 'File locale',
 'locked_by' => 'Bloccato da',
 'lock_document' => 'Blocca',
-'lock_message' => 'Questo documento è bloccato da <a href="mailto:[email]">[username]</a>. Solo gli utenti autorizzati possono sbloccare questo documento.',
+'lock_message' => 'Questo documento è bloccato da [username]. Solo gli utenti autorizzati possono sbloccare questo documento.',
 'lock_status' => 'Stato bloccaggio',
 'login' => 'Accesso',
 'login_disabled_text' => 'Il tuo account è stato disabilitato: troppi login falliti.',

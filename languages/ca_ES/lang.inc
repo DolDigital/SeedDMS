@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (698)
+//    Translators: Admin (699)
 
 $text = array(
 'accept' => 'Acceptar',
@@ -219,6 +219,7 @@ URL: [url]',
 'comment' => 'Comentaris',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Comentari de la versió actual',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -516,7 +517,7 @@ URL: [url]',
 'local_file' => 'Arxiu local',
 'locked_by' => 'Locked by',
 'lock_document' => 'Bloquejar',
-'lock_message' => 'Aquest document ha estat bloquejat per <a href="mailto:[email]">[username]</a>.<br />Només els usuaris autoritzats poden desbloquejar aquest document (vegeu al final de la pàgina).',
+'lock_message' => 'Aquest document ha estat bloquejat per [username]. Només els usuaris autoritzats poden desbloquejar aquest document (vegeu al final de la pàgina).',
 'lock_status' => 'Estat',
 'login' => '',
 'login_disabled_text' => '',

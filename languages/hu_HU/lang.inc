@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (586), ribaz (1019)
+//    Translators: Admin (587), ribaz (1019)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -236,6 +236,7 @@ URL: [url]',
 'comment' => 'Megjegyzés',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Megjegyzés az aktuális verzióhoz',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Igen, szeretném újra létrehozni a teljes szöveg indexet!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -587,7 +588,7 @@ URL: [url]',
 'local_file' => 'Helyi állomány',
 'locked_by' => 'Zárolta',
 'lock_document' => 'Zárol',
-'lock_message' => 'Ezt a dokumentumot <a href="mailto:[email]">[username]</a> zárolta.<br>Csak az arra jogosult felhasználó törölheti a zárolást (Lásd: lap alja).',
+'lock_message' => 'Ezt a dokumentumot [username] zárolta. Csak az arra jogosult felhasználó törölheti a zárolást (Lásd: lap alja).',
 'lock_status' => 'Állapot',
 'login' => 'Bejelentkezés',
 'login_disabled_text' => 'Fiókja letiltásra került, valószínűleg a túl sok érvénytelen bejelentkezési kísérlet miatt.',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1323)
+//    Translators: Admin (1324)
 
 $text = array(
 'accept' => 'Прийняти',
@@ -241,6 +241,7 @@ URL: [url]',
 'comment' => 'Коментар',
 'comment_changed_email' => 'Повідомлення про зміну коментаря',
 'comment_for_current_version' => 'Коментар версії',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Так, перестворити повнотекстовий індекс!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => 'Локальний файл',
 'locked_by' => 'Заблоковано',
 'lock_document' => 'Заблокувати',
-'lock_message' => 'Документ заблокував користувач <a href="mailto:[email]">[username]</a>. Тільки користувачі, які мають відповідні права, можуть його розблокувати.',
+'lock_message' => 'Документ заблокував користувач [username]. Тільки користувачі, які мають відповідні права, можуть його розблокувати.',
 'lock_status' => 'Статус',
 'login' => 'Логін',
 'login_disabled_text' => 'Ваш обліковий запис заблоковано, можливо, через кілька невдалих спроб входу.',

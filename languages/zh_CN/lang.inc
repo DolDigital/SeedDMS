@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (633), fengjohn (5)
+//    Translators: Admin (634), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -218,6 +218,7 @@ URL: [url]',
 'comment' => '说明',
 'comment_changed_email' => '',
 'comment_for_current_version' => '版本说明',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -517,7 +518,7 @@ URL: [url]',
 'local_file' => '本地文件',
 'locked_by' => '锁定人',
 'lock_document' => '锁定',
-'lock_message' => '此文档已被 <a href="mailto:[email]">[username]</a>锁定. 只有授权用户才能解锁.',
+'lock_message' => '此文档已被 [username] 锁定. 只有授权用户才能解锁.',
 'lock_status' => '锁定状态',
 'login' => '',
 'login_disabled_text' => '',

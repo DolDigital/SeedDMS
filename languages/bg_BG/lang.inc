@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (784)
+//    Translators: Admin (785)
 
 $text = array(
 'accept' => 'Приеми',
@@ -214,6 +214,7 @@ $text = array(
 'comment' => 'Коментар',
 'comment_changed_email' => 'Коментарите са изменени',
 'comment_for_current_version' => 'Коментар за версията',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Да, пресъздай пълнотекстов индекс!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -511,7 +512,7 @@ $text = array(
 'local_file' => 'Локален файл',
 'locked_by' => 'Блокиран',
 'lock_document' => 'Блокирай',
-'lock_message' => 'Документът е блокиран <a href="mailto:[email]">[username]</a>. Само имащите права могат да го разблокират.',
+'lock_message' => 'Документът е блокиран [username]. Само имащите права могат да го разблокират.',
 'lock_status' => 'Статус',
 'login' => 'Име',
 'login_disabled_text' => 'Вашия акаунт е забранен, вероятно заради прекалено много погрешни опити за влизане.',

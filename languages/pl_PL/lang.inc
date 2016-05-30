@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (733), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (734), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -229,6 +229,7 @@ URL: [url]',
 'comment' => 'Opis',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Komentarz do wersji',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Tak, chcę ponownie utworzyć indeks pełnotekstowy!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -580,7 +581,7 @@ URL: [url]',
 'local_file' => 'Lokalny plik',
 'locked_by' => 'Zablokowane przez',
 'lock_document' => 'Zablokuj',
-'lock_message' => 'Ten dokument jest zablokowany przez <a href="mailto:[email]">[username]</a>. Tylko uprawnieni użytkownicy mogą odblokować dokument.',
+'lock_message' => 'Ten dokument jest zablokowany przez [username]. Tylko uprawnieni użytkownicy mogą odblokować dokument.',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Twoje konto jest zablokowane. Prawdopodobnie z powodu zbyt wielu nieudanych prób logowania.',
