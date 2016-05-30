@@ -713,13 +713,15 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr ><td><b> <?php printMLText("preview_converters");?></b></td> </tr>
 <?php
-	foreach($settings->_converters['preview'] as $mimetype=>$cmd) {
+	if(isset($settings->_converters['preview'])) {
+		foreach($settings->_converters['preview'] as $mimetype=>$cmd) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
 				<td><?php $this->showTextField("converters[preview][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
       </tr>
 <?php
+		}
 	}
 ?>
       <tr title="">
