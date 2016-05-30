@@ -82,17 +82,25 @@ else
 foreach($attributes as $attrdefid=>$attribute) {
 	$attrdef = $dms->getAttributeDefinition($attrdefid);
 	if($attribute) {
-		if($attrdef->getRegex()) {
-			if(!preg_match($attrdef->getRegex(), $attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
-			}
-		}
-		if(is_array($attribute)) {
-			if($attrdef->getMinValues() > count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-			}
-			if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
+		if(!$attrdef->validate($attribute)) {
+			switch($attrdef->getValidationError()) {
+			case 5:
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_malformed_email", array("attrname"=>$attrdef->getName(), "value"=>$attribute)));
+				break;
+			case 4:
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_malformed_url", array("attrname"=>$attrdef->getName(), "value"=>$attribute)));
+				break;
+			case 3:
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match", array("attrname"=>$attrdef->getName(), "value"=>$attribute, "regex"=>$attrdef->getRegex())));
+				break;
+			case 2:
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
+				break;
+			case 1:
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
+				break;
+			default:
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 			}
 		}
 	} elseif($attrdef->getMinValues() > 0) {
