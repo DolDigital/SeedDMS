@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (906), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (907), flaviove (627), lfcristofoli (352)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -236,6 +236,7 @@ URL: [url]',
 'comment' => 'Comentário',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Comentário para versão atual',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Sim, eu gostaria de recriar o índice de texto completo!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -586,7 +587,7 @@ URL: [url]',
 'local_file' => 'Arquivo local',
 'locked_by' => 'Bloqueado por',
 'lock_document' => 'Travar',
-'lock_message' => 'Este documento foi travado por <a href="mailto:[email]">[username]</a>.<br>Somente usuários autorizados podem remover a trava deste documento (veja no final da página).',
+'lock_message' => 'Este documento foi travado por [username]. Somente usuários autorizados podem remover a trava deste documento (veja no final da página).',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Sua conta está desativada, provavelmente por causa de muitos logins falhos.',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1036), aydin (83)
+//    Translators: Admin (1037), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -235,6 +235,7 @@ URL: [url]',
 'comment' => 'Açıklama',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Versiyon açıklaması',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Evet, tam metin indeksini yeniden oluşturmak istiyorum!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -586,7 +587,7 @@ URL: [url]',
 'local_file' => 'Yerel dosya',
 'locked_by' => 'Kilitleyen',
 'lock_document' => 'Kilitle',
-'lock_message' => 'Bu doküman <a href="mailto:[email]">[username]</a> tarafından kilitlenmiştir. Sadece yetkilendirilmiş kişiler bu dokümanı açabilirler.',
+'lock_message' => 'Bu doküman [username] tarafından kilitlenmiştir. Sadece yetkilendirilmiş kişiler bu dokümanı açabilirler.',
 'lock_status' => 'Durum',
 'login' => 'Giriş',
 'login_disabled_text' => 'Hesabınız devre dışı. Muhtemelen çok fazla hatalı giriş denemesi yapıldı.',

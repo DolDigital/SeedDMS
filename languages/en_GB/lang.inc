@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1383), dgrutsch (7), netixw (14)
+//    Translators: Admin (1387), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -163,8 +163,8 @@ URL: [url]',
 'attribute_value' => 'Value of attribute',
 'attr_malformed_email' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid URL.',
 'attr_malformed_url' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid URL.',
-'attr_max_values' => 'The maximum number of required values for attributes [attrname] is exceeded.',
-'attr_min_values' => 'The minimum number of required values for attributes [attrname] is not reached.',
+'attr_max_values' => 'The maximum number of required values for attribute [attrname] is exceeded.',
+'attr_min_values' => 'The minimum number of required values for attribute [attrname] is not reached.',
 'attr_no_regex_match' => 'The attribute value \'[value]\' for attribute \'[attrname]\' does not match the regular expression \'[regex]\'',
 'at_least_n_users_of_group' => 'At least [number_of_users] users of [group]',
 'august' => 'August',
@@ -241,6 +241,7 @@ URL: [url]',
 'comment' => 'Comment',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Version comment',
+'confirm_clear_cache' => 'Would you really like to clear the cache? This will remove all precalculated preview images.',
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
 'confirm_move_document' => 'Please confirm moving the document.',
 'confirm_move_folder' => 'Please confirm moving the folder.',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => 'Local file',
 'locked_by' => 'Locked by',
 'lock_document' => 'Lock',
-'lock_message' => 'This document is locked by <a href="mailto:[email]">[username]</a>. Only authorized users can unlock this document.',
+'lock_message' => 'This document is locked by [username]. Only authorized users can unlock this document.',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Your account is disabled, probably because of too many failed logins.',

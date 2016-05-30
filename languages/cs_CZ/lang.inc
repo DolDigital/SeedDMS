@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (706), kreml (455)
+//    Translators: Admin (707), kreml (455)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -236,6 +236,7 @@ URL: [url]',
 'comment' => 'Komentář',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Komentář k aktuální verzi',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Ano, chci znovu vytvořit fulltext indes!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -587,7 +588,7 @@ URL: [url]',
 'local_file' => 'Lokální soubor',
 'locked_by' => 'Zamčeno kým',
 'lock_document' => 'Zamknout',
-'lock_message' => 'Tento dokument zamknul <a href="mailto:[email]">[username]</a>.<br>Pouze oprávnění uživatelé ho mohou odemknout (viz konec stránky).',
+'lock_message' => 'Tento dokument zamknul [username]. Pouze oprávnění uživatelé ho mohou odemknout (viz konec stránky).',
 'lock_status' => 'Stav',
 'login' => 'Login',
 'login_disabled_text' => 'Váš účet je zakázán, pravděpodobně z důvodu příliš mnoha neúspěšných přihlášení.',

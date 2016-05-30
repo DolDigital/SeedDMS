@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2236), dgrutsch (21)
+//    Translators: Admin (2238), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -241,6 +241,7 @@ URL: [url]',
 'comment' => 'Kommentar',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Kommentar zur aktuellen Version',
+'confirm_clear_cache' => 'Wollen Sie wirklich den Cache löschen? Dies entfernt alle vorberechneten Vorschaubilder.',
 'confirm_create_fulltext_index' => 'Ja, Ich möchte den Volltextindex neu erzeugen!.',
 'confirm_move_document' => 'Dokument wirklich verschieben?',
 'confirm_move_folder' => 'Ordner wirklich verschieben?',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => 'Lokale Datei',
 'locked_by' => 'Gesperrt von',
 'lock_document' => 'Sperren',
-'lock_message' => 'Dieses Dokument ist durch <a href="mailto:[email]">[username]</a> gesperrt. Nur authorisierte Benutzer können diese Sperrung aufheben.',
+'lock_message' => 'Dieses Dokument ist durch [username] gesperrt. Nur authorisierte Benutzer können diese Sperrung aufheben.',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Ihr Konto ist gesperrt. Der Grund sind möglicherweise zu viele gescheiterte Anmeldeversuche.',

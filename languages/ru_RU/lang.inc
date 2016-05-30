@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1541)
+//    Translators: Admin (1542)
 
 $text = array(
 'accept' => 'Принять',
@@ -241,6 +241,7 @@ URL: [url]',
 'comment' => 'Комментарий',
 'comment_changed_email' => 'Сообщение об изменении комментария',
 'comment_for_current_version' => 'Комментарий версии',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Да, пересоздать полнотекстовый индекс!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => 'Локальный файл',
 'locked_by' => 'Заблокирован',
 'lock_document' => 'Заблокировать',
-'lock_message' => 'Документ заблокировал(а) <a href="mailto:[email]">[username]</a>. Только имеющие права могут его разблокировать.',
+'lock_message' => 'Документ заблокировал(а) [username]. Только имеющие права могут его разблокировать.',
 'lock_status' => 'Статус',
 'login' => 'Логин',
 'login_disabled_text' => 'Ваша учётная запись заблокирована, возможно, из-за нескольких неудачных попыток входа.',

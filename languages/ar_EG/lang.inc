@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1266)
+//    Translators: Admin (1267)
 
 $text = array(
 'accept' => 'وافق',
@@ -229,6 +229,7 @@ URL: [url]',
 'comment' => 'تعليق',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'تعليق على الاصدار',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'نعم: اود اعادة انشاء فهرس للنص الكامل !',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -580,7 +581,7 @@ URL: [url]',
 'local_file' => 'ملف محلي',
 'locked_by' => 'محمي بواسطة',
 'lock_document' => 'حماية',
-'lock_message' => 'هذا الملف محمي بواسطة <a href="mailto:[email]">[username]</a>. فقط المستخدمين المصرح لهم يمكنهم تعديله.',
+'lock_message' => 'هذا الملف محمي بواسطة [username]. فقط المستخدمين المصرح لهم يمكنهم تعديله.',
 'lock_status' => 'حالة',
 'login' => 'دخول',
 'login_disabled_text' => 'حسابك معطل, غالبا بسبب المحاولات العديدة الخاطئة للدخول',

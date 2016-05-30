@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1029), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1030), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -236,6 +236,7 @@ URL: [url]',
 'comment' => 'Commentaire',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Commentaires pour la version actuelle',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Oui, je souhaite recréer l\'index de texte intégral!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -587,7 +588,7 @@ URL: [url]',
 'local_file' => 'Fichier local',
 'locked_by' => 'Verrouillé par',
 'lock_document' => 'Verrouiller',
-'lock_message' => 'Ce document a été verrouillé par <a href="mailto:[email]">[username]</a>.<br> Seuls les utilisateurs autorisés peuvent déverrouiller ce document (voir fin de page).',
+'lock_message' => 'Ce document a été verrouillé par [username]. Seuls les utilisateurs autorisés peuvent déverrouiller ce document (voir fin de page).',
 'lock_status' => 'Statut',
 'login' => 'Identifiant',
 'login_disabled_text' => 'Votre compte est désactivé, sans doute à cause de trop nombreuses connexions qui ont échoué.',

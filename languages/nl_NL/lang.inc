@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (715), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (716), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -234,6 +234,7 @@ URL: [url]',
 'comment' => 'Commentaar',
 'comment_changed_email' => 'Gewijzigde email',
 'comment_for_current_version' => 'Versie van het commentaar',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Ja, Ik wil de volledigetekst index opnieuw maken!',
 'confirm_move_document' => 'Bevestig verplaatsing van document',
 'confirm_move_folder' => 'Bevestig de verplaatsing van de map',
@@ -585,7 +586,7 @@ URL: [url]',
 'local_file' => 'Lokaal bestand',
 'locked_by' => 'In gebruik door',
 'lock_document' => 'Blokkeer',
-'lock_message' => 'Dit document is geblokkeerd door <a href="mailto:[email]">[username]</a>. Alleen geautoriseerde Gebruikers kunnen het de-blokeren.',
+'lock_message' => 'Dit document is geblokkeerd door [username]. Alleen geautoriseerde Gebruikers kunnen het de-blokeren.',
 'lock_status' => 'Status',
 'login' => 'Login',
 'login_disabled_text' => 'Uw account is gedeactiveerd, mogelijk door teveel foutieve inlogpogingen.',

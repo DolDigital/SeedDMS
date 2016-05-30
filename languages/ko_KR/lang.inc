@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (938), daivoc (418)
+//    Translators: Admin (939), daivoc (418)
 
 $text = array(
 'accept' => '동의',
@@ -243,6 +243,7 @@ URL: [url]',
 'comment' => '코멘트',
 'comment_changed_email' => '변경된 이메일 코멘트',
 'comment_for_current_version' => '코맨트',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '예, 전체 텍스트 인덱스를 다시 만들고 싶습니다!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -592,7 +593,7 @@ URL: [url]',
 'local_file' => '로컬 파일',
 'locked_by' => '잠금',
 'lock_document' => '잠금',
-'lock_message' => '이 문서는 <a href="mailto:[email]">[username]</a>.에 의해 잠겨 있습니다. 허가 된 사용자 만이 문서를 잠금을 해제 할 수 있습니다.',
+'lock_message' => '이 문서는 [username].에 의해 잠겨 있습니다. 허가 된 사용자 만이 문서를 잠금을 해제 할 수 있습니다.',
 'lock_status' => '상태',
 'login' => '로그인',
 'login_disabled_text' => '귀정 이상 로그인 실패로 당신의 계정을사용할 수 없습니다.',
