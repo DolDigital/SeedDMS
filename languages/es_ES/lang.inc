@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (991), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (992), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -236,6 +236,7 @@ URL: [url]',
 'comment' => 'Comentarios',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Comentario de la versión actual',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => '¡Sí, quiero regenerar el índice te texto completo¡',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -587,7 +588,7 @@ URL: [url]',
 'local_file' => 'Fichero local',
 'locked_by' => 'Bloqueado por',
 'lock_document' => 'Bloquear',
-'lock_message' => 'Este documento ha sido bloqueado por <a href="mailto:[email]">[username]</a>.<br />Sólo usuarios autorizados pueden desbloquear este documento (vea el final de la página).',
+'lock_message' => 'Este documento ha sido bloqueado por [username]. Sólo usuarios autorizados pueden desbloquear este documento (vea el final de la página).',
 'lock_status' => 'Estado',
 'login' => 'Iniciar sesión',
 'login_disabled_text' => 'Su cuenta está deshabilitada, probablemente es debido a demasiados intentos de acceso fallidos.',

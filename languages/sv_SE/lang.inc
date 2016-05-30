@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1127), tmichelfelder (106)
+//    Translators: Admin (1128), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -229,6 +229,7 @@ URL: [url]',
 'comment' => 'Kommentar',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Kommentar till versionen',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Ja, jag vill återskapa fulltext-sökindex !',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -580,7 +581,7 @@ URL: [url]',
 'local_file' => 'Lokal fil',
 'locked_by' => 'Låst av',
 'lock_document' => 'Lås',
-'lock_message' => 'Detta dokument har låsts av <a href="mailto:[email]">[username]</a>. Bara auktoriserade användare kan låsa upp dokumentet.',
+'lock_message' => 'Detta dokument har låsts av [username]. Bara auktoriserade användare kan låsa upp dokumentet.',
 'lock_status' => 'Status',
 'login' => 'Inloggning',
 'login_disabled_text' => 'Ditt konto är inaktivt, förmodligen för att du har överskridit tillåtna antal inloggningsförsök.',

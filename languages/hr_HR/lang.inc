@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1185), marbanas (16)
+//    Translators: Admin (1186), marbanas (16)
 
 $text = array(
 'accept' => 'Prihvati',
@@ -241,6 +241,7 @@ Internet poveznica: [url]',
 'comment' => 'Komentar',
 'comment_changed_email' => 'Promjena komentara',
 'comment_for_current_version' => 'Verzija komentara',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Da, želim ponovo indeksirati cijeli tekst!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -592,7 +593,7 @@ Internet poveznica: [url]',
 'local_file' => 'Lokalna datoteka',
 'locked_by' => 'Zaključao',
 'lock_document' => 'Zaključaj',
-'lock_message' => 'Ovaj dokument je zaključao <a href="mailto:[email]">[username]</a>. Samo ovlašteni korisnici mogu otključati ovaj dokument.',
+'lock_message' => 'Ovaj dokument je zaključao [username]. Samo ovlašteni korisnici mogu otključati ovaj dokument.',
 'lock_status' => 'Status',
 'login' => 'Prijava',
 'login_disabled_text' => 'Vaš korisnički račun je onemogućen, vjerojatno zbog previše neispravnih prijava.',
