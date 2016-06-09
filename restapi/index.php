@@ -461,6 +461,7 @@ function getDocument($id) { /* {{{ */
 				'date'=>$document->getDate(),
 				'mimetype'=>$lc->getMimeType(),
 				'version'=>$lc->getVersion(),
+				'orig_filename'=>$lc->getOriginalFileName(),
 				'size'=>$lc->getFileSize(),
 				'keywords'=>htmlspecialchars($document->getKeywords()),
 			);
