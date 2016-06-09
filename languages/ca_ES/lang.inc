@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (699)
+//    Translators: Admin (702)
 
 $text = array(
 'accept' => 'Acceptar',
@@ -1195,7 +1195,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Versió [version]:[status]',
 'to' => 'Fins',
 'toggle_manager' => 'Intercanviar manager',
 'to_before_from' => '',
@@ -1214,7 +1214,7 @@ URL: [url]',
 'tuesday' => 'Dimarts',
 'tuesday_abbr' => '',
 'type_of_hook' => '',
-'type_to_search' => '',
+'type_to_search' => 'Cerca',
 'uk_UA' => 'Ucraïnès',
 'under_folder' => 'A carpeta',
 'unknown_attrdef' => '',
@@ -1246,7 +1246,7 @@ URL: [url]',
 'uploading_failed' => 'Enviament (Upload) fallat. Si us plau, contacteu amb l\'administrador.',
 'uploading_maxsize' => '',
 'uploading_zerosize' => '',
-'used_discspace' => '',
+'used_discspace' => 'Espai utilitzat',
 'user' => 'Usuari',
 'users' => 'Usuaris',
 'users_and_groups' => '',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1037), aydin (83)
+//    Translators: Admin (1038), aydin (83)
 
 $text = array(
 'accept' => 'Kabul',
@@ -227,7 +227,7 @@ URL: [url]',
 'choose_workflow_action' => 'İş akış eylemi seçiniz',
 'choose_workflow_state' => 'İş akış durumunu seçiniz',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Ön belleği temizle',
 'clear_clipboard' => 'Panoyu temizle',
 'clear_password' => '',
 'clipboard' => 'Pano',
