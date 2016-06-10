@@ -1398,7 +1398,7 @@ $app->get('/account/locked', 'getLockedDocuments');
 $app->post('/accounts', 'createAccount');
 $app->get('/accounts/:id', 'getAccountById');
 $app->put('/accounts/:id/disable', 'setDisabledAccount');
-$app->get('/accounts/:id/password', 'changeAccountPassword');
+$app->put('/accounts/:id/password', 'changeAccountPassword');
 $app->post('/groups', 'createGroup');
 $app->get('/groups/:id', 'getGroup');
 $app->put('/groups/:id/addUser', 'addUserToGroup');
