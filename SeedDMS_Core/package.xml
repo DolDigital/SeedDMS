@@ -24,6 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+- all changes from 4.3.27 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

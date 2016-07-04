@@ -24,8 +24,9 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 add more documentation
-finished deletePreview()
+finish deletePreview()
 add new method deleteDocumentPreviews()
+fix calculation of timeout (Bug #269)
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

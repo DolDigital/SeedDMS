@@ -72,16 +72,17 @@ class SeedDMS_Preview_Previewer {
 		}
 			 
 		$output = '';
+		$timeleft = $timeout - time();
+		$read = array($pipes[1]);
+		$write = NULL;
+		$exeptions = NULL;
 		do {
-			$timeleft = $timeout - time();
-			$read = array($pipes[1]);
-			$write = NULL;
-			$exeptions = NULL;
 			stream_select($read, $write, $exeptions, $timeleft, 200000);
 					 
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
 													}
+			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
  
 		if ($timeleft <= 0) {

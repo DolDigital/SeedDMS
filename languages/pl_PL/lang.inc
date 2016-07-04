@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (734), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (735), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -221,7 +221,7 @@ URL: [url]',
 'choose_workflow_action' => 'Wybierz działanie procesu',
 'choose_workflow_state' => 'Wybierz stan obiegu',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Wyczyść cache',
 'clear_clipboard' => 'Oczyść schowek',
 'clear_password' => '',
 'clipboard' => 'Schowek',

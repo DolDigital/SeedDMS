@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1030), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1032), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -228,7 +228,7 @@ URL: [url]',
 'choose_workflow_action' => 'Choose une action de workflow',
 'choose_workflow_state' => 'Choisir un état de workflow',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Effacer le cache',
 'clear_clipboard' => 'Vider le presse-papier',
 'clear_password' => '',
 'clipboard' => 'Presse-papier',
@@ -236,7 +236,7 @@ URL: [url]',
 'comment' => 'Commentaire',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Commentaires pour la version actuelle',
-'confirm_clear_cache' => '',
+'confirm_clear_cache' => 'Confirmer l\'effacement du cache',
 'confirm_create_fulltext_index' => 'Oui, je souhaite recréer l\'index de texte intégral!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',

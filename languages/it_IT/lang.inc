@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1526), s.pnt (26)
+//    Translators: Admin (1527), s.pnt (26)
 
 $text = array(
 'accept' => 'Accetta',
@@ -234,7 +234,7 @@ URL: [url]',
 'choose_workflow_action' => 'Seleziona l\'azione del flusso di lavoro',
 'choose_workflow_state' => 'Seleziona lo stato del flusso di lavoro',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Pulisci cache',
 'clear_clipboard' => 'Cancella appunti',
 'clear_password' => '',
 'clipboard' => 'Appunti',
