@@ -38,7 +38,7 @@ class SeedDMS_Lucene_Indexer {
 		}
 	} /* }}} */
 
-	function create($luceneDir) { /* {{{ */
+	static function create($luceneDir) { /* {{{ */
 		$index = Zend_Search_Lucene::create($luceneDir);
 		return($index);
 	} /* }}} */
@@ -47,7 +47,7 @@ class SeedDMS_Lucene_Indexer {
 	 * Do some initialization
 	 *
 	 */
-	function init($stopWordsFile='') { /* {{{ */
+	static function init($stopWordsFile='') { /* {{{ */
 		$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive();
 		if($stopWordsFile && file_exists($stopWordsFile)) {
 			$stopWordsFilter = new Zend_Search_Lucene_Analysis_TokenFilter_StopWords();
