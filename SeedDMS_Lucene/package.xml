@@ -24,6 +24,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 pass variables to stream_select() to fullfill strict standards.
+make all functions in Indexer.php static
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
