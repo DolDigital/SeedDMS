@@ -383,7 +383,11 @@ class SeedDMS_Preview_Previewer {
 			return false;
 
 		$dir = $this->previewDir.'/'.$document->getDir();
-		return SeedDMS_Preview_Previewer::recurseRmdir($dir);
+		if(file_exists($dir) && is_dir($dir)) {
+			return SeedDMS_Preview_Previewer::recurseRmdir($dir);
+		} else {
+			return false;
+		}
 
 	} /* }}} */
 }
