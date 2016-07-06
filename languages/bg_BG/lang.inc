@@ -457,6 +457,7 @@ $text = array(
 'invalid_create_date_end' => 'Неправилна крайна дата за диапазаона на датата на създаване',
 'invalid_create_date_start' => 'Неправилна начална дата за диапазаона на датата на създаване',
 'invalid_doc_id' => 'Неправилен идентификатор на документа',
+'invalid_dropfolder_folder' => '',
 'invalid_expiration_date_end' => '',
 'invalid_expiration_date_start' => '',
 'invalid_file_id' => 'Неправилен идентификатор на файла',

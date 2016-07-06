@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2239), dgrutsch (21)
+//    Translators: Admin (2240), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -538,6 +538,7 @@ URL: [url]',
 'invalid_create_date_end' => 'Unzulässiges Erstellungsenddatum.',
 'invalid_create_date_start' => 'Unzulässiges Erstellungsstartdatum.',
 'invalid_doc_id' => 'Unzulässige Dokumentenidentifikation',
+'invalid_dropfolder_folder' => 'Ungültiger Ordner im Ablageordner',
 'invalid_expiration_date_end' => 'Unzulässiges Ablaufenddatum.',
 'invalid_expiration_date_start' => 'Unzulässiges Ablaufstartdatum.',
 'invalid_file_id' => 'Ungültige Datei-ID',
