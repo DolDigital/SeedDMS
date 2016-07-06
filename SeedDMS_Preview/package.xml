@@ -27,6 +27,7 @@ add more documentation
 finish deletePreview()
 add new method deleteDocumentPreviews()
 fix calculation of timeout (Bug #269)
+check if cache dir exists before deleting it in deleteDocumentPreviews()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
