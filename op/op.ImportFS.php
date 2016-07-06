@@ -25,7 +25,7 @@ if (empty($_GET["dropfolderfileform1"])) {
 }
 $dirname = $settings->_dropFolderDir.'/'.$user->getLogin()."/".$_GET["dropfolderfileform1"];
 if(!is_dir($dirname)) {
-	UI::exitError(getMLText("admin_tools"),getMLText("invalid_target_folder"));
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_dropfolder_folder"));
 }
 
 function import_folder($dirname, $folder) { /* {{{ */
