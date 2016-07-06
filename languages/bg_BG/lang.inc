@@ -438,6 +438,7 @@ $text = array(
 'import' => '',
 'importfs' => '',
 'import_fs' => '',
+'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Включи документи',
 'include_subdirectories' => 'Включи под-папки',

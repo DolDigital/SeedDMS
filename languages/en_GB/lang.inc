@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1389), dgrutsch (7), netixw (14)
+//    Translators: Admin (1391), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -519,6 +519,7 @@ URL: [url]',
 'import' => 'Import',
 'importfs' => 'Import from Filesystem',
 'import_fs' => 'Import from filesystem',
+'import_fs_warning' => 'This will only work for folders in the drop folder. The operation recursively imports all folders and files. Files will be released immediately.',
 'include_content' => 'Include content',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
