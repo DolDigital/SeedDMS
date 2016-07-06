@@ -22,6 +22,7 @@
 //    Translators: Admin (1527), s.pnt (26)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Accetta',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1037,6 +1038,8 @@ URL: [url]',
 'settings_Edition' => 'Impostazioni di edizione',
 'settings_editOnlineFileTypes' => 'Tipi di files modificabili Online',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Abilitare per notifiche',
 'settings_enableAcknowledgeWorkflow_desc' => 'Abilitare per attivare sul workflow le ricevute di notifica.',
 'settings_enableAdminRevApp' => 'Permetti la revisione/approvazione da parte degli amministratori',
@@ -1369,6 +1372,7 @@ URL: [url]',
 'timeline_status_change' => 'Versione - Stato',
 'to' => 'A',
 'toggle_manager' => 'Gestore',
+'toggle_qrcode' => '',
 'to_before_from' => 'La data di fine non può essere antecedente a quella di inizio',
 'transition_triggered_email' => 'Inizio transizione del flusso di lavoro',
 'transition_triggered_email_body' => 'Transizione del flusso di lavoro iniziata

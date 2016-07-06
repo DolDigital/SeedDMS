@@ -22,6 +22,7 @@
 //    Translators: Admin (1543)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Принять',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1043,6 +1044,8 @@ URL: [url]',
 'settings_Edition' => 'Настройки версий',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Включить подтверждение получения документа',
 'settings_enableAcknowledgeWorkflow_desc' => 'Включить для активации функции подтверждения получения документа',
 'settings_enableAdminRevApp' => 'Администратор как<br/>рецензирующий и утверждающий',
@@ -1375,6 +1378,7 @@ URL: [url]',
 'timeline_status_change' => 'Версия [version]: [status]',
 'to' => 'До',
 'toggle_manager' => 'Изменить как менеджера',
+'toggle_qrcode' => '',
 'to_before_from' => 'Конечная дата не может быть меньше начальной даты',
 'transition_triggered_email' => 'Изменено состояние процесса',
 'transition_triggered_email_body' => 'Изменено состояние процесса

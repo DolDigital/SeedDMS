@@ -22,6 +22,7 @@
 //    Translators: acabello (20), Admin (993), angel (123), francisco (2), jaimem (14)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Aceptar',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1014,6 +1015,8 @@ URL: [url]',
 'settings_Edition' => 'Configuración de edición',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Habilitar Administrador Rev Apr',
@@ -1346,6 +1349,7 @@ URL: [url]',
 'timeline_status_change' => 'Versión [version]: [estado]',
 'to' => 'Hasta',
 'toggle_manager' => 'Intercambiar mánager',
+'toggle_qrcode' => '',
 'to_before_from' => 'La fecha de finalización no debe ser anterior a la de inicio',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered

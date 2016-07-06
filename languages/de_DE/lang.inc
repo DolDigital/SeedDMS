@@ -19,9 +19,10 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2241), dgrutsch (21)
+//    Translators: Admin (2243), dgrutsch (21)
 
 $text = array(
+'2_factor_auth' => '2-Faktor Authentifizierung',
 'accept' => 'Übernehmen',
 'access_control' => 'Zugriffskontrolle',
 'access_control_is_off' => 'Erweiterte Zugriffskontrolle ist ausgeschaltet',
@@ -1045,6 +1046,8 @@ URL: [url]',
 'settings_Edition' => 'Funktions-Einstellungen',
 'settings_editOnlineFileTypes' => 'Dateitypen für Online-Editieren:',
 'settings_editOnlineFileTypes_desc' => 'Dateien mit den angegebenen Endungen können Online editiert werden (benutzen Sie ausschließlich Kleinbuchstaben).',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Ermögliche Bestätigung des Dokumentenempfang',
 'settings_enableAcknowledgeWorkflow_desc' => 'Anwählen, um den Workflow zur Kenntnisnahme von Dokumenten einzuschalten',
 'settings_enableAdminRevApp' => 'Admin darf freigeben/prüfen',
@@ -1377,6 +1380,7 @@ URL: [url]',
 'timeline_status_change' => 'Version [version]: [status]',
 'to' => 'bis',
 'toggle_manager' => 'Managerstatus wechseln',
+'toggle_qrcode' => 'Zeige/verberge QR-Code',
 'to_before_from' => 'Endedatum darf nicht vor dem Startdatum liegen',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered

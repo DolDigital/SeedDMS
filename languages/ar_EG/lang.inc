@@ -22,6 +22,7 @@
 //    Translators: Admin (1267)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'وافق',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -999,6 +1000,8 @@ URL: [url]',
 'settings_Edition' => 'اعدادات التحرير',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => '',
@@ -1331,6 +1334,7 @@ URL: [url]',
 'timeline_status_change' => 'ﺖﻐﻳﺭ ﺎﻠﺣﺎﻟﺓ ﻢﻋ ﺎﻟﺰﻤﻧ',
 'to' => 'الى',
 'toggle_manager' => 'رجح مدير',
+'toggle_qrcode' => '',
 'to_before_from' => '',
 'transition_triggered_email' => 'تم تحريك انتقال مسار العمل',
 'transition_triggered_email_body' => 'تم تحريك انتقال مسار العمل

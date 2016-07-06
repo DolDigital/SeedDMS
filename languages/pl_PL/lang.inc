@@ -22,6 +22,7 @@
 //    Translators: Admin (737), netixw (84), romi (93), uGn (112)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Akceptuj',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -993,6 +994,8 @@ URL: [url]',
 'settings_Edition' => 'Ustawienia edycji',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Dołącz Administratora do recenzji/rewizji',
@@ -1325,6 +1328,7 @@ URL: [url]',
 'timeline_status_change' => 'Wersja [wersja]: [status]',
 'to' => 'Do',
 'toggle_manager' => 'Przełączanie zarządcy',
+'toggle_qrcode' => '',
 'to_before_from' => '',
 'transition_triggered_email' => 'Uruchomiono proces przepływu',
 'transition_triggered_email_body' => 'Uruchomiono proces przepływu 
