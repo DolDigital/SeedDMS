@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (784)
+//    Translators: Admin (785)
 
 $text = array(
 'accept' => 'Приеми',
@@ -206,6 +206,7 @@ $text = array(
 'choose_workflow_action' => 'Изберете workflow действие',
 'choose_workflow_state' => 'Изберете състояние на workflow',
 'class_name' => '',
+'clear_cache' => '',
 'clear_clipboard' => '',
 'clear_password' => '',
 'clipboard' => '',
@@ -213,6 +214,7 @@ $text = array(
 'comment' => 'Коментар',
 'comment_changed_email' => 'Коментарите са изменени',
 'comment_for_current_version' => 'Коментар за версията',
+'confirm_clear_cache' => '',
 'confirm_create_fulltext_index' => 'Да, пресъздай пълнотекстов индекс!',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
@@ -315,7 +317,9 @@ $text = array(
 'draft_pending_approval' => 'Чернова - очаква утвърждаване',
 'draft_pending_review' => 'Чернова - очаква рецензия',
 'drag_icon_here' => 'Провлачи икона или папка, или документ ТУК!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Файл от drop папка',
+'dropfolder_folder' => '',
 'dropupload' => '',
 'drop_files_here' => '',
 'dump_creation' => 'Създаване дъмп на БД',
@@ -354,6 +358,7 @@ $text = array(
 'error' => 'Грешка',
 'error_add_aro' => '',
 'error_add_permission' => '',
+'error_importfs' => '',
 'error_no_document_selected' => 'Няма избрани документи',
 'error_no_folder_selected' => 'Няма избрани папки',
 'error_occured' => 'Стана грешка',
@@ -432,6 +437,8 @@ $text = array(
 'identical_version' => 'Новата версия е идентична с текущата.',
 'import' => '',
 'importfs' => '',
+'import_fs' => '',
+'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Включи документи',
 'include_subdirectories' => 'Включи под-папки',
@@ -451,6 +458,7 @@ $text = array(
 'invalid_create_date_end' => 'Неправилна крайна дата за диапазаона на датата на създаване',
 'invalid_create_date_start' => 'Неправилна начална дата за диапазаона на датата на създаване',
 'invalid_doc_id' => 'Неправилен идентификатор на документа',
+'invalid_dropfolder_folder' => '',
 'invalid_expiration_date_end' => '',
 'invalid_expiration_date_start' => '',
 'invalid_file_id' => 'Неправилен идентификатор на файла',
@@ -507,7 +515,7 @@ $text = array(
 'local_file' => 'Локален файл',
 'locked_by' => 'Блокиран',
 'lock_document' => 'Блокирай',
-'lock_message' => 'Документът е блокиран <a href="mailto:[email]">[username]</a>. Само имащите права могат да го разблокират.',
+'lock_message' => 'Документът е блокиран [username]. Само имащите права могат да го разблокират.',
 'lock_status' => 'Статус',
 'login' => 'Име',
 'login_disabled_text' => 'Вашия акаунт е забранен, вероятно заради прекалено много погрешни опити за влизане.',
@@ -1005,6 +1013,8 @@ $text = array(
 'settings_printDisclaimer_desc' => 'Ако е включено, то дисклаймер из lang.inc ще се показва под всяка страница',
 'settings_quota' => 'Квота за потребител',
 'settings_quota_desc' => 'Максималният брой байтове, които всеки потребител може да заема на диска. 0 за неограничено използване на диска. Тази стойност може да бъде презаписана за всяко използване на профила.',
+'settings_removeFromDropFolder' => '',
+'settings_removeFromDropFolder_desc' => '',
 'settings_restricted' => 'Ограничен достъп',
 'settings_restricted_desc' => 'Разреши вход за потребители, само ако имат съотв. запис в БД (независимо от успешния вход чрез LDAP)',
 'settings_rootDir' => 'Корнева папка',
@@ -1100,6 +1110,7 @@ $text = array(
 'splash_edit_user' => '',
 'splash_error_add_to_transmittal' => '',
 'splash_folder_edited' => '',
+'splash_importfs' => '',
 'splash_invalid_folder_id' => '',
 'splash_invalid_searchterm' => '',
 'splash_moved_clipboard' => '',

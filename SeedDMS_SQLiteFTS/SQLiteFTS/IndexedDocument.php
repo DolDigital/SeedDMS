@@ -44,14 +44,17 @@ class SeedDMS_SQLiteFTS_IndexedDocument extends SeedDMS_SQLiteFTS_Document {
 		}
 			 
 		$output = '';
+		$timeleft = $timeout - time();
+		$read = array($pipes[1]);
+		$write = NULL;
+		$exeptions = NULL;
 		do {
-			$timeleft = $timeout - time();
-			$read = array($pipes[1]);
-			stream_select($read, $write = NULL, $exeptions = NULL, $timeleft, 200000);
+			stream_select($read, $write, $exeptions, $timeleft, 200000);
 					 
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
 													}
+			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
  
 		if ($timeleft <= 0) {

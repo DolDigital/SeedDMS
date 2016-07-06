@@ -49,28 +49,35 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
 		$this->contentHeading(getMLText("import_fs"));
-		$this->contentContainerStart();
 
-		print "<form class=\"form-horizontal\" action=\"../op/op.ImportFS.php\" name=\"form1\">";
-		print "<div class=\"control-group\"><label class=\"control-label\"></label><div class=\"controls\">";
-		$this->printFolderChooserHtml("form1",M_READWRITE);
-		print "</div></div>";
-		if($dropfolderdir) {
+		if($dropfolderdir && file_exists($dropfolderdir.'/'.$user->getLogin())) {
+			echo "<div class=\"alert alert-warning\">";
+			printMLText("import_fs_warning");
+			echo "</div>\n";
+			$this->contentContainerStart();
+			print "<form class=\"form-horizontal\" action=\"../op/op.ImportFS.php\" name=\"form1\">";
+			print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('choose_target_folder')."</label><div class=\"controls\">";
+			$this->printFolderChooserHtml("form1",M_READWRITE);
+			print "</div></div>";
 			print "<div class=\"control-group\"><label class=\"control-label\">";
-			printMLText("dropfolder_file");
+			printMLText("dropfolder_folder");
 			echo ": ";
 			print "</label><div class=\"controls\">";
 			/* Setting drop folder dir to "" will force to take the default from settings.xml */
 			$this->printDropFolderChooserHtml("form1", "", 1);
 			print "</div></div>";
+			print "<div class=\"control-group\"><label class=\"control-label\">";
+			print "</label><div class=\"controls\">";
+			print "<input type='submit' class='btn' name='' value='".getMLText("import")."'/><br />";
+			print "</div></div>";
+			print "</form>\n";
+			$this->contentContainerEnd();
+		} else {
+			echo "<div class=\"alert alert-warning\">";
+			printMLText("dropfolderdir_missing");
+			echo "</div>\n";
 		}
-		print "<div class=\"control-group\"><label class=\"control-label\">";
-		print "</label><div class=\"controls\">";
-		print "<input type='submit' class='btn' name='' value='".getMLText("import")."'/><br />";
-		print "</div></div>";
-		print "</form>\n";
 
-		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

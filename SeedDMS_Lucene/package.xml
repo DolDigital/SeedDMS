@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-03-29</date>
+ <date>2016-04-28</date>
  <time>08:11:19</time>
  <version>
-  <release>1.1.8</release>
+  <release>1.1.9</release>
   <api>1.1.7</api>
  </version>
  <stability>
@@ -23,7 +23,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-set last parameter of stream_select() to 200000 micro sec. in case the timeout in sec. is set to 0
+pass variables to stream_select() to fullfill strict standards.
+make all functions in Indexer.php static
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -216,6 +217,22 @@ run external commands with a timeout
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 add command for indexing postѕcript files
+   </notes>
+  </release>
+  <release>
+   <date>2016-03-29</date>
+   <time>08:11:19</time>
+   <version>
+    <release>1.1.8</release>
+    <api>1.1.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+set last parameter of stream_select() to 200000 micro sec. in case the timeout in sec. is set to 0
    </notes>
   </release>
  </changelog>

@@ -595,6 +595,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_overrideMimeType");?>:</td>
         <td><input name="overrideMimeType" type="checkbox" <?php if ($settings->_overrideMimeType) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_removeFromDropFolder_desc");?>">
+        <td><?php printMLText("settings_removeFromDropFolder");?>:</td>
+        <td><input name="removeFromDropFolder" type="checkbox" <?php if ($settings->_removeFromDropFolder) echo "checked" ?> /></td>
+      </tr>
 
       <!--
         -- SETTINGS - ADVANCED - NOTIFICATION

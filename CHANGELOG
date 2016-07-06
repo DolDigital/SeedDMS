@@ -1,4 +1,11 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.4
+--------------------------------------------------------------------------------
+- merged changes from 4.3.27
+- much better dependency checking for extensions, turn off extensions which
+  do not match seeddms version dependency
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.3
 --------------------------------------------------------------------------------
 - merged changes from 4.3.26
@@ -25,6 +32,17 @@
 - add home folder for users
 
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.27
+--------------------------------------------------------------------------------
+- check for minimum number of attribute values for each attribute type
+- fix selection of imported folder in ImportFS, add it to the admin tools
+- file from drop folder can be removed after successful upload
+- remove preview images when document or document content is removed (Closes #262)
+- add clear cache operation in admin tools
+- fix strict standard error in SeedDMS_Lucene (Closes #263)
+- fix some sql statements, because they didn't work for mysql 5.7.5 anymore (Closes #273)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.26
 --------------------------------------------------------------------------------
 - move some left over javascript from html code into application.js (Closes #253)
@@ -41,7 +59,7 @@
 --------------------------------------------------------------------------------
 - much more consistent drag & drop
 - various translation updates
-- take out file deletion because it was (and probabbly never has been) useful
+- take out file deletion because it was not (and probabbly never has been) useful
 - send notification if folder is deleted by ajax call
 - add page ImportFS for mass importing files from drop folder
 - add initial version for editing text files online

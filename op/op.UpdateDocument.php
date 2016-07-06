@@ -221,6 +221,8 @@ if ($_FILES['userfile']['error'] == 0) {
 						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
 					}
 				}
+			} elseif($attrdef->getMinValues() > 0) {
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 			}
 		}
 	} else {

@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for CategoryChooser view
  *
  * @category   DMS
@@ -38,7 +43,7 @@ $('.fileselect').click(function(ev) {
 	attr_filename = $(ev.currentTarget).attr('filename');
 	fileSelected(attr_filename);
 });
-$('#folderselect').click(function(ev) {
+$('.folderselect').click(function(ev) {
 	attr_foldername = $(ev.currentTarget).attr('foldername');
 	folderSelected(attr_foldername);
 });
@@ -73,18 +78,18 @@ $('#folderselect').click(function(ev) {
 				$finfo = finfo_open(FILEINFO_MIME_TYPE);
 				while (false !== ($entry = $d->read())) {
 					if($entry != '..' && $entry != '.') {
-						if(!is_dir($dir.'/'.$entry)) {
+						if($showfolders == 0 && !is_dir($dir.'/'.$entry)) {
 							$mimetype = finfo_file($finfo, $dir.'/'.$entry);
 							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
 							echo "<tr><td style=\"min-width: ".$previewwidth."px;\">";
 							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
-								echo "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
+								echo "<img style=\"cursor: pointer;\" class=\"fileselect mimeicon\" filename=\"".$entry."\" width=\"".$previewwidth."\"src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
 							}
 							echo "</td><td><span style=\"cursor: pointer;\" class=\"fileselect\" filename=\"".$entry."\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
-						} elseif($showfolders) {
+						} elseif($showfolders && is_dir($dir.'/'.$entry)) {
 							echo "<tr>";
 							echo "<td></td>";
-							echo "<td><span style=\"cursor: pointer;\" id=\"folderselect\" foldername=\"".$entry."\" >".$entry."</span></td><td align=\"right\"></td><td></td>";
+							echo "<td><span style=\"cursor: pointer;\" class=\"folderselect\" foldername=\"".$entry."\" >".$entry."</span></td><td align=\"right\"></td><td></td>";
 							echo "</tr>\n";
 						}
 					}

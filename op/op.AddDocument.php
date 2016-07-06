@@ -84,6 +84,8 @@ foreach($attributes as $attrdefid=>$attribute) {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
 			}
 		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
 
@@ -107,9 +109,10 @@ foreach($attributes_version as $attrdefid=>$attribute) {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
 			}
 		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
-
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
@@ -434,6 +437,11 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 						$notifier->toGroup($user, $dms->getGroup($approvergrpid), $subject, $message, $params);
 					}
 				}
+			}
+		}
+		if($settings->_removeFromDropFolder) {
+			if(file_exists($userfiletmp)) {
+				unlink($userfiletmp);
 			}
 		}
 	}

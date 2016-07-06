@@ -534,8 +534,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		/* Check if 'onPostAddSubFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddSubFolder'])) {
-			$callback = $this->_dms->callbacks['onPostAddSubFolder'];
-			if(!call_user_func($callback[0], $callback[1], $newFolder)) {
+			foreach($this->_dms->callbacks['onPostAddSubFolder'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $newFolder)) {
+				}
 			}
 		}
 
@@ -852,8 +853,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		/* Check if 'onPostAddDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddDocument'])) {
-			$callback = $this->_dms->callbacks['onPostAddDocument'];
-			if(!call_user_func($callback[0], $callback[1], $document)) {
+			foreach($this->_dms->callbacks['onPostAddDocument'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $document)) {
+				}
 			}
 		}
 
@@ -874,9 +876,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		/* Check if 'onPreRemoveFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
-			$callback = $this->_dms->callbacks['onPreRemoveFolder'];
-			if(!call_user_func($callback[0], $callback[1], $this)) {
-				return false;
+			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this)) {
+					return false;
+				}
 			}
 		}
 
@@ -914,8 +917,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		/* Check if 'onPostRemoveFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
-			$callback = $this->_dms->callbacks['onPostRemoveFolder'];
-			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			foreach($this->_dms->callbacks['onPostRemoveFolder'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+				}
 			}
 		}
 

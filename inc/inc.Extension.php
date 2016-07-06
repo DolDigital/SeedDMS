@@ -13,6 +13,8 @@
 
 require "inc.ClassExtensionMgr.php";
 require_once "inc.ClassExtBase.php";
+require_once "inc.Version.php";
+require_once "inc.Utils.php";
 
 $extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 $extconffile = $extMgr->getExtensionsConfFile();
@@ -22,7 +24,17 @@ if(!file_exists($extconffile)) {
 $EXT_CONF = array();
 include($extconffile);
 
+$version = new SeedDMS_Version;
+
 foreach($EXT_CONF as $extname=>$extconf) {
+	if(!isset($extconf['disable']) || $extconf['disable'] == false) {
+		/* check for requirements */
+		if(!empty($extconf['constraints']['depends']['seeddms'])) {
+			$t = explode('-', $extconf['constraints']['depends']['seeddms'], 2);
+			if(cmpVersion($t[0], $version->version()) > 0 || ($t[1] && cmpVersion($t[1], $version->version()) < 0))
+				$extconf['disable'] = true;
+		}
+	}
 	if(!isset($extconf['disable']) || $extconf['disable'] == false) {
 		$classfile = $settings->_rootDir."/ext/".$extname."/".$extconf['class']['file'];
 		if(file_exists($classfile)) {

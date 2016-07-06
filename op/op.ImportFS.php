@@ -13,8 +13,7 @@ if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || $_GET["target
 $targetid = $_GET["targetid"];
 $folder = $dms->getFolder($targetid);
 if (!is_object($folder)) {
-	echo "Could not find specified folder\n";
-	exit(1);
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_target_folder"));
 }
 
 if ($folder->getAccessMode($user) < M_READWRITE) {
@@ -26,11 +25,11 @@ if (empty($_GET["dropfolderfileform1"])) {
 }
 $dirname = $settings->_dropFolderDir.'/'.$user->getLogin()."/".$_GET["dropfolderfileform1"];
 if(!is_dir($dirname)) {
-	UI::exitError(getMLText("admin_tools"),getMLText("invalid_target_folder"));
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_dropfolder_folder"));
 }
 
 function import_folder($dirname, $folder) { /* {{{ */
-	global $user;
+	global $user, $doccount, $foldercount;
 
 	$d = dir($dirname);
 	$sequence = 1;
@@ -56,27 +55,40 @@ function import_folder($dirname, $folder) { /* {{{ */
 				if (is_bool($lastDotIndex) && !$lastDotIndex) $filetype = ".";
 				else $filetype = substr($path, $lastDotIndex);
 
-				echo $mimetype." - ".$filetype." - ".$path."\n";
-				$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
+//				echo $mimetype." - ".$filetype." - ".$path."\n";
+				if($res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
 																		$categories, $filetmp, $name,
 																		$filetype, $mimetype, $sequence, $reviewers,
-																		$approvers, $reqversion, $version_comment);
-
-				if (is_bool($res) && !$res) {
-					echo "Could not add document to folder\n";
-					exit(1);
+																		$approvers, $reqversion, $version_comment)) {
+					$doccount++;
+				} else {
+					return false;
 				}
-				set_time_limit(1200);
+				set_time_limit(30);
 			} elseif(is_dir($path)) {
 				$name = basename($path);
-				$newfolder = $folder->addSubFolder($name, '', $user, $sequence);
-				import_folder($path, $newfolder);
+				if($newfolder = $folder->addSubFolder($name, '', $user, $sequence)) {
+					$foldercount++;
+					if(!import_folder($path, $newfolder))
+						return false;
+				} else {
+					return false;
+				}
 			}
 			$sequence++;
 		}
 	}
+	return true;
 } /* }}} */
 
-header("Content-Type: text/plain");
-import_folder($dirname, $folder);
+$foldercount = $doccount = 0;
+if($newfolder = $folder->addSubFolder($_GET["dropfolderfileform1"], '', $user, 1)) {
+	if(!import_folder($dirname, $newfolder))
+		$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_importfs')));
+	else
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_importfs', array('docs'=>$doccount, 'folders'=>$foldercount))));
+} else {
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_importfs')));
+}
 
+header("Location:../out/out.ViewFolder.php?folderid=".$newfolder->getID());

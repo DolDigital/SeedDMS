@@ -1,8 +1,6 @@
 <?php
-//    MyDMS. Document Management System
-//    Copyright (C) 2002-2005 Markus Westphal
-//    Copyright (C) 2007-2008 Malcolm Cowe
-//    Copyright (C) 2010-2013 Uwe Steinmann
+//    SeedDMS. Document Management System
+//    Copyright (C) 2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -18,20 +16,21 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-class SeedDMS_Version {
+include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
+include("../inc/inc.ClassUI.php");
+include("../inc/inc.Authentication.php");
 
-	public $_number = "5.0.4";
-	private $_string = "SeedDMS";
-
-	function __construct() {
-	}
-
-	function version() {
-		return $this->_number;
-	}
-
-	function banner() {
-		return $this->_string .", ". $this->_number;
-	}
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('clearcache')) {
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
-?>
+
+$cmd = 'rm -rf '.$settings->_cacheDir.'/*';
+system($cmd);
+add_log_line("");
+
+header("Location:../out/out.AdminTools.php");
+
