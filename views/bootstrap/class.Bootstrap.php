@@ -573,6 +573,7 @@ $(document).ready(function () {
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
