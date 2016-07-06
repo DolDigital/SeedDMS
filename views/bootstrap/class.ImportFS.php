@@ -51,6 +51,9 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("import_fs"));
 
 		if($dropfolderdir && file_exists($dropfolderdir.'/'.$user->getLogin())) {
+			echo "<div class=\"alert alert-warning\">";
+			printMLText("import_fs_warning");
+			echo "</div>\n";
 			$this->contentContainerStart();
 			print "<form class=\"form-horizontal\" action=\"../op/op.ImportFS.php\" name=\"form1\">";
 			print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('choose_target_folder')."</label><div class=\"controls\">";
