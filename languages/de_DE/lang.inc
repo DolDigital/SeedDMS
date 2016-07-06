@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2238), dgrutsch (21)
+//    Translators: Admin (2241), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -374,6 +374,7 @@ URL: [url]',
 'draft_pending_approval' => 'Entwurf - bevorstehende Freigabe',
 'draft_pending_review' => 'Entwurf - bevorstehende Prüfung',
 'drag_icon_here' => 'Icon eines Ordners oder Dokuments hier hin ziehen!',
+'dropfolderdir_missing' => 'Ihr persönlicher Ablageordner auf dem Server existiert nicht! Kontaktieren Sie den Administrator, um in anlegen zu lassen.',
 'dropfolder_file' => 'Datei aus Ablageordner',
 'dropfolder_folder' => 'Ordner aus Ablageordner',
 'dropupload' => 'Direkt Hochladen',
@@ -518,6 +519,7 @@ URL: [url]',
 'import' => 'Importiere',
 'importfs' => 'Importiere aus Dateisystem',
 'import_fs' => 'Aus Dateisystem importieren',
+'import_fs_warning' => 'Der Import kann nur für Ordner im Ablageordner erfolgen. Alle Ordner und Dateien werden rekursiv importiert. Dateien werden sofort freigegeben.',
 'include_content' => 'Inhalte mit exportieren',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
@@ -537,6 +539,7 @@ URL: [url]',
 'invalid_create_date_end' => 'Unzulässiges Erstellungsenddatum.',
 'invalid_create_date_start' => 'Unzulässiges Erstellungsstartdatum.',
 'invalid_doc_id' => 'Unzulässige Dokumentenidentifikation',
+'invalid_dropfolder_folder' => 'Ungültiger Ordner im Ablageordner',
 'invalid_expiration_date_end' => 'Unzulässiges Ablaufenddatum.',
 'invalid_expiration_date_start' => 'Unzulässiges Ablaufstartdatum.',
 'invalid_file_id' => 'Ungültige Datei-ID',

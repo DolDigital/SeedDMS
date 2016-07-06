@@ -35,12 +35,12 @@
                      Changes in version 4.3.27
 --------------------------------------------------------------------------------
 - check for minimum number of attribute values for each attribute type
-- fix selection of imported folder in ImportFS
+- fix selection of imported folder in ImportFS, add it to the admin tools
 - file from drop folder can be removed after successful upload
 - remove preview images when document or document content is removed (Closes #262)
 - add clear cache operation in admin tools
 - fix strict standard error in SeedDMS_Lucene (Closes #263)
-- fix sql statements, because the didn't work for mysql 5.7.5 anymore (Closes #273)
+- fix some sql statements, because they didn't work for mysql 5.7.5 anymore (Closes #273)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.26

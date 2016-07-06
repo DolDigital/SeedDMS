@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1128), tmichelfelder (106)
+//    Translators: Admin (1129), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -221,7 +221,7 @@ URL: [url]',
 'choose_workflow_action' => 'Välj åtgärd för arbetsflödet',
 'choose_workflow_state' => 'Välj status för arbetsflödet',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Rensa cache',
 'clear_clipboard' => 'Rensa urklipp',
 'clear_password' => '',
 'clipboard' => 'Urklipp',
@@ -362,6 +362,7 @@ URL: [url]',
 'draft_pending_approval' => 'Utkast: väntar på godkännande',
 'draft_pending_review' => 'Utkast: väntar på granskning',
 'drag_icon_here' => 'Dra ikon av mappen eller dokument hit!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Fil från mellanlagrings-mappen',
 'dropfolder_folder' => '',
 'dropupload' => 'Snabb uppladdning',
@@ -506,6 +507,7 @@ URL: [url]',
 'import' => '',
 'importfs' => '',
 'import_fs' => '',
+'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Inkludera dokument',
 'include_subdirectories' => 'Inkludera under-kataloger',
@@ -525,6 +527,7 @@ URL: [url]',
 'invalid_create_date_end' => 'Ogiltigt slutdatum för intervall.',
 'invalid_create_date_start' => 'Ogiltigt startdatum för intervall.',
 'invalid_doc_id' => 'Ogiltigt dokument-ID',
+'invalid_dropfolder_folder' => '',
 'invalid_expiration_date_end' => '',
 'invalid_expiration_date_start' => '',
 'invalid_file_id' => 'Ogiltigt fil-ID',

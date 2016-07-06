@@ -629,6 +629,7 @@ $(document).ready(function () {
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
@@ -1175,13 +1176,13 @@ $('#acceptkeywords').click(function(ev) {
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
+		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="dropfolderChooserLabel"><?php printMLText("choose_target_file") ?></h3>
+    <h3 id="dropfolderChooserLabel"><?php echo ($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file")) ?></h3>
   </div>
   <div class="modal-body">
 		<p><?php printMLText('files_loading') ?></p>

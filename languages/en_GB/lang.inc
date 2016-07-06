@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1387), dgrutsch (7), netixw (14)
+//    Translators: Admin (1391), dgrutsch (7), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -374,6 +374,7 @@ URL: [url]',
 'draft_pending_approval' => 'Draft - pending approval',
 'draft_pending_review' => 'Draft - pending review',
 'drag_icon_here' => 'Drag icon of folder or document here!',
+'dropfolderdir_missing' => 'Your personal drop folder does not exist on the server! Please ask your administrator to create it.',
 'dropfolder_file' => 'File from drop folder',
 'dropfolder_folder' => 'Folder from drop folder',
 'dropupload' => 'Fast upload',
@@ -518,6 +519,7 @@ URL: [url]',
 'import' => 'Import',
 'importfs' => 'Import from Filesystem',
 'import_fs' => 'Import from filesystem',
+'import_fs_warning' => 'This will only work for folders in the drop folder. The operation recursively imports all folders and files. Files will be released immediately.',
 'include_content' => 'Include content',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
@@ -537,6 +539,7 @@ URL: [url]',
 'invalid_create_date_end' => 'Invalid end date for creation date range.',
 'invalid_create_date_start' => 'Invalid start date for creation date range.',
 'invalid_doc_id' => 'Invalid Document ID',
+'invalid_dropfolder_folder' => 'Invalid folder in drop folder',
 'invalid_expiration_date_end' => 'Invalid end date for expiration date range.',
 'invalid_expiration_date_start' => 'Invalid start date for expiration date range.',
 'invalid_file_id' => 'Invalid file ID',

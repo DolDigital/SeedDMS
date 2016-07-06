@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1186), marbanas (16)
+//    Translators: Admin (1187), marbanas (16)
 
 $text = array(
 'accept' => 'Prihvati',
@@ -233,7 +233,7 @@ Internet poveznica: [url]',
 'choose_workflow_action' => 'Odaberite radnju toka rada',
 'choose_workflow_state' => 'Odaberite status toka rada',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Obriši keš',
 'clear_clipboard' => 'Očistite međuspremnik',
 'clear_password' => '',
 'clipboard' => 'Međuspremnik',
@@ -374,6 +374,7 @@ Internet poveznica: [url]',
 'draft_pending_approval' => 'Skica - čeka odobrenje',
 'draft_pending_review' => 'Skica - čeka pregled',
 'drag_icon_here' => 'Ovdje povuci ikonu mape ili dokumenta!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Datoteka iz padajuće mape',
 'dropfolder_folder' => '',
 'dropupload' => 'Zona za brzo učitavanje',
@@ -518,6 +519,7 @@ Internet poveznica: [url]',
 'import' => '',
 'importfs' => '',
 'import_fs' => '',
+'import_fs_warning' => '',
 'include_content' => 'Uključi sadržaj',
 'include_documents' => 'Sadrži dokumente',
 'include_subdirectories' => 'Sadrži podmape',
@@ -537,6 +539,7 @@ Internet poveznica: [url]',
 'invalid_create_date_end' => 'Pogrešan krajnji datum za izradu vremenskog raspona.',
 'invalid_create_date_start' => 'Pogrešan početni datum za izradu vremenskog raspona.',
 'invalid_doc_id' => 'Pogrešan ID dokumenta',
+'invalid_dropfolder_folder' => '',
 'invalid_expiration_date_end' => 'Neispravan datum isteka za datumski raspon isteka.',
 'invalid_expiration_date_start' => 'Neispravan početni datum za datumski raspon isteka.',
 'invalid_file_id' => 'Pogrešan ID datoteke',
