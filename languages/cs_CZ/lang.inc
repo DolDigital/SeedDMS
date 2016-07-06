@@ -22,6 +22,7 @@
 //    Translators: Admin (707), kreml (455)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Přijmout',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1008,6 +1009,8 @@ URL: [url]',
 'settings_Edition' => '',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => '',
@@ -1340,6 +1343,7 @@ URL: [url]',
 'timeline_status_change' => 'Verze [version]: [status]',
 'to' => 'Do',
 'toggle_manager' => 'Přepnout správce',
+'toggle_qrcode' => '',
 'to_before_from' => 'Datum ukončení nesmí být před datem zahájení',
 'transition_triggered_email' => 'Transformace pracovního postupu spuštěna',
 'transition_triggered_email_body' => 'Transformace pracovního postupu spuštěna

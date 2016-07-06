@@ -19,9 +19,10 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1391), dgrutsch (7), netixw (14)
+//    Translators: Admin (1395), dgrutsch (7), netixw (14)
 
 $text = array(
+'2_factor_auth' => '2-factor authentication',
 'accept' => 'Accept',
 'access_control' => 'Access control',
 'access_control_is_off' => 'Advanced access control is turned off',
@@ -1046,6 +1047,8 @@ URL: [url]',
 'settings_Edition' => 'Edition settings',
 'settings_editOnlineFileTypes' => 'Edit Online File Types:',
 'settings_editOnlineFileTypes_desc' => 'Files with one of the following endings can be edited online (USE ONLY LOWER CASE CHARACTERS)',
+'settings_enable2FactorAuthentication' => 'Enable 2-factor authentication',
+'settings_enable2FactorAuthentication_desc' => 'Enable/disable 2 factor authentication. The users will need the Google Authenticator on its mobile phone.',
 'settings_enableAcknowledgeWorkflow' => 'Enable acknowledge of document reception',
 'settings_enableAcknowledgeWorkflow_desc' => 'Enable, to turn on the workflow to acknowledge document reception.',
 'settings_enableAdminRevApp' => 'Allow review/approval for admins',
@@ -1378,6 +1381,7 @@ URL: [url]',
 'timeline_status_change' => 'Version [version]: [status]',
 'to' => 'To',
 'toggle_manager' => 'Toggle manager',
+'toggle_qrcode' => 'Show/hide QR code',
 'to_before_from' => 'End date may not be before start date',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered

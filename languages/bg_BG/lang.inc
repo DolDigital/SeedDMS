@@ -22,6 +22,7 @@
 //    Translators: Admin (785)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Приеми',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -864,6 +865,8 @@ $text = array(
 'settings_Edition' => 'Настройки редакция',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Разреши Admin Rev App',
@@ -1196,6 +1199,7 @@ $text = array(
 'timeline_status_change' => '',
 'to' => 'към',
 'toggle_manager' => 'Превключи мениджър',
+'toggle_qrcode' => '',
 'to_before_from' => '',
 'transition_triggered_email' => 'Забелязана промяна на процес',
 'transition_triggered_email_body' => '',

@@ -22,6 +22,7 @@
 //    Translators: Admin (1187), marbanas (16)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Prihvati',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1035,6 +1036,8 @@ Internet poveznica: [url]',
 'settings_Edition' => 'Postavke izdanja',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Omogućavanje potvrđivanja prijema dokumenta',
 'settings_enableAcknowledgeWorkflow_desc' => 'Omogućite kako bi omogućili tok rada za potvrđivajne prijema dokumenta.',
 'settings_enableAdminRevApp' => 'Dopusti pregled/ovjeru za administratore',
@@ -1367,6 +1370,7 @@ Internet poveznica: [url]',
 'timeline_status_change' => 'Verzija [version]: [status]',
 'to' => 'Do',
 'toggle_manager' => 'Zamjeni upravitelja',
+'toggle_qrcode' => '',
 'to_before_from' => 'Datum završetka ne može biti prije datuma početka',
 'transition_triggered_email' => 'Zatražena promjena toka rada',
 'transition_triggered_email_body' => 'Zatražena promjena toka rada

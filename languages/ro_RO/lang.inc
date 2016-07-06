@@ -22,6 +22,7 @@
 //    Translators: Admin (1043), balan (87)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Accept',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1036,6 +1037,8 @@ URL: [url]',
 'settings_Edition' => 'Setările Editiei',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Permite revizuirea/aprobarea pentru admini',
@@ -1368,6 +1371,7 @@ URL: [url]',
 'timeline_status_change' => 'Versiune [versiune]: [stare]',
 'to' => 'La',
 'toggle_manager' => 'Comută Manager',
+'toggle_qrcode' => '',
 'to_before_from' => 'Data de încheiere nu poate fi înainte de data de începere',
 'transition_triggered_email' => 'Tranziție Workflow declanșată',
 'transition_triggered_email_body' => 'Tranziție Workflow declanșată

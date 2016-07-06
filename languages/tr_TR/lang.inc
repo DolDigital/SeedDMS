@@ -22,6 +22,7 @@
 //    Translators: Admin (1038), aydin (83)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Kabul',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1015,6 +1016,8 @@ URL: [url]',
 'settings_Edition' => 'Düzenleme ayarları',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Yöneticilere kontrol/onay izni ver',
@@ -1347,6 +1350,7 @@ URL: [url]',
 'timeline_status_change' => 'Versiyon [version]: [status]',
 'to' => 'Kime',
 'toggle_manager' => 'Değişim yönetimi',
+'toggle_qrcode' => '',
 'to_before_from' => 'Bitiş tarihi başlama tarihinden önce olamaz',
 'transition_triggered_email' => 'İş Akış Geçişi Tetiklendi',
 'transition_triggered_email_body' => 'İş Akış Geçişi Tetiklendi

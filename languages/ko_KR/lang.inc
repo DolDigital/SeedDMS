@@ -22,6 +22,7 @@
 //    Translators: Admin (939), daivoc (418)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => '동의',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1028,6 +1029,8 @@ URL : [url]',
 'settings_Edition' => '판(Edition) 설정',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '문서 수신의 응답 활성화',
 'settings_enableAcknowledgeWorkflow_desc' => '문서의 수신 확인을 위해 워크플로어를 선택하고 활성화 합니다.',
 'settings_enableAdminRevApp' => '관리자에 대한 검토 / 승인 허용',
@@ -1360,6 +1363,7 @@ URL : [url]',
 'timeline_status_change' => '버전 [version]: [status]',
 'to' => '마감일',
 'toggle_manager' => '전환 매니저',
+'toggle_qrcode' => '',
 'to_before_from' => '종료일은 시작일 전이 될수 없습니다',
 'transition_triggered_email' => '워크플로우 전환 트리거',
 'transition_triggered_email_body' => '워크플로우 전환 트리거

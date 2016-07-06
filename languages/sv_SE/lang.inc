@@ -22,6 +22,7 @@
 //    Translators: Admin (1129), tmichelfelder (106)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Godkänn',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -999,6 +1000,8 @@ URL: [url]',
 'settings_Edition' => 'Redigeringsinställningar',
 'settings_editOnlineFileTypes' => 'Redigera online-filtyper',
 'settings_editOnlineFileTypes_desc' => 'Filer med en av följande filtyper kan redigeras online OBS! ANVÄND BARA SMÅ BOKSTÄVER)',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Visa Admin i listan granska/godkänna',
@@ -1331,6 +1334,7 @@ URL: [url]',
 'timeline_status_change' => 'Version [version]: [status]',
 'to' => 'till',
 'toggle_manager' => 'Byt manager',
+'toggle_qrcode' => '',
 'to_before_from' => 'Slutdatum får inte vara innan startdatum',
 'transition_triggered_email' => 'Arbetsflödesövergång utlöstes',
 'transition_triggered_email_body' => 'Arbetsflödesövergång utlöstes

@@ -22,6 +22,7 @@
 //    Translators: Admin (1324)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Прийняти',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1036,6 +1037,8 @@ URL: [url]',
 'settings_Edition' => 'Налаштування версій',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Увімкнути підтвердження отримання документу',
 'settings_enableAcknowledgeWorkflow_desc' => 'Включіть для активації функції підтвердження отримання документу',
 'settings_enableAdminRevApp' => 'Адміністратор може бути<br/>рецензент і затверджувач',
@@ -1368,6 +1371,7 @@ URL: [url]',
 'timeline_status_change' => 'Версія [version]: [status]',
 'to' => 'До',
 'toggle_manager' => 'Змінити ознаку менеджера',
+'toggle_qrcode' => '',
 'to_before_from' => 'Кінцева дата не може бути меншою початкової дати',
 'transition_triggered_email' => 'Змінено стан процесу',
 'transition_triggered_email_body' => 'Змінено стан процесу

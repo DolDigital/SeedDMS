@@ -22,6 +22,7 @@
 //    Translators: Admin (718), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Accept',
 'access_control' => 'Toegangscontrole',
 'access_control_is_off' => '',
@@ -1041,6 +1042,8 @@ URL: [url]',
 'settings_Edition' => 'Uitgave instellingen',
 'settings_editOnlineFileTypes' => 'Instellingen Filetypes',
 'settings_editOnlineFileTypes_desc' => 'Online zoekmethoden bewerken',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => 'Aanzetten Workflow-stappen',
 'settings_enableAcknowledgeWorkflow_desc' => 'Aanzetten workflow-stappen',
 'settings_enableAdminRevApp' => 'Inschakelen Beheer Contr/Beoord',
@@ -1373,6 +1376,7 @@ URL: [url]',
 'timeline_status_change' => 'Versie [version]: [status]',
 'to' => 'aan',
 'toggle_manager' => 'Wijzig Beheerder',
+'toggle_qrcode' => '',
 'to_before_from' => 'De einddatum mag niet voor de startdatum liggen',
 'transition_triggered_email' => 'Workflow-overgang geactiveerd',
 'transition_triggered_email_body' => 'Workflow Overgang

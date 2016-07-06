@@ -22,6 +22,7 @@
 //    Translators: Admin (587), ribaz (1023)
 
 $text = array(
+'2_factor_auth' => '',
 'accept' => 'Elfogad',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1013,6 +1014,8 @@ URL: [url]',
 'settings_Edition' => 'Kiadás beállítások',
 'settings_editOnlineFileTypes' => '',
 'settings_editOnlineFileTypes_desc' => '',
+'settings_enable2FactorAuthentication' => '',
+'settings_enable2FactorAuthentication_desc' => '',
 'settings_enableAcknowledgeWorkflow' => '',
 'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminRevApp' => 'Engedélyezi a felülvizsgálatot/jóváhagyást az adminisztrátorok számára',
@@ -1345,6 +1348,7 @@ URL: [url]',
 'timeline_status_change' => '[version]: [status] Verzio',
 'to' => 'ig',
 'toggle_manager' => 'Kulcs kezelő',
+'toggle_qrcode' => '',
 'to_before_from' => 'A lejárati dátum nem előzheti meg a kezdési dátumot',
 'transition_triggered_email' => 'Munkamenet átmenet kiváltva',
 'transition_triggered_email_body' => 'Munkafolyamat átmenet kiváltva
