@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2238), dgrutsch (21)
+//    Translators: Admin (2239), dgrutsch (21)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -374,6 +374,7 @@ URL: [url]',
 'draft_pending_approval' => 'Entwurf - bevorstehende Freigabe',
 'draft_pending_review' => 'Entwurf - bevorstehende Prüfung',
 'drag_icon_here' => 'Icon eines Ordners oder Dokuments hier hin ziehen!',
+'dropfolderdir_missing' => 'Ihr persönlicher Ablageordner auf dem Server existiert nicht! Kontaktieren Sie den Administrator, um in anlegen zu lassen.',
 'dropfolder_file' => 'Datei aus Ablageordner',
 'dropfolder_folder' => 'Ordner aus Ablageordner',
 'dropupload' => 'Direkt Hochladen',

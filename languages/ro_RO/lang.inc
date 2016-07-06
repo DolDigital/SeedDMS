@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1042), balan (87)
+//    Translators: Admin (1043), balan (87)
 
 $text = array(
 'accept' => 'Accept',
@@ -374,6 +374,7 @@ URL: [url]',
 'draft_pending_approval' => 'Proiect - în așteptarea aprobarii',
 'draft_pending_review' => 'Proiect - în așteptarea revizuirii',
 'drag_icon_here' => 'Trageți iconul de folder sau document aici!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Fișiere din folderele aruncate (File from drop folder)',
 'dropfolder_folder' => '',
 'dropupload' => 'Încărcare rapidă',
@@ -1362,7 +1363,7 @@ URL: [url]',
 'timeline_skip_status_change_1' => 'așteaptă aprobare',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => 'în proces',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Versiune [versiune]: [stare]',
 'to' => 'La',
 'toggle_manager' => 'Comută Manager',
 'to_before_from' => 'Data de încheiere nu poate fi înainte de data de începere',

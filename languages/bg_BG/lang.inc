@@ -317,6 +317,7 @@ $text = array(
 'draft_pending_approval' => 'Чернова - очаква утвърждаване',
 'draft_pending_review' => 'Чернова - очаква рецензия',
 'drag_icon_here' => 'Провлачи икона или папка, или документ ТУК!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Файл от drop папка',
 'dropfolder_folder' => '',
 'dropupload' => '',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (716), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (718), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -226,7 +226,7 @@ URL: [url]',
 'choose_workflow_action' => 'Kies workflow actie',
 'choose_workflow_state' => 'kiest workflowstatus',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Cache leegmaken',
 'clear_clipboard' => 'Vrijgeven klembord',
 'clear_password' => '',
 'clipboard' => 'Klembord',
@@ -367,6 +367,7 @@ URL: [url]',
 'draft_pending_approval' => 'Draft - in afwachting van goedkeuring',
 'draft_pending_review' => 'Draft - in afwachting van controle',
 'drag_icon_here' => 'Versleep icoon van de folder of bestand hier!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Bestand van dropfolder',
 'dropfolder_folder' => '',
 'dropupload' => 'Snel toevoegen',
@@ -1187,7 +1188,7 @@ URL: [url]',
 'settings_printDisclaimer_desc' => 'Indien ingeschakeld zal het vrijwarings bericht in de lang.inc bestanden worden getoond onderop de pagina',
 'settings_quota' => 'Gebruikersquotum',
 'settings_quota_desc' => 'Het maximum aantal bytes een gebruiker op de schijf mag schrijven. Stel deze in op 0 voor een onbeperkte schijfruimte. Deze waarde kan worden overschreven voor elk gebruik in zijn profiel.',
-'settings_removeFromDropFolder' => '',
+'settings_removeFromDropFolder' => 'Verwijder het bestand uit de dropfolder na een succesvolle upload',
 'settings_removeFromDropFolder_desc' => '',
 'settings_restricted' => 'Beperkte toegang',
 'settings_restricted_desc' => 'Sta alleen gebruiker toe om in te loggen die in de database zijn opgenomen (ongeacht succesvolle authenticatie met LDAP)',

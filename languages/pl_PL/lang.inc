@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (735), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (737), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -362,6 +362,7 @@ URL: [url]',
 'draft_pending_approval' => 'Szkic - w oczekiwaniu na akceptację',
 'draft_pending_review' => 'Szkic - w oczekiwaniu na opinię',
 'drag_icon_here' => 'Przeciągnij ikonę folderu lub dokumentu tutaj!',
+'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Plik z folderu rozwijanego',
 'dropfolder_folder' => '',
 'dropupload' => 'Szybki upload',
@@ -887,8 +888,8 @@ URL: [url]',
 'search_fulltext' => 'Przeszukaj całe teksty',
 'search_in' => 'Szukaj w',
 'search_mode_and' => 'wszystkie słowa',
-'search_mode_documents' => '',
-'search_mode_folders' => '',
+'search_mode_documents' => 'Tylko dokumenty',
+'search_mode_folders' => 'Tylko foldery',
 'search_mode_or' => 'conajmnej jedno słowo',
 'search_no_results' => 'Nie znaleziono dokumentów spełniających kryteria wyszukiwania.',
 'search_query' => 'Wyszukaj',
