@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (993), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (994), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -514,7 +514,7 @@ URL: [url]',
 'identical_version' => 'La nueva versión es idéntica a la actual.',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importar desde sistema de aechivos',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Incluir documentos',

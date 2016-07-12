@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (635), fengjohn (5)
+//    Translators: Admin (637), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '',
@@ -444,7 +444,7 @@ URL: [url]',
 'identical_version' => '',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => '从文件系统导入',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => '包含文档',
@@ -687,7 +687,7 @@ URL: [url]',
 'removed_revispr' => '',
 'removed_workflow_email_body' => '',
 'removed_workflow_email_subject' => '',
-'remove_marked_files' => '',
+'remove_marked_files' => '删除选中的文件',
 'repaired' => '',
 'repairing_objects' => '',
 'request_workflow_action_email_body' => '',

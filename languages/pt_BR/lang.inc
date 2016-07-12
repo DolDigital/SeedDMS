@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (907), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (909), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -229,7 +229,7 @@ URL: [url]',
 'choose_workflow_action' => 'Escolha a ação de fluxo de trabalho',
 'choose_workflow_state' => 'Escolha um estado de fluxo de trabalho',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Limpar o Cache',
 'clear_clipboard' => 'Limpar área de transferência',
 'clear_password' => '',
 'clipboard' => 'Área de transferência',
@@ -513,7 +513,7 @@ URL: [url]',
 'identical_version' => 'Nova versão é idêntica à versão atual.',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importar do sistema de arquivos',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Include documents',
