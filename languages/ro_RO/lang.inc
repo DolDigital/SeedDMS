@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1043), balan (87)
+//    Translators: Admin (1044), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Accept',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1147,7 +1149,7 @@ URL: [url]',
 'settings_luceneDir' => 'Directorul pentru indexul de text integral(full text index)',
 'settings_luceneDir_desc' => 'Calea catre indexul Lucene',
 'settings_maxDirID' => 'ID director Maxim',
-'settings_maxDirID_desc' => 'Numărul maxim de sub-directoare pe director părinte. Implicit: 32700.',
+'settings_maxDirID_desc' => 'Numărul maxim de sub-directoare pe director părinte. Implicit: 0.',
 'settings_maxExecutionTime' => 'Timp Maxim de executie (s)',
 'settings_maxExecutionTime_desc' => 'Acesta stabilește timpul maxim în secunde în care un script este permis să ruleze înainte de a fi oprit',
 'settings_maxRecursiveCount' => 'Numarul Maxim recursiv de numarare documente/foldere',
@@ -1326,6 +1328,7 @@ URL: [url]',
 'status_revisor_removed' => 'Revizuitor eliminat din lista',
 'status_unknown' => 'Necunoscut',
 'storage_size' => 'Dimensiunea de stocare',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Trimite aprobare',
 'submit_login' => 'Sign in',
 'submit_password' => 'Setare parolă nouă',

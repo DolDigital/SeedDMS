@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (718), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (719), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Accept',
 'access_control' => 'Toegangscontrole',
 'access_control_is_off' => '',
@@ -1152,7 +1154,7 @@ URL: [url]',
 'settings_luceneDir' => 'Map voor volledigetekst index',
 'settings_luceneDir_desc' => 'Pad naar Lucene index',
 'settings_maxDirID' => 'Max Map ID',
-'settings_maxDirID_desc' => 'Maximaal toegestane aantal submappen per bovenliggende map. Standaard: 32700.',
+'settings_maxDirID_desc' => 'Maximaal toegestane aantal submappen per bovenliggende map. Standaard: 0.',
 'settings_maxExecutionTime' => 'Max Uitvoertijd (s)',
 'settings_maxExecutionTime_desc' => 'Dit bepaald de maximale tijd in seconden waarin een script mag worden uitgevoerd, voordat het afgebroken wordt',
 'settings_maxRecursiveCount' => 'Max. nummers of recursieve document/map telling',
@@ -1331,6 +1333,7 @@ URL: [url]',
 'status_revisor_removed' => 'Verwijderd',
 'status_unknown' => 'Onbekend',
 'storage_size' => 'Omvang opslag',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Verzend [Goedkeuring]',
 'submit_login' => 'Log in',
 'submit_password' => 'Nieuw wachtwoord instellen',

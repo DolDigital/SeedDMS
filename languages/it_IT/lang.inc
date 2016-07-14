@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1527), s.pnt (26)
+//    Translators: Admin (1530), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Accetta',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -518,9 +520,9 @@ URL: [url]',
 'hu_HU' => 'Ungherese',
 'id' => 'ID',
 'identical_version' => 'La nuova versione è identica a quella attuale.',
-'import' => '',
+'import' => 'Importa',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importa dalla cartella di sistema',
 'import_fs_warning' => '',
 'include_content' => 'Includi contenuto',
 'include_documents' => 'Includi documenti',
@@ -1148,7 +1150,7 @@ URL: [url]',
 'settings_luceneDir' => 'Cartella di indicizzazione fulltext',
 'settings_luceneDir_desc' => 'Cartella di memorizzazione dell\'indice utilizzato da Lucene',
 'settings_maxDirID' => 'Max numero di ID-Cartella',
-'settings_maxDirID_desc' => 'Numero massimo di sottocartelle contenibili in una cartella. Default: 32700.',
+'settings_maxDirID_desc' => 'Numero massimo di sottocartelle contenibili in una cartella. Default: 0.',
 'settings_maxExecutionTime' => 'Tempo Max di esecuzione (s)',
 'settings_maxExecutionTime_desc' => 'Imposta il tempo limite per l\'esecuzione di uno script prima che il parser lo termini.',
 'settings_maxRecursiveCount' => 'Conteggio ricursivo Max di files e cartelle',
@@ -1327,6 +1329,7 @@ URL: [url]',
 'status_revisor_removed' => 'Revisore rimosso dalla lista',
 'status_unknown' => 'Sconosciuto',
 'storage_size' => 'Spazio di archiviazione',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Invio approvazione',
 'submit_login' => 'Accedi',
 'submit_password' => 'Impostazione nuova password',

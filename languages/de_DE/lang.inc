@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2243), dgrutsch (21)
+//    Translators: Admin (2247), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
+'2_factor_auth_info' => 'Dieses System erfordert 2-Faktor-Authentifikation. Dazu brauchen den Google Authenticator auf Ihrem Mobiltelefon. Unten sehen Sie zwei QR-Codes. Der rechte Code beinhaltet Ihren aktuellen geheimen Schlüssel. Auf der linken Seite wird ein neuer Schlüssel angezeigt. Wenn Sie den neuen Schlüssel speichern, dann stellen Sie zuvor sicher, dass sie ihn mit dem Google Authenticator zuvor eingescant haben.',
+'2_fact_auth_secret' => 'Schlüssel',
 'accept' => 'Übernehmen',
 'access_control' => 'Zugriffskontrolle',
 'access_control_is_off' => 'Erweiterte Zugriffskontrolle ist ausgeschaltet',
@@ -1156,7 +1158,7 @@ URL: [url]',
 'settings_luceneDir' => 'Verzeichnis für Volltextindex',
 'settings_luceneDir_desc' => 'Verzeichnis in dem der Lucene-Index abgelegt wird.',
 'settings_maxDirID' => 'Max. Anzahl Unterverzeichnisse',
-'settings_maxDirID_desc' => 'Maximale Anzahl der Unterverzeichnisse in einem Verzeichnis. Voreingestellt ist 32700.',
+'settings_maxDirID_desc' => 'Maximale Anzahl der Unterverzeichnisse in einem Verzeichnis. Ändern Sie diesen Wert nur, wenn Sie genau wissen was Sie tun! Voreingestellt ist 0.',
 'settings_maxExecutionTime' => 'Max. Ausführungszeit (s)',
 'settings_maxExecutionTime_desc' => 'Maximale Zeit in Sekunden bis ein Skript beendet wird.',
 'settings_maxRecursiveCount' => 'Max. Anzahl Anzahl rekursiver Dokumente/Ordner.',
@@ -1335,6 +1337,7 @@ URL: [url]',
 'status_revisor_removed' => 'Überprüfer von Liste entfernt',
 'status_unknown' => 'unbekannt',
 'storage_size' => 'Speicherverbrauch',
+'submit_2_fact_auth' => 'Schlüssel speichern',
 'submit_approval' => 'Freigabe hinzufügen',
 'submit_login' => 'Anmelden',
 'submit_password' => 'Setze neues Passwort',

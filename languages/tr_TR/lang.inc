@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1038), aydin (83)
+//    Translators: Admin (1039), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Kabul',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1126,7 +1128,7 @@ URL: [url]',
 'settings_luceneDir' => 'Tam metin dizini',
 'settings_luceneDir_desc' => 'Lucene indeks dizini yolu',
 'settings_maxDirID' => 'Maks Dizin ID',
-'settings_maxDirID_desc' => 'Klasör altında oluşturulabilecek maksimum alt klasör sayısı Varsayılan: 32700.',
+'settings_maxDirID_desc' => 'Klasör altında oluşturulabilecek maksimum alt klasör sayısı Varsayılan: 0.',
 'settings_maxExecutionTime' => 'Maksimum çalışma zamanı (s)',
 'settings_maxExecutionTime_desc' => 'Durdurulmadan önce bir betikin en fazla kaç saniye çalışabileceğini ayarlar',
 'settings_maxRecursiveCount' => 'Maks. özyinelemeli doküman/klasör sayısı',
@@ -1305,6 +1307,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Bilinmeyen',
 'storage_size' => 'Depo boyutu',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Onay ver',
 'submit_login' => 'Giriş',
 'submit_password' => 'Yeni parola ayarla',

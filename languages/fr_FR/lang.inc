@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1032), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1033), jeromerobert (50), lonnnew (9)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Accepter',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1101,7 +1103,7 @@ URL: [url]',
 'settings_luceneDir' => 'Répertoire index Lucene',
 'settings_luceneDir_desc' => 'Chemin vers index Lucene',
 'settings_maxDirID' => 'Max ID répertoire',
-'settings_maxDirID_desc' => 'Nombre maximum de sous-répertoires par le répertoire parent. Par défaut: 32700.',
+'settings_maxDirID_desc' => 'Nombre maximum de sous-répertoires par le répertoire parent. Par défaut: 0.',
 'settings_maxExecutionTime' => 'Temps d\'exécution max (s)',
 'settings_maxExecutionTime_desc' => 'Ceci définit la durée maximale en secondes q\'un script est autorisé à exécuter avant de se terminer par l\'analyse syntaxique',
 'settings_maxRecursiveCount' => 'Nombre maximal de document/dossier récursif',
@@ -1280,6 +1282,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Inconnu',
 'storage_size' => 'Taille occupée',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Soumettre approbation',
 'submit_login' => 'Connexion',
 'submit_password' => 'Entrez nouveau mot de passe',

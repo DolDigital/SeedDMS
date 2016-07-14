@@ -23,6 +23,8 @@
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Acceptar',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1159,6 +1161,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Desconegut',
 'storage_size' => 'Storage size',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Enviar aprovació',
 'submit_login' => 'Connectat',
 'submit_password' => '',

@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (909), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (910), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Aceitar',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1122,7 +1124,7 @@ URL: [url]',
 'settings_luceneDir' => 'Diretório para o índice de texto completo',
 'settings_luceneDir_desc' => 'Caminho para o índice Lucene',
 'settings_maxDirID' => 'Max Diretório ID',
-'settings_maxDirID_desc' => 'O número máximo de sub-diretórios por diretório mãe. Padrão: 32700.',
+'settings_maxDirID_desc' => 'O número máximo de sub-diretórios por diretório mãe. Padrão: 0.',
 'settings_maxExecutionTime' => 'Max Tempo de Execução (s)',
 'settings_maxExecutionTime_desc' => 'Isso define o tempo máximo em segundos que é permitido executar antes de ser finalizado pelo parse',
 'settings_maxRecursiveCount' => 'Max. número de contagem de documentos/pasta recursiva',
@@ -1301,6 +1303,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Unknown',
 'storage_size' => 'Tamanho de armazenamento',
+'submit_2_fact_auth' => '',
 'submit_approval' => '',
 'submit_login' => 'Entrar',
 'submit_password' => 'Definir uma nova senha',

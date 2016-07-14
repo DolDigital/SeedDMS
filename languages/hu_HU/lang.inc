@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (587), ribaz (1023)
+//    Translators: Admin (588), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Elfogad',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1124,7 +1126,7 @@ URL: [url]',
 'settings_luceneDir' => 'Teljes szöveg index könyvtára',
 'settings_luceneDir_desc' => 'Lucene index elérési útvonal',
 'settings_maxDirID' => 'Legnagyobb könyvtár azonosító',
-'settings_maxDirID_desc' => 'Szülő könyvtárban lévő alkönyvtárak maximális mennyisége, Alapérték: 32700.',
+'settings_maxDirID_desc' => 'Szülő könyvtárban lévő alkönyvtárak maximális mennyisége, Alapérték: 0.',
 'settings_maxExecutionTime' => 'Maximális végrehajtási idő (s)',
 'settings_maxExecutionTime_desc' => 'Beállítja a szkript maximális engedélyezett futási idejét másodpercben mielőtt megszakítja az értelmező',
 'settings_maxRecursiveCount' => 'Rekurzív dokumentum/mappa számláló legnagyobb értéke',
@@ -1303,6 +1305,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Ismeretlen',
 'storage_size' => 'Tároló mérete',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Jóváhagyás küldése',
 'submit_login' => 'Bejelentkezés',
 'submit_password' => 'Új jelszó megadása',

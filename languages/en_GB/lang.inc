@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1395), dgrutsch (7), netixw (14)
+//    Translators: Admin (1399), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
+'2_factor_auth_info' => 'This system enforces 2 factor authentication. You will need the Google Authenticator on your mobile phone. Below you see two QR codes. The right one is your current secret. On the left you can set a new secret. If you set a new secret make sure to rescan it with Google Authenticator.',
+'2_fact_auth_secret' => 'Secret',
 'accept' => 'Accept',
 'access_control' => 'Access control',
 'access_control_is_off' => 'Advanced access control is turned off',
@@ -1157,7 +1159,7 @@ URL: [url]',
 'settings_luceneDir' => 'Directory for full text index',
 'settings_luceneDir_desc' => 'Path to Lucene index',
 'settings_maxDirID' => 'Max Directory ID',
-'settings_maxDirID_desc' => 'Maximum number of sub-directories per parent directory. Default: 32700.',
+'settings_maxDirID_desc' => 'Maximum number of sub-directories per parent directory. Do not change this value unless you know what you do! Default: 0.',
 'settings_maxExecutionTime' => 'Max Execution Time (s)',
 'settings_maxExecutionTime_desc' => 'This sets the maximum time in seconds a script is allowed to run before it is terminated by the parse',
 'settings_maxRecursiveCount' => 'Max. number of recursive document/folder count',
@@ -1336,6 +1338,7 @@ URL: [url]',
 'status_revisor_removed' => 'Revisor removed from list',
 'status_unknown' => 'Unknown',
 'storage_size' => 'Storage size',
+'submit_2_fact_auth' => 'Save secret',
 'submit_approval' => 'Submit approval',
 'submit_login' => 'Sign in',
 'submit_password' => 'Set new password',

@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1543)
+//    Translators: Admin (1544)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Принять',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1154,7 +1156,7 @@ URL: [url]',
 'settings_luceneDir' => 'Каталог полнотекстового индекса Lucene',
 'settings_luceneDir_desc' => 'Путь, куда Lucene будет записывать свой индекс.',
 'settings_maxDirID' => 'Максимальный ID каталога',
-'settings_maxDirID_desc' => 'Максимум каталогов в родительском каталоге. По умолчанию 32700.',
+'settings_maxDirID_desc' => 'Максимум каталогов в родительском каталоге. По умолчанию 0.',
 'settings_maxExecutionTime' => 'Максимальное время выполнения, с',
 'settings_maxExecutionTime_desc' => 'Устанавливает максимальное время выполнения скрипта, перед тем как он будет завершён.',
 'settings_maxRecursiveCount' => 'Ограничение рекурсивного подсчёта<br/>документов и каталогов',
@@ -1333,6 +1335,7 @@ URL: [url]',
 'status_revisor_removed' => 'Ревизор удален из списка',
 'status_unknown' => 'Неизвестный',
 'storage_size' => 'Размер хранилища',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Утвердить',
 'submit_login' => 'Войти',
 'submit_password' => 'Установить новый пароль',

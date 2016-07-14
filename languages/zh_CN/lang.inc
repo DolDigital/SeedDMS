@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (637), fengjohn (5)
+//    Translators: Admin (638), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => '接受',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -981,7 +983,7 @@ URL: [url]',
 'settings_luceneDir' => '',
 'settings_luceneDir_desc' => '',
 'settings_maxDirID' => '最大目录编号',
-'settings_maxDirID_desc' => '每个父目录的子目录的最大数目。默认值：32700。',
+'settings_maxDirID_desc' => '每个父目录的子目录的最大数目。默认值：0。',
 'settings_maxExecutionTime' => '最大执行时间（秒）',
 'settings_maxExecutionTime_desc' => '此设置最长时间，以秒为脚本允许运行之前它是由解析终止',
 'settings_maxRecursiveCount' => '',
@@ -1160,6 +1162,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => '未知',
 'storage_size' => '存储大小',
+'submit_2_fact_auth' => '',
 'submit_approval' => '提交审核',
 'submit_login' => '登录',
 'submit_password' => '',

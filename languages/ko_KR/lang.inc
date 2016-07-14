@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (939), daivoc (418)
+//    Translators: Admin (940), daivoc (418)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => '동의',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1139,7 +1141,7 @@ URL : [url]',
 'settings_luceneDir' => '전체 텍스트 인덱스에 대한 디렉토리',
 'settings_luceneDir_desc' => 'Lucene 색인 경로',
 'settings_maxDirID' => '최대 디렉토리 ID',
-'settings_maxDirID_desc' => '상위 디렉토리 당 서브 디렉토리의  최대 수 기본값 : 32700',
+'settings_maxDirID_desc' => '',
 'settings_maxExecutionTime' => '최대 실행 시간 (들)',
 'settings_maxExecutionTime_desc' => '종료되기 전 스크립트의 구문 분석 할 수있는 최대 시간을 초 단위로 설정',
 'settings_maxRecursiveCount' => '최대 재귀 문서 / 폴더의 수',
@@ -1318,6 +1320,7 @@ URL : [url]',
 'status_revisor_removed' => '감사자 목록에서 제거',
 'status_unknown' => '알 수없는',
 'storage_size' => '저장 크기',
+'submit_2_fact_auth' => '',
 'submit_approval' => '승인 제출',
 'submit_login' => '로그인',
 'submit_password' => '새 비밀번호를 설정',

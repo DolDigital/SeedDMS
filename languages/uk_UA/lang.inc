@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1324)
+//    Translators: Admin (1325)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Прийняти',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1147,7 +1149,7 @@ URL: [url]',
 'settings_luceneDir' => 'Каталог повнотекстового індексу Lucene',
 'settings_luceneDir_desc' => 'Шлях, куди Lucene буде записувати свій індекс.',
 'settings_maxDirID' => 'Максимальний ID каталогу',
-'settings_maxDirID_desc' => 'Максимум каталогів у батьківському каталозі. По замовчуванню 32700.',
+'settings_maxDirID_desc' => 'Максимум каталогів у батьківському каталозі. По замовчуванню 0.',
 'settings_maxExecutionTime' => 'Максимальний час виконання, с',
 'settings_maxExecutionTime_desc' => 'Встановлює максимальний час виконання скрипта, перед тим як він буде завершений.',
 'settings_maxRecursiveCount' => 'Обмеження рекурсивного підрахунку<br/>документів і каталогів',
@@ -1326,6 +1328,7 @@ URL: [url]',
 'status_revisor_removed' => 'Ревізора видалено зі списку',
 'status_unknown' => 'Невідомий',
 'storage_size' => 'Розмір сховища',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Затвердити',
 'submit_login' => 'Увійти',
 'submit_password' => 'Встановити новий пароль',
