@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1187), marbanas (16)
+//    Translators: Admin (1188), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Prihvati',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1146,7 +1148,7 @@ Internet poveznica: [url]',
 'settings_luceneDir' => 'Mapa za indeksiranje cijelog teksta',
 'settings_luceneDir_desc' => 'Putanja to Lucene indeksa',
 'settings_maxDirID' => 'Max Directory ID',
-'settings_maxDirID_desc' => 'Maksimalni broj podmapa po nadređenoj mapi. Zadano: 32700.',
+'settings_maxDirID_desc' => 'Maksimalni broj podmapa po nadređenoj mapi. Zadano: 0.',
 'settings_maxExecutionTime' => 'Max. vrijeme izvršenja (s)',
 'settings_maxExecutionTime_desc' => 'Ovo postavlja maksimalno vrijeme u sekundama u kojem je skripti dopušteno da se pokrene prije nego se prekine rasčlanjivanjem',
 'settings_maxRecursiveCount' => 'Max. broj rekurzivnog dokumenta/mape',
@@ -1325,6 +1327,7 @@ Internet poveznica: [url]',
 'status_revisor_removed' => 'Revizor uklonjen s liste',
 'status_unknown' => 'Nepoznato',
 'storage_size' => 'Veličina pohrane',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Pošaljite odobrenje',
 'submit_login' => 'PRIJAVI SE',
 'submit_password' => 'Postavite novu lozinku',

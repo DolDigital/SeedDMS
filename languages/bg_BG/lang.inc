@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (785)
+//    Translators: Admin (786)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Приеми',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -975,7 +977,7 @@ $text = array(
 'settings_luceneDir' => 'Каталог за пълнотекстовия индекс',
 'settings_luceneDir_desc' => 'Път, където Lucene ще пише своя индекс',
 'settings_maxDirID' => 'Максимален ID на папка',
-'settings_maxDirID_desc' => 'Максимум подпапки в родителската папка. По подразбиране: 32700.',
+'settings_maxDirID_desc' => 'Максимум подпапки в родителската папка. По подразбиране: 0.',
 'settings_maxExecutionTime' => 'Максимално време за изпълнение (с)',
 'settings_maxExecutionTime_desc' => 'Установява максимално време за изпълнение на скрипта, преди да бъде прибит от парсера',
 'settings_maxRecursiveCount' => '',
@@ -1154,6 +1156,7 @@ $text = array(
 'status_revisor_removed' => '',
 'status_unknown' => 'Неизвестен',
 'storage_size' => 'Размер на хранилището',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Утвърди',
 'submit_login' => 'Влез',
 'submit_password' => 'Установи нова парола',

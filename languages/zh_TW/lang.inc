@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2369)
+//    Translators: Admin (2370)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => '接受',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -979,7 +981,7 @@ URL: [url]',
 'settings_luceneDir' => '',
 'settings_luceneDir_desc' => '',
 'settings_maxDirID' => '最大目錄編號',
-'settings_maxDirID_desc' => '每個父目錄的子目錄的最大數目。預設值：32700。',
+'settings_maxDirID_desc' => '每個父目錄的子目錄的最大數目。預設值：0。',
 'settings_maxExecutionTime' => '最大執行時間（秒）',
 'settings_maxExecutionTime_desc' => '此設置最長時間，以秒為腳本允許運行之前它是由解析終止',
 'settings_maxRecursiveCount' => '',
@@ -1158,6 +1160,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => '未知',
 'storage_size' => '存儲大小',
+'submit_2_fact_auth' => '',
 'submit_approval' => '提交審核',
 'submit_login' => '登錄',
 'submit_password' => '',

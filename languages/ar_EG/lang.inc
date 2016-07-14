@@ -23,6 +23,8 @@
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'وافق',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1289,6 +1291,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'مجهول',
 'storage_size' => 'حجم التخزين',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'ادخال موافقة',
 'submit_login' => 'تسجيل الدخول',
 'submit_password' => 'تحديد كلمة سر جديدة',

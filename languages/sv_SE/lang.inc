@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1129), tmichelfelder (106)
+//    Translators: Admin (1130), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Godkänn',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1110,7 +1112,7 @@ URL: [url]',
 'settings_luceneDir' => 'Mapp för fulltext-index',
 'settings_luceneDir_desc' => 'Sökväg till Lucene-index',
 'settings_maxDirID' => 'Max. mapp-ID',
-'settings_maxDirID_desc' => 'Högsta antal undermappar per överordnade mapp. Standard: 32700.',
+'settings_maxDirID_desc' => 'Högsta antal undermappar per överordnade mapp. Standard: 0.',
 'settings_maxExecutionTime' => 'Max. exekveringstid (s)',
 'settings_maxExecutionTime_desc' => 'Detta sätter hösta tillåtna tiden i sekunder som ett skript får på sig att utföras innan det avslutas.',
 'settings_maxRecursiveCount' => 'Max antal rekursiva dokument/katalog',
@@ -1289,6 +1291,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Okänd',
 'storage_size' => 'Platsstorlek',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Skicka godkännande',
 'submit_login' => 'Logga in',
 'submit_password' => 'Sätt nytt lösenord',

@@ -23,6 +23,8 @@
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Přijmout',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1298,6 +1300,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Neznámý',
 'storage_size' => 'Velikost úložiště',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Poslat ke schválení',
 'submit_login' => 'Přihlásit se',
 'submit_password' => 'Zadat nové heslo',

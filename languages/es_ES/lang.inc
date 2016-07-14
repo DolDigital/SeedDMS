@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (994), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (995), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Aceptar',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -1125,7 +1127,7 @@ URL: [url]',
 'settings_luceneDir' => 'Carpeta del índice de texto completo',
 'settings_luceneDir_desc' => 'Ruta hacia el índice Lucene',
 'settings_maxDirID' => 'ID máximo de carpeta',
-'settings_maxDirID_desc' => 'Número máximo de subcarpetas por carpeta principal. Por defecto: 32700.',
+'settings_maxDirID_desc' => 'Número máximo de subcarpetas por carpeta principal. Por defecto: 0.',
 'settings_maxExecutionTime' => 'Tiempo máximo de ejecución (s)',
 'settings_maxExecutionTime_desc' => 'Esto configura el tiempo máximo en segundos que un script puede estar ejectutándose antes de que el analizador lo pare',
 'settings_maxRecursiveCount' => 'Número máximo del contador de carpetas/documentos recursivos',
@@ -1304,6 +1306,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Desconocido',
 'storage_size' => 'Tamaño de almacenamiento',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Enviar aprobación',
 'submit_login' => 'Conectar',
 'submit_password' => 'Fijar nueva contraseña',

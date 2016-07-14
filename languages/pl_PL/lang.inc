@@ -19,10 +19,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (737), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (739), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
+'2_factor_auth_info' => '',
+'2_fact_auth_secret' => '',
 'accept' => 'Akceptuj',
 'access_control' => '',
 'access_control_is_off' => '',
@@ -507,7 +509,7 @@ URL: [url]',
 'identical_version' => 'Nowa wersja jest identyczna z obecną',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Import z systemu plików',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Uwzględnij dokumenty',
@@ -1104,7 +1106,7 @@ URL: [url]',
 'settings_luceneDir' => 'Katalog dla indeksu pełnotekstowego',
 'settings_luceneDir_desc' => 'Ścieżka do indeksu Lucene',
 'settings_maxDirID' => 'Maksymalny ID katalogu',
-'settings_maxDirID_desc' => 'Maksymalna liczba podkatalogów dla katalogu nadrzędnego. Domyślnie: 32700.',
+'settings_maxDirID_desc' => 'Maksymalna liczba podkatalogów dla katalogu nadrzędnego. Domyślnie: 0.',
 'settings_maxExecutionTime' => 'Maksymalny czas wykonywania (s)',
 'settings_maxExecutionTime_desc' => 'Ustawia maksymalny czas, liczony w sekundach, jaki ma na wykonanie skrypt zanim zostanie zakończony.',
 'settings_maxRecursiveCount' => 'Max. liczba rekurencji dokumentów/folderów',
@@ -1283,6 +1285,7 @@ URL: [url]',
 'status_revisor_removed' => '',
 'status_unknown' => 'Nieznany',
 'storage_size' => 'Zajętość dysku',
+'submit_2_fact_auth' => '',
 'submit_approval' => 'Zaakceptuj',
 'submit_login' => 'Zaloguj się',
 'submit_password' => 'Ustaw nowe hasło',
