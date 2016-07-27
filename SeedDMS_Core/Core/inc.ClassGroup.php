@@ -21,7 +21,7 @@
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe, 2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Core_Group {
+class SeedDMS_Core_Group { /* {{{ */
 	/**
 	 * The id of the user group
 	 *
@@ -437,5 +437,5 @@ class SeedDMS_Core_Group {
 		return $notifications;
 	} /* }}} */
 
-}
+} /* }}} */
 ?>
