@@ -150,34 +150,29 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			}
 		}
 
-
+		$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 		$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers);
 		unlink($userfiletmp);
 		if (is_bool($contentResult) && !$contentResult) {
 			echo getMLText("error_occured");
 		} else {
+			if($settings->_enableFullSearch) {
+				$index = $indexconf['Indexer']::open($settings->_luceneDir);
+				if($index) {
+					$lucenesearch = new $indexconf['Search']($index);
+					if($hit = $lucenesearch->getDocument((int) $document->getId())) {
+						$index->delete($hit->id);
+					}
+					$indexconf['Indexer']::init($settings->_stopWordsFile);
+					$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
+					$index->commit();
+				}
+			}
+
 			// Send notification to subscribers.
 			if ($notifier){
 				$notifyList = $document->getNotifyList();
 				$folder = $document->getFolder();
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_updated_email");
-				$message = getMLText("document_updated_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-				foreach ($document->_notifyList["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
-				}
-
-				// if user is not owner send notification to owner
-				if ($user->getID()!= $document->getOwner()->getID())
-					$notifier->toIndividual($user, $document->getOwner(), $subject, $message);
-*/
 				$subject = "document_updated_email_subject";
 				$message = "document_updated_email_body";
 				$params = array();
@@ -205,20 +200,6 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 					$notifyList = $document->getNotifyList();
 					$folder = $document->getFolder();
 					// Send notification to subscribers.
-/*
-					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("expiry_changed_email");
-					$message = getMLText("expiry_changed_email")."\r\n";
-					$message .= 
-						getMLText("document").": ".$document->getName()."\r\n".
-						getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-					$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-					foreach ($document->_notifyList["groups"] as $grp) {
-						$notifier->toGroup($user, $grp, $subject, $message);
-					}
-*/
 					$subject = "expiry_changed_email_subject";
 					$message = "expiry_changed_email_body";
 					$params = array();

@@ -285,6 +285,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		}
 	}
 
+	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
@@ -306,7 +307,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$index = $indexconf['Indexer']::open($settings->_luceneDir);
 			if($index) {
 				$indexconf['Indexer']::init($settings->_stopWordsFile);
-				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
+				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
 			}
 		}
 

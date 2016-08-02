@@ -67,6 +67,18 @@ if (count($document->getContent())==1) {
 	if (!$document->remove()) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} else {
+		/* Remove the document from the fulltext index */
+		if($settings->_enableFullSearch) {
+			$index = $indexconf['Indexer']::open($settings->_luceneDir);
+			if($index) {
+				$lucenesearch = new $indexconf['Search']($index);
+				if($hit = $lucenesearch->getDocument($documentid)) {
+					$index->delete($hit->id);
+					$index->commit();
+				}
+			}
+		}
+
 		if ($notifier){
 			$subject = "document_deleted_email_subject";
 			$message = "document_deleted_email_body";
@@ -115,6 +127,21 @@ else {
 	if (!$document->removeContent($version)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} else {
+		/* Remove the document from the fulltext index and reindex latest version */
+		if($settings->_enableFullSearch) {
+			$index = $indexconf['Indexer']::open($settings->_luceneDir);
+			if($index) {
+				$lucenesearch = new $indexconf['Search']($index);
+				if($hit = $lucenesearch->getDocument($document->getID())) {
+					$index->delete($hit->id);
+				}
+				$version = $document->getLatestContent();
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($version->getFileSize() < $settings->_maxSizeForFullText)));
+				$index->commit();
+			}
+		}
+
 		// Notify affected users.
 		if ($notifier){
 			$nl=$document->getNotifyList();
