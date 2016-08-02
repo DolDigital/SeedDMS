@@ -2,6 +2,7 @@
                      Changes in version 4.3.28
 --------------------------------------------------------------------------------
 - add expiration in list of documents
+- fix SetReviewersApprovers if reviewer/approver is an admin or the owner
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
