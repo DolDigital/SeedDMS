@@ -64,7 +64,7 @@ $folder = $document->getFolder();
 
 // Retrieve a list of all users and groups that have review / approve
 // privileges.
-$docAccess = $document->getReadAccessList();
+$docAccess = $document->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
 $accessIndex = array("i"=>array(), "g"=>array());
 foreach ($docAccess["users"] as $i=>$da) {
 	$accessIndex["i"][$da->getID()] = $i;
