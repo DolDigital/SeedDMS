@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1417), dgrutsch (7), netixw (14)
+//    Translators: Admin (1418), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1177,7 +1177,7 @@ URL: [url]',
 'settings_maxRecursiveCount' => 'Max. number of recursive document/folder count',
 'settings_maxRecursiveCount_desc' => 'This is the maximum number of documents or folders that will be checked for access rights, when recursively counting objects. If this number is exceeded, the number of documents and folders in the folder view will be estimated.',
 'settings_maxSizeForFullText' => 'Maximum filesize for instant indexing',
-'settings_maxSizeForFullText_desc' => 'All new document vresion smaller than the configured size will be fully indexed right after uploading. In all other cases only the metadata will be indexed.',
+'settings_maxSizeForFullText_desc' => 'All new document version smaller than the configured size will be fully indexed right after uploading. In all other cases only the metadata will be indexed.',
 'settings_more_settings' => 'Configure more settings. Default login: admin/admin',
 'settings_notfound' => 'Not found',
 'settings_Notification' => 'Notification settings',
