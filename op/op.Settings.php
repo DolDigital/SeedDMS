@@ -68,8 +68,9 @@ if ($action == "saveSettings")
   $settings->_enableEmail =getBoolValue("enableEmail");
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
-	$settings->_fullSearchEngine = $_POST["fullSearchEngine"];
-	$settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
+  $settings->_maxSizeForFullText = intval($_POST["maxSizeForFullText"]);
+  $settings->_fullSearchEngine = $_POST["fullSearchEngine"];
+  $settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
@@ -79,9 +80,9 @@ if ($action == "saveSettings")
   $settings->_enableHelp = getBoolValue("enableHelp");
   $settings->_enableThemeSelector = getBoolValue("enableThemeSelector");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
-	$settings->_stopWordsFile = $_POST["stopWordsFile"];
-	$settings->_sortUsersInList = $_POST["sortUsersInList"];
-	$settings->_sortFoldersDefault = $_POST["sortFoldersDefault"];
+  $settings->_stopWordsFile = $_POST["stopWordsFile"];
+  $settings->_sortUsersInList = $_POST["sortUsersInList"];
+  $settings->_sortFoldersDefault = $_POST["sortFoldersDefault"];
 
   // SETTINGS - SITE - CALENDAR
   $settings->_enableCalendar = getBoolValue("enableCalendar");

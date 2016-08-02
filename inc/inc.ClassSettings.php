@@ -91,6 +91,8 @@ class Settings { /* {{{ */
 	var $_stopWordsFile = null;
 	// enable/disable lucene fulltext search
 	var $_enableFullSearch = true;
+	// max size of documents for direct indexing
+	var $_maxSizeForFullText = 0;
 	// fulltext search engine
 	var $_fullSearchEngine = 'lucene';
 	// default search method
@@ -186,7 +188,7 @@ class Settings { /* {{{ */
 	var $_sortUsersInList = '';
 	// Sort method for forders and documents ('n' (name) or '')
 	var $_sortFoldersDefault = '';
-	// enable/disable lucene fulltext search
+	// Set valid IP for admin logins
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
 	// Max Execution Time
@@ -382,6 +384,7 @@ class Settings { /* {{{ */
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
 		$this->_enableThemeSelector = Settings::boolVal($tab["enableThemeSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
+		$this->_maxSizeForFullText = intval($tab["maxSizeForFullText"]);
 		$this->_fullSearchEngine = strval($tab["fullSearchEngine"]);
 		$this->_defaultSearchMethod = strval($tab["defaultSearchMethod"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
@@ -662,6 +665,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
     $this->setXMLAttributValue($node, "enableThemeSelector", $this->_enableThemeSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
+    $this->setXMLAttributValue($node, "maxSizeForFullText", $this->_maxSizeForFullText);
     $this->setXMLAttributValue($node, "fullSearchEngine", $this->_fullSearchEngine);
     $this->setXMLAttributValue($node, "defaultSearchMethod", $this->_defaultSearchMethod);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
