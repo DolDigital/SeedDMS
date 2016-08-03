@@ -46,36 +46,32 @@ class SeedDMS_View_UsrView extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("users"));
 		$this->contentContainerStart();
 
-		echo "<table class=\"table-condensed\">\n";
+		echo "<table class=\"table table-condensed\">\n";
 		echo "<thead>\n<tr>\n";
+		if($enableuserimage) echo "<th></th>\n";
 		echo "<th>".getMLText("name")."</th>\n";
-		echo "<th>".getMLText("email")."</th>\n";
-		echo "<th>".getMLText("comment")."</th>\n";
-		if ($enableuserimage) echo "<th>".getMLText("user_image")."</th>\n";
 		echo "</tr>\n</thead>\n";
 
 		foreach ($users as $currUser) {
 
 			if ($currUser->isGuest())
 				continue;
-				
+
 			if ($currUser->isHidden()=="1") continue;
-				
-			echo "<tr>\n";
-			
-			print "<td>".htmlspecialchars($currUser->getFullName())."</td>";
-			
-			print "<td><a href=\"mailto:".htmlspecialchars($currUser->getEmail())."\">".htmlspecialchars($currUser->getEmail())."</a></td>";
-			print "<td>".htmlspecialchars($currUser->getComment())."</td>";
-			
-			if ($enableuserimage){
-				print "<td>";
-				if ($currUser->hasImage()) print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
-				else printMLText("no_user_image");
-				print "</td>";	
+
+			echo "<tr>";
+			if($enableuserimage) {
+				echo "<td>";
+				if ($currUser->hasImage())
+					print "<img width=\"100\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
+				echo "</td>";
 			}
-			
-			echo "</tr>\n";
+			echo "<td>";
+			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
+			echo "<a href=\"mailto:".$currUser->getEmail()."\">".htmlspecialchars($currUser->getEmail())."</a><br />";
+			echo "<small>".htmlspecialchars($currUser->getComment())."</small>";
+			echo "</td>";
+			echo "</tr>";
 		}
 
 		echo "</table>\n";
