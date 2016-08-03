@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2263), dgrutsch (21)
+//    Translators: Admin (2269), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -402,8 +402,10 @@ URL: [url]',
 'edit_document_props' => 'Bearbeiten',
 'edit_event' => 'Ereignis editieren',
 'edit_existing_access' => 'Bestehende Berechtigungen bearbeiten',
+'edit_existing_attribute_groups' => 'Attributgruppen bearbeiten',
 'edit_existing_notify' => 'Beobachter bearbeiten',
 'edit_folder_access' => 'Zugriffsrechte bearbeiten',
+'edit_folder_attrdefgrp' => 'Attributgruppen bearbeiten',
 'edit_folder_notify' => 'Beobachtung von Ordnern',
 'edit_folder_props' => 'Bearbeiten',
 'edit_group' => 'Gruppe bearbeiten',
@@ -417,6 +419,7 @@ URL: [url]',
 'email_footer' => 'Sie können zu jeder Zeit Ihre E-Mail-Adresse über \'Mein Profil\' ändern.',
 'email_header' => 'Dies ist eine automatische Nachricht des DMS-Servers.',
 'email_not_given' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+'empty_attribute_group_list' => 'Keine Attributgruppen',
 'empty_folder_list' => 'Keine Dokumente oder Ordner',
 'empty_notify_list' => 'Keine Beobachter',
 'en_GB' => 'Englisch (GB)',
@@ -1172,6 +1175,8 @@ URL: [url]',
 'settings_maxExecutionTime_desc' => 'Maximale Zeit in Sekunden bis ein Skript beendet wird.',
 'settings_maxRecursiveCount' => 'Max. Anzahl Anzahl rekursiver Dokumente/Ordner.',
 'settings_maxRecursiveCount_desc' => 'Dies ist die maximale Anzahl der Dokumente und Ordner die auf Zugriffsrechte geprüft werden, wenn rekursiv gezählt wird. Wenn diese Anzahl überschritten wird, wird die Anzahl der Dokumente und Unterordner in der Ordner Ansicht geschätzt.',
+'settings_maxSizeForFullText' => 'Maximale Dateigröße für sofortige Indezierung',
+'settings_maxSizeForFullText_desc' => 'Alle neue Version eines Dokuments, die kleiner als die die konfigurierte Dateigröße sind, werden sofort indiziert. In allen anderen Fällen werden nur die Metadaten erfasst.',
 'settings_more_settings' => 'Weitere Einstellungen. Login mit admin/admin',
 'settings_notfound' => 'Nicht gefunden',
 'settings_Notification' => 'Benachrichtigungen-Einstellungen',

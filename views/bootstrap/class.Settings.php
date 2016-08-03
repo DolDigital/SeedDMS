@@ -207,6 +207,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableFullSearch");?>:</td>
         <td><input name="enableFullSearch" type="checkbox" <?php if ($settings->_enableFullSearch) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_maxSizeForFullText_desc");?>">
+        <td><?php printMLText("settings_maxSizeForFullText");?>:</td>
+        <td><?php $this->showTextField("maxSizeForFullText", $settings->_maxSizeForFullText); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_fullSearchEngine_desc");?>">
         <td><?php printMLText("settings_fullSearchEngine");?>:</td>
 				<td>
