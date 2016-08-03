@@ -10,6 +10,7 @@
 - show only those groups in GroupView the current user is a member of (partly
   fixes #239)
 - make UserView look similar to UserList
+- log correct ip even after a reverse proxy (Closes #206)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
