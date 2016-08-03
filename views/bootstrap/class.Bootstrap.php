@@ -1778,10 +1778,6 @@ $(document).ready( function() {
 		$owner = $subFolder->getOwner();
 		$comment = $subFolder->getComment();
 		if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-		$subsub = $subFolder->getSubFolders();
-		$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
-		$subdoc = $subFolder->getDocuments();
-		$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 
 		$content = '';
 		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
@@ -1811,6 +1807,14 @@ $(document).ready( function() {
 				$content .= (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
 			}
 		} else {
+			/* FIXME: the following is very inefficient for just getting the number of
+			 * subfolders and documents. Making it more efficient is difficult, because
+			 * the access rights need to be checked.
+			 */
+			$subsub = $subFolder->getSubFolders();
+			$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
+			$subdoc = $subFolder->getDocuments();
+			$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 			$content .= count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
 		}
 		$content .= "</small></td>";
