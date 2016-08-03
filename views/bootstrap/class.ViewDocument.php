@@ -370,7 +370,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach($attributes as $attribute) {
 				$arr = $this->callHook('showDocumentAttribute', $document, $attribute);
 				if(is_array($arr)) {
-					echo $txt;
 					echo "<tr>";
 					echo "<td>".$arr[0].":</td>";
 					echo "<td>".$arr[1]."</td>";
