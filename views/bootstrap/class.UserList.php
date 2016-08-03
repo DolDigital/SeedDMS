@@ -56,7 +56,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			echo "<tr>";
 			echo "<td>";
 			if ($currUser->hasImage())
-				print "<img width=\"50\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
+				print "<img width=\"100\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
 			echo "</td>";
 			echo "<td>";
 			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
