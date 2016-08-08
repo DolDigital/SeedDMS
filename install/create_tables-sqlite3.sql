@@ -37,7 +37,7 @@ CREATE TABLE `tblAttributeDefinitions` (
   `minvalues` INTEGER NOT NULL default '0',
   `maxvalues` INTEGER NOT NULL default '0',
   `valueset` TEXT default NULL,
-  `regex` TEXT DEFAULT '',
+  `regex` TEXT DEFAULT NULL,
   UNIQUE(`name`)
 ) ;
 
