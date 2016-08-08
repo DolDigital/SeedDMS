@@ -711,7 +711,8 @@ if(!is_writeable($settings->_configFilePath)) {
 				}
 ?>
 		</table>
-	</div>
+<?php		$this->contentContainerEnd(); ?>
+  </div>
   </div>
 <?php
 if(is_writeable($settings->_configFilePath)) {
