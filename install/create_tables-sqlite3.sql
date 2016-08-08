@@ -37,7 +37,7 @@ CREATE TABLE `tblAttributeDefinitions` (
   `minvalues` INTEGER NOT NULL default '0',
   `maxvalues` INTEGER NOT NULL default '0',
   `valueset` TEXT default NULL,
-  `regex` TEXT DEFAULT '',
+  `regex` TEXT DEFAULT NULL,
   UNIQUE(`name`)
 ) ;
 
@@ -428,9 +428,9 @@ CREATE TABLE `tblSessions` (
   `lastAccess` INTEGER NOT NULL default '0',
   `theme` varchar(30) NOT NULL default '',
   `language` varchar(30) NOT NULL default '',
-  `clipboard` text default '',
+  `clipboard` text default NULL,
 	`su` INTEGER DEFAULT NULL,
-  `splashmsg` text default ''
+  `splashmsg` text default NULL
 ) ;
 
 -- --------------------------------------------------------

@@ -49,6 +49,7 @@
   fixes #239)
 - make UserView look similar to UserList
 - log correct ip even after a reverse proxy (Closes #206)
+- fix sql error in table creation if sql mode is set to STRICT_TRANS_TABLE
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27

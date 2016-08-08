@@ -48,7 +48,7 @@ class SeedDMS_PasswordHistoryManager {
 
 	function add($user, $pwd) { /* {{{ */
 		$queryStr = "INSERT INTO tblUserPasswordHistory (userID, pwd, `date`) ".
-		  "VALUES (".$this->db->qstr($user->getId()).", ".$this->db->qstr($pwd).", CURRENT_TIMESTAMP)";
+		  "VALUES (".$this->db->qstr($user->getId()).", ".$this->db->qstr($pwd).", ".$this->db->getCurrentDatetime().")";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
