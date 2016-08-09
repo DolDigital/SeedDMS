@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1418), dgrutsch (7), netixw (14)
+//    Translators: Admin (1421), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -135,6 +135,7 @@ URL: [url]',
 'attrdefgrp_show_detail' => 'Details',
 'attrdefgrp_show_list' => 'List',
 'attrdefgrp_show_search' => 'Search',
+'attrdefgrp_show_searchlist' => 'Search result',
 'attrdef_exists' => 'Attribute definition already exists',
 'attrdef_info' => 'Information',
 'attrdef_in_use' => 'Attribute definition still in use',
@@ -427,6 +428,7 @@ URL: [url]',
 'error' => 'Error',
 'error_add_aro' => 'Error while adding access request object',
 'error_add_permission' => 'Error while add permission',
+'error_clearcache' => 'Error while clearing cache',
 'error_importfs' => 'Error while importing form file system',
 'error_no_document_selected' => 'No document selected',
 'error_no_folder_selected' => 'No folder selected',
@@ -1299,6 +1301,7 @@ URL: [url]',
 'splash_add_role' => 'Added new role',
 'splash_add_to_transmittal' => 'Add to transmittal',
 'splash_add_user' => 'New user added',
+'splash_clearcache' => 'Cache cleared',
 'splash_cleared_clipboard' => 'Clipboard cleared',
 'splash_document_added' => 'Document added',
 'splash_document_checkedout' => 'Document checked out',
