@@ -375,8 +375,28 @@ $(document).ready( function() {
 			url: url,
 			dataType: 'json',
 			success: function(data){
-				for (var i = 0; i < data.length; i++) {
-					noty({text: data[i].text, type: data[i].type});
+				if(data.success) {
+					if(element.data('param1') == 'command=clearclipboard') {
+						$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+						$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					}
+					noty({
+						text: data.message,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
 				}
 			}
 		});
