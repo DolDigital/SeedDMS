@@ -17,7 +17,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
@@ -29,7 +29,13 @@ if(!checkFormKey('clearcache')) {
 }
 
 $cmd = 'rm -rf '.$settings->_cacheDir.'/*';
-system($cmd);
+$ret = null;
+system($cmd, $ret);
+if($ret)
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_clearcache')));
+else
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_clearcache')));
+
 add_log_line("");
 
 header("Location:../out/out.AdminTools.php");
