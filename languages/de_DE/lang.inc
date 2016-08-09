@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2269), dgrutsch (21)
+//    Translators: Admin (2272), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -135,6 +135,7 @@ URL: [url]',
 'attrdefgrp_show_detail' => 'Details',
 'attrdefgrp_show_list' => 'Liste',
 'attrdefgrp_show_search' => 'Suche',
+'attrdefgrp_show_searchlist' => 'Suchergebnis',
 'attrdef_exists' => 'Attributdefinition existiert bereits',
 'attrdef_info' => 'Information',
 'attrdef_in_use' => 'Definition des Attributs noch in Gebrauch',
@@ -427,6 +428,7 @@ URL: [url]',
 'error' => 'Fehler',
 'error_add_aro' => 'Fehler beim Hinzufügen des Zugriffsobjekt',
 'error_add_permission' => 'Fehler beim Hinzufügen der Berechtigung',
+'error_clearcache' => 'Fehler beim Löschen des Cache',
 'error_importfs' => 'Fehler beim Importieren aus dem Dateisystem',
 'error_no_document_selected' => 'Kein Dokument ausgewählt',
 'error_no_folder_selected' => 'Kein Ordner ausgewählt',
@@ -1298,6 +1300,7 @@ URL: [url]',
 'splash_add_role' => 'Neue Rolle hinzugefügt',
 'splash_add_to_transmittal' => 'Zur Dokumentenliste hinzugefügt',
 'splash_add_user' => 'Neuen Benutzer hinzugefügt',
+'splash_clearcache' => 'Cache geleert',
 'splash_cleared_clipboard' => 'Zwischenablage geleert',
 'splash_document_added' => 'Dokument hinzugefügt',
 'splash_document_checkedout' => 'Dokument ausgecheckt',
