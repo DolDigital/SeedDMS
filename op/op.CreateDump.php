@@ -30,7 +30,7 @@ if (!$user->isAdmin()) {
 }
 
 $v = new SeedDMS_Version;
-$dump_name = $settings->_contentDir.date('Y-m-d\TH:i:s')."_".$v->_number.".sql";
+$dump_name = $settings->_contentDir.date('Y-m-d\TH-i-s')."_".$v->_number.".sql";
 if(!$dms->createDump($dump_name))
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 
