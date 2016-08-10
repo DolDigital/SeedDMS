@@ -197,18 +197,18 @@ else {
 	if($user = $dms->getUserByLogin($login)) {
 		$userid = $user->getID();
 
-	// Check if password matches (if not a guest user)
-	// Assume that the password has been sent via HTTP POST. It would be careless
-	// (and dangerous) for passwords to be sent via GET.
-	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
-		/* if counting of login failures is turned on, then increment its value */
-		if($settings->_loginFailure) {
-			$failures = $user->addLoginFailure();
-			if($failures >= $settings->_loginFailure)
-				$user->setDisabled(true);
+		// Check if password matches (if not a guest user)
+		// Assume that the password has been sent via HTTP POST. It would be careless
+		// (and dangerous) for passwords to be sent via GET.
+		if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
+			/* if counting of login failures is turned on, then increment its value */
+			if($settings->_loginFailure) {
+				$failures = $user->addLoginFailure();
+				if($failures >= $settings->_loginFailure)
+					$user->setDisabled(true);
+			}
+			$user = false;
 		}
-		$user = false;
-	}
 	}
 } /* }}} */
 
@@ -217,26 +217,26 @@ if(!$user) {
 	exit;
 }
 
-	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
-		_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
-		exit;
-	}
+if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
+	_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
+	exit;
+}
 
-	// Check if account is disabled
-	if($user->isDisabled()) {
-		_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
-		exit;
-	}
+// Check if account is disabled
+if($user->isDisabled()) {
+	_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
+	exit;
+}
 
-	// control admin IP address if required
-	// TODO: extend control to LDAP autentication
-	if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
-		_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
-		exit;
-	}
+// control admin IP address if required
+// TODO: extend control to LDAP autentication
+if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
+	_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
+	exit;
+}
 
-	/* Clear login failures if login was successful */
-	$user->clearLoginFailures();
+/* Clear login failures if login was successful */
+$user->clearLoginFailures();
 
 // Capture the user's language and theme settings.
 if (isset($_REQUEST["lang"]) && strlen($_REQUEST["lang"])>0 && is_numeric(array_search($_REQUEST["lang"],getLanguages())) ) {
