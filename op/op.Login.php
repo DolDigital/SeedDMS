@@ -31,12 +31,12 @@ include("../inc/inc.ClassController.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
-function _printMessage($heading, $message) {
+function _printMessage($heading, $message) { /* {{{ */
 	global $dms, $theme;
 	$view = UI::factory($theme, 'ErrorDlg', array('dms'=>$dms));
 	$view->exitError($heading, $message, true);
 	return;
-}
+} /* }}} */
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
@@ -63,6 +63,7 @@ if(isset($_POST['pwd'])) {
 	}
 }
 
+/* The password may only be empty if the guest user tries to log in */
 if($settings->_enableGuestLogin && (int) $settings->_guestID) {
 	$guestUser = $dms->getUser((int) $settings->_guestID);
 	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin())) {
@@ -87,8 +88,8 @@ if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
 	}
 }
 
-if (is_bool($user)) {
-if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+/* Authenticate against LDAP server {{{ */
+if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
 		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
 	} else {
@@ -152,11 +153,11 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 
 		/* No do the actual authentication of the user */
 		$bind = @ldap_bind($ds, $dn, $pwd);
+		$user = $dms->getUserByLogin($login);
 		if ($bind) {
 			// Successfully authenticated. Now check to see if the user exists within
 			// the database. If not, add them in if _restricted is not set,
 			// but do not add their password.
-			$user = $dms->getUserByLogin($login);
 			if (is_bool($user) && !$settings->_restricted) {
 				// Retrieve the user's LDAP information.
 				if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
@@ -172,46 +173,52 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 					}
 				}
 			}
-			if (!is_bool($user)) {
-				$userid = $user->getID();
+		} elseif($user) {
+			$userid = $user->getID();
+			if($settings->_loginFailure) {
+				$failures = $user->addLoginFailure();
+				if($failures >= $settings->_loginFailure)
+					$user->setDisabled(true);
 			}
+			$user = false;
 		}
 		ldap_close($ds);
 	}
-}
-}
+} /* }}} */
 
-if (is_bool($user)) {
+/* Authenticate against SeedDMS database {{{ */
+else {
 	//
 	// LDAP Authentication did not succeed or is not configured. Try internal
 	// authentication system.
 	//
 
 	// Try to find user with given login.
-	$user = $dms->getUserByLogin($login);
-	if (!$user) {
-		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
-		exit;
-	}
-
-	$userid = $user->getID();
-
-	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
-		_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
-		exit;
-	}
+	if($user = $dms->getUserByLogin($login)) {
+		$userid = $user->getID();
 
 	// Check if password matches (if not a guest user)
 	// Assume that the password has been sent via HTTP POST. It would be careless
 	// (and dangerous) for passwords to be sent via GET.
 	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
-		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
 		/* if counting of login failures is turned on, then increment its value */
 		if($settings->_loginFailure) {
 			$failures = $user->addLoginFailure();
 			if($failures >= $settings->_loginFailure)
 				$user->setDisabled(true);
 		}
+		$user = false;
+	}
+	}
+} /* }}} */
+
+if(!$user) {
+	_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
+	exit;
+}
+
+	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
+		_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
 		exit;
 	}
 
@@ -230,8 +237,6 @@ if (is_bool($user)) {
 
 	/* Clear login failures if login was successful */
 	$user->clearLoginFailures();
-
-}
 
 // Capture the user's language and theme settings.
 if (isset($_REQUEST["lang"]) && strlen($_REQUEST["lang"])>0 && is_numeric(array_search($_REQUEST["lang"],getLanguages())) ) {
@@ -326,8 +331,5 @@ if (isset($referuri) && strlen($referuri)>0) {
 else {
 	header("Location: ".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".($user->getHomeFolder() ? $user->getHomeFolder() : $settings->_rootFolderID)));
 }
-
-//_printMessage(getMLText("login_ok"),
-//	"<p><a href='".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php")."'>".getMLText("continue")."</a></p>");
 
 ?>

@@ -223,6 +223,14 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'clearclipboard': /* {{{ */
+		if($user) {
+			$session->clearClipboard();
+			header('Content-Type: application/json');
+			echo json_encode(array('success'=>true, 'message'=>getMLText('splash_cleared_clipboard')));
+		}
+		break; /* }}} */
+
 	case 'movefolder': /* {{{ */
 		if($user) {
 			if(!checkFormKey('movefolder', 'GET')) {

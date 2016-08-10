@@ -50,6 +50,8 @@
 - make UserView look similar to UserList
 - log correct ip even after a reverse proxy (Closes #206)
 - fix sql error in table creation if sql mode is set to STRICT_TRANS_TABLE
+- menu entry 'Clear clipboard' will call ajax function and no longer
+  redirects to new page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
