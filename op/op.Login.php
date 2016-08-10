@@ -213,7 +213,6 @@ if($user->isDisabled()) {
 }
 
 // control admin IP address if required
-// TODO: extend control to LDAP autentication
 if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
 	_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
 	exit;
