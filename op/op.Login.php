@@ -74,126 +74,16 @@ $user = false;
 
 /* Authenticate against LDAP server {{{ */
 if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
-	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
-		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
-	} else {
-		$ds = ldap_connect($settings->_ldapHost);
-	}
-
-	if (!is_bool($ds)) {
-		/* Check if ldap base dn is set, and use ldap server if it is */
-		if (isset($settings->_ldapBaseDN)) {
-			$ldapSearchAttribut = "uid=";
-			$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
-		}
-
-		/* Active directory has a different base dn */
-		if (isset($settings->_ldapType)) {
-			if ($settings->_ldapType==1) {
-				$ldapSearchAttribut = "sAMAccountName=";
-				$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
-				// Add the following if authentication with an Active Dir doesn't work
-				// See https://sourceforge.net/p/seeddms/discussion/general/thread/19c70d8d/
-				// and http://stackoverflow.com/questions/6222641/how-to-php-ldap-search-to-get-user-ou-if-i-dont-know-the-ou-for-base-dn
-				ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
-			}
-		}
-
-		// Ensure that the LDAP connection is set to use version 3 protocol.
-		// Required for most authentication methods, including SASL.
-		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-		// try an authenticated/anonymous bind first.
-		// If it succeeds, get the DN for the user and use it for an authentication
-		// with the users password.
-		$bind = false;
-		if (isset($settings->_ldapBindDN)) {
-			$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
-		} else {
-			$bind = @ldap_bind($ds);
-		}
-		$dn = false;
-		/* If bind succeed, then get the dn of for the user */
-		if ($bind) {
-			if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-				$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-			} else {
-				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-			}
-			if (!is_bool($search)) {
-				$info = ldap_get_entries($ds, $search);
-				if (!is_bool($info) && $info["count"]>0) {
-					$dn = $info[0]['dn'];
-				}
-			}
-		}
-
-		/* If the previous bind failed, try it with the users creditionals
-		 * by simply setting $dn to a default string
-		 */
-		if (is_bool($dn)) {
-			$dn = $tmpDN;
-		}
-
-		/* No do the actual authentication of the user */
-		$bind = @ldap_bind($ds, $dn, $pwd);
-		$user = $dms->getUserByLogin($login);
-		if ($bind) {
-			// Successfully authenticated. Now check to see if the user exists within
-			// the database. If not, add them in if _restricted is not set,
-			// but do not add their password.
-			if (is_bool($user) && !$settings->_restricted) {
-				// Retrieve the user's LDAP information.
-				if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-				} else {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-				}
-
-				if (!is_bool($search)) {
-					$info = ldap_get_entries($ds, $search);
-					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-						$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
-					}
-				}
-			}
-		} elseif($user) {
-			$userid = $user->getID();
-			if($settings->_loginFailure) {
-				$failures = $user->addLoginFailure();
-				if($failures >= $settings->_loginFailure)
-					$user->setDisabled(true);
-			}
-			$user = false;
-		}
-		ldap_close($ds);
-	}
+	require_once("../inc/inc.ClassLdapAuthentication.php");
+	$authobj = new SeedDMS_LdapAuthentication($dms, $settings);
+	$user = $authobj->authenticate($login, $pwd);
 } /* }}} */
 
 /* Authenticate against SeedDMS database {{{ */
 else {
-	//
-	// LDAP Authentication did not succeed or is not configured. Try internal
-	// authentication system.
-	//
-
-	// Try to find user with given login.
-	if($user = $dms->getUserByLogin($login)) {
-		$userid = $user->getID();
-
-		// Check if password matches (if not a guest user)
-		// Assume that the password has been sent via HTTP POST. It would be careless
-		// (and dangerous) for passwords to be sent via GET.
-		if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
-			/* if counting of login failures is turned on, then increment its value */
-			if($settings->_loginFailure) {
-				$failures = $user->addLoginFailure();
-				if($failures >= $settings->_loginFailure)
-					$user->setDisabled(true);
-			}
-			$user = false;
-		}
-	}
+	require_once("../inc/inc.ClassDbAuthentication.php");
+	$authobj = new SeedDMS_DbAuthentication($dms, $settings);
+	$user = $authobj->authenticate($login, $pwd);
 } /* }}} */
 
 if(!$user) {
@@ -201,6 +91,7 @@ if(!$user) {
 	exit;
 }
 
+$userid = $user->getID();
 if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
 	_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
 	exit;
