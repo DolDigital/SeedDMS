@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1421), dgrutsch (7), netixw (14)
+//    Translators: Admin (1425), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -309,7 +309,7 @@ URL: [url]',
 'documents_to_process' => 'Documents that need processing',
 'documents_to_receipt' => 'Documents awaiting to confirm the receipt',
 'documents_to_review' => 'Documents awaiting your review',
-'documents_to_revise' => 'Documents to revise',
+'documents_to_revise' => 'Documents awaiting your revision',
 'documents_user_rejected' => 'Rejected documents',
 'documents_user_requiring_attention' => 'Documents owned by you that require attention',
 'document_already_checkedout' => 'This document is already checked out',
@@ -656,6 +656,7 @@ URL: [url]',
 'my_transmittals' => 'My transmittals',
 'name' => 'Name',
 'needs_workflow_action' => 'This document requires your attention. Please check the workflow tab.',
+'network_drive' => 'Network drive',
 'never' => 'never',
 'new' => 'New',
 'new_attrdef' => 'Add attribute definition',
@@ -716,6 +717,7 @@ URL: [url]',
 'no_default_keywords' => 'No keywords available',
 'no_docs_checked_out' => 'No documents checked out',
 'no_docs_locked' => 'No documents locked.',
+'no_docs_rejected' => 'No documents rejected.',
 'no_docs_to_approve' => 'There are currently no documents that require approval.',
 'no_docs_to_look_at' => 'No documents that need attention.',
 'no_docs_to_receipt' => 'No document receipts required',
@@ -1477,7 +1479,7 @@ URL: [url]',
 'use_default_keywords' => 'Use predefined keywords',
 'version' => 'Version',
 'versioning_file_creation' => 'Versioning file creation',
-'versioning_file_creation_warning' => 'With this operation you can create a file containing the versioning information of an entire DMS folder. After the creation every file will be saved inside the document folder.',
+'versioning_file_creation_warning' => 'With this operation you can create a file for each document containing the versioning information of that document. After the creation every file will be saved inside the document folder. Those files are not needed for the regular operation of the dms, but could be of value if the complete repository shall be transferred to an other system.',
 'versioning_info' => 'Versioning info',
 'versiontolow' => 'Version to low',
 'version_deleted_email' => 'Version deleted',
