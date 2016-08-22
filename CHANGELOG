@@ -2,6 +2,8 @@
                      Changes in version 5.0.5
 --------------------------------------------------------------------------------
 - merged changes from 4.3.28
+- fix choosing home folder of users
+- fix clearing cache
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.4
