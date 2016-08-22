@@ -1004,22 +1004,22 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooserJs($formName) { /* {{{ */
+	function printFolderChooserJs($form) { /* {{{ */
 ?>
-function folderSelected<?php echo $formName ?>(id, name) {
-	$('#targetid<?php echo $formName ?>').val(id);
-	$('#choosefoldersearch<?php echo $formName ?>').val(name);
-	$('#folderChooser<?php echo $formName ?>').modal('hide');
+function folderSelected<?php echo $form ?>(id, name) {
+	$('#targetid<?php echo $form ?>').val(id);
+	$('#choosefoldersearch<?php echo $form ?>').val(name);
+	$('#folderChooser<?php echo $form ?>').modal('hide');
 }
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		$this->printFolderChooserHtml($formName, $accessMode, $exclude, $default);
+	function printFolderChooser($form, $accessMode, $exclude = -1, $default = false, $formname='') { /* {{{ */
+		$this->printFolderChooserHtml($form, $accessMode, $exclude, $default, $formname);
 ?>
 		<script language="JavaScript">
 <?php
-		$this->printFolderChooserJs($formName);
+		$this->printFolderChooserJs($form);
 ?>
 		</script>
 <?php
