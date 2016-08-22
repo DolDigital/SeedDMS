@@ -35,6 +35,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	$dms_session = $_COOKIE["mydms_session"];
 	$session = new SeedDMS_Session($db);
 	if(!$resArr = $session->load($dms_session)) {
+		header('Content-Type: application/json');
 		echo json_encode(array('error'=>1));
 		exit;
 	}
@@ -45,6 +46,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	/* Load user data */
 	$user = $dms->getUser($resArr["userID"]);
 	if (!is_object($user)) {
+		header('Content-Type: application/json');
 		echo json_encode(array('error'=>1));
 		exit;
 	}
@@ -63,6 +65,11 @@ if (isset($_COOKIE["mydms_session"])) {
 	$user = null;
 }
 
+/* make sure the browser doesn't cache the output of this page.
+ * Edge doesn't if not explicitly told to not do it, see bug #280
+ */
+header("Cache-Control: no-cache,no-store");
+
 $command = $_REQUEST["command"];
 switch($command) {
 	case 'checkpwstrength': /* {{{ */
@@ -75,17 +82,21 @@ switch($command) {
 		$score = $ps->get_score();
 		if($settings->_passwordStrength) {
 			if($score >= $settings->_passwordStrength) {
+				header('Content-Type: application/json');
 				echo json_encode(array('error'=>0, 'strength'=>$score, 'score'=>$score/$settings->_passwordStrength, 'ok'=>1));
 			} else {
+				header('Content-Type: application/json');
 				echo json_encode(array('error'=>0, 'strength'=>$score, 'score'=>$score/$settings->_passwordStrength, 'ok'=>0));
 			}
 		} else {
+			header('Content-Type: application/json');
 			echo json_encode(array('error'=>0, 'strength'=>$score));
 		}
 		break; /* }}} */
 
 	case 'sessioninfo': /* {{{ */
 		if($user) {
+			header('Content-Type: application/json');
 			echo json_encode($resArr);
 		}	
 		break; /* }}} */
@@ -159,6 +170,7 @@ switch($command) {
 				}
 			}
 
+			header('Content-Type: application/json');
 			echo json_encode($tree);
 	//		echo json_encode(array(array('label'=>'test1', 'id'=>1, 'load_on_demand'=> true), array('label'=>'test2', 'id'=>2, 'load_on_demand'=> true)));
 		}
@@ -506,6 +518,7 @@ switch($command) {
 				}
 
 				if ($folder->getAccessMode($user) < M_READWRITE) {
+					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("access_denied")));
 					exit;
 				}
@@ -513,6 +526,7 @@ switch($command) {
 				if($settings->_quota > 0) {
 					$remain = checkQuota($user);
 					if ($remain < 0) {
+						header('Content-Type: application/json');
 						echo json_encode(array('success'=>false, 'message'=>getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain))))));
 						exit;
 					}
