@@ -17,6 +17,7 @@
 - apply all login restrictions like guest login, restrict to ip address,
   disabled account when authenticating by ldap
 - place all authentication methods into its own class
+- do not cache output of op/op.Ajax.php (Closes #280)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27
