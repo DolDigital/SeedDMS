@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1039), aydin (83)
+//    Translators: Admin (1040), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -150,7 +150,7 @@ URL: [url]',
 'attrdef_type_email' => '',
 'attrdef_type_float' => '',
 'attrdef_type_int' => 'TamSayı',
-'attrdef_type_string' => '',
+'attrdef_type_string' => 'Dizi',
 'attrdef_type_url' => '',
 'attrdef_valueset' => 'Değer',
 'attributes' => 'Nitelik',
