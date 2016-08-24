@@ -312,7 +312,7 @@ class SeedDMS_Core_DMS {
 		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.0.4';
+			$this->version = '5.0.5';
 	} /* }}} */
 
 	/**
@@ -830,6 +830,7 @@ class SeedDMS_Core_DMS {
 			}
 			if (in_array(3, $searchin)) {
 				$searchFields[] = "`tblDocuments`.`comment`";
+				$searchFields[] = "`tblDocumentContent`.`comment`";
 			}
 			if (in_array(4, $searchin)) {
 				$searchFields[] = "`tblDocumentAttributes`.`value`";

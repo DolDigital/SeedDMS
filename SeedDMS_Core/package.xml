@@ -1106,5 +1106,38 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - all changes from 4.3.27 merged
    </notes>
   </release>
+  <release>
+   <date>2016-04-26</date>
+   <time>12:04:59</time>
+   <version>
+    <release>4.3.27</release>
+    <api>4.3.27</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- callbacks can have more then one user function
+- fix some sql statements, because they didn't work with mysql 5.7.5 anymore
+   </notes>
+  </release>
+  <release>
+   <date>2016-08-24</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.28</release>
+    <api>4.3.28</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+  - all changes from 4.3.28 merged
+   </notes>
+  </release>
  </changelog>
 </package>
