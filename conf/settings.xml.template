@@ -145,8 +145,8 @@
            -       URIs are supported, e.g.: ldaps://ldap.host.com
            - port: port of the authentification server
            - baseDN: top level of the LDAP directory tree
-	   - bindDN: XXX
-	   - bindPw: XXX
+           - bindDN: use this dn for a first step bind, leave empty for annonymous bind
+           - bindPw: use this password for a first step bind
            - filter: Additional filters which are to be checked
         -->
         <connector
@@ -165,9 +165,10 @@
            - host: hostname of the authentification server
            - port: port of the authentification server
            - baseDN: top level of the LDAP directory tree
+           - bindDN: use this dn for a first step bind, leave empty for annonymous bind
+           - bindPw: use this password for a first step bind
+           - filter: Additional filters which are to be checked
            - accountDomainName: sample: example.com
-	   - bindDN: XXX
-	   - bindPw: XXX
         -->
         <connector
           enable = "false"

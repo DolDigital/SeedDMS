@@ -93,6 +93,8 @@ class Settings { /* {{{ */
 	var $_stopWordsFile = null;
 	// enable/disable lucene fulltext search
 	var $_enableFullSearch = true;
+	// max size of documents for direct indexing
+	var $_maxSizeForFullText = 0;
 	// fulltext search engine
 	var $_fullSearchEngine = 'lucene';
 	// default search method
@@ -188,7 +190,7 @@ class Settings { /* {{{ */
 	var $_sortUsersInList = '';
 	// Sort method for forders and documents ('n' (name) or '')
 	var $_sortFoldersDefault = '';
-	// enable/disable lucene fulltext search
+	// Set valid IP for admin logins
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
 	// Max Execution Time
@@ -225,14 +227,24 @@ class Settings { /* {{{ */
 	var $_smtpUser = null;
 	// SMTP : password
 	var $_smtpPassword = null;
-	// LDAP
-	var $_ldapHost = ""; // URIs are supported, e.g.: ldaps://ldap.host.com
-	var $_ldapPort = 389; // Optional.
+	// LDAP Host, URIs are supported, e.g.: ldaps://ldap.host.com
+	var $_ldapHost = "";
+	// Port of ldap server, optional.
+	var $_ldapPort = 389;
+	// Base dn for searching users, if set the user will be search below base dn
 	var $_ldapBaseDN = "";
+	// Use this dn for an initial bind for searching the user
 	var $_ldapBindDN = "";
+	// Use this password for an initial bind for searching the user
 	var $_ldapBindPw = "";
+	// Used only by AD <username>@_ldapAccountDomainName will be used for a bind
+	// when the user is validated
 	var $_ldapAccountDomainName = "";
-	var $_ldapType = 1; // 0 = ldap; 1 = AD
+	// Type of Ldap server: 0 = ldap; 1 = AD
+	var $_ldapType = 1;
+	// Additional filter when searching for the user. If not set, the user will be searched
+	// below basedn and the search term 'uid=<username>' or 'sAMAccountName=<username>'
+	// if set the search will be (&(cn=<username>)<filter>)
 	var $_ldapFilter = "";
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
 	var $_extensions = array(); // configuration for extensions
@@ -389,6 +401,7 @@ class Settings { /* {{{ */
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
 		$this->_enableThemeSelector = Settings::boolVal($tab["enableThemeSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
+		$this->_maxSizeForFullText = intval($tab["maxSizeForFullText"]);
 		$this->_fullSearchEngine = strval($tab["fullSearchEngine"]);
 		$this->_defaultSearchMethod = strval($tab["defaultSearchMethod"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
@@ -686,6 +699,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
     $this->setXMLAttributValue($node, "enableThemeSelector", $this->_enableThemeSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
+    $this->setXMLAttributValue($node, "maxSizeForFullText", $this->_maxSizeForFullText);
     $this->setXMLAttributValue($node, "fullSearchEngine", $this->_fullSearchEngine);
     $this->setXMLAttributValue($node, "defaultSearchMethod", $this->_defaultSearchMethod);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);

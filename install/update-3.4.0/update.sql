@@ -29,6 +29,8 @@ END
 
 START TRANSACTION;
 
+ALTER TABLE `tblDocumentContent` MODIFY `version` smallint(5) unsigned NOT NULL;
+
 ALTER TABLE tblACLs ENGINE=InnoDB;
 
 ALTER TABLE tblCategory ENGINE=InnoDB;
@@ -98,6 +100,8 @@ CALL DROPFK('tblDocuments', 'tblDocuments_folder');
 ALTER TABLE tblDocuments ADD CONSTRAINT `tblDocuments_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`);
 
 CALL DROPFK('tblDocumentContent', 'tblDocumentDocument_document');
+
+ALTER TABLE tblDocumentContent DROP PRIMARY KEY;
 
 ALTER TABLE tblDocumentContent ADD CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`);
 

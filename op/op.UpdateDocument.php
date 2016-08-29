@@ -2,6 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -229,11 +230,25 @@ if ($_FILES['userfile']['error'] == 0) {
 		$attributes = array();
 	}
 
+	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
 	else {
+		if($settings->_enableFullSearch) {
+			$index = $indexconf['Indexer']::open($settings->_luceneDir);
+			if($index) {
+				$lucenesearch = new $indexconf['Search']($index);
+				if($hit = $lucenesearch->getDocument((int) $document->getId())) {
+					$index->delete($hit->id);
+				}
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
+				$index->commit();
+			}
+		}
+
 		// Send notification to subscribers.
 		if ($notifier){
 			$notifyList = $document->getNotifyList();

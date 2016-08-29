@@ -60,6 +60,8 @@ $(document).ready( function() {
 
 		foreach ($allGroups as $group){
 
+			if(!$group->isMember($user) && !$user->isAdmin())
+				continue;
 			$members = $group->getUsers();
 			$managers = $group->getManagers();
 			$ismanager = false; /* set to true if current user is manager */
@@ -67,11 +69,9 @@ $(document).ready( function() {
 			echo "<li>".htmlspecialchars($group->getName());
 			if($group->getComment())
 				echo " : ".htmlspecialchars($group->getComment());
-			foreach($managers as $manager)
-				if($manager->getId() == $user->getId()) {
-					echo " : ".getMLText("manager_of_group");
-					$ismanager = true;
-				}
+			$ismanager = $group->isMember($user, 1);
+			if($ismanager)
+				echo " : ".getMLText("manager_of_group");
 			echo "</li>";
 
 			echo "<ul>\n";

@@ -1,4 +1,11 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.5
+--------------------------------------------------------------------------------
+- merged changes from 4.3.28
+- fix choosing home folder of users
+- fix clearing cache
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.4
 --------------------------------------------------------------------------------
 - merged changes from 4.3.27
@@ -30,6 +37,29 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.28
+--------------------------------------------------------------------------------
+- add expiration in list of documents
+- fix SetReviewersApprovers if reviewer/approver is an admin or the owner
+- full text index documents after upload if they are smaller than a configured
+  size
+- reindex documents when versions were added or removed in order to keep the
+  full text index up to date
+- show only those groups in GroupView the current user is a member of (partly
+  fixes #239)
+- make UserView look similar to UserList
+- log correct ip even after a reverse proxy (Closes #206)
+- fix sql error in table creation if sql mode is set to STRICT_TRANS_TABLE
+- menu entry 'Clear clipboard' will call ajax function and no longer
+  redirects to new page
+- apply all login restrictions like guest login, restrict to ip address,
+  disabled account when authenticating by ldap
+- place all authentication methods into its own class
+- do not cache output of op/op.Ajax.php (Closes #280)
+- major update of italian translations
+- search also in comment of document versions
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.27

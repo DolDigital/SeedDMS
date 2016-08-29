@@ -2,6 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -30,12 +31,12 @@ include("../inc/inc.ClassController.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
-function _printMessage($heading, $message) {
+function _printMessage($heading, $message) { /* {{{ */
 	global $dms, $theme;
 	$view = UI::factory($theme, 'ErrorDlg', array('dms'=>$dms));
 	$view->exitError($heading, $message, true);
 	return;
-}
+} /* }}} */
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
@@ -62,6 +63,7 @@ if(isset($_POST['pwd'])) {
 	}
 }
 
+/* The password may only be empty if the guest user tries to log in */
 if($settings->_enableGuestLogin && (int) $settings->_guestID) {
 	$guestUser = $dms->getUser((int) $settings->_guestID);
 	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin())) {
@@ -86,151 +88,45 @@ if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
 	}
 }
 
-if (is_bool($user)) {
-if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
-	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
-		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
-	} else {
-		$ds = ldap_connect($settings->_ldapHost);
-	}
+/* Authenticate against LDAP server {{{ */
+if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+	require_once("../inc/inc.ClassLdapAuthentication.php");
+	$authobj = new SeedDMS_LdapAuthentication($dms, $settings);
+	$user = $authobj->authenticate($login, $pwd);
+} /* }}} */
 
-	if (!is_bool($ds)) {
-		/* Check if ldap base dn is set, and use ldap server if it is */
-		if (isset($settings->_ldapBaseDN)) {
-			$ldapSearchAttribut = "uid=";
-			$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
-		}
+/* Authenticate against SeedDMS database {{{ */
+else {
+	require_once("../inc/inc.ClassDbAuthentication.php");
+	$authobj = new SeedDMS_DbAuthentication($dms, $settings);
+	$user = $authobj->authenticate($login, $pwd);
+} /* }}} */
 
-		/* Active directory has a different base dn */
-		if (isset($settings->_ldapType)) {
-			if ($settings->_ldapType==1) {
-				$ldapSearchAttribut = "sAMAccountName=";
-				$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
-				// Add the following if authentication with an Active Dir doesn't work
-				// See https://sourceforge.net/p/seeddms/discussion/general/thread/19c70d8d/
-				// and http://stackoverflow.com/questions/6222641/how-to-php-ldap-search-to-get-user-ou-if-i-dont-know-the-ou-for-base-dn
-				ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
-			}
-		}
-
-		// Ensure that the LDAP connection is set to use version 3 protocol.
-		// Required for most authentication methods, including SASL.
-		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-		// try an authenticated/anonymous bind first.
-		// If it succeeds, get the DN for the user and use it for an authentication
-		// with the users password.
-		$bind = false;
-		if (isset($settings->_ldapBindDN)) {
-			$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
-		} else {
-			$bind = @ldap_bind($ds);
-		}
-		$dn = false;
-		/* If bind succeed, then get the dn of for the user */
-		if ($bind) {
-			if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-				$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-			} else {
-				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-			}
-			if (!is_bool($search)) {
-				$info = ldap_get_entries($ds, $search);
-				if (!is_bool($info) && $info["count"]>0) {
-					$dn = $info[0]['dn'];
-				}
-			}
-		}
-
-		/* If the previous bind failed, try it with the users creditionals
-		 * by simply setting $dn to a default string
-		 */
-		if (is_bool($dn)) {
-			$dn = $tmpDN;
-		}
-
-		/* No do the actual authentication of the user */
-		$bind = @ldap_bind($ds, $dn, $pwd);
-		if ($bind) {
-			// Successfully authenticated. Now check to see if the user exists within
-			// the database. If not, add them in if _restricted is not set,
-			// but do not add their password.
-			$user = $dms->getUserByLogin($login);
-			if (is_bool($user) && !$settings->_restricted) {
-				// Retrieve the user's LDAP information.
-				if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$login.")".$settings->_ldapFilter.")");
-				} else {
-					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-				}
-
-				if (!is_bool($search)) {
-					$info = ldap_get_entries($ds, $search);
-					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-						$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
-					}
-				}
-			}
-			if (!is_bool($user)) {
-				$userid = $user->getID();
-			}
-		}
-		ldap_close($ds);
-	}
-}
+if(!$user) {
+	_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
+	exit;
 }
 
-if (is_bool($user)) {
-	//
-	// LDAP Authentication did not succeed or is not configured. Try internal
-	// authentication system.
-	//
-
-	// Try to find user with given login.
-	$user = $dms->getUserByLogin($login);
-	if (!$user) {
-		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
-		exit;
-	}
-
-	$userid = $user->getID();
-
-	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
-		_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
-		exit;
-	}
-
-	// Check if password matches (if not a guest user)
-	// Assume that the password has been sent via HTTP POST. It would be careless
-	// (and dangerous) for passwords to be sent via GET.
-	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($pwd) != $user->getPwd())) {
-		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
-		/* if counting of login failures is turned on, then increment its value */
-		if($settings->_loginFailure) {
-			$failures = $user->addLoginFailure();
-			if($failures >= $settings->_loginFailure)
-				$user->setDisabled(true);
-		}
-		exit;
-	}
-
-	// Check if account is disabled
-	if($user->isDisabled()) {
-		_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
-		exit;
-	}
-
-	// control admin IP address if required
-	// TODO: extend control to LDAP autentication
-	if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
-		_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
-		exit;
-	}
-
-	/* Clear login failures if login was successful */
-	$user->clearLoginFailures();
-
+$userid = $user->getID();
+if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
+	_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
+	exit;
 }
+
+// Check if account is disabled
+if($user->isDisabled()) {
+	_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
+	exit;
+}
+
+// control admin IP address if required
+if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
+	_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
+	exit;
+}
+
+/* Clear login failures if login was successful */
+$user->clearLoginFailures();
 
 // Capture the user's language and theme settings.
 if (isset($_REQUEST["lang"]) && strlen($_REQUEST["lang"])>0 && is_numeric(array_search($_REQUEST["lang"],getLanguages())) ) {
@@ -325,8 +221,5 @@ if (isset($referuri) && strlen($referuri)>0) {
 else {
 	header("Location: ".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".($user->getHomeFolder() ? $user->getHomeFolder() : $settings->_rootFolderID)));
 }
-
-//_printMessage(getMLText("login_ok"),
-//	"<p><a href='".$settings->_httpRoot.(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php")."'>".getMLText("continue")."</a></p>");
 
 ?>

@@ -355,10 +355,14 @@ function add_log_line($msg="", $priority=null) { /* {{{ */
 
 	if(!$logger) return;
 
-	if($user)
-		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
+	if(!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	else
-		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
+		$ip = $_SERVER['REMOTE_ADDR'];
+	if($user)
+		$logger->log($user->getLogin()." (".$ip.") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
+	else
+		$logger->log("-- (".$ip.") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
 } /* }}} */
 
 function _add_log_line($msg="") { /* {{{ */

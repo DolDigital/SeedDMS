@@ -2,7 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2009-2013 Uwe Steinmann
+//    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
-include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");

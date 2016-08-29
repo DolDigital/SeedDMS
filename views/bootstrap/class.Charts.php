@@ -53,10 +53,11 @@ if(in_array($type, array('docspermonth'))) {
 ?>
 	var data = [
 <?php
-	foreach($data as $i=>$rec) {
-		$key = mktime(12, 0, 0, substr($rec['key'], 5, 2), 1, substr($rec['key'], 0, 4)) * 1000;
-		echo '["'.$rec['key'].'",'.$rec['total'].'],'."\n";
-//		echo '['.$i.','.$rec['total'].'],'."\n";
+	if($data) {
+		foreach($data as $i=>$rec) {
+			$key = mktime(12, 0, 0, substr($rec['key'], 5, 2), 1, substr($rec['key'], 0, 4)) * 1000;
+			echo '["'.$rec['key'].'",'.$rec['total'].'],'."\n";
+		}
 	}
 ?>
 	];
@@ -94,8 +95,10 @@ if(in_array($type, array('docspermonth'))) {
 ?>
 	var data = [
 <?php
-	foreach($data as $rec) {
-		echo '['.htmlspecialchars($rec['key']).','.$rec['total'].'],'."\n";
+	if($data) {
+		foreach($data as $rec) {
+			echo '['.htmlspecialchars($rec['key']).','.$rec['total'].'],'."\n";
+		}
 	}
 ?>
 	];
@@ -131,8 +134,10 @@ if(in_array($type, array('docspermonth'))) {
 ?>
 	var data = [
 <?php
-	foreach($data as $rec) {
-		echo '{ label: "'.htmlspecialchars($rec['key']).'", data: [[1,'.$rec['total'].']]},'."\n";
+	if($data) {
+		foreach($data as $rec) {
+			echo '{ label: "'.htmlspecialchars($rec['key']).'", data: [[1,'.$rec['total'].']]},'."\n";
+		}
 	}
 ?>
 	];

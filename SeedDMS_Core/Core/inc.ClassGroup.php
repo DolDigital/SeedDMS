@@ -21,7 +21,7 @@
  * @copyright  Copyright (C) 2002-2005 Markus Westphal, 2006-2008 Malcolm Cowe, 2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Core_Group {
+class SeedDMS_Core_Group { /* {{{ */
 	/**
 	 * The id of the user group
 	 *
@@ -35,6 +35,13 @@ class SeedDMS_Core_Group {
 	 * @var string
 	 */
 	protected $_name;
+
+	/**
+	 * The comment of the user group
+	 *
+	 * @var string
+	 */
+	protected $_comment;
 
 	/**
 	 * Back reference to DMS this user group belongs to
@@ -203,8 +210,14 @@ class SeedDMS_Core_Group {
 		return true;
 	} /* }}} */
 
-	// $asManager=false: verify if user is in group
-	// $asManager=true : verify if user is in group as manager
+	/**
+	 * Check if user is member of group
+	 *
+	 * @param object $user user to be checked
+	 * @param boolean $asManager also check whether user is manager of group if
+	 * set to true, otherwise does not care about manager status
+	 * @return boolean true if user is member, otherwise false
+	 */
 	function isMember($user,$asManager=false) { /* {{{ */
 		if (isset($this->_users)&&!$asManager) {
 			foreach ($this->_users as $usr)
@@ -225,6 +238,12 @@ class SeedDMS_Core_Group {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Toggle manager status of user
+	 *
+	 * @param object $user
+	 * @return boolean true if operation was successful, otherwise false
+	 */
 	function toggleManager($user) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -437,5 +456,5 @@ class SeedDMS_Core_Group {
 		return $notifications;
 	} /* }}} */
 
-}
+} /* }}} */
 ?>

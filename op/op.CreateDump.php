@@ -1,6 +1,7 @@
 <?php
 //    MyDMS. Document Management System
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -31,7 +32,7 @@ if (!$user->isAdmin()) {
 }
 
 $v = new SeedDMS_Version;
-$dump_name = $settings->_contentDir.date('Y-m-d\TH:i:s')."_".$v->_number.".sql";
+$dump_name = $settings->_contentDir.date('Y-m-d\TH-i-s')."_".$v->_number.".sql";
 if(!$dms->createDump($dump_name))
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 

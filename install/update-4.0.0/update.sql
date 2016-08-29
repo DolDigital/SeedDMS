@@ -12,7 +12,7 @@ ALTER TABLE tblDocumentContent ADD COLUMN `checksum` char(32);
 
 ALTER TABLE tblUsers ADD COLUMN `quota` bigint;
 
-ALTER TABLE tblSessions ADD COLUMN `clipboard` text DEFAULT '';
+ALTER TABLE tblSessions ADD COLUMN `clipboard` text DEFAULT NULL;
 
 CREATE TABLE tblWorkflowStates (
   `id` int(11) NOT NULL auto_increment,

@@ -3,6 +3,7 @@
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -64,7 +65,7 @@ $folder = $document->getFolder();
 
 // Retrieve a list of all users and groups that have review / approve
 // privileges.
-$docAccess = $document->getReadAccessList();
+$docAccess = $document->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
 $accessIndex = array("i"=>array(), "g"=>array());
 foreach ($docAccess["users"] as $i=>$da) {
 	$accessIndex["i"][$da->getID()] = $i;

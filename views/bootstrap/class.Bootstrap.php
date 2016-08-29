@@ -240,7 +240,8 @@ $(document).ready(function () {
 		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
 			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
 		}
-		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
+//		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
+		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
 		$content .= "     </ul>\n";
 		$content .= "    </li>\n";
 		$content .= "   </ul>\n";
@@ -1003,22 +1004,22 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooserJs($formName) { /* {{{ */
+	function printFolderChooserJs($form) { /* {{{ */
 ?>
-function folderSelected<?php echo $formName ?>(id, name) {
-	$('#targetid<?php echo $formName ?>').val(id);
-	$('#choosefoldersearch<?php echo $formName ?>').val(name);
-	$('#folderChooser<?php echo $formName ?>').modal('hide');
+function folderSelected<?php echo $form ?>(id, name) {
+	$('#targetid<?php echo $form ?>').val(id);
+	$('#choosefoldersearch<?php echo $form ?>').val(name);
+	$('#folderChooser<?php echo $form ?>').modal('hide');
 }
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		$this->printFolderChooserHtml($formName, $accessMode, $exclude, $default);
+	function printFolderChooser($form, $accessMode, $exclude = -1, $default = false, $formname='') { /* {{{ */
+		$this->printFolderChooserHtml($form, $accessMode, $exclude, $default, $formname);
 ?>
 		<script language="JavaScript">
 <?php
-		$this->printFolderChooserJs($formName);
+		$this->printFolderChooserJs($form);
 ?>
 		</script>
 <?php
@@ -1764,7 +1765,6 @@ $(document).ready( function() {
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$enableClipboard = $this->params['enableclipboard'];
@@ -1818,7 +1818,7 @@ $(document).ready( function() {
 
 			$content .= "<td>";	
 			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
-			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
+			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b>".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
@@ -1880,10 +1880,6 @@ $(document).ready( function() {
 		$owner = $subFolder->getOwner();
 		$comment = $subFolder->getComment();
 		if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-		$subsub = $subFolder->getSubFolders();
-		$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
-		$subdoc = $subFolder->getDocuments();
-		$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 
 		$content = '';
 		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
@@ -1913,6 +1909,14 @@ $(document).ready( function() {
 				$content .= (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
 			}
 		} else {
+			/* FIXME: the following is very inefficient for just getting the number of
+			 * subfolders and documents. Making it more efficient is difficult, because
+			 * the access rights need to be checked.
+			 */
+			$subsub = $subFolder->getSubFolders();
+			$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
+			$subdoc = $subFolder->getDocuments();
+			$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 			$content .= count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
 		}
 		$content .= "</small></td>";
