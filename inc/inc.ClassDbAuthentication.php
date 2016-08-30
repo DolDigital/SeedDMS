@@ -58,7 +58,7 @@ class SeedDMS_DbAuthentication extends SeedDMS_Authentication {
 			// Check if password matches (if not a guest user)
 			// Assume that the password has been sent via HTTP POST. It would be careless
 			// (and dangerous) for passwords to be sent via GET.
-			if (($userid != $settings->_guestID) && (md5($password) != $user->getPwd()) || ($userid == $settings->_guestID) && $user->getPwd() && (md5($password) != $user->getPwd())) {
+			if (md5($password) != $user->getPwd()) {
 				/* if counting of login failures is turned on, then increment its value */
 				if($settings->_loginFailure) {
 					$failures = $user->addLoginFailure();

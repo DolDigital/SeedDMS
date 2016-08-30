@@ -1081,9 +1081,10 @@ function folderSelected<?php echo $form ?>(id, name) {
 	} /* }}} */
 
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
 ?>
 		    <div class="input-append">
-				<input type="text" name="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>" />
+				<input type="text" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>"<?php echo $strictformcheck ? ' required' : ''; ?> />
 				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
 		    </div>
 <div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
@@ -1130,7 +1131,7 @@ $('#acceptkeywords').click(function(ev) {
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
-        <span class="input-append date datepicker" style="display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date datepicker" style="_display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
 					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
@@ -1145,7 +1146,7 @@ $('#acceptkeywords').click(function(ev) {
 				} else {
 					echo "\"";
 				}
-				echo ">";
+				echo "".($attrdef->getMinValues() > 0 ? ' required' : '').">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
@@ -1164,9 +1165,9 @@ $('#acceptkeywords').click(function(ev) {
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\">".htmlspecialchars($objvalue)."</textarea>";
+					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".($attrdef->getMinValues() > 0 ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
+					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '')." />";
 				}
 			}
 			break;

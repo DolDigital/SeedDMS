@@ -69,13 +69,31 @@ function guestLogin()
 	document.location.href = url;
 }
 $(document).ready( function() {
+/*
 	$('body').on('submit', '#form', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
 	});
+*/
 	$('body').on('click', '#guestlogin', function(ev){
 		ev.preventDefault();
 		guestLogin();
+	});
+	$("#form").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		messages: {
+			login: "<?php printMLText("js_no_login");?>",
+			pwd: "<?php printMLText("js_no_pwd");?>"
+		},
 	});
 });
 <?php
@@ -89,6 +107,8 @@ $(document).ready( function() {
 		$languages = $this->params['languages'];
 		$enableLanguageSelector = $this->params['enablelanguageselector'];
 		$enableThemeSelector = $this->params['enablethemeselector'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("sign_in"), "login");
 		$this->globalBanner();
@@ -105,13 +125,13 @@ $(document).ready( function() {
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("user_login");?>:</label>
 		<div class="controls">
-			<input type="text" id="login" name="login" placeholder="login">
+			<input type="text" id="login" name="login" placeholder="login" required>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="pwd"><?php printMLText("password");?>:</label>
 		<div class="controls">
-			<input type="Password" id="pwd" name="pwd">
+			<input type="Password" id="pwd" name="pwd" required>
 		</div>
 	</div>
 <?php if($enableLanguageSelector) { ?>

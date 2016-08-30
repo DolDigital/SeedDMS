@@ -74,6 +74,44 @@ $(document).ready(function() {
 	$('#new-file').click(function(event) {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
 	});
+
+	jQuery.validator.addMethod("alternatives", function(value, element, params) {
+		if(value == '' && params.val() == '')
+			return false;
+		return true;
+	}, "<?php printMLText("js_no_file");?>");
+	var validator = $("#form1").bind("invalid-form.validate", function() {
+		noty({
+			text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+			type: 'error',
+			dismissQueue: true,
+			layout: 'topRight',
+			theme: 'defaultTheme',
+			timeout: 1500,
+		});
+	}).validate({
+		rules: {
+			'userfile[]': {
+				alternatives: $('#dropfolderfileform1')
+			},
+			dropfolderfileform1: {
+				 alternatives: $(".btn-file input")
+			}
+		},
+		messages: {
+			name: "<?php printMLText("js_no_name");?>",
+			comment: "<?php printMLText("js_no_comment");?>",
+			keywords: "<?php printMLText("js_no_keywords");?>"
+		},
+		errorPlacement: function( error, element ) {
+			if ( element.is( ":file" ) ) {
+				error.appendTo( element.parent().parent().parent());
+console.log(element);
+			} else {
+				error.appendTo( element.parent());
+			}
+		}
+	});
 });
 <?php
 			$this->printKeywordChooserJs("form1");
@@ -97,6 +135,8 @@ $(document).ready(function() {
 		$sortusersinlist = $this->params['sortusersinlist'];
 		$orderby = $this->params['orderby'];
 		$folderid = $folder->getId();
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
@@ -131,7 +171,7 @@ $(document).ready(function() {
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="3" cols="80"></textarea></td>
+			<td><textarea name="comment" rows="3" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("keywords");?>:</td>

@@ -60,9 +60,27 @@ function checkForm()
 		return true;
 }
 $(document).ready(function() {
+/*
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
+	});
+*/
+	$("#form1").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		messages: {
+			name: "<?php printMLText("js_no_name");?>",
+			comment: "<?php printMLText("js_no_comment");?>"
+		},
 	});
 });
 <?php
@@ -77,6 +95,8 @@ $(document).ready(function() {
 		$strictformcheck = $this->params['strictformcheck'];
 		$orderby = $this->params['orderby'];
 
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
@@ -90,11 +110,11 @@ $(document).ready(function() {
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("name");?>:</td>
-<td><input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60"></td>
+<td><input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60" required></td>
 </tr>
 <tr>
 <td><?php printMLText("comment");?>:</td>
-<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($folder->getComment());?></textarea></td>
+<td><textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($folder->getComment());?></textarea></td>
 </tr>
 <?php
 		$parent = ($folder->getID() == $rootfolderid) ? false : $folder->getParent();
