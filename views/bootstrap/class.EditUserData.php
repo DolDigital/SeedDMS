@@ -57,9 +57,43 @@ function checkForm()
 }
 
 $(document).ready( function() {
+/*
 	$('body').on('submit', '#form', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
+	});
+*/
+	$("#form").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		rules: {
+			fullname: {
+				required: true
+			},
+			email: {
+				required: true,
+				email: true
+			},
+			pwdconf: {
+				equalTo: "#pwd"
+			}
+		},
+		messages: {
+			fullname: "<?php printMLText("js_no_name");?>",
+			email: {
+				required: "<?php printMLText("js_no_email");?>",
+				email: "<?php printMLText("js_invalid_email");?>"
+			},
+			pwdconf: "<?php printMLText("js_unequal_passwords");?>",
+		},
 	});
 });
 <?php
@@ -73,6 +107,8 @@ $(document).ready( function() {
 		$enablethemeselector = $this->params['enablethemeselector'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$httproot = $this->params['httproot'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("edit_user_details"));
 		$this->globalNavigation();

@@ -76,6 +76,11 @@ $(document).ready( function() {
 		ev.preventDefault();
 	});
 */
+	jQuery.validator.addMethod("alternatives", function(value, element, params) {
+		if(value == '' && params.val() == '')
+			return false;
+		return true;
+	}, "<?php printMLText("js_no_file");?>");
 	var validator = $("#form1").bind("invalid-form.validate", function() {
 		noty({
 			text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
@@ -86,8 +91,24 @@ $(document).ready( function() {
 			timeout: 1500,
 		});
 	}).validate({
+		rules: {
+			userfile: {
+				alternatives: $('#dropfolderfileform1')
+			},
+			dropfolderfileform1: {
+				 alternatives: $('#userfile')
+			}
+		},
 		messages: {
 			comment: "<?php printMLText("js_no_comment");?>",
+		},
+		errorPlacement: function( error, element ) {
+			if ( element.is( ":file" ) ) {
+				error.appendTo( element.parent().parent().parent());
+console.log(element);
+			} else {
+				error.appendTo( element.parent());
+			}
 		}
 	});
 });

@@ -75,6 +75,11 @@ $(document).ready(function() {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
 	});
 
+	jQuery.validator.addMethod("alternatives", function(value, element, params) {
+		if(value == '' && params.val() == '')
+			return false;
+		return true;
+	}, "<?php printMLText("js_no_file");?>");
 	var validator = $("#form1").bind("invalid-form.validate", function() {
 		noty({
 			text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
@@ -86,12 +91,14 @@ $(document).ready(function() {
 		});
 	}).validate({
 		rules: {
-			"_userfile[]": {
-				required: true
+			'userfile[]': {
+				alternatives: $('#dropfolderfileform1')
+			},
+			dropfolderfileform1: {
+				 alternatives: $(".btn-file input")
 			}
 		},
 		messages: {
-			"_userfile[]": "<?php printMLText("js_no_name");?>",
 			name: "<?php printMLText("js_no_name");?>",
 			comment: "<?php printMLText("js_no_comment");?>",
 			keywords: "<?php printMLText("js_no_keywords");?>"
