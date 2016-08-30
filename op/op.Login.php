@@ -57,20 +57,27 @@ if(isset($_POST['pwd'])) {
 	}
 }
 
-/* The password may only be empty if the guest user tries to log in */
-if($settings->_enableGuestLogin && (int) $settings->_guestID) {
-	$guestUser = $dms->getUser((int) $settings->_guestID);
-	if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin())) {
-		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text")."\n");
-		exit;
-	}
-}
-
 /* Initialy set $user to false. It will contain a valid user record
- * if authentication against ldap succeeds.
- * _ldapHost will only have a value if the ldap connector has been enabled
+ * if the user is a guest user or authentication will succeed.
  */
 $user = false;
+
+/* The password may only be empty if the guest user tries to log in.
+ * There is just one guest account with id $settings->_guestID which
+ * is allowed to log in without a password. All other guest accounts
+ * are treated like regular logins
+ */
+if($settings->_enableGuestLogin && (int) $settings->_guestID) {
+	$guestUser = $dms->getUser((int) $settings->_guestID);
+	if(($login != $guestUser->getLogin())) {
+		if ((!isset($pwd) || strlen($pwd)==0)) {
+			_printMessage(getMLText("login_error_title"),	getMLText("login_error_text")."\n");
+			exit;
+		}
+	} else {
+		$user = $guestUser;
+	}
+}
 
 /* Authenticate against LDAP server {{{ */
 if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
@@ -80,7 +87,7 @@ if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 } /* }}} */
 
 /* Authenticate against SeedDMS database {{{ */
-else {
+if(!$user) {
 	require_once("../inc/inc.ClassDbAuthentication.php");
 	$authobj = new SeedDMS_DbAuthentication($dms, $settings);
 	$user = $authobj->authenticate($login, $pwd);
