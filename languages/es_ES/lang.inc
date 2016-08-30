@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (995), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (996), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -526,7 +526,7 @@ URL: [url]',
 'hu_HU' => 'Hungaro',
 'id' => 'ID',
 'identical_version' => 'La nueva versión es idéntica a la actual.',
-'import' => '',
+'import' => 'Importar',
 'importfs' => '',
 'import_fs' => 'Importar desde sistema de aechivos',
 'import_fs_warning' => '',
@@ -570,6 +570,9 @@ URL: [url]',
 'is_hidden' => 'Ocultar de la lista de usuarios',
 'it_IT' => 'Italiano',
 'january' => 'Enero',
+'js_form_error' => '',
+'js_form_errors' => '',
+'js_invalid_email' => '',
 'js_no_approval_group' => 'Por favor, seleccione grupo de aprobación',
 'js_no_approval_status' => 'Por favor, seleccione el estado de aprobación',
 'js_no_comment' => 'No hay comentarios',
@@ -586,6 +589,7 @@ URL: [url]',
 'js_pwd_not_conf' => 'La contraseña y la confirmación de la contraseña no coinciden',
 'js_select_user' => 'Por favor, seleccione un usuario',
 'js_select_user_or_group' => 'Seleccione al menos un usuario o un grupo',
+'js_unequal_passwords' => '',
 'july' => 'Julio',
 'june' => 'Junio',
 'keep' => 'No cambiar',

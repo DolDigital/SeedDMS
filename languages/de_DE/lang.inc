@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2279), dgrutsch (21)
+//    Translators: Admin (2283), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -575,6 +575,9 @@ URL: [url]',
 'is_hidden' => 'In der Benutzerliste verbergen',
 'it_IT' => 'Italienisch',
 'january' => 'Januar',
+'js_form_error' => 'Das Formular beinhaltet noch # Fehler.',
+'js_form_errors' => 'Das Formular beinhaltet noch # Fehler.',
+'js_invalid_email' => 'Die E-Mail-Adresse ist ungültig',
 'js_no_approval_group' => 'Wählen Sie bitte eine Freigabe-Gruppe aus',
 'js_no_approval_status' => 'Wählen Sie bitte einen Freigabe-Status aus',
 'js_no_comment' => 'Geben Sie einen Kommentar an',
@@ -591,6 +594,7 @@ URL: [url]',
 'js_pwd_not_conf' => 'Passwort und -Bestätigung stimmen nicht überein',
 'js_select_user' => 'Bitte einen Benutzer auswählen',
 'js_select_user_or_group' => 'Wählen Sie mindestens einen Benutzer oder eine Gruppe aus',
+'js_unequal_passwords' => 'Die Passwörter sind nicht gleich',
 'july' => 'Juli',
 'june' => 'Juni',
 'keep' => 'Beibehalten',
