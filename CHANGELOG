@@ -1,4 +1,10 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.29
+--------------------------------------------------------------------------------
+- move guest authentication from inc/inc.ClassDbAuthentication.php into op/op.Login.php
+- use jquery.validate for form validation
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.28
 --------------------------------------------------------------------------------
 - add expiration in list of documents
