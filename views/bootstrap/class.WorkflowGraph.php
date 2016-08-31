@@ -116,8 +116,16 @@ cy.on('free', 'node', function(evt) {
 		if(!$renderdata)
 			$this->printGraph();
 ?>
-	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'grid'; ?>', condense: true });
-$('#png').attr('src', cy.png({'full': true}));
+	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'cose'; ?>', condense: true, ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
+//	$('#png').attr('src', cy.png({'full': true}));
+
+$(document).ready(function() {
+	$('body').on('click', '#setlayout', function(ev){
+		ev.preventDefault();
+		var element = $(this);
+		cy.layout({name: element.data('layout'), ready: function() {$('#png').attr('src', cy.png({'full': true}))}});
+	});
+});
 <?php
 	} /* }}} */
 
@@ -244,6 +252,8 @@ $('#png').attr('src', cy.png({'full': true}));
 		$this->htmlAddHeader('
 <style type="text/css">
 body {padding: 0px;}
+div.buttons {float: right; padding-left: 4px; height: 100px; width: 120px; margin-right: 5px;}
+div.buttons button {margin: 3px; float: right;}
 </style>
 ', 'css');
 		$this->htmlStartPage(getMLText("admin_tools"));
@@ -252,6 +262,9 @@ body {padding: 0px;}
 ?>
 <div id="canvas" style="width: 100%; height:546px; _border: 1px solid #bbb;"></div>
 <img id="png" style="float: left; border: 1px solid #bbb; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px;" />
+<div class="buttons">
+	<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
+</div>
 <?php
 //		$this->contentContainerEnd();
 		if(method_exists($this, 'js'))
