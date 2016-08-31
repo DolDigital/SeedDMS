@@ -49,6 +49,7 @@
 --------------------------------------------------------------------------------
 - move guest authentication from inc/inc.ClassDbAuthentication.php into op/op.Login.php
 - use jquery.validate for form validation
+- new graph layout for workflow manager using cytoscape
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.28
