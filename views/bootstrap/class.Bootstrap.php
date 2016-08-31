@@ -87,6 +87,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topCenter.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
 //		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";

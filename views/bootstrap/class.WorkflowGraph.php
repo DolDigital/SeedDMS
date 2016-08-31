@@ -48,7 +48,7 @@ var cy = cytoscape({
 			'height': 40,
 			'width': 40,
 			'text-valign': 'top',
-			'text-halign': 'right',
+			'text-halign': 'center',
 //			'color': '#fff',
 			'background-color': '#11479e',
 //			'text-outline-color': '#11479e',
@@ -61,7 +61,7 @@ var cy = cytoscape({
 	{
 		selector: 'node.action',
 		style: {
-			'shape': 'rectangle',
+			'shape': 'roundrectangle',
 			'height': 30,
 			'width': 30,
 			'background-color': '#91479e',
@@ -81,6 +81,8 @@ var cy = cytoscape({
 		selector: 'node.released',
 		style: {
 			'background-color': '#00b000',
+			'text-valign': 'bottom',
+			'text-margin-y': '3px',
 //			'text-outline-color': '#00b000'
 		}
 	},
@@ -89,6 +91,8 @@ var cy = cytoscape({
 		selector: 'node.rejected',
 		style: {
 			'background-color': '#b00000',
+			'text-valign': 'bottom',
+			'text-margin-y': '3px',
 //			'text-outline-color': '#b00000'
 		}
 	},
@@ -111,6 +115,20 @@ var cy = cytoscape({
 
 cy.on('free', 'node', function(evt) {
 	$('#png').attr('src', cy.png({'full': true}));
+});
+
+cy.on('tap', 'node', function(evt) {
+	var node = evt.cyTarget;
+	var scratch = node.scratch('app');
+	noty({
+		text: (scratch.users ? '<p><?php printMLText('users'); ?>: ' + scratch.users + '</p>' : '') + (scratch.groups ? '<?php printMLText('groups'); ?>: ' + scratch.groups + '</p>' : ''),
+		type: 'information',
+		dismissQueue: true,
+		layout: 'topCenter',
+		theme: 'defaultTheme',
+		timeout: 4000,
+		killer: true,
+	});
 });
 <?php
 		if(!$renderdata)
@@ -171,9 +189,12 @@ $(document).ready(function() {
 					echo "cy.add({
 						data: {
 							id: 'A".$transition->getID()."-".$action->getID()."',
-							name: \"".str_replace('"', "\\\"", $action->getName()).($unames ? "\\n(".str_replace('"', "\\\"", implode(", ", $unames)).")" : '').($gnames ? "\\n(".str_replace('"', "\\\"", implode(", ", $gnames)).")" : '')."\"
+							name: \"".str_replace('"', "\\\"", $action->getName())/*.($unames ? "\\n(".str_replace('"', "\\\"", implode(", ", $unames)).")" : '').($gnames ? "\\n(".str_replace('"', "\\\"", implode(", ", $gnames)).")" : '')*/."\"
 						},
-						classes: 'action'
+						classes: 'action',
+						scratch: {
+							app: {groups: '".implode(", ", $gnames)."', users: '".implode(", ", $unames)."'}
+						}
 					});\n";
 				}
 
@@ -185,7 +206,7 @@ $(document).ready(function() {
 					echo "cy.add({
 						data: {
 							id: 'S".$state->getID()."',
-							name: \"".str_replace('"', "\\\"", $state->getName()."\\n".$initstate)."\"
+							name: \"".str_replace('"', "\\\"", $state->getName()/*."\\n".$initstate*/)."\"
 						},
 						classes: 'state ".($state == $this->workflow->getInitState() ? 'init' : '')."'
 					});\n";
@@ -254,17 +275,25 @@ $(document).ready(function() {
 body {padding: 0px;}
 div.buttons {float: right; padding-left: 4px; height: 100px; width: 120px; margin-right: 5px;}
 div.buttons button {margin: 3px; float: right;}
-#preview {background: #f5f5f5; border-top: 1px solid #e3e3e3;}
-#preview img {border: 1px solid #bbb; background: #fff; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
+#legend {display: inline-block; margin-left: 10px;}
+#preview {height: 115px; background: #f5f5f5; border-top: 1px solid #e3e3e3;}
+#preview img {float: left;border: 1px solid #bbb; background: #fff; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
 </style>
 ', 'css');
 		$this->htmlStartPage(getMLText("admin_tools"));
 //		$this->contentContainerStart();
 
 ?>
-<div id="canvas" style="width: 100%; height:546px; _border: 1px solid #bbb;"></div>
+<div id="canvas" style="width: 100%; height:545px; _border: 1px solid #bbb;"></div>
 <div id="preview">
 	<img id="png" />
+	<div id="legend">
+		<i class="icon-circle" style="color: #ff9900;"></i> <?php printMLText("workflow_initstate"); ?><br />
+		<i class="icon-circle" style="color: #00b000;"></i> <?php echo getOverallStatusText(S_RELEASED); ?><br />
+		<i class="icon-circle" style="color: #b00000;"></i> <?php echo getOverallStatusText(S_REJECTED); ?><br />
+		<i class="icon-circle" style="color: #11479e;"></i> <?php echo getOverallStatusText(S_IN_WORKFLOW); ?><br />
+		<i class="icon-sign-blank" style="color: #91479e;"></i> <?php echo printMLText('global_workflow_actions'); ?>
+	</div>
 	<div class="buttons">
 		<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
 	</div>
