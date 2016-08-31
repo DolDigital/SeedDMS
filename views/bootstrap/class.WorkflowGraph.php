@@ -106,7 +106,7 @@ $(document).ready(function() {
 					echo "ggg.addNode(\"S".$state->getID()."\", { label : \"".str_replace('"', "\\\"", $state->getName()." ".$initstate)."\" });\n";
 				}
 				if(!isset($this->states[$nextstate->getID()])) {
-					$this->states[$state->getID()] = $nextstate;
+					$this->states[$nextstate->getID()] = $nextstate;
 					echo "ggg.addNode(\"S".$nextstate->getID()."\", { label : \"".str_replace('"', "\\\"", $nextstate->getName())."\" });\n";
 				}
 			}
