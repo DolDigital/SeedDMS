@@ -193,7 +193,7 @@ $(document).ready(function() {
 						},
 						classes: 'action',
 						scratch: {
-							app: {groups: '".implode(", ", $gnames)."', users: '".implode(", ", $unames)."'}
+							app: {groups: \"".str_replace('"', "\\\"", implode(", ", $gnames))."\", users: \"".str_replace('"', "\\\"", implode(", ", $unames))."\"}
 						}
 					});\n";
 				}
