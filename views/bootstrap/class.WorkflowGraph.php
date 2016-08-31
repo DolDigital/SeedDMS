@@ -277,7 +277,7 @@ div.buttons {float: right; padding-left: 4px; height: 100px; width: 120px; margi
 div.buttons button {margin: 3px; float: right;}
 #legend {display: inline-block; margin-left: 10px;}
 #preview {height: 115px; background: #f5f5f5; border-top: 1px solid #e3e3e3;}
-#preview img {float: left;border: 1px solid #bbb; background: #fff; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
+#preview img {float: left;border: 1px solid #bbb; background: #fff; min-height: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
 </style>
 ', 'css');
 		$this->htmlStartPage(getMLText("admin_tools"));
