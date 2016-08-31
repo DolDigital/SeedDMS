@@ -75,7 +75,7 @@ $(document).ready(function() {
 		$selworkflow = $this->params['selworkflow'];
 		if($selworkflow) { ?>
 <div id="workflowgraph">
-<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="550" style="border: 1px solid #AAA;"></iframe>
+<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="654" style="border: 1px solid #AAA;"></iframe>
 </div>
 <?php }
 	} /* }}} */
@@ -291,7 +291,7 @@ $(document).ready(function() {
 ?>
 
 <div class="row-fluid">
-<div class="span4">
+<div class="span5">
 <div class="well">
 <?php echo getMLText("selection")?>:
 <select id="selector" class="span9">
@@ -307,7 +307,7 @@ $(document).ready(function() {
 <div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 </div>
 
-<div class="span8">
+<div class="span7">
 	<div class="well">
 		<div class="ajax" data-view="WorkflowMgr" data-action="form" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 	</div>

@@ -34,33 +34,90 @@ class SeedDMS_View_WorkflowGraph extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$this->workflow = $this->params['workflow'];
 		header('Content-Type: application/javascript; charset=UTF-8');
-?>
-$(document).ready(function() {
-  var width = $('#canvas').width();
-  var height = $('#canvas').height();;
-  var ggg = new Graph();
-  ggg.edgeFactory.template.style.directed = true;
 
-  var render_action = function(r, n) {
-		/* the Raphael set is obligatory, containing all you want to display */
-		var set = r.set().push(
-			/* custom objects go here */
-			r.rect(n.point[0]-45, n.point[1]-13, 90, 44).attr({"fill": (n.color == undefined ? "#feb" : n.color), r : "12px", "stroke-width" : "1px" })).push(
-			r.text(n.point[0], n.point[1] + 10, (n.label || n.id) + "\n(" + (n.maxtime == undefined ? "Infinity" : n.maxtime) + ")"));
-		return set;
-	};
-
-<?php
-		$this->seentrans = array();
-		$state = $this->workflow->getInitState();
-		$this->states = array();
-		$this->actions = array();
-		$this->printGraph();
+		$renderdata = '';
 ?>
-    var layouter = new Graph.Layout.Spring(ggg);
-    var renderer = new Graph.Renderer.Raphael('canvas', ggg, width, height);
+var cy = cytoscape({
+	container: document.getElementById('canvas'),
+
+	style: [
+	{
+		selector: 'node',
+		style: {
+			'content': 'data(name)',
+			'height': 40,
+			'width': 40,
+			'text-valign': 'top',
+			'text-halign': 'right',
+//			'color': '#fff',
+			'background-color': '#11479e',
+//			'text-outline-color': '#11479e',
+//			'text-outline-width': '3px',
+//			'font-size': '10px',
+			'text-wrap': 'wrap'
+		}
+	},
+
+	{
+		selector: 'node.action',
+		style: {
+			'shape': 'rectangle',
+			'height': 30,
+			'width': 30,
+			'background-color': '#91479e',
+//			'text-outline-color': '#91479e'
+		}
+	},
+
+	{
+		selector: 'node.init',
+		style: {
+			'background-color': '#ff9900',
+//			'text-outline-color': '#b06000'
+		}
+	},
+
+	{
+		selector: 'node.released',
+		style: {
+			'background-color': '#00b000',
+//			'text-outline-color': '#00b000'
+		}
+	},
+
+	{
+		selector: 'node.rejected',
+		style: {
+			'background-color': '#b00000',
+//			'text-outline-color': '#b00000'
+		}
+	},
+
+	{
+		selector: 'edge',
+		style: {
+			'width': 4,
+			'curve-style': 'bezier',
+			'target-arrow-shape': 'triangle',
+			'line-color': '#9dbaea',
+			'target-arrow-color': '#9dbaea',
+			'curve-style': 'bezier'
+		}
+	}]
+<?php if($renderdata) echo ",".$renderdata; ?>
+}
+
+);
+
+cy.on('free', 'node', function(evt) {
+	$('#png').attr('src', cy.png({'full': true}));
 });
-
+<?php
+		if(!$renderdata)
+			$this->printGraph();
+?>
+	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'grid'; ?>', condense: true });
+$('#png').attr('src', cy.png({'full': true}));
 <?php
 	} /* }}} */
 
@@ -68,6 +125,9 @@ $(document).ready(function() {
 		$transitions = $this->workflow->getTransitions();	
 		if($transitions) {
 
+			$this->seentrans = array();
+			$this->states = array();
+			$this->actions = array();
 			foreach($transitions as $transition) {
 				$action = $transition->getAction();
 				$maxtime = $transition->getMaxTime();
@@ -95,20 +155,45 @@ $(document).ready(function() {
 					foreach($transusers as $transuser) {
 						$unames[] = $transuser->getUser()->getFullName();
 					}
-					echo "ggg.addNode(\"A".$transition->getID()."-".$action->getID()."\", { render: render_action, maxtime: \"".str_replace('"', "\\\"", implode(", ", $unames))."\", label : \"".str_replace('"', "\\\"", $action->getName())."\", color: '".$color."' });\n";
+					$transgroups = $transition->getGroups();
+					$gnames = array();
+					foreach($transgroups as $transgroup) {
+						$gnames[] = $transgroup->getGroup()->getName();
+					}
+					echo "cy.add({
+						data: {
+							id: 'A".$transition->getID()."-".$action->getID()."',
+							name: \"".str_replace('"', "\\\"", $action->getName()).($unames ? "\\n(".str_replace('"', "\\\"", implode(", ", $unames)).")" : '').($gnames ? "\\n(".str_replace('"', "\\\"", implode(", ", $gnames)).")" : '')."\"
+						},
+						classes: 'action'
+					});\n";
 				}
 
 				if(!isset($this->states[$state->getID()])) {
 					$this->states[$state->getID()] = $state;
 					$initstate = '';
 					if($state == $this->workflow->getInitState())
-						$initstate = " (START)";
-					echo "ggg.addNode(\"S".$state->getID()."\", { label : \"".str_replace('"', "\\\"", $state->getName()." ".$initstate)."\" });\n";
+						$initstate = getMLText('workflow_initstate');
+					echo "cy.add({
+						data: {
+							id: 'S".$state->getID()."',
+							name: \"".str_replace('"', "\\\"", $state->getName()."\\n".$initstate)."\"
+						},
+						classes: 'state ".($state == $this->workflow->getInitState() ? 'init' : '')."'
+					});\n";
 				}
 				if(!isset($this->states[$nextstate->getID()])) {
 					$this->states[$nextstate->getID()] = $nextstate;
-					echo "ggg.addNode(\"S".$nextstate->getID()."\", { label : \"".str_replace('"', "\\\"", $nextstate->getName())."\" });\n";
+					$docstatus = $nextstate->getDocumentStatus();
+					echo "cy.add({
+						data: {
+							id: 'S".$nextstate->getID()."',
+							name: '".str_replace('"', "\\\"", $nextstate->getName())/*.($docstatus == S_RELEASED || $docstatus == S_REJECTED ? "\\n(".getOverallStatusText($docstatus).")" : '')*/."'
+						},
+						classes: 'state".($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ''))."'
+					});\n";
 				}
+
 			}
 
 			foreach($transitions as $transition) {
@@ -118,12 +203,26 @@ $(document).ready(function() {
 					$action = $transition->getAction();
 					$iscurtransition = $this->curtransition && $transition->getID() == $this->curtransition->getID();
 
-					echo "ggg.addEdge(\"S".$state->getID()."\",\"A".$transition->getID()."-".$action->getID()."\", { ".($iscurtransition ? "stroke: '#D00', 'stroke-width': '2px'" : "")." });\n";
-					echo "ggg.addEdge(\"A".$transition->getID()."-".$action->getID()."\",\"S".$nextstate->getID()."\", { ".($iscurtransition ? "stroke: '#D00', 'stroke-width': '2px'" : "")." });\n";
+					echo "cy.add({
+						data: {
+							id: 'E1-".$transition->getID()."',
+							source: 'S".$state->getID()."',
+							target: 'A".$transition->getID()."-".$action->getID()."'
+						}
+					});\n";
+					echo "cy.add({
+						data: {
+							id: 'E2-".$transition->getID()."',
+							source: 'A".$transition->getID()."-".$action->getID()."',
+							target: 'S".$nextstate->getID()."'
+						}
+					});\n";
 					$this->seentrans[] = $transition->getID();
 				}
 			}
 		}
+?>
+<?php
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -141,10 +240,7 @@ $(document).ready(function() {
 		}
 
 		$this->htmlAddHeader(
-			'<script type="text/javascript" src="../styles/bootstrap/dracula/raphael-min.js"></script>'."\n".
-			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_graffle.js"></script>'."\n".
-			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_graph.js"></script>'."\n".
-			'<script type="text/javascript" src="../styles/bootstrap/dracula/dracula_algorithms.js"></script>'."\n");
+			'<script type="text/javascript" src="../styles/bootstrap/cytoscape/cytoscape.min.js"></script>'."\n");
 		$this->htmlAddHeader('
 <style type="text/css">
 body {padding: 0px;}
@@ -155,6 +251,7 @@ body {padding: 0px;}
 
 ?>
 <div id="canvas" style="width: 100%; height:546px; _border: 1px solid #bbb;"></div>
+<img id="png" style="float: left; border: 1px solid #bbb; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px;" />
 <?php
 //		$this->contentContainerEnd();
 		if(method_exists($this, 'js'))
