@@ -254,6 +254,8 @@ $(document).ready(function() {
 body {padding: 0px;}
 div.buttons {float: right; padding-left: 4px; height: 100px; width: 120px; margin-right: 5px;}
 div.buttons button {margin: 3px; float: right;}
+#preview {background: #f5f5f5; border-top: 1px solid #e3e3e3;}
+#preview img {border: 1px solid #bbb; background: #fff; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
 </style>
 ', 'css');
 		$this->htmlStartPage(getMLText("admin_tools"));
@@ -261,9 +263,11 @@ div.buttons button {margin: 3px; float: right;}
 
 ?>
 <div id="canvas" style="width: 100%; height:546px; _border: 1px solid #bbb;"></div>
-<img id="png" style="float: left; border: 1px solid #bbb; min-height: 100px; min-width: 100px; height: 100px; _width: 100px; padding: 3px;" />
-<div class="buttons">
-	<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
+<div id="preview">
+	<img id="png" />
+	<div class="buttons">
+		<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
+	</div>
 </div>
 <?php
 //		$this->contentContainerEnd();
