@@ -75,7 +75,7 @@ $(document).ready(function() {
 		$selworkflow = $this->params['selworkflow'];
 		if($selworkflow) { ?>
 <div id="workflowgraph">
-<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="654" style="border: 1px solid #AAA;"></iframe>
+<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #e3e3e3; border-radius: 4px; margin: -1px;"></iframe>
 </div>
 <?php }
 	} /* }}} */
