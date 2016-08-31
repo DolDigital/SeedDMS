@@ -109,9 +109,14 @@ var cy = cytoscape({
 		}
 	}]
 <?php if($renderdata) echo ",".$renderdata; ?>
-}
+});
 
-);
+cy.gridGuide({
+	discreteDrag: false,
+	guidelinesStyle: {
+		strokeStyle: "red"
+	}
+});
 
 cy.on('free', 'node', function(evt) {
 	$('#png').attr('src', cy.png({'full': true}));
@@ -270,6 +275,8 @@ $(document).ready(function() {
 
 		$this->htmlAddHeader(
 			'<script type="text/javascript" src="../styles/bootstrap/cytoscape/cytoscape.min.js"></script>'."\n");
+		$this->htmlAddHeader(
+			'<script type="text/javascript" src="../styles/bootstrap/cytoscape/cytoscape-grid-guide.js"></script>'."\n");
 		$this->htmlAddHeader('
 <style type="text/css">
 body {padding: 0px;}
