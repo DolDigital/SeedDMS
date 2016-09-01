@@ -167,6 +167,12 @@ ul.jqtree-tree li.jqtree_common > .jqtree-element:hover {
     background-color: #E0E0E0;
 }
 
+i.initstate {color: #ff9900;}
+i.released {color: #00b000;}
+i.rejected {color: #b00000;}
+i.in-workflow {color: #11479e;}
+i.workflow-action {color: #91479e;}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;
