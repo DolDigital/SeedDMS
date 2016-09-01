@@ -295,11 +295,11 @@ div.buttons button {margin: 3px; float: right;}
 <div id="preview">
 	<img id="png" />
 	<div id="legend">
-		<i class="icon-circle" style="color: #ff9900;"></i> <?php printMLText("workflow_initstate"); ?><br />
-		<i class="icon-circle" style="color: #00b000;"></i> <?php echo getOverallStatusText(S_RELEASED); ?><br />
-		<i class="icon-circle" style="color: #b00000;"></i> <?php echo getOverallStatusText(S_REJECTED); ?><br />
-		<i class="icon-circle" style="color: #11479e;"></i> <?php echo getOverallStatusText(S_IN_WORKFLOW); ?><br />
-		<i class="icon-sign-blank" style="color: #91479e;"></i> <?php echo printMLText('global_workflow_actions'); ?>
+		<i class="icon-circle initstate"></i> <?php printMLText("workflow_initstate"); ?><br />
+		<i class="icon-circle released"></i> <?php echo getOverallStatusText(S_RELEASED); ?><br />
+		<i class="icon-circle rejected"></i> <?php echo getOverallStatusText(S_REJECTED); ?><br />
+		<i class="icon-circle in-workflow"></i> <?php echo getOverallStatusText(S_IN_WORKFLOW); ?><br />
+		<i class="icon-sign-blank workflow-action"></i> <?php echo printMLText('global_workflow_actions'); ?>
 	</div>
 	<div class="buttons">
 		<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>

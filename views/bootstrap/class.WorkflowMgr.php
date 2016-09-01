@@ -177,14 +177,14 @@ $(document).ready(function() {
 				if(!$transusers && !$transgroups) {
 					echo " class=\"error\"";
 				}
-				echo "><td>".$state->getName()."<br />";
-				echo $nextstate->getName();
+				echo "><td>".'<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName()."<br />";
 				$docstatus = $nextstate->getDocumentStatus();
+				echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
 				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
 					echo "<br /><i class=\"icon-arrow-right\"></i> ".getOverallStatusText($docstatus);
 				}
 				echo "</td>";
-				echo "<td>".$action->getName()."</td>";
+				echo "<td><i class=\"icon-sign-blank workflow-action\"></i> ".$action->getName()."</td>";
 				echo "<td>";
 				foreach($transusers as $transuser) {
 					$u = $transuser->getUser();
