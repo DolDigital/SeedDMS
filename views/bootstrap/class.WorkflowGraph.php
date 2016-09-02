@@ -146,7 +146,7 @@ cy.on('zoom', function(evt) {
 		if(!$renderdata)
 			$this->printGraph();
 ?>
-	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'cose'; ?>', condense: true, ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
+	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'cose'; ?>', ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
 	cy.maxZoom(2.5);
 	cy.minZoom(0.4);
 
