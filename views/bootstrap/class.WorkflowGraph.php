@@ -125,6 +125,7 @@ cy.on('free', 'node', function(evt) {
 cy.on('tap', 'node', function(evt) {
 	var node = evt.cyTarget;
 	var scratch = node.scratch('app');
+	if(typeof scratch !== 'undefined') {
 	noty({
 		text: (scratch.users ? '<p><?php printMLText('users'); ?>: ' + scratch.users + '</p>' : '') + (scratch.groups ? '<?php printMLText('groups'); ?>: ' + scratch.groups + '</p>' : ''),
 		type: 'information',
@@ -134,19 +135,30 @@ cy.on('tap', 'node', function(evt) {
 		timeout: 4000,
 		killer: true,
 	});
+	}
 });
+
+cy.on('zoom', function(evt) {
+	$('#zoom button').text(Math.round(cy.zoom()*100)+'%');
+});
+
 <?php
 		if(!$renderdata)
 			$this->printGraph();
 ?>
 	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'cose'; ?>', condense: true, ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
-//	$('#png').attr('src', cy.png({'full': true}));
+	cy.maxZoom(2.5);
+	cy.minZoom(0.4);
 
 $(document).ready(function() {
 	$('body').on('click', '#setlayout', function(ev){
 		ev.preventDefault();
 		var element = $(this);
 		cy.layout({name: element.data('layout'), ready: function() {$('#png').attr('src', cy.png({'full': true}))}});
+	});
+	$('body').on('click', '#zoom button', function(ev){
+		cy.zoom(1);
+		cy.center();
 	});
 });
 <?php
@@ -281,7 +293,8 @@ $(document).ready(function() {
 <style type="text/css">
 body {padding: 0px;}
 div.buttons {float: right; padding-left: 4px; height: 100px; width: 120px; margin-right: 5px;}
-div.buttons button {margin: 3px; float: right;}
+div.buttons button {margin: 3px; _float: right;}
+div.buttons #zoom {margin: 3px; _float: right;}
 #legend {display: inline-block; margin-left: 10px;}
 #preview {height: 115px; background: #f5f5f5; border-top: 1px solid #e3e3e3;}
 #preview img {float: left;border: 1px solid #bbb; background: #fff; min-height: 100px; height: 100px; _width: 100px; padding: 3px; margin: 3px;}
@@ -302,6 +315,7 @@ div.buttons button {margin: 3px; float: right;}
 		<i class="icon-sign-blank workflow-action"></i> <?php echo printMLText('global_workflow_actions'); ?>
 	</div>
 	<div class="buttons">
+		<div id="zoom"><button class="btn btn-mini btn-default">kkk</button></div>
 		<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
 	</div>
 </div>
