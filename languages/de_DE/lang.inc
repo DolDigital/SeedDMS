@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2283), dgrutsch (21)
+//    Translators: Admin (2289), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1369,6 +1369,7 @@ URL: [url]',
 'submit_review' => 'Überprüfung hinzufügen',
 'submit_revision' => 'Wiederholungsprüfung hinzufügen',
 'submit_userinfo' => 'Daten setzen',
+'subsribe_timelinefeed' => 'Verauf als RSS-Feed abonnieren',
 'substitute_to_user' => 'Wechsel zu \'[username]\'',
 'substitute_user' => 'Benutzer wechseln',
 'success_add_aro' => 'Zugriffsobjekt hinzugefügt',
@@ -1509,8 +1510,12 @@ URL: [url]',
 'workflow_group_summary' => 'Gruppenübersicht',
 'workflow_initstate' => 'Initialer Status',
 'workflow_in_use' => 'Dieser Workflow wird zur Zeit noch von einem Dokument verwendet.',
+'workflow_layoutdata_saved' => 'Layout-Daten gespeichert',
 'workflow_management' => 'Workflow-Management',
 'workflow_name' => 'Name',
+'workflow_no_doc_rejected_state' => 'Das Dokument wird in keinem Workflow-Status abgelehnt!',
+'workflow_no_doc_released_state' => 'Das Dokument wird in keinem Workflow-Status freigegeben!',
+'workflow_no_initial_state' => 'Keine Transition beginnt mit dem initialen Status des Workflows!',
 'workflow_no_states' => 'Es muss zunächst mindestens ein Workflow-Status angelegt werden, um einen Workflow anlegen zu können.',
 'workflow_state' => 'Workflow-Status',
 'workflow_states_management' => 'Workflow-Status-Management',
@@ -1518,6 +1523,7 @@ URL: [url]',
 'workflow_state_in_use' => 'Dieser Status wird zur Zeit von einem Workflow verwendet.',
 'workflow_state_name' => 'Name',
 'workflow_summary' => 'Übersicht Workflows',
+'workflow_transition_without_user_group' => 'Mindestens eine Transition hat weder einen Benutzer noch eine Gruppe zugewiesen!',
 'workflow_user_summary' => 'Übersicht Benutzer',
 'year_view' => 'Jahresansicht',
 'yes' => 'Ja',

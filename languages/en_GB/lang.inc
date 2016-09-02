@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1430), dgrutsch (7), netixw (14)
+//    Translators: Admin (1436), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1370,6 +1370,7 @@ URL: [url]',
 'submit_review' => 'Submit review',
 'submit_revision' => 'Add Revision',
 'submit_userinfo' => 'Submit info',
+'subsribe_timelinefeed' => 'Subscribe to time line feed',
 'substitute_to_user' => 'Switch to \'[username]\'',
 'substitute_user' => 'Substitute User',
 'success_add_aro' => 'Access request object added',
@@ -1510,8 +1511,12 @@ URL: [url]',
 'workflow_group_summary' => 'Group summary',
 'workflow_initstate' => 'Initial state',
 'workflow_in_use' => 'This workflow is currently used by documents.',
+'workflow_layoutdata_saved' => 'Layout data saved',
 'workflow_management' => 'Workflow management',
 'workflow_name' => 'Name',
+'workflow_no_doc_rejected_state' => 'The document will not be rejected in a workflow state!',
+'workflow_no_doc_released_state' => 'The document will not be released in a workflow state!',
+'workflow_no_initial_state' => 'None of the transitions starts with the initial state of the workflow!',
 'workflow_no_states' => 'You must first define workflow states, before adding a workflow.',
 'workflow_state' => 'workflow state',
 'workflow_states_management' => 'Workflow states management',
@@ -1519,6 +1524,7 @@ URL: [url]',
 'workflow_state_in_use' => 'This state is currently used by workflows.',
 'workflow_state_name' => 'Name',
 'workflow_summary' => 'Workflow summary',
+'workflow_transition_without_user_group' => 'At least one of the transitions has neither a user nor a group!',
 'workflow_user_summary' => 'User summary',
 'year_view' => 'Year View',
 'yes' => 'Yes',
