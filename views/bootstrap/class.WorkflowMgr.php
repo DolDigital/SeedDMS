@@ -90,35 +90,42 @@ $(document).ready(function() {
 			$transitions = $workflow->getTransitions();
 			$initstate = $workflow->getInitState();
 			$hasinitstate = true;
+			$hasreleased = true;
+			$hasrejected = true;
 			$missesug = false;
 			if($transitions) {
 				$hasinitstate = false;
+				$hasreleased = false;
+				$hasrejected = false;
 				foreach($transitions as $transition) {
 					$transusers = $transition->getUsers();
 					$transgroups = $transition->getGroups();
 					if(!$transusers && !$transgroups) {
 						$missesug = true;
 					}
+					if($transition->getNextState()->getDocumentStatus() == S_RELEASED)
+						$hasreleased = true;
+					if($transition->getNextState()->getDocumentStatus() == S_REJECTED)
+						$hasrejected = true;
 					if($transition->getState()->getID() == $initstate->getID())
 						$hasinitstate = true;
 				}
 			}
 			if($missesug)
-				$this->errorMsg('One of the transitions has neither a user nor a group!');
+				$this->errorMsg(getMLText('workflow_transition_without_user_group'));
 			if(!$hasinitstate)
-				$this->errorMsg('None of the transitions starts with the initial state of the workflow!');
+				$this->errorMsg(getMLText('workflow_no_initial_state'));
+			if(!$hasreleased)
+				$this->errorMsg(getMLText('workflow_no_doc_released_state'));
+			if(!$hasrejected)
+				$this->errorMsg(getMLText('workflow_no_doc_rejected_state'));
 
-				if($workflow->isUsed()) {
-?>
-				<p><?php echo getMLText('workflow_in_use') ?></p>
-<?php
-				} else {
-?>
-			  <a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a>
-<?php
-				}
+			if($workflow->isUsed()) {
+				$this->infoMsg(getMLText('workflow_in_use'));
+			}
 		}
 ?>
+	<div class="well">
 	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
 <?php
 	if($workflow) {
@@ -135,6 +142,13 @@ $(document).ready(function() {
 	}
 ?>
 	<table class="table-condensed">
+<?php
+		if(!$workflow->isUsed()) {
+?>
+	  <tr><td></td><td><a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a></td></tr>
+<?php
+		}
+?>
 		<tr>
 			<td><?php printMLText("workflow_name");?>:</td>
 			<td><input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>"></td>
@@ -159,6 +173,7 @@ $(document).ready(function() {
 		</tr>
 	</table>
 	</form>
+	</div>
 <?php
 		if($workflow) {
 		$actions = $dms->getAllWorkflowActions();
@@ -308,9 +323,7 @@ $(document).ready(function() {
 </div>
 
 <div class="span7">
-	<div class="well">
 		<div class="ajax" data-view="WorkflowMgr" data-action="form" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
-	</div>
 </div>
 </div>
 
