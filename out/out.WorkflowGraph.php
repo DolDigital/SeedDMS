@@ -39,20 +39,20 @@ if(isset($_GET['documentid']) && $_GET['documentid']) {
 	$document = null;
 }
 
-if(isset($_GET['transition']) && $_GET['transition']) {
-	$transition = $dms->getWorkflowTransition($_GET['transition']);
-	if (is_bool($transition)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
+$transitions = array();
+if(isset($_GET['transitions']) && $_GET['transitions']) {
+	foreach($_GET['transitions'] as $tr) {
+		$transition = $dms->getWorkflowTransition($tr);
+		if ($transition)
+			$transitions[] = $transition;
 	}
-} else {
-	$transition = null;
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('workflow', $workflow);
-	$view->setParam('transition', $transition);
+	$view->setParam('transitions', $transitions);
 	$view->setParam('document', $document);
 	$view($_GET);
 	exit;
