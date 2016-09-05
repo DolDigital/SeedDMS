@@ -33,6 +33,7 @@ class SeedDMS_View_WorkflowGraph extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$this->workflow = $this->params['workflow'];
+		$this->curtransitions = $this->params['transitions'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
 		$renderdata = '';
@@ -66,6 +67,20 @@ var cy = cytoscape({
 			'width': 30,
 			'background-color': '#91479e',
 //			'text-outline-color': '#91479e'
+		}
+	},
+
+	{
+		selector: 'node.current',
+		style: {
+			'font-weight': 'bold',
+		}
+	},
+
+	{
+		selector: 'node.light',
+		style: {
+			'opacity': '0.3',
 		}
 	},
 
@@ -107,8 +122,15 @@ var cy = cytoscape({
 			'target-arrow-color': '#9dbaea',
 			'curve-style': 'bezier'
 		}
-	}]
-<?php if($renderdata) echo ",".$renderdata; ?>
+	},
+
+	{
+		selector: 'edge.light',
+		style: {
+			'opacity': '0.3',
+		}
+	}
+	]
 });
 
 cy.gridGuide({
@@ -143,10 +165,9 @@ cy.on('zoom', function(evt) {
 });
 
 <?php
-		if(!$renderdata)
-			$this->printGraph();
+		$this->printGraph();
 ?>
-	cy.layout({ name: '<?php echo $renderdata ? 'preset' : 'cose'; ?>', condense: true, ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
+	cy.layout({ name: 'cose', ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
 	cy.maxZoom(2.5);
 	cy.minZoom(0.4);
 
@@ -178,20 +199,13 @@ $(document).ready(function() {
 				$nextstate = $transition->getNextState();
 
 				if(1 || !isset($this->actions[$action->getID()])) {
-					$color = "#4B4";
-					$iscurtransition = $this->curtransition && $transition->getID() == $this->curtransition->getID();
-					if($iscurtransition) {
-						$color = "#D00";
-					} else {
-						if($this->wkflog) {
-							foreach($this->wkflog as $entry) {
-								if($entry->getTransition()->getID() == $transition->getID()) {
-									$color = "#DDD";
-									break;
-								}
-							}
-						}
+					$iscurtransition = false;
+					if($this->curtransitions) {
+						foreach($this->curtransitions as $tr)
+							if($transition->getID() == $tr->getID())
+								$iscurtransition = true;
 					}
+
 					$this->actions[$action->getID()] = $action->getID();
 					$transusers = $transition->getUsers();
 					$unames = array();
@@ -208,7 +222,7 @@ $(document).ready(function() {
 							id: 'A".$transition->getID()."-".$action->getID()."',
 							name: \"".str_replace('"', "\\\"", $action->getName())/*.($unames ? "\\n(".str_replace('"', "\\\"", implode(", ", $unames)).")" : '').($gnames ? "\\n(".str_replace('"', "\\\"", implode(", ", $gnames)).")" : '')*/."\"
 						},
-						classes: 'action',
+						classes: 'action".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."',
 						scratch: {
 							app: {groups: \"".str_replace('"', "\\\"", implode(", ", $gnames))."\", users: \"".str_replace('"', "\\\"", implode(", ", $unames))."\"}
 						}
@@ -247,21 +261,29 @@ $(document).ready(function() {
 					$state = $transition->getState();
 					$nextstate = $transition->getNextState();
 					$action = $transition->getAction();
-					$iscurtransition = $this->curtransition && $transition->getID() == $this->curtransition->getID();
+
+					$iscurtransition = false;
+					if($this->curtransitions) {
+						foreach($this->curtransitions as $tr)
+							if($transition->getID() == $tr->getID())
+								$iscurtransition = true;
+					}
 
 					echo "cy.add({
 						data: {
 							id: 'E1-".$transition->getID()."',
 							source: 'S".$state->getID()."',
 							target: 'A".$transition->getID()."-".$action->getID()."'
-						}
+						},
+						classes: '".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."',
 					});\n";
 					echo "cy.add({
 						data: {
 							id: 'E2-".$transition->getID()."',
 							source: 'A".$transition->getID()."-".$action->getID()."',
 							target: 'S".$nextstate->getID()."'
-						}
+						},
+						classes: '".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."',
 					});\n";
 					$this->seentrans[] = $transition->getID();
 				}
@@ -275,7 +297,6 @@ $(document).ready(function() {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$this->workflow = $this->params['workflow'];
-		$this->curtransition = $this->params['transition'];
 		$document = $this->params['document'];
 
 		if($document) {
@@ -315,8 +336,8 @@ div.buttons #zoom {margin: 3px; _float: right;}
 		<i class="icon-sign-blank workflow-action"></i> <?php echo printMLText('global_workflow_actions'); ?>
 	</div>
 	<div class="buttons">
-		<div id="zoom"><button class="btn btn-mini btn-default">kkk</button></div>
-		<button class="btn btn-mini" id="setlayout" data-layout="cose">Redraw</button>
+		<div id="zoom"><button class="btn btn-mini btn-default">Zoom</button></div>
+		<button class="btn btn-mini" id="setlayout" data-layout="cose"><?php printMLText('redraw'); ?></button>
 	</div>
 </div>
 <?php

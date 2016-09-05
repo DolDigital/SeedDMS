@@ -288,6 +288,7 @@ $(document).ready(function() {
 	function form() { /* {{{ */
 		$selworkflow = $this->params['selworkflow'];
 
+		if($selworkflow)
 		$this->showWorkflowForm($selworkflow);
 	} /* }}} */
 
