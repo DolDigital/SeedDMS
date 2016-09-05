@@ -725,6 +725,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		  <div class="tab-pane <?php if($currenttab == 'workflow') echo 'active'; ?>" id="workflow">
 <?php
+			echo "<div class=\"row-fluid\">";
+			echo "<div class=\"span6\">";
 			$this->contentContainerStart();
 			if($user->isAdmin()) {
 				if(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
@@ -738,15 +740,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			if($parentworkflow = $latestContent->getParentWorkflow()) {
 				echo "<p>Sub workflow of '".$parentworkflow->getName()."'</p>";
 			}
-			echo "<div class=\"row-fluid\">";
-			echo "<div class=\"span8\">";
 			echo "<h5>".getMLText('current_state').": ".$workflowstate->getName()."</h5>";
 			echo "<table class=\"table table-condensed\">\n";
 			echo "<tr>";
 			echo "<td>".getMLText('next_state').":</td>";
 			foreach($transitions as $transition) {
 				$nextstate = $transition->getNextState();
-				echo "<td>".$nextstate->getName()."</td>";
+				$docstatus = $nextstate->getDocumentStatus();
+				echo "<td><i class=\"icon-circle".($docstatus == S_RELEASED ? " released" : ($docstatus == S_REJECTED ? " rejected" : " in-workflow"))."\"></i> ".$nextstate->getName()."</td>";
 			}
 			echo "</tr>";
 			echo "<tr>";
@@ -815,11 +816,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "</tr>";
 			echo "<tr>";
 			echo "<td></td>";
+			$allowedtransitions = array();
 			foreach($transitions as $transition) {
 				echo "<td>";
 				if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
 					$action = $transition->getAction();
 					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.strtolower($action->getName()), array(), $action->getName())."\" /></form>";
+					$allowedtransitions[] = $transition;
 				}
 				echo "</td>";
 			}
@@ -895,9 +898,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					}
 				}
 			}
-			echo "</div>";
-			echo "</div>";
 			$this->contentContainerEnd();
+			echo "</div>";
+			echo "<div class=\"span6\">";
+?>
+	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?><?php if($allowedtransitions) foreach($allowedtransitions as $tr) {echo "&transitions[]=".$tr->getID();} ?>" width="99%" height="661" style="border: 1px solid #AAA;"></iframe>
+<?php
+			echo "</div>";
+			echo "</div>";
 ?>
 		  </div>
 <?php
