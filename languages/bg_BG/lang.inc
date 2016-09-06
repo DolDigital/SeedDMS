@@ -1322,6 +1322,7 @@ $text = array(
 'workflow_no_doc_released_state' => '',
 'workflow_no_initial_state' => '',
 'workflow_no_states' => 'Трябва първо да дефинирате състояние на процес, а след това да добавите процес.',
+'workflow_save_layout' => '',
 'workflow_state' => '',
 'workflow_states_management' => 'Управление на състоянието на процеси',
 'workflow_state_docstatus' => 'Състояние на документа',

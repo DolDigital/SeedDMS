@@ -629,7 +629,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						}
 						print "</a></td>";
-						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=workflow\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 						print "<td>".getOverallStatusText($res["status"])."</td>";
 						print "<td>".$res["version"]."</td>";
 						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";

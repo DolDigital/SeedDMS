@@ -170,6 +170,7 @@ cy.on('zoom', function(evt) {
 	cy.layout({ name: 'cose', ready: function() {$('#png').attr('src', cy.png({'full': true}))} });
 	cy.maxZoom(2.5);
 	cy.minZoom(0.4);
+	$('#zoom button').text(Math.round(cy.zoom()*100)+'%');
 
 $(document).ready(function() {
 	$('body').on('click', '#setlayout', function(ev){
