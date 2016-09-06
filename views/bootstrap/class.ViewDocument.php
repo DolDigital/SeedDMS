@@ -722,11 +722,21 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		} else {
 			if($workflow) {
+				/* Check if user is involved in workflow */
+				$user_is_involved = false;
+				foreach($transitions as $transition) {
+					if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
+						$user_is_involved = true;
+					}
+				}
 ?>
 		  <div class="tab-pane <?php if($currenttab == 'workflow') echo 'active'; ?>" id="workflow">
 <?php
 			echo "<div class=\"row-fluid\">";
-			echo "<div class=\"span6\">";
+			if($user_is_involved || $user->isAdmin())
+				echo "<div class=\"span6\">";
+			else
+				echo "<div class=\"span12\">";
 			$this->contentContainerStart();
 			if($user->isAdmin()) {
 				if(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
@@ -900,11 +910,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 			$this->contentContainerEnd();
 			echo "</div>";
-			echo "<div class=\"span6\">";
+			if($user_is_involved || $user->isAdmin()) {
+				echo "<div class=\"span6\">";
 ?>
 	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?><?php if($allowedtransitions) foreach($allowedtransitions as $tr) {echo "&transitions[]=".$tr->getID();} ?>" width="99%" height="661" style="border: 1px solid #AAA;"></iframe>
 <?php
-			echo "</div>";
+				echo "</div>";
+			}
 			echo "</div>";
 ?>
 		  </div>
