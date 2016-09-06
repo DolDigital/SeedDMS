@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (719), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (720), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -526,7 +526,7 @@ URL: [url]',
 'identical_version' => 'Nieuwe versie is identiek aan de huidige versie',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importeer van bestandssysteem',
 'import_fs_warning' => '',
 'include_content' => 'inclusief inhoud',
 'include_documents' => 'Inclusief documenten',
@@ -1513,6 +1513,7 @@ URL: [url]',
 'workflow_no_doc_released_state' => '',
 'workflow_no_initial_state' => '',
 'workflow_no_states' => 'U moet eerst workflow-statussen definiëren, voordat u een workflow toevoegt.',
+'workflow_save_layout' => '',
 'workflow_state' => 'workflow_states_managementWorkflow status beheer',
 'workflow_states_management' => 'Workflow status beheer',
 'workflow_state_docstatus' => 'Document status',

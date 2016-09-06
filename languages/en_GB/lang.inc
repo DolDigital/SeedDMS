@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1436), dgrutsch (7), netixw (14)
+//    Translators: Admin (1437), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1518,6 +1518,7 @@ URL: [url]',
 'workflow_no_doc_released_state' => 'The document will not be released in a workflow state!',
 'workflow_no_initial_state' => 'None of the transitions starts with the initial state of the workflow!',
 'workflow_no_states' => 'You must first define workflow states, before adding a workflow.',
+'workflow_save_layout' => 'Save layout',
 'workflow_state' => 'workflow state',
 'workflow_states_management' => 'Workflow states management',
 'workflow_state_docstatus' => 'Document status',

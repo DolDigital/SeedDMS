@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2289), dgrutsch (21)
+//    Translators: Admin (2290), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1517,6 +1517,7 @@ URL: [url]',
 'workflow_no_doc_released_state' => 'Das Dokument wird in keinem Workflow-Status freigegeben!',
 'workflow_no_initial_state' => 'Keine Transition beginnt mit dem initialen Status des Workflows!',
 'workflow_no_states' => 'Es muss zunächst mindestens ein Workflow-Status angelegt werden, um einen Workflow anlegen zu können.',
+'workflow_save_layout' => 'Layout speichern',
 'workflow_state' => 'Workflow-Status',
 'workflow_states_management' => 'Workflow-Status-Management',
 'workflow_state_docstatus' => 'Dokumentenstatus',

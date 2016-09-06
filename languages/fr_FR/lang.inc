@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1046), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (1047), jeromerobert (50), lonnnew (9)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1336,7 +1336,7 @@ URL: [url]',
 'thursday' => 'Jeudi',
 'thursday_abbr' => 'Jeu.',
 'timeline' => 'Chronologie',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Nouvelle Pièce Jointe',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',
@@ -1453,6 +1453,7 @@ URL: [url]',
 'workflow_no_doc_released_state' => '',
 'workflow_no_initial_state' => '',
 'workflow_no_states' => 'Vous devez d\'abord définir des états de workflow avant d\'ajouter un workflow.',
+'workflow_save_layout' => '',
 'workflow_state' => '',
 'workflow_states_management' => 'Gestion d\'états de workflow',
 'workflow_state_docstatus' => 'Etat du document',
