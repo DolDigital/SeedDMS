@@ -118,7 +118,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "4.3.28");
+define("SEEDDMS_VERSION", "4.3.29");
 
 require_once('../inc/inc.ClassSettings.php');
 
