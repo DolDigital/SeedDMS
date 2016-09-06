@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1438), dgrutsch (7), netixw (14)
+//    Translators: Admin (1439), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -415,6 +415,7 @@ URL: [url]',
 'edit_user' => 'Edit user',
 'edit_user_details' => 'Edit User Details',
 'edit_version' => 'Edit version',
+'el_GR' => 'Greek',
 'email' => 'Email',
 'email_error_title' => 'No email entered',
 'email_footer' => 'You can always change your e-mail settings using \'My Account\' functions',
