@@ -807,6 +807,7 @@ Ako i dalje imate problema s prijavom, molimo kontaktirajte Vašeg administrator
 'receipt_status' => '',
 'receipt_summary' => 'Sažetak prijema',
 'recipients' => 'Primatelji',
+'redraw' => '',
 'refresh' => 'Osvježi',
 'rejected' => 'Odbijeno',
 'released' => 'Obrađeno',

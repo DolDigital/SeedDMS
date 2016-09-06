@@ -808,6 +808,7 @@ Dacă aveți în continuare probleme la autentificare, vă rugăm să contactaț
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => 'Destinatari',
+'redraw' => '',
 'refresh' => 'Refresh',
 'rejected' => 'Respins',
 'released' => 'Final(Released)',

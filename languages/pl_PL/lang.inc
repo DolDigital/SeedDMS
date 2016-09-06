@@ -796,6 +796,7 @@ Jeśli nadal będą problemy z zalogowaniem, prosimy o kontakt z administratorem
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Odśwież',
 'rejected' => 'Odrzucony',
 'released' => 'Zatwierdzony',

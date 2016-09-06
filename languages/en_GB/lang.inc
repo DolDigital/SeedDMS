@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1437), dgrutsch (7), netixw (14)
+//    Translators: Admin (1438), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -813,6 +813,7 @@ URL: [url]',
 'receipt_status' => 'Status',
 'receipt_summary' => 'Receipt summary',
 'recipients' => 'Recipients',
+'redraw' => 'Redraw',
 'refresh' => 'Refresh',
 'rejected' => 'Rejected',
 'released' => 'Released',

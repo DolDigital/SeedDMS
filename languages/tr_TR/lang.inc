@@ -804,6 +804,7 @@ Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görü
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Yenile',
 'rejected' => 'Reddedildi',
 'released' => 'Yayınlandı',
