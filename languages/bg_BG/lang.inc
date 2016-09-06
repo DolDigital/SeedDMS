@@ -358,6 +358,7 @@ $text = array(
 'edit_user' => 'Редактирай потребител',
 'edit_user_details' => 'Редактирай данните на потребителя',
 'edit_version' => '',
+'el_GR' => '',
 'email' => 'Email',
 'email_error_title' => 'Email не е указан',
 'email_footer' => 'Винаги можете да измените e-mail исползвайки функцията \'Моя учетка\'',
