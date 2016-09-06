@@ -799,6 +799,7 @@ Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Adm
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Obnovit',
 'rejected' => 'Odmítnuto',
 'released' => 'Vydáno',

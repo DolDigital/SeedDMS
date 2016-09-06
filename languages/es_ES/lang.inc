@@ -803,6 +803,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Actualizar',
 'rejected' => 'Rechazado',
 'released' => 'Publicado',

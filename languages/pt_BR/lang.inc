@@ -801,6 +801,7 @@ Se você ainda tiver problemas para fazer o login, por favor, contate o administ
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Atualizar',
 'rejected' => 'Rejected',
 'released' => 'Released',

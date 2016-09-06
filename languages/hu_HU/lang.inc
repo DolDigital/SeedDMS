@@ -803,6 +803,7 @@ Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Frissítés',
 'rejected' => 'Elutasított',
 'released' => 'Kiadott',

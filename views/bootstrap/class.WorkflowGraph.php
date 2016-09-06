@@ -33,6 +33,11 @@ class SeedDMS_View_WorkflowGraph extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
 		$this->workflow = $this->params['workflow'];
+		/* curtransitions is a list of transition that shall be highlighted.
+		 * It is used to mark the current transition a user can trigger.
+		 * Setting this will automatically show all other transitions with
+		 * higher opacity.
+		 */
 		$this->curtransitions = $this->params['transitions'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
@@ -193,6 +198,7 @@ $(document).ready(function() {
 			$this->seentrans = array();
 			$this->states = array();
 			$this->actions = array();
+			$highlightstates = array();
 			foreach($transitions as $transition) {
 				$action = $transition->getAction();
 				$maxtime = $transition->getMaxTime();
@@ -223,42 +229,41 @@ $(document).ready(function() {
 							id: 'A".$transition->getID()."-".$action->getID()."',
 							name: \"".str_replace('"', "\\\"", $action->getName())/*.($unames ? "\\n(".str_replace('"', "\\\"", implode(", ", $unames)).")" : '').($gnames ? "\\n(".str_replace('"', "\\\"", implode(", ", $gnames)).")" : '')*/."\"
 						},
-						classes: 'action".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."',
+						classes: 'action".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."'".(!$this->curtransitions || $iscurtransition && $this->curtransitions ? ",
 						scratch: {
 							app: {groups: \"".str_replace('"', "\\\"", implode(", ", $gnames))."\", users: \"".str_replace('"', "\\\"", implode(", ", $unames))."\"}
-						}
+						}" : "")."
 					});\n";
 				}
 
-				if(!isset($this->states[$state->getID()])) {
+				/* Collect all states and remember those which are part of a
+				 * current transition.
+				 */
+				if(!isset($this->states[$state->getID()]) || $iscurtransition) {
+					if($iscurtransition)
+						$highlightstates[] = $state->getID();
 					$this->states[$state->getID()] = $state;
-					$initstate = '';
-					if($state == $this->workflow->getInitState())
-						$initstate = getMLText('workflow_initstate');
-					echo "cy.add({
-						data: {
-							id: 'S".$state->getID()."',
-							name: \"".str_replace('"', "\\\"", $state->getName()/*."\\n".$initstate*/)."\"
-						},
-						classes: 'state ".($state == $this->workflow->getInitState() ? 'init' : '')."'
-					});\n";
 				}
-				if(!isset($this->states[$nextstate->getID()])) {
+				if(!isset($this->states[$nextstate->getID()]) || $iscurtransition) {
+					if($iscurtransition)
+						$highlightstates[] = $nextstate->getID();
 					$this->states[$nextstate->getID()] = $nextstate;
-					$docstatus = $nextstate->getDocumentStatus();
-					echo "cy.add({
-						data: {
-							id: 'S".$nextstate->getID()."',
-							name: '".str_replace('"', "\\\"", $nextstate->getName())/*.($docstatus == S_RELEASED || $docstatus == S_REJECTED ? "\\n(".getOverallStatusText($docstatus).")" : '')*/."'
-						},
-						classes: 'state".($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ''))."'
-					});\n";
 				}
+			}
 
+			foreach($this->states as $state) {
+				$docstatus = $state->getDocumentStatus();
+				echo "cy.add({
+					data: {
+						id: 'S".$state->getID()."',
+						name: \"".str_replace('"', "\\\"", $state->getName())."\"
+					},
+					classes: 'state".($state == $this->workflow->getInitState() ? ' init' : ($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ''))).($highlightstates && !in_array($state->getID(), $highlightstates) ? ' light' : '')."'
+				});\n";
 			}
 
 			foreach($transitions as $transition) {
-				if(!in_array($transition->getID(), $this->seentrans)) {
+//				if(!in_array($transition->getID(), $this->seentrans)) {
 					$state = $transition->getState();
 					$nextstate = $transition->getNextState();
 					$action = $transition->getAction();
@@ -286,8 +291,8 @@ $(document).ready(function() {
 						},
 						classes: '".($iscurtransition ? " current" : ($this->curtransitions ? " light" : ""))."',
 					});\n";
-					$this->seentrans[] = $transition->getID();
-				}
+//					$this->seentrans[] = $transition->getID();
+//				}
 			}
 		}
 ?>

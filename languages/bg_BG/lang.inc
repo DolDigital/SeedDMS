@@ -689,6 +689,7 @@ $text = array(
 'receipt_status' => '',
 'receipt_summary' => '',
 'recipients' => '',
+'redraw' => '',
 'refresh' => 'Обнови',
 'rejected' => 'Отказан',
 'released' => 'Утвърден',
