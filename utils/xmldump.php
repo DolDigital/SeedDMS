@@ -105,6 +105,9 @@ $statistic = array(
 	'attributedefinitions'=>0,
 	'keywordcategories'=>0,
 	'documentcategories'=>0,
+	'workflows'=>0,
+	'workflowactions'=>0,
+	'workflowstates'=>0,
 );
 
 function dumplog($version, $type, $logs, $indent) { /* {{{ */
@@ -469,6 +472,13 @@ if($users) {
 			}
 			echo "  </mandatory_approvers>\n";
 		}
+		if($mworkflows = $user->getMandatoryWorkflows()) {
+			echo "  <mandatory_workflows>\n";
+			foreach($mworkflows as $mworkflow) {
+					echo "   <workflow id=\"".$mworkflow->getID()."\"></workflow>\n";
+			}
+			echo "  </mandatory_workflows>\n";
+		}
 		echo " </user>\n";
 		$statistic['users']++;
 	}
@@ -578,6 +588,72 @@ if($attrdefs) {
 		$statistic['attributedefinitions']++;
 	}
 	echo "</attrіbutedefinitions>\n";
+}
+}
+/* }}} */
+
+/* Dump workflows {{{ */
+if(!$sections || in_array('workflows', $sections)) {
+$workflowstates = $dms->getAllWorkflowStates();
+if($workflowstates) {
+	echo "<workflowstates>\n";
+	foreach ($workflowstates as $workflowstate) {
+		echo " <workflowstate id=\"".$workflowstate->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflowstate->getName()."</attr>\n";
+		echo "  <attr name=\"documentstate\">".$workflowstate->getDocumentStatus()."</attr>\n";
+		echo " </workflowstate>\n";
+		$statistic['workflowstates']++;
+	}
+	echo "</workflowstates>\n";
+}
+$workflowactions = $dms->getAllWorkflowActions();
+if($workflowactions) {
+	echo "<workflowactions>\n";
+	foreach ($workflowactions as $workflowaction) {
+		echo " <workflowaction id=\"".$workflowaction->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflowaction->getName()."</attr>\n";
+		echo " </workflowaction>\n";
+		$statistic['workflowactions']++;
+	}
+	echo "</workflowactions>\n";
+}
+$workflows = $dms->getAllWorkflows();
+if($workflows) {
+	echo "<workflows>\n";
+	foreach ($workflows as $workflow) {
+		echo " <workflow id=\"".$workflow->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflow->getName()."</attr>\n";
+		echo "  <attr name=\"initstate\">".$workflow->getInitState()->getID()."</attr>\n";
+		if($transitions = $workflow->getTransitions()) {
+			echo "  <transitions>\n";
+			foreach($transitions as $transition) {
+				echo "   <transition id=\"".$transition->getID()."\">\n";
+				echo "    <attr name=\"startstate\">".$transition->getState()->getID()."</attr>\n";
+				echo "    <attr name=\"nextstate\">".$transition->getNextState()->getID()."</attr>\n";
+				echo "    <attr name=\"action\">".$transition->getAction()->getID()."</attr>\n";
+				echo "    <attr name=\"maxtime\">".$transition->getMaxTime()."</attr>\n";
+				if($transusers = $transition->getUsers()) {
+					echo "    <users>\n";
+					foreach($transusers as $transuser) {
+						echo "     <user id=\"".$transuser->getUser()->getID()."\"></user>\n";
+					}
+					echo "    </users>\n";
+				}
+				if($transgroups = $transition->getGroups()) {
+					echo "    <groups>\n";
+					foreach($transgroups as $transgroup) {
+						echo "     <group id=\"".$transgroup->getGroup()->getID()."\" numofusers=\"".$transgroup->getNumOfUsers()."\"></group>\n";
+					}
+					echo "    </groups>\n";
+				}
+				echo "   </transition>\n";
+			}
+			echo "  </transitions>\n";
+		}
+		echo " </workflow>\n";
+		$statistic['workflows']++;
+	}
+	echo "</workflows>\n";
 }
 }
 /* }}} */
