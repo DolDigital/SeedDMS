@@ -25,6 +25,8 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - SeedDMЅ_Core_Object::getAttributes() orders attributes by name of attribute definition
+- SeedDMЅ_Core_Workflow::addTransition() force reload of transition list after adding a
+new transition
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
