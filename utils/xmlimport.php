@@ -216,6 +216,114 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 	return $newCategory;
 } /* }}} */
 
+function insert_workflow($workflow) { /* {{{ */
+	global $dms, $debug, $objmap, $sections;
+
+	if($debug)
+		print_r($workflow);
+	if($newWorkflow = $dms->getWorkflowByName($workflow['attributes']['name'])) {
+		echo "Workflow already exists\n";
+	} else {
+		if(in_array('workflows', $sections)) {
+			if(!$initstate = $dms->getWorkflowState($objmap['workflowstates'][(int)$workflow['attributes']['initstate']])) {
+				echo "Error: could not add workflow because initial state is missing\n";
+				return false;
+			}
+			if(!$newWorkflow = $dms->addWorkflow($workflow['attributes']['name'], $initstate)) {
+				echo "Error: could not add workflow\n";
+				return false;
+			}
+			if($workflow['transitions']) {
+				foreach($workflow['transitions'] as $transition) {
+					if(!$state = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['startstate']])) {
+						echo "Error: could not add workflow because start state of transition is missing\n";
+						return false;
+					}
+					if(!$nextstate = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['nextstate']])) {
+						echo "Error: could not add workflow because end state of transition is missing\n";
+						return false;
+					}
+					if(!$action = $dms->getWorkflowAction($objmap['workflowactions'][(int) $transition['attributes']['action']])) {
+						echo "Error: could not add workflow because end state of transition is missing\n";
+						return false;
+					}
+					$tusers = array();
+					if($transition['users']) {
+						foreach($transition['users'] as $tuserid) {
+							if(!$tusers[] = $dms->getUser($objmap['users'][(int) $tuserid])) {
+								echo "Error: could not add workflow because user of transition is missing\n";
+								return false;
+							}
+						}
+					}
+					$tgroups = array();
+					if($transition['groups']) {
+						foreach($transition['groups'] as $tgroupid) {
+							if(!$tgroups[] = $dms->getGroup($objmap['groups'][(int) $tgroupid])) {
+								echo "Error: could not add workflow because group of transition is missing\n";
+								return false;
+							}
+						}
+					}
+					if(!$newWorkflow->addTransition($state, $action, $nextstate, $tusers, $tgroups)) {
+						echo "Error: could not add workflow because transition could not be added\n";
+						return false;
+					}
+				}
+			}
+		} else {
+			$newWorkflow = null;
+		}
+	}
+	if($newWorkflow)
+		$objmap['workflows'][$workflow['id']] = $newWorkflow->getID();
+	return $newWorkflow;
+} /* }}} */
+
+function insert_workflowstate($workflowstate) { /* {{{ */
+	global $dms, $debug, $objmap, $sections;
+
+	if($debug)
+		print_r($workflowstate);
+	if($newWorkflowstate = $dms->getWorkflowStateByName($workflowstate['attributes']['name'])) {
+		echo "Workflow state already exists\n";
+	} else {
+		if(in_array('workflows', $sections)) {
+			if(!$newWorkflowstate = $dms->addWorkflowState($workflowstate['attributes']['name'], isset($workflowstate['attributes']['documentstate']) ? $workflowstate['attributes']['documentstate'] : 0)) {
+				echo "Error: could not add workflow state\n";
+				return false;
+			}
+		} else {
+			$newWorkflowstate = null;
+		}
+	}
+	if($newWorkflowstate)
+		$objmap['workflowstates'][$workflowstate['id']] = $newWorkflowstate->getID();
+	return $newWorkflowstate;
+} /* }}} */
+
+function insert_workflowaction($workflowaction) { /* {{{ */
+	global $dms, $debug, $objmap, $sections;
+
+	if($debug)
+		print_r($workflowaction);
+	if($newWorkflowaction = $dms->getWorkflowActionByName($workflowaction['attributes']['name'])) {
+		echo "Workflow action already exists\n";
+	} else {
+		if(in_array('workflows', $sections)) {
+			if(!$newWorkflowaction = $dms->addWorkflowAction($workflowaction['attributes']['name'])) {
+				echo "Error: could not add workflow action\n";
+				return false;
+			}
+		} else {
+			$newWorkflowaction = null;
+		}
+	}
+	if($newWorkflowaction)
+		$objmap['workflowactions'][$workflowaction['id']] = $newWorkflowaction->getID();
+	return $newWorkflowaction;
+} /* }}} */
+
 function insert_document($document) { /* {{{ */
 	global $dms, $debug, $defaultUser, $objmap, $sections, $rootfolder;
 
@@ -630,6 +738,9 @@ function insert_folder($folder) { /* {{{ */
 function resolve_links() { /* {{{ */
 	global $dms, $debug, $defaultUser, $links, $objmap;
 
+	if(!$links)
+		return;
+
 	if($debug)
 		print_r($links);
 	foreach($links as $documentid=>$doclinks) {
@@ -664,7 +775,7 @@ function resolve_links() { /* {{{ */
 } /* }}} */
 
 function startElement($parser, $name, $attrs) { /* {{{ */
-	global $dms, $noversioncheck, $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $dms, $noversioncheck, $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	$parent = end($elementstack);
 	array_push($elementstack, array('name'=>$name, 'attributes'=>$attrs));
@@ -681,9 +792,10 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 			break;
 		case "USER":
 			/* users can be the users data, the member of a group, a mandatory
-			 * reviewer or approver
+			 * reviewer or approver, a workflow transition
 			 */
 			$first = $elementstack[1];
+			$second = $elementstack[2];
 			if($first['name'] == 'USERS') {
 				if($parent['name'] == 'MANDATORY_REVIEWERS') {
 					$cur_user['individual']['reviewers'][] = (int) $attrs['ID'];
@@ -695,6 +807,9 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 					$cur_user['attributes'] = array();
 					$cur_user['individual']['reviewers'] = array();
 					$cur_user['individual']['approvers'] = array();
+					$cur_user['group']['reviewers'] = array();
+					$cur_user['group']['approvers'] = array();
+					$cur_user['workflows'] = array();
 				}
 			} elseif($first['name'] == 'GROUPS') {
 				$cur_group['users'][] = (int) $attrs['USER'];
@@ -704,10 +819,13 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				} elseif($first['name'] == 'DOCUMENT') {
 					$cur_document['notifications']['users'][] = (int) $attrs['ID'];
 				}
+			} elseif($second['name'] == 'WORKFLOW') {
+				$cur_transition['users'][] = (int) $attrs['ID'];
 			}
 			break;
 		case "GROUP":
 			$first = $elementstack[1];
+			$second = $elementstack[2];
 			if($first['name'] == 'GROUPS') {
 				$cur_group = array();
 				$cur_group['id'] = (int) $attrs['ID'];
@@ -725,6 +843,8 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				} elseif($first['name'] == 'DOCUMENT') {
 					$cur_document['notifications']['groups'][] = (int) $attrs['ID'];
 				}
+			} elseif($second['name'] == 'WORKFLOW') {
+				$cur_transition['groups'][] = (int) $attrs['ID'];
 			}
 			break;
 		case "DOCUMENT":
@@ -817,6 +937,14 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				$cur_file['attributes'][$attrs['NAME']] = '';
 			} elseif($parent['name'] == 'LINK') {
 				$cur_link['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'WORKFLOW') {
+				$cur_workflow['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'WORKFLOWTRANSITION') {
+				$cur_workflowtransition['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'WORKFLOWACTION') {
+				$cur_workflowaction['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'TRANSITION') {
+				$cur_transition['attributes'][$attrs['NAME']] = '';
 			}
 			break;
 		case "CATEGORIES":
@@ -925,11 +1053,49 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				$cur_link['id'] = (int) $attrs['ID'];
 			}
 			break;
+		case "TRANSITIONS":
+			$first = $elementstack[2];
+			if($first['name'] == 'WORKFLOW') {
+				$cur_workflow['transitions'] = array();
+			}
+			break;
+		case "TRANSITION":
+			$first = $elementstack[2];
+			if($first['name'] == 'WORKFLOW') {
+				$cur_transition = array();
+				$cur_transition['id'] = (int) $attrs['ID'];
+				$cur_transition['users'] = array();
+				$cur_transition['groups'] = array();
+			}
+			break;
+		case "WORKFLOW":
+			$first = $elementstack[1];
+			if($first['name'] == 'WORKFLOWS') {
+				$cur_workflow = array();
+				$cur_workflow['id'] = (int) $attrs['ID'];
+			} elseif($parent['name'] == 'MANDATORY_WORKFLOWS') {
+				$cur_user['workflows'][] = (int) $attrs['ID'];
+			}
+			break;
+		case "WORKFLOWACTION":
+			$first = $elementstack[1];
+			if($first['name'] == 'WORKFLOWACTIONS') {
+				$cur_workflowaction = array();
+				$cur_workflowaction['id'] = (int) $attrs['ID'];
+			}
+			break;
+		case "WORKFLOWSTATE":
+			$first = $elementstack[1];
+			if($first['name'] == 'WORKFLOWSTATES') {
+				$cur_workflowstate = array();
+				$cur_workflowstate['id'] = (int) $attrs['ID'];
+			}
+			break;
 	}
 } /* }}} */
 
 function endElement($parser, $name) { /* {{{ */
-	global $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	array_pop($elementstack);
 	$parent = end($elementstack);
@@ -999,11 +1165,61 @@ function endElement($parser, $name) { /* {{{ */
 				$cur_document['links'][] = $cur_link;
 			}
 			break;
+		case "TRANSITION":
+			$second = $elementstack[2];
+			if($second['name'] == 'WORKFLOW') {
+				$cur_workflow['transitions'][] = $cur_transition;
+			}
+			break;
+		case 'WORKFLOW':
+			$first = $elementstack[1];
+			if($first['name'] == 'WORKFLOWS') {
+				insert_workflow($cur_workflow);
+			}
+			break;
+		case 'WORKFLOWACTION':
+			insert_workflowaction($cur_workflowaction);
+			break;
+		case 'WORKFLOWSTATE':
+			insert_workflowstate($cur_workflowstate);
+			break;
+		case 'WORKFLOWS':
+			/* Workflows has all been added. It's time to set the mandatory workflows
+			 * of each user.
+			 */
+			foreach($users as $tuser) {
+				if($tuser['workflows']) {
+					if(!$user = $dms->getUser($objmap['users'][$tuser['id']])) {
+						echo "Error: Cannot find user for adding mandatory workflows\n";
+						exit;
+					}
+					foreach($tuser['workflows'] as $tworkflowid) {
+						if(!$wk = $dms->getWorkflow($objmap['workflows'][$tworkflowid])) {
+							echo "Error: Cannot find workflow for adding mandatory workflows\n";
+							exit;
+						}
+						$user->setMandatoryWorkflow($wk);
+					}
+					foreach($tuser['individual']['reviewers'] as $userid) {
+						$user->setMandatoryReviewer($objmap['users'][$userid], false);
+					}
+					foreach($tuser['individual']['approvers'] as $userid) {
+						$user->setMandatoryApprover($objmap['users'][$userid], false);
+					}
+					foreach($tuser['group']['reviewers'] as $groupid) {
+						$user->setMandatoryReviewer($objmap['groups'][$groupid], true);
+					}
+					foreach($tuser['group']['approvers'] as $userid) {
+						$user->setMandatoryApprover($objmap['groups'][$groupid], true);
+					}
+				}
+			}
+			break;
 	}
 } /* }}} */
 
 function characterData($parser, $data) { /* {{{ */
-	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link;
+	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	$current = end($elementstack);
 	$parent = prev($elementstack);
@@ -1090,6 +1306,18 @@ function characterData($parser, $data) { /* {{{ */
 					break;
 				case 'LINK':
 					$cur_link['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'WORKFLOW':
+					$cur_workflow['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'WORKFLOWSTATE':
+					$cur_workflowstate['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'WORKFLOWACTION':
+					$cur_workflowaction['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'TRANSITION':
+					$cur_transition['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 			}
 			break;
@@ -1192,7 +1420,7 @@ if(isset($options['no-version-check'])) {
 	$noversioncheck = true;
 }
 
-$sections = array('documents', 'folders', 'groups', 'users', 'keywordcategories', 'documentcategories', 'attributedefinitions');
+$sections = array('documents', 'folders', 'groups', 'users', 'keywordcategories', 'documentcategories', 'attributedefinitions', 'workflows');
 if(isset($options['sections'])) {
 	$sections = explode(',', $options['sections']);
 }
@@ -1235,6 +1463,9 @@ $objmap = array(
 	'groups' => array(),
 	'folders' => array(),
 	'documents' => array(),
+	'workflows' => array(),
+	'workflowstates' => array(),
+	'workflowactions' => array(),
 );
 
 $xml_parser = xml_parser_create("UTF-8");
