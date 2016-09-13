@@ -182,7 +182,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 		if($attributes = $folder->getAttributes()) {
 			foreach($attributes as $attribute) {
 				$attrdef = $attribute->getAttributeDefinition();
-				echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+				echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 			}
 		}
 		if($folder->inheritsAccess()) {
@@ -225,7 +225,8 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 	if($documents) {
 		foreach($documents as $document) {
 			$owner = $document->getOwner();
-			echo $indent."<document id=\"".$document->getId()."\" folder=\"".$folder->getID()."\"";
+			/* parent folder is only set if it is no skipped */
+			echo $indent."<document id=\"".$document->getId()."\"".(!$skipcurrent ? " folder=\"".$folder->getID()."\"" : "");
 			if($document->isLocked())
 				echo " locked=\"true\"";
 			echo ">\n";
@@ -285,8 +286,6 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($versions) {
 				echo $indent." <versions>\n";
 				foreach($versions as $version) {
-					$approvalStatus = $version->getApprovalStatus(30);
-					$reviewStatus = $version->getReviewStatus(30);
 					$owner = $version->getUser();
 					echo $indent."  <version version=\"".$version->getVersion()."\">\n";
 					echo $indent."   <attr name=\"mimetype\">".$version->getMimeType()."</attr>\n";
@@ -313,11 +312,32 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						}
 						echo $indent."   </status>\n";
 					}
+					$approvalStatus = $version->getApprovalStatus(30);
 					if($approvalStatus) {
 						dumplog($version, 'approval', $approvalStatus, $indent);
 					}
+					$reviewStatus = $version->getReviewStatus(30);
 					if($reviewStatus) {
 						dumplog($version, 'review', $reviewStatus, $indent);
+					}
+					$workflow = $version->getWorkflow();
+					if($workflow) {
+						$workflowstate = $version->getWorkflowState();
+						echo $indent."   <workflow id=\"".$workflow->getID()."\" state=\"".$workflowstate->getID()."\"></workflow>\n";
+					}
+					$wkflogs = $version->getWorkflowLog();
+					if($wkflogs) {
+						echo $indent."   <workflowlogs>\n";
+						foreach($wkflogs as $wklog) {
+							echo $indent."    <workflowlog>\n";
+							echo $indent."     <attr name=\"date\" format=\"Y-m-d H:i:s\">".$wklog->getDate()."</attr>\n";
+							echo $indent."     <attr name=\"transition\">".$wklog->getTransition()->getID()."</attr>\n";
+							$loguser = $wklog->getUser();
+							echo $indent."     <attr name=\"user\">".$loguser->getID()."</attr>\n";
+							echo $indent."     <attr name=\"comment\">".wrapWithCData($wklog->getComment())."</attr>\n";
+							echo $indent."    </workflowlog>\n";
+						}
+						echo $indent."   </workflowlogs>\n";
 					}
 					if(file_exists($dms->contentDir . $version->getPath())) {
 						echo $indent."   <data length=\"".filesize($dms->contentDir . $version->getPath())."\"";
@@ -449,7 +469,8 @@ if($users) {
 		if($image = $user->getImage()) {
 			echo "  <image id=\"".$image['id']."\">\n";
 			echo "   <attr name=\"mimetype\">".$image['mimeType']."</attr>\n";
-			echo "   <data>".base64_encode($image['image'])."</data>\n";
+			/* image data is already base64 coded */
+			echo "   <data>".$image['image']."</data>\n";
 			echo "  </image>\n";
 		}
 		if($mreviewers = $user->getMandatoryReviewers()) {
