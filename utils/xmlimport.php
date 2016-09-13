@@ -1,5 +1,6 @@
 <?php
 require_once("../inc/inc.ClassSettings.php");
+require("Log.php");
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
@@ -30,7 +31,7 @@ function dateToTimestamp($date, $format='Y-m-d H:i:s') { /* {{{ */
 } /* }}} */
 
 function getRevAppLog($reviews) { /* {{{ */
-	global $dms, $objmap;
+	global $logger, $dms, $objmap;
 
 	$newreviews = array();
 	foreach($reviews as $i=>$review) {
@@ -45,7 +46,7 @@ function getRevAppLog($reviews) { /* {{{ */
 		$newreview['logs'] = array();
 		foreach($review['logs'] as $j=>$log) {
 			if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
-				echo "Warning: user for review log cannot be mapped\n";
+				$logger->warning("User for review log cannot be mapped");
 			} else {
 				$newlog = array();
 				$newlog['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
@@ -61,12 +62,12 @@ function getRevAppLog($reviews) { /* {{{ */
 } /* }}} */
 
 function insert_user($user) { /* {{{ */
-	global $dms, $debug, $sections, $defaultUser, $objmap;
+	global $logger, $dms, $debug, $sections, $defaultUser, $objmap;
 
 	if($debug) print_r($user);
 
 	if ($newUser = $dms->getUserByLogin($user['attributes']['login'])) {
-		echo "User '".$user['attributes']['login']."' already exists\n";
+		$logger->info("User '".$user['attributes']['login']."' already exists");
 	} else {
 		if(in_array('users', $sections)) {
 			$newUser = $dms->addUser(
@@ -82,8 +83,17 @@ function insert_user($user) { /* {{{ */
 				$user['attributes']['disabled'],
 				$user['attributes']['pwdexpiration']);
 			if(!$newUser) {
-				echo "Error: could not add user\n";
+				$logger->err("Could not add user");
 				return false;
+			} else {
+				$logger->info("Added user '".$user['attributes']['login']."'");
+				if(isset($user['image']) && $user['image']) {
+					$filecontents = base64_decode($user['image']['data']);
+					$filename = tempnam('/tmp', 'FOO-User-Img');
+					file_put_contents($filename, $filecontents);
+					$newUser->setImage($filename, $user['image']['mimetype']);
+					unlink($filename);
+				}
 			}
 		} else {
 			$newUser = $defaultUser;
@@ -95,16 +105,17 @@ function insert_user($user) { /* {{{ */
 } /* }}} */
 
 function insert_group($group) { /* {{{ */
-	global $dms, $debug, $objmap, $sections, $users;
+	global $logger, $dms, $debug, $objmap, $sections, $users;
 
 	if($debug) print_r($group);
 
 	if ($newGroup = $dms->getGroupByName($group['attributes']['name'])) {
-		echo "Group already exists\n";
+		$logger->info("Group already exists");
 	} else {
 		if(in_array('groups', $sections)) {
 			$newGroup = $dms->addGroup($group['attributes']['name'], $group['attributes']['comment']);
 			if($newGroup) {
+				$logger->info("Added group '".$group['attributes']['name']."'");
 				foreach($group['users'] as $guser) {
 					/* Check if user is in array of users which has been previously filled
 					 * by the users in the xml file. Alternative, we could check if the
@@ -113,18 +124,20 @@ function insert_group($group) { /* {{{ */
 					if(isset($users[$guser])) {
 						$user = $users[$guser];
 						if($newMember = $dms->getUserByLogin($user['attributes']['login'])) {
-							$newGroup->addUser($newMember);
+							if($newGroup->addUser($newMember)) {
+								$logger->info("Added user '".$newMember->getLogin()."' to group '".$group['attributes']['name']."'");
+							}
 						} else {
-							echo "Error: could not find member of group\n";
+							$logger->err("Could not find member of group");
 							return false;
 						}
 					} else {
-						echo "Error: group member is not contained in xml file\n";
+						$logger->err("Group member is not contained in xml file");
 						return false;
 					}
 				}
 			} else {
-				echo "Error: could not add group\n";
+				$logger->err("Could not add group");
 				return false;
 			}
 		} else {
@@ -137,17 +150,19 @@ function insert_group($group) { /* {{{ */
 } /* }}} */
 
 function insert_attributedefinition($attrdef) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug)
 		print_r($attrdef);
 	if($newAttrdef = $dms->getAttributeDefinitionByName($attrdef['attributes']['name'])) {
-		echo "Attribute definition already exists\n";
+		$logger->info("Attribute definition already exists");
 	} else {
 		if(in_array('attributedefinitions', $sections)) {
 			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $attrdef['objecttype'], $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
-				echo "Error: could not add attribute definition\n";
+				$logger->err("Could not add attribute definition");
 				return false;
+			} else {
+				$logger->info("Added attribute definition '".$attrdef['attributes']['name']."'");
 			}
 		} else {
 			$newAttrdef = null;
@@ -159,17 +174,19 @@ function insert_attributedefinition($attrdef) { /* {{{ */
 } /* }}} */
 
 function insert_documentcategory($documentcat) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug) print_r($documentcat);
 
 	if($newCategory = $dms->getDocumentCategoryByName($documentcat['attributes']['name'])) {
-		echo "Document category already exists\n";
+		$logger->info("Document category already exists");
 	} else {
 		if(in_array('documentcategories', $sections)) {
 			if(!$newCategory = $dms->addDocumentCategory($documentcat['attributes']['name'])) {
-				echo "Error: could not add document category\n";
+				$logger->err("Error: could not add document category");
 				return false;
+			} else {
+				$logger->info("Added document category '".$documentcat['attributes']['name']."'");
 			}
 		} else {
 			$newCategory = null;
@@ -182,27 +199,29 @@ function insert_documentcategory($documentcat) { /* {{{ */
 } /* }}} */
 
 function insert_keywordcategory($keywordcat) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug) print_r($keywordcat);
 
 	if(!array_key_exists((int) $keywordcat['attributes']['owner'], $objmap['users'])) {
-		echo "Error: owner of keyword category cannot be found\n";
+		$logger->err("Owner of keyword category cannot be found");
 		return false;
 	}
 	$owner = $objmap['users'][(int) $keywordcat['attributes']['owner']];
 
 	if($newCategory = $dms->getKeywordCategoryByName($keywordcat['attributes']['name'], $owner)) {
-		echo "Document category already exists\n";
+		$logger->info("Document category already exists");
 	} else {
 		if(in_array('keywordcategories', $sections)) {
 			if(!$newCategory = $dms->addKeywordCategory($owner, $keywordcat['attributes']['name'])) {
-				echo "Error: could not add keyword category\n";
+				$logger->err("Could not add keyword category");
 				return false;
+			} else {
+				$logger->info("Added keyword category '".$keywordcat['attributes']['name']."'");
 			}
 			foreach($keywordcat['keywords'] as $keyword) {
 				if(!$newCategory->addKeywordList($keyword['attributes']['name'])) {
-					echo "Error: could not add keyword to keyword category\n";
+					$logger->err("Could not add keyword to keyword category");
 					return false;
 				}
 			}
@@ -217,41 +236,43 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 } /* }}} */
 
 function insert_workflow($workflow) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug)
 		print_r($workflow);
 	if($newWorkflow = $dms->getWorkflowByName($workflow['attributes']['name'])) {
-		echo "Workflow already exists\n";
+		$logger->info("Workflow already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$initstate = $dms->getWorkflowState($objmap['workflowstates'][(int)$workflow['attributes']['initstate']])) {
-				echo "Error: could not add workflow because initial state is missing\n";
+				$logger->err("Could not add workflow because initial state is missing");
 				return false;
 			}
 			if(!$newWorkflow = $dms->addWorkflow($workflow['attributes']['name'], $initstate)) {
-				echo "Error: could not add workflow\n";
+				$logger->err("Could not add workflow");
 				return false;
+			} else {
+				$logger->info("Added workflow '".$workflow['attributes']['name']."'");
 			}
 			if($workflow['transitions']) {
 				foreach($workflow['transitions'] as $transition) {
 					if(!$state = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['startstate']])) {
-						echo "Error: could not add workflow because start state of transition is missing\n";
+						$logger->err("Could not add workflow because start state of transition is missing");
 						return false;
 					}
 					if(!$nextstate = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['nextstate']])) {
-						echo "Error: could not add workflow because end state of transition is missing\n";
+						$logger->err("Could not add workflow because end state of transition is missing");
 						return false;
 					}
 					if(!$action = $dms->getWorkflowAction($objmap['workflowactions'][(int) $transition['attributes']['action']])) {
-						echo "Error: could not add workflow because end state of transition is missing\n";
+						$logger->err("Could not add workflow because end state of transition is missing");
 						return false;
 					}
 					$tusers = array();
 					if($transition['users']) {
 						foreach($transition['users'] as $tuserid) {
 							if(!$tusers[] = $dms->getUser($objmap['users'][(int) $tuserid])) {
-								echo "Error: could not add workflow because user of transition is missing\n";
+								$logger->err("Could not add workflow because user of transition is missing");
 								return false;
 							}
 						}
@@ -260,13 +281,13 @@ function insert_workflow($workflow) { /* {{{ */
 					if($transition['groups']) {
 						foreach($transition['groups'] as $tgroupid) {
 							if(!$tgroups[] = $dms->getGroup($objmap['groups'][(int) $tgroupid])) {
-								echo "Error: could not add workflow because group of transition is missing\n";
+								$logger->err("Could not add workflow because group of transition is missing");
 								return false;
 							}
 						}
 					}
 					if(!$newWorkflow->addTransition($state, $action, $nextstate, $tusers, $tgroups)) {
-						echo "Error: could not add workflow because transition could not be added\n";
+						$logger->err("Could not add workflow because transition could not be added");
 						return false;
 					}
 				}
@@ -281,17 +302,19 @@ function insert_workflow($workflow) { /* {{{ */
 } /* }}} */
 
 function insert_workflowstate($workflowstate) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug)
 		print_r($workflowstate);
 	if($newWorkflowstate = $dms->getWorkflowStateByName($workflowstate['attributes']['name'])) {
-		echo "Workflow state already exists\n";
+		$logger->info("Workflow state already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowstate = $dms->addWorkflowState($workflowstate['attributes']['name'], isset($workflowstate['attributes']['documentstate']) ? $workflowstate['attributes']['documentstate'] : 0)) {
-				echo "Error: could not add workflow state\n";
+				$logger->err("Could not add workflow state");
 				return false;
+			} else {
+				$logger->info("Added workflow state '".$workflowstate['attributes']['name']."'");
 			}
 		} else {
 			$newWorkflowstate = null;
@@ -303,17 +326,19 @@ function insert_workflowstate($workflowstate) { /* {{{ */
 } /* }}} */
 
 function insert_workflowaction($workflowaction) { /* {{{ */
-	global $dms, $debug, $objmap, $sections;
+	global $logger, $dms, $debug, $objmap, $sections;
 
 	if($debug)
 		print_r($workflowaction);
 	if($newWorkflowaction = $dms->getWorkflowActionByName($workflowaction['attributes']['name'])) {
-		echo "Workflow action already exists\n";
+		$logger->info("Workflow action already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowaction = $dms->addWorkflowAction($workflowaction['attributes']['name'])) {
-				echo "Error: could not add workflow action\n";
+				$logger->err("Could not add workflow action");
 				return false;
+			} else {
+				$logger->info("Added workflow action '".$workflowaction['attributes']['name']."'");
 			}
 		} else {
 			$newWorkflowaction = null;
@@ -325,12 +350,13 @@ function insert_workflowaction($workflowaction) { /* {{{ */
 } /* }}} */
 
 function insert_document($document) { /* {{{ */
-	global $dms, $debug, $defaultUser, $objmap, $sections, $rootfolder;
+	global $logger, $dms, $debug, $defaultUser, $objmap, $sections, $rootfolder, $contentdir;
 
-	if($debug) print_r($document);
+	if($debug)
+	 	print_r($document);
 
 	if(!array_key_exists((int) $document['attributes']['owner'], $objmap['users'])) {
-		echo "Warning: owner of document cannot be mapped using default user\n";
+		$logger->warning("Owner of document cannot be mapped using default user");
 		$owner = $defaultUser;
 	} else {
 		$owner = $dms->getUser($objmap['users'][(int) $document['attributes']['owner']]);
@@ -342,7 +368,7 @@ function insert_document($document) { /* {{{ */
 			if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
 				$attributes[$objmap['attributedefs'][$orgid]] = $value;
 			} else {
-				echo "Warning: User attribute ".$orgid." cannot be mapped\n";
+				$logger->warning("User attribute ".$orgid." cannot be mapped");
 			}
 		}
 	}
@@ -352,7 +378,7 @@ function insert_document($document) { /* {{{ */
 			if(array_key_exists((int) $catid, $objmap['documentcategories'])) {
 				$categories[$objmap['documentcategories'][$catid]] = $dms->getDocumentCategory($objmap['documentcategories'][$catid]);
 			} else {
-				echo "Warning: Category ".$catid." cannot be mapped\n";
+				$logger->warning("Category ".$catid." cannot be mapped");
 			}
 		}
 	}
@@ -361,7 +387,7 @@ function insert_document($document) { /* {{{ */
 		if(array_key_exists($document['folder'], $objmap['folders'])) {
 			$folder = $dms->getFolder($objmap['folders'][$document['folder']]);
 		} else {
-			echo "Error: folder ".$document['folder']." cannot be mapped\n";
+			$logger->err("Folder ".$document['folder']." cannot be mapped");
 			return false;
 		}
 	} else
@@ -372,11 +398,11 @@ function insert_document($document) { /* {{{ */
 		$initversion = array_shift($document['versions']);
 		if(!empty($initversion['fileref'])) {
 			$filename = tempnam('/tmp', 'FOO');
-			copy($initversion['fileref'], $filename);
+			copy($contentdir.$initversion['fileref'], $filename);
 		} else {
 			$filecontents = base64_decode($initversion['data']);
 			if(strlen($filecontents) != $initversion['data_length']) {
-				echo "Warning: file length (".strlen($filecontents).") doesn't match expected length (".$initversion['data_length'].").\n";
+				$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$initversion['data_length'].").");
 				$newDocument = null;
 				$error = true;
 			}
@@ -412,13 +438,28 @@ function insert_document($document) { /* {{{ */
 				}
 			}
 			 */
+
+			$workflow = null;
+			if(isset($initversion['workflow']) && $initversion['workflow']) {
+				if(array_key_exists((int) $initversion['workflow']['id'], $objmap['workflows'])) {
+					$workflow = $dms->getWorkflow($objmap['workflows'][(int) $initversion['workflow']['id']]);
+					if(!$workflow) {
+						$logger->warning("Workflow ".$orgid." cannot be mapped");
+					}
+				} else {
+					$logger->warning("Workflow ".$initversion['workflow']['id']." cannot be mapped");
+				}
+			}
+			if($initversion['workflowlogs']) {
+			}
+
 			$version_attributes = array();
 			if(isset($initversion['user_attributes'])) {
 				foreach($initversion['user_attributes'] as $orgid=>$value) {
 					if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
 						$version_attributes[$objmap['attributedefs'][$orgid]] = $value;
 					} else {
-						echo "Warning: User attribute ".$orgid." cannot be mapped\n";
+						$logger->warning("User attribute ".$orgid." cannot be mapped");
 					}
 				}
 			}
@@ -440,15 +481,26 @@ function insert_document($document) { /* {{{ */
 				isset($initversion['attributes']['comment']) ? $initversion['attributes']['comment'] : '',
 				$attributes,
 				$version_attributes,
-				null //workflow
+				$workflow
 				)
 			) {
 				unlink($filename);
-				echo "Error: could not add document\n";
+				$logger->err("Could not add document '".$document['attributes']['name']."'");
 				return false;
 			} else {
+				$logger->info("Added document '".$document['attributes']['name']."'");
 				$newDocument = $result[0];
 				unlink($filename);
+
+				if(isset($document['attributes']['lockedby'])) {
+					if(!array_key_exists($document['attributes']['lockedby'], $objmap['users'])) {
+						$logger->warning("User for document lock cannot be mapped");
+					} else {
+						if($lockuser = $dms->getUser($objmap['users'][$document['attributes']['lockedby']])) {
+							$newDocument->setLocked($lockuser);
+						}
+					}
+				}
 
 				$newVersion = $result[1]->getContent();
 				$newVersion->setDate(dateToTimestamp($initversion['attributes']['date']));
@@ -456,7 +508,7 @@ function insert_document($document) { /* {{{ */
 				foreach($initversion['statuslogs'] as $i=>$log) {
 					if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
 						unset($initversion['statuslogs'][$i]);
-						echo "Warning: user for status log cannot be mapped\n";
+						$logger->warning("User for status log cannot be mapped");
 					} else {
 						$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
 						$newlogs[] = $log['attributes'];
@@ -478,7 +530,7 @@ function insert_document($document) { /* {{{ */
 				$newDocument->setDefaultAccess($document['attributes']['defaultaccess']);
 				foreach($document['versions'] as $version) {
 					if(!array_key_exists((int) $version['attributes']['owner'], $objmap['users'])) {
-						echo "Error: owner of document cannot be mapped\n";
+						$logger->err("Owner of document cannot be mapped");
 						return false;
 					}
 					$owner = $dms->getUser($objmap['users'][(int) $version['attributes']['owner']]);
@@ -517,17 +569,17 @@ function insert_document($document) { /* {{{ */
 							if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
 								$version_attributes[$objmap['attributedefs'][$orgid]] = $value;
 							} else {
-								echo "Warning: User attribute ".$orgid." cannot be mapped\n";
+								$logger->warning("User attribute ".$orgid." cannot be mapped");
 							}
 						}
 					}
 					if(!empty($version['fileref'])) {
 						$filename = tempnam('/tmp', 'FOO');
-						copy($version['fileref'], $filename);
+						copy($contentdir.$version['fileref'], $filename);
 					} else {
 						$filecontents = base64_decode($version['data']);
 						if(strlen($filecontents) != $version['data_length']) {
-							echo "Warning: file length (".strlen($filecontents).") doesn't match expected length (".$version['data_length'].").\n";
+							$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$version['data_length'].").");
 						}
 						$filename = tempnam('/tmp', 'FOO');
 						file_put_contents($filename, $filecontents);
@@ -552,7 +604,7 @@ function insert_document($document) { /* {{{ */
 					foreach($version['statuslogs'] as $i=>$log) {
 						if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
 							unset($version['statuslogs'][$i]);
-							echo "Warning: user for status log cannot be mapped\n";
+							$logger->warning("User for status log cannot be mapped");
 						} else {
 							$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
 							$newlogs[] = $log['attributes'];
@@ -575,7 +627,7 @@ function insert_document($document) { /* {{{ */
 			if(isset($document['notifications']['users']) && $document['notifications']['users']) {
 				foreach($document['notifications']['users'] as $userid) {
 					if(!array_key_exists($userid, $objmap['users'])) {
-						echo "Warning: user for notification cannot be mapped\n";
+						$logger->warning("User for notification cannot be mapped");
 					} else {
 						$newDocument->addNotify($objmap['users'][$userid], 1);
 					}
@@ -584,7 +636,7 @@ function insert_document($document) { /* {{{ */
 			if(isset($document['notifications']['groups']) && $document['notifications']['groups']) {
 				foreach($document['notifications']['groups'] as $groupid) {
 					if(!array_key_exists($groupid, $objmap['groups'])) {
-						echo "Warning: user for notification cannot be mapped\n";
+						$logger->warning("User for notification cannot be mapped");
 					} else {
 						$newDocument->addNotify($objmap['groups'][$groupid], 0);
 					}
@@ -595,13 +647,13 @@ function insert_document($document) { /* {{{ */
 				foreach($document['acls'] as $acl) {
 					if($acl['type'] == 'user') {
 						if(!array_key_exists($acl['user'], $objmap['users'])) {
-							echo "Warning: user for notification cannot be mapped\n";
+							$logger->warning("User for notification cannot be mapped");
 						} else {
 							$newDocument->addAccess($acl['mode'], $objmap['users'][$acl['user']], 1);
 						}
 					} elseif($acl['type'] == 'group') {
 						if(!array_key_exists($acl['group'], $objmap['groups'])) {
-							echo "Warning: group for notification cannot be mapped\n";
+							$logger->warning("Group for notification cannot be mapped");
 						} else {
 							$newDocument->addAccess($acl['mode'], $objmap['groups'][$acl['group']], 0);
 						}
@@ -611,18 +663,18 @@ function insert_document($document) { /* {{{ */
 			if(isset($document['files']) && $document['files']) {
 				foreach($document['files'] as $file) {
 					if(!array_key_exists($file['attributes']['owner'], $objmap['users'])) {
-						echo "Warning: user for file cannot be mapped\n";
+						$logger->warning("User for file cannot be mapped");
 						$owner = $defaultUser;
 					} else {
 						$owner = $dms->getUser($objmap['users'][$file['attributes']['owner']]);
 					}
 					if(!empty($file['fileref'])) {
 						$filename = tempnam('/tmp', 'FOO');
-						copy($file['fileref'], $filename);
+						copy($contentdir.$file['fileref'], $filename);
 					} else {
 						$filecontents = base64_decode($file['data']);
 						if(strlen($filecontents) != $file['data_length']) {
-							echo "Warning: file length (".strlen($filecontents).") doesn't match expected length (".$file['data_length'].").\n";
+							$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$file['data_length'].").");
 						}
 						$filename = tempnam('/tmp', 'FOO');
 						file_put_contents($filename, $filecontents);
@@ -650,13 +702,13 @@ function insert_document($document) { /* {{{ */
 } /* }}} */
 
 function insert_folder($folder) { /* {{{ */
-	global $dms, $debug, $objmap, $defaultUser, $sections, $rootfolder;
+	global $logger, $dms, $debug, $objmap, $defaultUser, $sections, $rootfolder;
 
 	if($debug) print_r($folder);
 
 	if(in_array('folders', $sections)) {
 		if(!array_key_exists($folder['attributes']['owner'], $objmap['users'])) {
-			echo "Warning: owner of folder cannot be mapped using default user\n";
+			$logger->warning("Owner of folder cannot be mapped using default user");
 			$owner = $defaultuser;
 		} else {
 			$owner = $dms->getUser($objmap['users'][(int) $folder['attributes']['owner']]);
@@ -668,7 +720,7 @@ function insert_folder($folder) { /* {{{ */
 				if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
 					$attributes[$objmap['attributedefs'][$orgid]] = $value;
 				} else {
-					echo "Warning: User attribute ".$orgid." cannot be mapped\n";
+					$logger->warning("User attribute ".$orgid." cannot be mapped");
 				}
 			}
 		}
@@ -677,15 +729,17 @@ function insert_folder($folder) { /* {{{ */
 			if(array_key_exists($folder['folder'], $objmap['folders'])) {
 				$parent = $dms->getFolder($objmap['folders'][$folder['folder']]);
 			} else {
-				echo "Error: Folder ".$folder['folder']." cannot be mapped\n";
+				$logger->err("Folder ".$folder['folder']." cannot be mapped");
 				exit;
 			}
 		} else
 			$parent = $rootfolder;
 
 		if(!$newFolder = $parent->addSubFolder($folder['attributes']['name'], $folder['attributes']['comment'], $owner, $folder['attributes']['sequence'], $attributes)) {
-			echo "Error: could not add folder\n";
+			$logger->err("Could not add folder");
 			return false;
+		} else {
+			$logger->info("Added folder '".$folder['attributes']['name']."'");
 		}
 
 		$newFolder->setDate(dateToTimestamp($folder['attributes']['date']));
@@ -693,7 +747,7 @@ function insert_folder($folder) { /* {{{ */
 		if(isset($folder['notifications']['users']) && $folder['notifications']['users']) {
 			foreach($folder['notifications']['users'] as $userid) {
 				if(!array_key_exists($userid, $objmap['users'])) {
-					echo "Warning: user for notification cannot be mapped\n";
+					$logger->warning("User for notification cannot be mapped");
 				} else {
 					$newFolder->addNotify($objmap['users'][$userid], 1);
 				}
@@ -702,7 +756,7 @@ function insert_folder($folder) { /* {{{ */
 		if(isset($folder['notifications']['groups']) && $folder['notifications']['groups']) {
 			foreach($folder['notifications']['groups'] as $groupid) {
 				if(!array_key_exists($groupid, $objmap['groups'])) {
-					echo "Warning: user for notification cannot be mapped\n";
+					$logger->warning("User for notification cannot be mapped");
 				} else {
 					$newFolder->addNotify($objmap['groups'][$groupid], 0);
 				}
@@ -713,13 +767,13 @@ function insert_folder($folder) { /* {{{ */
 			foreach($folder['acls'] as $acl) {
 				if($acl['type'] == 'user') {
 					if(!array_key_exists($acl['user'], $objmap['users'])) {
-						echo "Warning: user for notification cannot be mapped\n";
+						$logger->warning("User for notification cannot be mapped");
 					} else {
 						$newFolder->addAccess($acl['mode'], $objmap['users'][$acl['user']], 1);
 					}
 				} elseif($acl['type'] == 'group') {
 					if(!array_key_exists($acl['group'], $objmap['groups'])) {
-						echo "Warning: group for notification cannot be mapped\n";
+						$logger->warning("Group for notification cannot be mapped");
 					} else {
 						$newFolder->addAccess($acl['mode'], $objmap['groups'][$acl['group']], 0);
 					}
@@ -736,7 +790,7 @@ function insert_folder($folder) { /* {{{ */
 } /* }}} */
 
 function resolve_links() { /* {{{ */
-	global $dms, $debug, $defaultUser, $links, $objmap;
+	global $logger, $dms, $debug, $defaultUser, $links, $objmap;
 
 	if(!$links)
 		return;
@@ -750,32 +804,32 @@ function resolve_links() { /* {{{ */
 							if(array_key_exists($doclink['attributes']['target'], $objmap['documents'])) {
 								if($target = $dms->getDocument($objmap['documents'][$doclink['attributes']['target']])) {
 									if(!array_key_exists($doclink['attributes']['owner'], $objmap['users'])) {
-										echo "Warning: user for link cannot be mapped using default user\n";
+										$logger->warning("User for link cannot be mapped using default user");
 										$owner = $defaultUser;
 									} else {
 										$owner = $dms->getUser($objmap['users'][$doclink['attributes']['owner']]);
 									}
 									if(!$doc->addDocumentLink($target->getID(), $owner->getID(), $doclink['attributes']['public'])) {
-										echo "Error: could not add document link from ".$doc->getID()." to ".$target->getID()."\n";
+										$logger->err("Could not add document link from ".$doc->getID()." to ".$target->getID());
 									}
 								} else {
-									echo "Warning: target document not found in database\n";
+									$logger->warning("Target document not found in database");
 								}
 							} else {
-								echo "Warning: target document not found in object mapping\n";
+								$logger->warning("Target document not found in object mapping");
 							}
 				}
 			} else {
-				echo "Warning: document not found in database\n";
+				$logger->warning("Document not found in database");
 			}
 		} else {
-			echo "Warning: document not found in object mapping\n";
+			$logger->warning("Document not found in object mapping");
 		}
 	}
 } /* }}} */
 
 function startElement($parser, $name, $attrs) { /* {{{ */
-	global $dms, $noversioncheck, $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
+	global $logger, $dms, $noversioncheck, $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_workflowlog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	$parent = end($elementstack);
 	array_push($elementstack, array('name'=>$name, 'attributes'=>$attrs));
@@ -785,7 +839,7 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				$xdbversion = explode('.', $attrs['DBVERSION']);
 				$dbversion = $dms->getDBVersion();
 				if(($xdbversion[0] != $dbversion['major']) || ($xdbversion[1] != $dbversion['minor'])) {
-					echo "Error: Database version (".implode('.', array($dbversion['major'], $dbversion['minor'], $dbversion['subminor'])).") doesn't match version in input file (".implode('.', $xdbversion).").\n";
+					$logger->crit("Database version (".implode('.', array($dbversion['major'], $dbversion['minor'], $dbversion['subminor'])).") doesn't match version in input file (".implode('.', $xdbversion).").");
 					exit(1);
 				}
 			}
@@ -850,7 +904,11 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 		case "DOCUMENT":
 			$cur_document = array();
 			$cur_document['id'] = (int) $attrs['ID'];
-			$cur_document['folder'] = (int) $attrs['FOLDER'];
+
+			if(isset($attrs['FOLDER']))
+				$cur_document['folder'] = (int) $attrs['FOLDER'];
+			if(isset($attrs['LOCKED']) && $attrs['LOCKED'] == 'true')
+				$cur_document['locked'] = true;
 			$cur_document['attributes'] = array();
 			$cur_document['versions'] = array();
 			break;
@@ -867,10 +925,19 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 			$cur_version['attributes'] = array();
 			$cur_version['approvals'] = array();
 			$cur_version['reviews'] = array();
+			$cur_version['statuslogs'] = array();
+			$cur_version['workflowlogs'] = array();
 			break;
 		case "STATUSLOG":
 			$cur_statuslog = array();
 			$cur_statuslog['attributes'] = array();
+			break;
+		case "WORKFLOWLOGS":
+			$cur_version['workflowlogs'] = array();
+			break;
+		case "WORKFLOWLOG":
+			$cur_workflowlog = array();
+			$cur_workflowlog['attributes'] = array();
 			break;
 		case "APPROVAL":
 			$cur_approval = array();
@@ -911,6 +978,8 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				}
 			} elseif($parent['name'] == 'STATUSLOG') {
 				$cur_statuslog['attributes'][$attrs['NAME']] = '';
+			} elseif($parent['name'] == 'WORKFLOWLOG') {
+				$cur_workflowlog['attributes'][$attrs['NAME']] = '';
 			} elseif($parent['name'] == 'APPROVAL') {
 				$cur_approval['attributes'][$attrs['NAME']] = '';
 			} elseif($parent['name'] == 'APPROVALLOG') {
@@ -1075,6 +1144,8 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 				$cur_workflow['id'] = (int) $attrs['ID'];
 			} elseif($parent['name'] == 'MANDATORY_WORKFLOWS') {
 				$cur_user['workflows'][] = (int) $attrs['ID'];
+			} elseif($parent['name'] == 'VERSION') {
+				$cur_version['workflow'] = array('id'=>(int) $attrs['ID'], 'state'=>(int) $attrs['STATE']);
 			}
 			break;
 		case "WORKFLOWACTION":
@@ -1095,7 +1166,7 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 } /* }}} */
 
 function endElement($parser, $name) { /* {{{ */
-	global $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
+	global $logger, $dms, $sections, $rootfolder, $objmap, $elementstack, $users, $groups, $links,$cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowlog, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	array_pop($elementstack);
 	$parent = end($elementstack);
@@ -1113,6 +1184,9 @@ function endElement($parser, $name) { /* {{{ */
 			break;
 		case "STATUSLOG":
 			$cur_version['statuslogs'][] = $cur_statuslog;
+			break;
+		case "WORKFLOWLOG":
+			$cur_version['workflowlogs'][] = $cur_workflowlog;
 			break;
 		case "APPROVAL":
 			$cur_version['approvals'][] = $cur_approval;
@@ -1190,12 +1264,12 @@ function endElement($parser, $name) { /* {{{ */
 			foreach($users as $tuser) {
 				if($tuser['workflows']) {
 					if(!$user = $dms->getUser($objmap['users'][$tuser['id']])) {
-						echo "Error: Cannot find user for adding mandatory workflows\n";
+						$logger->err("Cannot find user for adding mandatory workflows");
 						exit;
 					}
 					foreach($tuser['workflows'] as $tworkflowid) {
 						if(!$wk = $dms->getWorkflow($objmap['workflows'][$tworkflowid])) {
-							echo "Error: Cannot find workflow for adding mandatory workflows\n";
+							$logger->err("Cannot find workflow for adding mandatory workflows");
 							exit;
 						}
 						$user->setMandatoryWorkflow($wk);
@@ -1219,7 +1293,7 @@ function endElement($parser, $name) { /* {{{ */
 } /* }}} */
 
 function characterData($parser, $data) { /* {{{ */
-	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
+	global $elementstack, $objmap, $cur_user, $cur_group, $cur_folder, $cur_document, $cur_version, $cur_statuslog, $cur_approval, $cur_approvallog, $cur_review, $cur_reviewlog, $cur_attrdef, $cur_documentcat, $cur_keyword, $cur_keywordcat, $cur_file, $cur_link, $cur_workflow, $cur_workflowlog, $cur_workflowtransition, $cur_workflowaction, $cur_workflowstate, $cur_transition;
 
 	$current = end($elementstack);
 	$parent = prev($elementstack);
@@ -1228,39 +1302,72 @@ function characterData($parser, $data) { /* {{{ */
 			switch($parent['name']) {
 				case 'DOCUMENT':
 					if(isset($current['attributes']['TYPE']) && $current['attributes']['TYPE'] == 'user') {
-						$cur_document['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
+						if(isset($cur_document['user_attributes'][$current['attributes']['ATTRDEF']]))
+							$cur_document['user_attributes'][$current['attributes']['ATTRDEF']] .= $data;
+						else
+							$cur_document['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
 					} else {
-						$cur_document['attributes'][$current['attributes']['NAME']] = $data;
+						if(isset($cur_document['attributes'][$current['attributes']['NAME']]))
+							$cur_document['attributes'][$current['attributes']['NAME']] .= $data;
+						else
+							$cur_document['attributes'][$current['attributes']['NAME']] = $data;
 					}
 					break;
 				case 'FOLDER':
 					if(isset($current['attributes']['TYPE']) && $current['attributes']['TYPE']  == 'user') {
-						$cur_folder['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
+						if(isset($cur_folder['user_attributes'][$current['attributes']['ATTRDEF']]))
+							$cur_folder['user_attributes'][$current['attributes']['ATTRDEF']] .= $data;
+						else
+							$cur_folder['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
 					} else {
-						$cur_folder['attributes'][$current['attributes']['NAME']] = $data;
+						if(isset($cur_folder['attributes'][$current['attributes']['NAME']]))
+							$cur_folder['attributes'][$current['attributes']['NAME']] .= $data;
+						else
+							$cur_folder['attributes'][$current['attributes']['NAME']] = $data;
 					}
 					break;
 				case 'VERSION':
 					if(isset($current['attributes']['TYPE']) && $current['attributes']['TYPE']  == 'user') {
-						$cur_version['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
+						if(isset($cur_version['user_attributes'][$current['attributes']['ATTRDEF']]))
+							$cur_version['user_attributes'][$current['attributes']['ATTRDEF']] .= $data;
+						else
+							$cur_version['user_attributes'][$current['attributes']['ATTRDEF']] = $data;
 					} else {
-						$cur_version['attributes'][$current['attributes']['NAME']] = $data;
+						if(isset($cur_version['attributes'][$current['attributes']['NAME']]))
+							$cur_version['attributes'][$current['attributes']['NAME']] .= $data;
+						else
+							$cur_version['attributes'][$current['attributes']['NAME']] = $data;
 					}
 					break;
 				case 'STATUSLOG':
-					$cur_statuslog['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_statuslog['attributes'][$current['attributes']['NAME']]))
+						$cur_statuslog['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_statuslog['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'APPROVAL':
 					$cur_approval['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'APPROVALLOG':
-					$cur_approvallog['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_approvallog['attributes'][$current['attributes']['NAME']]))
+						$cur_approvallog['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_approvallog['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'REVIEW':
 					$cur_review['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'REVIEWLOG':
-					$cur_reviewlog['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_reviewlog['attributes'][$current['attributes']['NAME']]))
+						$cur_reviewlog['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_reviewlog['attributes'][$current['attributes']['NAME']] = $data;
+					break;
+				case 'WORKFLOWLOG':
+					if(isset($cur_workflowlog['attributes'][$current['attributes']['NAME']]))
+						$cur_workflowlog['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_workflowlog['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'USER':
 					if(isset($cur_user['attributes'][$current['attributes']['NAME']]))
@@ -1302,19 +1409,31 @@ function characterData($parser, $data) { /* {{{ */
 					$cur_user['image']['mimetype'] = $data;
 					break;
 				case 'FILE':
-					$cur_file['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_file['attributes'][$current['attributes']['NAME']]))
+						$cur_file['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_file['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'LINK':
 					$cur_link['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'WORKFLOW':
-					$cur_workflow['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_workflow['attributes'][$current['attributes']['NAME']]))
+						$cur_workflow['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_workflow['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'WORKFLOWSTATE':
-					$cur_workflowstate['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_workflowstate['attributes'][$current['attributes']['NAME']]))
+						$cur_workflowstate['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_workflowstate['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'WORKFLOWACTION':
-					$cur_workflowaction['attributes'][$current['attributes']['NAME']] = $data;
+					if(isset($cur_workflowaction['attributes'][$current['attributes']['NAME']]))
+						$cur_workflowaction['attributes'][$current['attributes']['NAME']] .= $data;
+					else
+						$cur_workflowaction['attributes'][$current['attributes']['NAME']] = $data;
 					break;
 				case 'TRANSITION':
 					$cur_transition['attributes'][$current['attributes']['NAME']] = $data;
@@ -1364,6 +1483,12 @@ if(isset($options['v']) || isset($options['verѕion'])) {
 	exit(0);
 }
 
+$logfile = "xmlimport.log";
+$logconf = array();
+$logconf['timeformat'] = '%Y-%m-%d %H:%M:%S';
+$logconf['lineFormat'] = '%{timestamp} %{priority} xmlimport: %{ident} %{message}';
+$logger = Log::factory('file', $logfile, '', $logconf);
+
 /* Check for debug mode */
 $debug = false;
 if(isset($options['debug'])) {
@@ -1389,7 +1514,7 @@ if(isset($options['contentdir'])) {
 		if(substr($contentdir, -1, 1) != DIRECTORY_SEPARATOR)
 			$contentdir .= DIRECTORY_SEPARATOR;
 	} else {
-		echo "Directory ".$options['contentdir']." does not exists\n";
+		$logger->crit("Directory ".$options['contentdir']." does not exists");
 		exit(1);
 	}
 } else {
@@ -1435,7 +1560,7 @@ $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostn
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 if(!$settings->_doNotCheckDBVersion && !$dms->checkVersion()) {
-	echo "Database update needed.";
+	$logger->crit("Database update needed.");
 	exit;
 }
 $dms->setRootFolderID($settings->_rootFolderID);
@@ -1447,7 +1572,7 @@ if(!$rootfolder) {
 
 if($defaultuserid) {
 	if(!$defaultUser = $dms->getUser($defaultuserid)) {
-		echo "Error: Could not find default user with id ".$defaultuserid."\n";
+		$logger->crit("Could not find default user with id ".$defaultuserid);
 		exit(1);
 	}
 } else {
@@ -1495,7 +1620,7 @@ if($exportmapping) {
 		}
 		fclose($fp);
 	} else {
-		echo "Error: could not open mapping file '".$exportmapping."'\n";
+		$logger->err("Could not open mapping file '".$exportmapping."'");
 	}
 }
 ?>
