@@ -5,4 +5,4 @@ if [ -z "${SEEDDMS_HOME}" ]; then
 	exit 1
 fi
 
-exec php -f "${SEEDDMS_HOME}/utils/xmldump" -- "${@}"
+exec php -f "${SEEDDMS_HOME}/utils/xmldump.php" -- "${@}"

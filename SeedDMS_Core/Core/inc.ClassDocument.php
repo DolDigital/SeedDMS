@@ -2771,6 +2771,10 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					$db->rollbackTransaction();
 					return false;
 				}
+				$reviewLogID = $db->getInsertID();
+				if(!empty($log['file'])) {
+					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
+				}
 			}
 		}
 
@@ -2894,6 +2898,10 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				if (!$db->getResult($queryStr)) {
 					$db->rollbackTransaction();
 					return false;
+				}
+				$approveLogID = $db->getInsertID();
+				if(!empty($log['file'])) {
+					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 				}
 			}
 		}

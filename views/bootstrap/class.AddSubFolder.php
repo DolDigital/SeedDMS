@@ -66,16 +66,17 @@ $(document).ready( function() {
 		ev.preventDefault();
 	});
 */
-	var validator = $("#form1").bind("invalid-form.validate", function() {
-		noty({
-			text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
-			type: 'error',
-			dismissQueue: true,
-			layout: 'topRight',
-			theme: 'defaultTheme',
-			timeout: 1500,
-		});
-	}).validate({
+	$("#form1").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
 		messages: {
 			name: "<?php printMLText("js_no_name");?>",
 			comment: "<?php printMLText("js_no_comment");?>"

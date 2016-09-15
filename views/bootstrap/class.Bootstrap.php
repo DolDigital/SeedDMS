@@ -1168,7 +1168,7 @@ $('#acceptkeywords').click(function(ev) {
 				if(strlen($objvalue) > 80) {
 					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".($attrdef->getMinValues() > 0 ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '')." />";
+					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
