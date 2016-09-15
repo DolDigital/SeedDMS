@@ -53,6 +53,12 @@ function getRevAppLog($reviews) { /* {{{ */
 				$newlog['status'] = $log['attributes']['status'];
 				$newlog['comment'] = $log['attributes']['comment'];
 				$newlog['date'] = $log['attributes']['date'];
+				if(!empty($log['data'])) {
+					$filecontents = base64_decode($log['data']);
+					$filename = tempnam('/tmp', 'FOO-revapp');
+					file_put_contents($filename, $filecontents);
+					$newlog['file'] = $filename;
+				}
 				$newreview['logs'][] = $newlog;
 			}
 		}
@@ -394,8 +400,69 @@ function insert_document($document) { /* {{{ */
 		$folder = $rootfolder;
 
 	if(in_array('documents', $sections)) {
-		$error = false;
 		$initversion = array_shift($document['versions']);
+		$reviews = array('i'=>array(), 'g'=>array());
+		/*
+		if($initversion['reviews']) {
+			foreach($initversion['reviews'] as $review) {
+				if($review['attributes']['type'] == 1) {
+					if(isset($objmap['groups'][(int) $review['attributes']['required']]))
+						$reviews['g'][] = $objmap['groups'][(int) $review['attributes']['required']];	
+				} else {
+					if(isset($objmap['users'][(int) $review['attributes']['required']]))
+						$reviews['i'][] = $objmap['users'][(int) $review['attributes']['required']];	
+				}
+			}
+		}
+		 */
+		$approvals = array('i'=>array(), 'g'=>array());
+		/*
+		if($initversion['approvals']) {
+			foreach($initversion['approvals'] as $approval) {
+				if($approval['attributes']['type'] == 1) {
+					if(isset($objmap['groups'][(int) $approval['attributes']['required']]))
+						$approvals['g'][] = $objmap['groups'][(int) $approval['attributes']['required']];	
+				} else {
+					if(isset($objmap['users'][(int) $approval['attributes']['required']]))
+						$approvals['i'][] = $objmap['users'][(int) $approval['attributes']['required']];	
+				}
+			}
+		}
+		 */
+
+		$workflow = null;
+		$workflowstate = null;
+		if(isset($initversion['workflow']) && $initversion['workflow']) {
+			if(array_key_exists((int) $initversion['workflow']['id'], $objmap['workflows'])) {
+				$workflow = $dms->getWorkflow($objmap['workflows'][(int) $initversion['workflow']['id']]);
+				if(!$workflow) {
+					$logger->warning("Workflow ".$initversion['workflow']['id']." cannot be mapped");
+				}
+			} else {
+				$logger->warning("Workflow ".$initversion['workflow']['id']." cannot be mapped");
+			}
+			if(array_key_exists((int) $initversion['workflow']['state'], $objmap['workflowstates'])) {
+				$workflowstate = $dms->getWorkflow($objmap['workflowstates'][(int) $initversion['workflow']['state']]);
+				if(!$workflowstate) {
+					$logger->warning("Workflowstate ".$initversion['workflow']['state']." cannot be mapped");
+				}
+			} else {
+				$logger->warning("Workflowstate ".$initversion['workflow']['state']." cannot be mapped");
+			}
+		}
+		if($initversion['workflowlogs']) {
+		}
+
+		$version_attributes = array();
+		if(isset($initversion['user_attributes'])) {
+			foreach($initversion['user_attributes'] as $orgid=>$value) {
+				if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
+					$version_attributes[$objmap['attributedefs'][$orgid]] = $value;
+				} else {
+					$logger->warning("User attribute ".$orgid." cannot be mapped");
+				}
+			}
+		}
 		if(!empty($initversion['fileref'])) {
 			$filename = tempnam('/tmp', 'FOO');
 			copy($contentdir.$initversion['fileref'], $filename);
@@ -403,17 +470,92 @@ function insert_document($document) { /* {{{ */
 			$filecontents = base64_decode($initversion['data']);
 			if(strlen($filecontents) != $initversion['data_length']) {
 				$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$initversion['data_length'].").");
-				$newDocument = null;
-				$error = true;
 			}
 			$filename = tempnam('/tmp', 'FOO');
 			file_put_contents($filename, $filecontents);
 		}
-		if(!$error) {
+		if(!$result = $folder->addDocument(
+			$document['attributes']['name'],
+			$document['attributes']['comment'],
+			isset($document['attributes']['expires']) ? dateToTimestamp($document['attributes']['expires']) : 0,
+			$owner,
+			isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : 0,
+			$categories,
+			$filename,
+			$initversion['attributes']['orgfilename'],
+			$initversion['attributes']['filetype'],
+			$initversion['attributes']['mimetype'],
+			$document['attributes']['sequence'],
+			$reviews, //reviewers
+			$approvals, //approvers
+			$initversion['version'],
+			isset($initversion['attributes']['comment']) ? $initversion['attributes']['comment'] : '',
+			$attributes,
+			$version_attributes,
+			$workflow
+			)
+		) {
+			unlink($filename);
+			$logger->err("Could not add document '".$document['attributes']['name']."'");
+			return false;
+		}
+
+		/* The document and its initial version was added */
+		$logger->info("Added document '".$document['attributes']['name']."'");
+		$newDocument = $result[0];
+		unlink($filename);
+
+		if(isset($document['attributes']['lockedby'])) {
+			if(!array_key_exists($document['attributes']['lockedby'], $objmap['users'])) {
+				$logger->warning("User for document lock cannot be mapped");
+			} else {
+				if($lockuser = $dms->getUser($objmap['users'][$document['attributes']['lockedby']])) {
+					$newDocument->setLocked($lockuser);
+				}
+			}
+		}
+
+		$newVersion = $result[1]->getContent();
+		$newVersion->setDate(dateToTimestamp($initversion['attributes']['date']));
+		if($workflowstate)
+			$newVersion->setWorkflowState($workflowstate);
+		$newlogs = array();
+		foreach($initversion['statuslogs'] as $i=>$log) {
+			if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
+				unset($initversion['statuslogs'][$i]);
+				$logger->warning("User for status log cannot be mapped");
+			} else {
+				$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
+				$newlogs[] = $log['attributes'];
+			}
+		}
+		$newVersion->rewriteStatusLog($newlogs);
+
+		/* Set reviewers and review log */
+		if($initversion['reviews']) {
+//			print_r($initversion['reviews']);
+			$newreviews = getRevAppLog($initversion['reviews']);
+			$newVersion->rewriteReviewLog($newreviews);
+		}
+		if($initversion['approvals']) {
+			$newapprovals = getRevAppLog($initversion['approvals']);
+			$newVersion->rewriteApprovalLog($newapprovals);
+		}
+
+		$newDocument->setDate(dateToTimestamp($document['attributes']['date']));
+		$newDocument->setDefaultAccess($document['attributes']['defaultaccess']);
+		$newDocument->setInheritAccess($document['attributes']['inheritaccess']);
+		foreach($document['versions'] as $version) {
+			if(!array_key_exists((int) $version['attributes']['owner'], $objmap['users'])) {
+				$logger->err("Owner of document cannot be mapped");
+				return false;
+			}
+			$owner = $dms->getUser($objmap['users'][(int) $version['attributes']['owner']]);
+
 			$reviews = array('i'=>array(), 'g'=>array());
 			/*
-			if($initversion['reviews']) {
-				foreach($initversion['reviews'] as $review) {
+			if($version['reviews']) {
+				foreach($version['reviews'] as $review) {
 					if($review['attributes']['type'] == 1) {
 						if(isset($objmap['groups'][(int) $review['attributes']['required']]))
 							$reviews['g'][] = $objmap['groups'][(int) $review['attributes']['required']];	
@@ -426,8 +568,8 @@ function insert_document($document) { /* {{{ */
 			 */
 			$approvals = array('i'=>array(), 'g'=>array());
 			/*
-			if($initversion['approvals']) {
-				foreach($initversion['approvals'] as $approval) {
+			if($version['approvals']) {
+				foreach($version['approvals'] as $approval) {
 					if($approval['attributes']['type'] == 1) {
 						if(isset($objmap['groups'][(int) $approval['attributes']['required']]))
 							$approvals['g'][] = $objmap['groups'][(int) $approval['attributes']['required']];	
@@ -440,22 +582,31 @@ function insert_document($document) { /* {{{ */
 			 */
 
 			$workflow = null;
-			if(isset($initversion['workflow']) && $initversion['workflow']) {
-				if(array_key_exists((int) $initversion['workflow']['id'], $objmap['workflows'])) {
-					$workflow = $dms->getWorkflow($objmap['workflows'][(int) $initversion['workflow']['id']]);
+			$workflowstate = null;
+			if(isset($version['workflow']) && $version['workflow']) {
+				if(array_key_exists((int) $version['workflow']['id'], $objmap['workflows'])) {
+					$workflow = $dms->getWorkflow($objmap['workflows'][(int) $version['workflow']['id']]);
 					if(!$workflow) {
-						$logger->warning("Workflow ".$orgid." cannot be mapped");
+						$logger->warning("Workflow ".$version['workflow']['id']." cannot be mapped");
 					}
 				} else {
-					$logger->warning("Workflow ".$initversion['workflow']['id']." cannot be mapped");
+					$logger->warning("Workflow ".$version['workflow']['id']." cannot be mapped");
+				}
+				if(array_key_exists((int) $version['workflow']['state'], $objmap['workflowstates'])) {
+					$workflowstate = $dms->getWorkflow($objmap['workflowstates'][(int) $version['workflow']['state']]);
+					if(!$workflowstate) {
+						$logger->warning("Workflowstate ".$version['workflow']['state']." cannot be mapped");
+					}
+				} else {
+					$logger->warning("Workflowstate ".$version['workflow']['state']." cannot be mapped");
 				}
 			}
-			if($initversion['workflowlogs']) {
+			if($version['workflowlogs']) {
 			}
 
 			$version_attributes = array();
-			if(isset($initversion['user_attributes'])) {
-				foreach($initversion['user_attributes'] as $orgid=>$value) {
+			if(isset($version['user_attributes'])) {
+				foreach($version['user_attributes'] as $orgid=>$value) {
 					if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
 						$version_attributes[$objmap['attributedefs'][$orgid]] = $value;
 					} else {
@@ -463,233 +614,128 @@ function insert_document($document) { /* {{{ */
 					}
 				}
 			}
-			if(!$result = $folder->addDocument(
-				$document['attributes']['name'],
-				$document['attributes']['comment'],
-				isset($document['attributes']['expires']) ? dateToTimestamp($document['attributes']['expires']) : 0,
+			if(!empty($version['fileref'])) {
+				$filename = tempnam('/tmp', 'FOO');
+				copy($contentdir.$version['fileref'], $filename);
+			} else {
+				$filecontents = base64_decode($version['data']);
+				if(strlen($filecontents) != $version['data_length']) {
+					$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$version['data_length'].").");
+				}
+				$filename = tempnam('/tmp', 'FOO');
+				file_put_contents($filename, $filecontents);
+			}
+			if(!($result = $newDocument->addContent(
+				$version['attributes']['comment'],
 				$owner,
-				isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : 0,
-				$categories,
 				$filename,
-				$initversion['attributes']['orgfilename'],
-				$initversion['attributes']['filetype'],
-				$initversion['attributes']['mimetype'],
-				$document['attributes']['sequence'],
+				$version['attributes']['orgfilename'],
+				$version['attributes']['filetype'],
+				$version['attributes']['mimetype'],
 				$reviews, //reviewers
 				$approvals, //approvers
-				$initversion['version'],
-				isset($initversion['attributes']['comment']) ? $initversion['attributes']['comment'] : '',
-				$attributes,
+				$version['version'],	
 				$version_attributes,
 				$workflow
-				)
-			) {
+			))) {
 				unlink($filename);
-				$logger->err("Could not add document '".$document['attributes']['name']."'");
+				$logger->err("Could not add version '".$version['version']."' of document '".$document['attributes']['name']."'");
 				return false;
-			} else {
-				$logger->info("Added document '".$document['attributes']['name']."'");
-				$newDocument = $result[0];
+			}
+
+			$logger->info("Added version '".$version['version']."' of document '".$document['attributes']['name']."'");
+			$newVersion = $result->getContent();
+			if($workflowstate)
+				$newVersion->setWorkflowState($workflowstate);
+			$newVersion->setDate(dateToTimestamp($version['attributes']['date']));
+			$newlogs = array();
+			foreach($version['statuslogs'] as $i=>$log) {
+				if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
+					unset($version['statuslogs'][$i]);
+					$logger->warning("User for status log cannot be mapped");
+				} else {
+					$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
+					$newlogs[] = $log['attributes'];
+				}
+			}
+			$newVersion->rewriteStatusLog($newlogs);
+
+			if($version['reviews']) {
+				$newreviews = getRevAppLog($version['reviews']);
+				$newVersion->rewriteReviewLog($newreviews);
+			}
+			if($version['approvals']) {
+				$newapprovals = getRevAppLog($version['approvals']);
+				$newVersion->rewriteApprovalLog($newapprovals);
+			}
+
+			unlink($filename);
+		}	
+
+		if(isset($document['notifications']['users']) && $document['notifications']['users']) {
+			foreach($document['notifications']['users'] as $userid) {
+				if(!array_key_exists($userid, $objmap['users'])) {
+					$logger->warning("User for notification cannot be mapped");
+				} else {
+					$newDocument->addNotify($objmap['users'][$userid], 1);
+				}
+			}
+		}
+		if(isset($document['notifications']['groups']) && $document['notifications']['groups']) {
+			foreach($document['notifications']['groups'] as $groupid) {
+				if(!array_key_exists($groupid, $objmap['groups'])) {
+					$logger->warning("User for notification cannot be mapped");
+				} else {
+					$newDocument->addNotify($objmap['groups'][$groupid], 0);
+				}
+			}
+		}
+		if(isset($document['acls']) && $document['acls']) {
+			foreach($document['acls'] as $acl) {
+				if($acl['type'] == 'user') {
+					if(!array_key_exists($acl['user'], $objmap['users'])) {
+						$logger->warning("User for notification cannot be mapped");
+					} else {
+						$newDocument->addAccess($acl['mode'], $objmap['users'][$acl['user']], 1);
+					}
+				} elseif($acl['type'] == 'group') {
+					if(!array_key_exists($acl['group'], $objmap['groups'])) {
+						$logger->warning("Group for notification cannot be mapped");
+					} else {
+						$newDocument->addAccess($acl['mode'], $objmap['groups'][$acl['group']], 0);
+					}
+				}
+			}
+		}
+		if(isset($document['files']) && $document['files']) {
+			foreach($document['files'] as $file) {
+				if(!array_key_exists($file['attributes']['owner'], $objmap['users'])) {
+					$logger->warning("User for file cannot be mapped");
+					$owner = $defaultUser;
+				} else {
+					$owner = $dms->getUser($objmap['users'][$file['attributes']['owner']]);
+				}
+				if(!empty($file['fileref'])) {
+					$filename = tempnam('/tmp', 'FOO');
+					copy($contentdir.$file['fileref'], $filename);
+				} else {
+					$filecontents = base64_decode($file['data']);
+					if(strlen($filecontents) != $file['data_length']) {
+						$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$file['data_length'].").");
+					}
+					$filename = tempnam('/tmp', 'FOO');
+					file_put_contents($filename, $filecontents);
+				}
+				$newDocument->addDocumentFile(
+					$file['attributes']['name'],
+					$file['attributes']['comment'],
+					$owner,
+					$filename,
+					$file['attributes']['orgfilename'],
+					$file['attributes']['filetype'],
+					$file['attributes']['mimetype']
+				);
 				unlink($filename);
-
-				if(isset($document['attributes']['lockedby'])) {
-					if(!array_key_exists($document['attributes']['lockedby'], $objmap['users'])) {
-						$logger->warning("User for document lock cannot be mapped");
-					} else {
-						if($lockuser = $dms->getUser($objmap['users'][$document['attributes']['lockedby']])) {
-							$newDocument->setLocked($lockuser);
-						}
-					}
-				}
-
-				$newVersion = $result[1]->getContent();
-				$newVersion->setDate(dateToTimestamp($initversion['attributes']['date']));
-				$newlogs = array();
-				foreach($initversion['statuslogs'] as $i=>$log) {
-					if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
-						unset($initversion['statuslogs'][$i]);
-						$logger->warning("User for status log cannot be mapped");
-					} else {
-						$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
-						$newlogs[] = $log['attributes'];
-					}
-				}
-				$newVersion->rewriteStatusLog($newlogs);
-
-				/* Set reviewers and review log */
-				if($initversion['reviews']) {
-					$newreviews = getRevAppLog($initversion['reviews']);
-					$newVersion->rewriteReviewLog($newreviews);
-				}
-				if($initversion['approvals']) {
-					$newapprovals = getRevAppLog($initversion['approvals']);
-					$newVersion->rewriteApprovalLog($newapprovals);
-				}
-
-				$newDocument->setDate(dateToTimestamp($document['attributes']['date']));
-				$newDocument->setDefaultAccess($document['attributes']['defaultaccess']);
-				foreach($document['versions'] as $version) {
-					if(!array_key_exists((int) $version['attributes']['owner'], $objmap['users'])) {
-						$logger->err("Owner of document cannot be mapped");
-						return false;
-					}
-					$owner = $dms->getUser($objmap['users'][(int) $version['attributes']['owner']]);
-
-					$reviews = array('i'=>array(), 'g'=>array());
-					/*
-					if($version['reviews']) {
-						foreach($version['reviews'] as $review) {
-							if($review['attributes']['type'] == 1) {
-								if(isset($objmap['groups'][(int) $review['attributes']['required']]))
-									$reviews['g'][] = $objmap['groups'][(int) $review['attributes']['required']];	
-							} else {
-								if(isset($objmap['users'][(int) $review['attributes']['required']]))
-									$reviews['i'][] = $objmap['users'][(int) $review['attributes']['required']];	
-							}
-						}
-					}
-					 */
-					$approvals = array('i'=>array(), 'g'=>array());
-					/*
-					if($version['approvals']) {
-						foreach($version['approvals'] as $approval) {
-							if($approval['attributes']['type'] == 1) {
-								if(isset($objmap['groups'][(int) $approval['attributes']['required']]))
-									$approvals['g'][] = $objmap['groups'][(int) $approval['attributes']['required']];	
-							} else {
-								if(isset($objmap['users'][(int) $approval['attributes']['required']]))
-									$approvals['i'][] = $objmap['users'][(int) $approval['attributes']['required']];	
-							}
-						}
-					}
-					 */
-					$version_attributes = array();
-					if(isset($version['user_attributes'])) {
-						foreach($version['user_attributes'] as $orgid=>$value) {
-							if(array_key_exists((int) $orgid, $objmap['attributedefs'])) {
-								$version_attributes[$objmap['attributedefs'][$orgid]] = $value;
-							} else {
-								$logger->warning("User attribute ".$orgid." cannot be mapped");
-							}
-						}
-					}
-					if(!empty($version['fileref'])) {
-						$filename = tempnam('/tmp', 'FOO');
-						copy($contentdir.$version['fileref'], $filename);
-					} else {
-						$filecontents = base64_decode($version['data']);
-						if(strlen($filecontents) != $version['data_length']) {
-							$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$version['data_length'].").");
-						}
-						$filename = tempnam('/tmp', 'FOO');
-						file_put_contents($filename, $filecontents);
-					}
-					if(!($result = $newDocument->addContent(
-						$version['attributes']['comment'],
-						$owner,
-						$filename,
-						$version['attributes']['orgfilename'],
-						$version['attributes']['filetype'],
-						$version['attributes']['mimetype'],
-						$reviews, //reviewers
-						$approvals, //approvers
-						$version['version'],	
-						$version_attributes,
-						null //workflow
-					))) {
-					}
-					$newVersion = $result->getContent();
-					$newVersion->setDate(dateToTimestamp($version['attributes']['date']));
-					$newlogs = array();
-					foreach($version['statuslogs'] as $i=>$log) {
-						if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
-							unset($version['statuslogs'][$i]);
-							$logger->warning("User for status log cannot be mapped");
-						} else {
-							$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
-							$newlogs[] = $log['attributes'];
-						}
-					}
-					$newVersion->rewriteStatusLog($newlogs);
-
-					if($version['reviews']) {
-						$newreviews = getRevAppLog($version['reviews']);
-						$newVersion->rewriteReviewLog($newreviews);
-					}
-					if($version['approvals']) {
-						$newapprovals = getRevAppLog($version['approvals']);
-						$newVersion->rewriteApprovalLog($newapprovals);
-					}
-
-					unlink($filename);
-				}	
-			}
-			if(isset($document['notifications']['users']) && $document['notifications']['users']) {
-				foreach($document['notifications']['users'] as $userid) {
-					if(!array_key_exists($userid, $objmap['users'])) {
-						$logger->warning("User for notification cannot be mapped");
-					} else {
-						$newDocument->addNotify($objmap['users'][$userid], 1);
-					}
-				}
-			}
-			if(isset($document['notifications']['groups']) && $document['notifications']['groups']) {
-				foreach($document['notifications']['groups'] as $groupid) {
-					if(!array_key_exists($groupid, $objmap['groups'])) {
-						$logger->warning("User for notification cannot be mapped");
-					} else {
-						$newDocument->addNotify($objmap['groups'][$groupid], 0);
-					}
-				}
-			}
-			if(isset($document['acls']) && $document['acls']) {
-				$newDocument->setInheritAccess(false);
-				foreach($document['acls'] as $acl) {
-					if($acl['type'] == 'user') {
-						if(!array_key_exists($acl['user'], $objmap['users'])) {
-							$logger->warning("User for notification cannot be mapped");
-						} else {
-							$newDocument->addAccess($acl['mode'], $objmap['users'][$acl['user']], 1);
-						}
-					} elseif($acl['type'] == 'group') {
-						if(!array_key_exists($acl['group'], $objmap['groups'])) {
-							$logger->warning("Group for notification cannot be mapped");
-						} else {
-							$newDocument->addAccess($acl['mode'], $objmap['groups'][$acl['group']], 0);
-						}
-					}
-				}
-			}
-			if(isset($document['files']) && $document['files']) {
-				foreach($document['files'] as $file) {
-					if(!array_key_exists($file['attributes']['owner'], $objmap['users'])) {
-						$logger->warning("User for file cannot be mapped");
-						$owner = $defaultUser;
-					} else {
-						$owner = $dms->getUser($objmap['users'][$file['attributes']['owner']]);
-					}
-					if(!empty($file['fileref'])) {
-						$filename = tempnam('/tmp', 'FOO');
-						copy($contentdir.$file['fileref'], $filename);
-					} else {
-						$filecontents = base64_decode($file['data']);
-						if(strlen($filecontents) != $file['data_length']) {
-							$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$file['data_length'].").");
-						}
-						$filename = tempnam('/tmp', 'FOO');
-						file_put_contents($filename, $filecontents);
-					}
-					$newDocument->addDocumentFile(
-						$file['attributes']['name'],
-						$file['attributes']['comment'],
-						$owner,
-						$filename,
-						$file['attributes']['orgfilename'],
-						$file['attributes']['filetype'],
-						$file['attributes']['mimetype']
-					);
-					unlink($filename);
-				}
 			}
 		}
 	} else {
@@ -744,6 +790,7 @@ function insert_folder($folder) { /* {{{ */
 
 		$newFolder->setDate(dateToTimestamp($folder['attributes']['date']));
 		$newFolder->setDefaultAccess($folder['attributes']['defaultaccess']);
+		$newFolder->setInheritAccess($folder['attributes']['inheritaccess']);
 		if(isset($folder['notifications']['users']) && $folder['notifications']['users']) {
 			foreach($folder['notifications']['users'] as $userid) {
 				if(!array_key_exists($userid, $objmap['users'])) {
@@ -763,7 +810,6 @@ function insert_folder($folder) { /* {{{ */
 			}
 		}
 		if(isset($folder['acls']) && $folder['acls']) {
-			$newFolder->setInheritAccess(false);
 			foreach($folder['acls'] as $acl) {
 				if($acl['type'] == 'user') {
 					if(!array_key_exists($acl['user'], $objmap['users'])) {
@@ -824,6 +870,46 @@ function resolve_links() { /* {{{ */
 			}
 		} else {
 			$logger->warning("Document not found in object mapping");
+		}
+	}
+} /* }}} */
+
+function set_mandatory() { /* {{{ */
+	global $logger, $dms, $users, $objmap;
+
+	if(!$users)	
+		return;
+
+	foreach($users as $user) {
+		if ($newUser = $dms->getUserByLogin($user['attributes']['login'])) {
+			if($user['individual']['reviewers']) {
+				foreach($user['individual']['reviewers'] as $u) {
+					if($uobj = $dms->getUser($objmap['users'][$u])) {
+						$newUser->setMandatoryReviewer($uobj->getID(), false);
+					}
+				}
+			}
+			if($user['individual']['approvers']) {
+				foreach($user['individual']['approvers'] as $u) {
+					if($uobj = $dms->getUser($objmap['users'][$u])) {
+						$newUser->setMandatoryApprover($uobj->getID(), false);
+					}
+				}
+			}
+			if($user['group']['reviewers']) {
+				foreach($user['group']['reviewers'] as $u) {
+					if($uobj = $dms->getGroup($objmap['groups'][$u])) {
+						$newUser->setMandatoryReviewer($uobj->getID(), true);
+					}
+				}
+			}
+			if($user['group']['approvers']) {
+				foreach($user['group']['approvers'] as $u) {
+					if($uobj = $dms->getGroup($objmap['groups'][$u])) {
+						$newUser->setMandatoryApprover($uobj->getID(), true);
+					}
+				}
+			}
 		}
 	}
 } /* }}} */
@@ -1070,6 +1156,12 @@ function startElement($parser, $name, $attrs) { /* {{{ */
 					$cur_file['fileref'] = $attrs['FILEREF'];
 				else
 					$cur_file['data'] = "";
+			} elseif($parent['name'] == 'REVIEWLOG') {
+				$cur_reviewlog['data_length'] = (int) $attrs['LENGTH'];
+				if(isset($attrs['FILEREF']))
+					$cur_reviewlog['fileref'] = $attrs['FILEREF'];
+				else
+					$cur_reviewlog['data'] = "";
 			}
 			break;
 		case "KEYWORD":
@@ -1451,6 +1543,9 @@ function characterData($parser, $data) { /* {{{ */
 				case 'FILE':
 					$cur_file['data'] .= $data;
 					break;
+				case 'REVIEWLOG':
+					$cur_reviewlog['data'] .= $data;
+					break;
 			}
 			break;
 		case 'USER':
@@ -1609,6 +1704,7 @@ while ($data = fread($fp, 65535)) {
 }
 
 resolve_links();
+set_mandatory();
 
 if($exportmapping) {
 	if($fp = fopen($exportmapping, 'w')) {
