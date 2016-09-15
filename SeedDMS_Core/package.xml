@@ -26,6 +26,7 @@
  <notes>
 - SeedDMЅ_Core_Object::getAttributes() orders attributes by name of attribute definition
 - SeedDMЅ_Core_Workflow::addTransition() force reload of transition list after adding a
+- SeedDMЅ_Core_Document::rewritet[Review|Approval]Log() will also copy file if it exists
 new transition
  </notes>
  <contents>
