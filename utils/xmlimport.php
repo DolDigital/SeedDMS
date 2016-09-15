@@ -90,6 +90,7 @@ function insert_user($user) { /* {{{ */
 				$user['attributes']['pwdexpiration']);
 			if(!$newUser) {
 				$logger->err("Could not add user");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			} else {
 				$logger->info("Added user '".$user['attributes']['login']."'");
@@ -183,6 +184,7 @@ function insert_attributedefinition($attrdef) { /* {{{ */
 		if(in_array('attributedefinitions', $sections)) {
 			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $attrdef['objecttype'], $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
 				$logger->err("Could not add attribute definition");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			} else {
 				$logger->info("Added attribute definition '".$attrdef['attributes']['name']."'");
@@ -207,6 +209,7 @@ function insert_documentcategory($documentcat) { /* {{{ */
 		if(in_array('documentcategories', $sections)) {
 			if(!$newCategory = $dms->addDocumentCategory($documentcat['attributes']['name'])) {
 				$logger->err("Error: could not add document category");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			} else {
 				$logger->info("Added document category '".$documentcat['attributes']['name']."'");
@@ -238,6 +241,7 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 		if(in_array('keywordcategories', $sections)) {
 			if(!$newCategory = $dms->addKeywordCategory($owner, $keywordcat['attributes']['name'])) {
 				$logger->err("Could not add keyword category");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			} else {
 				$logger->info("Added keyword category '".$keywordcat['attributes']['name']."'");
@@ -245,6 +249,7 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 			foreach($keywordcat['keywords'] as $keyword) {
 				if(!$newCategory->addKeywordList($keyword['attributes']['name'])) {
 					$logger->err("Could not add keyword to keyword category");
+					$logger->debug($dms->getDB()->getErrorMsg());
 					return false;
 				}
 			}
@@ -273,6 +278,7 @@ function insert_workflow($workflow) { /* {{{ */
 			}
 			if(!$newWorkflow = $dms->addWorkflow($workflow['attributes']['name'], $initstate)) {
 				$logger->err("Could not add workflow");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			} else {
 				$logger->info("Added workflow '".$workflow['attributes']['name']."'");
@@ -281,14 +287,17 @@ function insert_workflow($workflow) { /* {{{ */
 				foreach($workflow['transitions'] as $transition) {
 					if(!$state = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['startstate']])) {
 						$logger->err("Could not add workflow because start state of transition is missing");
+						$logger->debug($dms->getDB()->getErrorMsg());
 						return false;
 					}
 					if(!$nextstate = $dms->getWorkflowState($objmap['workflowstates'][(int) $transition['attributes']['nextstate']])) {
 						$logger->err("Could not add workflow because end state of transition is missing");
+						$logger->debug($dms->getDB()->getErrorMsg());
 						return false;
 					}
 					if(!$action = $dms->getWorkflowAction($objmap['workflowactions'][(int) $transition['attributes']['action']])) {
 						$logger->err("Could not add workflow because end state of transition is missing");
+						$logger->debug($dms->getDB()->getErrorMsg());
 						return false;
 					}
 					$tusers = array();
@@ -296,6 +305,7 @@ function insert_workflow($workflow) { /* {{{ */
 						foreach($transition['users'] as $tuserid) {
 							if(!$tusers[] = $dms->getUser($objmap['users'][(int) $tuserid])) {
 								$logger->err("Could not add workflow because user of transition is missing");
+								$logger->debug($dms->getDB()->getErrorMsg());
 								return false;
 							}
 						}
@@ -459,7 +469,7 @@ function insert_document($document) { /* {{{ */
 				$logger->warning("Workflow ".$initversion['workflow']['id']." cannot be mapped");
 			}
 			if(array_key_exists((int) $initversion['workflow']['state'], $objmap['workflowstates'])) {
-				$workflowstate = $dms->getWorkflow($objmap['workflowstates'][(int) $initversion['workflow']['state']]);
+				$workflowstate = $dms->getWorkflowState($objmap['workflowstates'][(int) $initversion['workflow']['state']]);
 				if(!$workflowstate) {
 					$logger->warning("Workflowstate ".$initversion['workflow']['state']." cannot be mapped");
 				}
@@ -610,7 +620,7 @@ function insert_document($document) { /* {{{ */
 					$logger->warning("Workflow ".$version['workflow']['id']." cannot be mapped");
 				}
 				if(array_key_exists((int) $version['workflow']['state'], $objmap['workflowstates'])) {
-					$workflowstate = $dms->getWorkflow($objmap['workflowstates'][(int) $version['workflow']['state']]);
+					$workflowstate = $dms->getWorkflowState($objmap['workflowstates'][(int) $version['workflow']['state']]);
 					if(!$workflowstate) {
 						$logger->warning("Workflowstate ".$version['workflow']['state']." cannot be mapped");
 					}
@@ -657,6 +667,7 @@ function insert_document($document) { /* {{{ */
 			))) {
 				unlink($filename);
 				$logger->err("Could not add version '".$version['version']."' of document '".$document['attributes']['name']."'");
+				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
 			}
 
@@ -800,6 +811,7 @@ function insert_folder($folder) { /* {{{ */
 
 		if(!$newFolder = $parent->addSubFolder($folder['attributes']['name'], $folder['attributes']['comment'], $owner, $folder['attributes']['sequence'], $attributes)) {
 			$logger->err("Could not add folder");
+			$logger->debug($dms->getDB()->getErrorMsg());
 			return false;
 		} else {
 			$logger->info("Added folder '".$folder['attributes']['name']."'");
@@ -874,6 +886,7 @@ function resolve_links() { /* {{{ */
 									}
 									if(!$doc->addDocumentLink($target->getID(), $owner->getID(), $doclink['attributes']['public'])) {
 										$logger->err("Could not add document link from ".$doc->getID()." to ".$target->getID());
+										$logger->debug($dms->getDB()->getErrorMsg());
 									}
 								} else {
 									$logger->warning("Target document not found in database");
