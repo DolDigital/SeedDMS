@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (786)
+//    Translators: Admin (791)
 
 $text = array(
 '2_factor_auth' => '',
@@ -160,7 +160,7 @@ $text = array(
 'backup_tools' => 'Иструменти за бекъп',
 'between' => 'между',
 'bg_BG' => '',
-'browse' => '',
+'browse' => 'Преглеждане',
 'calendar' => 'Календар',
 'calendar_week' => '',
 'cancel' => 'Отмяна',
@@ -216,11 +216,11 @@ $text = array(
 'choose_workflow_action' => 'Изберете workflow действие',
 'choose_workflow_state' => 'Изберете състояние на workflow',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Изчистване на кеша',
 'clear_clipboard' => '',
 'clear_password' => '',
 'clipboard' => '',
-'close' => '',
+'close' => 'Затвори',
 'comment' => 'Коментар',
 'comment_changed_email' => 'Коментарите са изменени',
 'comment_for_current_version' => 'Коментар за версията',
@@ -394,7 +394,7 @@ $text = array(
 'files' => 'Файлове',
 'files_deletion' => 'Изтриване на файлове',
 'files_deletion_warning' => 'Тази операция ще изтрие всички файлове във всички папки. Информацията за версиите ще остане достъпна',
-'files_loading' => '',
+'files_loading' => 'Моля изчакайте докато се зареди списъкът на файловете',
 'file_size' => 'Размер',
 'filter_for_documents' => '',
 'filter_for_folders' => '',
@@ -800,7 +800,7 @@ $text = array(
 'seconds' => 'секунди',
 'selection' => 'Избор',
 'select_attrdefgrp_show' => '',
-'select_category' => '',
+'select_category' => 'Изберете категория',
 'select_groups' => 'Кликни да избереш групи',
 'select_grp_approvers' => 'Кликни да избереш група утвърждаващи',
 'select_grp_ind_approvers' => '',
