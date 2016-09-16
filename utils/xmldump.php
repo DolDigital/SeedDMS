@@ -391,6 +391,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						}
 					} else {
 						echo $indent."   <!-- ".$dms->contentDir . $version->getPath()." not found -->\n";
+						echo $indent."   <data length=\"0\"></data>\n";
 					}
 					echo $indent."  </version>\n";
 				}
