@@ -67,6 +67,34 @@ function getRevAppLog($reviews) { /* {{{ */
 	return $newreviews;
 } /* }}} */
 
+function getWorkflowLog($workflowlogs) { /* {{{ */
+	global $logger, $dms, $objmap;
+
+	$newlogs = array();
+	foreach($workflowlogs as $i=>$log) {
+		if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
+			unset($initversion['workflowlogs'][$i]);
+			$logger->warning("User for workflow log cannot be mapped");
+		} else {
+			$log['attributes']['user'] = $dms->getUser($objmap['users'][$log['attributes']['user']]);
+			if(!array_key_exists($log['attributes']['workflow'], $objmap['workflows'])) {
+				unset($initversion['workflowlogs'][$i]);
+				$logger->warning("Workflow for workflow log cannot be mapped");
+			} else {
+				$log['attributes']['workflow'] = $dms->getWorkflow($objmap['workflows'][$log['attributes']['workflow']]);
+				if(!array_key_exists($log['attributes']['transition'], $objmap['workflowtransitions'])) {
+					unset($initversion['workflowlogs'][$i]);
+					$logger->warning("Workflow transition for workflow log cannot be mapped");
+				} else {
+					$log['attributes']['transition'] = $dms->getWorkflowTransition($objmap['workflowtransitions'][$log['attributes']['transition']]);
+					$newlogs[] = $log['attributes'];
+				}
+			}
+		}
+	}
+	return $newlogs;
+} /* }}} */
+
 function insert_user($user) { /* {{{ */
 	global $logger, $dms, $debug, $sections, $defaultUser, $objmap;
 
@@ -319,10 +347,12 @@ function insert_workflow($workflow) { /* {{{ */
 							}
 						}
 					}
-					if(!$newWorkflow->addTransition($state, $action, $nextstate, $tusers, $tgroups)) {
+					if(!($newWorkflowTransition = $newWorkflow->addTransition($state, $action, $nextstate, $tusers, $tgroups))) {
 						$logger->err("Could not add workflow because transition could not be added");
 						return false;
 					}
+					if($newWorkflowTransition)
+						$objmap['workflowtransitions'][$transition['id']] = $newWorkflowTransition->getID();
 				}
 			}
 		} else {
@@ -477,8 +507,6 @@ function insert_document($document) { /* {{{ */
 				$logger->warning("Workflowstate ".$initversion['workflow']['state']." cannot be mapped");
 			}
 		}
-		if($initversion['workflowlogs']) {
-		}
 
 		$version_attributes = array();
 		if(isset($initversion['user_attributes'])) {
@@ -567,6 +595,15 @@ function insert_document($document) { /* {{{ */
 		if($initversion['approvals']) {
 			$newapprovals = getRevAppLog($initversion['approvals']);
 			$newVersion->rewriteApprovalLog($newapprovals);
+		}
+
+		if($initversion['workflowlogs']) {
+			$newworkflowlogs = getWorkflowLog($initversion['workflowlogs']);
+			if(!$newVersion->rewriteWorkflowLog($newworkflowlogs)) {
+				$logger->err("Could not rewrite workflow log of version '".$newVersion->getVersion()."' of document '".$newDocument->getName()."'");
+				$logger->debug($dms->getDB()->getErrorMsg());
+				return false;
+			}
 		}
 
 		$newDocument->setDate(dateToTimestamp($document['attributes']['date']));
@@ -673,6 +710,7 @@ function insert_document($document) { /* {{{ */
 
 			$logger->info("Added version '".$version['version']."' of document '".$document['attributes']['name']."'");
 			$newVersion = $result->getContent();
+			unlink($filename);
 			if($workflowstate)
 				$newVersion->setWorkflowState($workflowstate);
 			$newVersion->setDate(dateToTimestamp($version['attributes']['date']));
@@ -697,7 +735,14 @@ function insert_document($document) { /* {{{ */
 				$newVersion->rewriteApprovalLog($newapprovals);
 			}
 
-			unlink($filename);
+			if($version['workflowlogs']) {
+				$newworkflowlogs = getWorkflowLog($version['workflowlogs']);
+				if(!$newVersion->rewriteWorkflowLog($newworkflowlogs)) {
+					$logger->err("Could not rewrite workflow log of version '".$newVersion->getVersion()."' of document '".$newDocument->getName()."'");
+					$logger->debug($dms->getDB()->getErrorMsg());
+					return false;
+				}
+			}
 		}	
 
 		if(isset($document['notifications']['users']) && $document['notifications']['users']) {

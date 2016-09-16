@@ -1088,6 +1088,9 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - SeedDMЅ_Core_Object::getAttributes() orders attributes by name of attribute definition
+- SeedDMЅ_Core_Workflow::addTransition() force reload of transition list after adding a
+- SeedDMЅ_Core_Document::rewrite[Review|Approval]Log() will also copy file if it exists
+- add method SeedDMЅ_Core_Document::rewriteWorkflowLog()
    </notes>
   </release>
   <release>

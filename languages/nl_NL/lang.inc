@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (720), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (721), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -408,7 +408,7 @@ URL: [url]',
 'edit_user' => 'Wijzig gebruiker',
 'edit_user_details' => 'Wijzig gebruiker Details',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'Griek',
 'email' => 'E-mail',
 'email_error_title' => 'Geen email ingevoerd',
 'email_footer' => 'U kunt altijd uw e-mail instellingen wijzigen via de \'Mijn Account\' opties',

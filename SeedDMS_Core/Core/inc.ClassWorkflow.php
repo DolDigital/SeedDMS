@@ -1101,6 +1101,10 @@ class SeedDMS_Core_Workflow_Log { /* {{{ */
 		return $this->_transition;
 	} /* }}} */
 
+	function getWorkflow() { /* {{{ */
+		return $this->_workflow;
+	} /* }}} */
+
 	function getUser() { /* {{{ */
 		return $this->_user;
 	} /* }}} */

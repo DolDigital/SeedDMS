@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1530), rickr (144), s.pnt (26)
+//    Translators: Admin (1531), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -416,7 +416,7 @@ URL: [url]',
 'edit_user' => 'Modifica l\'utente',
 'edit_user_details' => 'Modifica i dettagli utente',
 'edit_version' => 'Versione editato',
-'el_GR' => '',
+'el_GR' => 'Greco',
 'email' => 'Email',
 'email_error_title' => 'Nessuna email immessa',
 'email_footer' => 'Puoi cambiare l\'impostazione della tua email utilizzando le funzioni del menu \'Account personale\'',

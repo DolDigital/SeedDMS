@@ -3601,6 +3601,47 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Rewrites the complete workflow log
+	 * 
+	 * Attention: this function is highly dangerous.
+	 * It removes an existing workflow log and rewrites it.
+	 * This method was added for importing an xml dump.
+	 *
+	 * @param array $workflowlog new workflow log with the newest log entry first.
+	 * @return boolean true on success, otherwise false
+	 */
+	function rewriteWorkflowLog($workflowlog) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$db->startTransaction();
+
+		/* First, remove the old entries */
+		$queryStr = "DELETE FROM `tblWorkflowLog` WHERE `tblWorkflowLog`.`document` = '". $this->_document->getID() ."' AND `tblWorkflowLog`.`version` = '". $this->_version ."'";
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		/* Second, insert the new entries */
+		$workflowlog = array_reverse($workflowlog);
+		foreach($workflowlog as $log) {
+			if(!SeedDMS_Core_DMS::checkDate($log['date'], 'Y-m-d H:i:s')) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			$queryStr = "INSERT INTO `tblWorkflowLog` (`document`, `version`,	`workflow`, `transition`, `comment`, `date`, `userid`) ".
+				"VALUES ('".$this->_document->getID() ."', '".(int) $this->_version."', '".(int) $log['workflow']->getID()."', '".(int) $log['transition']->getID()."', ".$db->qstr($log['comment']) .", ".$db->qstr($log['date']).", ".$log['user']->getID().")";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+		}
+
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
 	 * Restart workflow from its initial state
 	 *
 	 * @return boolean true if workflow could be restarted
