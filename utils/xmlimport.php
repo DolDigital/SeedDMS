@@ -441,35 +441,13 @@ function insert_document($document) { /* {{{ */
 
 	if(in_array('documents', $sections)) {
 		$initversion = array_shift($document['versions']);
+		if(!$initversion) {
+			$logger->err("Document '".$document['attributes']['name']."' missing initial version");
+			return false;
+		}
+		/* Rewriting the review/approval log will set reviewers/approvers */
 		$reviews = array('i'=>array(), 'g'=>array());
-		/*
-		if($initversion['reviews']) {
-			foreach($initversion['reviews'] as $review) {
-				if($review['attributes']['type'] == 1) {
-					if(isset($objmap['groups'][(int) $review['attributes']['required']]))
-						$reviews['g'][] = $objmap['groups'][(int) $review['attributes']['required']];	
-				} else {
-					if(isset($objmap['users'][(int) $review['attributes']['required']]))
-						$reviews['i'][] = $objmap['users'][(int) $review['attributes']['required']];	
-				}
-			}
-		}
-		 */
 		$approvals = array('i'=>array(), 'g'=>array());
-		/*
-		if($initversion['approvals']) {
-			foreach($initversion['approvals'] as $approval) {
-				if($approval['attributes']['type'] == 1) {
-					if(isset($objmap['groups'][(int) $approval['attributes']['required']]))
-						$approvals['g'][] = $objmap['groups'][(int) $approval['attributes']['required']];	
-				} else {
-					if(isset($objmap['users'][(int) $approval['attributes']['required']]))
-						$approvals['i'][] = $objmap['users'][(int) $approval['attributes']['required']];	
-				}
-			}
-		}
-		 */
-
 		$workflow = null;
 		$workflowstate = null;
 		if(isset($initversion['workflow']) && $initversion['workflow']) {
@@ -505,6 +483,8 @@ function insert_document($document) { /* {{{ */
 			$filename = tempnam('/tmp', 'FOO');
 			copy($contentdir.$initversion['fileref'], $filename);
 		} else {
+			if(!isset($initversion['data']))
+				echo $document['attributes']['name']."\n";
 			$filecontents = base64_decode($initversion['data']);
 			if(strlen($filecontents) != $initversion['data_length']) {
 				$logger->warning("File length (".strlen($filecontents).") doesn't match expected length (".$initversion['data_length'].").");
@@ -599,35 +579,9 @@ function insert_document($document) { /* {{{ */
 			}
 			$owner = $dms->getUser($objmap['users'][(int) $version['attributes']['owner']]);
 
+			/* Rewriting the review/approval log will set reviewers/approvers */
 			$reviews = array('i'=>array(), 'g'=>array());
-			/*
-			if($version['reviews']) {
-				foreach($version['reviews'] as $review) {
-					if($review['attributes']['type'] == 1) {
-						if(isset($objmap['groups'][(int) $review['attributes']['required']]))
-							$reviews['g'][] = $objmap['groups'][(int) $review['attributes']['required']];	
-					} else {
-						if(isset($objmap['users'][(int) $review['attributes']['required']]))
-							$reviews['i'][] = $objmap['users'][(int) $review['attributes']['required']];	
-					}
-				}
-			}
-			 */
 			$approvals = array('i'=>array(), 'g'=>array());
-			/*
-			if($version['approvals']) {
-				foreach($version['approvals'] as $approval) {
-					if($approval['attributes']['type'] == 1) {
-						if(isset($objmap['groups'][(int) $approval['attributes']['required']]))
-							$approvals['g'][] = $objmap['groups'][(int) $approval['attributes']['required']];	
-					} else {
-						if(isset($objmap['users'][(int) $approval['attributes']['required']]))
-							$approvals['i'][] = $objmap['users'][(int) $approval['attributes']['required']];	
-					}
-				}
-			}
-			 */
-
 			$workflow = null;
 			$workflowstate = null;
 			if(isset($version['workflow']) && $version['workflow']) {
@@ -647,8 +601,6 @@ function insert_document($document) { /* {{{ */
 				} else {
 					$logger->warning("Workflowstate ".$version['workflow']['state']." cannot be mapped");
 				}
-			}
-			if($version['workflowlogs']) {
 			}
 
 			$version_attributes = array();
