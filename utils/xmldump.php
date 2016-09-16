@@ -366,6 +366,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						foreach($wkflogs as $wklog) {
 							echo $indent."    <workflowlog>\n";
 							echo $indent."     <attr name=\"date\" format=\"Y-m-d H:i:s\">".$wklog->getDate()."</attr>\n";
+							echo $indent."     <attr name=\"workflow\">".$wklog->getWorkflow()->getID()."</attr>\n";
 							echo $indent."     <attr name=\"transition\">".$wklog->getTransition()->getID()."</attr>\n";
 							$loguser = $wklog->getUser();
 							echo $indent."     <attr name=\"user\">".$loguser->getID()."</attr>\n";
