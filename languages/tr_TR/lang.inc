@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1043), aydin (83)
+//    Translators: Admin (1044), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -409,7 +409,7 @@ URL: [url]',
 'edit_user' => 'Kullanıcıyı düzenle',
 'edit_user_details' => 'Kullanıcı Detaylarını Düzenle',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'Yunanca',
 'email' => 'E-posta',
 'email_error_title' => 'E-posta adresi girilmedi',
 'email_footer' => '\'My Account\' özelliklerini kullanarak her zaman e-posta ayarlarınızı değiştirebilirsiniz',

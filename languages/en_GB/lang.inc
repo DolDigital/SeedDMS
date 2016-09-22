@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1439), dgrutsch (7), netixw (14)
+//    Translators: Admin (1440), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -847,7 +847,7 @@ Current state: [current_state]
 Parent folder: [folder_path]
 User: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => 'Workflow action required',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Workflow action required',
 'reset_checkout' => 'Finish Check out',
 'restrict_access' => 'No access to',
 'results_page' => 'Results Page',
