@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1188), marbanas (16)
+//    Translators: Admin (1189), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -841,7 +841,7 @@ Trenutni status: [current_state]
 Glavna mapa: [folder_path]
 Korisnik: [username]
 URL poveznica: [url]',
-'request_workflow_action_email_subject' => 'Zahtijeva se aktivnost po poslovnom toku',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Zahtijeva se aktivnost po poslovnom toku',
 'reset_checkout' => 'Dovršite odjavu',
 'restrict_access' => '',
 'results_page' => 'Stranica rezultata',

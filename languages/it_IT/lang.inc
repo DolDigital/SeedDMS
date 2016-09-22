@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1531), rickr (144), s.pnt (26)
+//    Translators: Admin (1532), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -848,7 +848,7 @@ Stato attuale: [current_state]
 Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => 'Richiesta di azione in un flusso di lavoro',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Richiesta di azione in un flusso di lavoro',
 'reset_checkout' => 'Check Out terminato',
 'restrict_access' => 'Nessun accesso al',
 'results_page' => 'Pagina dei risultati',

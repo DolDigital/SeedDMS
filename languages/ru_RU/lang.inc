@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1544)
+//    Translators: Admin (1545)
 
 $text = array(
 '2_factor_auth' => '',
@@ -844,7 +844,7 @@ URL: [url]',
 Каталог: [folder_path]
 Пользователь: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => 'Требуется действие по процессу',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Требуется действие по процессу',
 'reset_checkout' => 'Завершить проверку',
 'restrict_access' => '',
 'results_page' => 'Страница результатов',

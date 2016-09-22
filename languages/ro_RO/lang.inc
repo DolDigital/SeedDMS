@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1044), balan (87)
+//    Translators: Admin (1045), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -842,7 +842,7 @@ Starea curenta: [current_state]
 Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => 'Actiune workflow necesara',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Actiune workflow necesara',
 'reset_checkout' => 'Termina verificarea',
 'restrict_access' => '',
 'results_page' => 'Pagina rezultate',

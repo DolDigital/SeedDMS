@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1325)
+//    Translators: Admin (1326)
 
 $text = array(
 '2_factor_auth' => '',
@@ -837,7 +837,7 @@ URL: [url]',
 'repaired' => 'виправлено',
 'repairing_objects' => 'Відновлення каталогів і документів',
 'request_workflow_action_email_body' => 'Запит дії по процесу',
-'request_workflow_action_email_subject' => 'Запит дії для процесу',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Запит дії для процесу',
 'reset_checkout' => 'Зняти стан опрацювання',
 'restrict_access' => '',
 'results_page' => 'Сторінка результатів',
