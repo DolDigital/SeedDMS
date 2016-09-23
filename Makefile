@@ -32,6 +32,6 @@ doc:
 	$(PHPDOC) -d SeedDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' --force -t html
 
 apidoc:
-	apigen  generate -s SeedDMS_Core --exclude tests --skip-doc-prefix tests -d html
+	apigen  generate -s SeedDMS_Core --exclude tests -d html
 
 .PHONY: webdav webapp
