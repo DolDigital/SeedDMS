@@ -1,4 +1,10 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.6
+--------------------------------------------------------------------------------
+- merged changes from 4.3.29
+- set quota and homefolder propperly when creating new user (Closes #285)
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.5
 --------------------------------------------------------------------------------
 - merged changes from 4.3.28
@@ -37,6 +43,17 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.29
+--------------------------------------------------------------------------------
+- started greek translation (thanks to ank-99)
+- move guest authentication from inc/inc.ClassDbAuthentication.php into op/op.Login.php
+- use jquery.validate for form validation
+- new graph layout for workflow manager using cytoscape
+- show current workflow and highlight possible transitions on workflow tab
+  of ViewDocument page
+- webdav checks authentication against ldap and uses the authentication classes
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.28

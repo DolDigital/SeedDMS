@@ -68,11 +68,8 @@ if ($action == "adduser") {
 		UI::exitError(getMLText("admin_tools"),getMLText("user_exists"));
 	}
 
-	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration, $homefolder);
+	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration, $quota, $homefolder);
 	if ($newUser) {
-
-		/* Set Quota */
-		$newUser->setQuota($quota);
 
 		/* Set user image if uploaded */
 		if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)

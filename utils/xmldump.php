@@ -105,6 +105,9 @@ $statistic = array(
 	'attributedefinitions'=>0,
 	'keywordcategories'=>0,
 	'documentcategories'=>0,
+	'workflows'=>0,
+	'workflowactions'=>0,
+	'workflowstates'=>0,
 );
 
 function dumplog($version, $type, $logs, $indent) { /* {{{ */
@@ -137,11 +140,11 @@ function dumplog($version, $type, $logs, $indent) { /* {{{ */
 		if(!empty($a['file'])) {
 			$filename = $dms->contentDir . $document->getDir().'r'.(int) $a[$type2.'LogID'];
 			if(file_exists($filename)) {
-				echo $indent."     <data length=\"".filesize($filename)."\"";
+				echo $indent."      <data length=\"".filesize($filename)."\"";
 				if(filesize($filename) < $maxsize) {
 					echo ">\n";
 					echo chunk_split(base64_encode(file_get_contents($filename)), 76, "\n");
-					echo $indent."     </data>\n";
+					echo $indent."      </data>\n";
 				} else {
 					echo " fileref=\"".$filename."\" />\n";
 					if($contentdir) {
@@ -158,6 +161,25 @@ function dumplog($version, $type, $logs, $indent) { /* {{{ */
 	if($curid != 0)
 		echo $indent."    </".$type.">\n";
 	echo $indent."   </".$type."s>\n";
+} /* }}} */
+
+function dumpNotifications($notifications, $indent) { /* {{{ */
+	if($notifications) {
+		if($notifications['groups'] || $notifications['users']) {
+			echo $indent." <notifications>\n";
+			if($notifications['users']) {
+				foreach($notifications['users'] as $user) {
+					echo $indent."  <user id=\"".$user->getID()."\" />\n";
+				}
+			}
+			if($notifications['groups']) {
+				foreach($notifications['groups'] as $group) {
+					echo $indent."  <group id=\"".$group->getID()."\" />\n";
+				}
+			}
+			echo $indent." </notifications>\n";
+		}
+	}
 } /* }}} */
 
 function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
@@ -179,14 +201,22 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 		if($attributes = $folder->getAttributes()) {
 			foreach($attributes as $attribute) {
 				$attrdef = $attribute->getAttributeDefinition();
-				echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+				echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 			}
 		}
-		if($folder->inheritsAccess()) {
-			echo $indent." <acls type=\"inherited\" />\n";
-		} else {
-			echo $indent." <acls>\n";
+		$notifications = $folder->getNotifyList();
+		dumpNotifications($notifications, $indent);
+
+		/* getAccessList() returns also inherited access. So first check
+		 * if inheritsAccess is set and don't output any acls in that case.
+		 * There could be acls of the folder, which will be visible once the
+		 * inheritsAccess is turned off. Those entries will be lost in the
+		 * xml output.
+		 */
+		if(!$folder->inheritsAccess()) {
 			$accesslist = $folder->getAccessList();
+			if($accesslist['users'] || $accesslist['groups']) {
+			echo $indent." <acls>\n";
 			foreach($accesslist['users'] as $acl) {
 				echo $indent."  <acl type=\"user\"";
 				$user = $acl->getUser();
@@ -202,6 +232,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 				echo "/>\n";
 			}
 			echo $indent." </acls>\n";
+			}
 		}
 		echo $indent."</folder>\n";
 		$statistic['folders']++;
@@ -222,7 +253,8 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 	if($documents) {
 		foreach($documents as $document) {
 			$owner = $document->getOwner();
-			echo $indent."<document id=\"".$document->getId()."\" folder=\"".$folder->getID()."\"";
+			/* parent folder is only set if it is no skipped */
+			echo $indent."<document id=\"".$document->getId()."\"".(!$skipcurrent ? " folder=\"".$folder->getID()."\"" : "");
 			if($document->isLocked())
 				echo " locked=\"true\"";
 			echo ">\n";
@@ -248,10 +280,16 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 				}
 			}
 
-			/* Check if acl is not inherited */
+			/* getAccessList() returns also inherited access. So first check
+			 * if inheritsAccess is set and don't output any acls in that case.
+			 * There could be acls of the folder, which will be visible once the
+			 * inheritsAccess is turned off. Those entries will be lost in the
+			 * xml output.
+			 */
 			if(!$document->inheritsAccess()) {
-				echo $indent." <acls>\n";
 				$accesslist = $document->getAccessList();
+				if($accesslist['users'] || $accesslist['groups']) {
+				echo $indent." <acls>\n";
 				foreach($accesslist['users'] as $acl) {
 					echo $indent."  <acl type=\"user\"";
 					$user = $acl->getUser();
@@ -267,6 +305,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 					echo "/>\n";
 				}
 				echo $indent." </acls>\n";
+				}
 			}
 
 			$cats = $document->getCategories();
@@ -282,8 +321,6 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($versions) {
 				echo $indent." <versions>\n";
 				foreach($versions as $version) {
-					$approvalStatus = $version->getApprovalStatus(30);
-					$reviewStatus = $version->getReviewStatus(30);
 					$owner = $version->getUser();
 					echo $indent."  <version version=\"".$version->getVersion()."\">\n";
 					echo $indent."   <attr name=\"mimetype\">".$version->getMimeType()."</attr>\n";
@@ -310,11 +347,33 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						}
 						echo $indent."   </status>\n";
 					}
+					$approvalStatus = $version->getApprovalStatus(30);
 					if($approvalStatus) {
 						dumplog($version, 'approval', $approvalStatus, $indent);
 					}
+					$reviewStatus = $version->getReviewStatus(30);
 					if($reviewStatus) {
 						dumplog($version, 'review', $reviewStatus, $indent);
+					}
+					$workflow = $version->getWorkflow();
+					if($workflow) {
+						$workflowstate = $version->getWorkflowState();
+						echo $indent."   <workflow id=\"".$workflow->getID()."\" state=\"".$workflowstate->getID()."\"></workflow>\n";
+					}
+					$wkflogs = $version->getWorkflowLog();
+					if($wkflogs) {
+						echo $indent."   <workflowlogs>\n";
+						foreach($wkflogs as $wklog) {
+							echo $indent."    <workflowlog>\n";
+							echo $indent."     <attr name=\"date\" format=\"Y-m-d H:i:s\">".$wklog->getDate()."</attr>\n";
+							echo $indent."     <attr name=\"workflow\">".$wklog->getWorkflow()->getID()."</attr>\n";
+							echo $indent."     <attr name=\"transition\">".$wklog->getTransition()->getID()."</attr>\n";
+							$loguser = $wklog->getUser();
+							echo $indent."     <attr name=\"user\">".$loguser->getID()."</attr>\n";
+							echo $indent."     <attr name=\"comment\">".wrapWithCData($wklog->getComment())."</attr>\n";
+							echo $indent."    </workflowlog>\n";
+						}
+						echo $indent."   </workflowlogs>\n";
 					}
 					if(file_exists($dms->contentDir . $version->getPath())) {
 						echo $indent."   <data length=\"".filesize($dms->contentDir . $version->getPath())."\"";
@@ -332,6 +391,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						}
 					} else {
 						echo $indent."   <!-- ".$dms->contentDir . $version->getPath()." not found -->\n";
+						echo $indent."   <data length=\"0\"></data>\n";
 					}
 					echo $indent."  </version>\n";
 				}
@@ -360,7 +420,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 						} else {
 							echo " fileref=\"".$document->getID()."-A-".$file->getID().$file->getFileType()."\" />\n";
 							if($contentdir) {
-								copy($dms->contentDir . $version->getPath(), $contentdir.$document->getID()."-A-".$file->getID().$file->getFileType());
+								copy($dms->contentDir . $file->getPath(), $contentdir.$document->getID()."-A-".$file->getID().$file->getFileType());
 							} else {
 								echo "Warning: file content (size=".filesize($dms->contentDir . $file->getPath()).") will be missing from output\n";
 							}
@@ -387,22 +447,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 				echo $indent." </links>\n";
 			}
 			$notifications = $document->getNotifyList();
-			if($notifications) {
-				if($notifications['groups'] || $notifications['users']) {
-					echo $indent." <notifications>\n";
-					if($notifications['users']) {
-						foreach($notifications['users'] as $user) {
-							echo $indent."  <user id=\"".$user->getID()."\" />\n";
-						}
-					}
-					if($notifications['groups']) {
-						foreach($notifications['groups'] as $group) {
-							echo $indent."  <group id=\"".$group->getID()."\" />\n";
-						}
-					}
-					echo $indent." </notifications>\n";
-				}
-			}
+			dumpNotifications($notifications, $indent);
 
 			echo $indent."</document>\n";
 			$statistic['documents']++;
@@ -447,7 +492,8 @@ if($users) {
 		if($image = $user->getImage()) {
 			echo "  <image id=\"".$image['id']."\">\n";
 			echo "   <attr name=\"mimetype\">".$image['mimeType']."</attr>\n";
-			echo "   <data>".base64_encode($image['image'])."</data>\n";
+			/* image data is already base64 coded */
+			echo "   <data>".$image['image']."</data>\n";
 			echo "  </image>\n";
 		}
 		if($mreviewers = $user->getMandatoryReviewers()) {
@@ -469,6 +515,13 @@ if($users) {
 					echo "   <group id=\"".$mapprover['approverGroupID']."\"></group>\n";
 			}
 			echo "  </mandatory_approvers>\n";
+		}
+		if($mworkflows = $user->getMandatoryWorkflows()) {
+			echo "  <mandatory_workflows>\n";
+			foreach($mworkflows as $mworkflow) {
+					echo "   <workflow id=\"".$mworkflow->getID()."\"></workflow>\n";
+			}
+			echo "  </mandatory_workflows>\n";
 		}
 		echo " </user>\n";
 		$statistic['users']++;
@@ -579,6 +632,72 @@ if($attrdefs) {
 		$statistic['attributedefinitions']++;
 	}
 	echo "</attrіbutedefinitions>\n";
+}
+}
+/* }}} */
+
+/* Dump workflows {{{ */
+if(!$sections || in_array('workflows', $sections)) {
+$workflowstates = $dms->getAllWorkflowStates();
+if($workflowstates) {
+	echo "<workflowstates>\n";
+	foreach ($workflowstates as $workflowstate) {
+		echo " <workflowstate id=\"".$workflowstate->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflowstate->getName()."</attr>\n";
+		echo "  <attr name=\"documentstate\">".$workflowstate->getDocumentStatus()."</attr>\n";
+		echo " </workflowstate>\n";
+		$statistic['workflowstates']++;
+	}
+	echo "</workflowstates>\n";
+}
+$workflowactions = $dms->getAllWorkflowActions();
+if($workflowactions) {
+	echo "<workflowactions>\n";
+	foreach ($workflowactions as $workflowaction) {
+		echo " <workflowaction id=\"".$workflowaction->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflowaction->getName()."</attr>\n";
+		echo " </workflowaction>\n";
+		$statistic['workflowactions']++;
+	}
+	echo "</workflowactions>\n";
+}
+$workflows = $dms->getAllWorkflows();
+if($workflows) {
+	echo "<workflows>\n";
+	foreach ($workflows as $workflow) {
+		echo " <workflow id=\"".$workflow->getID()."\">\n";
+		echo "  <attr name=\"name\">".$workflow->getName()."</attr>\n";
+		echo "  <attr name=\"initstate\">".$workflow->getInitState()->getID()."</attr>\n";
+		if($transitions = $workflow->getTransitions()) {
+			echo "  <transitions>\n";
+			foreach($transitions as $transition) {
+				echo "   <transition id=\"".$transition->getID()."\">\n";
+				echo "    <attr name=\"startstate\">".$transition->getState()->getID()."</attr>\n";
+				echo "    <attr name=\"nextstate\">".$transition->getNextState()->getID()."</attr>\n";
+				echo "    <attr name=\"action\">".$transition->getAction()->getID()."</attr>\n";
+				echo "    <attr name=\"maxtime\">".$transition->getMaxTime()."</attr>\n";
+				if($transusers = $transition->getUsers()) {
+					echo "    <users>\n";
+					foreach($transusers as $transuser) {
+						echo "     <user id=\"".$transuser->getUser()->getID()."\"></user>\n";
+					}
+					echo "    </users>\n";
+				}
+				if($transgroups = $transition->getGroups()) {
+					echo "    <groups>\n";
+					foreach($transgroups as $transgroup) {
+						echo "     <group id=\"".$transgroup->getGroup()->getID()."\" numofusers=\"".$transgroup->getNumOfUsers()."\"></group>\n";
+					}
+					echo "    </groups>\n";
+				}
+				echo "   </transition>\n";
+			}
+			echo "  </transitions>\n";
+		}
+		echo " </workflow>\n";
+		$statistic['workflows']++;
+	}
+	echo "</workflows>\n";
 }
 }
 /* }}} */

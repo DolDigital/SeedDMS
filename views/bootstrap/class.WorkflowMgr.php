@@ -75,7 +75,7 @@ $(document).ready(function() {
 		$selworkflow = $this->params['selworkflow'];
 		if($selworkflow) { ?>
 <div id="workflowgraph">
-<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="550" style="border: 1px solid #AAA;"></iframe>
+<iframe src="out.WorkflowGraph.php?workflow=<?php echo $selworkflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #e3e3e3; border-radius: 4px; margin: -1px;"></iframe>
 </div>
 <?php }
 	} /* }}} */
@@ -90,35 +90,42 @@ $(document).ready(function() {
 			$transitions = $workflow->getTransitions();
 			$initstate = $workflow->getInitState();
 			$hasinitstate = true;
+			$hasreleased = true;
+			$hasrejected = true;
 			$missesug = false;
 			if($transitions) {
 				$hasinitstate = false;
+				$hasreleased = false;
+				$hasrejected = false;
 				foreach($transitions as $transition) {
 					$transusers = $transition->getUsers();
 					$transgroups = $transition->getGroups();
 					if(!$transusers && !$transgroups) {
 						$missesug = true;
 					}
+					if($transition->getNextState()->getDocumentStatus() == S_RELEASED)
+						$hasreleased = true;
+					if($transition->getNextState()->getDocumentStatus() == S_REJECTED)
+						$hasrejected = true;
 					if($transition->getState()->getID() == $initstate->getID())
 						$hasinitstate = true;
 				}
 			}
 			if($missesug)
-				$this->errorMsg('One of the transitions has neither a user nor a group!');
+				$this->errorMsg(getMLText('workflow_transition_without_user_group'));
 			if(!$hasinitstate)
-				$this->errorMsg('None of the transitions starts with the initial state of the workflow!');
+				$this->errorMsg(getMLText('workflow_no_initial_state'));
+			if(!$hasreleased)
+				$this->errorMsg(getMLText('workflow_no_doc_released_state'));
+			if(!$hasrejected)
+				$this->errorMsg(getMLText('workflow_no_doc_rejected_state'));
 
-				if($workflow->isUsed()) {
-?>
-				<p><?php echo getMLText('workflow_in_use') ?></p>
-<?php
-				} else {
-?>
-			  <a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a>
-<?php
-				}
+			if($workflow->isUsed()) {
+				$this->infoMsg(getMLText('workflow_in_use'));
+			}
 		}
 ?>
+	<div class="well">
 	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
 <?php
 	if($workflow) {
@@ -135,6 +142,13 @@ $(document).ready(function() {
 	}
 ?>
 	<table class="table-condensed">
+<?php
+		if(!$workflow->isUsed()) {
+?>
+	  <tr><td></td><td><a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a></td></tr>
+<?php
+		}
+?>
 		<tr>
 			<td><?php printMLText("workflow_name");?>:</td>
 			<td><input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>"></td>
@@ -159,6 +173,7 @@ $(document).ready(function() {
 		</tr>
 	</table>
 	</form>
+	</div>
 <?php
 		if($workflow) {
 		$actions = $dms->getAllWorkflowActions();
@@ -177,14 +192,14 @@ $(document).ready(function() {
 				if(!$transusers && !$transgroups) {
 					echo " class=\"error\"";
 				}
-				echo "><td>".$state->getName()."<br />";
-				echo $nextstate->getName();
+				echo "><td>".'<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName()."<br />";
 				$docstatus = $nextstate->getDocumentStatus();
+				echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
 				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
 					echo "<br /><i class=\"icon-arrow-right\"></i> ".getOverallStatusText($docstatus);
 				}
 				echo "</td>";
-				echo "<td>".$action->getName()."</td>";
+				echo "<td><i class=\"icon-sign-blank workflow-action\"></i> ".$action->getName()."</td>";
 				echo "<td>";
 				foreach($transusers as $transuser) {
 					$u = $transuser->getUser();
@@ -273,6 +288,7 @@ $(document).ready(function() {
 	function form() { /* {{{ */
 		$selworkflow = $this->params['selworkflow'];
 
+		if($selworkflow)
 		$this->showWorkflowForm($selworkflow);
 	} /* }}} */
 
@@ -291,7 +307,7 @@ $(document).ready(function() {
 ?>
 
 <div class="row-fluid">
-<div class="span4">
+<div class="span5">
 <div class="well">
 <?php echo getMLText("selection")?>:
 <select id="selector" class="span9">
@@ -307,10 +323,8 @@ $(document).ready(function() {
 <div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 </div>
 
-<div class="span8">
-	<div class="well">
+<div class="span7">
 		<div class="ajax" data-view="WorkflowMgr" data-action="form" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
-	</div>
 </div>
 </div>
 

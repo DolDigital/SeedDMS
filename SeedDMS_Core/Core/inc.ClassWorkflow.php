@@ -260,6 +260,10 @@ class SeedDMS_Core_Workflow { /* {{{ */
 			return false;
 		}
 
+		/* force reloading all transitions otherwise getTransition() will fail if two
+		 * transitions are added in a row, without reloading the workflow
+		 */
+		$this->_transitions = array();
 		$transition = $this->getTransition($db->getInsertID());
 
 		foreach($users as $user) {
@@ -1095,6 +1099,10 @@ class SeedDMS_Core_Workflow_Log { /* {{{ */
 
 	function getTransition() { /* {{{ */
 		return $this->_transition;
+	} /* }}} */
+
+	function getWorkflow() { /* {{{ */
+		return $this->_workflow;
 	} /* }}} */
 
 	function getUser() { /* {{{ */

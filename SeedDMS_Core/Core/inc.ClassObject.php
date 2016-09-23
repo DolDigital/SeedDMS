@@ -75,13 +75,13 @@ class SeedDMS_Core_Object { /* {{{ */
 
 			switch(get_class($this)) {
 				case $this->_dms->getClassname('document'):
-					$queryStr = "SELECT * FROM tblDocumentAttributes WHERE document = " . $this->_id." ORDER BY `id`";
+					$queryStr = "SELECT a.* FROM tblDocumentAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.document = " . $this->_id." ORDER BY b.`name`";
 					break;
 				case $this->_dms->getClassname('documentcontent'):
-					$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE content = " . $this->_id." ORDER BY `id`";
+					$queryStr = "SELECT a.* FROM tblDocumentContentAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.content = " . $this->_id." ORDER BY b.`name`";
 					break;
 				case $this->_dms->getClassname('folder'):
-					$queryStr = "SELECT * FROM tblFolderAttributes WHERE folder = " . $this->_id." ORDER BY `id`";
+					$queryStr = "SELECT a.* FROM tblFolderAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.folder = " . $this->_id." ORDER BY b.`name`";
 					break;
 				default:
 					return false;

@@ -70,9 +70,47 @@ function checkForm()
 }
 
 $(document).ready( function() {
+/*
 	$('body').on('submit', '#form1', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
+	});
+*/
+	jQuery.validator.addMethod("alternatives", function(value, element, params) {
+		if(value == '' && params.val() == '')
+			return false;
+		return true;
+	}, "<?php printMLText("js_no_file");?>");
+	$("#form1").validate({
+		invalidHandler: function(e, validator) {
+			noty({
+				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+				type: 'error',
+				dismissQueue: true,
+				layout: 'topRight',
+				theme: 'defaultTheme',
+				timeout: 1500,
+			});
+		},
+		rules: {
+			userfile: {
+				alternatives: $('#dropfolderfileform1')
+			},
+			dropfolderfileform1: {
+				 alternatives: $('#userfile')
+			}
+		},
+		messages: {
+			comment: "<?php printMLText("js_no_comment");?>",
+		},
+		errorPlacement: function( error, element ) {
+			if ( element.is( ":file" ) ) {
+				error.appendTo( element.parent().parent().parent());
+console.log(element);
+			} else {
+				error.appendTo( element.parent());
+			}
+		}
 	});
 });
 <?php
@@ -92,6 +130,8 @@ $(document).ready( function() {
 		$workflowmode = $this->params['workflowmode'];
 		$presetexpiration = $this->params['presetexpiration'];
 		$documentid = $document->getId();
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -163,7 +203,7 @@ $(document).ready( function() {
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
 			<td class="standardText">
-				<textarea name="comment" rows="4" cols="80"></textarea>
+				<textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea>
 			</td>
 		</tr>
 <?php

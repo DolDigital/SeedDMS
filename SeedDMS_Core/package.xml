@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-08-09</date>
+ <date>2016-09-06</date>
  <time>06:23:34</time>
  <version>
-  <release>5.0.5</release>
-  <api>5.0.5</api>
+  <release>5.0.6</release>
+  <api>5.0.6</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- all changes from 4.3.28 merged
+- all changes from 4.3.29 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1042,6 +1042,58 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 	 </notes>
   </release>
   <release>
+   <date>2016-04-26</date>
+   <time>12:04:59</time>
+   <version>
+    <release>4.3.27</release>
+    <api>4.3.27</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- callbacks can have more then one user function
+- fix some sql statements, because they didn't work with mysql 5.7.5 anymore
+   </notes>
+  </release>
+  <release>
+   <date>2016-08-24</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.28</release>
+    <api>4.3.28</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- SeedDMЅ_Core_DMS::search() searches also comment of document version
+   </notes>
+  </release>
+  <release>
+   <date>2016-09-06</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.29</release>
+    <api>4.3.29</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- SeedDMЅ_Core_Object::getAttributes() orders attributes by name of attribute definition
+- SeedDMЅ_Core_Workflow::addTransition() force reload of transition list after adding a
+- SeedDMЅ_Core_Document::rewrite[Review|Approval]Log() will also copy file if it exists
+- add method SeedDMЅ_Core_Document::rewriteWorkflowLog()
+   </notes>
+  </release>
+  <release>
    <date>2016-01-22</date>
    <time>14:34:58</time>
    <version>
@@ -1107,11 +1159,11 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
-   <date>2016-04-26</date>
-   <time>12:04:59</time>
+   <date>2016-05-03</date>
+   <time>08:56:33</time>
    <version>
-    <release>4.3.27</release>
-    <api>4.3.27</api>
+    <release>5.0.5</release>
+    <api>5.0.5</api>
    </version>
    <stability>
     <release>stable</release>
@@ -1119,16 +1171,15 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
-- callbacks can have more then one user function
-- fix some sql statements, because they didn't work with mysql 5.7.5 anymore
+- all changes from 4.3.28 merged
    </notes>
   </release>
   <release>
-   <date>2016-08-24</date>
-   <time>10:18:59</time>
+   <date>2016-08-09</date>
+   <time>06:23:34</time>
    <version>
-    <release>4.3.28</release>
-    <api>4.3.28</api>
+    <release>5.0.5</release>
+    <api>5.0.5</api>
    </version>
    <stability>
     <release>stable</release>
@@ -1136,7 +1187,7 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
-  - all changes from 4.3.28 merged
+- all changes from 4.3.28 merged
    </notes>
   </release>
  </changelog>

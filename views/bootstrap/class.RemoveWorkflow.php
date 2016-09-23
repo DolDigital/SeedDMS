@@ -57,7 +57,7 @@ class SeedDMS_View_RemoveWorkflow extends SeedDMS_Bootstrap_Style {
 	</form>
 	</div>
 	<div id="workflowgraph" class="span8">
-	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
+	<iframe src="out.WorkflowGraph.php?workflow=<?php echo $workflow->getID(); ?>" width="100%" height="661" style="border: 1px solid #AAA;"></iframe>
 	</div>
 	</div>
 <?php

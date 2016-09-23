@@ -113,9 +113,27 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function check_auth($type, $user, $pass) /* {{{ */
 	{
+		global $settings;
+
 		if($this->logger)
 			$this->logger->log('check_auth: type='.$type.', user='.$user.'', PEAR_LOG_INFO);
-		$userobj = $this->dms->getUserByLogin($user);
+
+		$userobj = false;
+
+		/* Authenticate against LDAP server {{{ */
+		if (!$userobj && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+			require_once("../inc/inc.ClassLdapAuthentication.php");
+			$authobj = new SeedDMS_LdapAuthentication($this->dms, $settings);
+			$userobj = $authobj->authenticate($user, $pass);
+		} /* }}} */
+
+		/* Authenticate against SeedDMS database {{{ */
+		if(!$userobj) {
+			require_once("../inc/inc.ClassDbAuthentication.php");
+			$authobj = new SeedDMS_DbAuthentication($this->dms, $settings);
+			$userobj = $authobj->authenticate($user, $pass);
+		} /* }}} */
+
 		if(!$userobj)
 			return false;
 		if(md5($pass) != $userobj->getPwd())
