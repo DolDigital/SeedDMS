@@ -143,7 +143,7 @@ $(document).ready(function() {
 ?>
 	<table class="table-condensed">
 <?php
-		if(!$workflow->isUsed()) {
+		if($workflow && !$workflow->isUsed()) {
 ?>
 	  <tr><td></td><td><a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a></td></tr>
 <?php
@@ -288,7 +288,6 @@ $(document).ready(function() {
 	function form() { /* {{{ */
 		$selworkflow = $this->params['selworkflow'];
 
-		if($selworkflow)
 		$this->showWorkflowForm($selworkflow);
 	} /* }}} */
 
