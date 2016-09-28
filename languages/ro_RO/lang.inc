@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1045), balan (87)
+//    Translators: Admin (1046), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -415,7 +415,7 @@ URL: [url]',
 'edit_user' => 'Editează utilizator',
 'edit_user_details' => 'Editează detalii utilizator',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'Greaca',
 'email' => 'Email',
 'email_error_title' => 'Nici un email introdus',
 'email_footer' => 'Puteți schimba oricând setările de e-mail folosind functionalitatile din \'Contul meu\'',
@@ -646,6 +646,7 @@ URL: [url]',
 'missing_checksum' => 'Lipsește suma de control(checksum)',
 'missing_file' => '',
 'missing_filesize' => 'Lipsește dimensiunea fișierului',
+'missing_reception' => '',
 'missing_request_object' => '',
 'missing_transition_user_group' => 'Lipsește utilizatorul/grupul pentru tranziție',
 'monday' => 'Luni',
@@ -808,6 +809,10 @@ Dacă aveți în continuare probleme la autentificare, vă rugăm să contactaț
 'receipt_request_email_subject' => '',
 'receipt_status' => '',
 'receipt_summary' => '',
+'reception' => '',
+'reception_acknowleged' => '',
+'reception_noaction' => '',
+'reception_rejected' => '',
 'recipients' => 'Destinatari',
 'redraw' => '',
 'refresh' => 'Refresh',
