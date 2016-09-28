@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1268)
+//    Translators: Admin (1269)
 
 $text = array(
 '2_factor_auth' => '',
@@ -403,7 +403,7 @@ URL: [url]',
 'edit_user' => 'تعديل المستخدم',
 'edit_user_details' => 'تعديل بيانات المستخدم',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'ﺲﻴﺴﻴﺳ',
 'email' => 'بريد الكتروني',
 'email_error_title' => 'لمي يتم ادخال البريد الالكتروني',
 'email_footer' => 'يمكنك دائما تغيير اعدادات بريدك الالكتروني من خلال خاصية - مستنداتي',
@@ -634,6 +634,7 @@ URL: [url]',
 'missing_checksum' => 'فحص اخطاء مفقود',
 'missing_file' => '',
 'missing_filesize' => 'حجم ملف مفقود',
+'missing_reception' => '',
 'missing_request_object' => '',
 'missing_transition_user_group' => 'مستخدم/مجموعة مفقودة للتحول',
 'monday' => 'الاثنين',
@@ -788,6 +789,10 @@ URL: [url]',
 'receipt_request_email_subject' => '',
 'receipt_status' => '',
 'receipt_summary' => '',
+'reception' => '',
+'reception_acknowleged' => '',
+'reception_noaction' => '',
+'reception_rejected' => '',
 'recipients' => '',
 'redraw' => '',
 'refresh' => 'اعادة تحميل',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2294), dgrutsch (21)
+//    Translators: Admin (2299), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -646,6 +646,7 @@ URL: [url]',
 'missing_checksum' => 'Fehlende Check-Summe',
 'missing_file' => 'Datei fehlt',
 'missing_filesize' => 'Fehlende Dateigröße',
+'missing_reception' => 'Fehlende Empfangsbestätigung',
 'missing_request_object' => 'Fehlendes Zugriffsobjekte',
 'missing_transition_user_group' => 'Fehlende/r Benutzer/Gruppe für Transition',
 'monday' => 'Montag',
@@ -812,6 +813,10 @@ URL: [url]',
 'receipt_request_email_subject' => '[sitename]: [name] - Aufforderung zur Empfangsbestätigung',
 'receipt_status' => 'Status',
 'receipt_summary' => 'Übersicht Bestätigungen',
+'reception' => 'Empfangsbestätigung',
+'reception_acknowleged' => 'Empfang bestätigt',
+'reception_noaction' => 'Keine Aktion',
+'reception_rejected' => 'Empfang abgelehnt',
 'recipients' => 'Empfänger',
 'redraw' => 'Neu zeichnen',
 'refresh' => 'Aktualisieren',
