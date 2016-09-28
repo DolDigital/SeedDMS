@@ -276,10 +276,12 @@ $(document).ready(function () {
 						$menuitems = $hookObj->userMenuItems($this, $menuitems);
 					}
 				}
-				foreach($menuitems as $menuitem) {
-					echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+				if($menuitems) {
+					foreach($menuitems as $menuitem) {
+						echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+					}
+					echo "    <li class=\"divider\"></li>\n";
 				}
-				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
 			if($this->params['enablelanguageselector']) {
