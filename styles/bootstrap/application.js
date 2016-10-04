@@ -240,6 +240,7 @@ $(document).ready( function() {
 			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
+					$('#table-row-folder-'+attr_source).hide('slow');
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -264,6 +265,7 @@ $(document).ready( function() {
 			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
+					$('#table-row-document-'+attr_source).hide('slow');
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -409,8 +411,12 @@ $(document).ready( function() {
 
 function onAddClipboard(ev) { /* {{{ */
 	ev.preventDefault();
-	source_type = ev.originalEvent.dataTransfer.getData("type");
-	source_id = ev.originalEvent.dataTransfer.getData("id");
+	var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+	source_type = source_info.type;
+	source_id = source_info.id;
+	formtoken = source_info.formtoken;
+//	source_type = ev.originalEvent.dataTransfer.getData("type");
+//	source_id = ev.originalEvent.dataTransfer.getData("id");
 	if(source_type == 'document' || source_type == 'folder') {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
@@ -642,9 +648,13 @@ $(document).ready(function() {
 		attr_rel = $(e.currentTarget).attr('rel');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
-		source_type = e.originalEvent.dataTransfer.getData("type");
-		source_id = e.originalEvent.dataTransfer.getData("id");
-		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
+		var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+		source_type = source_info.type;
+		source_id = source_info.id;
+		formtoken = source_info.formtoken;
+//		source_type = e.originalEvent.dataTransfer.getData("type");
+//		source_id = e.originalEvent.dataTransfer.getData("id");
+//		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
 			bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
@@ -654,6 +664,7 @@ $(document).ready(function() {
 						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-document-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -694,6 +705,7 @@ $(document).ready(function() {
 						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-folder-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -731,18 +743,30 @@ $(document).ready(function() {
 		attr_rel = $(e.target).attr('rel');
 		if(typeof attr_rel == 'undefined')
 			return;
-		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
-		e.originalEvent.dataTransfer.setData("type","folder");
-		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
+		var dragStartInfo = {
+			id : attr_rel.split("_")[1],
+			type : "folder",
+			formtoken : $(e.target).attr('formtoken')
+		};
+		e.originalEvent.dataTransfer.setData("text", JSON.stringify(dragStartInfo));
+//		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+//		e.originalEvent.dataTransfer.setData("type","folder");
+//		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	$(document).on('dragstart', '.table-row-document', function (e) {
 		attr_rel = $(e.target).attr('rel');
 		if(typeof attr_rel == 'undefined')
 			return;
-		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
-		e.originalEvent.dataTransfer.setData("type","document");
-		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
+		var dragStartInfo = {
+			id : attr_rel.split("_")[1],
+			type : "document",
+			formtoken : $(e.target).attr('formtoken')
+		};
+		e.originalEvent.dataTransfer.setData("text", JSON.stringify(dragStartInfo));
+//		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+//		e.originalEvent.dataTransfer.setData("type","document");
+//		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	/* Dropping item on alert below clipboard */
@@ -791,9 +815,13 @@ $(document).ready(function() {
 		$(e.target).parent().css('border', '0px solid white');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
-		source_type = e.originalEvent.dataTransfer.getData("type");
-		source_id = e.originalEvent.dataTransfer.getData("id");
-		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
+		var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+		source_type = source_info.type;
+		source_id = source_info.id;
+		formtoken = source_info.formtoken;
+//		source_type = e.originalEvent.dataTransfer.getData("type");
+//		source_id = e.originalEvent.dataTransfer.getData("id");
+//		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
 			bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
@@ -803,6 +831,7 @@ $(document).ready(function() {
 						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-document-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -843,6 +872,7 @@ $(document).ready(function() {
 						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-folder-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
