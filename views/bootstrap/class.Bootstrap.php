@@ -1125,7 +1125,7 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes') { /* {{{ */
+	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
@@ -1149,7 +1149,7 @@ $('#acceptkeywords').click(function(ev) {
 				} else {
 					echo "\"";
 				}
-				echo "".($attrdef->getMinValues() > 0 ? ' required' : '').">";
+				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
@@ -1168,9 +1168,9 @@ $('#acceptkeywords').click(function(ev) {
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".($attrdef->getMinValues() > 0 ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;

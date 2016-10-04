@@ -391,7 +391,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 
 // -------------- Output results --------------------------------------------
 
-if(count($entries) == 1) {
+if($settings->_showSingleSearchHit && count($entries) == 1) {
 	$entry = $entries[0];
 	if(get_class($entry) == $dms->getClassname('document')) {
 		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());

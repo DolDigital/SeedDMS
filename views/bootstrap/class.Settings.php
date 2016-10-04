@@ -229,6 +229,10 @@ if(!is_writeable($settings->_configFilePath)) {
 					</select>
 				</td>
       </tr>
+      <tr title="<?php printMLText("settings_showSingleSearchHit_desc");?>">
+        <td><?php printMLText("settings_showSingleSearchHit");?>:</td>
+        <td><input name="showSingleSearchHit" type="checkbox" <?php if ($settings->_showSingleSearchHit) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
         <td><?php $this->showTextField("stopWordsFile", $settings->_stopWordsFile); ?></td>

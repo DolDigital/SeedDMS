@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1545)
+//    Translators: Admin (1547)
 
 $text = array(
 '2_factor_auth' => '',
@@ -415,7 +415,7 @@ URL: [url]',
 'edit_user' => 'Редактировать пользователя',
 'edit_user_details' => 'Изменить данные пользователя',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'греческий',
 'email' => 'E-mail',
 'email_error_title' => 'Не указан e-mail',
 'email_footer' => 'Вы можете изменить e-mail используя меню «Моя учётка».',
@@ -534,7 +534,7 @@ URL: [url]',
 'identical_version' => 'Новая версия идентична текущей.',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'импорт из файловой системы',
 'import_fs_warning' => '',
 'include_content' => 'Включая содержимое',
 'include_documents' => 'Включая документы',
@@ -1238,6 +1238,8 @@ URL: [url]',
 'settings_Server' => 'Настройки сервера',
 'settings_showMissingTranslations' => 'Фразы которые нужно перевести',
 'settings_showMissingTranslations_desc' => 'Отображать внизу страницы фразы, которые нуждаются в переводе',
+'settings_showSingleSearchHit' => '',
+'settings_showSingleSearchHit_desc' => '',
 'settings_Site' => 'Сайт',
 'settings_siteDefaultPage' => 'Страница по умолчанию',
 'settings_siteDefaultPage_desc' => 'Страница, отображаемая после входа. По умолчанию: out/out.ViewFolder.php',

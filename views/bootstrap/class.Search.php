@@ -199,7 +199,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 
 <?php
@@ -307,7 +307,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 
 <?php
@@ -353,7 +353,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 <?php
 				}
