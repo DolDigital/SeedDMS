@@ -2,6 +2,8 @@
                      Changes in version 4.3.30
 --------------------------------------------------------------------------------
 - fix adding new workflows
+- fix moving documents/folders via drag&drop in Edge (Closes #286)
+- upate folder tree after moving a document/folder with drag&drop (Closes #288)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.29
