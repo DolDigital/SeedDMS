@@ -72,6 +72,7 @@ if ($action == "saveSettings")
   $settings->_maxSizeForFullText = intval($_POST["maxSizeForFullText"]);
   $settings->_fullSearchEngine = $_POST["fullSearchEngine"];
   $settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
+  $settings->_showSingleSearchHit = $_POST["showSingleSearchHit"];
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");

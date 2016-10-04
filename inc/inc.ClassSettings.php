@@ -97,6 +97,8 @@ class Settings { /* {{{ */
 	var $_fullSearchEngine = 'lucene';
 	// default search method
 	var $_defaultSearchMethod = 'database'; // or 'fulltext'
+	// jump straight to the document if it is the only hit of a search
+	var $_showSingleSearchHit = true;
 	// contentOffsetDirTo
 	var $_contentOffsetDir = "1048576";
 	// Maximum number of sub-directories per parent directory
@@ -397,6 +399,7 @@ class Settings { /* {{{ */
 		$this->_maxSizeForFullText = intval($tab["maxSizeForFullText"]);
 		$this->_fullSearchEngine = strval($tab["fullSearchEngine"]);
 		$this->_defaultSearchMethod = strval($tab["defaultSearchMethod"]);
+		$this->_showSingleSearchHit = Settings::boolVal($tab["showSingleSearchHit"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
@@ -678,6 +681,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxSizeForFullText", $this->_maxSizeForFullText);
     $this->setXMLAttributValue($node, "fullSearchEngine", $this->_fullSearchEngine);
     $this->setXMLAttributValue($node, "defaultSearchMethod", $this->_defaultSearchMethod);
+    $this->setXMLAttributValue($node, "showSingleSearchHit", $this->_showSingleSearchHit);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
