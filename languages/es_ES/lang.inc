@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (998), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (999), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -529,7 +529,7 @@ URL: [url]',
 'identical_version' => 'La nueva versión es idéntica a la actual.',
 'import' => 'Importar',
 'importfs' => '',
-'import_fs' => 'Importar desde sistema de aechivos',
+'import_fs' => 'Importar desde sistema de archivos',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Incluir documentos',
@@ -1209,6 +1209,8 @@ URL: [url]',
 'settings_Server' => 'Configuración del servidor',
 'settings_showMissingTranslations' => 'Mostrar traducciones faltantes',
 'settings_showMissingTranslations_desc' => 'Listar todos los términos pendientes de traducción de esta página al final de la misma. En entorno productivo no activar esta función',
+'settings_showSingleSearchHit' => '',
+'settings_showSingleSearchHit_desc' => '',
 'settings_Site' => 'Sitio',
 'settings_siteDefaultPage' => 'Página por defecto del sitio',
 'settings_siteDefaultPage_desc' => 'Página por defecto al conectar. Si está vacío se dirige a out/out.ViewFolder.php',

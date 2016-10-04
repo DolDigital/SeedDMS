@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1445), dgrutsch (7), netixw (14)
+//    Translators: Admin (1447), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1241,6 +1241,8 @@ URL: [url]',
 'settings_Server' => 'Server settings',
 'settings_showMissingTranslations' => 'Show missing translations',
 'settings_showMissingTranslations_desc' => 'List all missing translations on the page at the bottom of the page. The logged in user will be able to submit a proposal for a missing translation which will be saved in a csv file. Do not turn this function on if in a production environment!',
+'settings_showSingleSearchHit' => 'Jump right to a single search hit',
+'settings_showSingleSearchHit_desc' => 'If the search results into just one hit, then it will be displayed right away instead of the result list.',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Site Default Page',
 'settings_siteDefaultPage_desc' => 'Default page on login. If empty defaults to out/out.ViewFolder.php',

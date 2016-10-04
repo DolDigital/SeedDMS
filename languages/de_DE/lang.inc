@@ -19,11 +19,11 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2299), dgrutsch (21)
+//    Translators: Admin (2303), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
-'2_factor_auth_info' => 'Dieses System erfordert 2-Faktor-Authentifikation. Dazu brauchen den Google Authenticator auf Ihrem Mobiltelefon. Unten sehen Sie zwei QR-Codes. Der rechte Code beinhaltet Ihren aktuellen geheimen Schlüssel. Auf der linken Seite wird ein neuer Schlüssel angezeigt. Wenn Sie den neuen Schlüssel speichern, dann stellen Sie zuvor sicher, dass sie ihn mit dem Google Authenticator zuvor eingescant haben.',
+'2_factor_auth_info' => 'Dieses System erfordert 2-Faktor-Authentifikation. Dazu brauchen Sie den Google Authenticator auf Ihrem Mobiltelefon. Unten sehen Sie zwei QR-Codes. Der rechte Code beinhaltet Ihren aktuellen geheimen Schlüssel. Auf der linken Seite wird ein neuer Schlüssel angezeigt. Wenn Sie den neuen Schlüssel speichern, dann stellen Sie zuvor sicher, dass sie ihn mit dem Google Authenticator zuvor eingescant haben.',
 '2_fact_auth_secret' => 'Schlüssel',
 'accept' => 'Übernehmen',
 'access_control' => 'Zugriffskontrolle',
@@ -697,7 +697,7 @@ URL: [url]',
 'new_subfolder_email_subject' => '[sitename]: [folder_name] - Neuer Ordner',
 'new_user_image' => 'Neues Bild',
 'next_state' => 'Neuer Status',
-'nl_NL' => 'Hollandisch',
+'nl_NL' => 'Holländisch',
 'no' => 'Nein',
 'notify_added_email' => 'Benachrichtigung per Mail wurde eingerichtet',
 'notify_added_email_body' => 'Added to notification list
@@ -1240,6 +1240,8 @@ URL: [url]',
 'settings_Server' => 'Server-Einstellungen',
 'settings_showMissingTranslations' => 'Zeige fehlende Übersetzungen',
 'settings_showMissingTranslations_desc' => 'Listet die fehlenden Übersetzungen der Seite unterhalb der Fußzeile und erlaubt dem Benutzer Vorschläge einzureichen. Diese Vorschläge werden in einer CSV-Datei gespeichert. Diese Funktion sollte nicht in Produktionssystemen eingeschaltet sein.',
+'settings_showSingleSearchHit' => 'Springe zu direkt zu einem einzelnen Suchtreffer.',
+'settings_showSingleSearchHit_desc' => 'Wenn die Suche nur einen Treffer liefert, dann wird dieser direkt angezeigt und nicht die Liste der Treffer.',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Startseite',
 'settings_siteDefaultPage_desc' => 'Erste Seite nach der Anmeldung. Voreingestellt ist \'out/out.ViewFolder.php\'',
