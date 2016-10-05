@@ -797,6 +797,8 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'quota_exceeded' => 'Uw data quotum is overschreden met [bytes].',
 'quota_is_disabled' => 'Quota support is momenteel niet actief in de eigenschappen. Een user-quotum instellen zal geen effect hebben tot quota actief zijn',
 'quota_warning' => 'Uw maximale datagebruik is overschreden met [bytes]. Gelieve documenten of eerdere versies te verwijderen.',
+'receipt_deletion_email_body' => '',
+'receipt_deletion_email_subject' => '',
 'receipt_log' => 'Log ontvangst',
 'receipt_request_email_body' => 'Verzoek ontvangen
 Document: [name]
@@ -807,6 +809,7 @@ URL: [url]',
 'receipt_request_email_subject' => '[sitename]: [name] – Verzoek ontvangen',
 'receipt_status' => 'Status ontvangst',
 'receipt_summary' => 'Samenvatting',
+'receipt_update_failed' => '',
 'reception' => '',
 'reception_acknowleged' => '',
 'reception_noaction' => '',

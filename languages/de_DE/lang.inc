@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2303), dgrutsch (21)
+//    Translators: Admin (2310), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -803,6 +803,14 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'quota_exceeded' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten.',
 'quota_is_disabled' => 'Quota-Unterstützung ist zur Zeit ausgeschaltet. Benutzer-Quota werden ignoriert bis Quota-Unterstützung in den Einstellungen eingeschaltet wird.',
 'quota_warning' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten. Bitte löschen Sie Dokumente oder ältere Versionen.',
+'receipt_deletion_email_body' => 'Benutzer von Liste der Empfänger gelöscht
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Empfänger: [recipient]
+Benutzer: [username]
+URL: [url]',
+'receipt_deletion_email_subject' => '[sitename]: [name] - Empfänger gelöscht',
 'receipt_log' => 'Protokoll der Empfangsbestätigungen',
 'receipt_request_email_body' => 'Aufforderung zur Empfangsbestätigung
 Dokument: [name]
@@ -813,6 +821,7 @@ URL: [url]',
 'receipt_request_email_subject' => '[sitename]: [name] - Aufforderung zur Empfangsbestätigung',
 'receipt_status' => 'Status',
 'receipt_summary' => 'Übersicht Bestätigungen',
+'receipt_update_failed' => 'Setzen der Empfangsbestätigung fehlgeschlagen',
 'reception' => 'Empfangsbestätigung',
 'reception_acknowleged' => 'Empfang bestätigt',
 'reception_noaction' => 'Keine Aktion',
@@ -1240,7 +1249,7 @@ URL: [url]',
 'settings_Server' => 'Server-Einstellungen',
 'settings_showMissingTranslations' => 'Zeige fehlende Übersetzungen',
 'settings_showMissingTranslations_desc' => 'Listet die fehlenden Übersetzungen der Seite unterhalb der Fußzeile und erlaubt dem Benutzer Vorschläge einzureichen. Diese Vorschläge werden in einer CSV-Datei gespeichert. Diese Funktion sollte nicht in Produktionssystemen eingeschaltet sein.',
-'settings_showSingleSearchHit' => 'Springe zu direkt zu einem einzelnen Suchtreffer.',
+'settings_showSingleSearchHit' => 'Springe direkt zu einem einzelnen Suchtreffer',
 'settings_showSingleSearchHit_desc' => 'Wenn die Suche nur einen Treffer liefert, dann wird dieser direkt angezeigt und nicht die Liste der Treffer.',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Startseite',
