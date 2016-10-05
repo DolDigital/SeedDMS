@@ -877,21 +877,19 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			return false;
 		}
 
+		$success = true;
 		switch((string) $this->getType()) {
 		case self::type_int:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^[0-9]*$/', $value) ? true : false;
 			}
 			break;
 		case self::type_float:
-			$success = true;
 			foreach($values as $value) {
 				$success &= is_numeric($value);
 			}
 			break;
 		case self::type_string:
-			$success = true;
 			if(trim($this->getRegex()) != '') {
 				foreach($values as $value) {
 					$success &= preg_match($this->getRegex(), $value) ? true : false;
@@ -901,20 +899,17 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 				$this->_validation_error = 3;
 			break;
 		case self::type_boolean:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^[01]$/', $value);
 			}
 			break;
 		case self::type_email:
-			$success = true;
 			foreach($values as $value) {
 			}
 			if(!$success)
 				$this->_validation_error = 5;
 			break;
 		case self::type_url:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $value);
 			}
