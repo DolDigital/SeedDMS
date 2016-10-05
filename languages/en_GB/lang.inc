@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1447), dgrutsch (7), netixw (14)
+//    Translators: Admin (1448), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -804,6 +804,8 @@ If you have still problems to login, then please contact your administrator.',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',
 'quota_is_disabled' => 'Quota support is currently disabled in the settings. Setting a user quota will have no effect until it is enabled again.',
 'quota_warning' => 'Your maximum disc usage is exceeded by [bytes]. Please remove documents or previous versions.',
+'receipt_deletion_email_body' => '',
+'receipt_deletion_email_subject' => '',
 'receipt_log' => 'Reception Log',
 'receipt_request_email_body' => 'Reception request
 Document: [name]
@@ -814,6 +816,7 @@ URL: [url]',
 'receipt_request_email_subject' => '[sitename]: [name] - Reception request',
 'receipt_status' => 'Status',
 'receipt_summary' => 'Receipt summary',
+'receipt_update_failed' => 'Acknowledging reception failed',
 'reception' => 'Reception',
 'reception_acknowleged' => 'Reception acknowledged',
 'reception_noaction' => 'No action',

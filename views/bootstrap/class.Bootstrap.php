@@ -1769,6 +1769,7 @@ $(document).ready( function() {
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$enableClipboard = $this->params['enableclipboard'];

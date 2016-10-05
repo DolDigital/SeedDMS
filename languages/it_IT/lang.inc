@@ -805,6 +805,8 @@ Dovessero esserci ancora problemi al login, prego contatta l\'Amministratore di 
 'quota_exceeded' => 'La quota-disco è stata superata di [bytes].',
 'quota_is_disabled' => 'Il supporto per le quote è attualmente disattivato nelle impostazioni. L\'impostazione di una quota-utente non avrà alcun effetto finché tale funzionalità non verrà nuovamente attivata.',
 'quota_warning' => 'Il vostro utilizzo massimo di spazio è stato superato di [bytes]. Si prega di rimuovere documenti o versioni obsolete.',
+'receipt_deletion_email_body' => '',
+'receipt_deletion_email_subject' => '',
 'receipt_log' => 'Ricezione Log',
 'receipt_request_email_body' => 'Richiesta di ricezione
 Document: [name]
@@ -815,6 +817,7 @@ URL: [url]',
 'receipt_request_email_subject' => '[sitename]: [name] - Richiesta di ricezione',
 'receipt_status' => 'Status',
 'receipt_summary' => 'Sommario ricezione',
+'receipt_update_failed' => '',
 'reception' => '',
 'reception_acknowleged' => '',
 'reception_noaction' => '',
