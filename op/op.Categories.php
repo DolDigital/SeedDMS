@@ -34,7 +34,7 @@ else $action=NULL;
 //Neue Kategorie anlegen -----------------------------------------------------------------------------
 if ($action == "addcategory") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addcategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -56,7 +56,7 @@ if ($action == "addcategory") {
 //Kategorie löschen ----------------------------------------------------------------------------------
 else if ($action == "removecategory") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removecategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -79,7 +79,7 @@ else if ($action == "removecategory") {
 //Kategorie bearbeiten: Neuer Name --------------------------------------------------------------------
 else if ($action == "editcategory") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editcategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}

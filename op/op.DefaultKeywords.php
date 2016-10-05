@@ -34,7 +34,7 @@ else $action=NULL;
 // Create new keyword category ------------------------------------------
 if ($action == "addcategory") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addcategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -56,7 +56,7 @@ if ($action == "addcategory") {
 // Delete keyword categorie ---------------------------------------------
 else if ($action == "removecategory") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removecategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -83,7 +83,7 @@ else if ($action == "removecategory") {
 // Modify keyword categorie: new name -----------------------------------
 else if ($action == "editcategory") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editcategory')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -111,7 +111,7 @@ else if ($action == "editcategory") {
 // Modify keyword categorie: new list of keywords -----------------------
 else if ($action == "newkeywords") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('newkeywords')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -134,7 +134,7 @@ else if ($action == "newkeywords") {
 // Modify keyword categorie: modify list of keywords -------------------
 else if ($action == "editkeywords")
 {
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editkeywords')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -168,7 +168,7 @@ else if ($action == "editkeywords")
 // Modify keyword categorie: delete list of keywords --------------------
 else if ($action == "removekeywords") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removekeywords')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}

@@ -24,7 +24,7 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('removelog')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }

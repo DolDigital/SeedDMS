@@ -36,7 +36,7 @@ else $action = null;
 // Create new group --------------------------------------------------------
 if ($action == "addgroup") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addgroup')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -63,7 +63,7 @@ if ($action == "addgroup") {
 // Delete group -------------------------------------------------------------
 else if ($action == "removegroup") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removegroup')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -91,7 +91,7 @@ else if ($action == "removegroup") {
 // Modifiy group ------------------------------------------------------------
 else if ($action == "editgroup") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editgroup')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -123,7 +123,7 @@ else if ($action == "editgroup") {
 // Add user to group --------------------------------------------------------
 else if ($action == "addmember") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addmember')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -161,7 +161,7 @@ else if ($action == "addmember") {
 // Remove user from group --------------------------------------------------
 else if ($action == "rmmember") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('rmmember')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -196,7 +196,7 @@ else if ($action == "rmmember") {
 // toggle manager flag
 else if ($action == "tmanager") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('tmanager')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}

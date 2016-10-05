@@ -34,7 +34,7 @@ else $action=NULL;
 // add new attribute definition ---------------------------------------------
 if ($action == "addattrdef") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addattrdef')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -81,7 +81,7 @@ if ($action == "addattrdef") {
 // delete attribute definition -----------------------------------------------
 else if ($action == "removeattrdef") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removeattrdef')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -108,7 +108,7 @@ else if ($action == "removeattrdef") {
 // edit attribute definition -----------------------------------------------
 else if ($action == "editattrdef") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editattrdef')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}

@@ -38,7 +38,7 @@ else $action=NULL;
 // add new workflow ---------------------------------------------------------
 if ($action == "addworkflow") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('addworkflow')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -71,7 +71,7 @@ if ($action == "addworkflow") {
 // delete workflow --------------------------------------------------------
 else if ($action == "removeworkflow") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removeworkflow')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -101,7 +101,7 @@ else if ($action == "removeworkflow") {
 // modify workflow ---------------------------------------------------------
 else if ($action == "editworkflow") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('editworkflow')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
