@@ -221,7 +221,11 @@ $(document).ready( function() {
 							<?php printMLText("attrdef_valueset");?>:
 						</td>
 						<td>
+							<?php if($attrdef && strlen($attrdef->getValueSet()) > 30) { ?>
+							<textarea name="valueset" rows="5"><?php echo $attrdef ? $attrdef->getValueSet() : '' ?></textarea>
+							<?php } else { ?>
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getValueSet() : '' ?>" name="valueset" />
+							<?php } ?>
 						</td>
 					</tr>
 					<tr>
