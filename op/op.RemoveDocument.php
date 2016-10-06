@@ -31,7 +31,7 @@ include("../inc/inc.Authentication.php");
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('removedocument')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }

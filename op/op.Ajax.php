@@ -257,6 +257,7 @@ switch($command) {
 								if($mfolder->setParent($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_folder'), 'data'=>''));
+									add_log_line();
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
@@ -295,6 +296,7 @@ switch($command) {
 								if($mdocument->setFolder($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_document'), 'data'=>''));
+									add_log_line();
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving document', 'data'=>''));
@@ -349,6 +351,7 @@ switch($command) {
 							}
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							add_log_line();
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
@@ -413,6 +416,7 @@ switch($command) {
 
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							add_log_line();
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
@@ -455,6 +459,7 @@ switch($command) {
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_locked'), 'data'=>''));
+							add_log_line();
 						}
 					}
 				} else {
@@ -720,6 +725,7 @@ switch($command) {
 				}
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_added'), 'data'=>$document->getID()));
+				add_log_line();
 			} else {
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
@@ -728,5 +734,4 @@ switch($command) {
 		break; /* }}} */
 
 }
-add_log_line();
 ?>

@@ -40,7 +40,7 @@ else $action=NULL;
 // add new user ---------------------------------------------------------
 if ($action == "adduser") {
 	
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('adduser')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -134,7 +134,7 @@ if ($action == "adduser") {
 // delete user ------------------------------------------------------------
 else if ($action == "removeuser") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('removeuser')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
@@ -177,7 +177,7 @@ else if ($action == "removeuser") {
 // modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
-	/* Check if the form data comes for a trusted request */
+	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('edituser')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}

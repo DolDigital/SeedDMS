@@ -597,7 +597,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getValueSetAsArray() { /* {{{ */
 		if(strlen($this->_valueset) > 1)
-			return explode($this->_valueset[0], substr($this->_valueset, 1));
+			return array_map('trim', explode($this->_valueset[0], substr($this->_valueset, 1)));
 		else
 			return array();
 	} /* }}} */
@@ -613,7 +613,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		if(strlen($this->_valueset) > 1) {
 			$tmp = explode($this->_valueset[0], substr($this->_valueset, 1));
 			if(isset($tmp[$ind]))
-				return $tmp[$ind];
+				return trim($tmp[$ind]);
 			else
 				return false;
 		} else

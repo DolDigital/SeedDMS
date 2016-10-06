@@ -45,7 +45,7 @@ if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 /* FIXME: Currently GET request are allowed. */
 if(!checkFormKey('documentaccess', 'GET')) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_request_token"));

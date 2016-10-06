@@ -30,7 +30,7 @@ include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('reviewdocument')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
