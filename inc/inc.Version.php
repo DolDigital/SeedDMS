@@ -20,7 +20,7 @@
 
 class SeedDMS_Version {
 
-	public $_number = "5.0.6";
+	public $_number = "5.0.7";
 	private $_string = "SeedDMS";
 
 	function __construct() {
