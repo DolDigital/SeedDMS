@@ -222,7 +222,7 @@ $(document).ready( function() {
 						</td>
 						<td>
 							<?php if($attrdef && strlen($attrdef->getValueSet()) > 30) { ?>
-							<textarea name="valueset" rows="5"><?php echo $attrdef ? $attrdef->getValueSet() : '' ?></textarea>
+							<textarea name="valueset" rows="5"><?php echo ($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : '' ?></textarea>
 							<?php } else { ?>
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getValueSet() : '' ?>" name="valueset" />
 							<?php } ?>

@@ -54,7 +54,10 @@
 --------------------------------------------------------------------------------
 - fix adding new workflows
 - fix moving documents/folders via drag&drop in Edge (Closes #286)
-- upate folder tree after moving a document/folder with drag&drop (Closes #288)
+- update folder tree after moving a document/folder with drag&drop (Closes #288)
+- trim each value of a value sets of attribute definitions bevor saving
+- assign role 'user' instead of 'admin' to accounts automatically created during
+  ldap authentication
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.29

@@ -1698,6 +1698,12 @@ class SeedDMS_Core_DMS {
 		}
 		if(!$type)
 			return false;
+		if(trim($valueset)) {
+			$valuesetarr = array_map('trim', explode($valueset[0], substr($valueset, 1)));
+			$valueset = $valueset[0].implode($valueset[0], $valuesetarr);
+		} else {
+			$valueset = '';
+		}
 		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset, regex) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
