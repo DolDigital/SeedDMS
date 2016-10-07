@@ -546,6 +546,20 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get the separator used for the value set
+	 *
+	 * This is the first char of the value set string.
+	 *
+	 * @return string separator or an empty string if a value set is not set
+	 */
+	function getValueSetSeparator() { /* {{{ */
+		if(strlen($this->_valueset) > 1)
+			return $this->_valueset[0];
+		else
+			return '';
+	} /* }}} */
+
+	/**
 	 * Get the whole value set as an array
 	 *
 	 * @return array values of value set or false if the value set has
@@ -594,7 +608,12 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		}
 		$valuesetstr = implode(",", $tmp);
 	*/
-		$valuesetstr = $valueset;
+		if(trim($valueset)) {
+			$valuesetarr = array_map('trim', explode($valueset[0], substr($valueset, 1)));
+			$valuesetstr = $valueset[0].implode($valueset[0], $valuesetarr);
+		} else {
+			$valuesetstr = '';
+		}
 
 		$db = $this->_dms->getDB();
 
