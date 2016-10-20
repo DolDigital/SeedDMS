@@ -1067,12 +1067,12 @@ $('#acceptkeywords').click(function(ev) {
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".($objvalue ? 'checked' : '')." />";
+			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".($objvalue ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 ?>
         <span class="input-append date datepicker" style="_display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
@@ -1080,7 +1080,7 @@ $('#acceptkeywords').click(function(ev) {
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
 				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-				echo "<select name=\"".$fieldname."[".$attrdef->getId()."]";
+				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
 				} else {
@@ -1103,9 +1103,9 @@ $('#acceptkeywords').click(function(ev) {
 				echo "</select>";
 			} else {
 				if (strlen($objvalue) > 80) {
-					echo '<textarea class="input-xxlarge" name="'.$fieldname.'['.$attrdef->getId().']"'.((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					echo '<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class="input-xxlarge" name="'.$fieldname.'['.$attrdef->getId().']"'.((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
@@ -1658,6 +1658,89 @@ $(document).ready( function() {
 				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
 			}
 			$("#"+target).trigger("chosen:updated");
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a string into
+	 * a input field.
+	 *
+	 * Clicking on the button will preset the string
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="inputpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for input preset button
+	 * This code workѕ for input fields and single select fields
+	 */
+	function printInputPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.inputpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			sep = $(ev.currentTarget).data('sep');
+			if(sep) {
+				// Use attr() instead of data() because data() converts to int which cannot be split
+				arr = value.split(sep);
+				for(var i in arr) {
+					$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
+				}
+			} else {
+				$("#"+target).val(value);
+			}
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a boolean value
+	 * into a checkbox field.
+	 *
+	 * Clicking on the button will preset the checkbox
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printCheckboxPresetButtonHtml($name, $text) { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for checkboxt preset button
+	 * This code workѕ for checkboxes
+	 */
+	function printCheckboxPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.checkboxpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			if(value) {
+				$("#"+target).attr('checked', '');
+			} else {
+				$("#"+target).removeAttribute('checked');
+			}
 		}
 	});
 });
