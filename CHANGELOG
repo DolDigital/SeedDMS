@@ -2,6 +2,7 @@
                      Changes in version 5.0.7
 --------------------------------------------------------------------------------
 - merged changes from 4.3.30
+- validate email address of attributes of type email
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.6
