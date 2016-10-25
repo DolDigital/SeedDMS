@@ -37,6 +37,8 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript');
 		$this->printDropFolderChooserJs("form1");
 		$this->printSelectPresetButtonJs();
+		$this->printInputPresetButtonJs();
+		$this->printCheckboxPresetButtonJs();
 ?>
 function checkForm()
 {
@@ -241,7 +243,23 @@ console.log(element);
 ?>
     <tr>
 	    <td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	    <td><?php $this->printAttributeEditField($attrdef, '') ?></td>
+			<td><?php $this->printAttributeEditField($attrdef, '') ?>
+<?php
+			if($latestContent->getAttributeValue($attrdef)) {
+				switch($attrdef->getType()) {
+				case SeedDMS_Core_AttributeDefinition::type_string:
+				case SeedDMS_Core_AttributeDefinition::type_date:
+				case SeedDMS_Core_AttributeDefinition::type_int:
+				case SeedDMS_Core_AttributeDefinition::type_float:
+					$this->printInputPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
+					break;
+				case SeedDMS_Core_AttributeDefinition::type_boolean:
+					$this->printCheckboxPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
+					break;
+				}
+//				print_r($latestContent->getAttributeValue($attrdef));
+			}
+?></td>
     </tr>
 <?php
 			}

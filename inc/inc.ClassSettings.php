@@ -922,7 +922,7 @@ class Settings { /* {{{ */
 	function searchConfigFilePath() { /* {{{ */
 		$configFilePath = null;
 
-		if($configDir = $this->getConfigDir()) {
+		if($configDir = Settings::getConfigDir()) {
 			if (file_exists($configDir."/settings.xml"))
 				return $configDir."/settings.xml";
 		}
@@ -938,7 +938,7 @@ class Settings { /* {{{ */
 	 * If none was found a final try will be made checking /etc/seeddms
 	 * @return NULL|string config directory
 	 */
-	function getConfigDir() { /* {{{ */
+	static function getConfigDir() { /* {{{ */
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
 		$_arr = preg_split('/\//', rtrim(str_replace('\\', '/', $_tmp)));
 		$configDir = null;
