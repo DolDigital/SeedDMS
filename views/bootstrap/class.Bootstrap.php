@@ -1141,6 +1141,7 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_email:
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
 			break;
 		default:
