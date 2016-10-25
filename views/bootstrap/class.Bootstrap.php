@@ -1140,6 +1140,9 @@ $('#acceptkeywords').click(function(ev) {
 				</span>
 <?php
 			break;
+		case SeedDMS_Core_AttributeDefinition::type_email:
+			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
 				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
