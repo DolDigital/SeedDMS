@@ -25,6 +25,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - all changes from 4.3.30 merged
+- better attribute value checking
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
