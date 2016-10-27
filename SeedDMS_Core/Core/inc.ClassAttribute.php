@@ -898,15 +898,33 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		$success = true;
 		switch((string) $this->getType()) {
+		case self::type_boolean:
+			foreach($values as $value) {
+				$success &= preg_match('/^[01]$/', $value) ? true : false;
+			}
+			if(!$success)
+				$this->_validation_error = 8;
+			break;
 		case self::type_int:
 			foreach($values as $value) {
 				$success &= preg_match('/^[0-9]*$/', $value) ? true : false;
 			}
+			if(!$success)
+				$this->_validation_error = 6;
+			break;
+		case self::type_date:
+			foreach($values as $value) {
+				$success &= preg_match('/^[12][0-9]{3}-[01][0-9]-[0-9]{2}$/', $value) ? true : false;
+			}
+			if(!$success)
+				$this->_validation_error = 9;
 			break;
 		case self::type_float:
 			foreach($values as $value) {
 				$success &= is_numeric($value);
 			}
+			if(!$success)
+				$this->_validation_error = 7;
 			break;
 		case self::type_string:
 			if(trim($this->getRegex()) != '') {
