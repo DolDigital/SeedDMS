@@ -97,9 +97,8 @@ $(document).ready( function() {
 						/* various checks, if the value is valid */
 						echo "<td>";
 						/* Check if value is in value set */
-						if($selattrdef->getValueSet()) {
-							if(in_array($entry['value'], $selattrdef->getValueSetAsArray()))
-								printMLText("attribute_value_not_in_valueset");
+						if(!$selattrdef->validate($entry['value'])) {
+							echo getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
 						}
 						echo "</td>";
 						echo "</tr>";

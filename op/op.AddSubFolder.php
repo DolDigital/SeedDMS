@@ -66,18 +66,9 @@ else
 foreach($attributes as $attrdefid=>$attribute) {
 	$attrdef = $dms->getAttributeDefinition($attrdefid);
 	if($attribute) {
-		if($attrdef->getRegex()) {
-			if(!preg_match($attrdef->getRegex(), $attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
-			}
-		}
-		if(is_array($attribute)) {
-			if($attrdef->getMinValues() > count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-			}
-			if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-			}
+		if(!$attrdef->validate($attribute)) {
+			$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())), $errmsg);
 		}
 	}
 }
