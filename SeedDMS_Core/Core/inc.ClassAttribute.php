@@ -956,6 +956,9 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			break;
 		}
 
+		if(!$success)
+			return $success;
+
 		/* Check if value is in value set */
 		if($valueset = $this->getValueSetAsArray()) {
 			foreach($values as $value) {
