@@ -63,6 +63,8 @@ class SeedDMS_Controller_EditFolder extends SeedDMS_Controller_Common {
 							if(!$folder->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
 								return false;
 						}
+					} elseif($attrdef->getMinValues() > 0) {
+						$this->errormsg = getMLText("attr_min_values", array("attrname"=>$attrdef->getName()));
 					} elseif(isset($oldattributes[$attrdefid])) {
 						if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 							return false;
