@@ -66,18 +66,9 @@ if($attributes) {
 	foreach($attributes as $attrdefid=>$attribute) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
 		if($attribute) {
-			if($attrdef->getRegex()) {
-				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
-				}
-				if(is_array($attribute)) {
-					if($attrdef->getMinValues() > count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-					}
-					if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-					}
-				}
+			if(!$attrdef->validate($attribute)) {
+				$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())), $errmsg);
 			}
 			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
 				if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
