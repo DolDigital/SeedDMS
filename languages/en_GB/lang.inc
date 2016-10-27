@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1448), dgrutsch (7), netixw (14)
+//    Translators: Admin (1455), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -170,11 +170,17 @@ URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribute changed',
 'attribute_count' => 'Number of uses',
 'attribute_value' => 'Value of attribute',
+'attr_malformed_boolean' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid boolean.',
+'attr_malformed_date' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid date.',
 'attr_malformed_email' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid URL.',
+'attr_malformed_float' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid float.',
+'attr_malformed_int' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid integer.',
 'attr_malformed_url' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid URL.',
 'attr_max_values' => 'The maximum number of required values for attribute [attrname] is exceeded.',
 'attr_min_values' => 'The minimum number of required values for attribute [attrname] is not reached.',
+'attr_not_in_valueset' => 'The attribute value \'[value]\' for attribute \'[attrname]\' is not contained in the valueset.',
 'attr_no_regex_match' => 'The attribute value \'[value]\' for attribute \'[attrname]\' does not match the regular expression \'[regex]\'',
+'attr_validation_error' => 'The value \'[value]\' of attribute \'[attrname]\' is invalid.',
 'at_least_n_users_of_group' => 'At least [number_of_users] users of [group]',
 'august' => 'August',
 'authentication' => 'Authentication',
@@ -1318,6 +1324,7 @@ URL: [url]',
 'splash_add_group_member' => 'New group member added',
 'splash_add_role' => 'Added new role',
 'splash_add_to_transmittal' => 'Add to transmittal',
+'splash_add_transmittal' => 'Added transmittal',
 'splash_add_user' => 'New user added',
 'splash_clearcache' => 'Cache cleared',
 'splash_cleared_clipboard' => 'Clipboard cleared',
