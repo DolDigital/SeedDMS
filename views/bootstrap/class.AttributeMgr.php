@@ -76,7 +76,7 @@ $(document).ready( function() {
     <div class="accordion" id="accordion1">
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1"       href="#collapseOne">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
 						<?php printMLText('attribute_value'); ?>
           </a>
         </div>
@@ -89,9 +89,21 @@ $(document).ready( function() {
 					print "<thead>\n<tr>\n";
 					print "<th>".getMLText("attribute_value")."</th>\n";
 					print "<th>".getMLText("attribute_count")."</th>\n";
+					print "<th></th>\n";
 					print "</tr></thead>\n<tbody>\n";
 					foreach($res['frequencies'][$type] as $entry) {
-						echo "<tr><td>".$entry['value']."</td><td>".$entry['c']."</td></tr>";
+						echo "<tr>";
+						echo "<td>".$entry['value']."</td><td>".$entry['c']."</td>";
+						/* various checks, if the value is valid */
+						echo "<td>";
+						/* Check if value is in value set */
+						if($selattrdef->getValueSet()) {
+							if(false === array_search($entry['value'], $selattrdef->getValueSetAsArray()))
+								printMLText("attribute_value_not_in_valueset");
+						} else {
+						}
+						echo "</td>";
+						echo "</tr>";
 					}
 					print "</tbody></table>";
 				}
