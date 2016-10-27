@@ -250,4 +250,42 @@ function getOverallStatusText($status) { /* {{{ */
 	}
 } /* }}} */
 
+function getAttributeValidationText($error, $attrname='', $attrvalue='') { /* {{{ */
+	switch($error) {
+		case 10:
+			return getMLText("attr_not_in_valueset", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 8:
+			return getMLText("attr_malformed_date", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 8:
+			return getMLText("attr_malformed_boolean", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 7:
+			return getMLText("attr_malformed_float", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 6:
+			return getMLText("attr_malformed_int", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 5:
+			return getMLText("attr_malformed_email", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 4:
+			return getMLText("attr_malformed_url", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 3:
+			return getMLText("attr_no_regex_match", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 2:
+			return getMLText("attr_max_values", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		case 1:
+			return getMLText("attr_min_values", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+		default:
+			return getMLText("attr_validation_error", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			break;
+	}
+} /* }}} */
+
 ?>
