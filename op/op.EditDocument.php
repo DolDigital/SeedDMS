@@ -268,6 +268,8 @@ if($attributes) {
 				if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
 					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
+		} elseif($attrdef->getMinValues() > 0) {
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 		} elseif(isset($oldattributes[$attrdefid])) {
 			if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
