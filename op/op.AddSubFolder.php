@@ -70,6 +70,8 @@ foreach($attributes as $attrdefid=>$attribute) {
 			$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
 			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())), $errmsg);
 		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
 
