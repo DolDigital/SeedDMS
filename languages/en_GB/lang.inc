@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1455), dgrutsch (7), netixw (14)
+//    Translators: Admin (1457), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1089,6 +1089,8 @@ URL: [url]',
 'settings_enable2FactorAuthentication_desc' => 'Enable/disable 2 factor authentication. The users will need the Google Authenticator on its mobile phone.',
 'settings_enableAcknowledgeWorkflow' => 'Enable acknowledge of document reception',
 'settings_enableAcknowledgeWorkflow_desc' => 'Enable, to turn on the workflow to acknowledge document reception.',
+'settings_enableAdminReceipt' => 'Allow recepiton of documetns for admins',
+'settings_enableAdminReceipt_desc' => 'Enable this if you want administrators to be listed as recipients of documents.',
 'settings_enableAdminRevApp' => 'Allow review/approval for admins',
 'settings_enableAdminRevApp_desc' => 'Enable this if you want administrators to be listed as reviewers/approvers and for workflow transitions.',
 'settings_enableCalendar' => 'Enable Calendar',
@@ -1125,6 +1127,8 @@ URL: [url]',
 'settings_enableNotificationWorkflow_desc' => 'If this option is enabled, the users and groups which need to take action in the next workflow transition will be notified. Even if they have not added a notification for the document.',
 'settings_enableOwnerNotification' => 'Enable owner notification by default',
 'settings_enableOwnerNotification_desc' => 'Check for adding a notification for the owner if a document when it is added.',
+'settings_enableOwnerReceipt' => '',
+'settings_enableOwnerReceipt_desc' => '',
 'settings_enableOwnerRevApp' => 'Allow review/approval for owner',
 'settings_enableOwnerRevApp_desc' => 'Enable this if you want the owner of a document to be listed as reviewers/approvers and for workflow transitions.',
 'settings_enablePasswordForgotten' => 'Enable Password forgotten',
