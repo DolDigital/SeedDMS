@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2319), dgrutsch (21)
+//    Translators: Admin (2325), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1094,8 +1094,10 @@ URL: [url]',
 'settings_enable2FactorAuthentication_desc' => 'Schaltet die 2-Faktor Authentifizierung ein, welche den Google Authenticator auf dem Mobiltelefon erfordert.',
 'settings_enableAcknowledgeWorkflow' => 'Ermögliche Bestätigung des Dokumentenempfang',
 'settings_enableAcknowledgeWorkflow_desc' => 'Anwählen, um den Workflow zur Kenntnisnahme von Dokumenten einzuschalten',
+'settings_enableAdminReceipt' => 'Admin darf Empfang bestätigen',
+'settings_enableAdminReceipt_desc' => 'Anwählen, um Administratoren in der Liste der Personen für eine Empfangsbestätigung auszugeben',
 'settings_enableAdminRevApp' => 'Admin darf freigeben/prüfen',
-'settings_enableAdminRevApp_desc' => 'Anwählen, um Administratoren in der Liste der Prüfer und Freigeber auszugeben',
+'settings_enableAdminRevApp_desc' => 'Anwählen, um Administratoren in der Liste der Prüfer und Freigeber und als Beteiligte in Workflows auszugeben',
 'settings_enableCalendar' => 'Kalender einschalten',
 'settings_enableCalendar_desc' => 'Kalender ein/ausschalten',
 'settings_enableClipboard' => 'Zwischenablage einschalten',
@@ -1130,6 +1132,8 @@ URL: [url]',
 'settings_enableNotificationWorkflow_desc' => 'Wenn diese Option eingeschaltet ist, werden die Benutzer und Gruppen, die im nächsten Workflow-Schritt aktiv werden müssen, informiert. Selbst dann, wenn Sie für das Dokument keine Benachrichtigung eingetragen haben.',
 'settings_enableOwnerNotification' => 'Besitzer als Beobachter eintragen',
 'settings_enableOwnerNotification_desc' => 'Setzen Sie diese Option, wenn der Besitzer eines Dokuments nach dem Hochladen in die Liste der Beobachter eingetragen werden soll.',
+'settings_enableOwnerReceipt' => 'Erlaube Empfangsbestätigung durch Besitzer',
+'settings_enableOwnerReceipt_desc' => 'Anwählen, um den Besitzer eines Dokuments in der Liste der Empfänger auswählbar zu machen.',
 'settings_enableOwnerRevApp' => 'Erlaube Prüfung/Freigabe durch Besitzer',
 'settings_enableOwnerRevApp_desc' => 'Anwählen, um den Besitzer eines Dokuments in der Liste der Prüfer/Freigeber und für Workflow-Aktionen auswählbar zu machen.',
 'settings_enablePasswordForgotten' => 'Passwort-Vergessen Funktion einschalten',
@@ -1206,7 +1210,7 @@ URL: [url]',
 'settings_maxRecursiveCount' => 'Max. Anzahl Anzahl rekursiver Dokumente/Ordner.',
 'settings_maxRecursiveCount_desc' => 'Dies ist die maximale Anzahl der Dokumente und Ordner die auf Zugriffsrechte geprüft werden, wenn rekursiv gezählt wird. Wenn diese Anzahl überschritten wird, wird die Anzahl der Dokumente und Unterordner in der Ordner Ansicht geschätzt.',
 'settings_maxSizeForFullText' => 'Maximale Dateigröße für sofortige Indezierung',
-'settings_maxSizeForFullText_desc' => 'Alle neue Version eines Dokuments, die kleiner als die die konfigurierte Dateigröße sind, werden sofort indiziert. In allen anderen Fällen werden nur die Metadaten erfasst.',
+'settings_maxSizeForFullText_desc' => 'Alle neuen Versionen eines Dokuments, die kleiner als die konfigurierte Dateigröße in Bytes sind, werden sofort indiziert. In allen anderen Fällen werden nur die Metadaten erfasst.',
 'settings_more_settings' => 'Weitere Einstellungen. Login mit admin/admin',
 'settings_notfound' => 'Nicht gefunden',
 'settings_Notification' => 'Benachrichtigungen-Einstellungen',
