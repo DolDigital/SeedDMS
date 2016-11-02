@@ -75,7 +75,7 @@ if (!isset($settings->_editOnlineFileTypes) || !is_array($settings->_editOnlineF
  */
 
 /* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $folder = $document->getFolder();
 
