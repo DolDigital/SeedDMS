@@ -283,9 +283,9 @@ $(document).ready( function() {
 <div class="span6">
 <div class="well">
 <?php echo getMLText("selection")?>:
-	<select class="chzn-select" id="selector" class="span9">
-		<option value="-1"><?php echo getMLText("choose_attrdef")?>
-		<option value="0"><?php echo getMLText("new_attrdef")?>
+	<select class="chzn-select" id="selector" class="input-xlarge">
+		<option value="-1"><?php echo getMLText("choose_attrdef")?></option>
+		<option value="0"><?php echo getMLText("new_attrdef")?></option>
 <?php
 		if($attrdefs) {
 			foreach ($attrdefs as $attrdef) {
@@ -320,7 +320,7 @@ $(document).ready( function() {
 						$t = getMLText("attrdef_type_boolean");
 						break;
 				}
-				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.", ".$t.")");
+				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($ot.", ".$t)."\">" . htmlspecialchars($attrdef->getName()/* ." (".$ot.", ".$t.")"*/);
 			}
 		}
 ?>
