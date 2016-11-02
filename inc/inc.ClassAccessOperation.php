@@ -62,7 +62,7 @@ class SeedDMS_AccessOperation {
 	 * even if is disallowed in the settings.
 	 */
 	function mayEditVersion() { /* {{{ */
-		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$version = $this->obj->getLatestContent();
 			if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($version->getFileType()), $this->settings->_editOnlineFileTypes))
 				return false;
