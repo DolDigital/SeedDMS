@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-10-07</date>
+ <date>2016-11-02</date>
  <time>10:18:59</time>
  <version>
-  <release>4.3.30</release>
-  <api>4.3.30</api>
+  <release>4.3.31</release>
+  <api>4.3.31</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- new method SeedDMЅ_Core_AttributeDefinition::getValueSetSeparator() 
-- trim each value of a value set before saving the complete value set as a string
+- new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
+- new method SeedDMЅ_Core_WorkflowState::getTransitions() 
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1052,6 +1052,23 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - SeedDMЅ_Core_Document::rewrite[Review|Approval]Log() will also copy file if it exists
 - add method SeedDMЅ_Core_Document::rewriteWorkflowLog()
 new transition
+   </notes>
+  </release>
+  <release>
+   <date>2016-10-07</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.30</release>
+    <api>4.3.30</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMЅ_Core_AttributeDefinition::getValueSetSeparator() 
+- trim each value of a value set before saving the complete value set as a string
    </notes>
   </release>
  </changelog>
