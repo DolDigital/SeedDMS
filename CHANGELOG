@@ -2,7 +2,7 @@
                      Changes in version 5.0.8
 --------------------------------------------------------------------------------
 - merged changes from 4.3.31
-- fix saving online edited file
+- fix saving online editing file
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.7
@@ -55,6 +55,14 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.31
+--------------------------------------------------------------------------------
+- use bootstrap classes for some forms
+- show transitions in WorkflowActionMgr and WorkflowStateMgr where actions and
+  states are used
+- fix online editing of documents
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
