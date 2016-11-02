@@ -472,7 +472,7 @@ $(document).ready( function() {
 <option value="0"><?php echo getMLText("add_user")?>
 <?php
 		foreach ($users as $currUser) {
-			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '').">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
+			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\">" . htmlspecialchars($currUser->getLogin());
 		}
 ?>
 </select>
