@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-10-07</date>
+ <date>2016-11-02</date>
  <time>06:23:34</time>
  <version>
-  <release>5.0.7</release>
-  <api>5.0.7</api>
+  <release>5.0.8</release>
+  <api>5.0.8</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- all changes from 4.3.30 merged
-- better attribute value checking
+- all changes from 4.3.31 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1095,6 +1094,40 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
+   <date>2016-10-07</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.30</release>
+    <api>4.3.30</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMЅ_Core_AttributeDefinition::getValueSetSeparator() 
+- trim each value of a value set before saving the complete value set as a string
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-02</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.31</release>
+    <api>4.3.31</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
+- new method SeedDMЅ_Core_WorkflowState::getTransitions() 
+   </notes>
+  </release>
+  <release>
    <date>2016-01-22</date>
    <time>14:34:58</time>
    <version>
@@ -1160,22 +1193,6 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
-   <date>2016-05-03</date>
-   <time>08:56:33</time>
-   <version>
-    <release>5.0.5</release>
-    <api>5.0.5</api>
-   </version>
-   <stability>
-    <release>stable</release>
-    <api>stable</api>
-   </stability>
-   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
-   <notes>
-- all changes from 4.3.28 merged
-   </notes>
-  </release>
-  <release>
    <date>2016-08-09</date>
    <time>06:23:34</time>
    <version>
@@ -1205,6 +1222,23 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - all changes from 4.3.29 merged
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-02</date>
+   <time>06:23:34</time>
+   <version>
+    <release>5.0.7</release>
+    <api>5.0.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.30 merged
+- better attribute value checking
    </notes>
   </release>
  </changelog>

@@ -278,7 +278,10 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 <select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?>
 <option value="0"><?php echo getMLText("add_group")?>
@@ -288,6 +291,9 @@ $(document).ready( function() {
 		}
 ?>
 </select>
+		</div>
+	</div>
+</form>
 </div>
 	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 </div>

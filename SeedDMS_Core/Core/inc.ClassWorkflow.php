@@ -489,6 +489,29 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Return workflow transitions the status is being used in
+	 *
+	 * @return array/boolean array of workflow transitions or false in case of an error
+	 */
+	function getTransitions() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE state=".$this->_id. " OR nextstate=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_array($resArr) && count($resArr) == 0)
+			return false;
+
+		$wkftransitions = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$wkftransition = new SeedDMS_Core_Workflow_Transition($resArr[$i]["id"], $this->_dms->getWorkflow($resArr[$i]["workflow"]), $this->_dms->getWorkflowState($resArr[$i]["state"]), $this->_dms->getWorkflowAction($resArr[$i]["action"]), $this->_dms->getWorkflowState($resArr[$i]["nextstate"]), $resArr[$i]["maxtime"]);
+			$wkftransition->setDMS($this->_dms);
+			$wkftransitions[$resArr[$i]["id"]] = $wkftransition;
+		}
+
+		return $wkftransitions;
+	} /* }}} */
+
+	/**
 	 * Remove the workflow state
 	 *
 	 * @return boolean true on success or false in case of an error
@@ -586,6 +609,29 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
 		return true;
+	} /* }}} */
+
+	/**
+	 * Return workflow transitions the action is being used in
+	 *
+	 * @return array/boolean array of workflow transitions or false in case of an error
+	 */
+	function getTransitions() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE action=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_array($resArr) && count($resArr) == 0)
+			return false;
+
+		$wkftransitions = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$wkftransition = new SeedDMS_Core_Workflow_Transition($resArr[$i]["id"], $this->_dms->getWorkflow($resArr[$i]["workflow"]), $this->_dms->getWorkflowState($resArr[$i]["state"]), $this->_dms->getWorkflowAction($resArr[$i]["action"]), $this->_dms->getWorkflowState($resArr[$i]["nextstate"]), $resArr[$i]["maxtime"]);
+			$wkftransition->setDMS($this->_dms);
+			$wkftransitions[$resArr[$i]["id"]] = $wkftransition;
+		}
+
+		return $wkftransitions;
 	} /* }}} */
 
 	/**

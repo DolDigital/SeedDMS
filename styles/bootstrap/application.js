@@ -20,8 +20,24 @@ $(document).ready( function() {
 			$(ev.currentTarget).datepicker('hide');
 		});
 
-	$(".chzn-select").chosen({width: "95%"});
-	$(".chzn-select-deselect").chosen({width: "95%", allow_single_deselect:true});
+//	$(".chzn-select").chosen({width: "95%"});
+//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+	$(".chzn-select").select2({
+		width: '100%',
+		templateResult: function (state) {
+			var subtitle = $(state.element).data('subtitle');
+			var html = '<span>'+state.text+'';
+			if(subtitle)
+				html += '<br /><i>'+subtitle+'</i>';
+			html += '</span>';
+			var $newstate = $(html);
+			return $newstate;
+		}
+	});
+	$(".chzn-select-deselect").select({
+		allowClear:true
+	});
 
 	/* change the color and length of the bar graph showing the password
 	 * strength on each change to the passwod field.
@@ -341,7 +357,19 @@ $(document).ready( function() {
 			url = href;
 		$.get(url, function(data) {
 			element.html(data);
-			$(".chzn-select").chosen();
+//			$(".chzn-select").chosen();
+			$(".chzn-select").select2({
+				width: '100%',
+				templateResult: function (state) {
+					var subtitle = $(state.element).data('subtitle');
+					var html = '<span>'+state.text+'';
+					if(subtitle)
+						html += '<br /><i>'+subtitle+'</i>';
+					html += '</span>';
+					var $newstate = $(html);
+					return $newstate;
+				}
+			});
 		});
 	});
 
@@ -365,7 +393,19 @@ $(document).ready( function() {
 		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-			$(".chzn-select").chosen();
+//			$(".chzn-select").chosen();
+			$(".chzn-select").select2({
+				width: '100%',
+				templateResult: function (state) {
+					var subtitle = $(state.element).data('subtitle');
+					var html = '<span>'+state.text+'';
+					if(subtitle)
+						html += '<br /><i>'+subtitle+'</i>';
+					html += '</span>';
+					var $newstate = $(html);
+					return $newstate;
+				}
+			});
 		});
 	});
 

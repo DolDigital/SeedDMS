@@ -308,7 +308,10 @@ $(document).ready(function() {
 <div class="row-fluid">
 <div class="span5">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 <select id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_workflow")?>
 <option value="0"><?php echo getMLText("add_workflow")?>
@@ -318,6 +321,9 @@ $(document).ready(function() {
 		}
 ?>
 </select>
+		</div>
+	</div>
+</form>
 </div>
 <div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 </div>

@@ -70,6 +70,34 @@ $(document).ready( function() {
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$selworkflowaction = $this->params['selworkflowaction'];
+
+		if($selworkflowaction) {
+			if($selworkflowaction->isUsed()) {
+				$transitions = $selworkflowaction->getTransitions();
+				if($transitions) {
+					echo "<table class=\"table table-condensed\">";
+					echo "<thead><tr><th>".getMLText('workflow')."</th><th>".getMLText('previous_state')."</th><th>".getMLText('next_state')."</th></tr></thead>\n";
+					echo "<tbody>";
+					foreach($transitions as $transition) {
+						$state = $transition->getState();
+						$nextstate = $transition->getNextState();
+						$docstatus = $nextstate->getDocumentStatus();
+						$workflow = $transition->getWorkflow();
+						echo "<tr>";
+						echo "<td>";
+						echo $workflow->getName();
+						echo "</td><td>";
+						echo '<i class="icon-circle'.($workflow->getInitState()->getId() == $state->getId() ? ' initstate' : ' in-workflow').'"></i> '.$state->getName();
+						echo "</td><td>";
+						echo '<i class="icon-circle'.($docstatus == S_RELEASED ? ' released' : ($docstatus == S_REJECTED ? ' rejected' : ' in-workflow')).'"></i> '.$nextstate->getName();
+						echo "</td></tr>";
+					}
+					echo "</tbody>";
+					echo "</table>";
+				}
+			}
+		}
 	} /* }}} */
 
 	function showWorkflowActionForm($action) { /* {{{ */
@@ -143,7 +171,10 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 <select id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_workflow_action")?>
 <option value="0"><?php echo getMLText("add_workflow_action")?>
@@ -153,6 +184,9 @@ $(document).ready( function() {
 		}
 ?>
 </select>
+		</div>
+	</div>
+</form>
 </div>
 <div class="ajax" data-view="WorkflowActionsMgr" data-action="info" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
 </div>
