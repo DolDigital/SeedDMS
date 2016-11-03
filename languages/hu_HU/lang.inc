@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (588), ribaz (1023)
+//    Translators: Admin (590), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
@@ -244,7 +244,7 @@ URL: [url]',
 'choose_workflow_action' => 'Válasszon munkafolyamat műveletet',
 'choose_workflow_state' => 'Válasszon munkafolyamat állapotot',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Gyorsítótár törlése',
 'clear_clipboard' => 'Vágólap törlése',
 'clear_password' => '',
 'clipboard' => 'Vágólap',
@@ -416,7 +416,7 @@ URL: [url]',
 'edit_user' => 'Felhasználó szerkesztése',
 'edit_user_details' => 'Felhasználó részletes adatainak szerkesztése',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'Görög',
 'email' => 'Email',
 'email_error_title' => 'Nem adott meg email címet',
 'email_footer' => 'Bármikor módosíthatja email beállításait a \'My Account\' funkcióval',
@@ -1325,6 +1325,7 @@ URL: [url]',
 'splash_rm_role' => '',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Felhasználó eltávolítva',
+'splash_saved_file' => '',
 'splash_settings_saved' => 'Beállítások elmentve',
 'splash_substituted_user' => 'Helyettesített felhasználó',
 'splash_switched_back_user' => 'Visszaváltva az eredeti felhasználóra',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1046), balan (87)
+//    Translators: Admin (1048), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -249,7 +249,7 @@ URL: [url]',
 'choose_workflow_action' => 'Alege acțiune workflow',
 'choose_workflow_state' => 'Alege stare workflow',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'Sterge cache',
 'clear_clipboard' => 'Goleste clipboard',
 'clear_password' => '',
 'clipboard' => 'Clipboard',
@@ -540,7 +540,7 @@ URL: [url]',
 'identical_version' => 'Noua versiune este identică cu versiunea curentă.',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Import din filesystem',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Include documente',
@@ -1348,6 +1348,7 @@ URL: [url]',
 'splash_rm_role' => '',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Uilizator eliminat',
+'splash_saved_file' => '',
 'splash_settings_saved' => 'Setări salvate',
 'splash_substituted_user' => 'Utilizator substituit',
 'splash_switched_back_user' => 'Comutat înapoi la utilizatorul original',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (924), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (927), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1036,7 +1036,7 @@ URL: [url]',
 'settings_dbUser' => 'Nome do usuário',
 'settings_dbUser_desc' => 'O nome de usuário para acesso ao banco de dados, informado durante o processo de instalação. Não edite campo a menos que seja absolutamente necessário, por exemplo, a transferência do banco de dados para um novo host.',
 'settings_dbVersion' => 'Esquema de banco de dados muito antigo',
-'settings_defaultSearchMethod' => '',
+'settings_defaultSearchMethod' => 'Forma padrão para buscas',
 'settings_defaultSearchMethod_desc' => '',
 'settings_defaultSearchMethod_valdatabase' => 'Banco de Dados',
 'settings_defaultSearchMethod_valfulltext' => 'texto completo',
@@ -1079,7 +1079,7 @@ URL: [url]',
 'settings_enableGuestLogin' => 'Ativar Login de Visitante',
 'settings_enableGuestLogin_desc' => 'Se você quiser quiser permitir login como convidado, marque esta opção. Nota: login de convidado deve ser usado apenas em um ambiente de confiança',
 'settings_enableHelp' => 'Abilitar Ajuda',
-'settings_enableHelp_desc' => '',
+'settings_enableHelp_desc' => 'Ativar/desativar o link para telas de ajuda no menu',
 'settings_enableLanguageSelector' => 'Ativar Seletor de Idioma',
 'settings_enableLanguageSelector_desc' => 'Mostrar seletor para idioma de interface de usuário após login.',
 'settings_enableLargeFileUpload' => 'Ativar envio de grandes arquivos',
@@ -1176,7 +1176,7 @@ URL: [url]',
 'settings_Notification' => 'Configurações de notificação',
 'settings_notwritable' => 'A configuração não pode ser salva porque o arquivo de configuração não é gravável.',
 'settings_no_content_dir' => 'Diretório de conteúdo',
-'settings_overrideMimeType' => '',
+'settings_overrideMimeType' => 'Substituir MimeType',
 'settings_overrideMimeType_desc' => '',
 'settings_partitionSize' => 'Tamanho de arquivo parcial',
 'settings_partitionSize_desc' => 'Tamanho dos arquivos parciais em bytes, enviados por jumploader. Não defina um valor maior do que o tamanho máximo de carregamento definido pelo servidor.',
@@ -1323,6 +1323,7 @@ URL: [url]',
 'splash_rm_role' => '',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Usuário removido',
+'splash_saved_file' => '',
 'splash_settings_saved' => 'Configurações salvas',
 'splash_substituted_user' => 'Usuário substituido',
 'splash_switched_back_user' => 'Comutada de volta ao usuário original',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (740), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (746), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1305,6 +1305,7 @@ URL: [url]',
 'splash_rm_role' => '',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Użytkownika usunięto',
+'splash_saved_file' => '',
 'splash_settings_saved' => 'Zmiany zapisano',
 'splash_substituted_user' => 'Zmieniono użytkownika',
 'splash_switched_back_user' => 'Przełączono z powrotem do oryginalnego użytkownika',
@@ -1368,13 +1369,13 @@ URL: [url]',
 'timeline_full_add_version' => '',
 'timeline_full_status_change' => '',
 'timeline_selected_item' => '',
-'timeline_skip_add_file' => '',
-'timeline_skip_status_change_-1' => '',
-'timeline_skip_status_change_-3' => '',
-'timeline_skip_status_change_0' => '',
-'timeline_skip_status_change_1' => '',
+'timeline_skip_add_file' => 'dodano załącznik',
+'timeline_skip_status_change_-1' => 'odrzucony',
+'timeline_skip_status_change_-3' => 'przedawniony',
+'timeline_skip_status_change_0' => 'oczekuje na opinię',
+'timeline_skip_status_change_1' => 'oczekuje na zatwierdzenie',
 'timeline_skip_status_change_2' => '',
-'timeline_skip_status_change_3' => '',
+'timeline_skip_status_change_3' => 'w obiegu',
 'timeline_status_change' => 'Wersja [wersja]: [status]',
 'to' => 'Do',
 'toggle_manager' => 'Przełączanie zarządcy',
