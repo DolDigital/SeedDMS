@@ -282,7 +282,10 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span6">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 	<select class="chzn-select" id="selector" class="input-xlarge">
 		<option value="-1"><?php echo getMLText("choose_attrdef")?></option>
 		<option value="0"><?php echo getMLText("new_attrdef")?></option>
@@ -325,6 +328,9 @@ $(document).ready( function() {
 		}
 ?>
 	</select>
+		</div>
+	</div>
+</form>
 </div>
 <div class="ajax" data-view="AttributeMgr" data-action="info" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
 </div>
