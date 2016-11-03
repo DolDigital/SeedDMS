@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2325), dgrutsch (21)
+//    Translators: Admin (2326), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1363,6 +1363,7 @@ URL: [url]',
 'splash_rm_role' => 'Rolle gelöscht',
 'splash_rm_transmittal' => 'Dokumentenliste gelöscht',
 'splash_rm_user' => 'Benutzer gelöscht',
+'splash_saved_file' => 'Version gespeichert',
 'splash_settings_saved' => 'Einstellungen gesichert',
 'splash_substituted_user' => 'Benutzer gewechselt',
 'splash_switched_back_user' => 'Zum ursprünglichen Benutzer zurückgekehrt',
