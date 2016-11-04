@@ -35,8 +35,18 @@ $(document).ready( function() {
 			return $newstate;
 		}
 	});
-	$(".chzn-select-deselect").select({
-		allowClear:true
+	$(".chzn-select-deselect").select2({
+		allowClear:true,
+		width: '100%',
+		templateResult: function (state) {
+			var subtitle = $(state.element).data('subtitle');
+			var html = '<span>'+state.text+'';
+			if(subtitle)
+				html += '<br /><i>'+subtitle+'</i>';
+			html += '</span>';
+			var $newstate = $(html);
+			return $newstate;
+		}
 	});
 
 	/* change the color and length of the bar graph showing the password
