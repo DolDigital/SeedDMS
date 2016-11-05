@@ -50,7 +50,7 @@ class SeedDMS_Preview_Previewer {
 	 */
 	protected $timeout;
 
-	function __construct($previewDir, $width=40, $timeout=5) {
+	function __construct($previewDir, $width=40, $timeout=5) { /* {{{ */
 		if(!is_dir($previewDir)) {
 			if (!SeedDMS_Core_File::makeDir($previewDir)) {
 				$this->previewDir = '';
@@ -73,7 +73,7 @@ class SeedDMS_Preview_Previewer {
 			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
 		);
 		$this->timeout = intval($timeout);
-	}
+	} /* }}} */
 
 	static function execWithTimeout($cmd, $timeout=5) { /* {{{ */
 		$descriptorspec = array(
@@ -113,6 +113,9 @@ class SeedDMS_Preview_Previewer {
 
 	/**
 	 * Set a list of converters
+	 *
+	 * Merges the list of passed converters with the already existing ones.
+	 * Existing converters will be overwritten.
 	 *
 	 * @param array list of converters. The key of the array contains the mimetype
 	 * and the value is the command to be called for creating the preview
