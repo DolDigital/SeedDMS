@@ -38,6 +38,13 @@ class SeedDMS_Preview_Previewer {
 	protected $width;
 
 	/**
+	 * @var array $converters list of mimetypes and commands for converting
+	 * file into preview image
+	 * @access protected
+	 */
+	protected $converters;
+
+	/**
 	 * @var integer $timeout maximum time for execution of external commands
 	 * @access protected
 	 */
@@ -54,6 +61,17 @@ class SeedDMS_Preview_Previewer {
 			$this->previewDir = $previewDir;
 		}
 		$this->width = intval($width);
+		$this->converters = array(
+			'image/png' => "convert -resize %wx '%f' '%o'",
+			'image/gif' => "convert -resize %wx '%f' '%o'",
+			'image/jpg' => "convert -resize %wx '%f' '%o'",
+			'image/jpeg' => "convert -resize %wx '%f' '%o'",
+			'image/svg+xml' => "convert -resize %wx '%f' '%o'",
+			'text/plain' => "convert -resize %wx '%f' '%o'",
+			'application/pdf' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/postscript' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
+		);
 		$this->timeout = intval($timeout);
 	}
 
@@ -65,7 +83,7 @@ class SeedDMS_Preview_Previewer {
 		);
 		$pipes = array();
 	 
-	  $timeout += time();
+		$timeout += time();
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
@@ -91,6 +109,16 @@ class SeedDMS_Preview_Previewer {
 		} else {
 			return $output;
 		}
+	} /* }}} */
+
+	/**
+	 * Set a list of converters
+	 *
+	 * @param array list of converters. The key of the array contains the mimetype
+	 * and the value is the command to be called for creating the preview
+	 */
+	function setConverters($arr) { /* {{{ */
+		$this->converters = array_merge($arr, $this->converters);
 	} /* }}} */
 
 	/**
@@ -154,6 +182,10 @@ class SeedDMS_Preview_Previewer {
 			$target = $this->previewDir.$dir.md5($infile).'-'.$width;
 		if($target != '' && (!file_exists($target.'.png') || filectime($target.'.png') < filectime($infile))) {
 			$cmd = '';
+			if(isset($this->converters[$mimetype])) {
+				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimetype]);
+			}
+			/*
 			switch($mimetype) {
 				case "image/png":
 				case "image/gif":
@@ -173,6 +205,7 @@ class SeedDMS_Preview_Previewer {
 					$cmd = 'tar tzvf '.$infile.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target.'.png';
 					break;
 			}
+			 */
 			if($cmd) {
 				//exec($cmd);
 				try {
@@ -211,7 +244,6 @@ class SeedDMS_Preview_Previewer {
 		$file = $document->_dms->contentDir.$object->getPath();
 		$target = $this->getFileName($object, $width);
 		return $this->createRawPreview($file, $document->getDir(), $object->getMimeType(), $width, $target);
-			
 	} /* }}} */
 
 	/**
