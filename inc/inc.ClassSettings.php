@@ -201,6 +201,10 @@ class Settings { /* {{{ */
 	var $_previewWidthList = 40;
 	// Preview image width on document details page
 	var $_previewWidthDetail = 100;
+	// show full preview on document details page
+	var $_showFullPreview = false;
+	// convert to pdf for preview on document details page
+	var $_convertToPdf = false;
 	// Show form to submit missing translations at end of page
 	var $_showMissingTranslations = false;
 	// Extra Path to additional software, will be added to include path
@@ -377,6 +381,8 @@ class Settings { /* {{{ */
 			$this->_previewWidthList = intval($tab["previewWidthList"]);
 		if(isset($tab["previewWidthDetail"]))
 			$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
+		$this->_showFullPreview = Settings::boolVal($tab["showFullPreview"]);
+		$this->_convertToPdf = Settings::boolVal($tab["convertToPdf"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
@@ -660,6 +666,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "theme", $this->_theme);
     $this->setXMLAttributValue($node, "previewWidthList", $this->_previewWidthList);
     $this->setXMLAttributValue($node, "previewWidthDetail", $this->_previewWidthDetail);
+    $this->setXMLAttributValue($node, "showFullPreview", $this->_showFullPreview);
+    $this->setXMLAttributValue($node, "convertToPdf", $this->_convertToPdf);
 
     // XML Path: /configuration/site/edition
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');

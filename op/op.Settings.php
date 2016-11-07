@@ -60,6 +60,8 @@ if ($action == "saveSettings")
   $settings->_theme = $_POST["theme"];
   $settings->_previewWidthList = $_POST["previewWidthList"];
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
+  $settings->_showFullPreview = getBoolValue("showFullPreview");
+  $settings->_convertToPdf = getBoolValue("convertToPdf");
 
   // SETTINGS - SITE - EDITION
   $settings->_strictFormCheck = getBoolValue("strictFormCheck");
