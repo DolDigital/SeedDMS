@@ -72,6 +72,8 @@ if($view) {
 	$view->setParam('viewonlinefiletypes', $settings->_viewOnlineFileTypes);
 	$view->setParam('enableversionmodification', $settings->_enableVersionModification);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('showFullPreview', $settings->_showFullPreview);
+	$view->setParam('convertToPdf', $settings->_convertToPdf);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view->setParam('accessobject', $accessop);
