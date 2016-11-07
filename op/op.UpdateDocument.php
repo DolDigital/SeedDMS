@@ -376,6 +376,11 @@ if ($_FILES['userfile']['error'] == 0) {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
 		}
+		if($settings->_removeFromDropFolder) {
+			if(file_exists($userfiletmp)) {
+				unlink($userfiletmp);
+			}
+		}
 	}
 
 add_log_line("?documentid=".$documentid);
