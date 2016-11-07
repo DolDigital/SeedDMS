@@ -17,8 +17,18 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 /**
+ * @uses Preview/Base.php
+ */
+require_once('Preview/Base.php');
+
+/**
  * @uses Preview/Previewer.php
  */
 require_once('Preview/Previewer.php');
+
+/**
+ * @uses Preview/PdfPreviewer.php
+ */
+require_once('Preview/PdfPreviewer.php');
 
 ?>
