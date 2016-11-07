@@ -155,6 +155,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
 <?php
 			break;
+		case 'image/svg+xml':
+			$this->contentHeading(getMLText("preview"));
+?>
+			<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+<?php
+			break;
 		default:
 			break;
 		}
