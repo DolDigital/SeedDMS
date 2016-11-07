@@ -174,6 +174,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_previewWidthDetail");?>:</td>
 				<td><?php $this->showTextField("previewWidthDetail", $settings->_previewWidthDetail); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_showFullPreview_desc");?>">
+        <td><?php printMLText("settings_showFullPreview");?>:</td>
+        <td><input name="showFullPreview" type="checkbox" <?php if ($settings->_showFullPreview) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_convertToPdf_desc");?>">
+        <td><?php printMLText("settings_convertToPdf");?>:</td>
+        <td><input name="convertToPdf" type="checkbox" <?php if ($settings->_convertToPdf) echo "checked" ?> /></td>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - EDITION

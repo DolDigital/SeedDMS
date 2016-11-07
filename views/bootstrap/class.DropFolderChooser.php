@@ -97,6 +97,8 @@ $('.folderselect').click(function(ev) {
 				echo "</tbody>\n";
 				echo "</table>\n";
 				echo '<script src="../out/out.DropFolderChooser.php?action=js&'.$_SERVER['QUERY_STRING'].'"></script>'."\n";
+			} else {
+				echo "<div class=\"alert alert-danger\">".getMLText('invalid_dropfolder_folder')."</div>";
 			}
 		}
 	} /* }}} */

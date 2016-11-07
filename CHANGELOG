@@ -62,6 +62,10 @@
 - use bootstrap classes for some forms
 - show transitions in WorkflowActionMgr and WorkflowStateMgr where actions and
   states are used
+- remove file from dropfolder when updating a document and requested by
+  configuration
+- another check if dropfolder is accessible when opening the dialog box
+- add preview of pdf documents and convertion to pdf
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30

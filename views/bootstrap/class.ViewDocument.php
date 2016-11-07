@@ -167,9 +167,17 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 	function preview() { /* {{{ */
 		$document = $this->params['document'];
+		$timeout = $this->params['timeout'];
+		$showfullpreview = $this->params['showFullPreview'];
+		$converttopdf = $this->params['convertToPdf'];
+		$cachedir = $this->params['cachedir'];
+		if(!$showfullpreview)
+			return;
+
 		$latestContent = $document->getLatestContent();
 		switch($latestContent->getMimeType()) {
 		case 'audio/mpeg':
+		case 'audio/mp3':
 		case 'audio/ogg':
 		case 'audio/wav':
 			$this->contentHeading(getMLText("preview"));
@@ -179,6 +187,23 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		</audio>
 <?php
 			break;
+		case 'application/pdf':
+			$this->contentHeading(getMLText("preview"));
+?>
+			<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+<?php
+			break;
+		default:
+			break;
+		}
+		if($converttopdf) {
+			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
+			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
+				$this->contentHeading(getMLText("preview"));
+?>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.PdfPreview.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+<?php
+			}
 		}
 	} /* }}} */
 
@@ -258,7 +283,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 
 <div class="row-fluid">
-<div class="span3">
+<div class="span4">
 <?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
@@ -387,10 +412,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(is_string($txt))
 			echo $txt;
 		$this->contentContainerEnd();
-//		$this->preview();
+		$this->preview();
 ?>
 </div>
-<div class="span9">
+<div class="span8">
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="<?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
@@ -413,7 +438,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 ?>
 		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-		  <li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
@@ -1276,7 +1301,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerEnd();
 		}
 ?>
-		  </div>
+			</div>
 		</div>
 <?php
 		if($user->isAdmin()) {
