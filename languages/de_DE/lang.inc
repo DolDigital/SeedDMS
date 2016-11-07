@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2326), dgrutsch (21)
+//    Translators: Admin (2331), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1055,6 +1055,8 @@ URL: [url]',
 'settings_contentDir_desc' => 'Verzeichnis, in dem die Dokumente gespeichert werden. Sie sollten ein Verzeichnis wählen, das nicht durch den Web-Server erreichbar ist.',
 'settings_contentOffsetDir' => 'Content Offset Directory',
 'settings_contentOffsetDir_desc' => 'Die Dokumente werden nicht direkt im Content-Verzeichnis, sondern in einem Unterverzeichnis angelegt. Der Name dieses Verzeichnis ist beliebig, wird aber historisch bedingt oft auf \'1048576\' gesetzt.',
+'settings_convertToPdf' => 'Konvertiere Dokument für die Vorschau nach PDF',
+'settings_convertToPdf_desc' => 'Wenn das Dokumentenformat vom Browser nicht unterstützt wird, wird die PDF konvertierte Version angezeigt.',
 'settings_cookieLifetime' => 'Lebensdauer des Cookies',
 'settings_cookieLifetime_desc' => 'Die Lebensdauer des Cookies für die Sitzungsverwaltung. Wenn dieser Wert auf 0 gesetzt wird, dann wird der Cookie beim Schließen des Browsers gelöscht.',
 'settings_coreDir' => 'Core SeedDMS Verzeichnis',
@@ -1257,6 +1259,8 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'Id des Wurzelordners in SeedDMS (kann in der Regel unverändert bleiben)',
 'settings_SaveError' => 'Fehler beim Speichern der Konfiguration',
 'settings_Server' => 'Server-Einstellungen',
+'settings_showFullPreview' => 'Zeige gesamtes Dokument',
+'settings_showFullPreview_desc' => 'Anwählen, um auf der Dokumenten-Detail-Seite eine vollständige Vorschau des Dokuments anzuzeigen, sofern dies im Browser möglich ist.',
 'settings_showMissingTranslations' => 'Zeige fehlende Übersetzungen',
 'settings_showMissingTranslations_desc' => 'Listet die fehlenden Übersetzungen der Seite unterhalb der Fußzeile und erlaubt dem Benutzer Vorschläge einzureichen. Diese Vorschläge werden in einer CSV-Datei gespeichert. Diese Funktion sollte nicht in Produktionssystemen eingeschaltet sein.',
 'settings_showSingleSearchHit' => 'Springe direkt zu einem einzelnen Suchtreffer',
@@ -1410,6 +1414,7 @@ URL: [url]',
 'sunday_abbr' => 'So',
 'sv_SE' => 'Schwedisch',
 'switched_to' => 'Gewechselt zu',
+'takeOverAttributeValue' => 'Attributwert von vorheriger Version übernehmen',
 'takeOverGrpApprover' => 'Übernehme Gruppe von Freigebenden von letzter Version.',
 'takeOverGrpReviewer' => 'Übernehme Gruppe von Prüfern von letzter Version.',
 'takeOverIndApprover' => 'Übernehme Einzelfreigebende von letzter Version.',

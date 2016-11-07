@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1460), dgrutsch (7), netixw (14)
+//    Translators: Admin (1465), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1050,6 +1050,8 @@ URL: [url]',
 'settings_contentDir_desc' => 'Where the uploaded files are stored (best to choose a directory that is not accessible through your web-server)',
 'settings_contentOffsetDir' => 'Content Offset Directory',
 'settings_contentOffsetDir_desc' => 'To work around limitations in the underlying file system, a new directory structure has been devised that exists within the content directory (Content Directory). This requires a base directory from which to begin. Usually leave this to the default setting, 1048576, but can be any number or string that does not already exist within (Content Directory)',
+'settings_convertToPdf' => 'Convert document to PDF for preview',
+'settings_convertToPdf_desc' => 'If a document cannot be natively displayed by the browser, a converted version to pdf will be shown.',
 'settings_cookieLifetime' => 'Cookie Life time',
 'settings_cookieLifetime_desc' => 'The life time of a cookie in seconds. If set to 0 the cookie will be removed when the browser is closed.',
 'settings_coreDir' => 'Core SeedDMS directory',
@@ -1252,6 +1254,8 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'ID of root-folder (mostly no need to change)',
 'settings_SaveError' => 'Configuration file save error',
 'settings_Server' => 'Server settings',
+'settings_showFullPreview' => 'Show complete document',
+'settings_showFullPreview_desc' => 'Enable/disable a full preview of the document on the details page, if the browser is capable to do so.',
 'settings_showMissingTranslations' => 'Show missing translations',
 'settings_showMissingTranslations_desc' => 'List all missing translations on the page at the bottom of the page. The logged in user will be able to submit a proposal for a missing translation which will be saved in a csv file. Do not turn this function on if in a production environment!',
 'settings_showSingleSearchHit' => 'Jump right to a single search hit',
@@ -1405,6 +1409,7 @@ URL: [url]',
 'sunday_abbr' => 'Su',
 'sv_SE' => 'Swedish',
 'switched_to' => 'Switched to',
+'takeOverAttributeValue' => 'Take over attribute value from last version',
 'takeOverGrpApprover' => 'Take over group of approvers from last version.',
 'takeOverGrpReviewer' => 'Take over group of reviewers from last version.',
 'takeOverIndApprover' => 'Take over individual approver from last version.',
