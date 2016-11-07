@@ -1,5 +1,5 @@
 VERSION=4.3.30
-SRC=CHANGELOG inc conf utils index.php languages views op out doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
+SRC=CHANGELOG inc conf utils index.php languages views op out doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi pdfviewer
 # webapp
 
 PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
