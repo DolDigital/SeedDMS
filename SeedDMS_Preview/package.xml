@@ -28,7 +28,13 @@ add new previewer which converts document to pdf instead of png
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
    <dir name="Preview">
+    <file name="Base.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="Previewer.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="PdfPreviewer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /Lucene -->

@@ -461,7 +461,7 @@ $(document).ready( function() {
 
 function onAddClipboard(ev) { /* {{{ */
 	ev.preventDefault();
-	var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+	var source_info = JSON.parse(ev.originalEvent.dataTransfer.getData("text"));
 	source_type = source_info.type;
 	source_id = source_info.id;
 	formtoken = source_info.formtoken;
@@ -698,6 +698,7 @@ $(document).ready(function() {
 		attr_rel = $(e.currentTarget).attr('rel');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
+		console.log(e.originalEvent.dataTransfer.getData("text"));
 		var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
 		source_type = source_info.type;
 		source_id = source_info.id;
