@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2331), dgrutsch (21)
+//    Translators: Admin (2335), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -170,6 +170,7 @@ URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribut geändert',
 'attribute_count' => 'Anzahl Verwendungen',
 'attribute_value' => 'Attributwert',
+'attribute_value_not_in_valueset' => 'Wert nicht im Wertebereich',
 'attr_malformed_boolean' => 'Der Attributwert \'[value]\' des Attributs \'[attrname]\' ist kein gültiger Ja/Nein-Wert.',
 'attr_malformed_date' => 'Der Attributwert \'[value]\' des Attributs \'[attrname]\' ist kein gültiges Datum.',
 'attr_malformed_email' => 'Der Attributwert \'[value]\' des Attributs \'[attrname]\' ist keine gültige E-Mail.',
@@ -243,7 +244,7 @@ URL: [url]',
 'choose_target_category' => 'Kategorie wählen',
 'choose_target_document' => 'Dokument wählen',
 'choose_target_file' => 'Datei wählen',
-'choose_target_folder' => 'Zielordner wählen',
+'choose_target_folder' => 'Ordner wählen',
 'choose_user' => 'Benutzer wählen',
 'choose_workflow' => 'Workflow wählen',
 'choose_workflow_action' => 'Workflow-Aktion wählen',
@@ -618,6 +619,7 @@ URL: [url]',
 'linked_documents' => 'verknüpfte Dokumente',
 'linked_files' => 'Anhänge',
 'link_alt_updatedocument' => 'Wenn Sie ein Dokument hochladen möchten, das größer als die maximale Dateigröße ist, dann benutzen Sie bitte die alternative <a href="%s">Upload-Seite</a>.',
+'list_contains_no_access_docs' => 'Die Liste enthält weitere Dokumente auf die Sie keinen Zugriff haben und deshalb nicht angezeigt werden.',
 'list_hooks' => 'Liste interne Aufrufe',
 'local_file' => 'Lokale Datei',
 'locked_by' => 'Gesperrt von',

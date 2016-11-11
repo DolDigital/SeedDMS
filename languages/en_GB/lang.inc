@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1465), dgrutsch (7), netixw (14)
+//    Translators: Admin (1468), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -170,6 +170,7 @@ URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribute changed',
 'attribute_count' => 'Number of uses',
 'attribute_value' => 'Value of attribute',
+'attribute_value_not_in_valueset' => 'Value not in value set',
 'attr_malformed_boolean' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid boolean.',
 'attr_malformed_date' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid date.',
 'attr_malformed_email' => 'The attribute value \'[value]\' of attribute \'[attrname]\' is not a valid URL.',
@@ -618,6 +619,7 @@ URL: [url]',
 'linked_documents' => 'Related Documents',
 'linked_files' => 'Attachments',
 'link_alt_updatedocument' => 'If you would like to upload files bigger than the current maximum upload size, please use the alternative <a href="%s">upload page</a>.',
+'list_contains_no_access_docs' => 'The list contains more documents you have no access to and are not displayed.',
 'list_hooks' => 'List hooks',
 'local_file' => 'Local file',
 'locked_by' => 'Locked by',
