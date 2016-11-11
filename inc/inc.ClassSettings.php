@@ -591,16 +591,18 @@ class Settings { /* {{{ */
 			$this->_maxExecutionTime = ini_get("max_execution_time");
 
 		// XML Path: /configuration/system/advanced/converters
-		$converters = $xml->xpath('/configuration/advanced/converters[@target="fulltext"]/converter');
-		if(!$converters)
-			$converters = $xml->xpath('/configuration/advanced/converters/converter');
+		$convertergroups = $xml->xpath('/configuration/advanced/converters');
 		$this->_converters = array();
-		foreach($converters as $converter) {
-			$tab = $converter->attributes();
-			if(!trim(strval($tab['target'])))
-				$this->_converters['fulltext'][trim(strval($tab['mimeType']))] = trim(strval($converter));
+		foreach($convertergroups as $convertergroup) {
+			$tabgroup = $convertergroup->attributes();
+			if(strval($tabgroup['target']))
+				$target = strval($tabgroup['target']);
 			else
-				$this->_converters[trim(strval($tab['target']))][trim(strval($tab['mimeType']))] = trim(strval($converter));
+				$target = 'fulltext';
+			foreach($convertergroup as $converter) {
+				$tab = $converter->attributes();
+				$this->_converters[$target][trim(strval($tab['mimeType']))] = trim(strval($converter));
+			}
 		}
 
 		// XML Path: /configuration/extensions
@@ -870,30 +872,41 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
     $this->setXMLAttributValue($node, "cmdTimeout", $this->_cmdTimeout);
 
-    // XML Path: /configuration/advanced/converters
-    foreach($this->_converters['fulltext'] as $mimeType => $cmd)
-    {
-      // search XML node
-      $node = $xml->xpath('/configuration/advanced/converters/converter[@mimeType="'. $mimeType .'"]');
+		/* Check if there is still a converters list with a target attribute */
+		$node = $xml->xpath('/configuration/advanced/converters[count(@*)=0]');
+		if (count($node)>0) {
+			$this->setXMLAttributValue($node[0], 'target', 'fulltext');
+		}
 
-      if (isset($node))
-      {
-        if (count($node)>0)
-        {
-          $node = $node[0];
-        }
-        else
-        {
-          $nodeParent = $xml->xpath('/configuration/advanced/converters');
-          $node = $nodeParent[0]->addChild("converter");
-        }
+		// XML Path: /configuration/advanced/converters
+		foreach($this->_converters as $type=>$converters) {
+			foreach($this->_converters[$type] as $mimeType => $cmd) {
+				// search XML node
+				$node = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]/converter[@mimeType="'. $mimeType .'"]');
 
-				$node[0] = $cmd;
-        $this->setXMLAttributValue($node, 'mimeType', $mimeType);
-
-      } // isset($node)
-
-    } // foreach
+				if (count($node)>0) {
+					if(trim($cmd)) {
+						$node = $node[0];
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					} else {
+						$node = $node[0];
+						unset($node[0]);
+					}
+				} else {
+					if(trim($cmd)) {
+						$nodeParent = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]');
+						if(count($nodeParent) == 0) {
+							$nodeParent = array($advnode->addChild("converters"));
+							$this->setXMLAttributValue($nodeParent[0], 'target', $type);
+						}
+						$node = $nodeParent[0]->addChild("converter");
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					}
+				}
+			} // foreach
+		} // foreach
 
 
     // XML Path: /configuration/extensions
