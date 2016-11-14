@@ -1125,6 +1125,7 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <notes>
 - new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
 - new method SeedDMЅ_Core_WorkflowState::getTransitions() 
+- new method SeedDMЅ_Core_AttributeDefinition::parseValue() 
    </notes>
   </release>
   <release>

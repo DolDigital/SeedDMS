@@ -125,7 +125,17 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	 */
 	function getValueAsArray() { /* {{{ */
 		if($this->_attrdef->getMultipleValues()) {
-			return explode($this->_value[0], substr($this->_value, 1));
+			/* If the value doesn't start with the separator used in the value set,
+			 * then assume that the value was not saved with a leading separator.
+			 * This can happen, if the value was previously a single value from
+			 * the value set and later turned into a multi value attribute.
+			 */
+			$sep = substr($this->_value, 0, 1);
+			$vsep = $this->_attrdef->getValueSetSeparator();
+			if($sep == $vsep)
+				return(explode($sep, substr($this->_value, 1)));
+			else
+				return(array($this->_value));
 		} else {
 			return array($this->_value);
 		}
@@ -724,6 +734,35 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					return false;
 				}
 			}
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Parse a given value according to attribute definition
+	 *
+	 * The return value is always an array, even if the attribute is single
+	 * value attribute.
+	 *
+	 * @return array list of single values
+	 */
+	function parseValue($value) { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		if($this->getMultipleValues()) {
+			/* If the value doesn't start with the separator used in the value set,
+			 * then assume that the value was not saved with a leading separator.
+			 * This can happen, if the value was previously a single value from
+			 * the value set and later turned into a multi value attribute.
+			 */
+			$sep = substr($value, 0, 1);
+			$vsep = $this->getValueSetSeparator();
+			if($sep == $vsep)
+				return(explode($sep, substr($value, 1)));
+			else
+				return(array($value));
+		} else {
+			return array($value);
 		}
 		return true;
 	} /* }}} */
