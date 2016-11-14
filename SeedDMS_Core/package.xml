@@ -26,6 +26,7 @@
  <notes>
 - new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
 - new method SeedDMЅ_Core_WorkflowState::getTransitions() 
+- new method SeedDMЅ_Core_AttributeDefinition::parseValue() 
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
