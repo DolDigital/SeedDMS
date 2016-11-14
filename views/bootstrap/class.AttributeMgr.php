@@ -92,14 +92,17 @@ $(document).ready( function() {
 					print "<th></th>\n";
 					print "</tr></thead>\n<tbody>\n";
 					foreach($res['frequencies'][$type] as $entry) {
+						$value = $selattrdef->parseValue($entry['value']);
 						echo "<tr>";
-						echo "<td>".$entry['value']."</td><td>".$entry['c']."</td>";
+						echo "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
 						/* various checks, if the value is valid */
 						echo "<td>";
 						/* Check if value is in value set */
 						if($selattrdef->getValueSet()) {
-							if(in_array($entry['value'], $selattrdef->getValueSetAsArray()))
-								printMLText("attribute_value_not_in_valueset");
+							foreach($values as $v) {
+								if(!in_array($value, $selattrdef->getValueSetAsArray()))
+									printMLText("attribute_value_not_in_valueset");
+							}
 						}
 						echo "</td>";
 						echo "</tr>";
