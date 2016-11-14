@@ -917,9 +917,14 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function validate($attrvalue) { /* {{{ */
 		if($this->getMultipleValues()) {
-			if(is_string($attrvalue))
-				$values = explode($attrvalue[0], substr($attrvalue, 1));
-			else
+			if(is_string($attrvalue)) {
+				$sep = $attrvalue[0];
+				$vsep = $this->getValueSetSeparator();
+				if($sep == $vsep)
+					$values = explode($attrvalue[0], substr($attrvalue, 1));
+				else
+					$values = array($attrvalue);
+			} else
 				$values = $attrvalue;
 		} else {
 			$values = array($attrvalue);
