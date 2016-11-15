@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - merged changes from 4.3.31
 - fix saving online editing file
+- replace some php short tags by <?php (Closes #294)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.7
