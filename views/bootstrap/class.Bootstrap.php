@@ -1405,14 +1405,14 @@ $(function() {
 	$('#jqtree<?php echo $formid ?>').tree({
 		saveState: true,
 		data: data,
-		saveState: 'jqtree<?= $formid; ?>',
+		saveState: 'jqtree<?php echo $formid; ?>',
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
 		_onCanSelectNode: function(node) {
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1426,16 +1426,16 @@ $(function() {
 	});
 	// Unfold tree if folder is opened
 	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
-  $('#jqtree<?= $formid ?>').bind(
+  $('#jqtree<?php echo $formid ?>').bind(
 		'tree.click',
 		function(event) {
 			var node = event.node;
-			$('#jqtree<?= $formid ?>').tree('openNode', node);
+			$('#jqtree<?php echo $formid ?>').tree('openNode', node);
 //			event.preventDefault();
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		}
 	);
 });
