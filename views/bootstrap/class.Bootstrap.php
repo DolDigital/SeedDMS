@@ -1425,7 +1425,7 @@ $(function() {
     }
 	});
 	// Unfold tree if folder is opened
-	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
+	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?php echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
   $('#jqtree<?php echo $formid ?>').bind(
 		'tree.click',
 		function(event) {
