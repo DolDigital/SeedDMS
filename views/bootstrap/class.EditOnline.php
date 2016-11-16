@@ -54,7 +54,7 @@ $(document).ready(function()	{
 				theme: 'defaultTheme',
 				timeout: 1500,
 			});
-			$('div.ajax').trigger('update', {documentid: <?= $document->getId() ?>});
+			$('div.ajax').trigger('update', {documentid: <?php echo $document->getId(); ?>});
 		}, "json");
 		return false;
 	});
@@ -118,7 +118,7 @@ echo "<div class=\"span6\">\n";
 $this->contentHeading(getMLText("content"));
 ?>
 <form action="../op/op.EditOnline.php" id="form1" method="post">
-<input type="hidden" name="documentid" value="<?= $document->getId() ?>" />
+<input type="hidden" name="documentid" value="<?php echo $document->getId(); ?>" />
 <textarea id="markdown" name="data" width="100%" rows="20">
 <?php
 		echo htmlspecialchars(file_get_contents($dms->contentDir . $version->getPath()));
