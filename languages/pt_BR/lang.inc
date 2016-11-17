@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (927), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (931), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -146,12 +146,12 @@ URL: [url]',
 'attrdef_objtype' => 'Tipo de objeto',
 'attrdef_regex' => 'Expressão regular',
 'attrdef_type' => 'Tipo',
-'attrdef_type_boolean' => '',
-'attrdef_type_date' => '',
+'attrdef_type_boolean' => 'Binário',
+'attrdef_type_date' => 'Data',
 'attrdef_type_email' => '',
 'attrdef_type_float' => '',
-'attrdef_type_int' => '',
-'attrdef_type_string' => '',
+'attrdef_type_int' => 'Inteiro',
+'attrdef_type_string' => 'Texto',
 'attrdef_type_url' => '',
 'attrdef_valueset' => 'Conjunto de valores',
 'attributes' => 'Atributos',
@@ -1001,6 +1001,8 @@ URL: [url]',
 'settings_Authentication' => 'Definições de autenticação',
 'settings_autoLoginUser' => '',
 'settings_autoLoginUser_desc' => '',
+'settings_available_languages' => '',
+'settings_available_languages_desc' => '',
 'settings_backupDir' => '',
 'settings_backupDir_desc' => '',
 'settings_cacheDir' => 'Diretório de cache',

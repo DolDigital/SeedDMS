@@ -66,7 +66,9 @@
 - remove file from dropfolder when updating a document and requested by
   configuration
 - another check if dropfolder is accessible when opening the dialog box
-- add preview of pdf documents and convertion to pdf
+- add preview of pdf documents and conversion to pdf
+- replace some more php short tags
+- list of available languages can be set in configuration
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30

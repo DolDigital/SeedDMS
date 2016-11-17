@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1133), tmichelfelder (106)
+//    Translators: Admin (1134), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '',
@@ -527,7 +527,7 @@ URL: [url]',
 'hu_HU' => 'ungerska',
 'id' => 'ID',
 'identical_version' => 'Ny version är lika med den aktuella versionen.',
-'import' => '',
+'import' => 'Importera',
 'importfs' => '',
 'import_fs' => 'Import från filsystem',
 'import_fs_warning' => '',
@@ -989,6 +989,8 @@ URL: [url]',
 'settings_Authentication' => 'Autentiseringsinställningar',
 'settings_autoLoginUser' => '',
 'settings_autoLoginUser_desc' => '',
+'settings_available_languages' => '',
+'settings_available_languages_desc' => '',
 'settings_backupDir' => '',
 'settings_backupDir_desc' => '',
 'settings_cacheDir' => 'Cache-mapp',

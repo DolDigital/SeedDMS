@@ -103,7 +103,7 @@ class SeedDMS_Preview_Base {
 	 * and the value is the command to be called for creating the preview
 	 */
 	function setConverters($arr) { /* {{{ */
-		$this->converters = array_merge($arr, $this->converters);
+		$this->converters = array_merge($this->converters, $arr);
 	} /* }}} */
 
 	/**

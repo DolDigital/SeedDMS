@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2335), dgrutsch (21)
+//    Translators: Admin (2337), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1041,6 +1041,8 @@ URL: [url]',
 'settings_Authentication' => 'Authentifikations-Einstellungen',
 'settings_autoLoginUser' => 'Automatisches Login',
 'settings_autoLoginUser_desc' => 'Verwende den Benutzer mit der angegebenen Id, sofern man nicht bereits angemeldet ist. Solch ein Zugriff erzeugt keine eigene Sitzung.',
+'settings_available_languages' => 'Verfügbare Sprachen',
+'settings_available_languages_desc' => 'Nur die hier ausgewählten Sprachen werden geladen und erscheinen bei der Sprachauswahl. Die voreingestellte Sprache wird immer geladen.',
 'settings_backupDir' => 'Sicherungs-Verzeichnis',
 'settings_backupDir_desc' => 'Verzeichnis in dem das Backup-Tool die Sicherungen ablegt. Wenn hier kein Wert gesetzt wird oder auf das Verzeichnis nicht zugriffen werden kann, dann werden die Sicherungen im Content-Verzeichnis abgelegt.',
 'settings_cacheDir' => 'Cache Verzeichnis',

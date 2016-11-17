@@ -20,7 +20,10 @@
 
 $LANG = array();
 $MISSING_LANG = array();
-foreach(getLanguages() as $_lang) {
+$__languages = getLanguages();
+if(!in_array($settings->_language, $__languages))
+	$__languages[] = $settings->_language;
+foreach($__languages as $_lang) {
 	if(file_exists($settings->_rootDir . "languages/" . $_lang . "/lang.inc")) {
 		include $settings->_rootDir . "languages/" . $_lang . "/lang.inc";
 		$LANG[$_lang] = $text;
@@ -28,15 +31,14 @@ foreach(getLanguages() as $_lang) {
 }
 unset($text);
 
-function getLanguages()
-{
-	GLOBAL $settings;
-	
+function getAvailableLanguages() { /* {{{ */
+	global $settings;
+
 	$languages = array();
-	
+
 	$path = $settings->_rootDir . "languages/";
 	$handle = opendir($path);
-	
+
 	while ($entry = readdir($handle) )
 	{
 		if ($entry == ".." || $entry == ".")
@@ -48,7 +50,17 @@ function getLanguages()
 
 	asort($languages);
 	return $languages;
-}
+} /* }}} */
+
+function getLanguages() { /* {{{ */
+	global $settings;
+
+	if($settings->_availablelanguages) {
+		return $settings->_availablelanguages;
+	}
+
+	return getAvailableLanguages();
+} /* }}} */
 
 /**
  * Get translation
@@ -102,7 +114,7 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 	$keys = array_keys($replace);
 	foreach ($keys as $key)
 		$tmpText = str_replace("[".$key."]", $replace[$key], $tmpText);
-	
+
 	return $tmpText;
 } /* }}} */
 

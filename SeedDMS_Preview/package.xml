@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-11-07</date>
- <time>15:17:11</time>
+ <date>2016-11-15</date>
+ <time>21:00:26</time>
  <version>
-  <release>1.2.0</release>
+  <release>1.2.1</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add new previewer which converts document to pdf instead of png
+setConverters() overrides exiting converters
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -236,6 +236,22 @@ finish deletePreview()
 add new method deleteDocumentPreviews()
 fix calculation of timeout (Bug #269)
 check if cache dir exists before deleting it in deleteDocumentPreviews()
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-07</date>
+   <time>15:17:11</time>
+   <version>
+    <release>1.2.0</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add new previewer which converts document to pdf instead of png
    </notes>
   </release>
  </changelog>

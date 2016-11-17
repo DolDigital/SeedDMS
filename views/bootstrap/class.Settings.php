@@ -132,12 +132,29 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_printDisclaimer");?>:</td>
         <td><input name="printDisclaimer" type="checkbox" <?php if ($settings->_printDisclaimer) echo "checked" ?> /></td>
       </tr>
-       <tr title="<?php printMLText("settings_language_desc");?>">
+      <tr title="<?php printMLText("settings_available_languages_desc");?>">
+        <td><?php printMLText("settings_available_languages");?>:</td>
+        <td>
+         <select name="availablelanguages[]" multiple>
+            <?php
+              $languages = getAvailableLanguages();
+              foreach($languages as $language)
+              {
+                echo '<option value="' . $language . '" ';
+                 if (in_array($language, $settings->_availablelanguages))
+                   echo "selected";
+                echo '>' . getMLText($language) . '</option>';
+             }
+            ?>
+          </select>
+        </td>
+      </tr>
+      <tr title="<?php printMLText("settings_language_desc");?>">
         <td><?php printMLText("settings_language");?>:</td>
         <td>
-         <SELECT name="language">
+         <select name="language">
             <?php
-              $languages = getLanguages();
+              $languages = getAvailableLanguages();
               foreach($languages as $language)
               {
                 echo '<option value="' . $language . '" ';
@@ -146,13 +163,13 @@ if(!is_writeable($settings->_configFilePath)) {
                 echo '>' . getMLText($language) . '</option>';
              }
             ?>
-          </SELECT>
+          </select>
         </td>
       </tr>
       <tr title="<?php printMLText("settings_theme_desc");?>">
         <td><?php printMLText("settings_theme");?>:</td>
         <td>
-         <SELECT name="theme">
+         <select name="theme">
             <?php
               $themes = UI::getStyles();
               foreach($themes as $theme)
@@ -163,7 +180,7 @@ if(!is_writeable($settings->_configFilePath)) {
                 echo '>' . $theme . '</option>';
              }
             ?>
-          </SELECT>
+          </select>
         </td>
       </tr>
       <tr title="<?php printMLText("settings_previewWidthList_desc");?>">
