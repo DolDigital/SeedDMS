@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1468), dgrutsch (7), netixw (14)
+//    Translators: Admin (1470), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1036,6 +1036,8 @@ URL: [url]',
 'settings_Authentication' => 'Authentication settings',
 'settings_autoLoginUser' => 'Automatic login',
 'settings_autoLoginUser_desc' => 'Use this user id for accesses if the user is not already logged in. Such an access will not create a session.',
+'settings_available_languages' => 'Available languages',
+'settings_available_languages_desc' => 'Only the selected languages will be loaded and show up in the language selector. The default language will always be loaded.',
 'settings_backupDir' => 'Backup directory',
 'settings_backupDir_desc' => 'Directory where the backup tool saves backups. If this directory is not set or cannot be accessed, then the backups will be saved in the content directory.',
 'settings_cacheDir' => 'Cache directory',

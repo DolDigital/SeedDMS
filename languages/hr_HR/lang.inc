@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1189), marbanas (16)
+//    Translators: Admin (1190), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -422,7 +422,7 @@ Internet poveznica: [url]',
 'edit_user' => 'Uredi korisnika',
 'edit_user_details' => 'Uredi detalje korisnika',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => 'Grčki',
 'email' => 'Email',
 'email_error_title' => 'Nema ulaznog emaila',
 'email_footer' => 'Koristeći funckcije \'Moj račun\' možete promijeniti postavke email obavještavanja.',
@@ -1025,6 +1025,8 @@ Internet poveznica: [url]',
 'settings_Authentication' => 'Postavke autentifikacije',
 'settings_autoLoginUser' => 'Automatska prijava',
 'settings_autoLoginUser_desc' => 'Koristite ovaj korisnički ID za pristup ukoliko korisnik već nije prijavljen. Takav pristup neće otvoriti sesiju.',
+'settings_available_languages' => '',
+'settings_available_languages_desc' => '',
 'settings_backupDir' => 'Mapa za sigurnosnu kopiju',
 'settings_backupDir_desc' => 'Mapa gdje alat za sigurnosne kopije sprema podatke. Ako ova mapa nije postavljena ili joj se ne može pristupiti, tada se sigurnosne kopije spremaju u mapu sadržaja.',
 'settings_cacheDir' => 'Mapa predmemorije',
