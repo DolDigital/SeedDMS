@@ -103,6 +103,8 @@ class Settings { /* {{{ */
 	var $_contentOffsetDir = "1048576";
 	// Maximum number of sub-directories per parent directory
 	var $_maxDirID = 32700;
+	// default available languages (list of languages shown in language selector)
+	var $_availablelanguages = array();
 	// default language (name of a subfolder in folder "languages")
 	var $_language = "en_GB";
 	// users are notified about document-changes that took place within the last $_updateNotifyTime seconds
@@ -376,6 +378,8 @@ class Settings { /* {{{ */
 		$this->_footNote = strval($tab["footNote"]);
 		$this->_printDisclaimer = Settings::boolVal($tab["printDisclaimer"]);
 		$this->_language = strval($tab["language"]);
+		if(trim(strval($tab["availablelanguages"])))
+			$this->_availablelanguages = explode(',',strval($tab["availablelanguages"]));
 		$this->_theme = strval($tab["theme"]);
 		if(isset($tab["previewWidthList"]))
 			$this->_previewWidthList = intval($tab["previewWidthList"]);
@@ -678,6 +682,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "footNote", $this->_footNote);
     $this->setXMLAttributValue($node, "printDisclaimer", $this->_printDisclaimer);
     $this->setXMLAttributValue($node, "language", $this->_language);
+    $this->setXMLAttributValue($node, "availablelanguages", implode(',', $this->_availablelanguages));
     $this->setXMLAttributValue($node, "theme", $this->_theme);
     $this->setXMLAttributValue($node, "previewWidthList", $this->_previewWidthList);
     $this->setXMLAttributValue($node, "previewWidthDetail", $this->_previewWidthDetail);

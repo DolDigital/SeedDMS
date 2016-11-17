@@ -57,6 +57,7 @@ if ($action == "saveSettings")
   $settings->_footNote = $_POST["footNote"];
   $settings->_printDisclaimer = getBoolValue("printDisclaimer");
   $settings->_language = $_POST["language"];
+  $settings->_availablelanguages = $_POST["availablelanguages"];
   $settings->_theme = $_POST["theme"];
   $settings->_previewWidthList = $_POST["previewWidthList"];
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
