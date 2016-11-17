@@ -62,7 +62,7 @@ if($user->isAdmin()) {
 	if($resArr["su"]) {
 		$user = $dms->getUser($resArr["su"]);
 	} else {
-		$session->resetSu();
+	//	$session->resetSu();
 	}
 }
 $theme = $resArr["theme"];
