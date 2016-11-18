@@ -27,6 +27,7 @@
 - new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
 - new method SeedDMЅ_Core_WorkflowState::getTransitions() 
 - new method SeedDMЅ_Core_AttributeDefinition::parseValue() 
+- add check for cycles in workflow SeedDMS_Core_Workflow::checkForCycles()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
