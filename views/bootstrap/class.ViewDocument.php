@@ -837,7 +837,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach($transitions as $transition) {
 				echo "<td>";
 				if($latestContent->executeWorkflowTransitionIsAllowed($transition)) {
-					echo "Done";
+					/* If this is reached, then the transition should have been executed
+					 * but for some reason the next state hasn't been reached. This can
+					 * be causes, if a transition which was previously already executed
+					 * is about to be executed again. E.g. there was already a transition
+					 * T1 from state S1 to S2 triggered by user U1.
+					 * Then there was a second transition T2 from
+					 * S2 back to S1. If the state S1 has been reached again, then
+					 * executeWorkflowTransitionIsAllowed() will think that T1 could be
+					 * executed because there is already a log entry saying, that U1
+					 * has triggered the workflow.
+					 */
+					echo "Done ";
 				}
 				$wkflogs = $latestContent->getWorkflowLog($transition);
 				foreach($wkflogs as $wkflog) {
