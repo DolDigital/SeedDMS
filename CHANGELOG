@@ -10,6 +10,7 @@
 - add preview of pdf documents and conversion to pdf
 - replace some more php short tags
 - list of available languages can be set in configuration
+- check for cycles in workflows and issue warning
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
