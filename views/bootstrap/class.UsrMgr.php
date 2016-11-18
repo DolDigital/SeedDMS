@@ -471,11 +471,11 @@ $(document).ready( function() {
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
 		<div class="controls">
 <select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_user")?>
-<option value="0"><?php echo getMLText("add_user")?>
+<option value="-1"><?php echo getMLText("choose_user")?></option>
+<option value="0"><?php echo getMLText("add_user")?></option>
 <?php
 		foreach ($users as $currUser) {
-			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\">" . htmlspecialchars($currUser->getLogin());
+			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\">" . htmlspecialchars($currUser->getLogin()) . "</option>";
 		}
 ?>
 </select>
