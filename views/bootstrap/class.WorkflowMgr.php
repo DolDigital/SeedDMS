@@ -87,6 +87,15 @@ $(document).ready(function() {
 		$workflowstates = $this->params['allworkflowstates'];
 
 		if($workflow) {
+			$path = $workflow->checkForCycles();
+			if($path) {
+				$names = array();
+				foreach($path as $state) {
+					$names[] = $state->getName();
+				}
+				$this->errorMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="icon-arrow-right"></i> ', $names));
+			}
+
 			$transitions = $workflow->getTransitions();
 			$initstate = $workflow->getInitState();
 			$hasinitstate = true;
