@@ -320,9 +320,9 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	/**
 	 * Check if workflow contains cycles
 	 *
-	 * @return boolean true if workflow contains cycles, otherwise false
+	 * @return boolean list of states if workflow contains cycles, otherwise false
 	 */
-	function check() { /* {{{ */
+	function checkForCycles() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
 		$initstate = $this->getInitState();
