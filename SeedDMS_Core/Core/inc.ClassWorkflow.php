@@ -301,6 +301,35 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return true;
 	} /* }}} */
 
+	private function penetrate($laststates) {
+		$state = end($laststates);
+		$transitions = $this->getNextTransitions($state);
+		foreach($transitions as $transition) {
+			$nextstate = $transition->getNextState();
+			/* Check if nextstate is already in list of previous states */
+			foreach($laststates as $laststate) {
+				if($laststate->getID() == $nextstate->getID())
+					return array_merge($laststates, array($nextstate));
+			}
+			if($ret = $this->penetrate(array_merge($laststates, array($nextstate))))
+				return $ret;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if workflow contains cycles
+	 *
+	 * @return boolean list of states if workflow contains cycles, otherwise false
+	 */
+	function checkForCycles() { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$initstate = $this->getInitState();
+
+		return $this->penetrate(array($initstate));
+	} /* }}} */
+
 	/**
 	 * Remove the workflow and all its transitions
 	 * Do not remove actions and states of the workflow

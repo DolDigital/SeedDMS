@@ -351,7 +351,7 @@ $(document).ready( function() {
 		}
 	});
 
-	$('div.ajax').each(function(index) {
+	$('div.ajax').each(function(index) { /* {{{ */
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
@@ -381,9 +381,9 @@ $(document).ready( function() {
 				}
 			});
 		});
-	});
+	}); /* }}} */
 
-	$('div.ajax').on('update', function(event, param1) {
+	$('div.ajax').on('update', function(event, param1) { /* {{{ */
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
@@ -416,10 +416,24 @@ $(document).ready( function() {
 					return $newstate;
 				}
 			});
+			$(".pwd").passStrength({ /* {{{ */
+				url: "../op/op.Ajax.php",
+				onChange: function(data, target) {
+					pwsp = 100*data.score;
+					$('#'+target+' div.bar').width(pwsp+'%');
+					if(data.ok) {
+						$('#'+target+' div.bar').removeClass('bar-danger');
+						$('#'+target+' div.bar').addClass('bar-success');
+					} else {
+						$('#'+target+' div.bar').removeClass('bar-success');
+						$('#'+target+' div.bar').addClass('bar-danger');
+					}
+				}
+			}); /* }}} */
 		});
-	});
+	}); /* }}} */
 
-	$("body").on("click", ".ajax-click", function() {
+	$("body").on("click", ".ajax-click", function() { /* {{{ */
 		var element = $(this);
 		var url = element.data('href')+"?"+element.data('param1');
 		$.ajax({
@@ -452,11 +466,11 @@ $(document).ready( function() {
 				}
 			}
 		});
-	});
+	}); /* }}} */
 
-	$('button.history-back').on('click', function(event) {
+	$('button.history-back').on('click', function(event) { /* {{{ */
 		window.history.back();
-	});
+	}); /* }}} */
 });
 
 function onAddClipboard(ev) { /* {{{ */
@@ -654,7 +668,7 @@ function onAddClipboard(ev) { /* {{{ */
 	}
 }( window.SeedDMSUpload = window.SeedDMSUpload || {}, jQuery )); /* }}} */
 
-$(document).ready(function() {
+$(document).ready(function() { /* {{{ */
 	var obj = $("#dragandrophandler");
 	obj.on('dragenter', function (e) {
 		e.stopPropagation();
@@ -972,4 +986,4 @@ $(document).ready(function() {
 			timeout: (typeof timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
-});
+}); /* }}} */
