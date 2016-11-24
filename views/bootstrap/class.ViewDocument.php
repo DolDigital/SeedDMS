@@ -413,7 +413,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		/* Retrieve attacheѕ files */
-		$files = $document->getDocumentFiles();
+		$latestContent = $document->getLatestContent();
+		$files = $document->getDocumentFiles($latestContent->getVersion());
+		$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
 
 		/* Retrieve linked documents */
 		$links = $document->getDocumentLinks();

@@ -1929,7 +1929,8 @@ $(document).ready( function() {
 			}
 			
 			/* Retrieve attacheѕ files */
-			$files = $document->getDocumentFiles();
+			$files = $document->getDocumentFiles($latestContent->getVersion());
+			$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
 
 			/* Retrieve linked documents */
 			$links = $document->getDocumentLinks();
