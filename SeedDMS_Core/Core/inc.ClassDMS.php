@@ -316,6 +316,80 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Filter out document attachments which can not be accessed by a given user
+	 *
+	 * Returns a filtered list of files which are accessible by the
+	 * given user. A file is only accessible, if it is publically visible,
+	 * owned by the user, or the accessing user is an administrator.
+	 *
+	 * @param array $files list of objects of type SeedDMS_Core_DocumentFile
+	 * @param object $user user for which access is being checked
+	 * @return array filtered list of files
+	 */
+	static function filterDocumentFiles($user, $files) { /* {{{ */
+		$tmp = array();
+		foreach ($files as $file)
+			if ($file->isPublic() || ($file->getUser()->getID() == $user->getID()) || $user->isAdmin())
+				array_push($tmp, $file);
+		return $tmp;
+	} /* }}} */
+
+	/**
+	 * Merge access lists
+	 *
+	 * Merges two access lists. Objects of the second list will override objects
+	 * in the first list.
+	 *
+	 * @param array $first list of access rights as returned by
+	 * SeedDMS_Core_Document:: getAccessList() or SeedDMS_Core_Folder::getAccessList()
+	 * @param array $secont list of access rights
+	 * @return array merged list
+	 */
+	static function mergeAccessLists($first, $second) { /* {{{ */
+		if($first && !$second)
+			return $first;
+		if(!$first && $second)
+			return $second;
+
+		$tmp = array('users'=>array(), 'groups'=>array());
+		if(!isset($first['users']) || !isset($first['groups']) ||
+			!isset($second['users']) || !isset($second['groups']))
+			return false;
+
+		foreach ($first['users'] as $f) {
+			$new = $f;
+			foreach ($second['users'] as $i=>$s) {
+				if($f->getUserID() == $s->getUserID()) {
+					$new = $s;
+					unset($second['users'][$i]);
+					break;
+				}
+			}
+			array_push($tmp['users'], $new);
+		}
+		foreach ($seconf['users'] as $f) {
+			array_push($tmp['users'], $f);
+		}
+
+		foreach ($first['groups'] as $f) {
+			$new = $f;
+			foreach ($second['groups'] as $i=>$s) {
+				if($f->getGroupID() == $s->getGroupID()) {
+					$new = $s;
+					unset($second['groups'][$i]);
+					break;
+				}
+			}
+			array_push($tmp['groups'], $new);
+		}
+		foreach ($second['groups'] as $f) {
+			array_push($tmp['groups'], $f);
+		}
+
+		return $tmp;
+	} /* }}} */
+
+	/**
 	 * Create a new instance of the dms
 	 *
 	 * @param object $db object of class {@link SeedDMS_Core_DatabaseAccess}
