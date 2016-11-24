@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1470), dgrutsch (7), netixw (14)
+//    Translators: Admin (1473), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -618,6 +618,9 @@ URL: [url]',
 'librarydoc' => 'Document from library',
 'linked_documents' => 'Related Documents',
 'linked_files' => 'Attachments',
+'linked_to_current_version' => 'Linked to current version',
+'linked_to_document' => 'Linked to document',
+'linked_to_this_version' => 'Linked to this version',
 'link_alt_updatedocument' => 'If you would like to upload files bigger than the current maximum upload size, please use the alternative <a href="%s">upload page</a>.',
 'list_contains_no_access_docs' => 'The list contains more documents you have no access to and are not displayed.',
 'list_hooks' => 'List hooks',
