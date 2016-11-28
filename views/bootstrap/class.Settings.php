@@ -715,7 +715,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 ?>
-      <tr ><td><b><?php echo $extconf['title'];?></b></td></tr>
+			<tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
 <?php
 					foreach($extconf['config'] as $confkey=>$conf) {
 ?>
