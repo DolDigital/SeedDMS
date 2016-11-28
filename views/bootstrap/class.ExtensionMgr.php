@@ -95,7 +95,10 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			if($errmsgs)
 				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $errmsgs)."</div>";
 			echo "</td>";
-			echo "<td>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small></td>";
+			echo "<td>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small>";
+			if($extconf['config'])
+				echo "<div class=\"list-action\"><a href=\"../out/out.Settings.php?currenttab=extensions#".$extname."\"><i class=\"icon-cogs\"></i></a></div>";
+			echo "</td>";
 			echo "<td><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "</tr>\n";
 		}
