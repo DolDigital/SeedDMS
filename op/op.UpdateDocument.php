@@ -318,7 +318,7 @@ if ($_FILES['userfile']['error'] == 0) {
 					}
 				}
 
-				if($approvers['i'] || $approvers['g']) {
+				elseif($approvers['i'] || $approvers['g']) {
 					$subject = "approval_request_email_subject";
 					$message = "approval_request_email_body";
 					$params = array();
