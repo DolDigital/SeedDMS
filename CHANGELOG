@@ -12,6 +12,8 @@
 - list of available languages can be set in configuration
 - check for cycles in workflows and issue warning
 - major update of russian language (Thanks to r3code)
+- when updating or adding a document do not send request for approval
+  if review needs to be done before
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
