@@ -1759,7 +1759,8 @@ $(document).ready( function() {
 			for(var i in arr) {
 				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
 			}
-			$("#"+target).trigger("chosen:updated");
+//			$("#"+target).trigger("chosen:updated");
+			$("#"+target).trigger("change");
 		}
 	});
 });

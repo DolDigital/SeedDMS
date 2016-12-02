@@ -399,7 +399,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					}
 				}
 
-				if($approvers['i'] || $approvers['g']) {
+				elseif($approvers['i'] || $approvers['g']) {
 					$subject = "approval_request_email_subject";
 					$message = "approval_request_email_body";
 					$params = array();
