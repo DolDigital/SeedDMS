@@ -1769,7 +1769,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_documentFiles)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id." ORDER BY `date` DESC";
+			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id;
+			if($version) {
+				$queryStr .= " AND (`version`=0 OR `version`=".(int) $version.")";
+			}	
+			$queryStr .= " ORDER BY ";
+			if($version) {
+				$queryStr .= "`version` DESC,";
+			}
+			$queryStr .= "`date` DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 
