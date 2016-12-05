@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2371)
+//    Translators: Admin (2374)
 
 $text = array(
 '2_factor_auth' => '',
@@ -227,7 +227,7 @@ URL: [url]',
 'choose_workflow_action' => '選擇流程行為',
 'choose_workflow_state' => '選擇流程狀態',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => '清除緩存',
 'clear_clipboard' => '清除剪貼簿',
 'clear_password' => '',
 'clipboard' => '剪貼簿',
@@ -369,7 +369,7 @@ URL: [url]',
 'edit_user' => '編輯用戶',
 'edit_user_details' => '編輯用戶詳情',
 'edit_version' => '',
-'el_GR' => '',
+'el_GR' => '希臘語',
 'email' => 'Email',
 'email_error_title' => '',
 'email_footer' => '您可以用‘我的帳戶’選項來改變您的e-mail設置',
@@ -464,7 +464,7 @@ URL: [url]',
 'identical_version' => '新版本的內容與舊版本完全相同',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => '由檔案系統匯入',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => '包含文檔',

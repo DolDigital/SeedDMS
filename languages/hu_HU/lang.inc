@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (598), ribaz (1023)
+//    Translators: Admin (601), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
@@ -799,7 +799,7 @@ Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a
 'personal_default_keywords' => 'Személyes kulcsszó lista',
 'pl_PL' => 'Lengyel',
 'possible_substitutes' => '',
-'preview' => '',
+'preview' => 'Előnézet',
 'preview_converters' => '',
 'preview_markdown' => '',
 'preview_plain' => '',
@@ -1395,7 +1395,7 @@ URL: [url]',
 'thursday' => 'Csütörtök',
 'thursday_abbr' => 'Cs',
 'timeline' => 'Vremenska crta',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Új csatolmány',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',

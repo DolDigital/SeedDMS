@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1532), rickr (144), s.pnt (26)
+//    Translators: Admin (1537), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -1059,7 +1059,7 @@ URL: [url]',
 'settings_contentOffsetDir' => 'Cartella Offset',
 'settings_contentOffsetDir_desc' => 'Per supplire a limitazioni all\'utilizzo del filesystem è stata concepita una nuova struttura di cartelle all\'interno della cartella contenitore (Content Directory). Questa necessita di una cartella di partenza: di solito è sufficiente lasciare il nome di default, 1048576, ma può essere usato un qualsiasi numero o stringa che non esistano già all\'interno della cartella contenitore (Content Directory)',
 'settings_convertToPdf' => '',
-'settings_convertToPdf_desc' => '',
+'settings_convertToPdf_desc' => 'Se il documento non può essere nativamente mostrato nel browser, verrà mostrata una versione in PDF.',
 'settings_cookieLifetime' => 'Tempo di vita del cookie',
 'settings_cookieLifetime_desc' => 'Tempo di vita del cookie in secondi: se impostato su 0 il cookie verrà rimosso alla chiusura del browser',
 'settings_coreDir' => 'Cartella principale dell\'applicazione',
@@ -1262,12 +1262,12 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'ID della cartella principale (non dovrebbe essere necessario modificarlo)',
 'settings_SaveError' => 'Errore di salvataggio del file di configurazione',
 'settings_Server' => 'Impostazioni Server',
-'settings_showFullPreview' => '',
-'settings_showFullPreview_desc' => '',
+'settings_showFullPreview' => 'Mostra il documento completo',
+'settings_showFullPreview_desc' => 'Abilita/disabilita una preview completa del documento sulla pagina dei dettagli, se il browser è in grado di eseguirlo.',
 'settings_showMissingTranslations' => 'Mostra traduzioni mancanti',
 'settings_showMissingTranslations_desc' => 'Elenca tutte le traduzioni mancanti alla fine della pagina. L\'utente collegato potrà sottoporre una proposta per le traduzioni mancanti che verrà salvata in un file .csv. Da non usarsi in un ambiente di produzione.',
-'settings_showSingleSearchHit' => '',
-'settings_showSingleSearchHit_desc' => '',
+'settings_showSingleSearchHit' => 'Salta direttamente ad un singolo elemento di ricerca',
+'settings_showSingleSearchHit_desc' => 'Se i risultati di ricerca daranno origine ad un solo elemento, allora sarà visualizzato al posto della lista dei risultati.',
 'settings_Site' => 'Sito',
 'settings_siteDefaultPage' => 'Pagina iniziale',
 'settings_siteDefaultPage_desc' => 'Pagina iniziale di default del sito. Se lasciato vuoto punta su: out/out.ViewFolder.php',
