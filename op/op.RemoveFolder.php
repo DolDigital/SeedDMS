@@ -79,7 +79,7 @@ $controller->setParam('folder', $folder);
 $controller->setParam('index', $index);
 $controller->setParam('indexconf', $indexconf);
 if(!$controller->run()) {
-	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($foldername))),getMLText("error_remove_folder"));
 }
 
 if ($notifier) {

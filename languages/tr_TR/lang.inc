@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1044), aydin (83)
+//    Translators: Admin (1045), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -435,6 +435,8 @@ URL: [url]',
 'error_no_document_selected' => 'Hiçbir doküman seçilmedi',
 'error_no_folder_selected' => 'Hiçbir klasör seçilmedi',
 'error_occured' => 'Bir hata oluştu',
+'error_remove_document' => '',
+'error_remove_folder' => '',
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'es_ES' => 'İspanyolca',
@@ -800,7 +802,7 @@ Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görü
 'personal_default_keywords' => 'Kişisel anahtar kelimeler',
 'pl_PL' => 'Polonyaca',
 'possible_substitutes' => '',
-'preview' => '',
+'preview' => 'Önizle',
 'preview_converters' => '',
 'preview_markdown' => '',
 'preview_plain' => '',

@@ -83,7 +83,7 @@ $controller->setParam('document', $document);
 $controller->setParam('index', $index);
 $controller->setParam('indexconf', $indexconf);
 if(!$controller->run()) {
-	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($docname)))),getMLText("error_remove_document"));
 }
 
 if ($notifier){

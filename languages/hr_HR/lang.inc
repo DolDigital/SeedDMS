@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1190), marbanas (16)
+//    Translators: Admin (1191), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -441,6 +441,8 @@ Internet poveznica: [url]',
 'error_no_document_selected' => 'Nije odabran dokument',
 'error_no_folder_selected' => 'Nije odabrana mapa',
 'error_occured' => 'Dogodila se greška',
+'error_remove_document' => '',
+'error_remove_folder' => '',
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'es_ES' => 'Španjolski',
@@ -541,7 +543,7 @@ Internet poveznica: [url]',
 'identical_version' => 'Nova verzija je identična trenutnoj verziji.',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importaj iz FS-a',
 'import_fs_warning' => '',
 'include_content' => 'Uključi sadržaj',
 'include_documents' => 'Sadrži dokumente',

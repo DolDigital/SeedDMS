@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1055), jeromerobert (50), lonnnew (9), Oudiceval (130)
+//    Translators: Admin (1055), jeromerobert (50), lonnnew (9), Oudiceval (132)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -437,10 +437,12 @@ URL: [url]',
 'error_add_aro' => '',
 'error_add_permission' => 'Erreur lors de l’ajout de permission',
 'error_clearcache' => 'Erreur lors du vidage du cache',
-'error_importfs' => '',
+'error_importfs' => 'Erreur lors de l’import depuis le système de fichiers',
 'error_no_document_selected' => 'Aucun document sélectionné',
 'error_no_folder_selected' => 'Aucun dossier sélectionné',
 'error_occured' => 'Une erreur s\'est produite',
+'error_remove_document' => '',
+'error_remove_folder' => '',
 'error_remove_permission' => 'Erreur lors de la suppression de permission',
 'error_toogle_permission' => 'Erreur lors de la modification de permission',
 'es_ES' => 'Espagnol',
@@ -1274,7 +1276,7 @@ URL: [url]',
 'settings_zendframework' => 'Zend Framework',
 'set_expiry' => 'Modifier la date d\'expiration',
 'set_owner' => 'Sélection du propriétaire',
-'set_owner_error' => 'Error setting owner',
+'set_owner_error' => 'Erreur lors de la définition du propriétaire',
 'set_password' => 'Définir mot de passe',
 'set_workflow' => 'Définir le Workflow',
 'signed_in_as' => 'Connecté en tant que',

@@ -17,6 +17,8 @@ $(document).ready( function() {
 	$('.datepicker, #expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate')
 		.datepicker()
 		.on('changeDate', function(ev){
+			if(ev.date && $(ev.target).data('checkbox'))
+				$($(ev.target).data('checkbox')).prop('checked', false);
 			$(ev.currentTarget).datepicker('hide');
 		});
 
@@ -340,7 +342,7 @@ $(document).ready( function() {
 		input.trigger('fileselect', [numFiles, label]);
 	});
 
-	$('#upload-files').on('fileselect', '.btn-file :file', function(event, numFiles, label) {
+	$(document).on('fileselect', '#upload-file .btn-file :file', function(event, numFiles, label) {
 		var input = $(this).parents('.input-append').find(':text'),
 		log = numFiles > 1 ? numFiles + ' files selected' : label;
 

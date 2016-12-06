@@ -354,7 +354,7 @@ switch($command) {
 							add_log_line();
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('error_remove_folder'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
@@ -419,7 +419,7 @@ switch($command) {
 							add_log_line();
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('error_remove_document'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
@@ -669,15 +669,10 @@ switch($command) {
 						}
 					}
 					if($settings->_enableFullSearch) {
-						if(!empty($settings->_luceneClassDir))
-							require_once($settings->_luceneClassDir.'/Lucene.php');
-						else
-							require_once('SeedDMS/Lucene.php');
-
-						$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+						$index = $indexconf['Indexer']::open($settings->_luceneDir);
 						if($index) {
-							SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-							$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
+							$indexconf['Indexer']::init($settings->_stopWordsFile);
+							$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
 						}
 					}
 

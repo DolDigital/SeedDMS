@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (931), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (932), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -435,6 +435,8 @@ URL: [url]',
 'error_no_document_selected' => 'Nenhum documento selecionado',
 'error_no_folder_selected' => 'Nenhuma pasta selecionada',
 'error_occured' => 'Ocorreu um erro',
+'error_remove_document' => '',
+'error_remove_folder' => '',
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'es_ES' => 'Espanhol',
@@ -797,7 +799,7 @@ Se você ainda tiver problemas para fazer o login, por favor, contate o administ
 'personal_default_keywords' => 'palavras-chave pessoais',
 'pl_PL' => 'Polonês',
 'possible_substitutes' => '',
-'preview' => '',
+'preview' => 'visualizar',
 'preview_converters' => '',
 'preview_markdown' => '',
 'preview_plain' => '',

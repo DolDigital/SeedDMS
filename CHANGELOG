@@ -73,6 +73,7 @@
 - major update of russian language (Thanks to r3code)
 - when updating or adding a document do not send request for approval
   if review needs to be done before
+- uncheck checkbox for expiration date if date is selected.
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
@@ -80,7 +81,7 @@
 - fix adding new workflows
 - fix moving documents/folders via drag&drop in Edge (Closes #286)
 - update folder tree after moving a document/folder with drag&drop (Closes #288)
-- trim each value of a value sets of attribute definitions bevor saving
+- trim each value of a value sets of attribute definitions before saving
 - assign role 'user' instead of 'admin' to accounts automatically created during
   ldap authentication
 
