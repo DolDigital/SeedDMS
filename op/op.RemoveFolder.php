@@ -99,7 +99,7 @@ if ($folder->remove()) {
 		}
 	}
 } else {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_remove_folder"));
 }
 
 add_log_line("?folderid=".$folderid."&name=".$foldername);

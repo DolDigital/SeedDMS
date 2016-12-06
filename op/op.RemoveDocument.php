@@ -67,7 +67,7 @@ $nl = array(
 );
 $docname = $document->getName();
 if (!$document->remove()) {
-	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($docname))),getMLText("error_remove_document"));
 } else {
 
 	/* Remove the document from the fulltext index */
