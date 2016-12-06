@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2344), dgrutsch (21)
+//    Translators: Admin (2346), dgrutsch (21)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -441,6 +441,8 @@ URL: [url]',
 'error_no_document_selected' => 'Kein Dokument ausgewählt',
 'error_no_folder_selected' => 'Kein Ordner ausgewählt',
 'error_occured' => 'Ein Fehler ist aufgetreten. Bitte Administrator benachrichtigen.',
+'error_remove_document' => 'Fehler beim Löschen des Dokuments',
+'error_remove_folder' => 'Fehler beim Löschen des Ordners',
 'error_remove_permission' => 'Fehler beim Entfernen der Berechtigung',
 'error_toogle_permission' => 'Fehler beim Ändern der Berechtigung',
 'es_ES' => 'Spanisch',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1473), dgrutsch (7), netixw (14)
+//    Translators: Admin (1475), dgrutsch (7), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -441,6 +441,8 @@ URL: [url]',
 'error_no_document_selected' => 'No document selected',
 'error_no_folder_selected' => 'No folder selected',
 'error_occured' => 'An error has occurred',
+'error_remove_document' => 'Error while deleting document',
+'error_remove_folder' => 'Error while deleting folder',
 'error_remove_permission' => 'Error while remove permission',
 'error_toogle_permission' => 'Error while changing permission',
 'es_ES' => 'Spanish',
