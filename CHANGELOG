@@ -17,6 +17,7 @@
 - uncheck checkbox for expiration date if date is selected.
 - remove some old references to Lucene when indexing a document
   uploaded by fast upload
+- show workflow state in list of documents instead of just 'in workflow'
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
