@@ -1828,7 +1828,13 @@ $(document).ready( function() {
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small></td>";
+			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
+				$workflowstate = $latestContent->getWorkflowState();
+				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
+			} else {
+				$content .= getOverallStatusText($status["status"]);
+			}
+			$content .= "</small></td>";
 //				$content .= "<td>".$version."</td>";
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
