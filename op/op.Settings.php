@@ -178,6 +178,9 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - INDEX CMD
   $settings->_converters['fulltext'] = $_POST["converters"];
+  if(trim($_POST["converters_newmimetype"]) && trim($_POST["converters_newcmd"])) {
+    $settings->_converters['fulltext'][trim($_POST["converters_newmimetype"])] = trim($_POST["converters_newcmd"]);
+  }
 
   // -------------------------------------------------------------------------
   // save
