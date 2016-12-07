@@ -74,6 +74,8 @@
 - when updating or adding a document do not send request for approval
   if review needs to be done before
 - uncheck checkbox for expiration date if date is selected.
+- remove some old references to Lucene when indexing a document
+  uploaded by fast upload
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30

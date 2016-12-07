@@ -649,6 +649,7 @@ switch($command) {
 
 				$cats = array();
 
+				$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 				$res = $folder->addDocument($name, '', $expires, $user, '',
 																		array(), $userfiletmp, basename($userfilename),
 																		$fileType, $userfiletype, 0,
