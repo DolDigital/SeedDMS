@@ -182,7 +182,11 @@ if ($action == "saveSettings")
   $settings->_cmdTimeout = (intval($_POST["cmdTimeout"]) > 0) ?intval($_POST["cmdTimeout"]) : 1;
 
   // SETTINGS - ADVANCED - INDEX CMD
-  $settings->_converters['fulltext'] = $_POST["converters"];
+	$settings->_converters['fulltext'] = $_POST["converters"];
+	$newmimetype = preg_replace('#[^A-Za-z0-9_/+]+#', ',', $_POST["converters_newmimetype"]);
+  if($newmimetype && trim($_POST["converters_newcmd"])) {
+    $settings->_converters['fulltext'][$newmimetype] = trim($_POST["converters_newcmd"]);
+  }
 
   // SETTINGS - EXTENSIONS
   $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();
