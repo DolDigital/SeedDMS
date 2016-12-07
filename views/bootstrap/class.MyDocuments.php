@@ -621,6 +621,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					
 						print "<tr>\n";
 						$latestContent = $document->getLatestContent();
+						$workflow = $latestContent->getWorkflow();
 						$previewer->createPreview($latestContent);
 						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 						if($previewer->hasPreview($latestContent)) {
@@ -630,7 +631,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						}
 						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=workflow\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
-						print "<td>".getOverallStatusText($res["status"])."</td>";
+//						print "<td>".getOverallStatusText($res["status"])."</td>";
+						$workflowstate = $latestContent->getWorkflowState();
+						print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
 						print "<td>".$res["version"]."</td>";
 						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 						print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
