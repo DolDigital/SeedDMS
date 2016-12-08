@@ -65,20 +65,6 @@ if ($folder->setParent($targetFolder)) {
 	// Send notification to subscribers.
 	if($notifier) {
 		$notifyList = $folder->getNotifyList();
-/*
-		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_moved_email");
-		$message = getMLText("folder_moved_email")."\r\n";
-		$message .= 
-			getMLText("name").": ".$folder->getName()."\r\n".
-			getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$folder->getComment()."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-		foreach ($folder->_notifyList["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
 		$subject = "folder_moved_email_subject";
 		$message = "folder_moved_email_body";
 		$params = array();

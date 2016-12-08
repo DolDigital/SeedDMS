@@ -80,7 +80,6 @@ if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
 		$folder = $document->getFolder();
-
 		$subject = "transition_triggered_email_subject";
 		$message = "transition_triggered_email_body";
 		$params = array();

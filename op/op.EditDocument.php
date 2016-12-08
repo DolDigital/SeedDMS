@@ -79,25 +79,6 @@ if (($oldname = $document->getName()) != $name) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$oldname." - ".getMLText("document_renamed_email");
-			$message = getMLText("document_renamed_email")."\r\n";
-			$message .= 
-				getMLText("old").": ".$oldname."\r\n".
-				getMLText("new").": ".$name."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-			
-			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()->getID()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);		
-*/
 			$subject = "document_renamed_email_subject";
 			$message = "document_renamed_email_body";
 			$params = array();
@@ -132,25 +113,6 @@ if (($oldcomment = $document->getComment()) != $comment) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("comment_changed_email");
-			$message = getMLText("document_comment_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-
-			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);		
-*/
 			$subject = "document_comment_changed_email_subject";
 			$message = "document_comment_changed_email_body";
 			$params = array();

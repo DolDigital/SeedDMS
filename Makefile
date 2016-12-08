@@ -12,7 +12,7 @@ PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
 dist:
 	mkdir -p tmp/seeddms-$(VERSION)
 	cp -a $(SRC) tmp/seeddms-$(VERSION)
-	(cd tmp; tar --exclude=.svn -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
+	(cd tmp; tar --exclude=.svn --exclude=views/blue --exclude=views/hc --exclude=views/clean --exclude=styles/blue --exclude=styles/hc --exclude=styles/clean -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
 	rm -rf tmp
 
 pear:

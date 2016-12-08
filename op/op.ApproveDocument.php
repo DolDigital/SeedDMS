@@ -200,17 +200,6 @@ if ($_POST["approvalStatus"]==-1){
 		if($notifier) {
 			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-			$message = getMLText("document_status_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("status").": ".getOverallStatusText($status)."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-*/
-
 			$subject = "document_status_changed_email_subject";
 			$message = "document_status_changed_email_body";
 			$params = array();
@@ -258,17 +247,6 @@ if ($_POST["approvalStatus"]==-1){
 			if($notifier) {
 				$nl=$document->getNotifyList();
 				$folder = $document->getFolder();
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-				$message = getMLText("document_status_changed_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-*/
 				$subject = "document_status_changed_email_subject";
 				$message = "document_status_changed_email_body";
 				$params = array();
