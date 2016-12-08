@@ -79,8 +79,8 @@ if(($oldname = $folder->getName()) != $name) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 			// if user is not owner send notification to owner
-			if ($user->getID() != $folder->getOwner()->getID()) 
-				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
+//			if ($user->getID() != $folder->getOwner()->getID()) 
+//				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 		}
 	} else {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));	
@@ -107,8 +107,8 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 			// if user is not owner send notification to owner
-			if ($user->getID() != $folder->getOwner()->getID()) 
-				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
+//			if ($user->getID() != $folder->getOwner()->getID()) 
+//				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 
 		}
 	} else {

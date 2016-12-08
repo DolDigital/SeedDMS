@@ -115,7 +115,7 @@ if ($_POST["reviewType"] == "ind") {
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }
@@ -150,7 +150,7 @@ else if ($_POST["reviewType"] == "grp") {
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }
@@ -180,7 +180,7 @@ if ($_POST["reviewStatus"]==-1){
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 

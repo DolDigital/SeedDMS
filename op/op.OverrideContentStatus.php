@@ -89,7 +89,7 @@ if ($overrideStatus != $overallStatus["status"]) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }
