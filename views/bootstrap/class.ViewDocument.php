@@ -1215,6 +1215,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
+				if($file->getVersion())
+					print "<li>".getMLText('linked_to_current_version')."</li>";
+				else
+					print "<li>".getMLText('linked_to_document')."</li>";
 				print "</ul></td>";
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
 			

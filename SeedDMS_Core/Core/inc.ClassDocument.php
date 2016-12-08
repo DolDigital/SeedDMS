@@ -1762,10 +1762,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if ((is_bool($resArr) && !$resArr) || count($resArr)==0) return false;
 
 		$resArr = $resArr[0];
-		return new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"]);
+		return new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"],$resArr["version"],$resArr["public"]);
 	} /* }}} */
 
-	function getDocumentFiles() { /* {{{ */
+	function getDocumentFiles($version=0) { /* {{{ */
 		if (!isset($this->_documentFiles)) {
 			$db = $this->_dms->getDB();
 
@@ -1784,19 +1784,19 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$this->_documentFiles = array();
 
 			foreach ($resArr as $row) {
-				array_push($this->_documentFiles, new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"]));
+				array_push($this->_documentFiles, new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"], $row["version"], $row["public"]));
 			}
 		}
 		return $this->_documentFiles;
 	} /* }}} */
 
-	function addDocumentFile($name, $comment, $user, $tmpFile, $orgFileName,$fileType, $mimeType ) { /* {{{ */
+	function addDocumentFile($name, $comment, $user, $tmpFile, $orgFileName,$fileType, $mimeType,$version=0,$public=1) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$dir = $this->getDir();
 
-		$queryStr = "INSERT INTO `tblDocumentFiles` (`comment`, `date`, `dir`, `document`, `fileType`, `mimeType`, `orgFileName`, `userID`, `name`) VALUES ".
-			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
+		$queryStr = "INSERT INTO `tblDocumentFiles` (`comment`, `date`, `dir`, `document`, `fileType`, `mimeType`, `orgFileName`, `userID`, `name`, `version`, `public`) VALUES ".
+			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).", ".((int) $version).", ".($public ? 1 : 0).")";
 		if (!$db->getResult($queryStr)) return false;
 
 		$id = $db->getInsertID();
@@ -4379,6 +4379,16 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	protected $_date;
 
 	/**
+	 * @var integer version of document this file is attached to
+	 */
+	protected $_version;
+
+	/**
+	 * @var integer 1 if this link is public, or 0 if is only visible to the owner
+	 */
+	protected $_public;
+
+	/**
 	 * @var string directory where the file is stored. This is the
 	 * document id with a proceding '/'.
 	 * FIXME: looks like this isn't used anymore. The file path is
@@ -4406,7 +4416,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 */
 	protected $_name;
 
-	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name) {
+	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name,$version,$public) {
 		$this->_id = $id;
 		$this->_document = $document;
 		$this->_userID = $userID;
@@ -4417,6 +4427,8 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		$this->_mimeType = $mimeType;
 		$this->_orgFileName = $orgFileName;
 		$this->_name = $name;
+		$this->_version = $version;
+		$this->_public = $public;
 	}
 
 	function getID() { return $this->_id; }
@@ -4439,6 +4451,10 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	function getPath() {
 		return $this->_document->getDir() . "f" .$this->_id . $this->_fileType;
 	}
+
+	function getVersion() { return $this->_version; }
+
+	function isPublic() { return $this->_public; }
 
 } /* }}} */
 

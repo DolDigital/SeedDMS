@@ -77,6 +77,13 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	else
 		$name = $_FILES["userfile"]['name'][$file_num];
 	$comment  = $_POST["comment"];
+	$version  = (int) $_POST["version"];
+	$public  = (isset($_POST["public"]) && $_POST["public"] == 'true') ? 1 : 0;
+
+	$v = $document->getContentByVersion($version);
+	if(!$v) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	}
 
 	$userfiletmp = $_FILES["userfile"]["tmp_name"][$file_num];
 	$userfiletype = $_FILES["userfile"]["type"][$file_num];
@@ -90,8 +97,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	$res = $document->addDocumentFile($name, $comment, $user, $userfiletmp, 
-																		basename($userfilename),$fileType, $userfiletype );
-																	
+                                  basename($userfilename),$fileType, $userfiletype, $version, $public);
+                                
 	if (is_bool($res) && !$res) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	} else {
