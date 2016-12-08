@@ -18,6 +18,10 @@
 - remove some old references to Lucene when indexing a document
   uploaded by fast upload
 - show workflow state in list of documents instead of just 'in workflow'
+- overhaul notification system. Do not send extra notifications to owner
+  anymore. Send notifications to users/groups watching the old and new
+  folder if a document/folder is moved.
+- drop alternative themes blue, hc, and clean
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.30
