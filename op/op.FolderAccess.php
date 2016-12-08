@@ -144,7 +144,7 @@ if ($action == "setowner") {
 			foreach ($notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
+//			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
 
 		}
 	} else {

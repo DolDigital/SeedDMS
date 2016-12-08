@@ -192,8 +192,8 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 					$notifier->toGroup($user, $grp, $subject, $message, $params);
 				}
 				// if user is not owner send notification to owner
-				if ($user->getID() != $document->getOwner()->getID()) 
-					$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//				if ($user->getID() != $document->getOwner()->getID()) 
+//					$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 			}
 
 			$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]) : false;

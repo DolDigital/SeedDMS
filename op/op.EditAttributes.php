@@ -93,8 +93,8 @@ if($attributes) {
 							$notifier->toGroup($user, $grp, $subject, $message, $params);
 						}
 						// if user is not owner send notification to owner
-						if ($user->getID() != $document->getOwner()->getID()) 
-							$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//						if ($user->getID() != $document->getOwner()->getID()) 
+//							$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 
 					}
 				}

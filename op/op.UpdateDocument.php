@@ -261,8 +261,8 @@ if ($_FILES['userfile']['error'] == 0) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()->getID()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//			if ($user->getID() != $document->getOwner()->getID()) 
+//				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 
 			if($workflow && $settings->_enableNotificationWorkflow) {
 				$subject = "request_workflow_action_email_subject";

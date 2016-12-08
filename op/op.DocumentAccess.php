@@ -144,7 +144,7 @@ if ($action == "setowner") {
 			foreach ($notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
+//			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
 
 		}
 	}
@@ -207,8 +207,26 @@ else if ($action == "notinherit") {
 
 // Change to inherit-----------------------------------------------------
 else if ($action == "inherit") {
-	$document->clearAccessList();
-	$document->setInheritAccess(true);
+	if($document->clearAccessList() && $document->setInheritAccess(true)) {
+		if($notifier) {
+			$notifyList = $document->getNotifyList();
+			$folder = $document->getFolder();
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
+		}
+	}
 }
 
 // Set default permissions ----------------------------------------------
