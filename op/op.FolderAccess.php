@@ -124,23 +124,6 @@ if ($action == "setowner") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("ownership_changed_email");
-			$message = getMLText("ownership_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("old").": ".$oldOwner->getFullName()."\r\n".
-				getMLText("new").": ".$newOwner->getFullName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$folder->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "ownership_changed_email_subject";
 			$message = "ownership_changed_email_body";
 			$params = array();
@@ -175,19 +158,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -211,19 +181,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -263,21 +220,6 @@ else if ($action == "inherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$notifyList = $folder->getNotifyList();
-
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -305,20 +247,6 @@ else if ($action == "setdefault") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();

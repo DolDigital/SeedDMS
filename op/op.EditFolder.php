@@ -64,25 +64,6 @@ if(($oldname = $folder->getName()) != $name) {
 		// Send notification to subscribers.
 		if($notifier) {
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_renamed_email");
-			$message = getMLText("folder_renamed_email")."\r\n";
-			$message .= 
-				getMLText("old").": ".$oldname."\r\n".
-				getMLText("new").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "folder_renamed_email_subject";
 			$message = "folder_renamed_email_body";
 			$params = array();
@@ -110,24 +91,6 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 		// Send notification to subscribers.
 		if($notifier) {
 			$notifyList = $folder->getNotifyList();
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("comment_changed_email");
-			$message = getMLText("folder_comment_changed_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$folder->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "folder_comment_changed_email_subject";
 			$message = "folder_comment_changed_email_body";
 			$params = array();

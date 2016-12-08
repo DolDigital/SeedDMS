@@ -127,26 +127,6 @@ if ($action == "setowner") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("ownership_changed_email");
-			$message = getMLText("ownership_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("old").": ".$oldOwner->getFullName()."\r\n".
-				getMLText("new").": ".$newOwner->getFullName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-			// Send notification to previous owner.
-			$notifier->toIndividual($user, $oldOwner, $subject, $message);
-*/
-
 			$subject = "ownership_changed_email_subject";
 			$message = "ownership_changed_email_body";
 			$params = array();
@@ -176,21 +156,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -211,24 +176,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -268,21 +215,6 @@ else if ($action == "setdefault") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();

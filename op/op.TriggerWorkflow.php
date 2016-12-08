@@ -70,19 +70,6 @@ if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
 		$folder = $document->getFolder();
-
-/*
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("transition_triggered_email");
-		$message = getMLText("transition_triggered_email")."\r\n";
-		$message .= 
-			getMLText("document").": ".$document->getName()."\r\n".
-			getMLText("workflow").": ".$workflow->getName()."\r\n".
-			getMLText("action").": ".$transition->getAction()->getName()."\r\n".
-			getMLText("comment").": ".$_POST["comment"]."\r\n".
-			getMLText("previous_state").": ".$transition->getState()->getName()."\r\n".
-			getMLText("current_state").": ".$transition->getNextState()->getName()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-*/
 		$subject = "transition_triggered_email_subject";
 		$message = "transition_triggered_email_body";
 		$params = array();
