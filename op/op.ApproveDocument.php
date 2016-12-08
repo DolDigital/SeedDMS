@@ -100,18 +100,6 @@ if ($_POST["approvalType"] == "ind") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
-			$message = getMLText("approval_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-*/
-
 			$subject = "approval_submit_email_subject";
 			$message = "approval_submit_email_body";
 			$params = array();
@@ -150,18 +138,6 @@ else if ($_POST["approvalType"] == "grp") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
-			$message = getMLText("approval_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-*/
-
 			$subject = "approval_submit_email_subject";
 			$message = "approval_submit_email_body";
 			$params = array();
