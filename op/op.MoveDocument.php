@@ -64,7 +64,13 @@ if ($targetid != $oldFolder->getID()) {
 	if ($document->setFolder($targetFolder)) {
 		// Send notification to subscribers.
 		if($notifier) {
-			$notifyList = $document->getNotifyList();
+			$nl1 = $oldFolder->getNotifyList();
+			$nl2 = $document->getNotifyList();
+			$nl3 = $targetFolder->getNotifyList();
+			$nl = array(
+				'users'=>array_merge($nl1['users'], $nl2['users'], $nl3['users']),
+				'groups'=>array_merge($nl1['groups'], $nl2['groups'], $nl3['groups'])
+			);
 			$subject = "document_moved_email_subject";
 			$message = "document_moved_email_body";
 			$params = array();
@@ -75,13 +81,13 @@ if ($targetid != $oldFolder->getID()) {
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
-			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-			foreach ($notifyList["groups"] as $grp) {
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
+			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()->getID()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//			if ($user->getID() != $document->getOwner()->getID()) 
+//				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 		}
 
 	} else {
