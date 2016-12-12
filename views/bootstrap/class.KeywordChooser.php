@@ -108,7 +108,6 @@ myTA.focus();
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$categories = $this->params['categories'];
-		$form = $this->params['form'];
 
 //		$this->htmlStartPage(getMLText("use_default_keywords"));
 ?>

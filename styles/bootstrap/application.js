@@ -17,11 +17,39 @@ $(document).ready( function() {
 	$('.datepicker, #expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate')
 		.datepicker()
 		.on('changeDate', function(ev){
+			if(ev.date && $(ev.target).data('checkbox'))
+				$($(ev.target).data('checkbox')).prop('checked', false);
 			$(ev.currentTarget).datepicker('hide');
 		});
 
-	$(".chzn-select").chosen({width: "95%"});
-	$(".chzn-select-deselect").chosen({width: "95%", allow_single_deselect:true});
+//	$(".chzn-select").chosen({width: "95%"});
+//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+	$(".chzn-select").select2({
+		width: '100%',
+		templateResult: function (state) {
+			var subtitle = $(state.element).data('subtitle');
+			var html = '<span>'+state.text+'';
+			if(subtitle)
+				html += '<br /><i>'+subtitle+'</i>';
+			html += '</span>';
+			var $newstate = $(html);
+			return $newstate;
+		}
+	});
+	$(".chzn-select-deselect").select2({
+		allowClear:true,
+		width: '100%',
+		templateResult: function (state) {
+			var subtitle = $(state.element).data('subtitle');
+			var html = '<span>'+state.text+'';
+			if(subtitle)
+				html += '<br /><i>'+subtitle+'</i>';
+			html += '</span>';
+			var $newstate = $(html);
+			return $newstate;
+		}
+	});
 
 	/* change the color and length of the bar graph showing the password
 	 * strength on each change to the passwod field.
@@ -240,6 +268,7 @@ $(document).ready( function() {
 			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
+					$('#table-row-folder-'+attr_source).hide('slow');
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -264,6 +293,7 @@ $(document).ready( function() {
 			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
 				if(data.success) {
+					$('#table-row-document-'+attr_source).hide('slow');
 					noty({
 						text: data.msg,
 						type: data.success ? 'success' : 'error',
@@ -312,7 +342,7 @@ $(document).ready( function() {
 		input.trigger('fileselect', [numFiles, label]);
 	});
 
-	$('#upload-files').on('fileselect', '.btn-file :file', function(event, numFiles, label) {
+	$(document).on('fileselect', '#upload-file .btn-file :file', function(event, numFiles, label) {
 		var input = $(this).parents('.input-append').find(':text'),
 		log = numFiles > 1 ? numFiles + ' files selected' : label;
 
@@ -323,7 +353,7 @@ $(document).ready( function() {
 		}
 	});
 
-	$('div.ajax').each(function(index) {
+	$('div.ajax').each(function(index) { /* {{{ */
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
@@ -339,11 +369,23 @@ $(document).ready( function() {
 			url = href;
 		$.get(url, function(data) {
 			element.html(data);
-			$(".chzn-select").chosen();
+//			$(".chzn-select").chosen();
+			$(".chzn-select").select2({
+				width: '100%',
+				templateResult: function (state) {
+					var subtitle = $(state.element).data('subtitle');
+					var html = '<span>'+state.text+'';
+					if(subtitle)
+						html += '<br /><i>'+subtitle+'</i>';
+					html += '</span>';
+					var $newstate = $(html);
+					return $newstate;
+				}
+			});
 		});
-	});
+	}); /* }}} */
 
-	$('div.ajax').on('update', function(event, param1) {
+	$('div.ajax').on('update', function(event, param1) { /* {{{ */
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
@@ -363,11 +405,37 @@ $(document).ready( function() {
 		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-			$(".chzn-select").chosen();
+//			$(".chzn-select").chosen();
+			$(".chzn-select").select2({
+				width: '100%',
+				templateResult: function (state) {
+					var subtitle = $(state.element).data('subtitle');
+					var html = '<span>'+state.text+'';
+					if(subtitle)
+						html += '<br /><i>'+subtitle+'</i>';
+					html += '</span>';
+					var $newstate = $(html);
+					return $newstate;
+				}
+			});
+			$(".pwd").passStrength({ /* {{{ */
+				url: "../op/op.Ajax.php",
+				onChange: function(data, target) {
+					pwsp = 100*data.score;
+					$('#'+target+' div.bar').width(pwsp+'%');
+					if(data.ok) {
+						$('#'+target+' div.bar').removeClass('bar-danger');
+						$('#'+target+' div.bar').addClass('bar-success');
+					} else {
+						$('#'+target+' div.bar').removeClass('bar-success');
+						$('#'+target+' div.bar').addClass('bar-danger');
+					}
+				}
+			}); /* }}} */
 		});
-	});
+	}); /* }}} */
 
-	$("body").on("click", ".ajax-click", function() {
+	$("body").on("click", ".ajax-click", function() { /* {{{ */
 		var element = $(this);
 		var url = element.data('href')+"?"+element.data('param1');
 		$.ajax({
@@ -400,17 +468,21 @@ $(document).ready( function() {
 				}
 			}
 		});
-	});
+	}); /* }}} */
 
-	$('button.history-back').on('click', function(event) {
+	$('button.history-back').on('click', function(event) { /* {{{ */
 		window.history.back();
-	});
+	}); /* }}} */
 });
 
 function onAddClipboard(ev) { /* {{{ */
 	ev.preventDefault();
-	source_type = ev.originalEvent.dataTransfer.getData("type");
-	source_id = ev.originalEvent.dataTransfer.getData("id");
+	var source_info = JSON.parse(ev.originalEvent.dataTransfer.getData("text"));
+	source_type = source_info.type;
+	source_id = source_info.id;
+	formtoken = source_info.formtoken;
+//	source_type = ev.originalEvent.dataTransfer.getData("type");
+//	source_id = ev.originalEvent.dataTransfer.getData("id");
 	if(source_type == 'document' || source_type == 'folder') {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
@@ -598,7 +670,7 @@ function onAddClipboard(ev) { /* {{{ */
 	}
 }( window.SeedDMSUpload = window.SeedDMSUpload || {}, jQuery )); /* }}} */
 
-$(document).ready(function() {
+$(document).ready(function() { /* {{{ */
 	var obj = $("#dragandrophandler");
 	obj.on('dragenter', function (e) {
 		e.stopPropagation();
@@ -642,9 +714,14 @@ $(document).ready(function() {
 		attr_rel = $(e.currentTarget).attr('rel');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
-		source_type = e.originalEvent.dataTransfer.getData("type");
-		source_id = e.originalEvent.dataTransfer.getData("id");
-		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
+		console.log(e.originalEvent.dataTransfer.getData("text"));
+		var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+		source_type = source_info.type;
+		source_id = source_info.id;
+		formtoken = source_info.formtoken;
+//		source_type = e.originalEvent.dataTransfer.getData("type");
+//		source_id = e.originalEvent.dataTransfer.getData("id");
+//		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
 			bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
@@ -654,6 +731,7 @@ $(document).ready(function() {
 						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-document-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -694,6 +772,7 @@ $(document).ready(function() {
 						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-folder-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -731,18 +810,30 @@ $(document).ready(function() {
 		attr_rel = $(e.target).attr('rel');
 		if(typeof attr_rel == 'undefined')
 			return;
-		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
-		e.originalEvent.dataTransfer.setData("type","folder");
-		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
+		var dragStartInfo = {
+			id : attr_rel.split("_")[1],
+			type : "folder",
+			formtoken : $(e.target).attr('formtoken')
+		};
+		e.originalEvent.dataTransfer.setData("text", JSON.stringify(dragStartInfo));
+//		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+//		e.originalEvent.dataTransfer.setData("type","folder");
+//		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	$(document).on('dragstart', '.table-row-document', function (e) {
 		attr_rel = $(e.target).attr('rel');
 		if(typeof attr_rel == 'undefined')
 			return;
-		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
-		e.originalEvent.dataTransfer.setData("type","document");
-		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
+		var dragStartInfo = {
+			id : attr_rel.split("_")[1],
+			type : "document",
+			formtoken : $(e.target).attr('formtoken')
+		};
+		e.originalEvent.dataTransfer.setData("text", JSON.stringify(dragStartInfo));
+//		e.originalEvent.dataTransfer.setData("id", attr_rel.split("_")[1]);
+//		e.originalEvent.dataTransfer.setData("type","document");
+//		e.originalEvent.dataTransfer.setData("formtoken", $(e.target).attr('formtoken'));
 	});
 
 	/* Dropping item on alert below clipboard */
@@ -791,9 +882,13 @@ $(document).ready(function() {
 		$(e.target).parent().css('border', '0px solid white');
 		target_type = attr_rel.split("_")[0];
 		target_id = attr_rel.split("_")[1];
-		source_type = e.originalEvent.dataTransfer.getData("type");
-		source_id = e.originalEvent.dataTransfer.getData("id");
-		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
+		var source_info = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+		source_type = source_info.type;
+		source_id = source_info.id;
+		formtoken = source_info.formtoken;
+//		source_type = e.originalEvent.dataTransfer.getData("type");
+//		source_id = e.originalEvent.dataTransfer.getData("id");
+//		formtoken = e.originalEvent.dataTransfer.getData("formtoken");
 		if(source_type == 'document') {
 			bootbox.dialog(trans.confirm_move_document, [{
 				"label" : "<i class='icon-remove'></i> "+trans.move_document,
@@ -803,6 +898,7 @@ $(document).ready(function() {
 						{ command: 'movedocument', docid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-document-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -843,6 +939,7 @@ $(document).ready(function() {
 						{ command: 'movefolder', folderid: source_id, targetfolderid: target_id, formtoken: formtoken },
 						function(data) {
 							if(data.success) {
+								$('#table-row-folder-'+source_id).hide('slow');
 								noty({
 									text: data.message,
 									type: 'success',
@@ -891,4 +988,4 @@ $(document).ready(function() {
 			timeout: (typeof timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
-});
+}); /* }}} */

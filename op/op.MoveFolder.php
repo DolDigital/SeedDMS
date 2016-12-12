@@ -64,21 +64,13 @@ $oldFolder = $folder->getParent();
 if ($folder->setParent($targetFolder)) {
 	// Send notification to subscribers.
 	if($notifier) {
-		$notifyList = $folder->getNotifyList();
-/*
-		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_moved_email");
-		$message = getMLText("folder_moved_email")."\r\n";
-		$message .= 
-			getMLText("name").": ".$folder->getName()."\r\n".
-			getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$folder->getComment()."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-		foreach ($folder->_notifyList["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
+		$nl1 = $oldFolder->getNotifyList();
+		$nl2 = $folder->getNotifyList();
+		$nl3 = $targetFolder->getNotifyList();
+		$nl = array(
+			'users'=>array_merge($nl1['users'], $nl2['users'], $nl3['users']),
+			'groups'=>array_merge($nl1['groups'], $nl2['groups'], $nl3['groups'])
+		);
 		$subject = "folder_moved_email_subject";
 		$message = "folder_moved_email_body";
 		$params = array();
@@ -89,8 +81,8 @@ if ($folder->setParent($targetFolder)) {
 		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;
-		$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-		foreach ($notifyList["groups"] as $grp) {
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 		// if user is not owner send notification to owner

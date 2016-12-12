@@ -18,14 +18,15 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
-include("../inc/inc.Utils.php");
+include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('clearcache')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }

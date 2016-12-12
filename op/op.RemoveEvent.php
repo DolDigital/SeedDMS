@@ -30,7 +30,7 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Calendar.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('removeevent')) {
 	UI::exitError(getMLText("edit_event"),getMLText("invalid_request_token"));
 }

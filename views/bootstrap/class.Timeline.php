@@ -46,28 +46,18 @@ class SeedDMS_View_Timeline extends SeedDMS_Bootstrap_Style {
 		$timeout = $this->params['timeout'];
 
 		if($document && $version) {
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
-			$previewer->createPreview($version);
+		//	$this->contentHeading(getMLText("timeline_selected_item"));
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
+				echo $this->documentListRow($document, $previewer);
 
-			$this->contentHeading(getMLText("timeline_selected_item"));
-			$folder = $document->getFolder();
-			$path = $folder->getPath();
-			print "<div>";
-			print "<a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
-			for ($i = 1; $i  < count($path); $i++) {
-				print htmlspecialchars($path[$i]->getName())."/";
-			}
-			echo $document->getName();
-			print "</a>";
-			print "</div>";
-
-			print "<div>";
-			if($previewer->hasPreview($version)) {
-				print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($version->getMimeType())."\">");
-			} else {
-				print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
-			}
-			print "</div>";
+				echo "</tbody>\n</table>\n";
 		}
 	} /* }}} */
 
@@ -168,6 +158,7 @@ $(document).ready(function () {
 	});
 });
 <?php
+		$this->printDeleteDocumentButtonJs();
 		$timelineurl = 'out.Timeline.php?action=data&fromdate='.date('Y-m-d', $from).'&todate='.date('Y-m-d', $to).'&skip='.urldecode(http_build_query(array('skip'=>$skip)));
 		$this->printTimelineJs($timelineurl, 550, ''/*date('Y-m-d', $from)*/, ''/*date('Y-m-d', $to+1)*/, $skip);
 	} /* }}} */
@@ -178,6 +169,8 @@ $(document).ready(function () {
 		$fromdate = $this->params['fromdate'];
 		$todate = $this->params['todate'];
 		$skip = $this->params['skip'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		if($fromdate) {
 			$from = makeTsFromLongDate($fromdate.' 00:00:00');

@@ -494,6 +494,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<th></th>\n";
 								print "<th>".getMLText("name")."</th>\n";
 								print "<th>".getMLText("owner")."</th>\n";
+								print "<th>".getMLText("status")."</th>\n";
 								print "<th>".getMLText("version")."</th>\n";
 								print "<th>".getMLText("last_update")."</th>\n";
 								print "<th>".getMLText("expires")."</th>\n";
@@ -503,6 +504,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						
 							print "<tr>\n";
 							$latestContent = $document->getLatestContent();
+							$workflow = $latestContent->getWorkflow();
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
@@ -511,6 +513,8 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
+							$workflowstate = $latestContent->getWorkflowState();
+							print '<td>'.getOverallStatusText($docIdx[$st["document"]][$st["version"]]["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["document"]."&currenttab=workflow\">".htmlspecialchars($docIdx[$st["document"]][$st["version"]]["name"])."</a></td>";
 							print "<td>".htmlspecialchars($docIdx[$st["document"]][$st["version"]]["ownerName"])."</td>";
 							print "<td>".$st["version"]."</td>";
@@ -532,6 +536,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								print "<th></th>\n";
 								print "<th>".getMLText("name")."</th>\n";
 								print "<th>".getMLText("owner")."</th>\n";
+								print "<th>".getMLText("status")."</th>\n";
 								print "<th>".getMLText("version")."</th>\n";
 								print "<th>".getMLText("last_update")."</th>\n";
 								print "<th>".getMLText("expires")."</th>\n";
@@ -541,6 +546,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 
 							print "<tr>\n";
 							$latestContent = $document->getLatestContent();
+							$workflow = $latestContent->getWorkflow();
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
@@ -551,6 +557,8 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							print "</a></td>";
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["document"]."&currenttab=workflow\">".htmlspecialchars($docIdx[$st["document"]][$st["version"]]["name"])."</a></td>";
 							print "<td>".htmlspecialchars($docIdx[$st["document"]][$st["version"]]["ownerName"])."</td>";
+							$workflowstate = $latestContent->getWorkflowState();
+							print '<td>'.getOverallStatusText($docIdx[$st["document"]][$st["version"]]["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
 							print "<td>".$st["version"]."</td>";
 							print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["document"]][$st["version"]]["statusName"])."</td>";
 							print "<td".($docIdx[$st["document"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["document"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["document"]][$st["version"]]["expires"]))."</td>";				
@@ -614,13 +622,14 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					
 						// verify expiry
 						if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
-							if  ( $res["status"]==S_DRAFT_APP || $res["status"]==S_DRAFT_REV ){
+							if  ( $res["status"]==S_IN_WORKFLOW ){
 								$res["status"]=S_EXPIRED;
 							}
 						}
 					
 						print "<tr>\n";
 						$latestContent = $document->getLatestContent();
+						$workflow = $latestContent->getWorkflow();
 						$previewer->createPreview($latestContent);
 						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 						if($previewer->hasPreview($latestContent)) {
@@ -630,7 +639,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						}
 						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=workflow\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
-						print "<td>".getOverallStatusText($res["status"])."</td>";
+//						print "<td>".getOverallStatusText($res["status"])."</td>";
+						$workflowstate = $latestContent->getWorkflowState();
+						print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
 						print "<td>".$res["version"]."</td>";
 						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 						print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
@@ -698,6 +709,8 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				
 					print "<tr>\n";
 					$latestContent = $document->getLatestContent();
+					if($workflowmode == 'advanced')
+						$workflow = $latestContent->getWorkflow();
 					$previewer->createPreview($latestContent);
 					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 					if($previewer->hasPreview($latestContent)) {
@@ -707,7 +720,12 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					}
 					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
-					print "<td>".getOverallStatusText($res["status"])."</td>";
+					if($workflowmode == 'advanced' && $workflow) {
+						$workflowstate = $latestContent->getWorkflowState();
+						print '<td>'.getOverallStatusText($res["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
+					} else {
+						print "<td>".getOverallStatusText($res["status"])."</td>";
+					}
 					print "<td>".$res["version"]."</td>";
 					print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 					print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				

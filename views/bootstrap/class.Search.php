@@ -53,7 +53,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function js() { /* {{{ */
-		header('Content-Type: application/javascript');
+		header('Content-Type: application/javascript; charset=UTF-8');
+
+		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
 
 		$this->printFolderChooserJs("form1");
 		$this->printDeleteFolderButtonJs();
@@ -199,7 +201,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 
 <?php
@@ -307,7 +309,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 
 <?php
@@ -353,7 +355,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '', 'attributes', true) ?></td>
 </tr>
 <?php
 				}
@@ -478,7 +480,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						else
 							$comment = htmlspecialchars($document->getComment());
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-						print "<tr id=\"table-row-document-".$document->getID()."\">";
+						print "<tr id=\"table-row-document-".$document->getID()."\" class=\"table-row-document\" rel=\"document_".$document->getID()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 						if (in_array(2, $searchin)) {
 							$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
@@ -564,7 +566,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					} else {
 						$folderName = htmlspecialchars($folder->getName());
 					}
-					print "<tr id=\"table-row-folder-".$folder->getID()."\" rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+					print "<tr id=\"table-row-folder-".$folder->getID()."\" draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 					$path = $folder->getPath();

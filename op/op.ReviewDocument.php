@@ -30,7 +30,7 @@ include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('reviewdocument')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -102,26 +102,6 @@ if ($_POST["reviewType"] == "ind") {
 		if($notifier) {
 			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("review_submit_email");
-			$message = getMLText("review_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getReviewStatusText($_POST["reviewStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
-
-			// Send notification to subscribers.
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
-
 			$subject = "review_submit_email_subject";
 			$message = "review_submit_email_body";
 			$params = array();
@@ -138,7 +118,7 @@ if ($_POST["reviewType"] == "ind") {
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }
@@ -158,25 +138,6 @@ else if ($_POST["reviewType"] == "grp") {
 		if($notifier) {
 			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("review_submit_email");
-			$message = getMLText("review_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("status").": ".getReviewStatusText($_POST["reviewStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
-
-			// Send notification to subscribers.
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "review_submit_email_subject";
 			$message = "review_submit_email_body";
 			$params = array();
@@ -192,7 +153,7 @@ else if ($_POST["reviewType"] == "grp") {
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }
@@ -209,21 +170,6 @@ if ($_POST["reviewStatus"]==-1){
 		if($notifier) {
 			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-			$message = getMLText("document_status_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("status").": ".getOverallStatusText(S_REJECTED)."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "document_status_changed_email_subject";
 			$message = "document_status_changed_email_body";
 			$params = array();
@@ -237,7 +183,7 @@ if ($_POST["reviewStatus"]==-1){
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 
@@ -288,23 +234,6 @@ if ($_POST["reviewStatus"]==-1){
 			if($notifier) {
 				$nl=$document->getNotifyList();
 				$folder = $document->getFolder();
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-				$message = getMLText("document_status_changed_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-//				$subject=mydmsDecodeString($subject);
-//				$message=mydmsDecodeString($message);
-				
-				$notifier->toList($user, $nl["users"], $subject, $message);
-				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
-				}
-*/
 				$subject = "document_status_changed_email_subject";
 				$message = "document_status_changed_email_body";
 				$params = array();
@@ -327,15 +256,6 @@ if ($_POST["reviewStatus"]==-1){
 				$requestUser = $document->getOwner();
 
 				if($notifier) {
-/*
-					$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_request_email");
-					$message = getMLText("approval_request_email")."\r\n";
-					$message .= 
-						getMLText("name").": ".$content->getOriginalFileName()."\r\n".
-						getMLText("version").": ".$version."\r\n".
-						getMLText("comment").": ".$content->getComment()."\r\n".
-						"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."&version=".$version."\r\n";
-*/
 					$subject = "approval_request_email_subject";
 					$message = "approval_request_email_body";
 					$params = array();

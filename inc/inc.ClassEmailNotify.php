@@ -91,7 +91,9 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 		$headers = array ();
 		$headers['From'] = $from;
 		$headers['To'] = $recipient->getEmail();
-		$headers['Subject'] = getMLText($subject, $params, "", $lang);
+		$preferences = array("input-charset" => "UTF-8", "output-charset" => "UTF-8");
+		$encoded_subject = iconv_mime_encode("Subject", getMLText($subject, $params, "", $lang), $preferences);
+		$headers['Subject'] = substr($encoded_subject, strlen('Subject: '));
 		$headers['MIME-Version'] = "1.0";
 		$headers['Content-type'] = "text/plain; charset=utf-8";
 

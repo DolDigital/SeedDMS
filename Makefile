@@ -1,5 +1,5 @@
-VERSION=5.0.6
-SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
+VERSION=5.0.8
+SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi pdfviewer
 # webapp
 
 EXTENSIONS := \
@@ -12,7 +12,7 @@ PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
 dist:
 	mkdir -p tmp/seeddms-$(VERSION)
 	cp -a $(SRC) tmp/seeddms-$(VERSION)
-	(cd tmp; tar --exclude=.svn -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
+	(cd tmp; tar --exclude=.svn --exclude=views/blue --exclude=views/hc --exclude=views/clean --exclude=styles/blue --exclude=styles/hc --exclude=styles/clean -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
 	rm -rf tmp
 
 pear:
@@ -48,6 +48,6 @@ doc:
 	$(PHPDOC) -d SeedDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' --force -t html
 
 apidoc:
-	apigen  generate -s SeedDMS_Core --exclude tests --skip-doc-prefix tests -d html
+	apigen  generate -s SeedDMS_Core --exclude tests -d html
 
 .PHONY: webdav webapp

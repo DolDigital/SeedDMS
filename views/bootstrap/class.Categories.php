@@ -125,8 +125,11 @@ $(document).ready( function() {
 <div class="row-fluid">
 	<div class="span4">
 		<div class="well">
-<?php echo getMLText("selection")?>:
-			<select id="selector" class="span9">
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
+			<select id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 				<option value="0"><?php echo getMLText("new_document_category")?>
 <?php
@@ -135,6 +138,9 @@ $(document).ready( function() {
 				}
 ?>
 			</select>
+		</div>
+	</div>
+</form>
 		</div>
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>

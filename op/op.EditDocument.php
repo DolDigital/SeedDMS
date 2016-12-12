@@ -79,25 +79,6 @@ if (($oldname = $document->getName()) != $name) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$oldname." - ".getMLText("document_renamed_email");
-			$message = getMLText("document_renamed_email")."\r\n";
-			$message .= 
-				getMLText("old").": ".$oldname."\r\n".
-				getMLText("new").": ".$name."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-			
-			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()->getID()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);		
-*/
 			$subject = "document_renamed_email_subject";
 			$message = "document_renamed_email_body";
 			$params = array();
@@ -132,25 +113,6 @@ if (($oldcomment = $document->getComment()) != $comment) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("comment_changed_email");
-			$message = getMLText("document_comment_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-
-			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);		
-*/
 			$subject = "document_comment_changed_email_subject";
 			$message = "document_comment_changed_email_body";
 			$params = array();
@@ -261,45 +223,15 @@ if($attributes) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
 		if($attribute) {
 			if(!$attrdef->validate($attribute)) {
-				switch($attrdef->getValidationError()) {
-				case 5:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_malformed_email", array("attrname"=>$attrdef->getName(), "value"=>$attribute)));
-					break;
-				case 4:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_malformed_url", array("attrname"=>$attrdef->getName(), "value"=>$attribute)));
-					break;
-				case 3:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match", array("attrname"=>$attrdef->getName(), "value"=>$attribute, "regex"=>$attrdef->getRegex())));
-					break;
-				case 2:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-					break;
-				case 1:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-					break;
-				default:
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
-				}
+				$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())), $errmsg);
 			}
-			/*
-			if($attrdef->getRegex()) {
-				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
-				}
-			}
-			if(is_array($attribute)) {
-				if($attrdef->getMinValues() > count($attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-				}
-				if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-				}
-			}
-			 */
 			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
 				if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
 					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
+		} elseif($attrdef->getMinValues() > 0) {
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 		} elseif(isset($oldattributes[$attrdefid])) {
 			if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));

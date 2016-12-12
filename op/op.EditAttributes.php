@@ -29,7 +29,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('editattributes')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -66,18 +66,9 @@ if($attributes) {
 	foreach($attributes as $attrdefid=>$attribute) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
 		if($attribute) {
-			if($attrdef->getRegex()) {
-				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
-				}
-				if(is_array($attribute)) {
-					if($attrdef->getMinValues() > count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-					}
-					if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-					}
-				}
+			if(!$attrdef->validate($attribute)) {
+				$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())), $errmsg);
 			}
 			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
 				if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
@@ -102,8 +93,8 @@ if($attributes) {
 							$notifier->toGroup($user, $grp, $subject, $message, $params);
 						}
 						// if user is not owner send notification to owner
-						if ($user->getID() != $document->getOwner()->getID()) 
-							$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//						if ($user->getID() != $document->getOwner()->getID()) 
+//							$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 
 					}
 				}

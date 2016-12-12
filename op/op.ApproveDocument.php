@@ -30,7 +30,7 @@ include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('approvedocument')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -102,18 +102,6 @@ if ($_POST["approvalType"] == "ind") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
-			$message = getMLText("approval_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-*/
-
 			$subject = "approval_submit_email_subject";
 			$message = "approval_submit_email_body";
 			$params = array();
@@ -152,18 +140,6 @@ else if ($_POST["approvalType"] == "grp") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
-/*
-			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
-			$message = getMLText("approval_submit_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
-*/
-
 			$subject = "approval_submit_email_subject";
 			$message = "approval_submit_email_body";
 			$params = array();
@@ -200,17 +176,6 @@ if ($_POST["approvalStatus"]==-1){
 		if($notifier) {
 			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-			$message = getMLText("document_status_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("status").": ".getOverallStatusText($status)."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-*/
-
 			$subject = "document_status_changed_email_subject";
 			$message = "document_status_changed_email_body";
 			$params = array();
@@ -258,17 +223,6 @@ if ($_POST["approvalStatus"]==-1){
 			if($notifier) {
 				$nl=$document->getNotifyList();
 				$folder = $document->getFolder();
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-				$message = getMLText("document_status_changed_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-*/
 				$subject = "document_status_changed_email_subject";
 				$message = "document_status_changed_email_body";
 				$params = array();

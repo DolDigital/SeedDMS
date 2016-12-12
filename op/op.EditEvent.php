@@ -34,7 +34,7 @@ if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_event"),getMLText("access_denied"));
 }
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('editevent')) {
 	UI::exitError(getMLText("edit_event"),getMLText("invalid_request_token"));
 }

@@ -76,7 +76,7 @@ $(document).ready( function() {
     <div class="accordion" id="accordion1">
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1"       href="#collapseOne">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
 						<?php printMLText('attribute_value'); ?>
           </a>
         </div>
@@ -89,9 +89,20 @@ $(document).ready( function() {
 					print "<thead>\n<tr>\n";
 					print "<th>".getMLText("attribute_value")."</th>\n";
 					print "<th>".getMLText("attribute_count")."</th>\n";
+					print "<th></th>\n";
 					print "</tr></thead>\n<tbody>\n";
 					foreach($res['frequencies'][$type] as $entry) {
-						echo "<tr><td>".$entry['value']."</td><td>".$entry['c']."</td></tr>";
+						$value = $selattrdef->parseValue($entry['value']);
+						echo "<tr>";
+						echo "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
+						/* various checks, if the value is valid */
+						echo "<td>";
+						/* Check if value is in value set */
+						if(!$selattrdef->validate($entry['value'])) {
+							echo getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+						}
+						echo "</td>";
+						echo "</tr>";
 					}
 					print "</tbody></table>";
 				}
@@ -221,7 +232,11 @@ $(document).ready( function() {
 							<?php printMLText("attrdef_valueset");?>:
 						</td>
 						<td>
+							<?php if($attrdef && strlen($attrdef->getValueSet()) > 30) { ?>
+							<textarea name="valueset" rows="5"><?php echo ($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : '' ?></textarea>
+							<?php } else { ?>
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getValueSet() : '' ?>" name="valueset" />
+							<?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -267,10 +282,13 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span6">
 <div class="well">
-<?php echo getMLText("selection")?>:
-	<select class="chzn-select" id="selector" class="span9">
-		<option value="-1"><?php echo getMLText("choose_attrdef")?>
-		<option value="0"><?php echo getMLText("new_attrdef")?>
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
+	<select class="chzn-select" id="selector" class="input-xlarge">
+		<option value="-1"><?php echo getMLText("choose_attrdef")?></option>
+		<option value="0"><?php echo getMLText("new_attrdef")?></option>
 <?php
 		if($attrdefs) {
 			foreach ($attrdefs as $attrdef) {
@@ -305,11 +323,14 @@ $(document).ready( function() {
 						$t = getMLText("attrdef_type_boolean");
 						break;
 				}
-				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '').">" . htmlspecialchars($attrdef->getName() ." (".$ot.", ".$t.")");
+				print "<option value=\"".$attrdef->getID()."\" ".($selattrdef && $attrdef->getID()==$selattrdef->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($ot.", ".$t)."\">" . htmlspecialchars($attrdef->getName()/* ." (".$ot.", ".$t.")"*/);
 			}
 		}
 ?>
 	</select>
+		</div>
+	</div>
+</form>
 </div>
 	<div class="ajax" data-view="AttributeMgr" data-action="info" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
 </div>

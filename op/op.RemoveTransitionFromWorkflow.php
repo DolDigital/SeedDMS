@@ -31,7 +31,7 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('removetransitionfromworkflow')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }

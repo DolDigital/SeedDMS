@@ -140,7 +140,7 @@ class SeedDMS_LdapAuthentication extends SeedDMS_Authentication {
 					if (!is_bool($search)) {
 						$info = ldap_get_entries($ds, $search);
 						if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-							$user = $dms->addUser($username, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "", 1);
+							$user = $dms->addUser($username, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "", 0);
 						}
 					}
 				}

@@ -87,6 +87,15 @@ $(document).ready(function() {
 		$workflowstates = $this->params['allworkflowstates'];
 
 		if($workflow) {
+			$path = $workflow->checkForCycles();
+			if($path) {
+				$names = array();
+				foreach($path as $state) {
+					$names[] = $state->getName();
+				}
+				$this->errorMsg(getMLText('workflow_has_cycle').": ".implode(' <i class="icon-arrow-right"></i> ', $names));
+			}
+
 			$transitions = $workflow->getTransitions();
 			$initstate = $workflow->getInitState();
 			$hasinitstate = true;
@@ -143,7 +152,7 @@ $(document).ready(function() {
 ?>
 	<table class="table-condensed">
 <?php
-		if(!$workflow->isUsed()) {
+		if($workflow && !$workflow->isUsed()) {
 ?>
 	  <tr><td></td><td><a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a></td></tr>
 <?php
@@ -288,7 +297,6 @@ $(document).ready(function() {
 	function form() { /* {{{ */
 		$selworkflow = $this->params['selworkflow'];
 
-		if($selworkflow)
 		$this->showWorkflowForm($selworkflow);
 	} /* }}} */
 
@@ -309,7 +317,10 @@ $(document).ready(function() {
 <div class="row-fluid">
 <div class="span5">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 <select id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_workflow")?>
 <option value="0"><?php echo getMLText("add_workflow")?>
@@ -319,6 +330,9 @@ $(document).ready(function() {
 		}
 ?>
 </select>
+		</div>
+	</div>
+</form>
 </div>
 <div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 </div>

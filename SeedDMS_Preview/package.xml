@@ -11,11 +11,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-04-26</date>
- <time>15:17:11</time>
+ <date>2016-11-15</date>
+ <time>21:00:26</time>
  <version>
-  <release>1.1.9</release>
-  <api>1.1.9</api>
+  <release>1.2.1</release>
+  <api>1.2.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -23,16 +23,18 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add more documentation
-finish deletePreview()
-add new method deleteDocumentPreviews()
-fix calculation of timeout (Bug #269)
-check if cache dir exists before deleting it in deleteDocumentPreviews()
+setConverters() overrides exiting converters
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
    <dir name="Preview">
+    <file name="Base.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="Previewer.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="PdfPreviewer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /Lucene -->
@@ -214,6 +216,42 @@ set last parameter of stream_select() to 200000 micro sec. in case the timeout i
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 pass variables to stream_select (required by php7)
+   </notes>
+  </release>
+  <release>
+   <date>2016-04-26</date>
+   <time>15:17:11</time>
+   <version>
+    <release>1.1.9</release>
+    <api>1.1.9</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add more documentation
+finish deletePreview()
+add new method deleteDocumentPreviews()
+fix calculation of timeout (Bug #269)
+check if cache dir exists before deleting it in deleteDocumentPreviews()
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-07</date>
+   <time>15:17:11</time>
+   <version>
+    <release>1.2.0</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add new previewer which converts document to pdf instead of png
    </notes>
   </release>
  </changelog>

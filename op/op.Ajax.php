@@ -257,6 +257,7 @@ switch($command) {
 								if($mfolder->setParent($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_folder'), 'data'=>''));
+									add_log_line();
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
@@ -295,6 +296,7 @@ switch($command) {
 								if($mdocument->setFolder($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_document'), 'data'=>''));
+									add_log_line();
 								} else {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>false, 'message'=>'Error moving document', 'data'=>''));
@@ -349,9 +351,10 @@ switch($command) {
 							}
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							add_log_line();
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('error_remove_folder'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
@@ -413,9 +416,10 @@ switch($command) {
 
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							add_log_line();
 						} else {
 							header('Content-Type: application/json');
-							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>getMLText('error_remove_document'), 'data'=>''));
 						}
 					} else {
 						header('Content-Type: application/json');
@@ -455,6 +459,7 @@ switch($command) {
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_locked'), 'data'=>''));
+							add_log_line();
 						}
 					}
 				} else {
@@ -644,6 +649,7 @@ switch($command) {
 
 				$cats = array();
 
+				$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 				$res = $folder->addDocument($name, '', $expires, $user, '',
 																		array(), $userfiletmp, basename($userfilename),
 																		$fileType, $userfiletype, 0,
@@ -664,15 +670,10 @@ switch($command) {
 						}
 					}
 					if($settings->_enableFullSearch) {
-						if(!empty($settings->_luceneClassDir))
-							require_once($settings->_luceneClassDir.'/Lucene.php');
-						else
-							require_once('SeedDMS/Lucene.php');
-
-						$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+						$index = $indexconf['Indexer']::open($settings->_luceneDir);
 						if($index) {
-							SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-							$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, true));
+							$indexconf['Indexer']::init($settings->_stopWordsFile);
+							$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
 						}
 					}
 
@@ -720,6 +721,7 @@ switch($command) {
 				}
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_added'), 'data'=>$document->getID()));
+				add_log_line();
 			} else {
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
@@ -728,5 +730,4 @@ switch($command) {
 		break; /* }}} */
 
 }
-add_log_line();
 ?>

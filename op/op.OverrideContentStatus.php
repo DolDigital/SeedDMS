@@ -76,21 +76,6 @@ if ($overrideStatus != $overallStatus["status"]) {
 		if($notifier) {
 			$nl = $document->getNotifyList();
 			$folder = $document->getFolder();
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
-			$message = getMLText("document_status_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("status").": ".getOverallStatusText($overrideStatus)."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "document_status_changed_email_subject";
 			$message = "document_status_changed_email_body";
 			$params = array();
@@ -106,7 +91,7 @@ if ($overrideStatus != $overallStatus["status"]) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
+//			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 		}
 	}
 }

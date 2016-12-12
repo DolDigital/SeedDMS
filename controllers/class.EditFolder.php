@@ -55,50 +55,16 @@ class SeedDMS_Controller_EditFolder extends SeedDMS_Controller_Common {
 					$attrdef = $dms->getAttributeDefinition($attrdefid);
 					if($attribute) {
 						if(!$attrdef->validate($attribute)) {
-							$this->error = $attrdef->getValidationError();
-							switch($attrdef->getValidationError()) {
-							case 5:
-								$this->errormsg = getMLText("attr_malformed_email", array("attrname"=>$attrdef->getName(), "value"=>$attribute));
-								break;
-							case 4:
-								$this->errormsg = getMLText("attr_malformed_url", array("attrname"=>$attrdef->getName(), "value"=>$attribute));
-								break;
-							case 3:
-								$this->errormsg = getMLText("attr_no_regex_match", array("attrname"=>$attrdef->getName(), "value"=>$attribute, "regex"=>$attrdef->getRegex()));
-								break;
-							case 2:
-								$this->errormsg = getMLText("attr_max_values", array("attrname"=>$attrdef->getName()));
-								break;
-							case 1:
-								$this->errormsg = getMLText("attr_min_values", array("attrname"=>$attrdef->getName()));
-								break;
-							default:
-								$this->errormsg = getMLText("error_occured");
-							}
+							$this->errormsg	= getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
 							return false;
 						}
-							/*
-						if($attrdef->getRegex()) {
-							if(!preg_match($attrdef->getRegex(), $attribute)) {
-								$this->error = 1;
-								return false;
-							}
-						}
-						if(is_array($attribute)) {
-							if($attrdef->getMinValues() > count($attribute)) {
-								$this->error = 2;
-								return false;
-							}
-							if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-								$this->error = 3;
-								return false;
-							}
-						}
-							 */
+
 						if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
 							if(!$folder->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
 								return false;
 						}
+					} elseif($attrdef->getMinValues() > 0) {
+						$this->errormsg = getMLText("attr_min_values", array("attrname"=>$attrdef->getName()));
 					} elseif(isset($oldattributes[$attrdefid])) {
 						if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 							return false;

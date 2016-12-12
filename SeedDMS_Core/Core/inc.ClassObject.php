@@ -136,7 +136,16 @@ class SeedDMS_Core_Object { /* {{{ */
 			$value =  $this->_attributes[$attrdef->getId()]->getValue();
 			if($attrdef->getMultipleValues()) {
 				$sep = substr($value, 0, 1);
-				return(explode($sep, substr($value, 1)));
+				$vsep = $attrdef->getValueSetSeparator();
+				/* If the value doesn't start with the separator used in the value set,
+				 * then assume that the value was not saved with a leading separator.
+				 * This can happen, if the value was previously a single value from
+				 * the value set and later turned into a multi value attribute.
+				 */
+				if($sep == $vsep)
+					return(explode($sep, substr($value, 1)));
+				else
+					return(array($value));
 			} else {
 				return $value;
 			}

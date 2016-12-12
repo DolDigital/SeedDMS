@@ -75,6 +75,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader['css'])
@@ -129,6 +131,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
+		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if($this->footerjs) {
 			echo "<script type=\"text/javascript\">
@@ -276,10 +279,12 @@ $(document).ready(function () {
 						$menuitems = $hookObj->userMenuItems($this, $menuitems);
 					}
 				}
-				foreach($menuitems as $menuitem) {
-					echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+				if($menuitems) {
+					foreach($menuitems as $menuitem) {
+						echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+					}
+					echo "    <li class=\"divider\"></li>\n";
 				}
-				echo "    <li class=\"divider\"></li>\n";
 			}
 			$showdivider = false;
 			if($this->params['enablelanguageselector']) {
@@ -1123,31 +1128,35 @@ $('#acceptkeywords').click(function(ev) {
 <?php
 	} /* }}} */
 
-	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes') { /* {{{ */
+	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
 			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
+			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
         <span class="input-append date datepicker" style="_display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
 			break;
+		case SeedDMS_Core_AttributeDefinition::type_email:
+			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
+			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
 				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-				echo "<select name=\"".$fieldname."[".$attrdef->getId()."]";
+				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
 				} else {
 					echo "\"";
 				}
-				echo "".($attrdef->getMinValues() > 0 ? ' required' : '').">";
+				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
@@ -1166,9 +1175,9 @@ $('#acceptkeywords').click(function(ev) {
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea name=\"".$fieldname."[".$attrdef->getId()."]\"".($attrdef->getMinValues() > 0 ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					echo "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".($attrdef->getMinValues() > 0 ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
@@ -1396,14 +1405,14 @@ $(function() {
 	$('#jqtree<?php echo $formid ?>').tree({
 		saveState: true,
 		data: data,
-		saveState: 'jqtree<?= $formid; ?>',
+		saveState: 'jqtree<?php echo $formid; ?>',
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
 		_onCanSelectNode: function(node) {
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1416,17 +1425,17 @@ $(function() {
     }
 	});
 	// Unfold tree if folder is opened
-	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?PHP echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
-  $('#jqtree<?= $formid ?>').bind(
+	$('#jqtree<?php echo $formid ?>').tree('openNode', $('#jqtree<?php echo $formid ?>').tree('getNodeById', <?php echo $folderid ?>), false);
+  $('#jqtree<?php echo $formid ?>').bind(
 		'tree.click',
 		function(event) {
 			var node = event.node;
-			$('#jqtree<?= $formid ?>').tree('openNode', node);
+			$('#jqtree<?php echo $formid ?>').tree('openNode', node);
 //			event.preventDefault();
 			if(node.is_folder) {
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			} else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		}
 	);
 });
@@ -1750,7 +1759,91 @@ $(document).ready( function() {
 			for(var i in arr) {
 				$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
 			}
-			$("#"+target).trigger("chosen:updated");
+//			$("#"+target).trigger("chosen:updated");
+			$("#"+target).trigger("change");
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a string into
+	 * a input field.
+	 *
+	 * Clicking on the button will preset the string
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="inputpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for input preset button
+	 * This code workѕ for input fields and single select fields
+	 */
+	function printInputPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.inputpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			sep = $(ev.currentTarget).data('sep');
+			if(sep) {
+				// Use attr() instead of data() because data() converts to int which cannot be split
+				arr = value.split(sep);
+				for(var i in arr) {
+					$("#"+target+" option[value='"+arr[i]+"']").attr("selected", "selected");
+				}
+			} else {
+				$("#"+target).val(value);
+			}
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a boolean value
+	 * into a checkbox field.
+	 *
+	 * Clicking on the button will preset the checkbox
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function printCheckboxPresetButtonHtml($name, $text) { /* {{{ */
+?>
+	<span id="<?php echo $name; ?>_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
+<?php
+	} /* }}} */
+
+	/**
+	 * Javascript code for checkboxt preset button
+	 * This code workѕ for checkboxes
+	 */
+	function printCheckboxPresetButtonJs() { /* {{{ */
+?>
+$(document).ready( function() {
+	$('.checkboxpreset_btn').click(function(ev){
+		ev.preventDefault();
+		if (typeof $(ev.currentTarget).data('text') != 'undefined') {
+			target = $(ev.currentTarget).data('ref');
+			value = $(ev.currentTarget).data('text');
+			if(value) {
+				$("#"+target).attr('checked', '');
+			} else {
+				$("#"+target).removeAttribute('checked');
+			}
 		}
 	});
 });
@@ -1767,6 +1860,7 @@ $(document).ready( function() {
 	function documentListRow($document, $previewer, $skipcont=false, $version=0) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$showtree = $this->params['showtree'];
 		$workflowmode = $this->params['workflowmode'];
 		$previewwidth = $this->params['previewWidthList'];
 		$enableClipboard = $this->params['enableclipboard'];
@@ -1841,9 +1935,14 @@ $(document).ready( function() {
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
 			if(count($links))
 				$content .= count($links)." ".getMLText("linked_documents")."<br />";
-			$content .= getOverallStatusText($status["status"])."</small>";
-			$content .= "</td>\n";
-
+			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
+				$workflowstate = $latestContent->getWorkflowState();
+				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
+			} else {
+				$content .= getOverallStatusText($status["status"]);
+			}
+			$content .= "</small></td>";
+//				$content .= "<td>".$version."</td>";
 			$content .= "<td>";
 			$content .= "<div class=\"list-action\">";
 			if($document->getAccessMode($user) >= M_ALL) {

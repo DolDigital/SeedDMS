@@ -22,75 +22,27 @@
  * @copyright  Copyright (C) 2011, Uwe Steinmann
  * @version    Release: @package_version@
  */
-class SeedDMS_Preview_Previewer {
-	/**
-	 * @var string $cacheDir location in the file system where all the
-	 *      cached data like thumbnails are located. This should be an
-	 *      absolute path.
-	 * @access public
-	 */
-	public $previewDir;
-
+class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 	/**
 	 * @var integer $width maximum width/height of resized image
 	 * @access protected
 	 */
 	protected $width;
 
-	/**
-	 * @var integer $timeout maximum time for execution of external commands
-	 * @access protected
-	 */
-	protected $timeout;
-
-	function __construct($previewDir, $width=40, $timeout=5) {
-		if(!is_dir($previewDir)) {
-			if (!SeedDMS_Core_File::makeDir($previewDir)) {
-				$this->previewDir = '';
-			} else {
-				$this->previewDir = $previewDir;
-			}
-		} else {
-			$this->previewDir = $previewDir;
-		}
-		$this->width = intval($width);
-		$this->timeout = intval($timeout);
-	}
-
-	static function execWithTimeout($cmd, $timeout=5) { /* {{{ */
-		$descriptorspec = array(
-			0 => array("pipe", "r"),
-			1 => array("pipe", "w"),
-			2 => array("pipe", "w")
+	function __construct($previewDir, $width=40, $timeout=5) { /* {{{ */
+		parent::__construct($previewDir, $timeout);
+		$this->converters = array(
+			'image/png' => "convert -resize %wx '%f' '%o'",
+			'image/gif' => "convert -resize %wx '%f' '%o'",
+			'image/jpg' => "convert -resize %wx '%f' '%o'",
+			'image/jpeg' => "convert -resize %wx '%f' '%o'",
+			'image/svg+xml' => "convert -resize %wx '%f' '%o'",
+			'text/plain' => "convert -resize %wx '%f' '%o'",
+			'application/pdf' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/postscript' => "convert -density 100 -resize %wx '%f[0]' '%o'",
+			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
 		);
-		$pipes = array();
-	 
-	  $timeout += time();
-		$process = proc_open($cmd, $descriptorspec, $pipes);
-		if (!is_resource($process)) {
-			throw new Exception("proc_open failed on: " . $cmd);
-		}
-			 
-		$output = '';
-		$timeleft = $timeout - time();
-		$read = array($pipes[1]);
-		$write = NULL;
-		$exeptions = NULL;
-		do {
-			stream_select($read, $write, $exeptions, $timeleft, 200000);
-					 
-			if (!empty($read)) {
-				$output .= fread($pipes[1], 8192);
-													}
-			$timeleft = $timeout - time();
-		} while (!feof($pipes[1]) && $timeleft > 0);
- 
-		if ($timeleft <= 0) {
-			proc_terminate($process);
-			throw new Exception("command timeout on: " . $cmd);
-		} else {
-			return $output;
-		}
+		$this->width = intval($width);
 	} /* }}} */
 
 	/**
@@ -154,6 +106,10 @@ class SeedDMS_Preview_Previewer {
 			$target = $this->previewDir.$dir.md5($infile).'-'.$width;
 		if($target != '' && (!file_exists($target.'.png') || filectime($target.'.png') < filectime($infile))) {
 			$cmd = '';
+			if(isset($this->converters[$mimetype])) {
+				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimetype]);
+			}
+			/*
 			switch($mimetype) {
 				case "image/png":
 				case "image/gif":
@@ -173,6 +129,7 @@ class SeedDMS_Preview_Previewer {
 					$cmd = 'tar tzvf '.$infile.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target.'.png';
 					break;
 			}
+			 */
 			if($cmd) {
 				//exec($cmd);
 				try {
@@ -211,7 +168,6 @@ class SeedDMS_Preview_Previewer {
 		$file = $document->_dms->contentDir.$object->getPath();
 		$target = $this->getFileName($object, $width);
 		return $this->createRawPreview($file, $document->getDir(), $object->getMimeType(), $width, $target);
-			
 	} /* }}} */
 
 	/**

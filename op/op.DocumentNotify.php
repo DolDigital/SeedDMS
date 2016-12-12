@@ -97,22 +97,6 @@ if ($action == "delnotify"){
 		case 0:
 			// Email user / group, informing them of subscription change.
 			if($notifier) {
-/*
-				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_deleted_email");
-				$message = getMLText("notify_deleted_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->getName()."\r\n".
-					getMLText("folder").": ".$path."\r\n".
-					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-				if (isset($userid)) {
-					$notifier->toIndividual($user, $obj, $subject, $message);
-				}
-				else if (isset($groupid)) {
-					$notifier->toGroup($user, $obj, $subject, $message);
-				}
-*/
 				$subject = "notify_deleted_email_subject";
 				$message = "notify_deleted_email_body";
 				$params = array();
@@ -156,25 +140,6 @@ else if ($action == "addnotify") {
 				// Email user / group, informing them of subscription.
 				if ($notifier){
 					$obj = $dms->getUser($userid);
-/*
-					$path="";
-					$folder = $document->getFolder();
-					$folderPath = $folder->getPath();
-					for ($i = 0; $i  < count($folderPath); $i++) {
-						$path .= $folderPath[$i]->getName();
-						if ($i +1 < count($folderPath))
-							$path .= " / ";
-					}
-					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_added_email");
-					$message = getMLText("notify_added_email")."\r\n";
-					$message .= 
-						getMLText("document").": ".$document->getName()."\r\n".
-						getMLText("folder").": ".$path."\r\n".
-						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-					$notifier->toIndividual($user, $obj, $subject, $message);
-*/
 					$subject = "notify_added_email_subject";
 					$message = "notify_added_email_body";
 					$params = array();
@@ -209,25 +174,6 @@ else if ($action == "addnotify") {
 			case 0:
 				if ($notifier){
 					$obj = $dms->getGroup($groupid);
-/*
-					$path="";
-					$folder = $document->getFolder();
-					$folderPath = $folder->getPath();
-					for ($i = 0; $i  < count($folderPath); $i++) {
-						$path .= $folderPath[$i]->getName();
-						if ($i +1 < count($folderPath))
-							$path .= " / ";
-					}
-					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_added_email");
-					$message = getMLText("notify_added_email")."\r\n";
-					$message .= 
-						getMLText("document").": ".$document->getName()."\r\n".
-						getMLText("folder").": ".$path."\r\n".
-						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-					$notifier->toGroup($user, $obj, $subject, $message);
-*/
 					$subject = "notify_added_email_subject";
 					$message = "notify_added_email_body";
 					$params = array();

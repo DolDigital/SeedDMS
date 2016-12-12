@@ -99,8 +99,8 @@ if($oldname != $name) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 		// if user is not owner send notification to owner
-		if ($user->getID() != $folder->getOwner()->getID()) 
-			$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
+//		if ($user->getID() != $folder->getOwner()->getID()) 
+//			$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 	}
 }
 
@@ -125,8 +125,8 @@ if($oldcomment != $comment) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 		// if user is not owner send notification to owner
-		if ($user->getID() != $folder->getOwner()->getID()) 
-			$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
+//		if ($user->getID() != $folder->getOwner()->getID()) 
+//			$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 
 	}
 }

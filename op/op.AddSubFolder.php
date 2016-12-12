@@ -29,7 +29,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('addsubfolder')) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -66,19 +66,12 @@ else
 foreach($attributes as $attrdefid=>$attribute) {
 	$attrdef = $dms->getAttributeDefinition($attrdefid);
 	if($attribute) {
-		if($attrdef->getRegex()) {
-			if(!preg_match($attrdef->getRegex(), $attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
-			}
+		if(!$attrdef->validate($attribute)) {
+			$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())), $errmsg);
 		}
-		if(is_array($attribute)) {
-			if($attrdef->getMinValues() > count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-			}
-			if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-			}
-		}
+	} elseif($attrdef->getMinValues() > 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
 	}
 }
 

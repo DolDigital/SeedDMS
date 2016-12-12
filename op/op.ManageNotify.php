@@ -113,25 +113,6 @@ if ($_GET["type"]=="document"){
 			if($notifier) {
 				$obj = $dms->getUser($userid);
 				// Email user / group, informing them of subscription.
-/*
-				$path="";
-				$folderPath = $folder->getPath();
-				for ($i = 0; $i  < count($folderPath); $i++) {
-					$path .= $folderPath[$i]->getName();
-					if ($i +1 < count($folderPath))
-						$path .= " / ";
-				}
-
-				$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("notify_deleted_email");
-				$message = getMLText("notify_deleted_email")."\r\n";
-				$message .= 
-					getMLText("name").": ".$folder->getName()."\r\n".
-					getMLText("folder").": ".$path."\r\n".
-					getMLText("comment").": ".$folder->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
-
-				$notifier->toIndividual($user, $obj, $subject, $message);
-*/
 				$subject = "notify_deleted_email_subject";
 				$message = "notify_deleted_email_body";
 				$params = array();

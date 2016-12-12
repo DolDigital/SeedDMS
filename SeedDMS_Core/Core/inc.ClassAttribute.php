@@ -125,7 +125,17 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	 */
 	function getValueAsArray() { /* {{{ */
 		if($this->_attrdef->getMultipleValues()) {
-			return explode($this->_value[0], substr($this->_value, 1));
+			/* If the value doesn't start with the separator used in the value set,
+			 * then assume that the value was not saved with a leading separator.
+			 * This can happen, if the value was previously a single value from
+			 * the value set and later turned into a multi value attribute.
+			 */
+			$sep = substr($this->_value, 0, 1);
+			$vsep = $this->_attrdef->getValueSetSeparator();
+			if($sep == $vsep)
+				return(explode($sep, substr($this->_value, 1)));
+			else
+				return(array($this->_value));
 		} else {
 			return array($this->_value);
 		}
@@ -590,6 +600,20 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get the separator used for the value set
+	 *
+	 * This is the first char of the value set string.
+	 *
+	 * @return string separator or an empty string if a value set is not set
+	 */
+	function getValueSetSeparator() { /* {{{ */
+		if(strlen($this->_valueset) > 1)
+			return $this->_valueset[0];
+		else
+			return '';
+	} /* }}} */
+
+	/**
 	 * Get the whole value set as an array
 	 *
 	 * @return array values of value set or false if the value set has
@@ -597,7 +621,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getValueSetAsArray() { /* {{{ */
 		if(strlen($this->_valueset) > 1)
-			return explode($this->_valueset[0], substr($this->_valueset, 1));
+			return array_map('trim', explode($this->_valueset[0], substr($this->_valueset, 1)));
 		else
 			return array();
 	} /* }}} */
@@ -613,7 +637,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		if(strlen($this->_valueset) > 1) {
 			$tmp = explode($this->_valueset[0], substr($this->_valueset, 1));
 			if(isset($tmp[$ind]))
-				return $tmp[$ind];
+				return trim($tmp[$ind]);
 			else
 				return false;
 		} else
@@ -638,7 +662,12 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		}
 		$valuesetstr = implode(",", $tmp);
 	*/
-		$valuesetstr = $valueset;
+		if(trim($valueset)) {
+			$valuesetarr = array_map('trim', explode($valueset[0], substr($valueset, 1)));
+			$valuesetstr = $valueset[0].implode($valueset[0], $valuesetarr);
+		} else {
+			$valuesetstr = '';
+		}
 
 		$db = $this->_dms->getDB();
 
@@ -705,6 +734,35 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					return false;
 				}
 			}
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Parse a given value according to attribute definition
+	 *
+	 * The return value is always an array, even if the attribute is single
+	 * value attribute.
+	 *
+	 * @return array list of single values
+	 */
+	function parseValue($value) { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		if($this->getMultipleValues()) {
+			/* If the value doesn't start with the separator used in the value set,
+			 * then assume that the value was not saved with a leading separator.
+			 * This can happen, if the value was previously a single value from
+			 * the value set and later turned into a multi value attribute.
+			 */
+			$sep = substr($value, 0, 1);
+			$vsep = $this->getValueSetSeparator();
+			if($sep == $vsep)
+				return(explode($sep, substr($value, 1)));
+			else
+				return(array($value));
+		} else {
+			return array($value);
 		}
 		return true;
 	} /* }}} */
@@ -859,9 +917,14 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function validate($attrvalue) { /* {{{ */
 		if($this->getMultipleValues()) {
-			if(is_string($attrvalue))
-				$values = explode($attrvalue[0], substr($attrvalue, 1));
-			else
+			if(is_string($attrvalue)) {
+				$sep = $attrvalue[0];
+				$vsep = $this->getValueSetSeparator();
+				if($sep == $vsep)
+					$values = explode($attrvalue[0], substr($attrvalue, 1));
+				else
+					$values = array($attrvalue);
+			} else
 				$values = $attrvalue;
 		} else {
 			$values = array($attrvalue);
@@ -877,21 +940,37 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			return false;
 		}
 
+		$success = true;
 		switch((string) $this->getType()) {
+		case self::type_boolean:
+			foreach($values as $value) {
+				$success &= preg_match('/^[01]$/', $value) ? true : false;
+			}
+			if(!$success)
+				$this->_validation_error = 8;
+			break;
 		case self::type_int:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^[0-9]*$/', $value) ? true : false;
 			}
+			if(!$success)
+				$this->_validation_error = 6;
+			break;
+		case self::type_date:
+			foreach($values as $value) {
+				$success &= preg_match('/^[12][0-9]{3}-[01][0-9]-[0-9]{2}$/', $value) ? true : false;
+			}
+			if(!$success)
+				$this->_validation_error = 9;
 			break;
 		case self::type_float:
-			$success = true;
 			foreach($values as $value) {
 				$success &= is_numeric($value);
 			}
+			if(!$success)
+				$this->_validation_error = 7;
 			break;
 		case self::type_string:
-			$success = true;
 			if(trim($this->getRegex()) != '') {
 				foreach($values as $value) {
 					$success &= preg_match($this->getRegex(), $value) ? true : false;
@@ -901,20 +980,18 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 				$this->_validation_error = 3;
 			break;
 		case self::type_boolean:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^[01]$/', $value);
 			}
 			break;
 		case self::type_email:
-			$success = true;
 			foreach($values as $value) {
+				$success &= preg_match('/^[a-z0-9._-]+@+[a-z0-9._-]+\.+[a-z]{2,4}$/i', $value);
 			}
 			if(!$success)
 				$this->_validation_error = 5;
 			break;
 		case self::type_url:
-			$success = true;
 			foreach($values as $value) {
 				$success &= preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $value);
 			}
@@ -922,6 +999,9 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 				$this->_validation_error = 4;
 			break;
 		}
+
+		if(!$success)
+			return $success;
 
 		/* Check if value is in value set */
 		if($valueset = $this->getValueSetAsArray()) {

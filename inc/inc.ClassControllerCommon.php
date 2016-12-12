@@ -107,6 +107,11 @@ class SeedDMS_Controller_Common {
 	/**
 	 * Call a controller hook
 	 *
+	 * If a hook returns false, then no other hook will be called, because the
+	 * method returns right away. If hook returns null, then this is treated like
+	 * it was never called and the default action is executed. Any other value
+	 * returned by the hook will be returned by this method.
+	 *
 	 * @param $hook string name of hook
 	 * @return mixed false if one of the hooks fails,
 	 *               true if all hooks succedded,
@@ -115,6 +120,7 @@ class SeedDMS_Controller_Common {
 	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])])) {
+			$r = null;
 			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					switch(func_num_args()) {
@@ -128,9 +134,12 @@ class SeedDMS_Controller_Common {
 					if($result === false) {
 						return $result;
 					}
+					if($result !== null) {
+						$r = $result;
+					}
 				}
 			}
-			return true;
+			return $r;
 		}
 		return null;
 	} /* }}} */

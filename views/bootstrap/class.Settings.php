@@ -132,12 +132,29 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_printDisclaimer");?>:</td>
         <td><input name="printDisclaimer" type="checkbox" <?php if ($settings->_printDisclaimer) echo "checked" ?> /></td>
       </tr>
-       <tr title="<?php printMLText("settings_language_desc");?>">
+      <tr title="<?php printMLText("settings_available_languages_desc");?>">
+        <td><?php printMLText("settings_available_languages");?>:</td>
+        <td>
+         <select name="availablelanguages[]" multiple>
+            <?php
+              $languages = getAvailableLanguages();
+              foreach($languages as $language)
+              {
+                echo '<option value="' . $language . '" ';
+                 if (in_array($language, $settings->_availablelanguages))
+                   echo "selected";
+                echo '>' . getMLText($language) . '</option>';
+             }
+            ?>
+          </select>
+        </td>
+      </tr>
+      <tr title="<?php printMLText("settings_language_desc");?>">
         <td><?php printMLText("settings_language");?>:</td>
         <td>
-         <SELECT name="language">
+         <select name="language">
             <?php
-              $languages = getLanguages();
+              $languages = getAvailableLanguages();
               foreach($languages as $language)
               {
                 echo '<option value="' . $language . '" ';
@@ -146,13 +163,13 @@ if(!is_writeable($settings->_configFilePath)) {
                 echo '>' . getMLText($language) . '</option>';
              }
             ?>
-          </SELECT>
+          </select>
         </td>
       </tr>
       <tr title="<?php printMLText("settings_theme_desc");?>">
         <td><?php printMLText("settings_theme");?>:</td>
         <td>
-         <SELECT name="theme">
+         <select name="theme">
             <?php
               $themes = UI::getStyles();
               foreach($themes as $theme)
@@ -163,7 +180,7 @@ if(!is_writeable($settings->_configFilePath)) {
                 echo '>' . $theme . '</option>';
              }
             ?>
-          </SELECT>
+          </select>
         </td>
       </tr>
       <tr title="<?php printMLText("settings_previewWidthList_desc");?>">
@@ -173,6 +190,14 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_previewWidthDetail_desc");?>">
         <td><?php printMLText("settings_previewWidthDetail");?>:</td>
 				<td><?php $this->showTextField("previewWidthDetail", $settings->_previewWidthDetail); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_showFullPreview_desc");?>">
+        <td><?php printMLText("settings_showFullPreview");?>:</td>
+        <td><input name="showFullPreview" type="checkbox" <?php if ($settings->_showFullPreview) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_convertToPdf_desc");?>">
+        <td><?php printMLText("settings_convertToPdf");?>:</td>
+        <td><input name="convertToPdf" type="checkbox" <?php if ($settings->_convertToPdf) echo "checked" ?> /></td>
       </tr>
 
       <!--
@@ -228,6 +253,10 @@ if(!is_writeable($settings->_configFilePath)) {
 						<option value="fulltext" <?php if ($settings->_defaultSearchMethod=='fulltext') echo "selected" ?>><?php printMLText("settings_defaultSearchMethod_valfulltext");?></option>
 					</select>
 				</td>
+      </tr>
+      <tr title="<?php printMLText("settings_showSingleSearchHit_desc");?>">
+        <td><?php printMLText("settings_showSingleSearchHit");?>:</td>
+        <td><input name="showSingleSearchHit" type="checkbox" <?php if ($settings->_showSingleSearchHit) echo "checked" ?> /></td>
       </tr>
       <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
@@ -670,8 +699,8 @@ if(!is_writeable($settings->_configFilePath)) {
 	}
 ?>
       <tr title="">
-        <td><?php $this->showTextField("converters_newmimetype", ""); ?></td>
-        <td><?php $this->showTextField("converters_newcmd", ""); ?></td>
+        <td><?php $this->showTextField("converters_newmimetype", "", '', getMLText('mimetype')); ?></td>
+        <td><?php $this->showTextField("converters_newcmd", "", '', getMLText('command')); ?></td>
       </tr>
     </table>
 <?php		$this->contentContainerEnd(); ?>
@@ -686,7 +715,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 ?>
-      <tr ><td><b><?php echo $extconf['title'];?></b></td></tr>
+			<tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
 <?php
 					foreach($extconf['config'] as $confkey=>$conf) {
 ?>

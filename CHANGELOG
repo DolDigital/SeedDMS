@@ -1,4 +1,17 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.8
+--------------------------------------------------------------------------------
+- merged changes from 4.3.31
+- fix saving online editing file
+- replace some php short tags by <?php (Closes #294)
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.7
+--------------------------------------------------------------------------------
+- merged changes from 4.3.30
+- validate email address of attributes of type email
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.6
 --------------------------------------------------------------------------------
 - merged changes from 4.3.29
@@ -43,6 +56,41 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.31
+--------------------------------------------------------------------------------
+- use bootstrap classes for some forms
+- show transitions in WorkflowActionMgr and WorkflowStateMgr where actions and
+  states are used
+- remove file from dropfolder when updating a document and requested by
+  configuration
+- another check if dropfolder is accessible when opening the dialog box
+- add preview of pdf documents and conversion to pdf
+- replace some more php short tags
+- list of available languages can be set in configuration
+- check for cycles in workflows and issue warning
+- major update of russian language (Thanks to r3code)
+- when updating or adding a document do not send request for approval
+  if review needs to be done before
+- uncheck checkbox for expiration date if date is selected.
+- remove some old references to Lucene when indexing a document
+  uploaded by fast upload
+- show workflow state in list of documents instead of just 'in workflow'
+- overhaul notification system. Do not send extra notifications to owner
+  anymore. Send notifications to users/groups watching the old and new
+  folder if a document/folder is moved.
+- drop alternative themes blue, hc, and clean
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.30
+--------------------------------------------------------------------------------
+- fix adding new workflows
+- fix moving documents/folders via drag&drop in Edge (Closes #286)
+- update folder tree after moving a document/folder with drag&drop (Closes #288)
+- trim each value of a value sets of attribute definitions before saving
+- assign role 'user' instead of 'admin' to accounts automatically created during
+  ldap authentication
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.29

@@ -226,12 +226,12 @@ console.log(element);
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td>
-        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
-					<input type="checkbox" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
+					<input type="checkbox" id="expires" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
         </label>
 			</td>
 		</tr>

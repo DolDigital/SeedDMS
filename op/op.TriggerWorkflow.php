@@ -27,7 +27,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 if(!checkFormKey('triggerworkflow')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
@@ -68,23 +68,18 @@ if(!$version->triggerWorkflowTransitionIsAllowed($user, $transition)) {
 
 $workflow = $transition->getWorkflow();
 
+if(isset($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'] as $hookObj) {
+		if (method_exists($hookObj, 'preTriggerWorkflowTransition')) {
+			$hookObj->preTriggerWorkflowTransition(array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
+		}
+	}
+}
+
 if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
 		$folder = $document->getFolder();
-
-/*
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("transition_triggered_email");
-		$message = getMLText("transition_triggered_email")."\r\n";
-		$message .= 
-			getMLText("document").": ".$document->getName()."\r\n".
-			getMLText("workflow").": ".$workflow->getName()."\r\n".
-			getMLText("action").": ".$transition->getAction()->getName()."\r\n".
-			getMLText("comment").": ".$_POST["comment"]."\r\n".
-			getMLText("previous_state").": ".$transition->getState()->getName()."\r\n".
-			getMLText("current_state").": ".$transition->getNextState()->getName()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-*/
 		$subject = "transition_triggered_email_subject";
 		$message = "transition_triggered_email_body";
 		$params = array();
@@ -128,6 +123,14 @@ if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 				foreach($ntransition->getGroups() as $tuser) {
 					$notifier->toGroup($user, $tuser->getGroup(), $subject, $message, $params);
 				}
+			}
+		}
+	}
+
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'] as $hookObj) {
+			if (method_exists($hookObj, 'postTriggerWorkflowTransition')) {
+				$hookObj->postTriggerWorkflowTransition(array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
 			}
 		}
 	}

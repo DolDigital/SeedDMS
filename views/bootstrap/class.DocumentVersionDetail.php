@@ -36,6 +36,54 @@ require_once("SeedDMS/Preview.php");
  */
 class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 
+	function preview() { /* {{{ */
+		$document = $this->params['document'];
+		$timeout = $this->params['timeout'];
+		$showfullpreview = $this->params['showFullPreview'];
+		$converttopdf = $this->params['convertToPdf'];
+		$cachedir = $this->params['cachedir'];
+		$version = $this->params['version'];
+		if(!$showfullpreview)
+			return;
+
+		switch($version->getMimeType()) {
+		case 'audio/mpeg':
+		case 'audio/mp3':
+		case 'audio/ogg':
+		case 'audio/wav':
+			$this->contentHeading(getMLText("preview"));
+?>
+		<audio controls style="width: 100%;">
+		<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $version->getVersion(); ?>" type="audio/mpeg">
+		</audio>
+<?php
+			break;
+		case 'application/pdf':
+			$this->contentHeading(getMLText("preview"));
+?>
+			<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$version->getVersion()); ?>" width="100%" height="700px"></iframe>
+<?php
+			break;
+		case 'image/svg+xml':
+			$this->contentHeading(getMLText("preview"));
+?>
+			<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+<?php
+			break;
+		default:
+			break;
+		}
+		if($converttopdf) {
+			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
+			if($pdfpreviewer->hasConverter($version->getMimeType())) {
+				$this->contentHeading(getMLText("preview"));
+?>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.PdfPreview.php?documentid='.$document->getID().'&version='.$version->getVersion()); ?>" width="100%" height="700px"></iframe>
+<?php
+			}
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -59,7 +107,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 ?>
 <div class="row-fluid">
-<div class="span3">
+<div class="span4">
 <?php
 		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
@@ -138,9 +186,10 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 </table>
 <?php
 		$this->contentContainerEnd();
+		$this->preview();
 ?>
 </div>
-<div class="span9">
+<div class="span8">
 <?php
 
 		// verify if file exists
@@ -359,6 +408,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 ?>
+</div>
 </div>
 <?php
 		$this->contentEnd();

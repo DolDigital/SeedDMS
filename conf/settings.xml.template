@@ -293,7 +293,24 @@
       enableNotificationAppRev = "true"
       enableOwnerNotification = "false"
       enableNotificationWorkflow = "false"
-    />
+      />
+    <converters target="fulltext">
+      <converter mimeType="application/pdf">pdftotext -nopgbrk %s - | sed -e 's/ [a-zA-Z0-9.]\{1\} / /g' -e 's/[0-9.]//g'</converter>
+      <converter mimeType="application/msword">catdoc %s</converter>
+      <converter mimeType="application/vnd.ms-excel">ssconvert -T Gnumeric_stf:stf_csv -S %s fd://1</converter>
+      <converter mimeType="audio/mp3">id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'</converter>
+      <converter mimeType="audio/mpeg">id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'</converter>
+      <converter mimeType="text/plain">cat %s</converter>
+      <converter mimeType="text/html">html2text %s</converter>
+      <converter mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document">docx2txt %s -</converter>
+    </converters>
+    <converters target="preview">
+      <converter mimeType="application/msword">unoconv -d document -e PageRange=1 -f pdf --stdout -v '%f'|gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -dPDFFitPage -r72x72 -sOutputFile=- -dFirstPage=1 -dLastPage=1 -q - | convert  -resize %wx png:- '%o'</converter>
+      <converter mimeType="image/png">convert -resize %wx '%f' '%o'</converter>
+      <converter mimeType="image/jpg">convert -resize %wx '%f' '%o'</converter>
+      <converter mimeType="image/gif">convert -resize %wx '%f' '%o'</converter>
+      <converter mimeType="text/plain">a2ps -1 -a1  -R -B -o - '%f' | gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -dFirstPage=1 -dLastPage=1 -dPDFFitPage -r72x72 -sOutputFile=- -q - | convert  -resize %wx png:- '%o'</converter>
+    </converters>
   </advanced>
   <extensions/>
 </configuration>

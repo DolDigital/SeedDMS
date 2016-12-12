@@ -52,11 +52,28 @@ if (!isset($_POST["expires"]) || $_POST["expires"] != "false") {
 		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
 	}
 }
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+		if (method_exists($hookObj, 'preSetExpires')) {
+			$hookObj->preSetExpires(array('document'=>$document, 'expires'=>&$expires));
+		}
+	}
+}
+
 if (!$document->setExpires($expires)){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 }
 
 $document->verifyLastestContentExpriry();
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+		if (method_exists($hookObj, 'postSetExpires')) {
+			$hookObj->postSetExpires(array('document'=>$document, 'expires'=>$expires));
+		}
+	}
+}
 
 add_log_line("?documentid=".$documentid);
 

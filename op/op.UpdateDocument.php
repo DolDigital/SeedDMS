@@ -209,18 +209,9 @@ if ($_FILES['userfile']['error'] == 0) {
 		foreach($attributes as $attrdefid=>$attribute) {
 			$attrdef = $dms->getAttributeDefinition($attrdefid);
 			if($attribute) {
-				if($attrdef->getRegex()) {
-					if(!preg_match($attrdef->getRegex(), $attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("attr_no_regex_match"));
-					}
-				}
-				if(is_array($attribute)) {
-					if($attrdef->getMinValues() > count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
-					}
-					if($attrdef->getMaxValues() && $attrdef->getMaxValues() < count($attribute)) {
-						UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_max_values", array("attrname"=>$attrdef->getName())));
-					}
+				if(!$attrdef->validate($attribute)) {
+					$errmsg = getAttributeValidationText($attrdef->getValidationError(), $attrdef->getName(), $attribute);
+					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())), $errmsg);
 				}
 			} elseif($attrdef->getMinValues() > 0) {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_min_values", array("attrname"=>$attrdef->getName())));
@@ -270,8 +261,8 @@ if ($_FILES['userfile']['error'] == 0) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 			// if user is not owner send notification to owner
-			if ($user->getID() != $document->getOwner()->getID()) 
-				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+//			if ($user->getID() != $document->getOwner()->getID()) 
+//				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 
 			if($workflow && $settings->_enableNotificationWorkflow) {
 				$subject = "request_workflow_action_email_subject";
@@ -320,7 +311,7 @@ if ($_FILES['userfile']['error'] == 0) {
 					}
 				}
 
-				if($approvers['i'] || $approvers['g']) {
+				elseif($approvers['i'] || $approvers['g']) {
 					$subject = "approval_request_email_subject";
 					$message = "approval_request_email_body";
 					$params = array();
@@ -376,6 +367,11 @@ if ($_FILES['userfile']['error'] == 0) {
 				}
 			} else {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+			}
+		}
+		if($settings->_removeFromDropFolder) {
+			if(file_exists($userfiletmp)) {
+				unlink($userfiletmp);
 			}
 		}
 	}

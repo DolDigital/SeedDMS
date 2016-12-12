@@ -232,11 +232,11 @@ $(document).ready( function() {
 			<tr>
 				<td>
 					<select name="userid" id="userid">
-						<option value="-1"><?php printMLText("select_one");?>
+						<option value="-1"><?php printMLText("select_one");?></option>
 						<?php
 							foreach ($allUsers as $currUser)
 								if (!$group->isMember($currUser))
-									print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName()) . "\n";
+									print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName()) . "</option>\n";
 						?>
 					</select>
 				</td>
@@ -278,16 +278,22 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <div class="well">
-<?php echo getMLText("selection")?>:
+<form class="form-horizontal">
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
+		<div class="controls">
 <select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_group")?>
-<option value="0"><?php echo getMLText("add_group")?>
+<option value="-1"><?php echo getMLText("choose_group")?></option>
+<option value="0"><?php echo getMLText("add_group")?></option>
 <?php
 		foreach ($allGroups as $group) {
-			print "<option value=\"".$group->getID()."\" ".($selgroup && $group->getID()==$selgroup->getID() ? 'selected' : '').">" . htmlspecialchars($group->getName());
+			print "<option value=\"".$group->getID()."\" ".($selgroup && $group->getID()==$selgroup->getID() ? 'selected' : '').">" . htmlspecialchars($group->getName()) . "</option>";
 		}
 ?>
 </select>
+		</div>
+	</div>
+</form>
 </div>
 	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 </div>

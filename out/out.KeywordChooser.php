@@ -36,7 +36,7 @@ foreach($allusers as $u) {
 $categories = $dms->getAllKeywordCategories($userids);
 
 if($_GET['target']) {
-	$target = sanitizeString($_GET['target']);
+	$target = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET['target']);
 } else {
 	$target = 'form1';
 }

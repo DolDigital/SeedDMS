@@ -45,7 +45,7 @@ if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-/* Check if the form data comes for a trusted request */
+/* Check if the form data comes from a trusted request */
 /* FIXME: Currently GET request are allowed. */
 if(!checkFormKey('documentaccess', 'GET')) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_request_token"));
@@ -129,26 +129,6 @@ if ($action == "setowner") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("ownership_changed_email");
-			$message = getMLText("ownership_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("old").": ".$oldOwner->getFullName()."\r\n".
-				getMLText("new").": ".$newOwner->getFullName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->getComment()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-			// Send notification to previous owner.
-			$notifier->toIndividual($user, $oldOwner, $subject, $message);
-*/
-
 			$subject = "ownership_changed_email_subject";
 			$message = "ownership_changed_email_body";
 			$params = array();
@@ -164,7 +144,7 @@ if ($action == "setowner") {
 			foreach ($notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
-			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
+//			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
 
 		}
 	}
@@ -178,21 +158,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -213,24 +178,6 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();
@@ -260,8 +207,26 @@ else if ($action == "notinherit") {
 
 // Change to inherit-----------------------------------------------------
 else if ($action == "inherit") {
-	$document->clearAccessList();
-	$document->setInheritAccess(true);
+	if($document->clearAccessList() && $document->setInheritAccess(true)) {
+		if($notifier) {
+			$notifyList = $document->getNotifyList();
+			$folder = $document->getFolder();
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
+		}
+	}
 }
 
 // Set default permissions ----------------------------------------------
@@ -270,21 +235,6 @@ else if ($action == "setdefault") {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
-
-/*
-			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
-			$message = getMLText("access_permission_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			foreach ($document->_notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 			$subject = "access_permission_changed_email_subject";
 			$message = "access_permission_changed_email_body";
 			$params = array();

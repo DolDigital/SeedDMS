@@ -99,10 +99,14 @@ class Settings { /* {{{ */
 	var $_fullSearchEngine = 'lucene';
 	// default search method
 	var $_defaultSearchMethod = 'database'; // or 'fulltext'
+	// jump straight to the document if it is the only hit of a search
+	var $_showSingleSearchHit = true;
 	// contentOffsetDirTo
 	var $_contentOffsetDir = "1048576";
 	// Maximum number of sub-directories per parent directory
 	var $_maxDirID = 32700;
+	// default available languages (list of languages shown in language selector)
+	var $_availablelanguages = array();
 	// default language (name of a subfolder in folder "languages")
 	var $_language = "en_GB";
 	// users are notified about document-changes that took place within the last $_updateNotifyTime seconds
@@ -201,6 +205,10 @@ class Settings { /* {{{ */
 	var $_previewWidthList = 40;
 	// Preview image width on document details page
 	var $_previewWidthDetail = 100;
+	// show full preview on document details page
+	var $_showFullPreview = false;
+	// convert to pdf for preview on document details page
+	var $_convertToPdf = false;
 	// Show form to submit missing translations at end of page
 	var $_showMissingTranslations = false;
 	// Extra Path to additional software, will be added to include path
@@ -377,11 +385,15 @@ class Settings { /* {{{ */
 		$this->_footNote = strval($tab["footNote"]);
 		$this->_printDisclaimer = Settings::boolVal($tab["printDisclaimer"]);
 		$this->_language = strval($tab["language"]);
+		if(trim(strval($tab["availablelanguages"])))
+			$this->_availablelanguages = explode(',',strval($tab["availablelanguages"]));
 		$this->_theme = strval($tab["theme"]);
 		if(isset($tab["previewWidthList"]))
 			$this->_previewWidthList = intval($tab["previewWidthList"]);
 		if(isset($tab["previewWidthDetail"]))
 			$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
+		$this->_showFullPreview = Settings::boolVal($tab["showFullPreview"]);
+		$this->_convertToPdf = Settings::boolVal($tab["convertToPdf"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
@@ -404,6 +416,7 @@ class Settings { /* {{{ */
 		$this->_maxSizeForFullText = intval($tab["maxSizeForFullText"]);
 		$this->_fullSearchEngine = strval($tab["fullSearchEngine"]);
 		$this->_defaultSearchMethod = strval($tab["defaultSearchMethod"]);
+		$this->_showSingleSearchHit = Settings::boolVal($tab["showSingleSearchHit"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
@@ -582,16 +595,18 @@ class Settings { /* {{{ */
 			$this->_maxExecutionTime = ini_get("max_execution_time");
 
 		// XML Path: /configuration/system/advanced/converters
-		$converters = $xml->xpath('/configuration/advanced/converters[@target="fulltext"]/converter');
-		if(!$converters)
-			$converters = $xml->xpath('/configuration/advanced/converters/converter');
+		$convertergroups = $xml->xpath('/configuration/advanced/converters');
 		$this->_converters = array();
-		foreach($converters as $converter) {
-			$tab = $converter->attributes();
-			if(!trim(strval($tab['target'])))
-				$this->_converters['fulltext'][trim(strval($tab['mimeType']))] = trim(strval($converter));
+		foreach($convertergroups as $convertergroup) {
+			$tabgroup = $convertergroup->attributes();
+			if(strval($tabgroup['target']))
+				$target = strval($tabgroup['target']);
 			else
-				$this->_converters[trim(strval($tab['target']))][trim(strval($tab['mimeType']))] = trim(strval($converter));
+				$target = 'fulltext';
+			foreach($convertergroup as $converter) {
+				$tab = $converter->attributes();
+				$this->_converters[$target][trim(strval($tab['mimeType']))] = trim(strval($converter));
+			}
 		}
 
 		// XML Path: /configuration/extensions
@@ -678,9 +693,12 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "footNote", $this->_footNote);
     $this->setXMLAttributValue($node, "printDisclaimer", $this->_printDisclaimer);
     $this->setXMLAttributValue($node, "language", $this->_language);
+    $this->setXMLAttributValue($node, "availablelanguages", implode(',', $this->_availablelanguages));
     $this->setXMLAttributValue($node, "theme", $this->_theme);
     $this->setXMLAttributValue($node, "previewWidthList", $this->_previewWidthList);
     $this->setXMLAttributValue($node, "previewWidthDetail", $this->_previewWidthDetail);
+    $this->setXMLAttributValue($node, "showFullPreview", $this->_showFullPreview);
+    $this->setXMLAttributValue($node, "convertToPdf", $this->_convertToPdf);
 
     // XML Path: /configuration/site/edition
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');
@@ -702,6 +720,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxSizeForFullText", $this->_maxSizeForFullText);
     $this->setXMLAttributValue($node, "fullSearchEngine", $this->_fullSearchEngine);
     $this->setXMLAttributValue($node, "defaultSearchMethod", $this->_defaultSearchMethod);
+    $this->setXMLAttributValue($node, "showSingleSearchHit", $this->_showSingleSearchHit);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
@@ -858,30 +877,41 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
     $this->setXMLAttributValue($node, "cmdTimeout", $this->_cmdTimeout);
 
-    // XML Path: /configuration/advanced/converters
-    foreach($this->_converters['fulltext'] as $mimeType => $cmd)
-    {
-      // search XML node
-      $node = $xml->xpath('/configuration/advanced/converters/converter[@mimeType="'. $mimeType .'"]');
+		/* Check if there is still a converters list with a target attribute */
+		$node = $xml->xpath('/configuration/advanced/converters[count(@*)=0]');
+		if (count($node)>0) {
+			$this->setXMLAttributValue($node[0], 'target', 'fulltext');
+		}
 
-      if (isset($node))
-      {
-        if (count($node)>0)
-        {
-          $node = $node[0];
-        }
-        else
-        {
-          $nodeParent = $xml->xpath('/configuration/advanced/converters');
-          $node = $nodeParent[0]->addChild("converter");
-        }
+		// XML Path: /configuration/advanced/converters
+		foreach($this->_converters as $type=>$converters) {
+			foreach($this->_converters[$type] as $mimeType => $cmd) {
+				// search XML node
+				$node = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]/converter[@mimeType="'. $mimeType .'"]');
 
-				$node[0] = $cmd;
-        $this->setXMLAttributValue($node, 'mimeType', $mimeType);
-
-      } // isset($node)
-
-    } // foreach
+				if (count($node)>0) {
+					if(trim($cmd)) {
+						$node = $node[0];
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					} else {
+						$node = $node[0];
+						unset($node[0]);
+					}
+				} else {
+					if(trim($cmd)) {
+						$nodeParent = $xml->xpath('/configuration/advanced/converters[@target="'.$type.'"]');
+						if(count($nodeParent) == 0) {
+							$nodeParent = array($advnode->addChild("converters"));
+							$this->setXMLAttributValue($nodeParent[0], 'target', $type);
+						}
+						$node = $nodeParent[0]->addChild("converter");
+						$node[0] = $cmd;
+						$this->setXMLAttributValue($node, 'mimeType', $mimeType);
+					}
+				}
+			} // foreach
+		} // foreach
 
 
     // XML Path: /configuration/extensions
@@ -918,7 +948,7 @@ class Settings { /* {{{ */
 	function searchConfigFilePath() { /* {{{ */
 		$configFilePath = null;
 
-		if($configDir = $this->getConfigDir()) {
+		if($configDir = Settings::getConfigDir()) {
 			if (file_exists($configDir."/settings.xml"))
 				return $configDir."/settings.xml";
 		}
@@ -934,7 +964,7 @@ class Settings { /* {{{ */
 	 * If none was found a final try will be made checking /etc/seeddms
 	 * @return NULL|string config directory
 	 */
-	function getConfigDir() { /* {{{ */
+	static function getConfigDir() { /* {{{ */
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
 		$_arr = preg_split('/\//', rtrim(str_replace('\\', '/', $_tmp)));
 		$configDir = null;
