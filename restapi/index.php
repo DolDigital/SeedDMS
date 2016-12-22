@@ -425,8 +425,9 @@ function uploadDocument($id) { /* {{{ */
 			fclose($handle);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$userfiletype = finfo_file($finfo, $temp);
+			$fileType = ".".pathinfo($origfilename, PATHINFO_EXTENSION);
 			finfo_close($finfo);
-			$res = $mfolder->addDocument($docname, '', 0, $userobj, '', array(), $temp, $origfilename ? $origfilename : basename($temp), '.', $userfiletype, 0);
+			$res = $mfolder->addDocument($docname, '', 0, $userobj, '', array(), $temp, $origfilename ? $origfilename : basename($temp), $fileType, $userfiletype, 0);
 			unlink($temp);
 			if($res) {
 				$doc = $res[0];
