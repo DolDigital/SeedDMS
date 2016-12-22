@@ -127,6 +127,127 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->printDocumentChooserJs("form1");
 	} /* }}} */
 
+	function documentInfos() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$document = $this->params['document'];
+
+		$this->contentHeading(getMLText("document_infos"));
+		$this->contentContainerStart();
+?>
+		<table class="table-condensed">
+<?php
+		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText("id").":</td>\n";
+			echo "<td>".htmlspecialchars($document->getID())."</td>\n";
+			echo "</tr>";
+		}
+?>
+		<tr>
+		<td><?php printMLText("name");?>:</td>
+		<td><?php print htmlspecialchars($document->getName());?></td>
+		</tr>
+		<tr>
+		<td><?php printMLText("owner");?>:</td>
+		<td>
+<?php
+		$owner = $document->getOwner();
+		print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialchars($owner->getFullName())."</a>";
+?>
+		</td>
+		</tr>
+<?php
+		if($document->getComment()) {
+?>
+		<tr>
+		<td><?php printMLText("comment");?>:</td>
+		<td><?php print htmlspecialchars($document->getComment());?></td>
+		</tr>
+<?php
+		}
+		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText('default_access').":</td>";
+			echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
+			echo "</tr>";
+			if($document->inheritsAccess()) {
+				echo "<tr>";
+				echo "<td>".getMLText("access_mode").":</td>\n";
+				echo "<td>";
+				echo getMLText("inherited")."<br />";
+				$this->printAccessList($document);
+				echo "</tr>";
+			} else {
+				echo "<tr>";
+				echo "<td>".getMLText('access_mode').":</td>";
+				echo "<td>";
+				$this->printAccessList($document);
+				echo "</td>";
+				echo "</tr>";
+			}
+		}
+?>
+		<tr>
+		<td><?php printMLText("used_discspace");?>:</td>
+		<td><?php print SeedDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
+		</tr>
+		<tr>
+		<td><?php printMLText("creation_date");?>:</td>
+		<td><?php print getLongReadableDate($document->getDate()); ?></td>
+		</tr>
+<?php
+		if($document->expires()) {
+?>
+		<tr>
+		<td><?php printMLText("expires");?>:</td>
+		<td><?php print getReadableDate($document->getExpires()); ?></td>
+		</tr>
+<?php
+		}
+		if($document->getKeywords()) {
+?>
+		<tr>
+		<td><?php printMLText("keywords");?>:</td>
+		<td><?php print htmlspecialchars($document->getKeywords());?></td>
+		</tr>
+<?php
+		}
+		if($cats = $document->getCategories()) {
+?>
+		<tr>
+		<td><?php printMLText("categories");?>:</td>
+		<td>
+		<?php
+			$ct = array();
+			foreach($cats as $cat)
+				$ct[] = htmlspecialchars($cat->getName());
+			echo implode(', ', $ct);
+		?>
+		</td>
+		</tr>
+<?php
+		}
+?>
+		<?php
+		$attributes = $document->getAttributes();
+		if($attributes) {
+			foreach($attributes as $attribute) {
+				$attrdef = $attribute->getAttributeDefinition();
+?>
+		    <tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
+		    </tr>
+<?php
+			}
+		}
+?>
+		</table>
+<?php
+		$this->contentContainerEnd();
+	} /* }}} */
+
 	function preview() { /* {{{ */
 		$dms = $this->params['dms'];
 		$document = $this->params['document'];
@@ -248,120 +369,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <div class="row-fluid">
 <div class="span4">
 <?php
-		$this->contentHeading(getMLText("document_infos"));
-		$this->contentContainerStart();
-?>
-		<table class="table-condensed">
-<?php
-		if($user->isAdmin()) {
-			echo "<tr>";
-			echo "<td>".getMLText("id").":</td>\n";
-			echo "<td>".htmlspecialchars($document->getID())."</td>\n";
-			echo "</tr>";
-		}
-?>
-		<tr>
-		<td><?php printMLText("name");?>:</td>
-		<td><?php print htmlspecialchars($document->getName());?></td>
-		</tr>
-		<tr>
-		<td><?php printMLText("owner");?>:</td>
-		<td>
-<?php
-		$owner = $document->getOwner();
-		print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialchars($owner->getFullName())."</a>";
-?>
-		</td>
-		</tr>
-<?php
-		if($document->getComment()) {
-?>
-		<tr>
-		<td><?php printMLText("comment");?>:</td>
-		<td><?php print htmlspecialchars($document->getComment());?></td>
-		</tr>
-<?php
-		}
-		if($user->isAdmin()) {
-			echo "<tr>";
-			echo "<td>".getMLText('default_access').":</td>";
-			echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
-			echo "</tr>";
-			if($document->inheritsAccess()) {
-				echo "<tr>";
-				echo "<td>".getMLText("access_mode").":</td>\n";
-				echo "<td>";
-				echo getMLText("inherited")."<br />";
-				$this->printAccessList($document);
-				echo "</tr>";
-			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('access_mode').":</td>";
-				echo "<td>";
-				$this->printAccessList($document);
-				echo "</td>";
-				echo "</tr>";
-			}
-		}
-?>
-		<tr>
-		<td><?php printMLText("used_discspace");?>:</td>
-		<td><?php print SeedDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
-		</tr>
-		<tr>
-		<td><?php printMLText("creation_date");?>:</td>
-		<td><?php print getLongReadableDate($document->getDate()); ?></td>
-		</tr>
-<?php
-		if($document->expires()) {
-?>
-		<tr>
-		<td><?php printMLText("expires");?>:</td>
-		<td><?php print getReadableDate($document->getExpires()); ?></td>
-		</tr>
-<?php
-		}
-		if($document->getKeywords()) {
-?>
-		<tr>
-		<td><?php printMLText("keywords");?>:</td>
-		<td><?php print htmlspecialchars($document->getKeywords());?></td>
-		</tr>
-<?php
-		}
-		if($cats = $document->getCategories()) {
-?>
-		<tr>
-		<td><?php printMLText("categories");?>:</td>
-		<td>
-		<?php
-			$ct = array();
-			foreach($cats as $cat)
-				$ct[] = htmlspecialchars($cat->getName());
-			echo implode(', ', $ct);
-		?>
-		</td>
-		</tr>
-<?php
-		}
-?>
-		<?php
-		$attributes = $document->getAttributes();
-		if($attributes) {
-			foreach($attributes as $attribute) {
-				$attrdef = $attribute->getAttributeDefinition();
-?>
-		    <tr>
-					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
-		    </tr>
-<?php
-			}
-		}
-?>
-		</table>
-<?php
-		$this->contentContainerEnd();
+		$this->documentInfos();
 		$this->preview();
 ?>
 </div>
