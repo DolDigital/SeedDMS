@@ -488,8 +488,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		print "</ul>";
 		print "<ul class=\"unstyled actions\">";
-		if($accessop->mayEditVersion()) {
-			print "<li><a href=\"out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+		if ($file_exists){
+			if($accessop->mayEditVersion()) {
+				print "<li><a href=\"out.EditOnline.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_version")."</a></li>";
+			}
 		}
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
