@@ -174,11 +174,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(!$showfullpreview)
 			return;
 
-		$txt = $this->callHook('preDocumentPreview', $document);
+		$latestContent = $document->getLatestContent();
+		$txt = $this->callHook('preDocumentPreview', $latestContent);
 		if(is_string($txt))
 			echo $txt;
 		else {
-			$latestContent = $document->getLatestContent();
 			switch($latestContent->getMimeType()) {
 			case 'audio/mpeg':
 			case 'audio/mp3':
@@ -204,13 +204,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	<?php
 				break;
 			default:
-				$txt = $this->callHook('additionalDocumentPreview', $document);
+				$txt = $this->callHook('additionalDocumentPreview', $latestContent);
 				if(is_string($txt))
 					echo $txt;
 				break;
 			}
 		}
-		$txt = $this->callHook('postDocumentPreview', $document);
+		$txt = $this->callHook('postDocumentPreview', $latestContent);
 		if(is_string($txt))
 			echo $txt;
 
