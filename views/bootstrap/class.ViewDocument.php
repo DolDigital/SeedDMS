@@ -128,6 +128,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	function preview() { /* {{{ */
+		$dms = $this->params['dms'];
 		$document = $this->params['document'];
 		$timeout = $this->params['timeout'];
 		$showfullpreview = $this->params['showFullPreview'];
