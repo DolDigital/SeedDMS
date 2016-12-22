@@ -174,34 +174,46 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if(!$showfullpreview)
 			return;
 
-		$latestContent = $document->getLatestContent();
-		switch($latestContent->getMimeType()) {
-		case 'audio/mpeg':
-		case 'audio/mp3':
-		case 'audio/ogg':
-		case 'audio/wav':
-			$this->contentHeading(getMLText("preview"));
-?>
-		<audio controls style="width: 100%;">
-		<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
-		</audio>
-<?php
-			break;
-		case 'application/pdf':
-			$this->contentHeading(getMLText("preview"));
-?>
-			<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
-<?php
-			break;
-		case 'image/svg+xml':
-			$this->contentHeading(getMLText("preview"));
-?>
-			<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
-<?php
-			break;
-		default:
-			break;
+		$txt = $this->callHook('preDocumentPreview', $document);
+		if(is_string($txt))
+			echo $txt;
+		else {
+			$latestContent = $document->getLatestContent();
+			switch($latestContent->getMimeType()) {
+			case 'audio/mpeg':
+			case 'audio/mp3':
+			case 'audio/ogg':
+			case 'audio/wav':
+				$this->contentHeading(getMLText("preview"));
+	?>
+			<audio controls style="width: 100%;">
+			<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
+			</audio>
+	<?php
+				break;
+			case 'application/pdf':
+				$this->contentHeading(getMLText("preview"));
+	?>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+	<?php
+				break;
+			case 'image/svg+xml':
+				$this->contentHeading(getMLText("preview"));
+	?>
+				<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+	<?php
+				break;
+			default:
+				$txt = $this->callHook('additionalDocumentPreview', $document);
+				if(is_string($txt))
+					echo $txt;
+				break;
+			}
 		}
+		$txt = $this->callHook('postDocumentPreview', $document);
+		if(is_string($txt))
+			echo $txt;
+
 		if($converttopdf) {
 			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
 			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
