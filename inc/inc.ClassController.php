@@ -38,7 +38,7 @@ class Controller {
 		$classname = "SeedDMS_Controller_".$class;
 		$filename = '';
 		foreach($EXT_CONF as $extname=>$extconf) {
-			$filename = '../ext/'.$extname.'/controllers/class.'.$class.".php";
+			$filename = $settings->_rootDir.'ext/'.$extname.'/controllers/class.'.$class.".php";
 			if(file_exists($filename)) {
 				break;
 			}
