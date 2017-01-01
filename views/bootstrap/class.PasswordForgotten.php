@@ -73,27 +73,31 @@ document.form1.email.focus();
 ?>
 
 <?php $this->contentContainerStart(); ?>
-<form action="../op/op.PasswordForgotten.php" method="post" id="form1" name="form1">
+<form class="form-horizontal" action="../op/op.PasswordForgotten.php" method="post" id="form1" name="form1">
 <?php
 		if ($referrer) {
 			echo "<input type='hidden' name='referuri' value='".$referrer."'/>";
 		}
 ?>
   <p><?php printMLText("password_forgotten_text"); ?></p>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("login");?>:</td>
-			<td><input type="text" name="login" id="login"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("email");?>:</td>
-			<td><input type="text" name="email" id="email"></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input class="btn" type="submit" value="<?php printMLText("submit_password_forgotten") ?>"></td>
-		</tr>
-	</table>
+
+		<div class="control-group">
+		<label class="control-label"><?php printMLText("login");?>:</label>
+			<div class="controls">
+			<input type="text" name="login" id="login">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("email");?>:</label>
+			<div class="controls">
+				<input type="text" name="email" id="email">
+			</div>
+		</div>
+
+		<div class="controls">
+			<input class="btn" type="submit" value="<?php printMLText("submit_password_forgotten") ?>">
+		</div>
+
 </form>
 <?php $this->contentContainerEnd(); ?>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>

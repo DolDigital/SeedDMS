@@ -140,21 +140,22 @@ $(document).ready( function() {
 			$owner = $category->getOwner();
 			if ((!$user->isAdmin()) && ($owner->getID() != $user->getID())) return;
 ?>
-			<table class="table-condensed">
-				<tr>
-					<td></td>
-					<td>
+
+				<div class="control-group">
+					<label class="control-label"></label>
+					<div class="controls">
 						<form action="../op/op.DefaultKeywords.php" method="post">
   						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 							<input type="Hidden" name="action" value="removecategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 							<button type="submit" class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php printMLText("rm_default_keyword_category");?></button>
 						</form>
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo getMLText("name")?>:</td>
-					<td>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label"><?php echo getMLText("name")?>:</label>
+					<div class="controls">
 						<form class="form-inline formn" action="../op/op.DefaultKeywords.php" method="post">
   						<?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="hidden" name="action" value="editcategory">
@@ -162,11 +163,12 @@ $(document).ready( function() {
 							<input name="name" class="name" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">
 							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
 						</form>
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo getMLText("default_keywords")?>:</td>
-					<td>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label"><?php echo getMLText("default_keywords")?>:</label>
+					<div class="controls">
 						<?php
 							$lists = $category->getKeywordLists();
 							if (count($lists) == 0)
@@ -192,23 +194,22 @@ $(document).ready( function() {
 									</form>
 									<br>
 						<?php }  ?>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label"></label>
+					<div class="controls">
 					  <form class="form-inline formk" action="../op/op.DefaultKeywords.php" method="post">
   				  <?php echo createHiddenFieldWithKey('newkeywords'); ?>
 						<input type="Hidden" name="action" value="newkeywords">
 						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 						<input type="text" class="keywords" name="keywords">
-					
-					  <input type="submit" class="btn" value="<?php printMLText("new_default_keywords");?>">
+					  	<input type="submit" class="btn" value="<?php printMLText("new_default_keywords");?>">
 						</form>
-					</td>
-				</tr>
+					</div>
+				</div>
 
-			</table>
 <?php
 		}
 	} /* }}} */

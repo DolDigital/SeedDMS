@@ -115,13 +115,13 @@ $(document).ready( function() {
 ?>
 <br>
 
-<form action="../op/op.DocumentNotify.php" name="form1" id="form1">
+<form class=form-horizontal" action="../op/op.DocumentNotify.php" name="form1" id="form1">
 <input type="hidden" name="documentid" value="<?php print $document->getID()?>">
 <input type="hidden" name="action" value="addnotify">
-<table class="table-condensed">
-	<tr>
-		<td><?php printMLText("user");?>:</td>
-		<td>
+
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("user");?>:</label>
+		<div class="controls">
 			<select name="userid">
 				<option value="-1"><?php printMLText("select_one");?>
 				<?php
@@ -137,11 +137,14 @@ $(document).ready( function() {
 					}
 				?>
 			</select>
-		</td>
-	</tr>
-	<tr>
-		<td><?php printMLText("group");?>:</td>
-		<td>
+		</div>
+	</div>
+
+
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("group");?>:</label>
+
+		<div class="controls">
 			<select name="groupid">
 				<option value="-1"><?php printMLText("select_one");?>
 				<?php
@@ -153,13 +156,13 @@ $(document).ready( function() {
 					}
 				?>
 			</select>
-		</td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><input type="submit" class="btn" value="<?php printMLText("add") ?>"></td>
-	</tr>
-</table>
+		</div>
+	</div>
+
+	<div class="controls">
+		<input type="submit" class="btn" value="<?php printMLText("add") ?>">
+	</div>
+
 </form>
 
 <?php
