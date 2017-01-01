@@ -50,7 +50,7 @@ document.form1.newpassword.focus();
 		$this->pageNavigation(getMLText("change_password"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.ChangePassword.php" method="post" name="form1">
+<form class="form-horizontal" action="../op/op.ChangePassword.php" method="post" name="form1">
 <?php
 		if ($referuri) {
 			echo "<input type='hidden' name='referuri' value='".$referuri."'/>";
@@ -59,32 +59,32 @@ document.form1.newpassword.focus();
 			echo "<input type='hidden' name='hash' value='".$hash."'/>";
 		}
 ?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("password");?>:</td>
-			<td><input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password"></td>
-		</tr>
+
+		 <div class="control-group">
+			<label class="control-label"><?php printMLText("password");?>:</label>
+			<div class="controls"><input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password"></div>
+		 </div>
 <?php
 		if($passwordstrength > 0) {
 ?>
-		<tr>
-			<td><?php printMLText("password_strength");?>:</td>
-			<td>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("password_strength");?>:</label>
+			<div class="controls">
 				<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
-			</td>
-		</tr>
+			</div>
+		</div>
 <?php
 		}
 ?>
-		<tr>
-			<td><?php printMLText("confirm_pwd");?>:</td>
-			<td><input type="password" name="newpasswordrepeat" id="passwordrepeat"></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input class="btn" type="submit" value="<?php printMLText("submit_password") ?>"></td>
-		</tr>
-	</table>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("confirm_pwd");?>:</label>
+			<div class="controls"><input type="password" name="newpasswordrepeat" id="passwordrepeat"></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls"><input class="btn" type="submit" value="<?php printMLText("submit_password") ?>"></div>
+		</div>
+
 </form>
 <?php $this->contentContainerEnd(); ?>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
