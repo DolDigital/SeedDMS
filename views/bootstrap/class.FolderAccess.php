@@ -158,8 +158,8 @@ $(document).ready(function() {
 ?>
 <form class="form-inline" action="../op/op.FolderAccess.php">
   <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
-	<input type="Hidden" name="action" value="setdefault">
+	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+	<input type="hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
 	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 </form>
@@ -179,9 +179,9 @@ $(document).ready(function() {
 				print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
-				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
-				print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
-				print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"action\" value=\"editaccess\">\n";
+				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<td>\n";
 				$this->printAccessModeSelection($userAccess->getMode());
 				print "</td>\n";
@@ -191,9 +191,9 @@ $(document).ready(function() {
 				print "</form>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
-				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
-				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
-				print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
+				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<td>\n";
 				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
 				print "</td>\n";
@@ -209,9 +209,9 @@ $(document).ready(function() {
 				print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
 				print "<form action=\"../op/op.FolderAccess.php\">";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
-				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">";
-				print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">";
-				print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
+				print "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\">";
+				print "<input type=\"hidden\" name=\"action\" value=\"editaccess\">";
+				print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 				print "<td>";
 				$this->printAccessModeSelection($groupAccess->getMode());
 				print "</td>\n";
@@ -221,9 +221,9 @@ $(document).ready(function() {
 				print "</form>";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
-				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
-				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
-				print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
+				print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
 				print "<td>";
 				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
 				print "</td>\n";
@@ -236,8 +236,8 @@ $(document).ready(function() {
 ?>
 <form action="../op/op.FolderAccess.php" id="form1" name="form1">
 <?php echo createHiddenFieldWithKey('folderaccess'); ?>
-<input type="Hidden" name="folderid" value="<?php print $folder->getID()?>">
-<input type="Hidden" name="action" value="addaccess">
+<input type="hidden" name="folderid" value="<?php print $folder->getID()?>">
+<input type="hidden" name="action" value="addaccess">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("user");?>:</td>

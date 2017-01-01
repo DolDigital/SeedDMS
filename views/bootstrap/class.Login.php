@@ -125,13 +125,13 @@ $(document).ready( function() {
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("user_login");?>:</label>
 		<div class="controls">
-			<input type="text" id="login" name="login" placeholder="login" required>
+			<input type="text" id="login" name="login" placeholder="login" autocomplete="off" required>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="pwd"><?php printMLText("password");?>:</label>
 		<div class="controls">
-			<input type="Password" id="pwd" name="pwd" required>
+			<input type="Password" id="pwd" name="pwd" autocomplete="off" required>
 		</div>
 	</div>
 <?php if($enableLanguageSelector) { ?>

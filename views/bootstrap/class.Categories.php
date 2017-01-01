@@ -71,8 +71,8 @@ $(document).ready( function() {
 ?>
 						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
-						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input type="Hidden" name="action" value="removecategory">
+						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="hidden" name="action" value="removecategory">
 						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php

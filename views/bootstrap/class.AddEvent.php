@@ -82,38 +82,44 @@ $(document).ready(function() {
 		$expdate = date('Y-m-d');
 ?>
 
-<form action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("from");?>:</td>
-			<td><?php //$this->printDateChooser(-1, "from");?>
+<form class="form-horizontal" action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("from");?>:</label>
+			<div class="controls"><?php //$this->printDateChooser(-1, "from");?>
     		<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
       		<input class="span6" size="16" name="from" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("to");?>:</td>
-			<td><?php //$this->printDateChooser(-1, "to");?>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("to");?>:</label>
+			<div class="controls"><?php //$this->printDateChooser(-1, "to");?>
     		<span class="input-append date span12" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
       		<input class="span6" size="16" name="to" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
-			</td>
-		</tr>
-		<tr>
-			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" size="60"></td>
-		</tr>
-		<tr>
-			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"></textarea></td>
-		</tr>
-		<tr>
-			<td></td><td><input class="btn" type="submit" value="<?php printMLText("add_event");?>"></td>
-		</tr>
-	</table>
+			</div>
+		</div>
+
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("name");?>:</label>
+			<div class="controls"><input type="text" name="name" size="60"></div>
+		</div>
+
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls"><textarea name="comment" rows="4" cols="80"></textarea></div>
+		</div>
+		
+		<div class="controls">
+			<input class="btn" type="submit" value="<?php printMLText("add_event");?>">
+		</div>
+
 </form>
 <?php
 		$this->contentContainerEnd();
