@@ -56,6 +56,7 @@ if ($document->getAccessMode($user) < M_READ) {
  */
 if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
+	exit;
 }
 
 if($view) {

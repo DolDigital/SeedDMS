@@ -56,6 +56,7 @@ if (!is_object($version)) {
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()==$version->getVersion()) {
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
+	exit;
 }
 
 $folder = $document->getFolder();
