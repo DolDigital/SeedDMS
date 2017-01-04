@@ -103,40 +103,43 @@ $(document).ready( function() {
 		$this->contentContainerStart();
 ?>
 
-<form action="../op/op.AddSubFolder.php" id="form1" name="form1" method="post">
+<form class="form-horizontal" action="../op/op.AddSubFolder.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('addsubfolder'); ?>
-	<input type="Hidden" name="folderid" value="<?php print $folder->getId();?>">
-	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
-	<table class="table-condensed">
-		<tr>
-			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" size="60" required></td>
-		</tr>
-		<tr>
-			<td class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea></td>
-		</tr>
-		<tr>
-			<td class="inputDescription"><?php printMLText("sequence");?>:</td>
-			<td><?php $this->printSequenceChooser($folder->getSubFolders('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off');?></td>
-		</tr>
+	<input type="hidden" name="folderid" value="<?php print $folder->getId();?>">
+	<input type="hidden" name="showtree" value="<?php echo showtree();?>">
+	
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("name");?>:</label>
+			<div class="controls"><input type="text" name="name" size="60" required></div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls"><textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea></div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("sequence");?>:</label>
+			<div class="controls"><?php $this->printSequenceChooser($folder->getSubFolders('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off');?></div>
+		</div>
 <?php
 	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
 ?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, '') ?></td>
-</tr>
+<div class="control-group">
+	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
+	<div class="controls"><?php $this->printAttributeEditField($attrdef, '') ?></div>
+</div>
 <?php
 		}
 	}
 ?>
-		<tr>
-			<td></td><td><input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>"></td>
-		</tr>
-	</table>
+
+<div class="controls">
+	<input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>">
+</div>
+
 </form>
 <?php
 		$this->contentContainerEnd();

@@ -118,73 +118,84 @@ $(document).ready( function() {
 		$this->contentHeading(getMLText("edit_user_details"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" id="form">
-<table class="table-condensed">
-	<tr>
-		<td><?php printMLText("current_password");?>:</td>
-		<td><input id="currentpwd" type="password" name="currentpwd" size="30"></td>
-	</tr>
-	<tr>
-		<td><?php printMLText("new_password");?>:</td>
-		<td><input class="pwd" type="password" rel="strengthbar" id="pwd" name="pwd" size="30"></td>
-	</tr>
+<form class="form-horizontal" action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" id="form">
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("current_password");?>:</label>
+		<div class="controls">
+			<input id="currentpwd" type="password" name="currentpwd" size="30">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("new_password");?>:</label>
+		<div class="controls">
+			<input class="pwd" type="password" rel="strengthbar" id="pwd" name="pwd" size="30">
+		</div>
+	</div>
 <?php
 	if($passwordstrength) {
 ?>
-	<tr>
-		<td><?php printMLText("password_strength");?>:</td>
-		<td>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("password_strength");?>:</label>
+		<div class="controls">
 			<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
-		</td>
-	</tr>
+		</div>
+	</div>
 <?php
 	}
 ?>
-	<tr>
-		<td><?php printMLText("confirm_pwd");?>:</td>
-		<td><input id="pwdconf" type="Password" id="pwdconf" name="pwdconf" size="30"></td>
-	</tr>
-	<tr>
-		<td><?php printMLText("name");?>:</td>
-		<td><input type="text" id="fullname" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
-	</tr>
-	<tr>
-		<td><?php printMLText("email");?>:</td>
-		<td><input type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
-	</tr>
-	<tr>
-		<td><?php printMLText("comment");?>:</td>
-		<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($user->getComment());?></textarea></td>
-	</tr>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("confirm_pwd");?>:</label>
+		<div class="controls">
+			<input id="pwdconf" type="Password" id="pwdconf" name="pwdconf" size="30">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("name");?>:</label>
+		<div class="controls">
+			<input type="text" id="fullname" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("email");?>:</label>
+		<div class="controls">
+			<input type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("comment");?>:</label>
+		<div class="controls">
+			<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($user->getComment());?></textarea>
+		</div>
+	</div>
 
 <?php	
 		if ($enableuserimage){	
 ?>	
-	<tr>
-		<td><?php printMLText("user_image");?>:</td>
-		<td>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("user_image");?>:</label>
+		<div class="controls">
 <?php
 			if ($user->hasImage())
 				print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$user->getId()."\">";
 			else printMLText("no_user_image");
 ?>
-		</td>
-	</tr>
-	<tr>
-		<td><?php printMLText("new_user_image");?>:</td>
-		<td>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("new_user_image");?>:</label>
+		<div class="controls">
 <?php
 	$this->printFileChooser('userfile', false, "image/jpeg");
 ?>
-		</td>
-	</tr>
+		</div>
+	</div>
 <?php
 		}
 		if ($enablelanguageselector){	
 ?>
-	<tr>
-		<td><?php printMLText("language");?>:</td>
-		<td>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("language");?>:</label>
+		<div class="controls">
 			<select name="language">
 <?php
 			$languages = getLanguages();
@@ -193,15 +204,15 @@ $(document).ready( function() {
 			}
 ?>
 			</select>
-		</td>
-	</tr>
+		</div>
+	</div>
 <?php
 		}
 		if ($enablethemeselector){	
 ?>
-	<tr>
-		<td><?php printMLText("theme");?>:</td>
-		<td>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("theme");?>:</label>
+		<div class="controls">
 			<select name="theme">
 <?php
 			$themes = UI::getStyles();
@@ -210,16 +221,14 @@ $(document).ready( function() {
 			}
 ?>
 			</select>
-		</td>
-	</tr>
+		</div>
+	</div>
 <?php
 		}
 ?>
-	<tr>
-		<td></td>
-	  <td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button></td>
-	</tr>
-</table>
+	<div class="controls">
+		<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
+	</div>
 </form>
 
 <?php

@@ -166,7 +166,7 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-			<form action="../op/op.AttributeMgr.php" method="post">
+			<form class="form-horizontal" action="../op/op.AttributeMgr.php" method="post">
 <?php
 		if($attrdef) {
 			echo createHiddenFieldWithKey('editattrdef');
@@ -181,82 +181,89 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-				<table class="table-condensed">
-					<tr>
-						<td>
+					<div class="control-group">
+						<label class="control-label">
 								<?php printMLText("attrdef_name");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" name="name" value="<?php echo $attrdef ? htmlspecialchars($attrdef->getName()) : '' ?>">
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_objtype");?>:
-						</td>
-						<td>
-							<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>>Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>>Document</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>>Document content</option></select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<?php printMLText("attrdef_type");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
+						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('version'); ?></option></select>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label"><?php printMLText("attrdef_type");?>:</label>
+						<div class="controls">
 							<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_date) echo "selected"; ?>><?php printMLText('attrdef_type_date'); ?></option></select>
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_multiple");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="checkbox" value="1" name="multiple" <?php echo ($attrdef && $attrdef->getMultipleValues()) ? "checked" : "" ?>/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<?php printMLText("attrdef_minvalues");?>:
-						</td>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label"><?php printMLText("attrdef_minvalues");?>:</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getMinValues() : '' ?>" name="minvalues" />
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_maxvalues");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getMaxValues() : '' ?>" name="maxvalues" />
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_valueset");?>:
-						</td>
-						<td>
+						</label>
+
+						<div class="controls">
 							<?php if($attrdef && strlen($attrdef->getValueSet()) > 30) { ?>
 							<textarea name="valueset" rows="5"><?php echo ($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : '' ?></textarea>
 							<?php } else { ?>
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getValueSet() : '' ?>" name="valueset" />
 							<?php } ?>
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+					
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_regex");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getRegex() : '' ?>" name="regex" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
-						</td>
-					</tr>
-				</table>
+						</div>
+					</div>
+
+					<div class="controls">
+						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
+					</div>
 			</form>
 <?php
 } /* }}} */

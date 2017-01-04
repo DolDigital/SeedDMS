@@ -153,7 +153,7 @@ $(document).ready( function() {
 		$allUsers = $this->params['allusers'];
 		$groups = $this->params['allgroups'];
 ?>
-	<form action="../op/op.GroupMgr.php" name="form_1" id="form_1" method="post">
+	<form class="form-horizontal" action="../op/op.GroupMgr.php" name="form_1" id="form_1" method="post">
 <?php
 		if($group) {
 			echo createHiddenFieldWithKey('editgroup');
@@ -168,30 +168,34 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-	<table class="table-condensed">
+
 <?php
 		if($group) {
 ?>
-		<tr>
-			<td></td>
-			<td><a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a></td>
-		</tr>
+		<div class="control-group">
+			<div class="controls">
+				<a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a>
+			</div>
+		</div>
 <?php
 		}
 ?>
-		<tr>
-			<td><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-		</tr>
-	</table>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("name");?>:</label>
+			<div class="controls">
+				<input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls">
+				<textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea>
+			</div>
+		</div>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		</div>
+
 	</form>
 <?php
 		if($group) {

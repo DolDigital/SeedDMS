@@ -76,17 +76,17 @@ $(document).ready( function() {
 				$workflows = $dms->getAllWorkflows();
 				if($workflows) {
 ?>
-		<form action="../op/op.SetWorkflow.php" method="post" name="form1">
+		<form class="form-horizontal" action="../op/op.SetWorkflow.php" method="post" name="form1">
 		<?php echo createHiddenFieldWithKey('setworkflow'); ?>
 		<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 		<input type="hidden" name="version" value="<?php print $latestContent->getVersion(); ?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
-		<table class="table-condensed">
-		<tr>	
-      <td>
-			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
-      </td>
-      <td>
+
+		<div class="control-group">
+			<label class="control-label">
+				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
+      		</label>
+      		<div class="controls">
 <?php
 					echo "<select id=\"selector\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
@@ -99,14 +99,13 @@ $(document).ready( function() {
 					}
 					echo "</select>";
 ?>
-				</td>
-			</tr>
-			<tr>	
-				<td>
-				</td>
-				<td><input type="submit" class="btn" value="<?php printMLText("set_workflow");?>"></td>
-			</tr>
-		</table>
+			</div>
+		</div>
+
+		<div class="controls">
+			<input type="submit" class="btn" value="<?php printMLText("set_workflow");?>">
+		</div>
+
 		</form>
 <?php
 				} else {
