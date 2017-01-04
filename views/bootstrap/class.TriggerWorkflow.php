@@ -106,18 +106,20 @@ $(document).ready(function() {
 ?>
 	<div class="row-fluid">
 	<div class="span4">
-	<form method="POST" action="../op/op.TriggerWorkflow.php" id="form1" name="form1">
+	<form class="form-horizontal" method="post" action="../op/op.TriggerWorkflow.php" id="form1" name="form1">
 	<?php echo createHiddenFieldWithKey('triggerworkflow'); ?>
-	<table>
-	<tr><td><?php printMLText("comment")?>:</td>
-	<td><textarea name="comment" cols="80" rows="4"></textarea>
-	</td></tr>
-	<tr><td></td><td>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText('comment'); ?>:</label>
+		<div class="controls">
+			<textarea name="comment" cols="80" rows="4"></textarea>
+		</div>
+	</div>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='transition' value='<?php echo $transition->getID(); ?>'/>
-	<input type='submit' class="btn" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
-	</td></tr></table>
+	<div class="controls">
+		<input type='submit' class="btn" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
+	</div>
 	</form>
 	</div>
 	<div id="workflowgraph" class="span8">

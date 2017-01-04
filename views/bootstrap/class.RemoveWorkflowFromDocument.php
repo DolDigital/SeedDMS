@@ -71,12 +71,9 @@ class SeedDMS_View_RemoveWorkflowFromDocument extends SeedDMS_Bootstrap_Style {
 	<p><?php printMLText("rm_workflow_warning"); ?></p>
 	<form method="post" action="../op/op.RemoveWorkflowFromDocument.php" name="form1">
 	<?php echo createHiddenFieldWithKey('removeworkflowfromdocument'); ?>
-	<table>
-	<tr><td></td><td>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<button type='submit' class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow"); ?></button>
-	</td></tr></table>
 	</form>
 	</div>
 	<div id="workflowgraph" class="span8">
