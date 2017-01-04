@@ -51,17 +51,17 @@ class SeedDMS_View_MoveDocument extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("move_document"));
 		$this->contentContainerStart('warning');
 ?>
-<form action="../op/op.MoveDocument.php" name="form1">
+<form class="form-horizontal" action="../op/op.MoveDocument.php" name="form1">
 	<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
-	<table>
-		<tr>
-			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooserHtml("form1", M_READWRITE, -1, $target);?></td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("move");?>"></td>
-		</tr>
-	</table>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("choose_target_folder");?>:</label>
+		<div class="controls">
+			<?php $this->printFolderChooserHtml("form1", M_READWRITE, -1, $target);?>
+		</div>
+	</div>
+	<div class="controls">
+		<input class="btn" type="submit" value="<?php printMLText("move"); ?>">
+	</div>
 </form>
 <?php
 		$this->contentContainerEnd();
