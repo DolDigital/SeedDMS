@@ -135,10 +135,10 @@ $(document).ready(function() {
 				$arr = $this->callHook('folderEditAttribute', $folder, $attrdef);
 				if(is_array($arr)) {
 					echo $txt;
-					echo "<tr>";
-					echo "<td>".$arr[0]."</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
+					echo "<div class=\"control-group\">";
+					echo "<label class=\"control-label\">".$arr[0]."</label>";
+					echo "<div class=\"controls\">".$arr[1]."</div>";
+					echo "</div>";
 				} else {
 ?>
 			<div class="control-group">
@@ -147,7 +147,8 @@ $(document).ready(function() {
 					<?php $this->printAttributeEditField($attrdef, $folder->getAttribute($attrdef)) ?>
 				</div>
 			</div>
-			<?php
+<?php
+				}
 			}
 		}
 ?>
