@@ -98,30 +98,37 @@ $(document).ready( function() {
 		$this->contentContainerStart();
 ?>
 
-<form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload">
+<form class="form-horizontal" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload">
 <input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
-<table class="table-condensed">
-<tr>
-	<td><?php printMLText("local_file");?>:</td>
-	<td><!-- <input type="File" name="userfile" size="60"> -->
-<?php
-	$this->printFileChooser('userfile', false);
-?>
-	</td>
-</tr>
-<tr>
-	<td><?php printMLText("name");?>:</td>
-	<td><input type="text" name="name" id="name" size="60"></td>
-</tr>
-<tr>
-	<td><?php printMLText("comment");?>:</td>
-	<td><textarea name="comment" id="comment" rows="4" cols="80"></textarea></td>
-</tr>
-<tr>
-	<td></td>
-	<td><input class="btn" type="submit" value="<?php printMLText("add");?>"></td>
-</tr>
-</table>
+
+<div class="control-group">
+	<label class="control-label"><?php printMLText("local_file");?>:</label>
+	<div class="controls">
+		<?php $this->printFileChooser('userfile', false); ?>
+	</div>
+</div>
+
+
+<div class="control-group">
+	<label class="control-label"><?php printMLText("name");?>:</label>
+	<div class="controls">
+		<input type="text" name="name" id="name" size="60">
+	</div>
+</div>
+
+
+<div class="control-group">
+	<label class="control-label"><?php printMLText("comment");?>:</label>
+	<div class="controls">
+		<textarea name="comment" id="comment" rows="4" cols="80"></textarea>
+	</div>
+</div>
+
+
+<div class="controls">
+	<input class="btn" type="submit" value="<?php printMLText("add");?>">
+</div>
+
 </form>
 <?php
 		$this->contentContainerEnd();
