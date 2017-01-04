@@ -181,15 +181,10 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		echo "<div class=\"span8\">\n";
 		echo "<div class=\"well\">\n";
 
-		print "<table class=\"table-condensed\"><tr><td>\n";
-
 		print "<ul>\n";
 		$this->printFolder($rootfolder);
 		print "</ul>\n";
 
-		print "</td></tr>";
-
-		print "</table>\n";
 		echo "</div>\n";
 		echo "</div>\n";
 
