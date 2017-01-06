@@ -1,5 +1,5 @@
 VERSION=4.3.31
-SRC=CHANGELOG inc conf utils index.php languages views op out doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi pdfviewer
+SRC=CHANGELOG inc conf utils index.php languages views op out doc drop-tables-innodb.sql styles TODO LICENSE Makefile webdav install restapi pdfviewer
 # webapp
 
 NODISTFILES=Makefile utils/importmail.php utils/seedddms-importmail utils/remote-email-upload utils/remote-upload .svn .gitignore styles/blue styles/hc styles/clean views/blue views/hc views/clean
