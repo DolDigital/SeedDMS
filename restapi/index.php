@@ -542,10 +542,10 @@ function getDocumentContent($id) { /* {{{ */
 			$lc = $document->getLatestContent();
 			$app->response()->header('Content-Type', $lc->getMimeType());
 			$app->response()->header("Content-Disposition: filename=\"" . $document->getName().$lc->getFileType() . "\"");
-			$app->response()->header("Content-Length: " . filesize($dms->contentDir . $lc->getPath()));
-			$app->response()->header("Expires: 0");
-			$app->response()->header("Cache-Control: no-cache, must-revalidate");
-			$app->response()->header("Pragma: no-cache");
+			$app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
+			$app->response()->header("Expires", "0");
+			$app->response()->header("Cache-Control", "no-cache, must-revalidate");
+			$app->response()->header("Pragma", "no-cache");
 
 			readfile($dms->contentDir . $lc->getPath());
 		} else {
@@ -592,11 +592,11 @@ function getDocumentVersion($id, $version) { /* {{{ */
 		if ($document->getAccessMode($userobj) >= M_READ) {
 			$lc = $document->getContentByVersion($version);
 			$app->response()->header('Content-Type', $lc->getMimeType());
-			$app->response()->header("Content-Disposition: filename=\"" . $document->getName().$lc->getFileType() . "\"");
-			$app->response()->header("Content-Length: " . filesize($dms->contentDir . $lc->getPath()));
-			$app->response()->header("Expires: 0");
-			$app->response()->header("Cache-Control: no-cache, must-revalidate");
-			$app->response()->header("Pragma: no-cache");
+			$app->response()->header("Content-Disposition", "filename=\"" . $document->getName().$lc->getFileType() . "\"");
+			$app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
+			$app->response()->header("Expires", "0");
+			$app->response()->header("Cache-Control", "no-cache, must-revalidate");
+			$app->response()->header("Pragma", "no-cache");
 
 			readfile($dms->contentDir . $lc->getPath());
 		} else {
@@ -638,11 +638,11 @@ function getDocumentFile($id, $fileid) { /* {{{ */
 		if ($document->getAccessMode($userobj) >= M_READ) {
 			$file = $document->getDocumentFile($fileid);
 			$app->response()->header('Content-Type', $file->getMimeType());
-			$app->response()->header("Content-Disposition: filename=\"" . $document->getName().$file->getFileType() . "\"");
-			$app->response()->header("Content-Length: " . filesize($dms->contentDir . $file->getPath()));
-			$app->response()->header("Expires: 0");
-			$app->response()->header("Cache-Control: no-cache, must-revalidate");
-			$app->response()->header("Pragma: no-cache");
+			$app->response()->header("Content-Disposition", "filename=\"" . $document->getName().$file->getFileType() . "\"");
+			$app->response()->header("Content-Length", filesize($dms->contentDir . $file->getPath()));
+			$app->response()->header("Expires", "0");
+			$app->response()->header("Cache-Control", "no-cache, must-revalidate");
+			$app->response()->header("Pragma", "no-cache");
 
 			readfile($dms->contentDir . $file->getPath());
 		} else {
@@ -691,6 +691,39 @@ function getDocumentAttributes($id) { /* {{{ */
 			}
 			$app->response()->header('Content-Type', 'application/json');
 			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
+		} else {
+			$app->response()->status(404);
+		}
+	}
+} /* }}} */
+
+function getDocumentPreview($id, $version=0, $width=0) { /* {{{ */
+	global $app, $dms, $userobj, $settings;
+	$document = $dms->getDocument($id);
+
+	if($document) {
+		if ($document->getAccessMode($userobj) >= M_READ) {
+			if($version)
+				$object = $document->getContentByVersion($version);
+			else
+				$object = $document->getLatestContent();
+			if(!$object)
+				exit;
+			
+			if(!empty($width))
+				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $width);
+			else
+				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
+			if(!$previewer->hasPreview($object))
+				$previewer->createPreview($object);
+			$app->response()->header('Content-Type', 'image/png');
+			$app->response()->header("Content-Disposition", "filename=\"preview-" . $document->getID()."-".$object->getVersion()."-".$width.".png" . "\"");
+			$app->response()->header("Content-Length", $previewer->getFilesize($object));
+//			$app->response()->header("Expires", "0");
+//			$app->response()->header("Cache-Control", "no-cache, must-revalidate");
+//			$app->response()->header("Pragma", "no-cache");
+
+			$previewer->getPreview($object);
 		} else {
 			$app->response()->status(404);
 		}
@@ -1347,6 +1380,7 @@ $app->get('/document/:id/files', 'getDocumentFiles');
 $app->get('/document/:id/file/:fileid', 'getDocumentFile');
 $app->get('/document/:id/links', 'getDocumentLinks');
 $app->get('/document/:id/attributes', 'getDocumentAttributes');
+$app->get('/document/:id/preview/:version/:width', 'getDocumentPreview');
 $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
 $app->get('/account/locked', 'getLockedDocuments');
