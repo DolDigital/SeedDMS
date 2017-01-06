@@ -2,12 +2,14 @@ VERSION=4.3.31
 SRC=CHANGELOG inc conf utils index.php languages views op out doc drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi pdfviewer
 # webapp
 
+NODISTFILES=Makefile utils/importmail.php utils/seedddms-importmail utils/remote-email-upload utils/remote-upload .svn .gitignore styles/blue styles/hc styles/clean views/blue views/hc views/clean
+
 PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
 
 dist:
 	mkdir -p tmp/seeddms-$(VERSION)
 	cp -a $(SRC) tmp/seeddms-$(VERSION)
-	(cd tmp; tar --exclude=.svn --exclude=views/blue --exclude=views/hc --exclude=views/clean --exclude=styles/blue --exclude=styles/hc --exclude=styles/clean -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
+	(cd tmp; rm -rf $(NODISTFILES); tar --exclude=.svn --exclude=.gitignore --exclude=views/blue --exclude=views/hc --exclude=views/clean --exclude=styles/blue --exclude=styles/hc --exclude=styles/clean -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
 	rm -rf tmp
 
 pear:
