@@ -28,13 +28,22 @@ if(!checkFormKey('clearcache')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
-$cmd = 'rm -rf '.$settings->_cacheDir.'/*';
-$ret = null;
-system($cmd, $ret);
+if(!empty($_POST['preview'])) {
+	$cmd = 'rm -rf '.$settings->_cacheDir.'/[1-9]*';
+	$ret = null;
+	system($cmd, $ret);
+}
+
+if(!empty($_POST['js'])) {
+	$cmd = 'rm -rf '.$settings->_cacheDir.'/js/*';
+	$ret = null;
+	system($cmd, $ret);
+}
+
 if($ret)
-	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_clearcache')));
+	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_cleared_cache')));
 else
-	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_clearcache')));
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_cleared_cache')));
 
 add_log_line("");
 
