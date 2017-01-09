@@ -228,6 +228,7 @@ $text = array(
 'clear_password' => '',
 'clipboard' => '',
 'close' => 'Затвори',
+'command' => '',
 'comment' => 'Коментар',
 'comment_changed_email' => 'Коментарите са изменени',
 'comment_for_current_version' => 'Коментар за версията',

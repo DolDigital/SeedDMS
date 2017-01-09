@@ -228,6 +228,7 @@ $text = array(
 'clear_password' => '',
 'clipboard' => '',
 'close' => 'Κλέισιμο',
+'command' => '',
 'comment' => 'Σχόλιο',
 'comment_changed_email' => '',
 'comment_for_current_version' => '',
