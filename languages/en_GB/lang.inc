@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1475), dgrutsch (7), netixw (14)
+//    Translators: Admin (1478), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -436,7 +436,7 @@ URL: [url]',
 'error' => 'Error',
 'error_add_aro' => 'Error while adding access request object',
 'error_add_permission' => 'Error while add permission',
-'error_clearcache' => 'Error while clearing cache',
+'error_cleared_cache' => 'Error while clearing cache',
 'error_importfs' => 'Error while importing form file system',
 'error_no_document_selected' => 'No document selected',
 'error_no_folder_selected' => 'No folder selected',
@@ -808,6 +808,7 @@ If you have still problems to login, then please contact your administrator.',
 'possible_substitutes' => 'Substitutes',
 'preview' => 'Preview',
 'preview_converters' => 'Preview document conversion',
+'preview_images' => 'Preview images',
 'preview_markdown' => 'Markdown',
 'preview_plain' => 'Text',
 'previous_state' => 'Previous state',
@@ -817,8 +818,14 @@ If you have still problems to login, then please contact your administrator.',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',
 'quota_is_disabled' => 'Quota support is currently disabled in the settings. Setting a user quota will have no effect until it is enabled again.',
 'quota_warning' => 'Your maximum disc usage is exceeded by [bytes]. Please remove documents or previous versions.',
-'receipt_deletion_email_body' => '',
-'receipt_deletion_email_subject' => '',
+'receipt_deletion_email_body' => 'User has been removed from the list of recipients
+Document: [name]
+Version: [version]
+Parent folder: [folder_path]
+Recipient: [recipient]
+User: [username]
+URL: [url]',
+'receipt_deletion_email_subject' => '[sitename]: [name] - Recipient removed',
 'receipt_log' => 'Reception Log',
 'receipt_request_email_body' => 'Reception request
 Document: [name]
@@ -1267,7 +1274,7 @@ URL: [url]',
 'settings_showFullPreview_desc' => 'Enable/disable a full preview of the document on the details page, if the browser is capable to do so.',
 'settings_showMissingTranslations' => 'Show missing translations',
 'settings_showMissingTranslations_desc' => 'List all missing translations on the page at the bottom of the page. The logged in user will be able to submit a proposal for a missing translation which will be saved in a csv file. Do not turn this function on if in a production environment!',
-'settings_showSingleSearchHit' => 'Jump right to a single search hit',
+'settings_showSingleSearchHit' => 'Jump straight to a single search hit',
 'settings_showSingleSearchHit_desc' => 'If the search results into just one hit, then it will be displayed right away instead of the result list.',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Site Default Page',
@@ -1343,7 +1350,7 @@ URL: [url]',
 'splash_add_to_transmittal' => 'Add to transmittal',
 'splash_add_transmittal' => 'Added transmittal',
 'splash_add_user' => 'New user added',
-'splash_clearcache' => 'Cache cleared',
+'splash_cleared_cache' => 'Cache cleared',
 'splash_cleared_clipboard' => 'Clipboard cleared',
 'splash_document_added' => 'Document added',
 'splash_document_checkedout' => 'Document checked out',
@@ -1424,6 +1431,7 @@ URL: [url]',
 'takeOverIndApprover' => 'Take over individual approver from last version.',
 'takeOverIndReviewer' => 'Take over individual reviewer from last version.',
 'tasks' => 'Tasks',
+'temp_jscode' => 'Temporary javascript code',
 'testmail_body' => 'This mail is just for testing the mail configuration of SeedDMS',
 'testmail_subject' => 'Test mail',
 'theme' => 'Theme',
