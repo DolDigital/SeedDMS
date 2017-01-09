@@ -134,16 +134,19 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if($this->footerjs) {
-			echo "<script type=\"text/javascript\">
-//<![CDATA[
-$(document).ready(function () {
-";
+			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
-				echo $script."\n";
+				$jscode .= $script."\n";
 			}
-			echo "});
-//]]>
-</script>";
+			$jscode .= "});\n";
+			$hashjs = md5($jscode);
+			if(!is_dir($this->params['cachedir'].'/js')) {
+				SeedDMS_Core_File::makeDir($this->params['cachedir'].'/js');
+			}
+			if(is_dir($this->params['cachedir'].'/js')) {
+				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
+			}
+			echo '<script src="../out/out.'.$this->params['class'].'.php?action=footerjs&hash='.$hashjs.'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
@@ -151,6 +154,13 @@ $(document).ready(function () {
 			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function footerjs() { /* {{{ */
+		header('Content-Type: application/javascript');
+		if(file_exists($this->params['cachedir'].'/js/'.$_GET['hash'].'.js')) {
+			readfile($this->params['cachedir'].'/js/'.$_GET['hash'].'.js');
+		}
 	} /* }}} */
 
 	function missingḺanguageKeys() { /* {{{ */
