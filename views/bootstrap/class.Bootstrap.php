@@ -940,6 +940,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-target=\"targetid".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -965,6 +966,12 @@ function folderSelected<?php echo $formName ?>(id, name) {
 	$('#choosefoldersearch<?php echo $formName ?>').val(name);
 	$('#folderChooser<?php echo $formName ?>').modal('hide');
 }
+$(document).ready(function() {
+	$('#clearfolder<?php print $formName ?>').click(function(ev) {
+		$('#choosefoldersearch<?php echo $formName ?>').val('');
+		$('#targetid<?php echo $formName ?>').val('');
+	});
+});
 <?php
 	} /* }}} */
 
@@ -1163,9 +1170,6 @@ function folderSelected(name) {
 	modalDropfolderChooser.modal('hide');
 }
 <?php } ?>
-function clearFilename<?php print $formName ?>() {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
-}
 $(document).ready(function() {
 	$('#clearfilename<?php print $formName ?>').click(function(ev) {
 		$('#dropfolderfile<?php echo $formName ?>').val('');
