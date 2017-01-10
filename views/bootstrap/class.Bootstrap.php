@@ -953,7 +953,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function printDocumentChooserHtml($formName) { /* {{{ */
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -976,7 +976,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 ?>
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
-	$('#choosedocsearch').val(name);
+	$('#choosedocsearch<?php echo $formName ?>').val(name);
 	$('#docChooser<?php echo $formName ?>').modal('hide');
 }
 function folderSelected<?php echo $formName ?>(id, name) {
