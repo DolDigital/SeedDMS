@@ -1518,16 +1518,16 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			if ($defAccess < M_READ) {
 				if (strlen($groupIDs)>0) {
 					$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` ".
-						"WHERE `tblGroups`.`id` IN (". $groupIDs .")";
+						"WHERE `tblGroups`.`id` IN (". $groupIDs .") ORDER BY `name`";
 				}
 			}
 			else {
 				if (strlen($groupIDs)>0) {
 					$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` ".
-						"WHERE `tblGroups`.`id` NOT IN (". $groupIDs .")";
+						"WHERE `tblGroups`.`id` NOT IN (". $groupIDs .") ORDER BY `name`";
 				}
 				else {
-					$queryStr = "SELECT `tblGroups`.* FROM `tblGroups`";
+					$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` ORDER BY `name`";
 				}
 			}
 			if (strlen($queryStr)>0) {
