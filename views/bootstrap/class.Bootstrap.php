@@ -1029,9 +1029,9 @@ function folderSelected<?php echo $form ?>(id, name) {
 	$('#folderChooser<?php echo $form ?>').modal('hide');
 }
 $(document).ready(function() {
-	$('#clearfolder<?php print $formName ?>').click(function(ev) {
-		$('#choosefoldersearch<?php echo $formName ?>').val('');
-		$('#targetid<?php echo $formName ?>').val('');
+	$('#clearfolder<?php print $form ?>').click(function(ev) {
+		$('#choosefoldersearch<?php echo $form ?>').val('');
+		$('#targetid<?php echo $form ?>').val('');
 	});
 });
 <?php
