@@ -1121,8 +1121,10 @@ function folderSelected<?php echo $form ?>(id, name) {
 
 	function printKeywordChooserJs($formName) { /* {{{ */
 ?>
-$('#acceptkeywords').click(function(ev) {
-	acceptKeywords();
+$(document).ready(function() {
+	$('#acceptkeywords').click(function(ev) {
+		acceptKeywords();
+	});
 });
 <?php
 	} /* }}} */
@@ -1197,7 +1199,7 @@ $('#acceptkeywords').click(function(ev) {
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1233,8 +1235,10 @@ function folderSelected(name) {
 function clearFilename<?php print $formName ?>() {
 	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
-$('#clearfilename<?php print $formName ?>').click(function(ev) {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
+$(document).ready(function() {
+	$('#clearfilename<?php print $formName ?>').click(function(ev) {
+		$('#dropfolderfile<?php echo $formName ?>').val('');
+	});
 });
 <?php
 	} /* }}} */
