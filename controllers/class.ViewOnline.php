@@ -33,8 +33,11 @@ class SeedDMS_Controller_ViewOnline extends SeedDMS_Controller_Common {
 			case "version":
 				if(null === $this->callHook('version')) {
 					header("Content-Type: " . $content->getMimeType());
+					$efilename = rawurlencode($content->getOriginalFileName());
 					if (!isset($settings->_viewOnlineFileTypes) || !is_array($settings->_viewOnlineFileTypes) || !in_array(strtolower($content->getFileType()), $settings->_viewOnlineFileTypes)) {
-						header("Content-Disposition: filename=\"" . $document->getName().$content->getFileType()) . "\"";
+						header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
+					} else {
+						header("Content-Disposition: filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
 					}
 					header("Content-Length: " . filesize($dms->contentDir . $content->getPath()));
 					header("Expires: 0");
