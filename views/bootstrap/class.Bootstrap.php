@@ -2552,5 +2552,36 @@ mayscript>
 		echo "</script>";
 		$this->printTimelineHtml($height);
 	} /* }}} */
+
+	protected function printPopupBox($title, $content) { /* {{{ */
+?>
+		<span class="openpopupbox"><?php echo $title; ?></span>
+		<div class="popupbox" style="display: none;">
+			<?php echo $content; ?>
+		</div>
+<?php
+	} /* }}} */
+
+	protected function printAccordion($title, $content) { /* {{{ */
+		$id = substr(md5(uniqid()), 0, 4);
+?>
+		<div class="accordion" id="accordion<?php echo $id; ?>">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion<?php echo $id; ?>" href="#collapse<?php echo $id; ?>">
+						<?php echo $title; ?>
+          </a>
+        </div>
+				<div id="collapse<?php echo $id; ?>" class="accordion-body collapse" style="height: 0px;">
+          <div class="accordion-inner">
+<?php
+		echo $content;
+?>
+          </div>
+        </div>
+      </div>
+    </div>
+<?php
+	} /* }}} */
 }
 ?>

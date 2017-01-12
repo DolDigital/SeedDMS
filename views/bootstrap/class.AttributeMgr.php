@@ -70,50 +70,41 @@ $(document).ready( function() {
 			$this->contentHeading(getMLText("attrdef_info"));
 			$res = $selattrdef->getStatistics(30);
 			if(!empty($res['frequencies']['document']) ||!empty($res['frequencies']['folder']) ||!empty($res['frequencies']['content'])) {
-
-
-?>
-    <div class="accordion" id="accordion1">
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-						<?php printMLText('attribute_value'); ?>
-          </a>
-        </div>
-        <div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-          <div class="accordion-inner">
-<?php
-			foreach(array('document', 'folder', 'content') as $type) {
-				if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
-					print "<table class=\"table table-condensed\">";
-					print "<thead>\n<tr>\n";
-					print "<th>".getMLText("attribute_value")."</th>\n";
-					print "<th>".getMLText("attribute_count")."</th>\n";
-					print "<th></th>\n";
-					print "</tr></thead>\n<tbody>\n";
-					foreach($res['frequencies'][$type] as $entry) {
-						$value = $selattrdef->parseValue($entry['value']);
-						echo "<tr>";
-						echo "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
-						/* various checks, if the value is valid */
-						echo "<td>";
-						/* Check if value is in value set */
-						if(!$selattrdef->validate($entry['value'])) {
-							echo getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+				foreach(array('document', 'folder', 'content') as $type) {
+					$content = '';
+					if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
+						$content .= "<table class=\"table table-condensed\">";
+						$content .= "<thead>\n<tr>\n";
+						$content .= "<th>".getMLText("attribute_value")."</th>\n";
+						$content .= "<th>".getMLText("attribute_count")."</th>\n";
+						$content .= "<th></th>\n";
+						$content .= "</tr></thead>\n<tbody>\n";
+						foreach($res['frequencies'][$type] as $entry) {
+							$value = $selattrdef->parseValue($entry['value']);
+							$content .= "<tr>";
+							$content .= "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
+							/* various checks, if the value is valid */
+							if(!$selattrdef->validate($entry['value'])) {
+								$content .= getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+							}
+							$content .= "<td>";
+							/* Check if value is in value set */
+							if($selattrdef->getValueSet()) {
+								foreach($values as $v) {
+									if(!in_array($value, $selattrdef->getValueSetAsArray()))
+										$content .= getMLText("attribute_value_not_in_valueset");
+								}
+							}
+							$content .= "</td>";
+							$content .= "</tr>";
 						}
-						echo "</td>";
-						echo "</tr>";
+						$content .= "</tbody></table>";
 					}
-					print "</tbody></table>";
+					if($content)
+						$this->printAccordion(getMLText('attribute_value')." (".getMLText($type).")", $content);
 				}
 			}
-?>
-          </div>
-        </div>
-      </div>
-     </div>
-<?php
-			}
+
 			if($res['folders'] || $res['docs']) {
 				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
@@ -194,7 +185,7 @@ $(document).ready( function() {
 							<?php printMLText("attrdef_objtype");?>:
 						</label>
 						<div class="controls">
-						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('version'); ?></option></select>
+						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('documentcontent'); ?></option></select>
 						</div>
 					</div>
 
@@ -310,7 +301,7 @@ $(document).ready( function() {
 						$ot = getMLText("document");
 						break;
 					case SeedDMS_Core_AttributeDefinition::objtype_documentcontent:
-						$ot = getMLText("version");
+						$ot = getMLText("documentcontent");
 						break;
 				}
 				switch($attrdef->getType()) {

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1479), dgrutsch (9), netixw (14)
+//    Translators: Admin (1480), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -307,6 +307,7 @@ URL: [url]',
 'disclaimer' => 'This is a classified area. Access is permitted only to authorized personnel. Any violation will be prosecuted according to the national and international laws.',
 'discspace' => 'Disc space',
 'document' => 'Document',
+'documentcontent' => 'Document content',
 'documents' => 'Documents',
 'documents_checked_out_by_you' => 'Documents checked out by you',
 'documents_in_process' => 'Documents In Process',

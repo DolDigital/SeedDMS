@@ -58,21 +58,28 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
 			return;
 
+		$content = '';
 		for ($i = 0; $i < count($accessList["groups"]); $i++)
 		{
 			$group = $accessList["groups"][$i]->getGroup();
 			$accesstext = $this->getAccessModeText($accessList["groups"][$i]->getMode());
-			print $accesstext.": ".htmlspecialchars($group->getName());
+			$content .= $accesstext.": ".htmlspecialchars($group->getName());
 			if ($i+1 < count($accessList["groups"]) || count($accessList["users"]) > 0)
-				print "<br />";
+				$content .= "<br />";
 		}
 		for ($i = 0; $i < count($accessList["users"]); $i++)
 		{
 			$user = $accessList["users"][$i]->getUser();
 			$accesstext = $this->getAccessModeText($accessList["users"][$i]->getMode());
-			print $accesstext.": ".htmlspecialchars($user->getFullName());
+			$content .= $accesstext.": ".htmlspecialchars($user->getFullName());
 			if ($i+1 < count($accessList["users"]))
-				print "<br />";
+				$content .= "<br />";
+		}
+
+		if(count($accessList["groups"]) + count($accessList["users"]) > 3) {
+			$this->printPopupBox(getMLText('list_access_rights'), $content);
+		} else {
+			echo $content;
 		}
 	} /* }}} */
 

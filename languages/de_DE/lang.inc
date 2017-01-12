@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2349), dgrutsch (22)
+//    Translators: Admin (2350), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -307,6 +307,7 @@ URL: [url]',
 'disclaimer' => 'Dies ist ein geschützter Bereich. Nur authorisiertes Personal hat Zugriff. Jegliche Verstöße werden nach geltendem Recht (Englisch und International) verfolgt.',
 'discspace' => 'Plattenplatz',
 'document' => 'Dokument',
+'documentcontent' => 'Dokumentenversion',
 'documents' => 'Dokumente',
 'documents_checked_out_by_you' => 'Von mir ausgecheckte Dokumente',
 'documents_in_process' => 'Dokumente in Bearbeitung',

@@ -988,4 +988,10 @@ $(document).ready(function() { /* {{{ */
 			timeout: (typeof timeout == 'undefined' ? 1500 : timeout),
 		});
 	});
+
+	$('span.openpopupbox').on('click', function(e) {
+		$('div.popupbox').toggle();
+		console.log('Hallo');
+	});
+
 }); /* }}} */
