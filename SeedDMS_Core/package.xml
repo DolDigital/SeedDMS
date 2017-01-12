@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-11-02</date>
+ <date>2017-01-12</date>
  <time>10:18:59</time>
  <version>
-  <release>4.3.31</release>
-  <api>4.3.31</api>
+  <release>4.3.32</release>
+  <api>4.3.32</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
-- new method SeedDMЅ_Core_WorkflowState::getTransitions() 
-- new method SeedDMЅ_Core_AttributeDefinition::parseValue() 
-- add check for cycles in workflow SeedDMS_Core_Workflow::checkForCycles()
+- order groups by name returned by getReadAccessList()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1071,6 +1068,25 @@ new transition
    <notes>
 - new method SeedDMЅ_Core_AttributeDefinition::getValueSetSeparator() 
 - trim each value of a value set before saving the complete value set as a string
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-02</date>
+   <time>10:18:59</time>
+   <version>
+    <release>4.3.31</release>
+    <api>4.3.31</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMЅ_Core_WorkflowAction::getTransitions() 
+- new method SeedDMЅ_Core_WorkflowState::getTransitions() 
+- new method SeedDMЅ_Core_AttributeDefinition::parseValue() 
+- add check for cycles in workflow SeedDMS_Core_Workflow::checkForCycles()
    </notes>
   </release>
  </changelog>
