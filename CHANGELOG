@@ -2,6 +2,9 @@
                      Changes in version 4.3.32
 --------------------------------------------------------------------------------
 - fix saving new mimetype for fulltext search, available languages
+- put access rights of folder into popup box if more than 3 exists
+- define apache_request_headers() if it does not exists, makes webdav
+  work in fast cgi mode or on webservers other than apache
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.31
