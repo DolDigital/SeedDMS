@@ -15,8 +15,8 @@
  <date>2016-11-02</date>
  <time>06:23:34</time>
  <version>
-  <release>5.0.8</release>
-  <api>5.0.8</api>
+  <release>5.0.9</release>
+  <api>5.0.9</api>
  </version>
  <stability>
   <release>stable</release>
@@ -1257,6 +1257,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <notes>
 - all changes from 4.3.30 merged
 - better attribute value checking
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-02</date>
+   <time>06:23:34</time>
+   <version>
+    <release>5.0.8</release>
+    <api>5.0.8</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.31 merged
    </notes>
   </release>
  </changelog>

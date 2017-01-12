@@ -1,4 +1,4 @@
-VERSION=5.0.8
+VERSION=5.0.9
 SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc drop-tables-innodb.sql styles TODO LICENSE Makefile webdav install restapi pdfviewer
 # webapp
 

@@ -328,7 +328,7 @@ class SeedDMS_Core_DMS {
 		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.0.8';
+			$this->version = '5.0.9';
 	} /* }}} */
 
 	/**
