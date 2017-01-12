@@ -1050,7 +1050,6 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - SeedDMЅ_Core_Workflow::addTransition() force reload of transition list after adding a
 - SeedDMЅ_Core_Document::rewrite[Review|Approval]Log() will also copy file if it exists
 - add method SeedDMЅ_Core_Document::rewriteWorkflowLog()
-new transition
    </notes>
   </release>
   <release>
