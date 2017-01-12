@@ -280,6 +280,7 @@ $text = array(
 'disclaimer' => '',
 'discspace' => '',
 'document' => 'Έγγραφο',
+'documentcontent' => '',
 'documents' => 'Έγγραφα',
 'documents_checked_out_by_you' => '',
 'documents_in_process' => '',
