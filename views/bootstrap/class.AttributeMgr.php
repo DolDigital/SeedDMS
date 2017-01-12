@@ -197,7 +197,7 @@ $(document).ready( function() {
 							<?php printMLText("attrdef_objtype");?>:
 						</label>
 						<div class="controls">
-						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('version'); ?></option></select>
+						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('documentcontent'); ?></option></select>
 						</div>
 					</div>
 
@@ -313,7 +313,7 @@ $(document).ready( function() {
 						$ot = getMLText("document");
 						break;
 					case SeedDMS_Core_AttributeDefinition::objtype_documentcontent:
-						$ot = getMLText("version");
+						$ot = getMLText("documentcontent");
 						break;
 				}
 				switch($attrdef->getType()) {
