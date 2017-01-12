@@ -70,53 +70,38 @@ $(document).ready( function() {
 			$this->contentHeading(getMLText("attrdef_info"));
 			$res = $selattrdef->getStatistics(30);
 			if(!empty($res['frequencies']['document']) ||!empty($res['frequencies']['folder']) ||!empty($res['frequencies']['content'])) {
-
-
-?>
-    <div class="accordion" id="accordion1">
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-						<?php printMLText('attribute_value'); ?>
-          </a>
-        </div>
-        <div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-          <div class="accordion-inner">
-<?php
-			foreach(array('document', 'folder', 'content') as $type) {
-				if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
-					print "<table class=\"table table-condensed\">";
-					print "<thead>\n<tr>\n";
-					print "<th>".getMLText("attribute_value")."</th>\n";
-					print "<th>".getMLText("attribute_count")."</th>\n";
-					print "<th></th>\n";
-					print "</tr></thead>\n<tbody>\n";
-					foreach($res['frequencies'][$type] as $entry) {
-						$value = $selattrdef->parseValue($entry['value']);
-						echo "<tr>";
-						echo "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
-						/* various checks, if the value is valid */
-						echo "<td>";
-						/* Check if value is in value set */
-						if($selattrdef->getValueSet()) {
-							foreach($values as $v) {
-								if(!in_array($value, $selattrdef->getValueSetAsArray()))
-									printMLText("attribute_value_not_in_valueset");
+				foreach(array('document', 'folder', 'content') as $type) {
+					$content = '';
+					if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
+						$content .= "<table class=\"table table-condensed\">";
+						$content .= "<thead>\n<tr>\n";
+						$content .= "<th>".getMLText("attribute_value")."</th>\n";
+						$content .= "<th>".getMLText("attribute_count")."</th>\n";
+						$content .= "<th></th>\n";
+						$content .= "</tr></thead>\n<tbody>\n";
+						foreach($res['frequencies'][$type] as $entry) {
+							$value = $selattrdef->parseValue($entry['value']);
+							$content .= "<tr>";
+							$content .= "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
+							/* various checks, if the value is valid */
+							$content .= "<td>";
+							/* Check if value is in value set */
+							if($selattrdef->getValueSet()) {
+								foreach($values as $v) {
+									if(!in_array($value, $selattrdef->getValueSetAsArray()))
+										$content .= getMLText("attribute_value_not_in_valueset");
+								}
 							}
+							$content .= "</td>";
+							$content .= "</tr>";
 						}
-						echo "</td>";
-						echo "</tr>";
+						$content .= "</tbody></table>";
 					}
-					print "</tbody></table>";
+					if($content)
+						$this->printAccordion(getMLText('attribute_value')." (".getMLText($type).")", $content);
 				}
 			}
-?>
-          </div>
-        </div>
-      </div>
-     </div>
-<?php
-			}
+
 			if($res['folders'] || $res['docs']) {
 				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
