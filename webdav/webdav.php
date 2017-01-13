@@ -7,7 +7,7 @@ else
 	require_once('SeedDMS/Core.php');
 
 /* Set apache_request_headers() in case it doesn't exists, like
- * when using fastcgi (patch by christopher täufert)
+ * when using fastcgi (patch by christopher täufert taken from http://php.net/)
  */
 if( !function_exists('apache_request_headers') ) {
 	function apache_request_headers() {
