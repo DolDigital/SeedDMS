@@ -545,6 +545,7 @@ $text = array(
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Ако искате да качите файлове над текущия лимит, използвайте друг <a href="%s">начин</a>.',
+'list_access_rights' => '',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Локален файл',
