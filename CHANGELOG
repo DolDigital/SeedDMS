@@ -16,6 +16,7 @@
 - add new method getDocumentPreview() to restapi
 - replace lots of tables in forms by bootstraps control-group
 - add remove button to folder selector
+- editing of an exiting review/approval can be turned off
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.31
