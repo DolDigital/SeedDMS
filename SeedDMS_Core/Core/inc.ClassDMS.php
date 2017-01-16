@@ -259,13 +259,29 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
+	 * @param string $access set if source or target of link shall be checked
+	 * for sufficient access rights. Set to 'source' if the source document
+	 * of a link is to be checked, set to 'target' for the target document.
+	 * If not set, then access right aren't checked at all.
 	 * @return filtered list of links
 	 */
-	static function filterDocumentLinks($user, $links) { /* {{{ */
+	static function filterDocumentLinks($user, $links, $access='') { /* {{{ */
 		$tmp = array();
-		foreach ($links as $link)
-			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
-				array_push($tmp, $link);
+		foreach ($links as $link) {
+			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin()){
+				if($access == 'source') {
+					$obj = $link->getDocument();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} elseif($access == 'target') {
+					$obj = $link->getTarget();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} else {
+					array_push($tmp, $link);
+				}
+			}
+		}
 		return $tmp;
 	} /* }}} */
 

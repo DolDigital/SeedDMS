@@ -25,6 +25,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - order groups by name returned by getReadAccessList()
+- add optional parameter to SeedDMS_Core_DMS::filterDocumentLinks()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
