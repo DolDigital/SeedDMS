@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2351), dgrutsch (22)
+//    Translators: Admin (2354), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1161,6 +1161,8 @@ URL: [url]',
 'settings_enableSelfRevApp_desc' => 'Anwählen, um den aktuell angemeldeten Benutzer in der Liste der Prüfer/Freigeber und für Workflow-Aktionen auswählbar zu machen.',
 'settings_enableThemeSelector' => 'Auswahl des Themas',
 'settings_enableThemeSelector_desc' => 'Schaltet das Auswahlmenü für die Themenauswahl in der Anmeldemaske ein oder aus.',
+'settings_enableUpdateRevApp' => 'Erlaube die Änderung einer Prüfung/Freigabe',
+'settings_enableUpdateRevApp_desc' => 'Anwählen, um dem Benutzer, der die Prüfung/Freigabe durchgeführt hat, die Änderung der Entscheidung zu erlauben, solange das Dokument den Workflow-Schritt noch nicht verlassen hat.',
 'settings_enableUserImage' => 'Benutzerbilder einschalten',
 'settings_enableUserImage_desc' => 'Foto der Benutzer ein-/ausschalten',
 'settings_enableUsersView' => 'Benutzeransicht aktivieren',
