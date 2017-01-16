@@ -407,11 +407,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		/* Retrieve linked documents */
 		$links = $document->getDocumentLinks();
-		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
+		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links, 'target');
 
 		/* Retrieve reverse linked documents */
 		$reverselinks = $document->getReverseDocumentLinks();
-		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks);
+		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks, 'source');
 
 		/* Retrieve latest content */
 		$latestContent = $document->getLatestContent();
@@ -725,10 +725,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\">";
 
 				if($accessop->mayReview()) {
-					if ($is_reviewer && $r["status"]==0) {
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
-					}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+					if ($is_reviewer) {
+						if ($r["status"]==0) {
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
+						} elseif ($accessop->mayUpdateReview($updateUser) && (($r["status"]==1)||($r["status"]==-1))) {
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+						}
 					}
 				}
 
@@ -794,10 +796,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\">";
 
 				if($accessop->mayApprove()) {
-					if ($is_approver && $a['status'] == 0 /*$status["status"]==S_DRAFT_APP*/) {
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
-					}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
-						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+					if ($is_approver) {
+						if ($a['status'] == 0) {
+							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
+						} elseif ($accessop->mayUpdateApproval($updateUser) && (($a["status"]==1)||($a["status"]==-1))) {
+							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+						}
 					}
 				}
 

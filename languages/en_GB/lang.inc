@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1480), dgrutsch (9), netixw (14)
+//    Translators: Admin (1483), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -626,6 +626,7 @@ URL: [url]',
 'linked_to_document' => 'Linked to document',
 'linked_to_this_version' => 'Linked to this version',
 'link_alt_updatedocument' => 'If you would like to upload files bigger than the current maximum upload size, please use the alternative <a href="%s">upload page</a>.',
+'list_access_rights' => 'List all access rights ...',
 'list_contains_no_access_docs' => 'The list contains more documents you have no access to and are not displayed.',
 'list_hooks' => 'List hooks',
 'local_file' => 'Local file',
@@ -1161,6 +1162,8 @@ URL: [url]',
 'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
 'settings_enableThemeSelector' => 'Theme selection',
 'settings_enableThemeSelector_desc' => 'Turns on/off the theme selector on the login page.',
+'settings_enableUpdateRevApp' => 'Allow editing of exting review/approval',
+'settings_enableUpdateRevApp_desc' => 'Enable this, if the user who has made a review/approval may change the decission as long as the current workflow step has not been finished.',
 'settings_enableUserImage' => 'Enable User Image',
 'settings_enableUserImage_desc' => 'Enable users images',
 'settings_enableUsersView' => 'Enable Users View',

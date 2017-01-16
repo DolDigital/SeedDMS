@@ -164,6 +164,7 @@ if ($action == "saveSettings")
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
   $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");
+  $settings->_enableUpdateRevApp = getBoolValue("enableUpdateRevApp");
   $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
   $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");
