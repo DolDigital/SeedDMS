@@ -579,6 +579,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableSelfRevApp");?>:</td>
         <td><input name="enableSelfRevApp" type="checkbox" <?php if ($settings->_enableSelfRevApp) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableUpdateRevApp_desc");?>">
+        <td><?php printMLText("settings_enableUpdateRevApp");?>:</td>
+        <td><input name="enableUpdateRevApp" type="checkbox" <?php if ($settings->_enableUpdateRevApp) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableVersionDeletion_desc");?>">
         <td><?php printMLText("settings_enableVersionDeletion");?>:</td>
         <td><input name="enableVersionDeletion" type="checkbox" <?php if ($settings->_enableVersionDeletion) echo "checked" ?> /></td>

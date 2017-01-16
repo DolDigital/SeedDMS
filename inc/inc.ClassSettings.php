@@ -129,6 +129,8 @@ class Settings { /* {{{ */
 	var $_enableOwnerRevApp = false;
 	// enable/disable listing logged in user as reviewer/approver
 	var $_enableSelfRevApp = false;
+	// enable/disable update of a review/approval by the reviewer/approver
+	var $_enableUpdateRevApp = false;
 	// enable/disable default notification for owner
 	var $_enableOwnerNotification = false;
 	// enable/disable deleting of versions for regular users
@@ -550,6 +552,7 @@ class Settings { /* {{{ */
 		$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
 		$this->_enableOwnerRevApp = Settings::boolval($tab["enableOwnerRevApp"]);
 		$this->_enableSelfRevApp = Settings::boolval($tab["enableSelfRevApp"]);
+		$this->_enableUpdateRevApp = Settings::boolval($tab["enableUpdateRevApp"]);
 		$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
 		$this->_workflowMode = strval($tab["workflowMode"]);
@@ -836,6 +839,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableAdminRevApp", $this->_enableAdminRevApp);
     $this->setXMLAttributValue($node, "enableOwnerRevApp", $this->_enableOwnerRevApp);
     $this->setXMLAttributValue($node, "enableSelfRevApp", $this->_enableSelfRevApp);
+    $this->setXMLAttributValue($node, "enableUpdateRevApp", $this->_enableUpdateRevApp);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
