@@ -338,11 +338,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		/* Retrieve linked documents */
 		$links = $document->getDocumentLinks();
-		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
+		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links, 'target');
 
 		/* Retrieve reverse linked documents */
 		$reverselinks = $document->getReverseDocumentLinks();
-		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks);
+		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks, 'source');
 
 		/* Retrieve latest content */
 		$latestContent = $document->getLatestContent();
