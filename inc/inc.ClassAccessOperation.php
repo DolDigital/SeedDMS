@@ -229,6 +229,21 @@ class SeedDMS_AccessOperation {
 	} /* }}} */
 
 	/**
+	 * Check if a review maybe edited
+	 *
+	 * A review may only be updated by the user who originaly addedd the
+	 * review and if it is allowed in the settings
+	 */
+	function mayUpdateReview($updateUser) { /* {{{ */
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			if($this->settings->_enableUpdateRevApp && ($updateUser == $this->user) && !$this->obj->hasExpired()) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
 	 * Check if document content may be approved
 	 *
 	 * Approving a document content is only allowed if the document was not
@@ -241,6 +256,21 @@ class SeedDMS_AccessOperation {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if a approval maybe edited
+	 *
+	 * An approval may only be updated by the user who originaly addedd the
+	 * approval and if it is allowed in the settings
+	 */
+	function mayUpdateApproval($updateUser) { /* {{{ */
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			if($this->settings->_enableUpdateRevApp && ($updateUser == $this->user) && !$this->obj->hasExpired()) {
 				return true;
 			}
 		}
