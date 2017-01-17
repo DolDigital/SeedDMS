@@ -6,31 +6,6 @@ if(!empty($settings->_coreDir))
 else
 	require_once('SeedDMS/Core.php');
 
-/* Set apache_request_headers() in case it doesn't exists, like
- * when using fastcgi (patch by christopher täufert taken from http://php.net/)
- */
-if( !function_exists('apache_request_headers') ) {
-	function apache_request_headers() {
-		$arh = array();
-		$rx_http = '/\AHTTP_/';
-		foreach($_SERVER as $key => $val) {
-			if( preg_match($rx_http, $key) ) {
-				$arh_key = preg_replace($rx_http, '', $key);
-				$rx_matches = array();
-				// do some nasty string manipulations to restore the original letter case
-				// this should work in most cases
-				$rx_matches = explode('_', $arh_key);
-				if( count($rx_matches) > 0 and strlen($arh_key) > 2 ) {
-					foreach($rx_matches as $ak_key => $ak_val) $rx_matches[$ak_key] = ucfirst($ak_val);
-					$arh_key = implode('-', $rx_matches);
-				}
-				$arh[$arh_key] = $val;
-			}
-		}
-		return( $arh );
-	}
-}
-
 /**
  * SeedDMS access using WebDAV
  *
@@ -79,10 +54,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		// special treatment for litmus compliance test
 		// reply on its identifier header
 		// not needed for the test itself but eases debugging
-		foreach (apache_request_headers() as $key => $value) {
-			if (stristr($key, "litmus")) {
-				error_log("Litmus test $value");
-				header("X-Litmus-reply: ".$value);
+		if( function_exists('apache_request_headers') ) {
+			foreach (apache_request_headers() as $key => $value) {
+				if (stristr($key, "litmus")) {
+					error_log("Litmus test $value");
+					header("X-Litmus-reply: ".$value);
+				}
 			}
 		}
 

@@ -292,6 +292,7 @@ $text = array(
 'documents_to_receipt' => '',
 'documents_to_review' => '',
 'documents_to_revise' => '',
+'documents_user_reception' => '',
 'documents_user_rejected' => '',
 'documents_user_requiring_attention' => '',
 'document_already_checkedout' => '',

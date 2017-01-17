@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2355), dgrutsch (22)
+//    Translators: Admin (2356), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -319,6 +319,7 @@ URL: [url]',
 'documents_to_receipt' => 'Empfangsbestätigung erforderlich',
 'documents_to_review' => 'Prüfung erforderlich',
 'documents_to_revise' => 'Erneute Prüfung erforderlich',
+'documents_user_reception' => 'Dokumente mit Empfangsbestätigung',
 'documents_user_rejected' => 'Abgelehnte Dokumente',
 'documents_user_requiring_attention' => 'Diese Dokumente sollte ich mal nachsehen',
 'document_already_checkedout' => 'Dieses Dokument ist bereits ausgecheckt',
