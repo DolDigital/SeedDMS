@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 - fix saving new mimetype for fulltext search, available languages
 - put access rights of folder into popup box if more than 3 exists
-- define apache_request_headers() if it does not exists, makes webdav
-  work in fast cgi mode or on webservers other than apache
+- do not execute code which uses apache_request_headers() if it does not exists,
+  makes webdav work in fast cgi mode or on webservers other than apache
 - clean up of distribution created by makefile
 - order groups in select boxes by name
 - javascript added by addToFooterJS() will be written to a temp. file
