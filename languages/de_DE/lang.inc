@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2354), dgrutsch (22)
+//    Translators: Admin (2355), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -626,6 +626,7 @@ URL: [url]',
 'linked_to_document' => 'Mit dem Dokument verknüpft',
 'linked_to_this_version' => 'Mit dieser Version verknüpft',
 'link_alt_updatedocument' => 'Wenn Sie ein Dokument hochladen möchten, das größer als die maximale Dateigröße ist, dann benutzen Sie bitte die alternative <a href="%s">Upload-Seite</a>.',
+'link_to_version' => 'Version',
 'list_access_rights' => 'Alle Zugriffsrechte auflisten ...',
 'list_contains_no_access_docs' => 'Die Liste enthält weitere Dokumente auf die Sie keinen Zugriff haben und deshalb nicht angezeigt werden.',
 'list_hooks' => 'Liste interne Aufrufe',
