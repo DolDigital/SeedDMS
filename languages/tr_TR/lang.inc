@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1045), aydin (83)
+//    Translators: Admin (1046), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -249,7 +249,7 @@ URL: [url]',
 'clear_password' => '',
 'clipboard' => 'Pano',
 'close' => 'Kapat',
-'command' => '',
+'command' => 'komut',
 'comment' => 'Açıklama',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Versiyon açıklaması',
@@ -620,6 +620,7 @@ URL: [url]',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Mevcut maksimum yükleme boyutundan daha büyük dosya yüklemek istiyorsanız <a href="%s">alternatif yükleme sayfası için tıklayın</a>.',
+'link_to_version' => '',
 'list_access_rights' => '',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',

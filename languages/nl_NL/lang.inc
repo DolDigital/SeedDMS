@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (722), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (723), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -536,7 +536,7 @@ URL: [url]',
 'hu_HU' => 'Hongaars',
 'id' => 'ID',
 'identical_version' => 'Nieuwe versie is identiek aan de huidige versie',
-'import' => '',
+'import' => 'Importeer',
 'importfs' => '',
 'import_fs' => 'Importeer van bestandssysteem',
 'import_fs_warning' => '',
@@ -619,6 +619,7 @@ URL: [url]',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Als u bestanden wilt uploaden groter dan het huidige maximum, gebruik aub de alternatieve <a href="%s">upload pagina</a>.',
+'link_to_version' => '',
 'list_access_rights' => '',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',

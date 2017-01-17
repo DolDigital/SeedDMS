@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1006), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1008), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -621,6 +621,7 @@ URL: [url]',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Si desea subir archivos mayores que el tamaño máximo actualmente permitido, por favor, utilice la <a href="%s">página de subida</a> alternativa.',
+'link_to_version' => '',
 'list_access_rights' => '',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
@@ -1031,7 +1032,7 @@ URL: [url]',
 'settings_contentDir_desc' => 'Donde se almacenan los archivos subidos (es preferible seleccionar una carpeta que no sea accesible a través del servidor web)',
 'settings_contentOffsetDir' => 'Carpeta de contenidos de desplazamiento',
 'settings_contentOffsetDir_desc' => 'Para tratar las limitaciones del sistema de ficheros subyacentes, se ha ideado una estructura de carpetas dentro de la carpeta de contenido. Esto requiere una carpeta base desde la que comenzar. Normalmente puede dejar este valor por defecto, 1048576, pero puede ser cualquier número o cadena que no exista ya dentro de ella (carpeta de contenido).',
-'settings_convertToPdf' => '',
+'settings_convertToPdf' => 'Convertir documento en PDF para pervisualización',
 'settings_convertToPdf_desc' => '',
 'settings_cookieLifetime' => 'Tiempo de vida de las cookies',
 'settings_cookieLifetime_desc' => 'Tiempo de vida de las cookies en segundos. Si asigna 0 la cookie será eliminada cuando el navegador se cierre.',
@@ -1237,7 +1238,7 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'ID de la carpeta raíz (normalmente no es necesario cambiar)',
 'settings_SaveError' => 'Error guardando archivo de configuración',
 'settings_Server' => 'Configuración del servidor',
-'settings_showFullPreview' => '',
+'settings_showFullPreview' => 'Visualizar documento completo',
 'settings_showFullPreview_desc' => '',
 'settings_showMissingTranslations' => 'Mostrar traducciones faltantes',
 'settings_showMissingTranslations_desc' => 'Listar todos los términos pendientes de traducción de esta página al final de la misma. En entorno productivo no activar esta función',

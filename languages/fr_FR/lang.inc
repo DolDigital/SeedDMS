@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1055), jeromerobert (50), lonnnew (9), Oudiceval (171)
+//    Translators: Admin (1058), jeromerobert (50), lonnnew (9), Oudiceval (171)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -255,7 +255,7 @@ URL: [url]',
 'clear_password' => 'Sans mot de passe',
 'clipboard' => 'Presse-papier',
 'close' => 'Fermer',
-'command' => '',
+'command' => 'Commande',
 'comment' => 'Commentaire',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Commentaires pour la version actuelle',
@@ -626,6 +626,7 @@ URL: [url]',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Pour déposer des fichiers de taille supérieure, utilisez la <a href="%s">page d\'ajout multiple</a>.',
+'link_to_version' => '',
 'list_access_rights' => '',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
@@ -809,7 +810,7 @@ En cas de problème persistant, veuillez contacter votre administrateur.',
 'possible_substitutes' => '',
 'preview' => 'Aperçu',
 'preview_converters' => '',
-'preview_images' => '',
+'preview_images' => 'Prévisualisation des images',
 'preview_markdown' => '',
 'preview_plain' => 'Texte',
 'previous_state' => 'État précédent',
@@ -1380,7 +1381,7 @@ URL: [url]',
 'takeOverIndApprover' => 'Récupérer les approbateurs de la dernière version.',
 'takeOverIndReviewer' => 'Récupérer les examinateurs de la dernière version.',
 'tasks' => 'Tâches',
-'temp_jscode' => '',
+'temp_jscode' => 'Code javascript temporaire',
 'testmail_body' => 'Ce message est un test pour vérifier la configuration mail de SeedDMS.',
 'testmail_subject' => 'E-mail test',
 'theme' => 'Thème',
