@@ -80,9 +80,11 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$version  = (int) $_POST["version"];
 	$public  = (isset($_POST["public"]) && $_POST["public"] == 'true') ? 1 : 0;
 
-	$v = $document->getContentByVersion($version);
-	if(!$v) {
-		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	if($version) {
+		$v = $document->getContentByVersion($version);
+		if(!$v) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+		}
 	}
 
 	$userfiletmp = $_FILES["userfile"]["tmp_name"][$file_num];
