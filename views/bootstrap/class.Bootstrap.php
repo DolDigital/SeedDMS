@@ -2442,13 +2442,16 @@ mayscript>
 		$this->printTimelineHtml($height);
 	} /* }}} */
 
-	protected function printPopupBox($title, $content) { /* {{{ */
-?>
-		<span class="openpopupbox"><?php echo $title; ?></span>
+	protected function printPopupBox($title, $content, $ret=false) { /* {{{ */
+		$html = '
+		<span class="openpopupbox">'.$title.'</span>
 		<div class="popupbox" style="display: none;">
-			<?php echo $content; ?>
-		</div>
-<?php
+			'.$content.'
+		</div>';
+		if($ret)
+			return $html;
+		else
+			echo $html;
 	} /* }}} */
 
 	protected function printAccordion($title, $content) { /* {{{ */
