@@ -18,6 +18,8 @@
 - add remove button to folder selector
 - editing of an exiting review/approval can be turned off
 - add searching for id of folder/document (Closes #302)
+- admin may set owner of document when uploading it
+- default access rights for documents can be set in configuration
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.31
