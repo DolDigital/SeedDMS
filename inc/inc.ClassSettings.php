@@ -66,6 +66,8 @@ class Settings { /* {{{ */
 	var $_encryptionKey = '';
 	// lifetime of cookie in seconds or 0 for end of session
 	var $_cookieLifetime = '';
+	// default access mode for documents
+	var $_defaultAccessDocs = '';
 	// Strict form checking
 	var $_strictFormCheck = false;
 	// Path to where SeedDMS is located
@@ -462,6 +464,7 @@ class Settings { /* {{{ */
 		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
+		$this->_defaultAccessDocs = intval($tab["defaultAccessDocs"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -765,6 +768,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "cookieLifetime", $this->_cookieLifetime);
+    $this->setXMLAttributValue($node, "defaultAccessDocs", $this->_defaultAccessDocs);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);

@@ -58,6 +58,18 @@ if($settings->_quota > 0) {
 	}
 }
 
+if($user->isAdmin()) {
+	$ownerid = (int) $_POST["ownerid"];
+	if($ownerid) {
+		if(!($owner = $dms->getUser($ownerid))) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+		}
+	} else {
+		$owner = $user;
+	}
+} else {
+	$owner = $user;
+}
 $comment  = trim($_POST["comment"]);
 $version_comment = trim($_POST["version_comment"]);
 if($version_comment == "" && isset($_POST["use_comment"]))
@@ -277,7 +289,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
+	$res = $folder->addDocument($name, $comment, $expires, $owner, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
 	                            $reviewers, $approvers, $reqversion,
@@ -287,6 +299,15 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	} else {
 		$document = $res[0];
+
+		/* Set access as specified in settings. */
+		if($settings->_defaultAccessDocs) {
+			if($settings->_defaultAccessDocs > 0 && $settings->_defaultAccessDocs < 4) {
+				$document->setInheritAccess(0, true);
+				$document->setDefaultAccess($settings->_defaultAccessDocs, true);
+			}
+		}
+
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postAddDocument')) {
