@@ -26,6 +26,7 @@
  <notes>
 - order groups by name returned by getReadAccessList()
 - add optional parameter to SeedDMS_Core_DMS::filterDocumentLinks()
+- SeedDMS_Core_DMS::search() can search for document/folder id
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
