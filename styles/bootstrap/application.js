@@ -992,6 +992,9 @@ $(document).ready(function() { /* {{{ */
 	$("body").on("click", "span.openpopupbox", function(e) {
 		$(""+$(e.target).data("href")).toggle();
 	});
+	$("body").on("click", "span.openpopupbox i", function(e) {
+		$(e.target).parent().click();
+	});
 	$("body").on("click", "span.closepopupbox", function(e) {
 		$(this).parent().hide();
 	});
