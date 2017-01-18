@@ -179,8 +179,12 @@ span.openpopupbox {
 }
 
 div.popupbox {
+	margin-top: 5px;
 	background-color: #fff;
 	border-radius: 4px;
+	color: black;
+	text-align: left;
+	text-shadow: none;
 	border: 1px solid #ccc;
 	padding: 15px;
 	display: none;
