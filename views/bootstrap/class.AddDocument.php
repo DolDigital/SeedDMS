@@ -196,6 +196,24 @@ console.log(element);
 			<td><?php printMLText("sequence");?>:</td>
 			<td><?php $this->printSequenceChooser($folder->getDocuments('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); ?></td>
 		</tr>
+<?php if($user->isAdmin()) { ?>
+		<tr>
+			<td><?php printMLText("owner");?>:</td>
+			<td>
+				<select class="chzn-select" name="ownerid">
+<?php
+	$allUsers = $dms->getAllUsers($sortusersinlist);
+	foreach ($allUsers as $currUser) {
+		if ($currUser->isGuest())
+			continue;
+		print "<option value=\"".$currUser->getID()."\" ".($currUser->getID()==$user->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\"";
+		print ">" . htmlspecialchars($currUser->getLogin()) . "</option>\n";
+	}
+?>
+				</select>
+			</td>
+		</tr>
+<?php } ?>
 <?php
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
