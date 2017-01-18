@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1485), dgrutsch (9), netixw (14)
+//    Translators: Admin (1489), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1094,6 +1094,8 @@ URL: [url]',
 'settings_dbUser' => 'Username',
 'settings_dbUser_desc' => 'The username for access to your database entered during the installation process. Do not edit field unless absolutely necessary, for example transfer of the database to a new Host.',
 'settings_dbVersion' => 'Database schema too old',
+'settings_defaultAccessDocs' => 'Default access for new documents',
+'settings_defaultAccessDocs_desc' => 'When a new document is created, this will be the default access right.',
 'settings_defaultSearchMethod' => 'Default search method',
 'settings_defaultSearchMethod_desc' => 'Default search method, when a search is started by the search form in the main menu.',
 'settings_defaultSearchMethod_valdatabase' => 'database',
@@ -1164,6 +1166,8 @@ URL: [url]',
 'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
 'settings_enableThemeSelector' => 'Theme selection',
 'settings_enableThemeSelector_desc' => 'Turns on/off the theme selector on the login page.',
+'settings_enableUpdateReceipt' => 'Allow editing of existing reception',
+'settings_enableUpdateReceipt_desc' => 'Enable this, if the user who has made a reception may change the decission.',
 'settings_enableUpdateRevApp' => 'Allow editing of exting review/approval',
 'settings_enableUpdateRevApp_desc' => 'Enable this, if the user who has made a review/approval may change the decission as long as the current workflow step has not been finished.',
 'settings_enableUserImage' => 'Enable User Image',
