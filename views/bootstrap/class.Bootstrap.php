@@ -2554,10 +2554,20 @@ mayscript>
 	} /* }}} */
 
 	protected function printPopupBox($title, $content, $ret=false) { /* {{{ */
+		$id = md5(uniqid());
+		/*
+		$this->addFooterJS('
+$("body").on("click", "span.openpopupbox", function(e) {
+	$(""+$(e.target).data("href")).toggle();
+//	$("div.popupbox").toggle();
+});
+');
+		 */
 		$html = '
-		<span class="openpopupbox">'.$title.'</span>
-		<div class="popupbox" style="display: none;">
-			'.$content.'
+		<span class="openpopupbox" data-href="#'.$id.'">'.$title.'</span>
+		<div id="'.$id.'" class="popupbox" style="display: none;">
+		'.$content.'
+			<span class="closepopupbox"><i class="icon-remove"></i></span>
 		</div>';
 		if($ret)
 			return $html;

@@ -989,9 +989,10 @@ $(document).ready(function() { /* {{{ */
 		});
 	});
 
-	$('span.openpopupbox').on('click', function(e) {
-		$('div.popupbox').toggle();
-		console.log('Hallo');
+	$("body").on("click", "span.openpopupbox", function(e) {
+		$(""+$(e.target).data("href")).toggle();
 	});
-
+	$("body").on("click", "span.closepopupbox", function(e) {
+		$(this).parent().hide();
+	});
 }); /* }}} */
