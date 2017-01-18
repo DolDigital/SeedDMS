@@ -127,6 +127,7 @@ if ($action == "saveSettings")
   $settings->_undelUserIds = strval($_POST["undelUserIds"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
   $settings->_cookieLifetime = intval($_POST["cookieLifetime"]);
+  $settings->_defaultAccessDocs = intval($_POST["defaultAccessDocs"]);
 
   // TODO Connectors
 
