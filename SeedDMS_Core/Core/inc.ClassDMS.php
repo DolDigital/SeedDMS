@@ -691,7 +691,7 @@ class SeedDMS_Core_DMS {
 
 		// if none is checkd search all
 		if (count($searchin)==0)
-			$searchin=array(1, 2, 3, 4);
+			$searchin=array(1, 2, 3, 4, 5);
 
 		/*--------- Do it all over again for folders -------------*/
 		$totalFolders = 0;
@@ -852,6 +852,9 @@ class SeedDMS_Core_DMS {
 			if (in_array(4, $searchin)) {
 				$searchFields[] = "`tblDocumentAttributes`.`value`";
 				$searchFields[] = "`tblDocumentContentAttributes`.`value`";
+			}
+			if (in_array(5, $searchin)) {
+				$searchFields[] = "`tblDocuments`.`id`";
 			}
 
 

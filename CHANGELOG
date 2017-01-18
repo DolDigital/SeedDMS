@@ -66,10 +66,10 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.32
 --------------------------------------------------------------------------------
-- fix saving new mimetype for fulltext search, available languages
+- fix saving new mimetype for fulltext search, available languages (Closes #308)
 - put access rights of folder into popup box if more than 3 exists
 - do not execute code which uses apache_request_headers() if it does not exists,
-  makes webdav work in fast cgi mode or on webservers other than apache
+  makes webdav work in fast cgi mode or on webservers other than apache (Closes #300)
 - clean up of distribution created by makefile
 - order groups in select boxes by name
 - javascript added by addToFooterJS() will be written to a temp. file
@@ -82,6 +82,7 @@
 - replace lots of tables in forms by bootstraps control-group
 - add remove button to folder selector
 - editing of an exiting review/approval can be turned off
+- add searching for id of folder/document (Closes #302)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.31

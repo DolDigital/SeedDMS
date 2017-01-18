@@ -106,6 +106,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (in_array(4, $searchin)) {
 			$searchFields[] = "`tblFolderAttributes`.`value`";
 		}
+		if (in_array(5, $searchin)) {
+			$searchFields[] = "`tblFolders`.`id`";
+		}
 		return $searchFields;
 	} /* }}} */
 

@@ -1144,6 +1144,7 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <notes>
 - order groups by name returned by getReadAccessList()
 - add optional parameter to SeedDMS_Core_DMS::filterDocumentLinks()
+- SeedDMS_Core_DMS::search() can search for document/folder id
    </notes>
   </release>
   <release>
