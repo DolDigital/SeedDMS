@@ -146,7 +146,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			if(is_dir($this->params['cachedir'].'/js')) {
 				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
 			}
-			echo '<script src="../out/out.'.$this->params['class'].'.php?action=footerjs&hash='.$hashjs.'"></script>'."\n";
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'footerjs';
+			$tmp['hash'] = $hashjs;
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
