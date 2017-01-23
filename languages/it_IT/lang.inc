@@ -937,6 +937,8 @@ User: [username]
 URL: [url]',
 'revision_request_email_subject' => '[sitename]: [name] - Richiesta di revisione',
 'revision_status' => 'Status',
+'revision_submit_email_body' => '',
+'revision_submit_email_subject' => '',
 'revisors' => 'Revisori',
 'revisor_already_assigned' => 'Utente già assegnato al ruolo di revisore',
 'revisor_already_removed' => 'Revisore già rimosso dal processo di revisione o ha già revisionato documento.',

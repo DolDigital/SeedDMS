@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2360), dgrutsch (22)
+//    Translators: Admin (2362), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -941,6 +941,15 @@ Benutzer: [username]
 URL: [url]',
 'revision_request_email_subject' => '[sitename]: [name] - Aufforderung zur Wiederholungsprüfung',
 'revision_status' => 'Status',
+'revision_submit_email_body' => 'Erneute Freigabe erteilen
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Status: [status]
+Kommentar: [comment]
+Benutzer: [username]
+URL: [url]',
+'revision_submit_email_subject' => '[sitename]: [name] - Erneute Freigabe erteilen',
 'revisors' => 'Überprüfer',
 'revisor_already_assigned' => 'Benutzer bereits als Wiederholungsprüfer eingetragen.',
 'revisor_already_removed' => 'Wiederholungsprüfer wurde bereits vom Prozess ausgeschlossen oder hat das Dokument bereits geprüft.',
