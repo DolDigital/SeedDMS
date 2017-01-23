@@ -942,6 +942,8 @@ User: [username]
 URL: [url]',
 'revision_request_email_subject' => '[sitename]: [name] - Revision request',
 'revision_status' => 'Status',
+'revision_submit_email_body' => '',
+'revision_submit_email_subject' => '',
 'revisors' => 'Revisors',
 'revisor_already_assigned' => 'User is already assigned as an revisor.',
 'revisor_already_removed' => 'Revisor has already been removed from revision process or has already revised the document.',

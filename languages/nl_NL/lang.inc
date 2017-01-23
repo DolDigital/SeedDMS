@@ -927,6 +927,8 @@ User: [username]
 URL: [url]',
 'revision_request_email_subject' => '[sitename]: [name] – Verzoek tot herziening',
 'revision_status' => 'Status revisie',
+'revision_submit_email_body' => '',
+'revision_submit_email_subject' => '',
 'revisors' => 'Herzieners',
 'revisor_already_assigned' => 'Gebruiker is reeds herziener',
 'revisor_already_removed' => 'Herziener reeds verwijderd',

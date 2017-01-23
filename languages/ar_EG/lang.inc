@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1270)
+//    Translators: Admin (1272)
 
 $text = array(
 '2_factor_auth' => '',
@@ -238,7 +238,7 @@ URL: [url]',
 'choose_workflow_action' => 'اختر اجراء مسار عمل',
 'choose_workflow_state' => 'اختر حالة مسار عمل',
 'class_name' => '',
-'clear_cache' => '',
+'clear_cache' => 'ﻢﺴﺣ ﺎﻠﻤﺤﻓﻮﻇﺎﺗ',
 'clear_clipboard' => '',
 'clear_password' => '',
 'clipboard' => 'لوحة القصاصات',
@@ -532,7 +532,7 @@ URL: [url]',
 'hu_HU' => 'مجرية',
 'id' => 'معرف',
 'identical_version' => 'الاصدار الجديد مماثل للاصدار الحالي.',
-'import' => '',
+'import' => 'ﺎﺴﺘﺧﺭﺎﺟ',
 'importfs' => '',
 'import_fs' => '',
 'import_fs_warning' => '',
@@ -889,6 +889,8 @@ URL: [url]',
 'revision_request_email_body' => '',
 'revision_request_email_subject' => '',
 'revision_status' => '',
+'revision_submit_email_body' => '',
+'revision_submit_email_subject' => '',
 'revisors' => '',
 'revisor_already_assigned' => '',
 'revisor_already_removed' => '',

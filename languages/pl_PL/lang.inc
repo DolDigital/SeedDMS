@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (746), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (747), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -384,7 +384,7 @@ URL: [url]',
 'drag_icon_here' => 'Przeciągnij ikonę folderu lub dokumentu tutaj!',
 'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Plik z folderu rozwijanego',
-'dropfolder_folder' => '',
+'dropfolder_folder' => 'Katalog ze strefy drop',
 'dropupload' => 'Szybki upload',
 'drop_files_here' => 'Przeciągnij tu pliki!',
 'dump_creation' => 'Utworzenie zrzutu bazy danych',
@@ -883,6 +883,8 @@ URL: [url]',
 'revision_request_email_body' => '',
 'revision_request_email_subject' => '',
 'revision_status' => '',
+'revision_submit_email_body' => '',
+'revision_submit_email_subject' => '',
 'revisors' => '',
 'revisor_already_assigned' => '',
 'revisor_already_removed' => '',
