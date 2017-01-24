@@ -2052,7 +2052,7 @@ class SeedDMS_Core_DMS {
 	function getUnlinkedDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2076,7 +2076,7 @@ class SeedDMS_Core_DMS {
 	function getNoFileSizeDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 OR fileSize is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2100,7 +2100,7 @@ class SeedDMS_Core_DMS {
 	function getNoChecksumDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE checksum = '' OR checksum is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
