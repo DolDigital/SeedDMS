@@ -86,7 +86,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader['js'])
 			echo $this->extraheader['js'];
-		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/passwordstrength/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topCenter.js"></script>'."\n";
@@ -134,16 +134,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if($this->footerjs) {
-			echo "<script type=\"text/javascript\">
-//<![CDATA[
-$(document).ready(function () {
-";
+			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
-				echo $script."\n";
+				$jscode .= $script."\n";
 			}
-			echo "});
-//]]>
-</script>";
+			$jscode .= "});\n";
+			$hashjs = md5($jscode);
+			if(!is_dir($this->params['cachedir'].'/js')) {
+				SeedDMS_Core_File::makeDir($this->params['cachedir'].'/js');
+			}
+			if(is_dir($this->params['cachedir'].'/js')) {
+				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
+			}
+			parse_str($_SERVER['QUERY_STRING'], $tmp);
+			$tmp['action'] = 'footerjs';
+			$tmp['hash'] = $hashjs;
+			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
@@ -151,6 +157,13 @@ $(document).ready(function () {
 			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function footerjs() { /* {{{ */
+		header('Content-Type: application/javascript');
+		if(file_exists($this->params['cachedir'].'/js/'.$_GET['hash'].'.js')) {
+			readfile($this->params['cachedir'].'/js/'.$_GET['hash'].'.js');
+		}
 	} /* }}} */
 
 	function missingḺanguageKeys() { /* {{{ */
@@ -943,7 +956,7 @@ $(document).ready(function () {
 	function printDocumentChooserHtml($formName) { /* {{{ */
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -966,7 +979,7 @@ $(document).ready(function () {
 ?>
 function documentSelected<?php echo $formName ?>(id, name) {
 	$('#docid<?php echo $formName ?>').val(id);
-	$('#choosedocsearch').val(name);
+	$('#choosedocsearch<?php echo $formName ?>').val(name);
 	$('#docChooser<?php echo $formName ?>').modal('hide');
 }
 function folderSelected<?php echo $formName ?>(id, name) {
@@ -992,6 +1005,7 @@ function folderSelected<?php echo $formName ?>(id, name) {
 		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1017,6 +1031,12 @@ function folderSelected<?php echo $form ?>(id, name) {
 	$('#choosefoldersearch<?php echo $form ?>').val(name);
 	$('#folderChooser<?php echo $form ?>').modal('hide');
 }
+$(document).ready(function() {
+	$('#clearfolder<?php print $form ?>').click(function(ev) {
+		$('#choosefoldersearch<?php echo $form ?>').val('');
+		$('#targetid<?php echo $form ?>').val('');
+	});
+});
 <?php
 	} /* }}} */
 
@@ -1111,8 +1131,10 @@ function folderSelected<?php echo $form ?>(id, name) {
 
 	function printKeywordChooserJs($formName) { /* {{{ */
 ?>
-$('#acceptkeywords').click(function(ev) {
-	acceptKeywords();
+$(document).ready(function() {
+	$('#acceptkeywords').click(function(ev) {
+		acceptKeywords();
+	});
 });
 <?php
 	} /* }}} */
@@ -1137,8 +1159,8 @@ $('#acceptkeywords').click(function(ev) {
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 ?>
-        <span class="input-append date datepicker" style="_display: inline;" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span4" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+        <span class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
 				</span>
 <?php
@@ -1187,7 +1209,7 @@ $('#acceptkeywords').click(function(ev) {
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" id=\"clearFilename".$formName."\"><i class=\"icon-remove\"></i></button>";
+		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
@@ -1220,11 +1242,10 @@ function folderSelected(name) {
 	modalDropfolderChooser.modal('hide');
 }
 <?php } ?>
-function clearFilename<?php print $formName ?>() {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
-}
-$('#clearfilename<?php print $formName ?>').click(function(ev) {
-	$('#dropfolderfile<?php echo $formName ?>').val('');
+$(document).ready(function() {
+	$('#clearfilename<?php print $formName ?>').click(function(ev) {
+		$('#dropfolderfile<?php echo $formName ?>').val('');
+	});
 });
 <?php
 	} /* }}} */
@@ -2533,6 +2554,50 @@ mayscript>
 		$this->printTimelineJs($timelineurl, $height, $start, $end, $skip);
 		echo "</script>";
 		$this->printTimelineHtml($height);
+	} /* }}} */
+
+	protected function printPopupBox($title, $content, $ret=false) { /* {{{ */
+		$id = md5(uniqid());
+		/*
+		$this->addFooterJS('
+$("body").on("click", "span.openpopupbox", function(e) {
+	$(""+$(e.target).data("href")).toggle();
+//	$("div.popupbox").toggle();
+});
+');
+		 */
+		$html = '
+		<span class="openpopupbox" data-href="#'.$id.'">'.$title.'</span>
+		<div id="'.$id.'" class="popupbox" style="display: none;">
+		'.$content.'
+			<span class="closepopupbox"><i class="icon-remove"></i></span>
+		</div>';
+		if($ret)
+			return $html;
+		else
+			echo $html;
+	} /* }}} */
+
+	protected function printAccordion($title, $content) { /* {{{ */
+		$id = substr(md5(uniqid()), 0, 4);
+?>
+		<div class="accordion" id="accordion<?php echo $id; ?>">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion<?php echo $id; ?>" href="#collapse<?php echo $id; ?>">
+						<?php echo $title; ?>
+          </a>
+        </div>
+				<div id="collapse<?php echo $id; ?>" class="accordion-body collapse" style="height: 0px;">
+          <div class="accordion-inner">
+<?php
+		echo $content;
+?>
+          </div>
+        </div>
+      </div>
+    </div>
+<?php
 	} /* }}} */
 }
 ?>

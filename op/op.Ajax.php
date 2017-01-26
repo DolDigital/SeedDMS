@@ -662,6 +662,15 @@ switch($command) {
 					exit;
 				} else {
 					$document = $res[0];
+
+					/* Set access as specified in settings. */
+					if($settings->_defaultAccessDocs) {
+						if($settings->_defaultAccessDocs > 0 && $settings->_defaultAccessDocs < 4) {
+							$document->setInheritAccess(0, true);
+							$document->setDefaultAccess($settings->_defaultAccessDocs, true);
+						}
+					}
+
 					if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
 						foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
 							if (method_exists($hookObj, 'postAddDocument')) {

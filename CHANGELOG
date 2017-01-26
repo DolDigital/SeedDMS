@@ -1,4 +1,10 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.9
+--------------------------------------------------------------------------------
+- merged changes from 4.3.32
+- add hooks for previewing documents
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.8
 --------------------------------------------------------------------------------
 - merged changes from 4.3.31
@@ -56,6 +62,29 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.32
+--------------------------------------------------------------------------------
+- fix saving new mimetype for fulltext search, available languages (Closes #308)
+- put access rights of folder into popup box if more than 3 exists
+- do not execute code which uses apache_request_headers() if it does not exists,
+  makes webdav work in fast cgi mode or on webservers other than apache (Closes #300)
+- clean up of distribution created by makefile
+- order groups in select boxes by name
+- javascript added by addToFooterJS() will be written to a temp. file
+  which can then be read without violating the CSP
+- clearing cache can just remove temp. js files or preview images
+- new mimetype of preview command may contain a '.' now
+- fix incorrect calls of $app->response()->header() in restapi.php
+- set filetype propperly after uploadind a new document with the restapi
+- add new method getDocumentPreview() to restapi
+- replace lots of tables in forms by bootstraps control-group
+- add remove button to folder selector
+- editing of an exiting review/approval can be turned off
+- add searching for id of folder/document (Closes #302)
+- admin may set owner of document when uploading it
+- default access rights for documents can be set in configuration
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.31

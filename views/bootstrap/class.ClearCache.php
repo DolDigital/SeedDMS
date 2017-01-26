@@ -49,6 +49,11 @@ class SeedDMS_View_ClearCache extends SeedDMS_Bootstrap_Style {
 <p>
 <?php printMLText("confirm_clear_cache", array('cache_dir'=>$cachedir));?>
 </p>
+<p>
+<input type="checkbox" name="preview" value="1" checked> <?php printMLText('preview_images'); ?>
+</p>
+<p>
+<input type="checkbox" name="js" value="1" checked> <?php printMLText('temp_jscode'); ?>
 <p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("clear_cache");?></button></p>
 </form>
 <?php

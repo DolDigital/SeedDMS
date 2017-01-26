@@ -51,20 +51,19 @@ class SeedDMS_View_MoveFolder extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 
 ?>
-<form action="../op/op.MoveFolder.php" name="form1">
+<form class="form-horizontal" action="../op/op.MoveFolder.php" name="form1">
 	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="hidden" name="showtree" value="<?php echo showtree();?>">
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooserHtml("form1", M_READWRITE, $folder->getID(), $target);?></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input class="btn" type="submit" value="<?php printMLText("move_folder"); ?>"></td>
-		</tr>
-	</table>
-	</form>
+	<div class="control-group">
+		<label class="control-label"><?php printMLText("choose_target_folder");?>:</label>
+		<div class="controls">
+			<?php $this->printFolderChooserHtml("form1", M_READWRITE, $folder->getID(), $target);?>
+		</div>
+	</div>
+	<div class="controls">
+		<input class="btn" type="submit" value="<?php printMLText("move_folder"); ?>">
+	</div>
+</form>
 
 
 <?php

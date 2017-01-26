@@ -104,27 +104,30 @@ $(document).ready(function() {
 		$this->contentHeading(getMLText("edit_folder_props"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditFolder.php" id="form1" name="form1" method="post">
-<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
-<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
-<table class="table-condensed">
-<tr>
-<td><?php printMLText("name");?>:</td>
-<td><input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60" required></td>
-</tr>
-<tr>
-<td><?php printMLText("comment");?>:</td>
-<td><textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($folder->getComment());?></textarea></td>
-</tr>
+<form class="form-horizontal" action="../op/op.EditFolder.php" id="form1" name="form1" method="post">
+		<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
+		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("name");?>:</label>
+			<div class="controls">
+				<input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60" required>
+			</div>
+		</div>	
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls">
+				<textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($folder->getComment());?></textarea>
+			</div>
+		</div>
 <?php
 		$parent = ($folder->getID() == $rootfolderid) ? false : $folder->getParent();
 		if ($parent && $parent->getAccessMode($user) > M_READ) {
-			print "<tr>";
-			print "<td>" . getMLText("sequence") . ":</td>";
-			print "<td>";
+			print "<div class=\"control-group\">";
+			print "<label class=\"control-label\">" . getMLText("sequence") . ":</label>";
+			print "<div class=\"controls\">";
 			$this->printSequenceChooser($parent->getSubFolders('s'), $folder->getID());
 			if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); 
-			print "</td></tr>\n";
+			print "</div></div>\n";
 		}
 
 		if($attrdefs) {
@@ -132,26 +135,26 @@ $(document).ready(function() {
 				$arr = $this->callHook('folderEditAttribute', $folder, $attrdef);
 				if(is_array($arr)) {
 					echo $txt;
-					echo "<tr>";
-					echo "<td>".$arr[0]."</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
+					echo "<div class=\"control-group\">";
+					echo "<label class=\"control-label\">".$arr[0]."</label>";
+					echo "<div class=\"controls\">".$arr[1]."</div>";
+					echo "</div>";
 				} else {
 ?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, $folder->getAttribute($attrdef)) ?></td>
-</tr>
+			<div class="control-group">
+				<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
+				<div class="controls">
+					<?php $this->printAttributeEditField($attrdef, $folder->getAttribute($attrdef)) ?>
+				</div>
+			</div>
 <?php
 				}
 			}
 		}
 ?>
-<tr>
-	<td></td>
-	<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button></td>
-</tr>
-</table>
+			<div class="controls">
+				<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
+			</div>
 </form>
 <?php
 		$this->contentContainerEnd();

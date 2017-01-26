@@ -70,50 +70,41 @@ $(document).ready( function() {
 			$this->contentHeading(getMLText("attrdef_info"));
 			$res = $selattrdef->getStatistics(30);
 			if(!empty($res['frequencies']['document']) ||!empty($res['frequencies']['folder']) ||!empty($res['frequencies']['content'])) {
-
-
-?>
-    <div class="accordion" id="accordion1">
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-						<?php printMLText('attribute_value'); ?>
-          </a>
-        </div>
-        <div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-          <div class="accordion-inner">
-<?php
-			foreach(array('document', 'folder', 'content') as $type) {
-				if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
-					print "<table class=\"table table-condensed\">";
-					print "<thead>\n<tr>\n";
-					print "<th>".getMLText("attribute_value")."</th>\n";
-					print "<th>".getMLText("attribute_count")."</th>\n";
-					print "<th></th>\n";
-					print "</tr></thead>\n<tbody>\n";
-					foreach($res['frequencies'][$type] as $entry) {
-						$value = $selattrdef->parseValue($entry['value']);
-						echo "<tr>";
-						echo "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
-						/* various checks, if the value is valid */
-						echo "<td>";
-						/* Check if value is in value set */
-						if(!$selattrdef->validate($entry['value'])) {
-							echo getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+				foreach(array('document', 'folder', 'content') as $type) {
+					$content = '';
+					if(isset($res['frequencies'][$type]) && $res['frequencies'][$type]) {
+						$content .= "<table class=\"table table-condensed\">";
+						$content .= "<thead>\n<tr>\n";
+						$content .= "<th>".getMLText("attribute_value")."</th>\n";
+						$content .= "<th>".getMLText("attribute_count")."</th>\n";
+						$content .= "<th></th>\n";
+						$content .= "</tr></thead>\n<tbody>\n";
+						foreach($res['frequencies'][$type] as $entry) {
+							$value = $selattrdef->parseValue($entry['value']);
+							$content .= "<tr>";
+							$content .= "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
+							/* various checks, if the value is valid */
+							if(!$selattrdef->validate($entry['value'])) {
+								$content .= getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+							}
+							$content .= "<td>";
+							/* Check if value is in value set */
+							if($selattrdef->getValueSet()) {
+								foreach($values as $v) {
+									if(!in_array($value, $selattrdef->getValueSetAsArray()))
+										$content .= getMLText("attribute_value_not_in_valueset");
+								}
+							}
+							$content .= "</td>";
+							$content .= "</tr>";
 						}
-						echo "</td>";
-						echo "</tr>";
+						$content .= "</tbody></table>";
 					}
-					print "</tbody></table>";
+					if($content)
+						$this->printAccordion(getMLText('attribute_value')." (".getMLText($type).")", $content);
 				}
 			}
-?>
-          </div>
-        </div>
-      </div>
-     </div>
-<?php
-			}
+
 			if($res['folders'] || $res['docs']) {
 				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
@@ -163,7 +154,7 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-			<form action="../op/op.AttributeMgr.php" method="post">
+			<form class="form-horizontal" action="../op/op.AttributeMgr.php" method="post">
 <?php
 		if($attrdef) {
 			echo createHiddenFieldWithKey('editattrdef');
@@ -178,82 +169,89 @@ $(document).ready( function() {
 <?php
 		}
 ?>
-				<table class="table-condensed">
-					<tr>
-						<td>
+					<div class="control-group">
+						<label class="control-label">
 								<?php printMLText("attrdef_name");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" name="name" value="<?php echo $attrdef ? htmlspecialchars($attrdef->getName()) : '' ?>">
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_objtype");?>:
-						</td>
-						<td>
-							<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>>Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>>Document</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>>Document content</option></select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<?php printMLText("attrdef_type");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
+						<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>"><?php printMLText('all'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>><?php printMLText('folder'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>><?php printMLText('document'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef && $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>><?php printMLText('documentcontent'); ?></option></select>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label"><?php printMLText("attrdef_type");?>:</label>
+						<div class="controls">
 							<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>><?php printMLText('attrdef_type_int'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>><?php printMLText('attrdef_type_float'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>><?php printMLText('attrdef_type_string'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>><?php printMLText('attrdef_type_boolean'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_date ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_date) echo "selected"; ?>><?php printMLText('attrdef_type_date'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_email ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_email) echo "selected"; ?>><?php printMLText('attrdef_type_email'); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_url ?>" <?php if($attrdef && $attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_url) echo "selected"; ?>><?php printMLText('attrdef_type_url'); ?></option></select>
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_multiple");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="checkbox" value="1" name="multiple" <?php echo ($attrdef && $attrdef->getMultipleValues()) ? "checked" : "" ?>/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<?php printMLText("attrdef_minvalues");?>:
-						</td>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label"><?php printMLText("attrdef_minvalues");?>:</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getMinValues() : '' ?>" name="minvalues" />
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_maxvalues");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getMaxValues() : '' ?>" name="maxvalues" />
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_valueset");?>:
-						</td>
-						<td>
+						</label>
+
+						<div class="controls">
 							<?php if($attrdef && strlen($attrdef->getValueSet()) > 30) { ?>
 							<textarea name="valueset" rows="5"><?php echo ($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : '' ?></textarea>
 							<?php } else { ?>
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getValueSet() : '' ?>" name="valueset" />
 							<?php } ?>
-						</td>
-					</tr>
-					<tr>
-						<td>
+						</div>
+					</div>
+
+					
+					<div class="control-group">
+						<label class="control-label">
 							<?php printMLText("attrdef_regex");?>:
-						</td>
-						<td>
+						</label>
+						<div class="controls">
 							<input type="text" value="<?php echo $attrdef ? $attrdef->getRegex() : '' ?>" name="regex" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
-						</td>
-					</tr>
-				</table>
+						</div>
+					</div>
+
+					<div class="controls">
+						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
+					</div>
 			</form>
 <?php
 } /* }}} */
@@ -303,7 +301,7 @@ $(document).ready( function() {
 						$ot = getMLText("document");
 						break;
 					case SeedDMS_Core_AttributeDefinition::objtype_documentcontent:
-						$ot = getMLText("version");
+						$ot = getMLText("documentcontent");
 						break;
 				}
 				switch($attrdef->getType()) {

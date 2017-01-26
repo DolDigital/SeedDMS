@@ -135,13 +135,13 @@ $(document).ready(function() {
 		}
 ?>
 	<div class="well">
-	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
+	<form class="form-horizontal" action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
 <?php
 	if($workflow) {
 		echo createHiddenFieldWithKey('editworkflow');
 ?>
-	<input type="Hidden" name="workflowid" value="<?php print $workflow->getID();?>">
-	<input type="Hidden" name="action" value="editworkflow">
+	<input type="hidden" name="workflowid" value="<?php print $workflow->getID();?>">
+	<input type="hidden" name="action" value="editworkflow">
 <?php
 	} else {
 		echo createHiddenFieldWithKey('addworkflow');
@@ -150,21 +150,26 @@ $(document).ready(function() {
 <?php
 	}
 ?>
-	<table class="table-condensed">
+
 <?php
 		if($workflow && !$workflow->isUsed()) {
 ?>
-	  <tr><td></td><td><a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a></td></tr>
+		<div class="controls">
+			  <a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $workflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a>
+		</div>
 <?php
 		}
 ?>
-		<tr>
-			<td><?php printMLText("workflow_name");?>:</td>
-			<td><input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("workflow_initstate");?>:</td>
-			<td><select name="initstate">
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("workflow_name");?>:</label>
+			<div class="controls">
+				<input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("workflow_initstate");?>:</label>
+			<div class="controls">
+				<select name="initstate">
 <?php
 			foreach($workflowstates as $workflowstate) {
 				echo "<option value=\"".$workflowstate->getID()."\"";
@@ -173,14 +178,14 @@ $(document).ready(function() {
 				echo ">".htmlspecialchars($workflowstate->getName())."</option>\n";
 			}
 ?>
-			</select></td>
-		</tr>
+			</select>
+			</div>
+		</div>
 
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-		</tr>
-	</table>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		</div>
+
 	</form>
 	</div>
 <?php

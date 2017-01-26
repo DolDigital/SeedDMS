@@ -66,6 +66,8 @@ class Settings { /* {{{ */
 	var $_encryptionKey = '';
 	// lifetime of cookie in seconds or 0 for end of session
 	var $_cookieLifetime = '';
+	// default access mode for documents
+	var $_defaultAccessDocs = '';
 	// Strict form checking
 	var $_strictFormCheck = false;
 	// Path to where SeedDMS is located
@@ -131,6 +133,8 @@ class Settings { /* {{{ */
 	var $_enableOwnerRevApp = false;
 	// enable/disable listing logged in user as reviewer/approver
 	var $_enableSelfRevApp = false;
+	// enable/disable update of a review/approval by the reviewer/approver
+	var $_enableUpdateRevApp = false;
 	// enable/disable default notification for owner
 	var $_enableOwnerNotification = false;
 	// enable/disable deleting of versions for regular users
@@ -460,6 +464,7 @@ class Settings { /* {{{ */
 		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
+		$this->_defaultAccessDocs = intval($tab["defaultAccessDocs"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -561,6 +566,7 @@ class Settings { /* {{{ */
 		$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
 		$this->_enableOwnerRevApp = Settings::boolval($tab["enableOwnerRevApp"]);
 		$this->_enableSelfRevApp = Settings::boolval($tab["enableSelfRevApp"]);
+		$this->_enableUpdateRevApp = Settings::boolval($tab["enableUpdateRevApp"]);
 		$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
 		$this->_workflowMode = strval($tab["workflowMode"]);
@@ -762,6 +768,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "cookieLifetime", $this->_cookieLifetime);
+    $this->setXMLAttributValue($node, "defaultAccessDocs", $this->_defaultAccessDocs);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);
@@ -850,6 +857,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableAdminRevApp", $this->_enableAdminRevApp);
     $this->setXMLAttributValue($node, "enableOwnerRevApp", $this->_enableOwnerRevApp);
     $this->setXMLAttributValue($node, "enableSelfRevApp", $this->_enableSelfRevApp);
+    $this->setXMLAttributValue($node, "enableUpdateRevApp", $this->_enableUpdateRevApp);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);

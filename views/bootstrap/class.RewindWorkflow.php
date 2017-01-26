@@ -71,12 +71,9 @@ class SeedDMS_View_RewindWorkflow extends SeedDMS_Bootstrap_Style {
 	<p><?php printMLText("rewind_workflow_warning"); ?></p>
 	<form method="post" action="../op/op.RewindWorkflow.php" name="form1">
 	<?php echo createHiddenFieldWithKey('rewindworkflow'); ?>
-	<table>
-	<tr><td></td><td>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='submit' class="btn" value='<?php printMLText("rewind_workflow"); ?>'/>
-	</td></tr></table>
 	</form>
 	</div>
 	<div id="workflowgraph" class="span8">

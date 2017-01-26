@@ -84,20 +84,19 @@ $(document).ready(function() {
 		$this->contentHeading(getMLText("edit_comment"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditComment.php" id="form1" name="form1" method="post">
+<form class="form-horizontal" action="../op/op.EditComment.php" id="form1" name="form1" method="post">
 	<?php echo createHiddenFieldWithKey('editcomment'); ?>
 	<input type="Hidden" name="documentid" value="<?php print $document->getID();?>">
 	<input type="Hidden" name="version" value="<?php print $version->getVersion();?>">
-	<table class="table-condensed">
-		<tr>
-			<td class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($version->getComment());?></textarea></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button></td>
-		</tr>
-	</table>
+	<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls">
+				<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($version->getComment());?></textarea>
+			</div>
+	</div>
+	<div class="controls">
+		<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+	</div>
 </form>
 <?php
 		$this->contentContainerEnd();

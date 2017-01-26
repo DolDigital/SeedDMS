@@ -54,10 +54,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		// special treatment for litmus compliance test
 		// reply on its identifier header
 		// not needed for the test itself but eases debugging
-		foreach (apache_request_headers() as $key => $value) {
-			if (stristr($key, "litmus")) {
-				error_log("Litmus test $value");
-				header("X-Litmus-reply: ".$value);
+		if( function_exists('apache_request_headers') ) {
+			foreach (apache_request_headers() as $key => $value) {
+				if (stristr($key, "litmus")) {
+					error_log("Litmus test $value");
+					header("X-Litmus-reply: ".$value);
+				}
 			}
 		}
 

@@ -33,7 +33,7 @@ if (isset($_REQUEST["hash"]) && strlen($_REQUEST["hash"])>0) {
 	$hash = $_REQUEST["hash"];
 } else {
 	header("Location: ../out/out.Login.php");
-  exit;
+	exit;
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));

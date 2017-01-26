@@ -47,27 +47,28 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("edit_attributes"));
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.EditAttributes.php" name="form1" method="POST">
+<form class="form-horizontal" action="../op/op.EditAttributes.php" name="form1" method="POST">
 	<?php echo createHiddenFieldWithKey('editattributes'); ?>
-	<input type="Hidden" name="documentid" value="<?php print $document->getID();?>">
-	<input type="Hidden" name="version" value="<?php print $version->getVersion();?>">
-	<table class="table-condensed">
+	<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
+	<input type="hidden" name="version" value="<?php print $version->getVersion();?>">
+
 <?php
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
 ?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, $version->getAttribute($attrdef)) ?></td>
-</tr>
+    <div class="control-group">
+	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?></label>
+        <div class="controls">
+	        <?php $this->printAttributeEditField($attrdef, $version->getAttribute($attrdef)) ?>
+        </div>
+	</div>
 <?php
 				}
 			}
 ?>
-		<tr>
-			<td colspan="2"><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button></td>
-		</tr>
-	</table>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+		</div>
 </form>
 <?php
 		$this->contentContainerEnd();

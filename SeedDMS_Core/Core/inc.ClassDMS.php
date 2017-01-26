@@ -289,13 +289,29 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
+	 * @param string $access set if source or target of link shall be checked
+	 * for sufficient access rights. Set to 'source' if the source document
+	 * of a link is to be checked, set to 'target' for the target document.
+	 * If not set, then access right aren't checked at all.
 	 * @return array filtered list of links
 	 */
-	static function filterDocumentLinks($user, $links) { /* {{{ */
+	static function filterDocumentLinks($user, $links, $access='') { /* {{{ */
 		$tmp = array();
-		foreach ($links as $link)
-			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
-				array_push($tmp, $link);
+		foreach ($links as $link) {
+			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin()){
+				if($access == 'source') {
+					$obj = $link->getDocument();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} elseif($access == 'target') {
+					$obj = $link->getTarget();
+					if ($obj->getAccessMode($user) >= M_READ)
+						array_push($tmp, $link);
+				} else {
+					array_push($tmp, $link);
+				}
+			}
+		}
 		return $tmp;
 	} /* }}} */
 
@@ -328,7 +344,7 @@ class SeedDMS_Core_DMS {
 		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.0.8';
+			$this->version = '5.0.9';
 	} /* }}} */
 
 	/**
@@ -675,7 +691,7 @@ class SeedDMS_Core_DMS {
 
 		// if none is checkd search all
 		if (count($searchin)==0)
-			$searchin=array(1, 2, 3, 4);
+			$searchin=array(1, 2, 3, 4, 5);
 
 		/*--------- Do it all over again for folders -------------*/
 		$totalFolders = 0;
@@ -836,6 +852,9 @@ class SeedDMS_Core_DMS {
 			if (in_array(4, $searchin)) {
 				$searchFields[] = "`tblDocumentAttributes`.`value`";
 				$searchFields[] = "`tblDocumentContentAttributes`.`value`";
+			}
+			if (in_array(5, $searchin)) {
+				$searchFields[] = "`tblDocuments`.`id`";
 			}
 
 
@@ -2033,7 +2052,7 @@ class SeedDMS_Core_DMS {
 	function getUnlinkedDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2057,7 +2076,7 @@ class SeedDMS_Core_DMS {
 	function getNoFileSizeDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 OR fileSize is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();
@@ -2081,7 +2100,7 @@ class SeedDMS_Core_DMS {
 	function getNoChecksumDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE checksum = '' OR checksum is null";
 		$resArr = $this->db->getResultArray($queryStr);
-		if (!$resArr)
+		if ($resArr === false)
 			return false;
 
 		$versions = array();

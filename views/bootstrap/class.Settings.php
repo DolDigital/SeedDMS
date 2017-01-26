@@ -484,6 +484,17 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_cookieLifetime");?>:</td>
         <td><?php $this->showTextField("cookieLifetime", $settings->_cookieLifetime); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_defaultAccessDocs_desc");?>">
+        <td><?php printMLText("settings_defaultAccessDocs");?>:</td>
+        <td>
+				  <select name="defaultAccessDocs">
+						<option value="0" <?php if ($settings->_defaultAccessDocs==0) echo "selected" ?>><?php printMLText("inherited");?></option>
+						<option value="<?php echo M_NONE; ?>" <?php if ($settings->_defaultAccessDocs==M_NONE) echo "selected" ?>><?php printMLText("access_mode_none");?></option>
+						<option value="<?php echo M_READ; ?>" <?php if ($settings->_defaultAccessDocs==M_READ) echo "selected" ?>><?php printMLText("access_mode_read");?></option>
+						<option value="<?php echo M_READWRITE; ?>" <?php if ($settings->_defaultAccessDocs==M_READWRITE) echo "selected" ?>><?php printMLText("access_mode_readwrite");?></option>
+					</select>
+				</td>
+      </tr>
 
       <!-- TODO Connectors -->
 
@@ -611,6 +622,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enableSelfRevApp_desc");?>">
         <td><?php printMLText("settings_enableSelfRevApp");?>:</td>
         <td><input name="enableSelfRevApp" type="checkbox" <?php if ($settings->_enableSelfRevApp) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableUpdateRevApp_desc");?>">
+        <td><?php printMLText("settings_enableUpdateRevApp");?>:</td>
+        <td><input name="enableUpdateRevApp" type="checkbox" <?php if ($settings->_enableUpdateRevApp) echo "checked" ?> /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableVersionDeletion_desc");?>">
         <td><?php printMLText("settings_enableVersionDeletion");?>:</td>
