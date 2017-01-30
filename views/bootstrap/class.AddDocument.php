@@ -32,42 +32,16 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
-		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$partitionsize = $this->params['partitionsize'];
+		$enablelargefileupload = $this->params['enablelargefileupload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
-?>
-function checkForm()
-	{
-	msg = new Array();
-	//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
-			
-<?php
-			if ($strictformcheck) {
-?>
-	if(!document.form1.name.disabled){
-		if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
-	}
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
-<?php
-			}
-?>
-	if (msg != ""){
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	return true;
-}
 
+		if($enablelargefileupload)
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize);
+?>
 $(document).ready(function() {
-	$('body').on('submit', '#form1', function(ev){
+	$('body').on('submit', '#__form1', function(ev){
 		if(checkForm()) return;
 		ev.preventDefault();
 	});
@@ -80,7 +54,25 @@ $(document).ready(function() {
 			return false;
 		return true;
 	}, "<?php printMLText("js_no_file");?>");
+	/* The fineuploader validation is actually checking all fields that can contain
+	 * a file to be uploaded. First checks if an alternative input field is set,
+	 * second loops through the list of scheduled uploads, checking if at least one
+	 * file will be submitted.
+	 */
+	jQuery.validator.addMethod("fineuploader", function(value, element, params) {
+		if(params[1].val() != '')
+			return true;
+		uploader = params[0];
+		arr = uploader.getUploads();
+		for(var i in arr) {
+			if(arr[i].status == 'submitted')
+				return true;
+		}
+		return false;
+	}, "<?php printMLText("js_no_file");?>");
 	$("#form1").validate({
+		debug: false,
+		ignore: ":hidden:not(.do_validate)",
 		invalidHandler: function(e, validator) {
 			noty({
 				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
@@ -91,13 +83,34 @@ $(document).ready(function() {
 				timeout: 1500,
 			});
 		},
+<?php
+		if($enablelargefileupload) {
+?>
+		submitHandler: function(form) {
+			manualuploader.uploadStoredFiles();
+		},
+<?php
+		}
+?>
 		rules: {
+<?php
+		if($enablelargefileupload) {
+?>
+			fineuploaderuuids: {
+				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			}
+<?php
+		} else {
+?>
 			'userfile[]': {
 				alternatives: $('#dropfolderfileform1')
 			},
 			dropfolderfileform1: {
 				 alternatives: $(".btn-file input")
 			}
+<?php
+		}
+?>
 		},
 		messages: {
 			name: "<?php printMLText("js_no_name");?>",
@@ -107,7 +120,6 @@ $(document).ready(function() {
 		errorPlacement: function( error, element ) {
 			if ( element.is( ":file" ) ) {
 				error.appendTo( element.parent().parent().parent());
-console.log(element);
 			} else {
 				error.appendTo( element.parent());
 			}
@@ -138,6 +150,8 @@ console.log(element);
 		$folderid = $folder->getId();
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+		if($enablelargefileupload)
+			$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fine-uploader/jquery.fine-uploader.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
@@ -145,7 +159,7 @@ console.log(element);
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
-		if($enablelargefileupload) {
+		if(0 && $enablelargefileupload) {
 			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree())."</p>";
 		}
 		$this->warningMsg($msg);
@@ -265,9 +279,15 @@ console.log(element);
 			</ol>
 -->
 <?php
-	$this->printFileChooser('userfile[]', false);
+		if($enablelargefileupload)
+			$this->printFineUploaderHtml();
+		else {
+			$this->printFileChooser('userfile[]', false);
 ?>
 			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
+<?php
+		}
+?>
 			</td>
 		</tr>
 <?php if($dropfolderdir) { ?>

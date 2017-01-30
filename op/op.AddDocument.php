@@ -258,6 +258,23 @@ if($settings->_dropFolderDir) {
 	}
 }
 
+if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
+	$uuids = explode(';', $_POST['fineuploaderuuids']);
+	$names = explode(';', $_POST['fineuploadernames']);
+	foreach($uuids as $i=>$uuid) {
+		$fullfile = $settings->_stagingDir.'/'.basename($uuid);
+		if(file_exists($fullfile)) {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$mimetype = finfo_file($finfo, $fullfile);
+			$_FILES["userfile"]['tmp_name'][] = $fullfile;
+			$_FILES["userfile"]['type'][] = $mimetype;
+			$_FILES["userfile"]['name'][] = isset($names[$i]) ? $names[$i] : $uuid;
+			$_FILES["userfile"]['size'][] = filesize($fullfile);
+			$_FILES["userfile"]['error'][] = 0;
+		}
+	}
+}
+
 /* Check files for Errors first */
 for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	if ($_FILES["userfile"]["size"][$file_num]==0) {
