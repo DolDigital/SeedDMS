@@ -425,7 +425,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else if ($accessMode >= M_READWRITE) {
 			echo "<li id=\"first\"><a href=\"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_subfolder")."</a></li>\n";
 			echo "<li><a href=\"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_document")."</a></li>\n";
-			if($this->params['enablelargefileupload'])
+			if(0 && $this->params['enablelargefileupload'])
 				echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
 			echo "<li><a href=\"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_props")."</a></li>\n";
 			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
@@ -2333,13 +2333,13 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderJs($uploadurl, $partsize=0) { /* {{{ */
+	function printFineUploaderJs($uploadurl, $partsize=0, $multiple=true) { /* {{{ */
 ?>
 $(document).ready(function() {
 	manualuploader = new qq.FineUploader({
 		debug: true,
 		autoUpload: false,
-		multiple: true,
+		multiple: <?php echo ($multiple ? 'true' : 'false'); ?>,
 		element: $('#manual-fine-uploader')[0],
 		request: {
 			endpoint: '<?php echo $uploadurl; ?>'
