@@ -41,10 +41,6 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize);
 ?>
 $(document).ready(function() {
-	$('body').on('submit', '#__form1', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
-	});
 	$('#new-file').click(function(event) {
 			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
 	});
