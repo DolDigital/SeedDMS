@@ -280,7 +280,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	if ($_FILES["userfile"]["size"][$file_num]==0) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_zerosize"));
 	}
-	if (is_uploaded_file($_FILES["userfile"]["tmp_name"][$file_num]) && $_FILES['userfile']['error'][$file_num]!=0){
+	if (/* is_uploaded_file($_FILES["userfile"]["tmp_name"][$file_num]) && */$_FILES['userfile']['error'][$file_num]!=0){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
 	}
 }
