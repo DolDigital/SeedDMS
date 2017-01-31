@@ -34,54 +34,37 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$partitionsize = $this->params['partitionsize'];
 		header('Content-Type: application/javascript');
 		$this->printDropFolderChooserJs("form1");
 		$this->printSelectPresetButtonJs();
 		$this->printInputPresetButtonJs();
 		$this->printCheckboxPresetButtonJs();
+		if($enablelargefileupload)
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, false);
 ?>
-function checkForm()
-{
-	msg = new Array();
-<?php if($dropfolderdir) { ?>
-	if ($("#userfile").val() == "" && $("#dropfolderfileform1").val() == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } else { ?>
-	if ($("#userfile").val() == "") msg.push("<?php printMLText("js_no_file");?>");
-<?php } ?>
-<?php
-	if ($strictformcheck) {
-	?>
-	if ($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
-<?php
-	}
-?>
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
 $(document).ready( function() {
-/*
-	$('body').on('submit', '#form1', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
-	});
-*/
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
 		if(value == '' && params.val() == '')
 			return false;
 		return true;
+	}, "<?php printMLText("js_no_file");?>");
+	/* The fineuploader validation is actually checking all fields that can contain
+	 * a file to be uploaded. First checks if an alternative input field is set,
+	 * second loops through the list of scheduled uploads, checking if at least one
+	 * file will be submitted.
+	 */
+	jQuery.validator.addMethod("fineuploader", function(value, element, params) {
+		if(params[1].val() != '')
+			return true;
+		uploader = params[0];
+		arr = uploader.getUploads();
+		for(var i in arr) {
+			if(arr[i].status == 'submitted')
+				return true;
+		}
+		return false;
 	}, "<?php printMLText("js_no_file");?>");
 	$("#form1").validate({
 		invalidHandler: function(e, validator) {
@@ -94,13 +77,34 @@ $(document).ready( function() {
 				timeout: 1500,
 			});
 		},
+<?php
+		if($enablelargefileupload) {
+?>
+		submitHandler: function(form) {
+			manualuploader.uploadStoredFiles();
+		},
+<?php
+		}
+?>
 		rules: {
+<?php
+		if($enablelargefileupload) {
+?>
+			fineuploaderuuids: {
+				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			}
+<?php
+		} else {
+?>
 			userfile: {
 				alternatives: $('#dropfolderfileform1')
 			},
 			dropfolderfileform1: {
 				 alternatives: $('#userfile')
 			}
+<?php
+		}
+?>
 		},
 		messages: {
 			comment: "<?php printMLText("js_no_comment");?>",
@@ -134,6 +138,8 @@ console.log(element);
 		$documentid = $document->getId();
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+		if($enablelargefileupload)
+			$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fine-uploader/jquery.fine-uploader.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -190,9 +196,12 @@ console.log(element);
 	
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
-			<td><!-- input type="File" name="userfile" size="60" -->
+			<td>
 <?php
-	$this->printFileChooser('userfile', false);
+		if($enablelargefileupload)
+			$this->printFineUploaderHtml();
+		else
+			$this->printFileChooser('userfile', false);
 ?>
 			</td>
 		</tr>
