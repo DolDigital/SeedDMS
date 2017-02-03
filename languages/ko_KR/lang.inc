@@ -854,6 +854,7 @@ URL : [url]',
 사용자: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename] : [name] - 문서 버전에서 제거 된 워크플로우',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => '마크 파일을 제거',
 'repaired' => '복구',
 'repairing_objects' => '문서 및 폴더 복구',

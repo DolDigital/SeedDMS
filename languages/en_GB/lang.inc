@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1493), dgrutsch (9), netixw (14)
+//    Translators: Admin (1494), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -873,6 +873,7 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Removed workflow from document version',
+'removeFolderFromDropFolder' => 'Remove folder after import',
 'remove_marked_files' => 'Remove marked files',
 'repaired' => 'repaired',
 'repairing_objects' => 'Repairing documents and folders.',

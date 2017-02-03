@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1136), tmichelfelder (106)
+//    Translators: Admin (1138), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '',
@@ -603,7 +603,7 @@ URL: [url]',
 'keep' => '',
 'keep_doc_status' => 'Bibehåll dokumentstatus',
 'keywords' => 'Nyckelord',
-'keywords_loading' => '',
+'keywords_loading' => 'Vänta till nyckelordlistan har laddats',
 'keyword_exists' => 'Nyckelordet finns redan',
 'ko_KR' => 'Koreanska',
 'language' => 'Språk',
@@ -750,7 +750,7 @@ URL: [url]',
 'no_update_cause_locked' => 'Därför kan du inte uppdatera detta dokument. Ta kontakt med användaren som låst dokumentet.',
 'no_user_image' => 'Ingen bild hittades',
 'no_version_check' => 'Fel vid sökning efter ny version av SeedDMS! Ursaken kan vara att allow_url_fopen i din php konfiguration är satt till 0.',
-'no_version_modification' => '',
+'no_version_modification' => 'Inga andra versioner finns',
 'no_workflow_available' => '',
 'objectcheck' => 'Katalog/Dokument-kontroll',
 'object_check_critical' => '',
@@ -842,6 +842,7 @@ Arbetsflöde: [workflow]
 Användare: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Arbetsflöde borttagen från dokument version',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Ta bort markerade filer',
 'repaired' => 'repaired',
 'repairing_objects' => 'Förbereder dokument och kataloger.',

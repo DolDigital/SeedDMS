@@ -857,6 +857,7 @@ Carpeta principal: [folder_path]
 Usuario: [username]
 nURL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Eliminar flujo de trabajo de la versión del documento',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Eliminar ficheros marcados',
 'repaired' => 'Reparado',
 'repairing_objects' => 'Reparando documentos y carpetas.',

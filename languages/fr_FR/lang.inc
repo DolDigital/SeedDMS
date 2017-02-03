@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1058), jeromerobert (50), lonnnew (9), Oudiceval (171)
+//    Translators: Admin (1058), jeromerobert (50), lonnnew (9), Oudiceval (175)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -859,6 +859,7 @@ Répertoire: [folder_path]
 Utilisateur: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Supprimer les fichiers sélectionnés',
 'repaired' => 'réparé',
 'repairing_objects' => 'Réparation des documents et des dossiers.',
@@ -1044,8 +1045,8 @@ URL: [url]',
 'settings_dbUser' => 'Nom d\'utilisateur',
 'settings_dbUser_desc' => 'Le nom d\'utilisateur pour l\'accès à votre base de données entré pendant le processus d\'installation. Ne pas modifier le champ sauf si vraiment nécessaire, par exemple pour le transfert de la base de données vers un nouvel hébergement.',
 'settings_dbVersion' => 'Schéma de base de données trop ancien',
-'settings_defaultAccessDocs' => '',
-'settings_defaultAccessDocs_desc' => '',
+'settings_defaultAccessDocs' => 'Accès par défaut des nouveaux documents',
+'settings_defaultAccessDocs_desc' => 'Lors de la création d’un nouveau document, ce droit d’accès sera appliqué par défaut.',
 'settings_defaultSearchMethod' => 'Méthode de recherche par défaut',
 'settings_defaultSearchMethod_desc' => 'Méthode de recherche par défaut, lorsque la recherche est exécutée depuis le moteur de recherche du menu principal',
 'settings_defaultSearchMethod_valdatabase' => 'base de données',
@@ -1156,7 +1157,7 @@ URL: [url]',
 'settings_initialDocumentStatus_draft' => 'Brouillon',
 'settings_initialDocumentStatus_released' => 'publié',
 'settings_installADOdb' => 'Installer ADOdb',
-'settings_install_disabled' => 'Le fichier ENABLE_INSTALL_TOOL a été supprimé. ous pouvez maintenant vous connecter à SeedDMS et poursuivre la configuration.',
+'settings_install_disabled' => 'Le fichier ENABLE_INSTALL_TOOL a été supprimé. Vous pouvez maintenant vous connecter à SeedDMS et poursuivre la configuration.',
 'settings_install_pear_package_log' => 'Installer le paquet Pear \'Log\'',
 'settings_install_pear_package_webdav' => 'Installer le paquet Pear \'HTTP_WebDAV_Server\', si vous avez l\'intention d\'utiliser l\'interface webdav',
 'settings_install_success' => 'L\'installation est terminée avec succès',
@@ -1221,7 +1222,7 @@ URL: [url]',
 'settings_printDisclaimer_desc' => 'Si activé, le message d’avertissement sera affiché en bas de chaque page.',
 'settings_quota' => 'Quota de l\'utilisateur',
 'settings_quota_desc' => 'Le maximum de bytes qu\'un utilisateur peut utiliser sur le disque. Définir à 0 pour un espace illimité. Cette valeur peut être outrepasser pour chaque utilisation dans son profile.',
-'settings_removeFromDropFolder' => 'Supprimer le fichier du dossier de dépôt après un upload résussi',
+'settings_removeFromDropFolder' => 'Supprimer le fichier du dossier de dépôt après un chargement réussi',
 'settings_removeFromDropFolder_desc' => 'Activez ceci si un fichier pris du dossier de dépôt doit être supprimé après un upload réussi.',
 'settings_restricted' => 'Accès restreint',
 'settings_restricted_desc' => 'Autoriser les utilisateurs à se connecter seulement s\'ils ont une entrée dans la BD locale (independamment d\'une authentification réussie avec LDAP)',

@@ -734,6 +734,7 @@ $text = array(
 'removed_revispr' => '',
 'removed_workflow_email_body' => '',
 'removed_workflow_email_subject' => '',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => '',
 'repaired' => '',
 'repairing_objects' => 'Поправка на папки и документи',

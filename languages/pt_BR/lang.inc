@@ -855,6 +855,7 @@ Pasta mãe: [folder_path]
 Usuário: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Fluxo de trabalho removido da versão do documento',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Remover arquivos marcados',
 'repaired' => 'reparado',
 'repairing_objects' => 'Reparando documentos e pastas',

@@ -850,6 +850,7 @@ Folder nadrzędny: [folder_path]
 Użytkownik: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Usunięty workflow z wersji dokumentu',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Usuń zaznaczone pliki',
 'repaired' => 'naprawiony',
 'repairing_objects' => 'Naprawa dokumentów i katalogów.',

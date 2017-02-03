@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1191), marbanas (16)
+//    Translators: Admin (1195), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -861,6 +861,7 @@ Glavna mapa: [folder_path]
 Korisnik: [username]
 Internet poveznica: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Uklonjeni tok rada iz ove verzije dokumenta',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Ukloni označene datoteke',
 'repaired' => 'popravljeno',
 'repairing_objects' => 'Popravljanje dokumenata ili mapa.',
@@ -1042,7 +1043,7 @@ Internet poveznica: [url]',
 'settings_Authentication' => 'Postavke autentifikacije',
 'settings_autoLoginUser' => 'Automatska prijava',
 'settings_autoLoginUser_desc' => 'Koristite ovaj korisnički ID za pristup ukoliko korisnik već nije prijavljen. Takav pristup neće otvoriti sesiju.',
-'settings_available_languages' => '',
+'settings_available_languages' => 'Dostupni jezici',
 'settings_available_languages_desc' => '',
 'settings_backupDir' => 'Mapa za sigurnosnu kopiju',
 'settings_backupDir_desc' => 'Mapa gdje alat za sigurnosne kopije sprema podatke. Ako ova mapa nije postavljena ili joj se ne može pristupiti, tada se sigurnosne kopije spremaju u mapu sadržaja.',
@@ -1060,7 +1061,7 @@ Internet poveznica: [url]',
 'settings_contentDir_desc' => 'Gdje se spremaju učitane datoteke (najbolje da odaberete mapu koja nije dostupna kroz vaš web-server)',
 'settings_contentOffsetDir' => 'Offset mapa sadržaja',
 'settings_contentOffsetDir_desc' => 'Za zaobilaželje ograničenja unutar datotečnog sustava, nova struktura mapa je  a new directory structure je zasnovana i nalazi se unutar mape sadržaja. Ovo zahtjeva baznu mapu od koje se kreće. Uobičajeno da se ostavlja zadana postavka, 1048576, ali može biti bilo koji niz koji se već ne nalazi unutar mape sadržaja',
-'settings_convertToPdf' => '',
+'settings_convertToPdf' => 'Pretvori dokument u PDF format za brzi prikaz',
 'settings_convertToPdf_desc' => '',
 'settings_cookieLifetime' => 'Životni vijek kolačića',
 'settings_cookieLifetime_desc' => 'Životni vijek kolačića u sekundama. Ako je postavljeno na 0, kolačić će biti uklonjen kada se zatvori pretraživač.',
@@ -1222,7 +1223,7 @@ Internet poveznica: [url]',
 'settings_maxExecutionTime_desc' => 'Ovo postavlja maksimalno vrijeme u sekundama u kojem je skripti dopušteno da se pokrene prije nego se prekine rasčlanjivanjem',
 'settings_maxRecursiveCount' => 'Max. broj rekurzivnog dokumenta/mape',
 'settings_maxRecursiveCount_desc' => 'To je maksimalni broj dokumenata ili mapa koji će biti označen pristupnim pravima, pri rekurzivnom brojanju objekata. Ako se taj broj premaši, broj dokumenata i mapa u pregledu mape će biti procjenjen.',
-'settings_maxSizeForFullText' => '',
+'settings_maxSizeForFullText' => 'Maksimalna veličina dokumenta za instant indeksiranje',
 'settings_maxSizeForFullText_desc' => '',
 'settings_more_settings' => 'Konfiguriraj više postavki. Zadana prijava: admin/admin',
 'settings_notfound' => 'Nije pronađeno',
@@ -1270,7 +1271,7 @@ Internet poveznica: [url]',
 'settings_rootFolderID_desc' => 'ID root mape (većinom ne treba mijenjati)',
 'settings_SaveError' => 'Greška pri spremanju datoteke konfiguracije',
 'settings_Server' => 'Postavke servera',
-'settings_showFullPreview' => '',
+'settings_showFullPreview' => 'Prikaži cijeli dokument',
 'settings_showFullPreview_desc' => '',
 'settings_showMissingTranslations' => 'Prikaži prijevode koji nedostaju',
 'settings_showMissingTranslations_desc' => 'Navedi sve prijevode koji nedostaju na stranici na dnu stranice. Prijavljeni korisnik će moći podnijeti prijedlog za prijevode koji nedostaju koji će biti pohranjen u csv datoteku. Ne uključujte ovu funkciju ako ste u proizvodnoj okolini!',

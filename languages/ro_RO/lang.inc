@@ -862,6 +862,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Workflow eliminat din versiunea documentului',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Eliminați fișierele marcate',
 'repaired' => 'reparat',
 'repairing_objects' => 'Reparare documente și foldere.',

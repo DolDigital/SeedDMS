@@ -858,6 +858,7 @@ Klasör: [folder_path]
 Kullanıcı: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Doküman versiyonundan iş akışı silindi',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'İşaretli dosyaları sil',
 'repaired' => 'onarıldı',
 'repairing_objects' => 'Doküman ve klasörler onarılıyor.',

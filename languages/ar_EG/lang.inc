@@ -842,6 +842,7 @@ Parent folder: [folder_path]
 مستخدم: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - تم ازالة مسار العمل من اصدار المستند',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'ازالة الملفات المختارة',
 'repaired' => 'تم اصلاحه',
 'repairing_objects' => 'تحضير المستندات والمجلدات.',

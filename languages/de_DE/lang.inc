@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2366), dgrutsch (22)
+//    Translators: Admin (2367), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -872,6 +872,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Workflow von Dokumentenversion',
+'removeFolderFromDropFolder' => 'Ordner nach Import entfernen',
 'remove_marked_files' => 'Markierte Dateien löschen',
 'repaired' => 'repariert',
 'repairing_objects' => 'Repariere Dokumente und Ordner.',
