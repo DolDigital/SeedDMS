@@ -320,6 +320,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$txt = $this->callHook('preDocumentPreview', $latestContent);
 		if(is_string($txt))
 			echo $txt;
+		$txt = $this->callHook('documentPreview', $latestContent);
+		if(is_string($txt))
+			echo $txt;
 		else {
 			switch($latestContent->getMimeType()) {
 			case 'audio/mpeg':
