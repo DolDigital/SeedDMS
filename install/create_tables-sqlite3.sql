@@ -286,21 +286,6 @@ CREATE TABLE `tblDocumentLocks` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblDocumentReviewLog`
--- 
-
-CREATE TABLE `tblDocumentReviewLog` (
-  `reviewLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `reviewID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
-  `status` INTEGER NOT NULL default 0,
-  `comment` TEXT NOT NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
-  `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
-) ;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `tblDocumentReviewers`
 -- 
 
@@ -311,6 +296,21 @@ CREATE TABLE `tblDocumentReviewers` (
   `type` INTEGER NOT NULL default '0',
   `required` INTEGER NOT NULL default '0',
   UNIQUE (`documentID`,`version`,`type`,`required`)
+) ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentReviewLog`
+-- 
+
+CREATE TABLE `tblDocumentReviewLog` (
+  `reviewLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `reviewID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
+  `status` INTEGER NOT NULL default 0,
+  `comment` TEXT NOT NULL,
+  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ;
 
 -- --------------------------------------------------------
@@ -480,13 +480,13 @@ CREATE TABLE `tblEvents` (
 -- Table structure for workflow states
 -- 
 
-CREATE TABLE tblWorkflowStates (
+CREATE TABLE `tblWorkflowStates` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` text NOT NULL,
-  `visibility` smallint(5) DEFAULT 0,
+  `visibility` INTEGER DEFAULT 0,
   `maxtime` INTEGER DEFAULT 0,
   `precondfunc` text DEFAULT NULL,
-  `documentstatus` smallint(5) DEFAULT NULL
+  `documentstatus` INTEGER DEFAULT NULL
 ) ;
 
 -- --------------------------------------------------------
@@ -495,7 +495,7 @@ CREATE TABLE tblWorkflowStates (
 -- Table structure for workflow actions
 -- 
 
-CREATE TABLE tblWorkflowActions (
+CREATE TABLE `tblWorkflowActions` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` text NOT NULL
 ) ;
@@ -506,7 +506,7 @@ CREATE TABLE tblWorkflowActions (
 -- Table structure for workflows
 -- 
 
-CREATE TABLE tblWorkflows (
+CREATE TABLE `tblWorkflows` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` text NOT NULL,
   `initstate` INTEGER NOT NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
@@ -518,7 +518,7 @@ CREATE TABLE tblWorkflows (
 -- Table structure for workflow transitions
 -- 
 
-CREATE TABLE tblWorkflowTransitions (
+CREATE TABLE `tblWorkflowTransitions` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `workflow` INTEGER default NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `state` INTEGER default NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
@@ -533,7 +533,7 @@ CREATE TABLE tblWorkflowTransitions (
 -- Table structure for workflow transition users
 -- 
 
-CREATE TABLE tblWorkflowTransitionUsers (
+CREATE TABLE `tblWorkflowTransitionUsers` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `transition` INTEGER default NULL REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
   `userid` INTEGER default NULL REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -545,7 +545,7 @@ CREATE TABLE tblWorkflowTransitionUsers (
 -- Table structure for workflow transition groups
 -- 
 
-CREATE TABLE tblWorkflowTransitionGroups (
+CREATE TABLE `tblWorkflowTransitionGroups` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `transition` INTEGER default NULL REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
   `groupid` INTEGER default NULL REFERENCES `tblGroups` (`id`) ON DELETE CASCADE,
@@ -558,10 +558,10 @@ CREATE TABLE tblWorkflowTransitionGroups (
 -- Table structure for workflow log
 -- 
 
-CREATE TABLE tblWorkflowLog (
+CREATE TABLE `tblWorkflowLog` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `document` INTEGER default NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  `version` smallint default NULL,
+  `version` INTEGER default NULL,
   `workflow` INTEGER default NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `userid` INTEGER default NULL REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `transition` INTEGER default NULL REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
@@ -575,11 +575,11 @@ CREATE TABLE tblWorkflowLog (
 -- Table structure for workflow document relation
 -- 
 
-CREATE TABLE tblWorkflowDocumentContent (
+CREATE TABLE `tblWorkflowDocumentContent` (
   `parentworkflow` INTEGER DEFAULT 0,
   `workflow` INTEGER DEFAULT NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `document` INTEGER DEFAULT NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  `version` smallint DEFAULT NULL,
+  `version` INTEGER DEFAULT NULL,
   `state` INTEGER DEFAULT NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
   `date` datetime NOT NULL default '0000-00-00 00:00:00'
 ) ;
@@ -590,7 +590,7 @@ CREATE TABLE tblWorkflowDocumentContent (
 -- Table structure for mandatory workflows
 -- 
 
-CREATE TABLE tblWorkflowMandatoryWorkflow (
+CREATE TABLE `tblWorkflowMandatoryWorkflow` (
   `userid` INTEGER default NULL REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `workflow` INTEGER default NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   UNIQUE(userid, workflow)
@@ -604,9 +604,9 @@ CREATE TABLE tblWorkflowMandatoryWorkflow (
 
 CREATE TABLE `tblVersion` (
   `date` TEXT NOT NULL default '0000-00-00 00:00:00',
-  `major` smallint,
-  `minor` smallint,
-  `subminor` smallint
+  `major` INTEGER,
+  `minor` INTEGER,
+  `subminor` INTEGER
 ) ;
 
 -- --------------------------------------------------------
@@ -619,4 +619,3 @@ INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Ad
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', strftime('%s','now'), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (DATETIME(), 4, 3, 0);
-INSERT INTO tblCategory VALUES (0, '');
