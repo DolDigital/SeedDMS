@@ -206,6 +206,45 @@ div.popupbox span.closepopupbox {
 	top: 0px;
 }
 
+ul.qq-upload-list {
+	/*
+	background-color: #fff;
+	border-radius: 4px;
+	border: 1px solid #cccccc;
+	*/
+}
+
+ul.qq-upload-list li {
+	display: inline-block;
+	margin: 5px 5px 5px 0;
+	padding: 5px;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+}
+
+ul.qq-upload-list li img {
+	display: block;
+}
+
+ul.qq-upload-list li span {
+	display: block;
+}
+
+.qq-upload-button {
+	display: inline-block;
+}
+
+.qq-upload-drop-area {
+	display: inline-block;
+	width: 200px;
+	height: 22px;
+	padding: 3px;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

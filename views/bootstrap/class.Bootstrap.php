@@ -457,7 +457,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else if ($accessMode >= M_READWRITE) {
 			$menuitems['add_subfolder'] = array('link'=>"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_subfolder');
 			$menuitems['add_document'] = array('link'=>"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_document');
-			if($this->params['enablelargefileupload'])
+			if(0 && $this->params['enablelargefileupload'])
 				$menuitems['add_multiple_documents'] = array('link'=>"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'add_multiple_documents');
 			$menuitems['edit_folder_props'] = array('link'=>"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree(), 'label'=>'edit_folder_props');
 			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
@@ -2369,6 +2369,130 @@ mayscript>
 
 	function show(){ /* {{{ */
 		parent::show();
+	} /* }}} */
+
+	/**
+	 * Output HTML Code for jumploader
+	 *
+	 * @param string $uploadurl URL where post data is send
+	 * @param integer $folderid id of folder where document is saved
+	 * @param integer $maxfiles maximum number of files allowed to upload
+	 * @param array $fields list of post fields
+	 */
+	function printFineUploaderHtml() { /* {{{ */
+?>
+		<script type="text/template" id="qq-template">
+		<div class="qq-uploader-selector qq-uploader" qq-drop-area-text="">
+			<div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+				<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+				</div>
+			<div class="input-append">
+			<div class="qq-upload-drop-area-selector qq-upload-drop-area" _qq-hide-dropzone>Drop files here
+				<span class="qq-upload-drop-area-text-selector"></span>
+			</div>
+			<button class="btn qq-upload-button-selector qq-upload-button"><?php printMLText('browse'); ?>&hellip;</button>
+			</div>
+			<span class="qq-drop-processing-selector qq-drop-processing">
+				<span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+			</span>
+			<ul class="qq-upload-list-selector qq-upload-list unstyled" aria-live="polite" aria-relevant="additions removals">
+				<li>
+					<div class="progress qq-progress-bar-container-selector">
+						<div class="bar qq-progress-bar-selector qq-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+					<span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+					<img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+					<span class="qq-upload-file-selector qq-upload-file"></span>
+					<span class="qq-upload-size-selector qq-upload-size"></span>
+					<button class="btn btn-mini qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+					<span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+				</li>
+			</ul>
+			<dialog class="qq-alert-dialog-selector">
+				<div class="qq-dialog-message-selector"></div>
+				<div class="qq-dialog-buttons">
+					<button class="btn qq-cancel-button-selector">Cancel</button>
+				</div>
+			</dialog>
+
+			<dialog class="qq-confirm-dialog-selector">
+				<div class="qq-dialog-message-selector"></div>
+				<div class="qq-dialog-buttons">
+					<button class="btn qq-cancel-button-selector">Cancel</button>
+					<button class="btn qq-ok-button-selector">Ok</button>
+				</div>
+			</dialog>
+
+			<dialog class="qq-prompt-dialog-selector">
+				<div class="qq-dialog-message-selector"></div>
+				<input type="text">
+				<div class="qq-dialog-buttons">
+					<button class="btn qq-cancel-button-selector">Cancel</button>
+					<button class="btn qq-ok-button-selector">Ok</button>
+				</div>
+			</dialog>
+		</div>
+		</script>
+		<div id="manual-fine-uploader"></div>
+		<input type="hidden" class="do_validate" id="fineuploaderuuids" name="fineuploaderuuids" value="" />
+		<input type="hidden" id="fineuploadernames" name="fineuploadernames" value="" />
+<?php
+	} /* }}} */
+
+	/**
+	 * Output Javascript Code for fine uploader
+	 *
+	 * @param string $uploadurl URL where post data is send
+	 * @param integer $folderid id of folder where document is saved
+	 * @param integer $maxfiles maximum number of files allowed to upload
+	 * @param array $fields list of post fields
+	 */
+	function printFineUploaderJs($uploadurl, $partsize=0, $multiple=true) { /* {{{ */
+?>
+$(document).ready(function() {
+	manualuploader = new qq.FineUploader({
+		debug: true,
+		autoUpload: false,
+		multiple: <?php echo ($multiple ? 'true' : 'false'); ?>,
+		element: $('#manual-fine-uploader')[0],
+		request: {
+			endpoint: '<?php echo $uploadurl; ?>'
+		},
+		chunking: {
+			enabled: true,
+			<?php echo $partsize ? 'partSize: '.(int)$partsize.",\n" : ''; ?>
+			mandatory: true
+		},
+		callbacks: {
+			onComplete: function(id, name, json, xhr) {
+			},
+			onAllComplete: function(succeeded, failed) {
+				var uuids = Array();
+				var names = Array();
+				for (var i = 0; i < succeeded.length; i++) {
+					uuids.push(this.getUuid(succeeded[i]))
+					names.push(this.getName(succeeded[i]))
+				}
+				$('#fineuploaderuuids').val(uuids.join(';'));
+				$('#fineuploadernames').val(names.join(';'));
+				/* Run upload only if all files could be uploaded */
+				if(succeeded.length > 0 && failed.length == 0)
+					document.getElementById('form1').submit();
+			},
+			onError: function(id, name, reason, xhr) {
+				noty({
+					text: reason,
+					type: 'error',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 3500,
+				});
+			}
+		}
+	});
+});
+<?php
 	} /* }}} */
 
 	/**

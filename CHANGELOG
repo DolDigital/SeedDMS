@@ -64,6 +64,12 @@
 - add home folder for users
 
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.33
+--------------------------------------------------------------------------------
+- add support for fine-uploader as a replacement for the old jumploader
+- when importing from filesystem, the imported folder can be deleted afterwards
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.32
 --------------------------------------------------------------------------------
 - fix saving new mimetype for fulltext search, available languages (Closes #308)

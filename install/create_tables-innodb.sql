@@ -551,7 +551,7 @@ CREATE TABLE `tblEvents` (
 -- Table structure for workflow states
 -- 
 
-CREATE TABLE tblWorkflowStates (
+CREATE TABLE `tblWorkflowStates` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `visibility` smallint(5) DEFAULT 0,
@@ -567,7 +567,7 @@ CREATE TABLE tblWorkflowStates (
 -- Table structure for workflow actions
 -- 
 
-CREATE TABLE tblWorkflowActions (
+CREATE TABLE `tblWorkflowActions` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   PRIMARY KEY  (`id`)
@@ -579,7 +579,7 @@ CREATE TABLE tblWorkflowActions (
 -- Table structure for workflows
 -- 
 
-CREATE TABLE tblWorkflows (
+CREATE TABLE `tblWorkflows` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `initstate` int(11) NOT NULL,
@@ -593,7 +593,7 @@ CREATE TABLE tblWorkflows (
 -- Table structure for workflow transitions
 -- 
 
-CREATE TABLE tblWorkflowTransitions (
+CREATE TABLE `tblWorkflowTransitions` (
   `id` int(11) NOT NULL auto_increment,
   `workflow` int(11) default NULL,
   `state` int(11) default NULL,
@@ -613,7 +613,7 @@ CREATE TABLE tblWorkflowTransitions (
 -- Table structure for workflow transition users
 -- 
 
-CREATE TABLE tblWorkflowTransitionUsers (
+CREATE TABLE `tblWorkflowTransitionUsers` (
   `id` int(11) NOT NULL auto_increment,
   `transition` int(11) default NULL,
   `userid` int(11) default NULL,
@@ -628,7 +628,7 @@ CREATE TABLE tblWorkflowTransitionUsers (
 -- Table structure for workflow transition groups
 -- 
 
-CREATE TABLE tblWorkflowTransitionGroups (
+CREATE TABLE `tblWorkflowTransitionGroups` (
   `id` int(11) NOT NULL auto_increment,
   `transition` int(11) default NULL,
   `groupid` int(11) default NULL,
@@ -644,7 +644,7 @@ CREATE TABLE tblWorkflowTransitionGroups (
 -- Table structure for workflow log
 -- 
 
-CREATE TABLE tblWorkflowLog (
+CREATE TABLE `tblWorkflowLog` (
   `id` int(11) NOT NULL auto_increment,
   `document` int(11) default NULL,
   `version` smallint(5) default NULL,
@@ -666,7 +666,7 @@ CREATE TABLE tblWorkflowLog (
 -- Table structure for workflow document relation
 -- 
 
-CREATE TABLE tblWorkflowDocumentContent (
+CREATE TABLE `tblWorkflowDocumentContent` (
   `parentworkflow` int(11) DEFAULT 0,
   `workflow` int(11) DEFAULT NULL,
   `document` int(11) DEFAULT NULL,
@@ -684,7 +684,7 @@ CREATE TABLE tblWorkflowDocumentContent (
 -- Table structure for mandatory workflows
 -- 
 
-CREATE TABLE tblWorkflowMandatoryWorkflow (
+CREATE TABLE `tblWorkflowMandatoryWorkflow` (
   `userid` int(11) default NULL,
   `workflow` int(11) default NULL,
   UNIQUE(userid, workflow),
@@ -715,4 +715,3 @@ INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Ad
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '0000-00-00 00:00:00', 0, 0, 0, NULL);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (NOW(), 5, 0, 0);
-INSERT INTO tblCategory VALUES (0, '');

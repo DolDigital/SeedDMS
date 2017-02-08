@@ -864,6 +864,7 @@ URL: [url]',
 Користувач: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: видалено процес з версії документа «[name]»',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Видалити обрані файли',
 'repaired' => 'виправлено',
 'repairing_objects' => 'Відновлення каталогів і документів',

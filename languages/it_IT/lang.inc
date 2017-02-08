@@ -868,6 +868,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Flusso di lavoro rimosso dalla versione del documento',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Rimuovi i files contrassegnati',
 'repaired' => 'riparato',
 'repairing_objects' => 'Riparazione documenti e cartelle in corso...',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (652), fengjohn (5)
+//    Translators: Admin (654), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '',
@@ -694,7 +694,7 @@ URL: [url]',
 'password_send' => '',
 'password_send_text' => '',
 'password_strength' => '密码强度',
-'password_strength_insuffient' => '',
+'password_strength_insuffient' => '密码强度不够',
 'password_wrong' => '',
 'pending_approvals' => '',
 'pending_reviews' => '',
@@ -740,6 +740,7 @@ URL: [url]',
 'removed_revispr' => '',
 'removed_workflow_email_body' => '',
 'removed_workflow_email_subject' => '',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => '删除选中的文件',
 'repaired' => '',
 'repairing_objects' => '',
@@ -1169,7 +1170,7 @@ URL: [url]',
 'set_expiry' => '设置截止日期',
 'set_owner' => '设置所有者',
 'set_owner_error' => '错误 设置所有者',
-'set_password' => '',
+'set_password' => '设定密码',
 'set_workflow' => '',
 'signed_in_as' => '登录为',
 'sign_in' => '',

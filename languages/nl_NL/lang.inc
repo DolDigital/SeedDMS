@@ -859,6 +859,7 @@ Bovenliggende map: [folder_path]
 Gebruiker: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Workflow verwijderd van document versie',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Geselecteerde bestanden zijn verwijderd',
 'repaired' => 'Gerepareerd',
 'repairing_objects' => 'Documenten en mappen repareren.',

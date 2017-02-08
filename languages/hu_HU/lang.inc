@@ -857,6 +857,7 @@ Szülő mappa: [folder_path]
 Felhasználó: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Dokumentum változatból eltávolított munkafolyamat',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Megjelölt állományok eltávolítása',
 'repaired' => 'javított',
 'repairing_objects' => 'Dokumentumok és mappák helyreállítása',

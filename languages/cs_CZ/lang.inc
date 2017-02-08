@@ -852,6 +852,7 @@ Nadřazená složka: [folder_path]
 Uživatel: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Odstraněn průběh práce z verze dokumentu',
+'removeFolderFromDropFolder' => '',
 'remove_marked_files' => 'Odstranit označené soubory',
 'repaired' => 'opraveno',
 'repairing_objects' => 'Opravuji dokumenty a složky.',

@@ -58,14 +58,30 @@ if ($document->isLocked()) {
 	else $document->setLocked(false);
 }
 
+if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
+	$uuids = explode(';', $_POST['fineuploaderuuids']);
+	$names = explode(';', $_POST['fineuploadernames']);
+	$uuid = $uuids[0];
+	$fullfile = $settings->_stagingDir.'/'.basename($uuid);
+	if(file_exists($fullfile)) {
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mimetype = finfo_file($finfo, $fullfile);
+		$_FILES["userfile"]['tmp_name'] = $fullfile;
+		$_FILES["userfile"]['type'] = $mimetype;
+		$_FILES["userfile"]['name'] = isset($names[0]) ? $names[0] : $uuid;
+		$_FILES["userfile"]['size'] = filesize($fullfile);
+		$_FILES["userfile"]['error'] = 0;
+	}
+}
+
 if(isset($_POST["comment"]))
 	$comment  = $_POST["comment"];
 else
 	$comment = "";
 
 if ($_FILES['userfile']['error'] == 0) {
-	if(!is_uploaded_file($_FILES["userfile"]["tmp_name"]))
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+//	if(!is_uploaded_file($_FILES["userfile"]["tmp_name"]))
+//		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured")."lsajdflk");
 
 	if($_FILES["userfile"]["size"] == 0)
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_zerosize"));
