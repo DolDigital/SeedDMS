@@ -214,6 +214,16 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
+	 * Replace back ticks by '"'
+	 *
+	 * @param string text
+	 * @return string sanitized string
+	 */
+	function rbt($text) { /* {{{ */
+		return str_replace('`', '"');
+	} /* }}} */
+
+	/**
 	 * Execute SQL query and return result
 	 *
 	 * Call this function only with sql query which return data records.
