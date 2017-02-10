@@ -75,13 +75,13 @@ class SeedDMS_Core_Object { /* {{{ */
 
 			switch(get_class($this)) {
 				case $this->_dms->getClassname('document'):
-					$queryStr = "SELECT a.* FROM tblDocumentAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.document = " . $this->_id." ORDER BY b.`name`";
+					$queryStr = "SELECT a.* FROM `tblDocumentAttributes` a LEFT JOIN `tblAttributeDefinitions` b ON a.`attrdef`=b.`id` WHERE a.`document` = " . $this->_id." ORDER BY b.`name`";
 					break;
 				case $this->_dms->getClassname('documentcontent'):
-					$queryStr = "SELECT a.* FROM tblDocumentContentAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.content = " . $this->_id." ORDER BY b.`name`";
+					$queryStr = "SELECT a.* FROM `tblDocumentContentAttributes` a LEFT JOIN `tblAttributeDefinitions` b ON a.`attrdef`=b.`id` WHERE a.`content` = " . $this->_id." ORDER BY b.`name`";
 					break;
 				case $this->_dms->getClassname('folder'):
-					$queryStr = "SELECT a.* FROM tblFolderAttributes a LEFT JOIN tblAttributeDefinitions b ON a.attrdef=b.id WHERE a.folder = " . $this->_id." ORDER BY b.`name`";
+					$queryStr = "SELECT a.* FROM `tblFolderAttributes` a LEFT JOIN `tblAttributeDefinitions` b ON a.`attrdef`=b.`id` WHERE a.`folder` = " . $this->_id." ORDER BY b.`name`";
 					break;
 				default:
 					return false;
@@ -223,13 +223,13 @@ class SeedDMS_Core_Object { /* {{{ */
 		if(!isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {
 				case $this->_dms->getClassname('document'):
-					$queryStr = "INSERT INTO tblDocumentAttributes (document, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
+					$queryStr = "INSERT INTO `tblDocumentAttributes` (`document`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				case $this->_dms->getClassname('documentcontent'):
-					$queryStr = "INSERT INTO tblDocumentContentAttributes (content, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
+					$queryStr = "INSERT INTO `tblDocumentContentAttributes` (`content`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				case $this->_dms->getClassname('folder'):
-					$queryStr = "INSERT INTO tblFolderAttributes (folder, attrdef, value) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
+					$queryStr = "INSERT INTO `tblFolderAttributes` (`folder`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				default:
 					return false;
@@ -262,13 +262,13 @@ class SeedDMS_Core_Object { /* {{{ */
 		if(isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {
 				case $this->_dms->getClassname('document'):
-					$queryStr = "DELETE FROM tblDocumentAttributes WHERE document=".$this->_id." AND attrdef=".$attrdef->getId();
+					$queryStr = "DELETE FROM `tblDocumentAttributes` WHERE `document`=".$this->_id." AND `attrdef`=".$attrdef->getId();
 					break;
 				case $this->_dms->getClassname('documentcontent'):
-					$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content=".$this->_id." AND attrdef=".$attrdef->getId();
+					$queryStr = "DELETE FROM `tblDocumentContentAttributes` WHERE `content`=".$this->_id." AND `attrdef`=".$attrdef->getId();
 					break;
 				case $this->_dms->getClassname('folder'):
-					$queryStr = "DELETE FROM tblFolderAttributes WHERE folder=".$this->_id." AND attrdef=".$attrdef->getId();
+					$queryStr = "DELETE FROM `tblFolderAttributes` WHERE `folder`=".$this->_id." AND `attrdef`=".$attrdef->getId();
 					break;
 				default:
 					return false;

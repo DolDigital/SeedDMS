@@ -71,7 +71,7 @@ class SeedDMS_Core_KeywordCategory {
 	function setName($newName) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblKeywordCategories SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblKeywordCategories` SET `name` = ".$db->qstr($newName)." WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -82,7 +82,7 @@ class SeedDMS_Core_KeywordCategory {
 	function setOwner($user) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblKeywordCategories SET owner = " . $user->getID() . " WHERE id " . $this->_id;
+		$queryStr = "UPDATE `tblKeywordCategories` SET `owner` = " . $user->getID() . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -94,28 +94,28 @@ class SeedDMS_Core_KeywordCategory {
 	function getKeywordLists() {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblKeywords WHERE category = " . $this->_id . " order by `keywords`";
+		$queryStr = "SELECT * FROM `tblKeywords` WHERE `category` = " . $this->_id . " order by `keywords`";
 		return $db->getResultArray($queryStr);
 	}
 
 	function editKeywordList($listID, $keywords) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblKeywords SET keywords = ".$db->qstr($keywords)." WHERE id = $listID";
+		$queryStr = "UPDATE `tblKeywords` SET `keywords` = ".$db->qstr($keywords)." WHERE `id` = $listID";
 		return $db->getResult($queryStr);
 	}
 
 	function addKeywordList($keywords) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "INSERT INTO tblKeywords (category, keywords) VALUES (" . $this->_id . ", ".$db->qstr($keywords).")";
+		$queryStr = "INSERT INTO `tblKeywords` (`category`, `keywords`) VALUES (" . $this->_id . ", ".$db->qstr($keywords).")";
 		return $db->getResult($queryStr);
 	}
 
 	function removeKeywordList($listID) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblKeywords WHERE id = $listID";
+		$queryStr = "DELETE FROM `tblKeywords` WHERE `id` = $listID";
 		return $db->getResult($queryStr);
 	}
 
@@ -123,13 +123,13 @@ class SeedDMS_Core_KeywordCategory {
 		$db = $this->_dms->getDB();
 
 		$db->startTransaction();
-		$queryStr = "DELETE FROM tblKeywords WHERE category = " . $this->_id;
+		$queryStr = "DELETE FROM `tblKeywords` WHERE `category` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblKeywordCategories WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblKeywordCategories` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;

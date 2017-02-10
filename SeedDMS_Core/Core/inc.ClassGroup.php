@@ -75,7 +75,7 @@ class SeedDMS_Core_Group { /* {{{ */
 			$queryStr = "SELECT * FROM `tblGroups` WHERE `name` = ".$db->qstr($id);
 			break;
 		default:
-			$queryStr = "SELECT * FROM `tblGroups` WHERE id = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblGroups` WHERE `id` = " . (int) $id;
 		}
 
 		$resArr = $db->getResultArray($queryStr);
@@ -96,7 +96,7 @@ class SeedDMS_Core_Group { /* {{{ */
 
 		switch($orderby) {
 		default:
-			$queryStr = "SELECT * FROM tblGroups ORDER BY name";
+			$queryStr = "SELECT * FROM `tblGroups` ORDER BY `name`";
 		}
 		$resArr = $db->getResultArray($queryStr);
 
@@ -124,7 +124,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblGroups SET name = ".$db->qstr($newName)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblGroups` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -137,7 +137,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblGroups SET comment = ".$db->qstr($newComment)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblGroups` SET `comment` = ".$db->qstr($newComment)." WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -190,7 +190,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	function addUser($user,$asManager=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "INSERT INTO tblGroupMembers (groupID, userID, manager) VALUES (".$this->_id.", ".$user->getID(). ", " . ($asManager?"1":"0") ." )";
+		$queryStr = "INSERT INTO `tblGroupMembers` (`groupID`, `userID`, `manager`) VALUES (".$this->_id.", ".$user->getID(). ", " . ($asManager?"1":"0") ." )";
 		$res = $db->getResult($queryStr);
 
 		if (!$res) return false;
@@ -202,7 +202,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	function removeUser($user) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblGroupMembers WHERE groupID = ".$this->_id." AND userID = ".$user->getID();
+		$queryStr = "DELETE FROM `tblGroupMembers` WHERE `groupID` = ".$this->_id." AND `userID` = ".$user->getID();
 		$res = $db->getResult($queryStr);
 
 		if (!$res) return false;
@@ -227,8 +227,8 @@ class SeedDMS_Core_Group { /* {{{ */
 		}
 
 		$db = $this->_dms->getDB();
-		if ($asManager) $queryStr = "SELECT * FROM tblGroupMembers WHERE groupID = " . $this->_id . " AND userID = " . $user->getID() . " AND manager = 1";
-		else $queryStr = "SELECT * FROM tblGroupMembers WHERE groupID = " . $this->_id . " AND userID = " . $user->getID();
+		if ($asManager) $queryStr = "SELECT * FROM `tblGroupMembers` WHERE `groupID` = " . $this->_id . " AND `userID` = " . $user->getID() . " AND `manager` = 1";
+		else $queryStr = "SELECT * FROM `tblGroupMembers` WHERE `groupID` = " . $this->_id . " AND `userID` = " . $user->getID();
 
 		$resArr = $db->getResultArray($queryStr);
 
@@ -249,8 +249,8 @@ class SeedDMS_Core_Group { /* {{{ */
 
 		if (!$this->isMember($user)) return false;
 
-		if ($this->isMember($user,true)) $queryStr = "UPDATE tblGroupMembers SET manager = 0 WHERE groupID = ".$this->_id." AND userID = ".$user->getID();
-		else $queryStr = "UPDATE tblGroupMembers SET manager = 1 WHERE groupID = ".$this->_id." AND userID = ".$user->getID();
+		if ($this->isMember($user,true)) $queryStr = "UPDATE `tblGroupMembers` SET `manager` = 0 WHERE `groupID` = ".$this->_id." AND `userID` = ".$user->getID();
+		else $queryStr = "UPDATE `tblGroupMembers` SET `manager` = 1 WHERE `groupID` = ".$this->_id." AND `userID` = ".$user->getID();
 
 		if (!$db->getResult($queryStr)) return false;
 		return true;
@@ -270,37 +270,37 @@ class SeedDMS_Core_Group { /* {{{ */
 
 		$db->startTransaction();
 
-		$queryStr = "DELETE FROM tblGroupMembers WHERE groupID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblGroupMembers` WHERE `groupID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblACLs WHERE groupID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `groupID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblNotify WHERE groupID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `groupID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE reviewerGroupID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryReviewers` WHERE `reviewerGroupID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE approverGroupID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryApprovers` WHERE `approverGroupID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblWorkflowTransitionGroups WHERE groupid = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowTransitionGroups` WHERE `groupid` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblGroups WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblGroups` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -410,11 +410,11 @@ class SeedDMS_Core_Group { /* {{{ */
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = 'select distinct d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow where d.document is not null and a.state=d.state and c.groupid='.$this->_id;
+		$queryStr = 'select distinct d.*, c.`groupid` from `tblWorkflowTransitions` a left join `tblWorkflows` b on a.`workflow`=b.`id` left join `tblWorkflowTransitionGroups` c on a.`id`=c.`transition` left join `tblWorkflowDocumentContent` d on b.`id`=d.`workflow` where d.`document` is not null and a.`state`=d.`state` and c.`groupid`='.$this->_id;
 		if($documentID) {
-			$queryStr .= ' AND d.document='.(int) $documentID;
+			$queryStr .= ' AND d.`document`='.(int) $documentID;
 			if($version)
-				$queryStr .= ' AND d.version='.(int) $version;
+				$queryStr .= ' AND d.`version`='.(int) $version;
 		}
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)

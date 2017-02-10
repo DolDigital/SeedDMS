@@ -170,15 +170,15 @@ class SeedDMS_Core_User { /* {{{ */
 
 		switch($by) {
 		case 'name':
-			$queryStr = "SELECT * FROM tblUsers WHERE login = ".$db->qstr($id);
+			$queryStr = "SELECT * FROM `tblUsers` WHERE `login` = ".$db->qstr($id);
 			if($email)
-				$queryStr .= " AND email=".$db->qstr($email);
+				$queryStr .= " AND `email`=".$db->qstr($email);
 			break;
 		case 'email':
-			$queryStr = "SELECT * FROM tblUsers WHERE email = ".$db->qstr($id);
+			$queryStr = "SELECT * FROM `tblUsers` WHERE `email` = ".$db->qstr($id);
 			break;
 		default:
-			$queryStr = "SELECT * FROM tblUsers WHERE id = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblUsers` WHERE `id` = " . (int) $id;
 		}
 		$resArr = $db->getResultArray($queryStr);
 
@@ -196,9 +196,9 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $dms->getDB();
 
 		if($orderby == 'fullname')
-			$queryStr = "SELECT * FROM tblUsers ORDER BY fullname";
+			$queryStr = "SELECT * FROM `tblUsers` ORDER BY `fullname`";
 		else
-			$queryStr = "SELECT * FROM tblUsers ORDER BY login";
+			$queryStr = "SELECT * FROM `tblUsers` ORDER BY `login`";
 		$resArr = $db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -226,7 +226,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setLogin($newLogin) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET login =".$db->qstr($newLogin)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `login` =".$db->qstr($newLogin)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -240,7 +240,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setFullName($newFullName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET fullname = ".$db->qstr($newFullName)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `fullname` = ".$db->qstr($newFullName)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -254,7 +254,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setPwd($newPwd) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET pwd =".$db->qstr($newPwd)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `pwd` =".$db->qstr($newPwd)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -270,7 +270,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 		if(trim($newPwdExpiration) == '')
 			$newPwdExpiration = '0000-00-00 00:00:00';
-		$queryStr = "UPDATE tblUsers SET pwdExpiration =".$db->qstr($newPwdExpiration)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `pwdExpiration` =".$db->qstr($newPwdExpiration)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -284,7 +284,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setEmail($newEmail) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET email =".$db->qstr($newEmail)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `email` =".$db->qstr($newEmail)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -298,7 +298,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setLanguage($newLanguage) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET language =".$db->qstr($newLanguage)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `language` =".$db->qstr($newLanguage)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -312,7 +312,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setTheme($newTheme) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET theme =".$db->qstr($newTheme)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `theme` =".$db->qstr($newTheme)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -326,7 +326,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET comment =".$db->qstr($newComment)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `comment` =".$db->qstr($newComment)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -340,7 +340,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setRole($newrole) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET role = " . $newrole . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `role` = " . $newrole . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -353,7 +353,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setAdmin($isAdmin) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET role = " . SeedDMS_Core_User::role_admin . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `role` = " . SeedDMS_Core_User::role_admin . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -366,7 +366,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setGuest($isGuest) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET role = " . SeedDMS_Core_User::role_guest . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `role` = " . SeedDMS_Core_User::role_guest . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -380,7 +380,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$isHidden = ($isHidden) ? "1" : "0";
-		$queryStr = "UPDATE tblUsers SET hidden = " . $isHidden . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `hidden` = " . $isHidden . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -394,7 +394,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$isDisabled = ($isDisabled) ? "1" : "0";
-		$queryStr = "UPDATE tblUsers SET disabled = " . $isDisabled . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `disabled` = " . $isDisabled . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -406,7 +406,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$this->_loginFailures++;
-		$queryStr = "UPDATE tblUsers SET loginfailures = " . $this->_loginFailures . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `loginfailures` = " . $this->_loginFailures . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -417,7 +417,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$this->_loginFailures = 0;
-		$queryStr = "UPDATE tblUsers SET loginfailures = " . $this->_loginFailures . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `loginfailures` = " . $this->_loginFailures . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -435,7 +435,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getUsedDiskSpace() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT SUM(filesize) sum FROM tblDocumentContent a LEFT JOIN tblDocuments b ON a.document=b.id WHERE b.owner = " . $this->_id;
+		$queryStr = "SELECT SUM(`fileSize`) sum FROM `tblDocumentContent` a LEFT JOIN `tblDocuments` b ON a.`document`=b.`id` WHERE b.`owner` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -449,7 +449,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$quota = intval($quota);
-		$queryStr = "UPDATE tblUsers SET quota = " . $quota . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `quota` = " . $quota . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -462,7 +462,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setHomeFolder($homefolder) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET homefolder = " . ($homefolder ? (int) $homefolder : NULL) . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `homefolder` = " . ($homefolder ? (int) $homefolder : NULL) . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -496,10 +496,10 @@ class SeedDMS_Core_User { /* {{{ */
 		$db->startTransaction();
 
 		// delete private keyword lists
-		$queryStr = "SELECT tblKeywords.id FROM tblKeywords, tblKeywordCategories WHERE tblKeywords.category = tblKeywordCategories.id AND tblKeywordCategories.owner = " . $this->_id;
+		$queryStr = "SELECT `tblKeywords`.`id` FROM `tblKeywords`, `tblKeywordCategories` WHERE `tblKeywords`.`category` = `tblKeywordCategories`.`id` AND `tblKeywordCategories`.`owner` = " . $this->_id;
 		$resultArr = $db->getResultArray($queryStr);
 		if (count($resultArr) > 0) {
-			$queryStr = "DELETE FROM tblKeywords WHERE ";
+			$queryStr = "DELETE FROM `tblKeywords` WHERE ";
 			for ($i = 0; $i < count($resultArr); $i++) {
 				$queryStr .= "id = " . $resultArr[$i]["id"];
 				if ($i + 1 < count($resultArr))
@@ -511,147 +511,147 @@ class SeedDMS_Core_User { /* {{{ */
 			}
 		}
 
-		$queryStr = "DELETE FROM tblKeywordCategories WHERE owner = " . $this->_id;
+		$queryStr = "DELETE FROM `tblKeywordCategories` WHERE `owner` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		//Benachrichtigungen entfernen
-		$queryStr = "DELETE FROM tblNotify WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		/* Assign documents of the removed user to the given user */
-		$queryStr = "UPDATE tblFolders SET owner = " . $assignTo . " WHERE owner = " . $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "UPDATE tblDocuments SET owner = " . $assignTo . " WHERE owner = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "UPDATE tblDocumentContent SET createdBy = " . $assignTo . " WHERE createdBy = " . $this->_id;
+		$queryStr = "UPDATE `tblDocumentContent` SET `createdBy` = " . $assignTo . " WHERE `createdBy` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Remove private links on documents ...
-		$queryStr = "DELETE FROM tblDocumentLinks WHERE userID = " . $this->_id . " AND public = 0";
+		$queryStr = "DELETE FROM `tblDocumentLinks` WHERE `userID` = " . $this->_id . " AND `public` = 0";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// ... but keep public links
-		$queryStr = "UPDATE tblDocumentLinks SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
+		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// set administrator for deleted user's attachments
-		$queryStr = "UPDATE tblDocumentFiles SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
+		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// unlock documents locked by the user
-		$queryStr = "DELETE FROM tblDocumentLocks WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentLocks` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete user from all groups
-		$queryStr = "DELETE FROM tblGroupMembers WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblGroupMembers` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// User aus allen ACLs streichen
-		$queryStr = "DELETE FROM tblACLs WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete image of user
-		$queryStr = "DELETE FROM tblUserImages WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblUserImages` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete entries in password history
-		$queryStr = "DELETE FROM tblUserPasswordHistory WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblUserPasswordHistory` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete entries in password request
-		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblUserPasswordRequest` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// mandatory review/approve
-		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE reviewerUserID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryReviewers` WHERE `reviewerUserID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE approverUserID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryApprovers` WHERE `approverUserID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblWorkflowTransitionUsers WHERE userid = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowTransitionUsers` WHERE `userid` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// set administrator for deleted user's events
-		$queryStr = "UPDATE tblEvents SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
+		$queryStr = "UPDATE `tblEvents` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete user itself
-		$queryStr = "DELETE FROM tblUsers WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblUsers` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -775,7 +775,7 @@ class SeedDMS_Core_User { /* {{{ */
 		if (!isset($this->_hasImage)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT COUNT(*) AS num FROM tblUserImages WHERE userID = " . $this->_id;
+			$queryStr = "SELECT COUNT(*) AS num FROM `tblUserImages` WHERE `userID` = " . $this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if ($resArr === false)
 				return false;
@@ -795,7 +795,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getImage() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblUserImages WHERE userID = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblUserImages` WHERE `userID` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
@@ -814,9 +814,9 @@ class SeedDMS_Core_User { /* {{{ */
 		fclose($fp);
 
 		if ($this->hasImage())
-			$queryStr = "UPDATE tblUserImages SET image = '".base64_encode($content)."', mimeType = ".$db->qstr($mimeType)." WHERE userID = " . $this->_id;
+			$queryStr = "UPDATE `tblUserImages` SET `image` = '".base64_encode($content)."', `mimeType` = ".$db->qstr($mimeType)." WHERE `userID` = " . $this->_id;
 		else
-			$queryStr = "INSERT INTO tblUserImages (userID, image, mimeType) VALUES (" . $this->_id . ", '".base64_encode($content)."', ".$db->qstr($mimeType).")";
+			$queryStr = "INSERT INTO `tblUserImages` (`userID`, `image`, `mimeType`) VALUES (" . $this->_id . ", '".base64_encode($content)."', ".$db->qstr($mimeType).")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1059,11 +1059,11 @@ class SeedDMS_Core_User { /* {{{ */
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = 'SELECT DISTINCT d.*, c.userid FROM tblWorkflowTransitions a LEFT JOIN tblWorkflows b ON a.workflow=b.id LEFT JOIN tblWorkflowTransitionUsers c ON a.id=c.transition LEFT JOIN tblWorkflowDocumentContent d ON b.id=d.workflow WHERE d.document IS NOT NULL AND a.state=d.state AND c.userid='.$this->_id;
+		$queryStr = 'SELECT DISTINCT d.*, c.`userid` FROM `tblWorkflowTransitions` a LEFT JOIN `tblWorkflows` b ON a.`workflow`=b.`id` LEFT JOIN `tblWorkflowTransitionUsers` c ON a.`id`=c.`transition` LEFT JOIN `tblWorkflowDocumentContent` d ON b.`id`=d.`workflow` WHERE d.`document` IS NOT NULL AND a.`state`=d.`state` AND c.`userid`='.$this->_id;
 		if($documentID) {
-			$queryStr .= ' AND d.document='.(int) $documentID;
+			$queryStr .= ' AND d.`document`='.(int) $documentID;
 			if($version)
-				$queryStr .= ' AND d.version='.(int) $version;
+				$queryStr .= ' AND d.`version`='.(int) $version;
 		}
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
@@ -1075,11 +1075,11 @@ class SeedDMS_Core_User { /* {{{ */
 			}
 		}
 
-		$queryStr = 'select distinct d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow left join tblGroupMembers e on c.groupid = e.groupID where d.document is not null and a.state=d.state and e.userID='.$this->_id;
+		$queryStr = 'select distinct d.*, c.`groupid` from `tblWorkflowTransitions` a left join `tblWorkflows` b on a.`workflow`=b.`id` left join `tblWorkflowTransitionGroups` c on a.`id`=c.`transition` left join `tblWorkflowDocumentContent` d on b.`id`=d.`workflow` left join `tblGroupMembers` e on c.`groupid` = e.`groupID` where d.`document` is not null and a.`state`=d.`state` and e.`userID`='.$this->_id;
 		if($documentID) {
-			$queryStr .= ' AND d.document='.(int) $documentID;
+			$queryStr .= ' AND d.`document`='.(int) $documentID;
 			if($version)
-				$queryStr .= ' AND d.version='.(int) $version;
+				$queryStr .= ' AND d.`version`='.(int) $version;
 		}
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
@@ -1106,7 +1106,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getMandatoryReviewers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblMandatoryReviewers WHERE userID = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 
 		return $resArr;
@@ -1122,7 +1122,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getMandatoryApprovers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 
 		return $resArr;
@@ -1140,7 +1140,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getMandatoryWorkflow() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
 
@@ -1163,7 +1163,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getMandatoryWorkflows() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
 
@@ -1190,21 +1190,21 @@ class SeedDMS_Core_User { /* {{{ */
 
 		if ($isgroup){
 
-			$queryStr = "SELECT * FROM tblMandatoryReviewers WHERE userID = " . $this->_id . " AND reviewerGroupID = " . $id;
+			$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id . " AND `reviewerGroupID` = " . $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return true;
 
-			$queryStr = "INSERT INTO tblMandatoryReviewers (userID, reviewerGroupID) VALUES (" . $this->_id . ", " . $id .")";
+			$queryStr = "INSERT INTO `tblMandatoryReviewers` (`userID`, `reviewerGroupID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 
 		}else{
 
-			$queryStr = "SELECT * FROM tblMandatoryReviewers WHERE userID = " . $this->_id . " AND reviewerUserID = " . $id;
+			$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id . " AND reviewerUserID = " . $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return true;
 
-			$queryStr = "INSERT INTO tblMandatoryReviewers (userID, reviewerUserID) VALUES (" . $this->_id . ", " . $id .")";
+			$queryStr = "INSERT INTO `tblMandatoryReviewers` (`userID`, `reviewerUserID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 		}
@@ -1224,21 +1224,21 @@ class SeedDMS_Core_User { /* {{{ */
 
 		if ($isgroup){
 
-			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverGroupID = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverGroupID` = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return;
 
-			$queryStr = "INSERT INTO tblMandatoryApprovers (userID, approverGroupID) VALUES (" . $this->_id . ", " . $id .")";
+			$queryStr = "INSERT INTO `tblMandatoryApprovers` (`userID`, `approverGroupID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 
 		}else{
 
-			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverUserID = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND approverUserID = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return;
 
-			$queryStr = "INSERT INTO tblMandatoryApprovers (userID, approverUserID) VALUES (" . $this->_id . ", " . $id .")";
+			$queryStr = "INSERT INTO `tblMandatoryApprovers` (`userID`, `approverUserID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 		}
@@ -1254,11 +1254,11 @@ class SeedDMS_Core_User { /* {{{ */
 	function setMandatoryWorkflow($workflow) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id . " AND workflow = " . (int) $workflow->getID();
+		$queryStr = "SELECT * FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id . " AND `workflow` = " . (int) $workflow->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (count($resArr)!=0) return;
 
-		$queryStr = "INSERT INTO tblWorkflowMandatoryWorkflow (userid, workflow) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
+		$queryStr = "INSERT INTO `tblWorkflowMandatoryWorkflow` (`userid`, `workflow`) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
 		$resArr = $db->getResult($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
 	} /* }}} */
@@ -1274,14 +1274,14 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$db->startTransaction();
-		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		foreach($workflows as $workflow) {
-			$queryStr = "INSERT INTO tblWorkflowMandatoryWorkflow (userid, workflow) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
+			$queryStr = "INSERT INTO `tblWorkflowMandatoryWorkflow` (`userid`, `workflow`) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) {
 				$db->rollbackTransaction();
@@ -1300,7 +1300,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 */
 	function delMandatoryReviewers() { /* {{{ */
 		$db = $this->_dms->getDB();
-		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 		return true;
 	} /* }}} */
@@ -1313,7 +1313,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function delMandatoryApprovers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 		return true;
 	} /* }}} */
@@ -1325,7 +1325,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 */
 	function delMandatoryWorkflow() { /* {{{ */
 		$db = $this->_dms->getDB();
-		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 		return true;
 	} /* }}} */

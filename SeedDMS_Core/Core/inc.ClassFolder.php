@@ -126,7 +126,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
-		$queryStr = "SELECT * FROM tblFolders WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblFolders` WHERE `id` = " . (int) $id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -155,7 +155,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	public function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders SET name = " . $db->qstr($newName) . " WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `name` = " . $db->qstr($newName) . " WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -169,7 +169,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	public function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders SET comment = " . $db->qstr($newComment) . " WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `comment` = " . $db->qstr($newComment) . " WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -203,7 +203,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 				return false;
 		}
 
-		$queryStr = "UPDATE tblFolders SET date = " . (int) $date . " WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `date` = " . (int) $date . " WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_date = $date;
@@ -276,7 +276,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (strlen($pathPrefix)>1) {
 			$pathPrefix .= ":";
 		}
-		$queryStr = "UPDATE tblFolders SET parent = ".$newParent->getID().", folderList='".$pathPrefix."' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `parent` = ".$newParent->getID().", `folderList`='".$pathPrefix."' WHERE `id` = ". $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -342,7 +342,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function setOwner($newOwner) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders set owner = " . $newOwner->getID() . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblFolders` set `owner` = " . $newOwner->getID() . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -373,7 +373,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function setDefaultAccess($mode, $noclean=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders set defaultAccess = " . (int) $mode . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblFolders` set `defaultAccess` = " . (int) $mode . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -406,7 +406,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$inheritAccess = ($inheritAccess) ? "1" : "0";
 
-		$queryStr = "UPDATE tblFolders SET inheritAccess = " . (int) $inheritAccess . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `inheritAccess` = " . (int) $inheritAccess . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -423,7 +423,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function setSequence($seq) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders SET sequence = " . $seq . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblFolders` SET `sequence` = " . $seq . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -443,7 +443,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (isset($this->_subFolders)) {
 			return count($this->subFolders);
 		}
-		$queryStr = "SELECT count(*) as c FROM tblFolders WHERE parent = " . $this->_id;
+		$queryStr = "SELECT count(*) as c FROM `tblFolders` WHERE `parent` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -466,11 +466,11 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_subFolders)) {
-			$queryStr = "SELECT * FROM tblFolders WHERE parent = " . $this->_id;
+			$queryStr = "SELECT * FROM `tblFolders` WHERE `parent` = " . $this->_id;
 
-			if ($orderby=="n") $queryStr .= " ORDER BY name";
-			elseif ($orderby=="s") $queryStr .= " ORDER BY sequence";
-			elseif ($orderby=="d") $queryStr .= " ORDER BY date";
+			if ($orderby=="n") $queryStr .= " ORDER BY `name`";
+			elseif ($orderby=="s") $queryStr .= " ORDER BY `sequence`";
+			elseif ($orderby=="d") $queryStr .= " ORDER BY `date`";
 			if($dir == 'desc')
 				$queryStr .= " DESC";
 
@@ -514,7 +514,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db->startTransaction();
 
 		//inheritAccess = true, defaultAccess = M_READ
-		$queryStr = "INSERT INTO tblFolders (name, parent, folderList, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
+		$queryStr = "INSERT INTO `tblFolders` (`name`, `parent`, `folderList`, `comment`, `date`, `owner`, `inheritAccess`, `defaultAccess`, `sequence`) ".
 					"VALUES (".$db->qstr($name).", ".$this->_id.", ".$db->qstr($pathPrefix).", ".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$owner->getID().", 1, ".M_READ.", ". $sequence.")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
@@ -618,7 +618,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (isset($this->_documents)) {
 			return count($this->documents);
 		}
-		$queryStr = "SELECT count(*) as c FROM tblDocuments WHERE folder = " . $this->_id;
+		$queryStr = "SELECT count(*) as c FROM `tblDocuments` WHERE `folder` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -637,7 +637,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (isset($this->_documents)) {
 			return count($this->documents);
 		}
-		$queryStr = "SELECT count(*) as c FROM tblDocuments WHERE folder = " . $this->_id . " AND `name` = ".$db->qstr($name);
+		$queryStr = "SELECT count(*) as c FROM `tblDocuments` WHERE `folder` = " . $this->_id . " AND `name` = ".$db->qstr($name);
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -660,10 +660,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_documents)) {
-			$queryStr = "SELECT * FROM tblDocuments WHERE folder = " . $this->_id;
-			if ($orderby=="n") $queryStr .= " ORDER BY name";
-			elseif($orderby=="s") $queryStr .= " ORDER BY sequence";
-			elseif($orderby=="d") $queryStr .= " ORDER BY date";
+			$queryStr = "SELECT * FROM `tblDocuments` WHERE `folder` = " . $this->_id;
+			if ($orderby=="n") $queryStr .= " ORDER BY `name`";
+			elseif($orderby=="s") $queryStr .= " ORDER BY `sequence`";
+			elseif($orderby=="d") $queryStr .= " ORDER BY `date`";
 			if($dir == 'desc')
 				$queryStr .= " DESC";
 
@@ -715,7 +715,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$pathPrefix .= ":";
 		}
 
-		$queryStr = "SELECT id FROM tblFolders WHERE folderList like '".$pathPrefix. "%'";
+		$queryStr = "SELECT id FROM `tblFolders` WHERE `folderList` like '".$pathPrefix. "%'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -745,7 +745,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$documents = array();
 		if($folderids) {
-			$queryStr = "SELECT id FROM tblDocuments WHERE folder in (".implode(',', $folderids). ")";
+			$queryStr = "SELECT id FROM `tblDocuments` WHERE `folder` in (".implode(',', $folderids). ")";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -818,7 +818,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$db->startTransaction();
 
-		$queryStr = "INSERT INTO tblDocuments (name, comment, date, expires, owner, folder, folderList, inheritAccess, defaultAccess, locked, keywords, sequence) VALUES ".
+		$queryStr = "INSERT INTO `tblDocuments` (`name`, `comment`, `date`, `expires`, `owner`, `folder`, `folderList`, `inheritAccess`, `defaultAccess`, `locked`, `keywords`, `sequence`) VALUES ".
 					"(".$db->qstr($name).", ".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".(int) $expires.", ".$owner->getID().", ".$this->_id.",".$db->qstr($pathPrefix).", 1, ".M_READ.", -1, ".$db->qstr($keywords).", " . $sequence . ")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
@@ -888,30 +888,30 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$db->startTransaction();
 		// unset homefolder as it will no longer exist
-		$queryStr = "UPDATE tblUsers SET homefolder=NULL WHERE homefolder =  " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `homefolder`=NULL WHERE `homefolder` =  " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Remove database entries
-		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
+		$queryStr = "DELETE FROM `tblFolders` WHERE `id` =  " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblFolderAttributes WHERE folder =  " . $this->_id;
+		$queryStr = "DELETE FROM `tblFolderAttributes` WHERE `folder` =  " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblACLs WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `target` = ". $this->_id. " AND `targetType` = " . T_FOLDER;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblNotify WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `target` = ". $this->_id. " AND `targetType` = " . T_FOLDER;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1002,8 +1002,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			if ($mode!=M_ANY) {
 				$modeStr = " AND mode".$op.(int)$mode;
 			}
-			$queryStr = "SELECT * FROM tblACLs WHERE targetType = ".T_FOLDER.
-				" AND target = " . $this->_id .	$modeStr . " ORDER BY targetType";
+			$queryStr = "SELECT * FROM `tblACLs` WHERE `targetType` = ".T_FOLDER.
+				" AND `target` = " . $this->_id .	$modeStr . " ORDER BY `targetType`";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -1029,7 +1029,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function clearAccessList($noclean=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblACLs WHERE targetType = " . T_FOLDER . " AND target = " . $this->_id;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `targetType` = " . T_FOLDER . " AND `target` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1054,9 +1054,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function addAccess($mode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "INSERT INTO tblACLs (target, targetType, ".$userOrGroup.", mode) VALUES 
+		$queryStr = "INSERT INTO `tblACLs` (`target`, `targetType`, ".$userOrGroup.", `mode`) VALUES 
 					(".$this->_id.", ".T_FOLDER.", " . (int) $userOrGroupID . ", " .(int) $mode. ")";
 		if (!$db->getResult($queryStr))
 			return false;
@@ -1084,9 +1084,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function changeAccess($newMode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "UPDATE tblACLs SET mode = " . (int) $newMode . " WHERE targetType = ".T_FOLDER." AND target = " . $this->_id . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
+		$queryStr = "UPDATE `tblACLs` SET `mode` = " . (int) $newMode . " WHERE `targetType` = ".T_FOLDER." AND `target` = " . $this->_id . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1103,9 +1103,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function removeAccess($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "DELETE FROM tblACLs WHERE targetType = ".T_FOLDER." AND target = ".$this->_id." AND ".$userOrGroup." = " . (int) $userOrGroupID;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `targetType` = ".T_FOLDER." AND `target` = ".$this->_id." AND ".$userOrGroup." = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1235,7 +1235,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr ="SELECT * FROM tblNotify WHERE targetType = " . T_FOLDER . " AND target = " . $this->_id;
+			$queryStr ="SELECT * FROM `tblNotify` WHERE `targetType` = " . T_FOLDER . " AND `target` = " . $this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && $resArr == false)
 				return false;
@@ -1297,7 +1297,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function addNotify($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
 		/* Verify that user / group exists */
 		$obj = ($isUser ? $this->_dms->getUser($userOrGroupID) : $this->_dms->getGroup($userOrGroupID));
@@ -1392,7 +1392,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return -3;
 		}
 
-		$queryStr = "INSERT INTO tblNotify (target, targetType, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_FOLDER . ", " .  (int) $userOrGroupID . ")";
+		$queryStr = "INSERT INTO `tblNotify` (`target`, `targetType`, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_FOLDER . ", " .  (int) $userOrGroupID . ")";
 		if (!$db->getResult($queryStr))
 			return -4;
 
@@ -1466,7 +1466,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return -3;
 		}
 
-		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_FOLDER . " AND " . $userOrGroup . " = " .  (int) $userOrGroupID;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `target` = " . $this->_id . " AND `targetType` = " . T_FOLDER . " AND " . $userOrGroup . " = " .  (int) $userOrGroupID;
 		/* If type is given then delete only those notifications */
 		if($type)
 			$queryStr .= " AND `type` = ".(int) $type;
@@ -1627,7 +1627,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function getFolderList() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT folderList FROM tblFolders where id = ".$this->_id;
+		$queryStr = "SELECT `folderList` FROM `tblFolders` where `id` = ".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -1656,7 +1656,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$pathPrefix .= ":";
 		}
 		if($curfolderlist != $pathPrefix) {
-			$queryStr = "UPDATE tblFolders SET folderList='".$pathPrefix."' WHERE id = ". $this->_id;
+			$queryStr = "UPDATE `tblFolders` SET `folderList`='".$pathPrefix."' WHERE `id` = ". $this->_id;
 			$res = $db->getResult($queryStr);
 			if (!$res)
 				return false;

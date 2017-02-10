@@ -170,7 +170,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
-		$queryStr = "SELECT * FROM tblDocuments WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblDocuments` WHERE `id` = " . (int) $id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -179,7 +179,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$resArr = $resArr[0];
 
 		// New Locking mechanism uses a separate table to track the lock.
-		$queryStr = "SELECT * FROM tblDocumentLocks WHERE document = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblDocumentLocks` WHERE `document` = " . (int) $id;
 		$lockArr = $db->getResultArray($queryStr);
 		if ((is_bool($lockArr) && $lockArr==false) || (count($lockArr)==0)) {
 			// Could not find a lock on the selected document.
@@ -227,7 +227,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `name` = ".$db->qstr($newName)." WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -250,7 +250,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET comment = ".$db->qstr($newComment)." WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `comment` = ".$db->qstr($newComment)." WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -263,7 +263,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setKeywords($newKeywords) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET keywords = ".$db->qstr($newKeywords)." WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `keywords` = ".$db->qstr($newKeywords)." WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -280,7 +280,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if(!$this->_categories) {
-			$queryStr = "SELECT * FROM tblCategory where id in (select categoryID from tblDocumentCategory where documentID = ".$this->_id.")";
+			$queryStr = "SELECT * FROM `tblCategory` where `id` in (select `categoryID` from `tblDocumentCategory` where `documentID` = ".$this->_id.")";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -305,14 +305,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$db->startTransaction();
-		$queryStr = "DELETE from tblDocumentCategory WHERE documentID = ". $this->_id;
+		$queryStr = "DELETE from `tblDocumentCategory` WHERE `documentID` = ". $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		foreach($newCategories as $cat) {
-			$queryStr = "INSERT INTO tblDocumentCategory (categoryID, documentID) VALUES (". $cat->getId() .", ". $this->_id .")";
+			$queryStr = "INSERT INTO `tblDocumentCategory` (`categoryID`, `documentID`) VALUES (". $cat->getId() .", ". $this->_id .")";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -350,7 +350,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 		}
 
-		$queryStr = "UPDATE tblDocuments SET date = " . (int) $date . " WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `date` = " . (int) $date . " WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_date = $date;
@@ -380,7 +380,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setFolder($newFolder) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET folder = " . $newFolder->getID() . " WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `folder` = " . $newFolder->getID() . " WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_folderID = $newFolder->getID();
@@ -395,7 +395,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (strlen($flist)>1) {
 			$flist .= ":";
 		}
-		$queryStr = "UPDATE tblDocuments SET folderList = '" . $flist . "' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `folderList` = '" . $flist . "' WHERE `id` = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -422,7 +422,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setOwner($newOwner) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments set owner = " . $newOwner->getID() . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` set `owner` = " . $newOwner->getID() . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -452,7 +452,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setDefaultAccess($mode, $noclean="false") { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments set defaultAccess = " . (int) $mode . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` set `defaultAccess` = " . (int) $mode . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -483,7 +483,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setInheritAccess($inheritAccess, $noclean=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET inheritAccess = " . ($inheritAccess ? "1" : "0") . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `inheritAccess` = " . ($inheritAccess ? "1" : "0") . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -534,7 +534,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return true;
 		}
 
-		$queryStr = "UPDATE tblDocuments SET expires = " . (int) $expires . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `expires` = " . (int) $expires . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -599,10 +599,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$lockUserID = -1;
 		if (is_bool($falseOrUser) && !$falseOrUser) {
-			$queryStr = "DELETE FROM tblDocumentLocks WHERE document = ".$this->_id;
+			$queryStr = "DELETE FROM `tblDocumentLocks` WHERE `document` = ".$this->_id;
 		}
 		else if (is_object($falseOrUser)) {
-			$queryStr = "INSERT INTO tblDocumentLocks (document, userID) VALUES (".$this->_id.", ".$falseOrUser->getID().")";
+			$queryStr = "INSERT INTO `tblDocumentLocks` (`document`, `userID`) VALUES (".$this->_id.", ".$falseOrUser->getID().")";
 			$lockUserID = $falseOrUser->getID();
 		}
 		else {
@@ -635,7 +635,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function setSequence($seq) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocuments SET sequence = " . $seq . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblDocuments` SET `sequence` = " . $seq . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -652,7 +652,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function clearAccessList($noclean=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblACLs WHERE targetType = " . T_DOCUMENT . " AND target = " . $this->_id;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `targetType` = " . T_DOCUMENT . " AND `target` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -699,8 +699,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			if ($mode!=M_ANY) {
 				$modeStr = " AND mode".$op.(int)$mode;
 			}
-			$queryStr = "SELECT * FROM tblACLs WHERE targetType = ".T_DOCUMENT.
-				" AND target = " . $this->_id .	$modeStr . " ORDER BY targetType";
+			$queryStr = "SELECT * FROM `tblACLs` WHERE `targetType` = ".T_DOCUMENT.
+				" AND target = " . $this->_id .	$modeStr . " ORDER BY `targetType`";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -730,9 +730,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function addAccess($mode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "INSERT INTO tblACLs (target, targetType, ".$userOrGroup.", mode) VALUES
+		$queryStr = "INSERT INTO `tblACLs` (`target`, `targetType`, ".$userOrGroup.", `mode`) VALUES
 					(".$this->_id.", ".T_DOCUMENT.", " . (int) $userOrGroupID . ", " .(int) $mode. ")";
 		if (!$db->getResult($queryStr))
 			return false;
@@ -760,9 +760,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function changeAccess($newMode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "UPDATE tblACLs SET mode = " . (int) $newMode . " WHERE targetType = ".T_DOCUMENT." AND target = " . $this->_id . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
+		$queryStr = "UPDATE `tblACLs` SET `mode` = " . (int) $newMode . " WHERE `targetType` = ".T_DOCUMENT." AND `target` = " . $this->_id . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -787,9 +787,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function removeAccess($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
-		$queryStr = "DELETE FROM tblACLs WHERE targetType = ".T_DOCUMENT." AND target = ".$this->_id." AND ".$userOrGroup." = " . (int) $userOrGroupID;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `targetType` = ".T_DOCUMENT." AND `target` = ".$this->_id." AND ".$userOrGroup." = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -927,7 +927,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr ="SELECT * FROM tblNotify WHERE targetType = " . T_DOCUMENT . " AND target = " . $this->_id;
+			$queryStr ="SELECT * FROM `tblNotify` WHERE `targetType` = " . T_DOCUMENT . " AND `target` = " . $this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && $resArr == false)
 				return false;
@@ -1078,7 +1078,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return -3;
 		}
 
-		$queryStr = "INSERT INTO tblNotify (target, targetType, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_DOCUMENT . ", " . (int) $userOrGroupID . ")";
+		$queryStr = "INSERT INTO `tblNotify` (`target`, `targetType`, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_DOCUMENT . ", " . (int) $userOrGroupID . ")";
 		if (!$db->getResult($queryStr))
 			return -4;
 
@@ -1150,7 +1150,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return -3;
 		}
 
-		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `target` = " . $this->_id . " AND `targetType` = " . T_DOCUMENT . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
 		/* If type is given then delete only those notifications */
 		if($type)
 			$queryStr .= " AND `type` = ".(int) $type;
@@ -1193,7 +1193,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		 * innodb is used. That's why the version is now determined here.
 		 */
 		if ((int)$version<1) {
-			$queryStr = "SELECT MAX(version) as m from tblDocumentContent where document = ".$this->_id;
+			$queryStr = "SELECT MAX(`version`) as m from `tblDocumentContent` where `document` = ".$this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$res)
 				return false;
@@ -1205,7 +1205,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$checksum = SeedDMS_Core_File::checksum($tmpFile);
 
 		$db->startTransaction();
-		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType, fileSize, checksum) VALUES ".
+		$queryStr = "INSERT INTO `tblDocumentContent` (`document`, `version`, `comment`, `date`, `createdBy`, `dir`, `orgFileName`, `fileType`, `mimeType`, `fileSize`, `checksum`) VALUES ".
 						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$filesize.", ".$db->qstr($checksum).")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
@@ -1359,7 +1359,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* If $version < 1 than replace the content of the latest version.
 		 */
 		if ((int) $version<1) {
-			$queryStr = "SELECT MAX(version) as m from tblDocumentContent where document = ".$this->_id;
+			$queryStr = "SELECT MAX(`version`) as m from `tblDocumentContent` where `document` = ".$this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$res)
 				return false;
@@ -1389,7 +1389,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$checksum = SeedDMS_Core_File::checksum($tmpFile);
 
 		$db->startTransaction();
-		$queryStr = "UPDATE tblDocumentContent set date=".$db->getCurrentTimestamp().", fileSize=".$filesize.", checksum=".$db->qstr($checksum)." WHERE id=".$content->getID();
+		$queryStr = "UPDATE `tblDocumentContent` set `date`=".$db->getCurrentTimestamp().", `fileSize`=".$filesize.", `checksum`=".$db->qstr($checksum)." WHERE `id`=".$content->getID();
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1419,7 +1419,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_content)) {
-			$queryStr = "SELECT * FROM tblDocumentContent WHERE document = ".$this->_id." ORDER BY version";
+			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version`";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$res)
 				return false;
@@ -1451,7 +1451,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$db = $this->_dms->getDB();
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE document = ".$this->_id." AND version = " . (int) $version;
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." AND `version` = " . (int) $version;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$res)
 			return false;
@@ -1466,7 +1466,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function getLatestContent() { /* {{{ */
 		if (!isset($this->_latestContent)) {
 			$db = $this->_dms->getDB();
-			$queryStr = "SELECT * FROM tblDocumentContent WHERE document = ".$this->_id." ORDER BY version DESC LIMIT 0,1";
+			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC LIMIT 0,1";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -1492,13 +1492,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$status = $version->getStatus();
 		$stID = $status["statusID"];
 
-		$queryStr = "DELETE FROM tblDocumentContent WHERE `document` = " . $this->getID() .	" AND `version` = " . $version->_version;
+		$queryStr = "DELETE FROM `tblDocumentContent` WHERE `document` = " . $this->getID() .	" AND `version` = " . $version->_version;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content = " . $version->getId();
+		$queryStr = "DELETE FROM `tblDocumentContentAttributes` WHERE `content` = " . $version->getId();
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1520,7 +1520,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$stList = "";
 		foreach ($status as $st) {
 			$stList .= (strlen($stList)==0 ? "" : ", "). "'".$st["reviewID"]."'";
-			$queryStr = "SELECT * FROM tblDocumentReviewLog WHERE reviewID = " . $st['reviewID'];
+			$queryStr = "SELECT * FROM `tblDocumentReviewLog` WHERE `reviewID` = " . $st['reviewID'];
 			$resArr = $db->getResultArray($queryStr);
 			if ((is_bool($resArr) && !$resArr)) {
 				$db->rollbackTransaction();
@@ -1549,7 +1549,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$stList = "";
 		foreach ($status as $st) {
 			$stList .= (strlen($stList)==0 ? "" : ", "). "'".$st["approveID"]."'";
-			$queryStr = "SELECT * FROM tblDocumentApproveLog WHERE approveID = " . $st['approveID'];
+			$queryStr = "SELECT * FROM `tblDocumentApproveLog` WHERE `approveID` = " . $st['approveID'];
 			$resArr = $db->getResultArray($queryStr);
 			if ((is_bool($resArr) && !$resArr)) {
 				$db->rollbackTransaction();
@@ -1603,7 +1603,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!is_numeric($linkID)) return false;
 
-		$queryStr = "SELECT * FROM tblDocumentLinks WHERE document = " . $this->_id ." AND id = " . (int) $linkID;
+		$queryStr = "SELECT * FROM `tblDocumentLinks` WHERE `document` = " . $this->_id ." AND `id` = " . (int) $linkID;
 		$resArr = $db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || count($resArr)==0)
 			return false;
@@ -1631,12 +1631,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_documentLinks)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT * FROM tblDocumentLinks WHERE document = " . $this->_id;
+			$queryStr = "SELECT * FROM `tblDocumentLinks` WHERE `document` = " . $this->_id;
 			$tmp = array();
 			if($publiconly)
-				$tmp[] = "public=1";
+				$tmp[] = "`public`=1";
 			if($user)
-				$tmp[] = "userID=".$user->getID();
+				$tmp[] = "`userID`=".$user->getID();
 			if($tmp) {
 				$queryStr .= " AND (".implode(" OR ", $tmp).")";
 			}
@@ -1675,12 +1675,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function getReverseDocumentLinks($publiconly=false, $user=null) { /* {{{ */
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT * FROM tblDocumentLinks WHERE target = " . $this->_id;
+			$queryStr = "SELECT * FROM `tblDocumentLinks` WHERE `target` = " . $this->_id;
 			$tmp = array();
 			if($publiconly)
-				$tmp[] = "public=1";
+				$tmp[] = "`public`=1";
 			if($user)
-				$tmp[] = "userID=".$user->getID();
+				$tmp[] = "`userID`=".$user->getID();
 			if($tmp) {
 				$queryStr .= " AND (".implode(" OR ", $tmp).")";
 			}
@@ -1703,7 +1703,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$public = ($public) ? "1" : "0";
 
-		$queryStr = "INSERT INTO tblDocumentLinks(document, target, userID, public) VALUES (".$this->_id.", ".(int)$targetID.", ".(int)$userID.", ".(int)$public.")";
+		$queryStr = "INSERT INTO `tblDocumentLinks` (`document`, `target`, `userID`, `public`) VALUES (".$this->_id.", ".(int)$targetID.", ".(int)$userID.", ".(int)$public.")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1716,7 +1716,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!is_numeric($linkID)) return false;
 
-		$queryStr = "DELETE FROM tblDocumentLinks WHERE document = " . $this->_id ." AND id = " . (int) $linkID;
+		$queryStr = "DELETE FROM `tblDocumentLinks` WHERE `document` = " . $this->_id ." AND `id` = " . (int) $linkID;
 		if (!$db->getResult($queryStr)) return false;
 		unset ($this->_documentLinks);
 		return true;
@@ -1727,7 +1727,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!is_numeric($ID)) return false;
 
-		$queryStr = "SELECT * FROM tblDocumentFiles WHERE document = " . $this->_id ." AND id = " . (int) $ID;
+		$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id ." AND `id` = " . (int) $ID;
 		$resArr = $db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || count($resArr)==0) return false;
 
@@ -1739,7 +1739,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_documentFiles)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT * FROM tblDocumentFiles WHERE document = " . $this->_id." ORDER BY `date` DESC";
+			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id." ORDER BY `date` DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 
@@ -1757,7 +1757,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$dir = $this->getDir();
 
-		$queryStr = "INSERT INTO tblDocumentFiles (comment, date, dir, document, fileType, mimeType, orgFileName, userID, name) VALUES ".
+		$queryStr = "INSERT INTO `tblDocumentFiles` (`comment`, `date`, `dir`, `document`, `fileType`, `mimeType`, `orgFileName`, `userID`, `name`) VALUES ".
 			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
 		if (!$db->getResult($queryStr)) return false;
 
@@ -1793,7 +1793,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$name=$file->getName();
 		$comment=$file->getcomment();
 
-		$queryStr = "DELETE FROM tblDocumentFiles WHERE document = " . $this->getID() . " AND id = " . (int) $ID;
+		$queryStr = "DELETE FROM `tblDocumentFiles` WHERE `document` = " . $this->getID() . " AND `id` = " . (int) $ID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1861,44 +1861,44 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 			}
 
-		$queryStr = "DELETE FROM tblDocuments WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocuments` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblDocumentAttributes WHERE document = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentAttributes` WHERE `document` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblACLs WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT;
+		$queryStr = "DELETE FROM `tblACLs` WHERE `target` = " . $this->_id . " AND `targetType` = " . T_DOCUMENT;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblDocumentLinks WHERE document = " . $this->_id . " OR target = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentLinks` WHERE `document` = " . $this->_id . " OR `target` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblDocumentLocks WHERE document = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentLocks` WHERE `document` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblDocumentFiles WHERE document = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentFiles` WHERE `document` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$queryStr = "DELETE FROM tblDocumentCategory WHERE documentID = " . $this->_id;
+		$queryStr = "DELETE FROM `tblDocumentCategory` WHERE `documentID` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete the notification list.
-		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT;
+		$queryStr = "DELETE FROM `tblNotify` WHERE `target` = " . $this->_id . " AND `targetType` = " . T_DOCUMENT;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -2066,7 +2066,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function getFolderList() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT folderList FROM tblDocuments where id = ".$this->_id;
+		$queryStr = "SELECT `folderList` FROM `tblDocuments` where id = ".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -2096,7 +2096,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$pathPrefix .= ":";
 		}
 		if($curfolderlist != $pathPrefix) {
-			$queryStr = "UPDATE tblDocuments SET folderList='".$pathPrefix."' WHERE id = ". $this->_id;
+			$queryStr = "UPDATE `tblDocuments` SET `folderList`='".$pathPrefix."' WHERE `id` = ". $this->_id;
 			$res = $db->getResult($queryStr);
 			if (!$res)
 				return false;
@@ -2115,7 +2115,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function getUsedDiskSpace() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT SUM(filesize) sum FROM tblDocumentContent WHERE document = " . $this->_id;
+		$queryStr = "SELECT SUM(`fileSize`) sum FROM `tblDocumentContent` WHERE `document` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -2148,7 +2148,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 		 */
 
-		$queryStr = "SELECT * FROM tblDocumentFiles WHERE document = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -2317,7 +2317,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 		}
 
-		$queryStr = "UPDATE tblDocumentContent SET date = ".(int) $date." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		$queryStr = "UPDATE `tblDocumentContent` SET `date` = ".(int) $date." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -2339,7 +2339,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$db = $this->_document->_dms->getDB();
-		$queryStr = "UPDATE tblDocumentContent SET fileSize = ".$filesize." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
+		$queryStr = "UPDATE `tblDocumentContent` SET `fileSize` = ".$filesize." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_fileSize = $filesize;
@@ -2360,7 +2360,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$db = $this->_document->_dms->getDB();
-		$queryStr = "UPDATE tblDocumentContent SET checksum = ".$db->qstr($checksum)." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
+		$queryStr = "UPDATE `tblDocumentContent` SET `checksum` = ".$db->qstr($checksum)." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_checksum = $checksum;
@@ -2371,7 +2371,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
-		$queryStr = "UPDATE tblDocumentContent SET comment = ".$db->qstr($newComment)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		$queryStr = "UPDATE `tblDocumentContent` SET `comment` = ".$db->qstr($newComment)." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -2801,7 +2801,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (1 || !isset($this->_approvalStatus)) {
 			/* First get a list of all approvals for this document content */
 			$queryStr=
-				"SELECT approveID FROM tblDocumentApprovers WHERE `version`='".$this->_version
+				"SELECT approveID FROM `tblDocumentApprovers` WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
@@ -3504,7 +3504,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		if($this->_workflow) {
-			$queryStr = "UPDATE tblWorkflowDocumentContent set state=". $state->getID() ." WHERE workflow=". intval($this->_workflow->getID()). " AND document=". intval($this->_document->getID()) ." AND version=". intval($this->_version) ."";
+			$queryStr = "UPDATE `tblWorkflowDocumentContent` set `state`=". $state->getID() ." WHERE `workflow`=". intval($this->_workflow->getID()). " AND `document`=". intval($this->_document->getID()) ." AND version=". intval($this->_version) ."";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
@@ -3531,9 +3531,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!$this->_workflowState) {
 			$queryStr=
-				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflowStates b ON a.state = b.id WHERE workflow=". intval($this->_workflow->getID())
-				." AND a.version='".$this->_version
-				."' AND a.document = '". $this->_document->getID() ."' ";
+				"SELECT b.* FROM `tblWorkflowDocumentContent` a LEFT JOIN `tblWorkflowStates` b ON a.`state` = b.id WHERE `workflow`=". intval($this->_workflow->getID())
+				." AND a.`version`='".$this->_version
+				."' AND a.`document` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
@@ -3555,7 +3555,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($workflow && is_object($workflow)) {
 			$db->startTransaction();
 			$initstate = $workflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state, date) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", ".$db->getCurrentDatetime().")";
+			$queryStr = "INSERT INTO `tblWorkflowDocumentContent` (`workflow`, `document`, `version`, `state`, `date`) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", ".$db->getCurrentDatetime().")";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -3586,9 +3586,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!isset($this->_workflow)) {
 			$queryStr=
-				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflows b ON a.workflow = b.id WHERE a.`version`='".$this->_version
+				"SELECT b.* FROM `tblWorkflowDocumentContent` a LEFT JOIN `tblWorkflows` b ON a.`workflow` = b.id WHERE a.`version`='".$this->_version
 				."' AND a.`document` = '". $this->_document->getID() ."' "
-				." ORDER BY date DESC LIMIT 1";
+				." ORDER BY `date` DESC LIMIT 1";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
@@ -3657,7 +3657,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$db->startTransaction();
-		$queryStr = "DELETE from tblWorkflowLog WHERE `document` = ". $this->_document->getID() ." AND `version` = ".$this->_version." AND `workflow` = ".$this->_workflow->getID();
+		$queryStr = "DELETE from `tblWorkflowLog` WHERE `document` = ". $this->_document->getID() ." AND `version` = ".$this->_version." AND `workflow` = ".$this->_workflow->getID();
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -3700,7 +3700,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if(SeedDMS_Core_DMS::checkIfEqual($this->_workflow->getInitState(), $this->getWorkflowState()) || $unlink == true) {
 			$db->startTransaction();
 			$queryStr=
-				"DELETE FROM tblWorkflowDocumentContent WHERE "
+				"DELETE FROM `tblWorkflowDocumentContent` WHERE "
 				."`version`='".$this->_version."' "
 				." AND `document` = '". $this->_document->getID() ."' "
 				." AND `workflow` = '". $this->_workflow->getID() ."' ";
@@ -3710,7 +3710,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			}
 			if(!$unlink) {
 				$queryStr=
-					"DELETE FROM tblWorkflowLog WHERE "
+					"DELETE FROM `tblWorkflowLog` WHERE "
 					."`version`='".$this->_version."' "
 					." AND `document` = '". $this->_document->getID() ."' "
 					." AND `workflow` = '". $this->_workflow->getID() ."' ";
@@ -3742,7 +3742,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$queryStr=
-			"SELECT * FROM tblWorkflowDocumentContent WHERE "
+			"SELECT * FROM `tblWorkflowDocumentContent` WHERE "
 			."`version`='".$this->_version."' "
 			." AND `document` = '". $this->_document->getID() ."' "
 			." AND `workflow` = '". $this->_workflow->getID() ."' ";
@@ -3777,7 +3777,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if($subworkflow) {
 			$initstate = $subworkflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state, date) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", ".$db->getCurrentDatetime().")";
+			$queryStr = "INSERT INTO `tblWorkflowDocumentContent` (`parentworkflow`, `workflow`, `document`, `version`, `state`, `date`) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", ".$db->getCurrentDatetime().")";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
@@ -3809,7 +3809,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$db->startTransaction();
 
 			$queryStr=
-				"SELECT * FROM tblWorkflowDocumentContent WHERE workflow=". intval($this->_workflow->getID())
+				"SELECT * FROM `tblWorkflowDocumentContent` WHERE `workflow`=". intval($this->_workflow->getID())
 				. " AND `version`='".$this->_version
 				."' AND `document` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
@@ -3868,7 +3868,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		/* Check if the user has already triggered the transition */
 		$queryStr=
-			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID(). " AND userid = ".$user->getID();
+			"SELECT * FROM `tblWorkflowLog` WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID(). " AND userid = ".$user->getID();
 		$queryStr .= " AND `transition` = ".$transition->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -4017,7 +4017,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$state = $this->_workflowState;
-		$queryStr = "INSERT INTO tblWorkflowLog (document, version, workflow, userid, transition, date, comment) VALUES (".$this->_document->getID().", ".$this->_version.", " . (int) $this->_workflow->getID() . ", " .(int) $user->getID(). ", ".(int) $transition->getID().", ".$db->getCurrentDatetime().", ".$db->qstr($comment).")";
+		$queryStr = "INSERT INTO `tblWorkflowLog` (`document`, `version`, `workflow`, `userid`, `transition`, `date`, `comment`) VALUES (".$this->_document->getID().", ".$this->_version.", " . (int) $this->_workflow->getID() . ", " .(int) $user->getID(). ", ".(int) $transition->getID().", ".$db->getCurrentDatetime().", ".$db->qstr($comment).")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -4148,7 +4148,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 */
 		$queryStr=
-			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."'"; // AND `workflow` = ". $this->_workflow->getID();
+			"SELECT * FROM `tblWorkflowLog` WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."'"; // AND `workflow` = ". $this->_workflow->getID();
 		if($transition)
 			$queryStr .= " AND `transition` = ".$transition->getID();
 		$queryStr .= " ORDER BY `date`";
@@ -4183,7 +4183,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$queryStr=
-			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
+			"SELECT * FROM `tblWorkflowLog` WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
 		$queryStr .= " ORDER BY `id` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)

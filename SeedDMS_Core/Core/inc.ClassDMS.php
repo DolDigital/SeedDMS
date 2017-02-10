@@ -411,7 +411,7 @@ class SeedDMS_Core_DMS {
 		$tbllist = explode(',',strtolower(join(',',$tbllist)));
 		if(!array_search('tblversion', $tbllist))
 			return false;
-		$queryStr = "SELECT * FROM tblVersion order by major,minor,subminor limit 1";
+		$queryStr = "SELECT * FROM `tblVersion` order by `major`,`minor`,`subminor` limit 1";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -433,7 +433,7 @@ class SeedDMS_Core_DMS {
 		$tbllist = explode(',',strtolower(join(',',$tbllist)));
 		if(!array_search('tblversion', $tbllist))
 			return true;
-		$queryStr = "SELECT * FROM tblVersion order by major,minor,subminor limit 1";
+		$queryStr = "SELECT * FROM `tblVersion` order by `major`,`minor`,`subminor` limit 1";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -601,7 +601,7 @@ class SeedDMS_Core_DMS {
 	function getDocumentContent($id) { /* {{{ */
 		if (!is_numeric($id)) return false;
 
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE id = ".(int) $id;
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `id` = ".(int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -1030,7 +1030,7 @@ class SeedDMS_Core_DMS {
 
 			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
 				// Count the number of rows that the search will produce.
-				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.`id` ".$searchQuery.") a");
 				$totalDocs = 0;
 				if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 					$totalDocs = (integer)$resArr[0]["num"];
@@ -1124,7 +1124,7 @@ class SeedDMS_Core_DMS {
 	function getFolderByName($name, $folder=null) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblFolders WHERE name = " . $this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblFolders` WHERE `name` = " . $this->db->qstr($name);
 		if($folder)
 			$queryStr .= " AND `parent` = ". $folder->getID();
 		$queryStr .= " LIMIT 1";
@@ -1150,7 +1150,7 @@ class SeedDMS_Core_DMS {
 	 * @return array list of errors
 	 */
 	function checkFolders() { /* {{{ */
-		$queryStr = "SELECT * FROM tblFolders";
+		$queryStr = "SELECT * FROM `tblFolders`";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr === false)
@@ -1184,7 +1184,7 @@ class SeedDMS_Core_DMS {
 	 * @return array list of errors
 	 */
 	function checkDocuments() { /* {{{ */
-		$queryStr = "SELECT * FROM tblFolders";
+		$queryStr = "SELECT * FROM `tblFolders`";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr === false)
@@ -1195,7 +1195,7 @@ class SeedDMS_Core_DMS {
 			$fcache[$rec['id']] = array('name'=>$rec['name'], 'parent'=>$rec['parent'], 'folderList'=>$rec['folderList']);
 		}
 
-		$queryStr = "SELECT * FROM tblDocuments";
+		$queryStr = "SELECT * FROM `tblDocuments`";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr === false)
@@ -1297,7 +1297,7 @@ class SeedDMS_Core_DMS {
 			$role = '0';
 		if(trim($pwdexpiration) == '')
 			$pwdexpiration = '0000-00-00 00:00:00';
-		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration, quota, homefolder) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
+		$queryStr = "INSERT INTO `tblUsers` (`login`, `pwd`, `fullName`, `email`, `language`, `theme`, `comment`, `role`, `hidden`, `disabled`, `pwdExpiration`, `quota`, `homefolder`) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1360,7 +1360,7 @@ class SeedDMS_Core_DMS {
 			return false;
 		}
 
-		$queryStr = "INSERT INTO tblGroups (name, comment) VALUES (".$this->db->qstr($name).", ".$this->db->qstr($comment).")";
+		$queryStr = "INSERT INTO `tblGroups` (`name`, `comment`) VALUES (".$this->db->qstr($name).", ".$this->db->qstr($comment).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1381,7 +1381,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblKeywordCategories WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblKeywordCategories` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1393,7 +1393,7 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	function getKeywordCategoryByName($name, $userID) { /* {{{ */
-		$queryStr = "SELECT * FROM tblKeywordCategories WHERE name = " . $this->db->qstr($name) . " AND owner = " . (int) $userID;
+		$queryStr = "SELECT * FROM `tblKeywordCategories` WHERE `name` = " . $this->db->qstr($name) . " AND `owner` = " . (int) $userID;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1405,9 +1405,9 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	function getAllKeywordCategories($userIDs = array()) { /* {{{ */
-		$queryStr = "SELECT * FROM tblKeywordCategories";
+		$queryStr = "SELECT * FROM `tblKeywordCategories`";
 		if ($userIDs)
-			$queryStr .= " WHERE owner in (".implode(',', $userIDs).")";
+			$queryStr .= " WHERE `owner` IN (".implode(',', $userIDs).")";
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -1427,9 +1427,9 @@ class SeedDMS_Core_DMS {
 	 * This function should be replaced by getAllKeywordCategories()
 	 */
 	function getAllUserKeywordCategories($userID) { /* {{{ */
-		$queryStr = "SELECT * FROM tblKeywordCategories";
+		$queryStr = "SELECT * FROM `tblKeywordCategories`";
 		if ($userID != -1)
-			$queryStr .= " WHERE owner = " . (int) $userID;
+			$queryStr .= " WHERE `owner` = " . (int) $userID;
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -1449,7 +1449,7 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getKeywordCategoryByName($name, $userID))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblKeywordCategories (owner, name) VALUES (".(int) $userID.", ".$this->db->qstr($name).")";
+		$queryStr = "INSERT INTO `tblKeywordCategories` (`owner`, `name`) VALUES (".(int) $userID.", ".$this->db->qstr($name).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1470,7 +1470,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblCategory WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblCategory` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1482,7 +1482,7 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	function getDocumentCategories() { /* {{{ */
-		$queryStr = "SELECT * FROM tblCategory order by name";
+		$queryStr = "SELECT * FROM `tblCategory` order by `name`";
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -1509,7 +1509,7 @@ class SeedDMS_Core_DMS {
 	function getDocumentCategoryByName($name) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblCategory where name=".$this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblCategory` where `name`=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
@@ -1525,7 +1525,7 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getDocumentCategoryByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblCategory (name) VALUES (".$this->db->qstr($name).")";
+		$queryStr = "INSERT INTO `tblCategory` (`name`) VALUES (".$this->db->qstr($name).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1577,7 +1577,7 @@ class SeedDMS_Core_DMS {
 	 */
 	function createPasswordRequest($user) { /* {{{ */
 		$hash = md5(uniqid(time()));
-		$queryStr = "INSERT INTO tblUserPasswordRequest (userID, hash, `date`) VALUES (" . $user->getId() . ", " . $this->db->qstr($hash) .", ".$this->db->getCurrentDatetime().")";
+		$queryStr = "INSERT INTO `tblUserPasswordRequest` (`userID`, `hash`, `date`) VALUES (" . $user->getId() . ", " . $this->db->qstr($hash) .", ".$this->db->getCurrentDatetime().")";
 		$resArr = $this->db->getResult($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
 		return $hash;
@@ -1593,7 +1593,7 @@ class SeedDMS_Core_DMS {
 	 */
 	function checkPasswordRequest($hash) { /* {{{ */
 		/* Get the password request from the database */
-		$queryStr = "SELECT * FROM tblUserPasswordRequest where hash=".$this->db->qstr($hash);
+		$queryStr = "SELECT * FROM `tblUserPasswordRequest` where `hash`=".$this->db->qstr($hash);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -1613,7 +1613,7 @@ class SeedDMS_Core_DMS {
 	 */
 	function deletePasswordRequest($hash) { /* {{{ */
 		/* Delete the request, so nobody can use it a second time */
-		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE hash=".$this->db->qstr($hash);
+		$queryStr = "DELETE FROM `tblUserPasswordRequest` WHERE `hash`=".$this->db->qstr($hash);
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return true;
@@ -1632,7 +1632,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblAttributeDefinitions` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1656,7 +1656,7 @@ class SeedDMS_Core_DMS {
 	function getAttributeDefinitionByName($name) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE name = " . $this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblAttributeDefinitions` WHERE `name` = " . $this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1676,14 +1676,14 @@ class SeedDMS_Core_DMS {
 	 * @return array of instances of {@link SeedDMS_Core_AttributeDefinition} or false
 	 */
 	function getAllAttributeDefinitions($objtype=0) { /* {{{ */
-		$queryStr = "SELECT * FROM tblAttributeDefinitions";
+		$queryStr = "SELECT * FROM `tblAttributeDefinitions`";
 		if($objtype) {
 			if(is_array($objtype))
-				$queryStr .= ' WHERE objtype in (\''.implode("','", $objtype).'\')';
+				$queryStr .= ' WHERE `objtype` in (\''.implode("','", $objtype).'\')';
 			else
-				$queryStr .= ' WHERE objtype='.intval($objtype);
+				$queryStr .= ' WHERE `objtype`='.intval($objtype);
 		}
-		$queryStr .= ' ORDER BY name';
+		$queryStr .= ' ORDER BY `name`';
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -1723,7 +1723,7 @@ class SeedDMS_Core_DMS {
 		} else {
 			$valueset = '';
 		}
-		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset, regex) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
+		$queryStr = "INSERT INTO `tblAttributeDefinitions` (`name`, `objtype`, `type`, `multiple`, `minvalues`, `maxvalues`, `valueset`, `regex`) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1737,13 +1737,13 @@ class SeedDMS_Core_DMS {
 	 * @return array of instances of {@link SeedDMS_Core_Workflow} or false
 	 */
 	function getAllWorkflows() { /* {{{ */
-		$queryStr = "SELECT * FROM tblWorkflows ORDER BY name";
+		$queryStr = "SELECT * FROM `tblWorkflows` ORDER BY `name`";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowStates ORDER BY name";
+		$queryStr = "SELECT * FROM `tblWorkflowStates` ORDER BY `name`";
 		$ressArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($ressArr) && $ressArr == false)
@@ -1770,7 +1770,7 @@ class SeedDMS_Core_DMS {
 	 * @return object of instances of {@link SeedDMS_Core_Workflow} or false
 	 */
 	function getWorkflow($id) { /* {{{ */
-		$queryStr = "SELECT * FROM tblWorkflows WHERE id=".intval($id);
+		$queryStr = "SELECT * FROM `tblWorkflows` WHERE `id`=".intval($id);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -1796,7 +1796,7 @@ class SeedDMS_Core_DMS {
 	function getWorkflowByName($name) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblWorkflows WHERE name=".$this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblWorkflows` WHERE `name`=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -1824,7 +1824,7 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getWorkflowByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblWorkflows (name, initstate) VALUES (".$db->qstr($name).", ".$initstate->getID().")";
+		$queryStr = "INSERT INTO `tblWorkflows` (`name`, `initstate`) VALUES (".$db->qstr($name).", ".$initstate->getID().")";
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1844,7 +1844,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowStates WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblWorkflowStates` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1866,7 +1866,7 @@ class SeedDMS_Core_DMS {
 	function getWorkflowStateByName($name) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowStates WHERE name=".$this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblWorkflowStates` WHERE `name`=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -1889,7 +1889,7 @@ class SeedDMS_Core_DMS {
 	 * @return array of instances of {@link SeedDMS_Core_Workflow_State} or false
 	 */
 	function getAllWorkflowStates() { /* {{{ */
-		$queryStr = "SELECT * FROM tblWorkflowStates ORDER BY name";
+		$queryStr = "SELECT * FROM `tblWorkflowStates` ORDER BY `name`";
 		$ressArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($ressArr) && $ressArr == false)
@@ -1917,7 +1917,7 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getWorkflowStateByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblWorkflowStates (name, documentstatus) VALUES (".$db->qstr($name).", ".(int) $docstatus.")";
+		$queryStr = "INSERT INTO `tblWorkflowStates` (`name`, `documentstatus`) VALUES (".$db->qstr($name).", ".(int) $docstatus.")";
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1937,7 +1937,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowActions WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblWorkflowActions` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1961,7 +1961,7 @@ class SeedDMS_Core_DMS {
 	function getWorkflowActionByName($name) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowActions WHERE name = " . $this->db->qstr($name);
+		$queryStr = "SELECT * FROM `tblWorkflowActions` WHERE `name` = " . $this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1980,7 +1980,7 @@ class SeedDMS_Core_DMS {
 	 * @return array list of instances of {@link SeedDMS_Core_Workflow_Action} or false
 	 */
 	function getAllWorkflowActions() { /* {{{ */
-		$queryStr = "SELECT * FROM tblWorkflowActions";
+		$queryStr = "SELECT * FROM `tblWorkflowActions`";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -2007,7 +2007,7 @@ class SeedDMS_Core_DMS {
 		if (is_object($this->getWorkflowActionByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblWorkflowActions (name) VALUES (".$db->qstr($name).")";
+		$queryStr = "INSERT INTO `tblWorkflowActions` (`name`) VALUES (".$db->qstr($name).")";
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -2027,7 +2027,7 @@ class SeedDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE id = " . (int) $id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `id` = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -2050,7 +2050,7 @@ class SeedDMS_Core_DMS {
 	 * the document is gone already.
 	 */
 	function getUnlinkedDocumentContent() { /* {{{ */
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` NOT IN (SELECT id FROM `tblDocuments`)";
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
@@ -2074,7 +2074,7 @@ class SeedDMS_Core_DMS {
 	 * in version 4.0.0 of SeedDMS for implementation of user quotas.
 	 */
 	function getNoFileSizeDocumentContent() { /* {{{ */
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 OR fileSize is null";
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `fileSize` = 0 OR `fileSize` is null";
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
@@ -2098,7 +2098,7 @@ class SeedDMS_Core_DMS {
 	 * in version 4.0.0 of SeedDMS for finding duplicates.
 	 */
 	function getNoChecksumDocumentContent() { /* {{{ */
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE checksum = '' OR checksum is null";
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `checksum` = '' OR `checksum` is null";
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
@@ -2122,7 +2122,7 @@ class SeedDMS_Core_DMS {
 	 * in version 4.0.0 of SeedDMS for finding duplicates.
 	 */
 	function getDuplicateDocumentContent() { /* {{{ */
-		$queryStr = "SELECT a.*, b.id as dupid FROM tblDocumentContent a LEFT JOIN tblDocumentContent b ON a.checksum=b.checksum where a.id!=b.id ORDER by a.id";
+		$queryStr = "SELECT a.*, b.`id` as dupid FROM `tblDocumentContent` a LEFT JOIN `tblDocumentContent` b ON a.`checksum`=b.`checksum` where a.`id`!=b.`id` ORDER by a.`id`";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
@@ -2154,29 +2154,29 @@ class SeedDMS_Core_DMS {
 	function getStatisticalData($type='') { /* {{{ */
 		switch($type) {
 			case 'docsperuser':
-				$queryStr = "select b.fullname as `key`, count(owner) as total from tblDocuments a left join tblUsers b on a.owner=b.id group by owner";
+				$queryStr = "select b.`fullname` as `key`, count(`owner`) as total from `tblDocuments` a left join `tblUsers` b on a.`owner`=b.`id` group by `owner`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
 
 				return $resArr;
 			case 'docspermimetype':
-				$queryStr = "select b.mimeType as `key`, count(mimeType) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document group by b.mimeType";
+				$queryStr = "select b.`mimeType` as `key`, count(mimeType) as total from `tblDocuments` a left join `tblDocumentContent` b on a.`id`=b.`document` group by b.`mimeType`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
 
 				return $resArr;
 			case 'docspercategory':
-				$queryStr = "select b.name as `key`, count(a.categoryID) as total from tblDocumentCategory a left join tblCategory b on a.categoryID=b.id group by a.categoryID";
+				$queryStr = "select b.`name` as `key`, count(a.`categoryID`) as total from `tblDocumentCategory` a left join `tblCategory` b on a.`categoryID`=b.id group by a.`categoryID`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
 
 				return $resArr;
 			case 'docsperstatus':
-				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(b.version), max(c.statusLogId) as maxlog from tblDocuments a left join tblDocumentStatus b on a.id=b.documentid left join tblDocumentStatusLog c on b.statusid=c.statusid group by a.id, b.version order by a.id, b.statusid) a left join tblDocumentStatusLog b on a.maxlog=b.statusLogId group by b.status";
-				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(c.statusLogId) as maxlog from tblDocuments a left join tblDocumentStatus b on a.id=b.documentid left join tblDocumentStatusLog c on b.statusid=c.statusid group by a.id  order by a.id, b.statusid) a left join tblDocumentStatusLog b on a.maxlog=b.statusLogId group by b.status";
+				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.id, max(b.version), max(c.`statusLogId`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentid` left join `tblDocumentStatusLog` c on b.`statusid`=c.`statusid` group by a.`id`, b.`version` order by a.`id`, b.`statusid`) a left join `tblDocumentStatusLog` b on a.`maxlog`=b.`statusLogId` group by b.`status`";
+				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(c.`statusLogId`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentid` left join `tblDocumentStatusLog` c on b.`statusid`=c.`statusid` group by a.`id`  order by a.id, b.`statusid`) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogId` group by b.`status`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
@@ -2206,7 +2206,7 @@ class SeedDMS_Core_DMS {
 				}
 				return $resArr;
 			case 'sizeperuser':
-				$queryStr = "select c.fullname as `key`, sum(fileSize) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document left join tblUsers c on a.owner=c.id group by a.owner";
+				$queryStr = "select c.`fullname` as `key`, sum(`fileSize`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.id=b.`document` left join `tblUsers` c on a.`owner`=c.`id` group by a.`owner`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
@@ -2236,7 +2236,7 @@ class SeedDMS_Core_DMS {
 			$startts = mktime(24, 0, 0);
 		$timeline = array();
 
-		$queryStr = "SELECT document FROM tblDocumentContent WHERE date > ".$startts." AND date < ".$endts;
+		$queryStr = "SELECT `document` FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
