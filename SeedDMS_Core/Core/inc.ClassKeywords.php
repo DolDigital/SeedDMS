@@ -82,7 +82,7 @@ class SeedDMS_Core_KeywordCategory {
 	function setOwner($user) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE `tblKeywordCategories` SET `owner` = " . $user->getID() . " WHERE `id` = " . $this->_id;
+		$queryStr = "UPDATE `tblKeywordCategories` SET `owner` = " . $user->getID() . " WHERE = `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
