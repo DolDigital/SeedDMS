@@ -196,7 +196,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $dms->getDB();
 
 		if($orderby == 'fullname')
-			$queryStr = "SELECT * FROM `tblUsers` ORDER BY `fullname`";
+			$queryStr = "SELECT * FROM `tblUsers` ORDER BY `fullName`";
 		else
 			$queryStr = "SELECT * FROM `tblUsers` ORDER BY `login`";
 		$resArr = $db->getResultArray($queryStr);
@@ -240,7 +240,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function setFullName($newFullName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE `tblUsers` SET `fullname` = ".$db->qstr($newFullName)." WHERE `id` = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `fullName` = ".$db->qstr($newFullName)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
