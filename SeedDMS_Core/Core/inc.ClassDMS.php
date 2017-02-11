@@ -1288,7 +1288,7 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		$user = $this->getUser($this->db->getInsertID());
+		$user = $this->getUser($this->db->getInsertID('tblUsers'));
 
 		/* Check if 'onPostAddUser' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddUser'])) {
@@ -1350,7 +1350,7 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		$group = $this->getGroup($this->db->getInsertID());
+		$group = $this->getGroup($this->db->getInsertID('tblGroups'));
 
 		/* Check if 'onPostAddGroup' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddGroup'])) {
@@ -1439,7 +1439,7 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		$category = $this->getKeywordCategory($this->db->getInsertID());
+		$category = $this->getKeywordCategory($this->db->getInsertID('tblKeywordCategories'));
 
 		/* Check if 'onPostAddKeywordCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddKeywordCategory'])) {
@@ -1515,7 +1515,7 @@ class SeedDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 
-		$category = $this->getDocumentCategory($this->db->getInsertID());
+		$category = $this->getDocumentCategory($this->db->getInsertID('tblCategory'));
 
 		/* Check if 'onPostAddDocumentCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddDocumentCategory'])) {
@@ -1714,7 +1714,7 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		return $this->getAttributeDefinition($this->db->getInsertID());
+		return $this->getAttributeDefinition($this->db->getInsertID('tblAttributeDefinitions'));
 	} /* }}} */
 
 	/**
@@ -1815,7 +1815,7 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		return $this->getWorkflow($db->getInsertID());
+		return $this->getWorkflow($db->getInsertID('tblWorkflows'));
 	} /* }}} */
 
 	/**
@@ -1908,7 +1908,7 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		return $this->getWorkflowState($db->getInsertID());
+		return $this->getWorkflowState($db->getInsertID('tblWorkflowStates'));
 	} /* }}} */
 
 	/**
@@ -1998,7 +1998,7 @@ class SeedDMS_Core_DMS {
 		if (!$res)
 			return false;
 
-		return $this->getWorkflowAction($db->getInsertID());
+		return $this->getWorkflowAction($db->getInsertID('tblWorkflowActions'));
 	} /* }}} */
 
 	/**

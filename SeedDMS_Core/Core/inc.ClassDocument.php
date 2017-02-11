@@ -1242,7 +1242,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		$contentID = $db->getInsertID();
+		$contentID = $db->getInsertID('tblDocumentContent');
 
 		// copy file
 		if (!SeedDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) {
@@ -1288,7 +1288,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		$statusID = $db->getInsertID();
+		$statusID = $db->getInsertID('tblDocumentStatus', 'statusID');
 
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
@@ -1791,7 +1791,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
 		if (!$db->getResult($queryStr)) return false;
 
-		$id = $db->getInsertID();
+		$id = $db->getInsertID('tblDocumentFiles');
 
 		$file = $this->getDocumentFile($id);
 		if (is_bool($file) && !$file) return false;
@@ -2788,7 +2788,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$db->rollbackTransaction();
 				return false;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 			$reviewlog = array_reverse($review['logs']);
 			foreach($reviewlog as $log) {
 				if(!SeedDMS_Core_DMS::checkDate($log['date'], 'Y-m-d H:i:s')) {
@@ -2801,7 +2801,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					$db->rollbackTransaction();
 					return false;
 				}
-				$reviewLogID = $db->getInsertID();
+				$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 				if(!empty($log['file'])) {
 					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 				}
@@ -2916,7 +2916,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$db->rollbackTransaction();
 				return false;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 			$reviewlog = array_reverse($review['logs']);
 			foreach($reviewlog as $log) {
 				if(!SeedDMS_Core_DMS::checkDate($log['date'], 'Y-m-d H:i:s')) {
@@ -2929,7 +2929,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					$db->rollbackTransaction();
 					return false;
 				}
-				$approveLogID = $db->getInsertID();
+				$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 				if(!empty($log['file'])) {
 					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 				}
@@ -2987,7 +2987,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 		}
 		else {
 			$reviewID = isset($indstatus["reviewID"]) ? $indstatus["reviewID"] : NULL;
@@ -3045,7 +3045,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 		}
 		else {
 			$reviewID = isset($reviewStatus[0]["reviewID"])?$reviewStatus[0]["reviewID"]:NULL;
@@ -3115,7 +3115,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$reviewLogID = $db->getInsertID();
+		$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 		}
@@ -3167,7 +3167,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 		else {
-			$reviewLogID = $db->getInsertID();
+			$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 			if($file) {
 				SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 			}
@@ -3220,7 +3220,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$approveID = $db->getInsertID();
+			$approveID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 		}
 		else {
 			$approveID = isset($indstatus["approveID"]) ? $indstatus["approveID"] : NULL;
@@ -3233,7 +3233,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return -1;
 		}
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		return $approveLogID;
 	} /* }}} */
 
@@ -3276,7 +3276,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$approveID = $db->getInsertID();
+			$approveID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 		}
 		else {
 			$approveID = isset($approvalStatus[0]["approveID"])?$approvalStatus[0]["approveID"]:NULL;
@@ -3292,7 +3292,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		// Add approver to event notification table.
 		//$this->_document->addNotify($groupID, false);
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		return $approveLogID;
 	} /* }}} */
 
@@ -3350,7 +3350,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}
@@ -3394,7 +3394,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}

@@ -264,7 +264,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		 * transitions are added in a row, without reloading the workflow
 		 */
 		$this->_transitions = array();
-		$transition = $this->getTransition($db->getInsertID());
+		$transition = $this->getTransition($db->getInsertID('tblWorkflowTransitions'));
 
 		foreach($users as $user) {
 			$queryStr = "INSERT INTO `tblWorkflowTransitionUsers` (`transition`, `userid`) VALUES (".$transition->getID().", ".$user->getID().")";

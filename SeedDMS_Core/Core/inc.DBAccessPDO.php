@@ -164,6 +164,7 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'mysql':
 			case 'mysqli':
 			case 'mysqlnd':
+			case 'pgsql':
 				$dsn = $this->_driver.":dbname=".$this->_database.";host=".$this->_hostname;
 				if($this->_port)
 					$dsn .= ";port=".$this->_port;
@@ -220,7 +221,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @return string sanitized string
 	 */
 	function rbt($text) { /* {{{ */
-		return str_replace('`', '"');
+		return str_replace('`', '"', $text);
 	} /* }}} */
 
 	/**
@@ -231,9 +232,12 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @param string $queryStr sql query
 	 * @return array/boolean data if query could be executed otherwise false
 	 */
-	function getResultArray($queryStr) { /* {{{ */
+	function getResultArray($queryStr, $retick=true) { /* {{{ */
 		$resArr = array();
 		
+		if($retick && $this->_driver == 'pgsql') {
+			$queryStr = $this->rbt($queryStr);
+		}
 		$res = $this->_conn->query($queryStr);
 		if ($res === false) {
 			if($this->_debug)
@@ -251,11 +255,13 @@ class SeedDMS_Core_DatabaseAccess {
 	 * Call this function only with sql query which do not return data records.
 	 *
 	 * @param string $queryStr sql query
-	 * @param boolean $silent not used anymore. This was used when this method
-	 *        still issued an error message
+	 * @param boolean $retick replace all '`' by '"'
 	 * @return boolean true if query could be executed otherwise false
 	 */
-	function getResult($queryStr, $silent=false) { /* {{{ */
+	function getResult($queryStr, $retick=true) { /* {{{ */
+		if($retick && $this->_driver == 'pgsql') {
+			$queryStr = $this->rbt($queryStr);
+		}
 		$res = $this->_conn->exec($queryStr);
 		if($res === false) {
 			if($this->_debug)
@@ -293,8 +299,11 @@ class SeedDMS_Core_DatabaseAccess {
 	 *
 	 * @return integer id used in last autoincrement
 	 */
-	function getInsertID() { /* {{{ */
-		return $this->_conn->lastInsertId();
+	function getInsertID($tablename='', $fieldname='id') { /* {{{ */
+		if($this->_driver == 'pgsql')
+			return $this->_conn->lastInsertId($tablename.'_'.$fieldname.'_seq');
+		else
+			return $this->_conn->lastInsertId();
 	} /* }}} */
 
 	function getErrorMsg() { /* {{{ */

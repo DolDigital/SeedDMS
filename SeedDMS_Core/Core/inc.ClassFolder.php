@@ -520,7 +520,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$newFolder = $this->_dms->getFolder($db->getInsertID());
+		$newFolder = $this->_dms->getFolder($db->getInsertID('tblFolders'));
 		unset($this->_subFolders);
 
 		if($attributes) {
@@ -825,7 +825,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 		}
 
-		$document = $this->_dms->getDocument($db->getInsertID());
+		$document = $this->_dms->getDocument($db->getInsertID('tblDocuments'));
 
 //		if ($version_comment!="")
 			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers, $reqversion, $version_attributes, $workflow);
