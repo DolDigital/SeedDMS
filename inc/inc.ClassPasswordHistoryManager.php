@@ -47,7 +47,7 @@ class SeedDMS_PasswordHistoryManager {
 	} /* }}} */
 
 	function add($user, $pwd) { /* {{{ */
-		$queryStr = "INSERT INTO tblUserPasswordHistory (userID, pwd, `date`) ".
+		$queryStr = "INSERT INTO `tblUserPasswordHistory` (`userID`, `pwd`, `date`) ".
 		  "VALUES (".$this->db->qstr($user->getId()).", ".$this->db->qstr($pwd).", ".$this->db->getCurrentDatetime().")";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
@@ -55,7 +55,7 @@ class SeedDMS_PasswordHistoryManager {
 	} /* }}} */
 
 	function search($user, $pwd) { /* {{{ */
-		$queryStr = "SELECT * FROM tblUserPasswordHistory WHERE userID = ".$this->db->qstr($user->getId())." AND pwd=".$this->db->qstr($pwd);
+		$queryStr = "SELECT * FROM `tblUserPasswordHistory` WHERE `userID` = ".$this->db->qstr($user->getId())." AND `pwd`=".$this->db->qstr($pwd);
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)

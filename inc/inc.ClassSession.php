@@ -67,7 +67,7 @@ class SeedDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function load($id) { /* {{{ */
-		$queryStr = "SELECT * FROM tblSessions WHERE id = ".$this->db->qstr($id);
+		$queryStr = "SELECT * FROM `tblSessions` WHERE `id` = ".$this->db->qstr($id);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -97,7 +97,7 @@ class SeedDMS_Session {
 		$id = "" . rand() . time() . rand() . "";
 		$id = md5($id);
 		$lastaccess = time();
-		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language, su) ".
+		$queryStr = "INSERT INTO `tblSessions` (`id`, `userID`, `lastAccess`, `theme`, `language`, `su`) ".
 		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."', 0)";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
@@ -126,7 +126,7 @@ class SeedDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function updateAccess($id) { /* {{{ */
-		$queryStr = "UPDATE tblSessions SET lastAccess = " . time() . " WHERE id = " . $this->db->qstr($id);
+		$queryStr = "UPDATE `tblSessions` SET `lastAccess` = " . time() . " WHERE `id` = " . $this->db->qstr($id);
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return true;
@@ -139,7 +139,7 @@ class SeedDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function deleteByTime($sec) { /* {{{ */
-		$queryStr = "DELETE FROM tblSessions WHERE " . time() . " - lastAccess > ".$sec;
+		$queryStr = "DELETE FROM `tblSessions` WHERE " . time() . " - `lastAccess` > ".$sec;
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
@@ -153,7 +153,7 @@ class SeedDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function delete($id) { /* {{{ */
-		$queryStr = "DELETE FROM tblSessions WHERE id = " . $this->db->qstr($id);
+		$queryStr = "DELETE FROM `tblSessions` WHERE `id` = " . $this->db->qstr($id);
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
@@ -178,7 +178,7 @@ class SeedDMS_Session {
 	function setUser($userid) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET userID = " . $this->db->qstr($userid) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `userID` = " . $this->db->qstr($userid) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['userid'] = $userid;	
@@ -194,7 +194,7 @@ class SeedDMS_Session {
 	function setLanguage($lang) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET language = " . $this->db->qstr($lang) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `language` = " . $this->db->qstr($lang) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['lang'] = $lang;	
@@ -219,7 +219,7 @@ class SeedDMS_Session {
 	function setSu($su) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET su = " . (int) $su . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `su` = " . (int) $su . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['su'] = (int) $su;	
@@ -235,7 +235,7 @@ class SeedDMS_Session {
 	function resetSu() { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET su = 0 WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `su` = 0 WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['su'] = 0;	
@@ -260,7 +260,7 @@ class SeedDMS_Session {
 	function setClipboard($clipboard) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($clipboard)) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `clipboard` = " . $this->db->qstr(json_encode($clipboard)) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['clipboard'] = $clipboard;	
@@ -292,7 +292,7 @@ class SeedDMS_Session {
 				if(!in_array($object->getID(), $this->data['clipboard']['folders']))
 					array_push($this->data['clipboard']['folders'], $object->getID());
 			}
-			$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `clipboard` = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 		}
@@ -316,7 +316,7 @@ class SeedDMS_Session {
 				if($key !== false)
 					unset($this->data['clipboard']['folders'][$key]);
 			}
-			$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `clipboard` = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 		}
@@ -330,7 +330,7 @@ class SeedDMS_Session {
 	function clearClipboard() { /* {{{ */
 		$this->data['clipboard']['docs'] = array();
 		$this->data['clipboard']['folders'] = array();
-		$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE id = " . $this->db->qstr($this->id);
+		$queryStr = "UPDATE `tblSessions` SET `clipboard` = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE `id` = " . $this->db->qstr($this->id);
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return true;
@@ -344,7 +344,7 @@ class SeedDMS_Session {
 	function setSplashMsg($msg) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET splashmsg = " . $this->db->qstr(json_encode($msg)) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `splashmsg` = " . $this->db->qstr(json_encode($msg)) . " WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['splashmsg'] = $msg;	
@@ -360,7 +360,7 @@ class SeedDMS_Session {
 	function clearSplashMsg() { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET splashmsg = '' WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE `tblSessions` SET `splashmsg` = '' WHERE `id` = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['splashmsg'] = '';	
@@ -428,7 +428,7 @@ class SeedDMS_SessionMgr {
 		$id = "" . rand() . time() . rand() . "";
 		$id = md5($id);
 		$lastaccess = time();
-		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language, su) ".
+		$queryStr = "INSERT INTO `tblSessions` (`id`, `userID`, `lastAccess`, `theme`, `language`, `su`) ".
 		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."', 0)";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
@@ -443,7 +443,7 @@ class SeedDMS_SessionMgr {
 	 * @return array list of sessions
 	 */
 	function getAllSessions() { /* {{{ */
-		$queryStr = "SELECT * FROM tblSessions";
+		$queryStr = "SELECT * FROM `tblSessions`";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -463,7 +463,7 @@ class SeedDMS_SessionMgr {
 	 * @return array list of sessions
 	 */
 	function getUserSessions($user) { /* {{{ */
-		$queryStr = "SELECT * FROM tblSessions WHERE userID=".$user->getID();
+		$queryStr = "SELECT * FROM `tblSessions` WHERE `userID`=".$user->getID();
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;

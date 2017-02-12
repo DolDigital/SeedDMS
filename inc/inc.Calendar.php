@@ -28,7 +28,7 @@ function getEvents($day, $month, $year){
 
 	$date = mktime(12,0,0, $month, $day, $year);
 	
-	$queryStr = "SELECT * FROM tblEvents WHERE start <= " . $date . " AND stop >= " . $date;
+	$queryStr = "SELECT * FROM `tblEvents` WHERE `start` <= " . $date . " AND `stop` >= " . $date;
 	$ret = $db->getResultArray($queryStr);	
 	return $ret;
 }
@@ -37,9 +37,9 @@ function getEventsInInterval($start, $stop){
 
 	global $db;
 
-	$queryStr = "SELECT * FROM tblEvents WHERE ( start <= " . (int) $start . " AND stop >= " . (int) $start . " ) ".
-	                                       "OR ( start <= " . (int) $stop . " AND stop >= " . (int) $stop . " ) ".
-	                                       "OR ( start >= " . (int) $start . " AND stop <= " . (int) $stop . " )";
+	$queryStr = "SELECT * FROM `tblEvents` WHERE ( `start` <= " . (int) $start . " AND `stop` >= " . (int) $start . " ) ".
+	                                       "OR ( `start` <= " . (int) $stop . " AND `stop` >= " . (int) $stop . " ) ".
+	                                       "OR ( `start` >= " . (int) $start . " AND `stop` <= " . (int) $stop . " )";
 	$ret = $db->getResultArray($queryStr);	
 	return $ret;
 }
@@ -48,7 +48,7 @@ function addEvent($from, $to, $name, $comment ){
 
 	global $db,$user;
 
-	$queryStr = "INSERT INTO tblEvents (name, comment, start, stop, date, userID) VALUES ".
+	$queryStr = "INSERT INTO `tblEvents` (`name`, `comment`, `start`, `stop`, `date`, `userID`) VALUES ".
 		"(".$db->qstr($name).", ".$db->qstr($comment).", ".(int) $from.", ".(int) $to.", ".$db->getCurrentTimestamp().", ".$user->getID().")";
 	
 	$ret = $db->getResult($queryStr);
@@ -61,7 +61,7 @@ function getEvent($id){
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblEvents WHERE id = " . (int) $id;
+	$queryStr = "SELECT * FROM `tblEvents` WHERE `id` = " . (int) $id;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
@@ -76,7 +76,7 @@ function editEvent($id, $from, $to, $name, $comment ){
 
 	global $db;
 	
-	$queryStr = "UPDATE tblEvents SET start = " . (int) $from . ", stop = " . (int) $to . ", name = " . $db->qstr($name) . ", comment = " . $db->qstr($comment) . ", date = " . $db->getCurrentTimestamp() . " WHERE id = ". (int) $id;
+	$queryStr = "UPDATE `tblEvents` SET `start` = " . (int) $from . ", `stop` = " . (int) $to . ", `name` = " . $db->qstr($name) . ", `comment` = " . $db->qstr($comment) . ", `date` = " . $db->getCurrentTimestamp() . " WHERE `id` = ". (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
@@ -87,7 +87,7 @@ function delEvent($id){
 	
 	global $db;
 	
-	$queryStr = "DELETE FROM tblEvents WHERE id = " . (int) $id;
+	$queryStr = "DELETE FROM `tblEvents` WHERE `id` = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
