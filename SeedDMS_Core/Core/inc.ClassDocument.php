@@ -989,7 +989,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function addNotify($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$userOrGroup = ($isUser ? "userID" : "groupID");
+		$userOrGroup = ($isUser ? "`userID`" : "`groupID`");
 
 		/* Verify that user / group exists. */
 		$obj = ($isUser ? $this->_dms->getUser($userOrGroupID) : $this->_dms->getGroup($userOrGroupID));
@@ -1110,7 +1110,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return -1;
 		}
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
 		/* Verify that the requesting user has permission to add the target to
 		 * the notification system.
