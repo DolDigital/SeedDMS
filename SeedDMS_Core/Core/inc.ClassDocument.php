@@ -1069,7 +1069,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Check to see if user/group is already on the list. */
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_DOCUMENT."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '".(int) $userOrGroupID."'";
+			"AND `tblNotify`.".$userOrGroup." = '".(int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
@@ -1141,7 +1141,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Check to see if the target is in the database. */
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_DOCUMENT."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '".(int) $userOrGroupID."'";
+			"AND `tblNotify`.".$userOrGroup." = '".(int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
