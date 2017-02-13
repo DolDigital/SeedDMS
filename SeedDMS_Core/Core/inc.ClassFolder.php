@@ -1383,7 +1383,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		//
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_FOLDER."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '". (int) $userOrGroupID."'";
+			"AND `tblNotify`.".$userOrGroup." = '". (int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
@@ -1424,7 +1424,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return -1;
 		}
 
-		$userOrGroup = ($isUser) ? "userID" : "groupID";
+		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
 		/* Verify that the requesting user has permission to add the target to
 		 * the notification system.
@@ -1457,7 +1457,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		//
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_FOLDER."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '". (int) $userOrGroupID."'";
+			"AND `tblNotify`.".$userOrGroup." = '". (int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
