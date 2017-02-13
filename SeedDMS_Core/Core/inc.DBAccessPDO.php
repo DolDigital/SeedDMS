@@ -301,7 +301,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 */
 	function getInsertID($tablename='', $fieldname='id') { /* {{{ */
 		if($this->_driver == 'pgsql')
-			return $this->_conn->lastInsertId($tablename.'_'.$fieldname.'_seq');
+			return $this->_conn->lastInsertId('"'.$tablename.'_'.$fieldname.'_seq"');
 		else
 			return $this->_conn->lastInsertId();
 	} /* }}} */
