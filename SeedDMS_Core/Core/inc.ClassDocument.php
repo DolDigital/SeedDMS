@@ -2673,7 +2673,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (1 || !isset($this->_reviewStatus)) {
 			/* First get a list of all reviews for this document content */
 			$queryStr=
-				"SELECT reviewID FROM `tblDocumentReviewers` WHERE `version`='".$this->_version
+				"SELECT `reviewID` FROM `tblDocumentReviewers` WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
