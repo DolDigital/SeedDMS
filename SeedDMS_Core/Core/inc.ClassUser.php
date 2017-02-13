@@ -658,8 +658,8 @@ class SeedDMS_Core_User { /* {{{ */
 		}
 
 		// TODO : update document status if reviewer/approver has been deleted
-		// "DELETE FROM tblDocumentApproveLog WHERE userID = " . $this->_id;
-		// "DELETE FROM tblDocumentReviewLog WHERE userID = " . $this->_id;
+		// "DELETE FROM `tblDocumentApproveLog` WHERE `userID` = " . $this->_id;
+		// "DELETE FROM `tblDocumentReviewLog` WHERE `userID` = " . $this->_id;
 
 
 		$reviewStatus = $this->getReviewStatus();

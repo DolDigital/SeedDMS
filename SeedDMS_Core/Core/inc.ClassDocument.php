@@ -2137,7 +2137,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		/* No need to add entries for new version because the status log
 		 * will generate an entry as well.
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE document = " . $this->_id;
+		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -2673,7 +2673,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (1 || !isset($this->_reviewStatus)) {
 			/* First get a list of all reviews for this document content */
 			$queryStr=
-				"SELECT reviewID FROM tblDocumentReviewers WHERE `version`='".$this->_version
+				"SELECT reviewID FROM `tblDocumentReviewers` WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)

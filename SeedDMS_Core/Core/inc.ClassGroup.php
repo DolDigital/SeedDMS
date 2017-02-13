@@ -172,7 +172,7 @@ class SeedDMS_Core_Group { /* {{{ */
 
 		$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
-			"WHERE `tblGroupMembers`.`groupID` = '". $this->_id ."' AND tblGroupMembers.manager = 1";
+			"WHERE `tblGroupMembers`.`groupID` = '". $this->_id ."' AND `tblGroupMembers`.`manager` = 1";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
