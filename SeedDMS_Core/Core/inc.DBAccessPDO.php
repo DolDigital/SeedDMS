@@ -469,6 +469,16 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				return "strftime(".$this->qstr($format).", `".$fieldname."`, 'unixepoch')";
 				break;
+			case 'pgsql':
+				switch($format) {
+				case '%Y-%m':
+					return "to_char(to_timestamp(`".$fieldname."`), 'YYYY-MM')";
+					break;
+				default:
+					return "to_char(to_timestamp(`".$fieldname."`), 'YYYY-MM-DD')";
+					break;
+				}
+				break;
 		}
 		return '';
 	} /* }}} */
@@ -487,6 +497,9 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				return "datetime('now', 'localtime')";
 				break;
+			case 'pgsql':
+				return "now()";
+				break;
 		}
 		return '';
 	} /* }}} */
@@ -503,6 +516,9 @@ class SeedDMS_Core_DatabaseAccess {
 				break;
 			case 'sqlite':
 				return "strftime('%s', 'now')";
+				break;
+			case 'pgsql':
+				return "date_part('epoch',CURRENT_TIMESTAMP)::int";
 				break;
 		}
 		return '';
