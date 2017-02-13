@@ -2154,7 +2154,7 @@ class SeedDMS_Core_DMS {
 	function getStatisticalData($type='') { /* {{{ */
 		switch($type) {
 			case 'docsperuser':
-				$queryStr = "select b.`fullname` as `key`, count(`owner`) as total from `tblDocuments` a left join `tblUsers` b on a.`owner`=b.`id` group by `owner`";
+				$queryStr = "select b.`fullName` as `key`, count(`owner`) as total from `tblDocuments` a left join `tblUsers` b on a.`owner`=b.`id` group by `owner`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
@@ -2206,7 +2206,7 @@ class SeedDMS_Core_DMS {
 				}
 				return $resArr;
 			case 'sizeperuser':
-				$queryStr = "select c.`fullname` as `key`, sum(`fileSize`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.id=b.`document` left join `tblUsers` c on a.`owner`=c.`id` group by a.`owner`";
+				$queryStr = "select c.`fullName` as `key`, sum(`fileSize`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.id=b.`document` left join `tblUsers` c on a.`owner`=c.`id` group by a.`owner`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
