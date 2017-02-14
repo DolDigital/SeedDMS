@@ -330,7 +330,7 @@ class SeedDMS_Core_DatabaseAccess {
 						"ORDER BY `maxLogID`";
 				break;
 				case 'pgsql':
-					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (`reviewID` INTEGER, `maxLogID` INTEGER, PRIMARY INDEX (`reviewID`));".
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (`reviewID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`reviewID`));".
 						"INSERT INTO `ttreviewid` SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
