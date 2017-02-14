@@ -428,6 +428,14 @@ class SeedDMS_Core_DatabaseAccess {
 						"GROUP BY `tblDocumentContent`.`document` ".
 						"ORDER BY `tblDocumentContent`.`document`";
 					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE `ttcontentid` (`document` INTEGER, `maxVersion` INTEGER, PRIMARY KEY (`document`)); ".
+						"INSERT INTO `ttcontentid` SELECT `tblDocumentContent`.`document` AS `document`, ".
+						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
+						"FROM `tblDocumentContent` ".
+						"GROUP BY `tblDocumentContent`.`document` ".
+						"ORDER BY `tblDocumentContent`.`document`";
+					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` (PRIMARY KEY (`document`), INDEX (`maxVersion`)) ".
 						"SELECT `tblDocumentContent`.`document`, ".
