@@ -217,7 +217,7 @@ $(document).ready( function() {
 ?>
 		<tr>
 			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><?php if($currUser) { ?><option value=""><?php printMLText("keep");?></option><?php } ?><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="0000-00-00"><?php printMLText("never");?></option></select> <?php echo $currUser ? $currUser->getPwdExpiration() : ""; ?></td>
+			<td><select name="pwdexpiration"><?php if($currUser) { ?><option value=""><?php printMLText("keep");?></option><?php } ?><option value="now"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="never"><?php printMLText("never");?></option></select> <?php echo $currUser ? $currUser->getPwdExpiration() : ""; ?></td>
 		</tr>
 <?php
 	}
