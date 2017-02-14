@@ -395,6 +395,14 @@ class SeedDMS_Core_DatabaseAccess {
 						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
 						"ORDER BY `maxLogID`";
 					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (`statusID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`statusID`));".
+						"INSERT INTO `ttstatid` SELECT `tblDocumentStatusLog`.`statusID`, ".
+						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentStatusLog` ".
+						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
+						"ORDER BY `maxLogID`";
+					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (PRIMARY KEY (`statusID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentStatusLog`.`statusID`, ".
@@ -429,7 +437,7 @@ class SeedDMS_Core_DatabaseAccess {
 						"ORDER BY `tblDocumentContent`.`document`";
 					break;
 				case 'pgsql':
-					$queryStr = "CREATE TEMPORARY TABLE `ttcontentid` (`document` INTEGER, `maxVersion` INTEGER, PRIMARY KEY (`document`)); ".
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` (`document` INTEGER, `maxVersion` INTEGER, PRIMARY KEY (`document`)); ".
 						"INSERT INTO `ttcontentid` SELECT `tblDocumentContent`.`document` AS `document`, ".
 						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
 						"FROM `tblDocumentContent` ".
