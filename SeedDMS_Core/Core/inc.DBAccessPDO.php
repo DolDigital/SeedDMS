@@ -539,6 +539,20 @@ class SeedDMS_Core_DatabaseAccess {
 		}
 		return '';
 	} /* }}} */
+
+	/**
+	 * Return sql statement for returning the current timestamp
+	 *
+	 * @return string sql code
+	 */
+	function castToText($field) { /* {{{ */
+		switch($this->_driver) {
+			case 'pgsql':
+				return $field."::TEXT";
+				break;
+		}
+		return $field;
+	} /* }}} */
 }
 
 ?>
