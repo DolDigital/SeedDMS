@@ -2147,7 +2147,7 @@ class SeedDMS_Core_DMS {
 
 				return $resArr;
 			case 'docspermimetype':
-				$queryStr = "select b.`mimeType` as `key`, count(mimeType) as total from `tblDocuments` a left join `tblDocumentContent` b on a.`id`=b.`document` group by b.`mimeType`";
+				$queryStr = "select b.`mimeType` as `key`, count(`mimeType`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.`id`=b.`document` group by b.`mimeType`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
@@ -2162,7 +2162,7 @@ class SeedDMS_Core_DMS {
 				return $resArr;
 			case 'docsperstatus':
 				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.id, max(b.version), max(c.`statusLogId`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentid` left join `tblDocumentStatusLog` c on b.`statusid`=c.`statusid` group by a.`id`, b.`version` order by a.`id`, b.`statusid`) a left join `tblDocumentStatusLog` b on a.`maxlog`=b.`statusLogId` group by b.`status`";
-				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(c.`statusLogId`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentid` left join `tblDocumentStatusLog` c on b.`statusid`=c.`statusid` group by a.`id`  order by a.id, b.`statusid`) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogId` group by b.`status`";
+				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.`id`, max(c.`statusLogId`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentid` left join `tblDocumentStatusLog` c on b.`statusid`=c.`statusid` group by a.`id`  order by a.id, b.`statusid`) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogId` group by b.`status`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
