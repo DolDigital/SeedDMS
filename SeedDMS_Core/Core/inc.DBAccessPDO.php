@@ -329,6 +329,14 @@ class SeedDMS_Core_DatabaseAccess {
 						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
 						"ORDER BY `maxLogID`";
 				break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (`reviewID` INTEGER, `maxLogID` INTEGER, PRIMARY INDEX (`reviewID`));".
+						"INSERT INTO `ttreviewid` SELECT `tblDocumentReviewLog`.`reviewID`, ".
+						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentReviewLog` ".
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
+						"ORDER BY `maxLogID`";
+				break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (PRIMARY KEY (`reviewID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
@@ -357,6 +365,14 @@ class SeedDMS_Core_DatabaseAccess {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` AS ".
 						"SELECT `tblDocumentApproveLog`.`approveID`, ".
+						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentApproveLog` ".
+						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
+						"ORDER BY `maxLogID`";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` (`approveID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`approveID`));".
+						"INSERT INTO `ttapproveid` SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
 						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
