@@ -699,7 +699,7 @@ class SeedDMS_Core_DMS {
 			$searchKey = "";
 
 			$classname = $this->classnames['folder'];
-			$searchFields = $classname::getSearchFields($searchin);
+			$searchFields = $classname::getSearchFields($this, $searchin);
 
 			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {
@@ -840,7 +840,7 @@ class SeedDMS_Core_DMS {
 			$searchKey = "";
 
 			$classname = $this->classnames['document'];
-			$searchFields = $classname::getSearchFields($searchin);
+			$searchFields = $classname::getSearchFields($this, $searchin);
 
 			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {

@@ -95,7 +95,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * 4=attributes)
 	 * @return array list of database fields
 	 */
-	public static function getSearchFields($searchin) { /* {{{ */
+	public static function getSearchFields($dms, $searchin) { /* {{{ */
+		$db = $dms->getDB();
+
 		$searchFields = array();
 		if (in_array(2, $searchin)) {
 			$searchFields[] = "`tblFolders`.`name`";
@@ -107,7 +109,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$searchFields[] = "`tblFolderAttributes`.`value`";
 		}
 		if (in_array(5, $searchin)) {
-			$searchFields[] = "`tblFolders`.`id`";
+			$searchFields[] = $db->castToText("`tblFolders`.`id`");
 		}
 		return $searchFields;
 	} /* }}} */

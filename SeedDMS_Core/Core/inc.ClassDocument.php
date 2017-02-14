@@ -175,7 +175,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * 4=attributes)
 	 * @return array list of database fields
 	 */
-	public static function getSearchFields($searchin) { /* {{{ */
+	public static function getSearchFields($dms, $searchin) { /* {{{ */
+		$db = $dms->getDB();
+
 		$searchFields = array();
 		if (in_array(1, $searchin)) {
 			$searchFields[] = "`tblDocuments`.`keywords`";
@@ -192,7 +194,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$searchFields[] = "`tblDocumentContentAttributes`.`value`";
 		}
 		if (in_array(5, $searchin)) {
-			$searchFields[] = "`tblDocuments`.`id`";
+			$searchFields[] = $db->castToText("`tblDocuments`.`id`");
 		}
 
 		return $searchFields;
