@@ -167,6 +167,37 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$this->_notifyList = array();
 	} /* }}} */
 
+	/**
+	 * Return an array of database fields which used for searching
+	 * a term entered in the database search form
+	 *
+	 * @param array $searchin integer list of search scopes (2=name, 3=comment,
+	 * 4=attributes)
+	 * @return array list of database fields
+	 */
+	public static function getSearchFields($searchin) { /* {{{ */
+		$searchFields = array();
+		if (in_array(1, $searchin)) {
+			$searchFields[] = "`tblDocuments`.`keywords`";
+		}
+		if (in_array(2, $searchin)) {
+			$searchFields[] = "`tblDocuments`.`name`";
+		}
+		if (in_array(3, $searchin)) {
+			$searchFields[] = "`tblDocuments`.`comment`";
+			$searchFields[] = ""tblDocumentContent`.`comment`";
+		}
+		if (in_array(4, $searchin)) {
+			$searchFields[] = "`tblDocumentAttributes`.`value`";
+			$searchFields[] = "`tblDocumentContentAttributes`.`value`";
+		}
+		if (in_array(5, $searchin)) {
+			$searchFields[] = "`tblDocuments`.`id`";
+		}
+
+		return $searchFields;
+	} /* }}} */
+
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -195,7 +226,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$document->setDMS($dms);
 		return $document;
 	} /* }}} */
-
 
 	/*
 	 * Return the directory of the document in the file system relativ

@@ -838,25 +838,9 @@ class SeedDMS_Core_DMS {
 		$totalDocs = 0;
 		if($mode & 0x1) {
 			$searchKey = "";
-			$searchFields = array();
-			if (in_array(1, $searchin)) {
-				$searchFields[] = "`tblDocuments`.`keywords`";
-			}
-			if (in_array(2, $searchin)) {
-				$searchFields[] = "`tblDocuments`.`name`";
-			}
-			if (in_array(3, $searchin)) {
-				$searchFields[] = "`tblDocuments`.`comment`";
-				$searchFields[] = "`tblDocumentContent`.`comment`";
-			}
-			if (in_array(4, $searchin)) {
-				$searchFields[] = "`tblDocumentAttributes`.`value`";
-				$searchFields[] = "`tblDocumentContentAttributes`.`value`";
-			}
-			if (in_array(5, $searchin)) {
-				$searchFields[] = "`tblDocuments`.`id`";
-			}
 
+			$classname = $this->classnames['document'];
+			$searchFields = $classname::getSearchFields($searchin);
 
 			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {
