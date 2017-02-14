@@ -1202,7 +1202,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 		}else{
 
-			$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id . " AND reviewerUserID = " . $id;
+			$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `userID` = " . $this->_id . " AND `reviewerUserID` = " . $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return true;
 
