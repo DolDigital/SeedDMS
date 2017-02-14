@@ -1429,7 +1429,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	function getLatestContent() { /* {{{ */
 		if (!isset($this->_latestContent)) {
 			$db = $this->_dms->getDB();
-			$queryStr = "SELECT * FROM tblDocumentContent WHERE document = ".$this->_id." ORDER BY version DESC LIMIT 0,1";
+			$queryStr = "SELECT * FROM tblDocumentContent WHERE document = ".$this->_id." ORDER BY version DESC LIMIT 1";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
