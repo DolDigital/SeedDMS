@@ -107,6 +107,9 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				$sql = "select tbl_name as name from sqlite_master where type='table'";
 				break;
+			case 'pgsql':
+				$sql = "select tablename as name from pg_catalog.pg_tables where schemaname='public'";
+				break;
 			default:
 				return false;
 		}
