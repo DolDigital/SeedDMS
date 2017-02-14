@@ -268,8 +268,10 @@ class SeedDMS_Core_User { /* {{{ */
 	function setPwdExpiration($newPwdExpiration) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		if(trim($newPwdExpiration) == '')
+		if(trim($newPwdExpiration) == '' || trim($newPwdExpiration) == 'never')
 			$newPwdExpiration = '0000-00-00 00:00:00';
+		elseif(trim($newPwdExpiration) == 'now')
+			$newPwdExpiration = date('Y-m-d H:i:s');
 		$queryStr = "UPDATE `tblUsers` SET `pwdExpiration` =".$db->qstr($newPwdExpiration)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
