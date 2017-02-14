@@ -2801,7 +2801,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (1 || !isset($this->_approvalStatus)) {
 			/* First get a list of all approvals for this document content */
 			$queryStr=
-				"SELECT approveID FROM `tblDocumentApprovers` WHERE `version`='".$this->_version
+				"SELECT `approveID` FROM `tblDocumentApprovers` WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
