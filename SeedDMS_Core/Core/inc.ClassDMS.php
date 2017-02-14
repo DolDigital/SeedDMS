@@ -2162,7 +2162,7 @@ class SeedDMS_Core_DMS {
 				return $resArr;
 			case 'docsperstatus':
 				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.id, max(b.version), max(c.`statusLogID`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentID` left join `tblDocumentStatusLog` c on b.`statusID`=c.`statusID` group by a.`id`, b.`version` order by a.`id`, b.`statusID`) a left join `tblDocumentStatusLog` b on a.`maxlog`=b.`statusLogID` group by b.`status`";
-				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.`id`, max(c.`statusLogID`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentID` left join `tblDocumentStatusLog` c on b.`statusID`=c.`statusID` group by a.`id`  order by a.id, b.`statusID`) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogID` group by b.`status`";
+				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.`id`, max(c.`statusLogID`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentID` left join `tblDocumentStatusLog` c on b.`statusID`=c.`statusID` group by a.`id`  order by a.id) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogID` group by b.`status`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
