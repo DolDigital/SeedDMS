@@ -185,7 +185,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 		if (in_array(3, $searchin)) {
 			$searchFields[] = "`tblDocuments`.`comment`";
-			$searchFields[] = ""tblDocumentContent`.`comment`";
+			$searchFields[] = "`tblDocumentContent`.`comment`";
 		}
 		if (in_array(4, $searchin)) {
 			$searchFields[] = "`tblDocumentAttributes`.`value`";
