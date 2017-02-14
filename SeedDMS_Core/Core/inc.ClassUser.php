@@ -1236,7 +1236,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 		}else{
 
-			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND approverUserID = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverUserID` = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return;
 
