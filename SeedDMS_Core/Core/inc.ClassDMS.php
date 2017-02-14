@@ -2192,7 +2192,7 @@ class SeedDMS_Core_DMS {
 				}
 				return $resArr;
 			case 'sizeperuser':
-				$queryStr = "select c.`fullName` as `key`, sum(`fileSize`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.id=b.`document` left join `tblUsers` c on a.`owner`=c.`id` group by a.`owner`";
+				$queryStr = "select c.`fullName` as `key`, sum(`fileSize`) as total from `tblDocuments` a left join `tblDocumentContent` b on a.id=b.`document` left join `tblUsers` c on a.`owner`=c.`id` group by a.`owner`, c.`fullName`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
