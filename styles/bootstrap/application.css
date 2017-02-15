@@ -46,6 +46,14 @@ ul.tree, ul.tree ul {
 	margin-left: 20px;
 }
 
+td.today {
+	background-color: rgb(255, 200, 0);
+}
+
+td.event {
+	background-color: rgb(0, 200, 255);
+}
+
 .wordbreak {
 	word-break: break-word;
 }
