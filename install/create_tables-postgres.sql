@@ -619,6 +619,9 @@ CREATE TABLE "tblVersion" (
 --
 
 INSERT INTO "tblUsers" VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, NULL, 0, 0, 0, NULL);
+SELECT nextval('"tblUsers_id_seq"');
 INSERT INTO "tblUsers" VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, NULL, 0, 0, 0, NULL);
+SELECT nextval('"tblUsers_id_seq"');
 INSERT INTO "tblFolders" VALUES (1, 'DMS', 0, '', 'DMS root', extract(epoch from now()), 1, 0, 2, 0);
+SELECT nextval('"tblFolders_id_seq"');
 INSERT INTO "tblVersion" VALUES (CURRENT_TIMESTAMP, 5, 0, 0);
