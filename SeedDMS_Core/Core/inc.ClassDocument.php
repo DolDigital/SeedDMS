@@ -1197,9 +1197,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		unset($this->_content);
 		unset($this->_latestContent);
 		$content = $this->getLatestContent($contentID);
-//		$content = new SeedDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType, $filesize, $checksum);
-		if($workflow)
-			$content->setWorkflow($workflow, $user);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
 
 		if($attributes) {
@@ -1227,6 +1224,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$statusID = $db->getInsertID();
+
+		if($workflow)
+			$content->setWorkflow($workflow, $user);
 
 		// Add reviewers into the database. Reviewers must review the document
 		// and submit comments, if appropriate. Reviewers can also recommend that
