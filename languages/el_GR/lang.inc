@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (214)
+//    Translators: Admin (215)
 
 $text = array(
 '2_factor_auth' => '',
@@ -606,7 +606,7 @@ $text = array(
 'new' => 'Νέο',
 'new_attrdef' => '',
 'new_default_keywords' => '',
-'new_default_keyword_category' => '',
+'new_default_keyword_category' => 'Προσθήκη Κατηγορίας',
 'new_document_category' => '',
 'new_document_email' => 'Νέο Έγγραφο',
 'new_document_email_body' => 'Νέο έγγραφο
@@ -797,6 +797,7 @@ URL: [url]',
 'rm_default_keyword_category' => '',
 'rm_document' => 'Διαγραφή εγγράφου',
 'rm_document_category' => 'Διαγραφή κατηγορίας',
+'rm_event' => '',
 'rm_file' => 'Διαγραφή αρχείου',
 'rm_folder' => 'Διαγραφή φακέλου',
 'rm_from_clipboard' => '',

@@ -2211,18 +2211,18 @@ class SeedDMS_Core_DMS {
 	 * entries in the database tables tblDocumentContent, tblDocumentFiles,
 	 * and tblDocumentStatusLog
 	 *
-	 * @param string $start start date
-	 * @param string $end end date
+	 * @param string $start start date, defaults to start of current day
+	 * @param string $end end date, defaults to end of start day
 	 * @return array list of changes
 	 */
 	function getTimeline($startts='', $endts='') { /* {{{ */
 		if(!$startts)
 			$startts = mktime(0, 0, 0);
 		if(!$endts)
-			$startts = mktime(24, 0, 0);
+			$endts = $startts+86400;
 		$timeline = array();
 
-		$queryStr = "SELECT `document` FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts;
+		$queryStr = "SELECT DISTINCT `document` FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts." UNION SELECT DISTINCT `document` FROM `tblDocumentFiles` WHERE `date` > ".$startts." AND `date` < ".$endts;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;

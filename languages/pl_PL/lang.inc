@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (747), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (748), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -908,6 +908,7 @@ URL: [url]',
 'rm_default_keyword_category' => 'Usuń kategorię',
 'rm_document' => 'Usuń dokument',
 'rm_document_category' => 'Usuń kategorię',
+'rm_event' => '',
 'rm_file' => 'Usuń plik',
 'rm_folder' => 'Usuń folder',
 'rm_from_clipboard' => 'Usuń ze schowka',
@@ -1086,7 +1087,7 @@ URL: [url]',
 'settings_enableGuestAutoLogin_desc' => '',
 'settings_enableGuestLogin' => 'Pozwól na logowanie gościa',
 'settings_enableGuestLogin_desc' => 'Jeśli chcesz dowolnej osobie zalogować się jako gość, zaznacz tę opcję. Uwaga: logowanie gościa powinno być używane wyłącznie w zaufanym środowisku.',
-'settings_enableHelp' => '',
+'settings_enableHelp' => 'Włącz pomoc',
 'settings_enableHelp_desc' => '',
 'settings_enableLanguageSelector' => 'Włącz wybór języka',
 'settings_enableLanguageSelector_desc' => 'Pokaż selektor języka dla interfejsu użytkownika po zalogowaniu To nie ma wpływu na wybór języka na stronie logowania.',

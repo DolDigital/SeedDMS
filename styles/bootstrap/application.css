@@ -54,6 +54,14 @@ ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
 		font-weight: bold;
 }
 
+td.today {
+	background-color: rgb(255, 200, 0);
+}
+
+td.event {
+	background-color: rgb(0, 200, 255);
+}
+
 .wordbreak {
 	word-break: break-word;
 }

@@ -421,6 +421,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				case "admin_tools":
 					$this->adminToolsNavigationBar();
 					break;
+				case "calendarold";
+					$this->calendarOldNavigationBar($extra);
+					break;
 				case "calendar";
 					$this->calendarNavigationBar($extra);
 					break;
@@ -667,15 +670,27 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 	
-	private function calendarNavigationBar($d){ /* {{{ */
+	private function calendarOldNavigationBar($d){ /* {{{ */
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
-		echo "<id=\"first\"><a href=\"../out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a>\n";
+		echo "<id=\"first\"><a href=\"../out/out.CalendarOld.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a>\n";
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
-		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
-		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
+		echo "<li><a href=\"../out/out.CalendarOld.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
+		echo "<li><a href=\"../out/out.CalendarOld.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
+		echo "<li><a href=\"../out/out.CalendarOld.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
+		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		echo "</ul>\n";
+		echo "</div>\n";
+		return;
+	
+	} /* }}} */
+
+	private function calendarNavigationBar($d){ /* {{{ */
+		echo "<id=\"first\"><a href=\"../out/out.Calendar.php\" class=\"brand\">".getMLText("calendar")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
+		echo "<ul class=\"nav\">\n";
+
 		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
 		echo "</ul>\n";
 		echo "</div>\n";

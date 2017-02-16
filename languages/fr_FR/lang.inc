@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1058), jeromerobert (50), lonnnew (9), Oudiceval (175)
+//    Translators: Admin (1058), jeromerobert (50), lonnnew (9), Oudiceval (182)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -309,7 +309,7 @@ URL: [url]',
 'docs_in_reception_no_access' => '',
 'docs_in_revision_no_access' => '',
 'document' => 'Document',
-'documentcontent' => '',
+'documentcontent' => 'Version de document',
 'documents' => 'Documents',
 'documents_checked_out_by_you' => 'Documents bloqués par vous',
 'documents_in_process' => 'Documents en cours',
@@ -629,8 +629,8 @@ URL: [url]',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Pour déposer des fichiers de taille supérieure, utilisez la <a href="%s">page d\'ajout multiple</a>.',
-'link_to_version' => '',
-'list_access_rights' => '',
+'link_to_version' => 'Version',
+'list_access_rights' => 'Liste des droits d’accès…',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Fichier local',
@@ -710,11 +710,11 @@ URL: [url]',
 'new_password' => 'Nouveau mot de passe',
 'new_subfolder_email' => 'Nouveau dossier',
 'new_subfolder_email_body' => 'Nouveau dossier
-Name: [name]
-Dossier parent: [folder_path]
-Commentaire: [comment]
-Utilisateur: [username]
-URL: [url]',
+Nom : [name]
+Dossier parent : [folder_path]
+Commentaire : [comment]
+Utilisateur : [username]
+URL : [url]',
 'new_subfolder_email_subject' => '[sitename]: [name] - Nouveau dossier',
 'new_user_image' => 'Nouvelle image',
 'next_state' => 'Nouvel état',
@@ -825,8 +825,14 @@ En cas de problème persistant, veuillez contacter votre administrateur.',
 'quota_exceeded' => 'Votre quota de disque est dépassé de [bytes].',
 'quota_is_disabled' => 'Le support des quota est actuellement désactivé dans les réglages. Affecter un quota utilisateur n\'aura pas d\'effet jusqu\'à ce qu\'il soit de nouveau activé.',
 'quota_warning' => 'Votre quota d’espace disque est dépassé de [bytes]. Veuillez supprimer des documents ou d\'anciennes versions.',
-'receipt_deletion_email_body' => '',
-'receipt_deletion_email_subject' => '',
+'receipt_deletion_email_body' => 'L’utilisateur a été retiré de la liste des destinataires
+Document : [name]
+Version : [version]
+Dossier parent : [folder_path]
+Destinataire : [recipient]
+Utilisateur : [username]
+URL : [url]',
+'receipt_deletion_email_subject' => '[sitename] : [name] - Destinataire supprimé',
 'receipt_log' => '',
 'receipt_request_email_body' => '',
 'receipt_request_email_subject' => '',
@@ -918,6 +924,7 @@ URL: [url]',
 'rm_default_keyword_category' => 'Supprimer la catégorie',
 'rm_document' => 'Supprimer le document',
 'rm_document_category' => 'Supprimer la catégorie',
+'rm_event' => 'Supprimer l’événement',
 'rm_file' => 'Supprimer le fichier',
 'rm_folder' => 'Supprimer le dossier',
 'rm_from_clipboard' => 'Supprimer le dossier du presse-papiers',
