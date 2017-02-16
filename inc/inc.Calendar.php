@@ -70,13 +70,13 @@ function getEvent($id){
 	return $ret[0];	
 }
 
-function editEvent($id, $from, $to, $name, $comment ){
+function editEvent($id, $from, $to=null, $name=null, $comment=null ){
 
 	if (!is_numeric($id)) return false;
 
 	global $db;
 	
-	$queryStr = "UPDATE `tblEvents` SET `start` = " . (int) $from . ", `stop` = " . (int) $to . ", `name` = " . $db->qstr($name) . ", `comment` = " . $db->qstr($comment) . ", `date` = " . $db->getCurrentTimestamp() . " WHERE `id` = ". (int) $id;
+	$queryStr = "UPDATE `tblEvents` SET `start` = " . (int) $from . ($to !== null ? ", `stop` = " . (int) $to : '') . ($name !== null ? ", `name` = " . $db->qstr($name) : '') . ($comment !== null ? ", `comment` = " . $db->qstr($comment) : '') . ", `date` = " . $db->getCurrentTimestamp() . " WHERE `id` = ". (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }

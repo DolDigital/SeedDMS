@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for Calendar view
  *
  * @category   DMS
@@ -31,354 +36,371 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 
-	function generateCalendarArrays() { /* {{{ */
-		$this->monthNames = array( getMLText("january"),
-												 getMLText("february"),
-												 getMLText("march"),
-												 getMLText("april"),
-												 getMLText("may"),
-												 getMLText("june"),
-												 getMLText("july"),
-												 getMLText("august"),
-												 getMLText("september"),
-												 getMLText("october"),
-												 getMLText("november"),
-												 getMLText("december") );
+	function iteminfo() { /* {{{ */
+		$dms = $this->params['dms'];
+		$document = $this->params['document'];
+		$version = $this->params['version'];
+		$event = $this->params['event'];
+		$strictformcheck = $this->params['strictformcheck'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidthlist = $this->params['previewWidthList'];
+		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$timeout = $this->params['timeout'];
 
-		$this->dayNamesLong = array( getMLText("sunday"),
-													 getMLText("monday"),
-													 getMLText("tuesday"),
-													 getMLText("wednesday"),
-													 getMLText("thursday"),
-													 getMLText("friday"),
-													 getMLText("saturday") );
-		/* Set abbreviated weekday names. If no translation is availabe, use
-		 * the first three chars from the long name
-		 */
-		$this->dayNames = array( getMLText("sunday_abbr", array(), substr($this->dayNamesLong[0], 0, 3)),
-													 getMLText("monday_abbr", array(), substr($this->dayNamesLong[1], 0, 3)),
-													 getMLText("tuesday_abbr", array(), substr($this->dayNamesLong[2], 0, 3)),
-													 getMLText("wednesday_abbr", array(), substr($this->dayNamesLong[3], 0, 3)),
-													 getMLText("thursday_abbr", array(), substr($this->dayNamesLong[4], 0, 3)),
-													 getMLText("friday_abbr", array(), substr($this->dayNamesLong[5], 0, 3)),
-													 getMLText("saturday_abbr", array(), substr($this->dayNamesLong[6], 0, 3)) );
+		if($document) {
+		//	$this->contentHeading(getMLText("timeline_selected_item"));
+				print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
+				echo $this->documentListRow($document, $previewer);
 
+				echo "</tbody>\n</table>\n";
+		}
+		if($event) {
+//			print_r($event);
+			$this->contentHeading(getMLText('edit_event'));
+			$this->contentContainerStart();
+?>
+
+<form class="form-horizontal" action="../op/op.EditEvent.php" id="form1" name="form1" method="POST">
+  <?php echo createHiddenFieldWithKey('editevent'); ?>
+
+	<input type="hidden" name="eventid" value="<?php echo (int) $event["id"]; ?>">
+
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("from");?>:</label>
+			<div class="controls">
+				<?php //$this->printDateChooser($event["start"], "from");?>
+	    		<span class="input-append date span12" id="fromdate" data-date="<?php echo date('Y-m-d', $event["start"]); ?>" data-date-format="yyyy-mm-dd">
+	      		<input class="span6" size="16" name="from" type="text" value="<?php echo date('Y-m-d', $event["start"]); ?>">
+	      		<span class="add-on"><i class="icon-calendar"></i>
+	    		</span>
+	    	</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("to");?>:</label>
+			<div class="controls">
+				<?php //$this->printDateChooser($event["stop"], "to");?>
+	    		<span class="input-append date span12" id="todate" data-date="<?php echo date('Y-m-d', $event["stop"]); ?>" data-date-format="yyyy-mm-dd">
+	      		<input class="span6" size="16" name="to" type="text" value="<?php echo date('Y-m-d', $event["stop"]); ?>">
+	      		<span class="add-on"><i class="icon-calendar"></i></span>
+	    		</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("name");?>:</label>
+			<div class="controls">
+				<input type="text" name="name" value="<?php echo htmlspecialchars($event["name"]);?>" size="60" required>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"><?php printMLText("comment");?>:</label>
+			<div class="controls">
+				<textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php echo htmlspecialchars($event["comment"])?></textarea>
+			</div>
+		</div>
+		<div class="controls">
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
+		</div>
+</form>
+<?php
+			$this->contentContainerEnd();
+			$this->contentHeading(getMLText('rm_event'));
+		$this->contentContainerStart();
+?>
+<form action="../op/op.RemoveEvent.php" name="form2" method="post">
+  <?php echo createHiddenFieldWithKey('removeevent'); ?>
+	<input type="hidden" name="eventid" value="<?php echo intval($event["id"]); ?>">
+	<p><?php printMLText("confirm_rm_event", array ("name" => htmlspecialchars($event["name"])));?></p>
+	<button class="btn" type="submit"><i class="icon-remove"></i> <?php printMLText("delete");?></button>
+</form>
+<?php
+			$this->contentContainerEnd();
+		}
 	} /* }}} */
 
-	// Calculate the number of days in a month, taking into account leap years.
-	function getDaysInMonth($month, $year) { /* {{{ */
-		if ($month < 1 || $month > 12) return 0;
+	function itemsperday() { /* {{{ */
+		$dms = $this->params['dms'];
+		$start = explode('-', $this->params['start']);
+		$cachedir = $this->params['cachedir'];
+		$previewwidthlist = $this->params['previewWidthList'];
+		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$timeout = $this->params['timeout'];
 
-		$daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-		$d = $daysInMonth[$month - 1];
+		if($this->params['start']) {
+			$from = makeTsFromLongDate($this->params['start'].' 00:00:00');
+		} else {
+			$from = time();
+		}
 
-		if ($month == 2){
-
-			if ($year%4 == 0){
-
-				if ($year%100 == 0){
-
-					if ($year%400 == 0) $d = 29;
+		if($data = $dms->getTimeline($from)) {
+			$this->contentHeading(getReadableDate($from));
+			print "<table id=\"viewfolder-table\" class=\"table table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th></th>\n";	
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
+			foreach($data as $i=>$item) {
+				/* Filter out timeline events for the documents not happened on the
+				 * selected day
+				 */
+				if(substr($item['date'], 0, 10) == $this->params['start'])
+					if($item['document']) {
+						echo $this->documentListRow($item['document'], $previewer);
 				}
-				else $d = 29;
 			}
+			echo "</tbody>\n</table>\n";
 		}
-		return $d;
 	} /* }}} */
 
-	// Adjust dates to allow months > 12 and < 0 and day<0 or day>days of the month
-	function adjustDate(&$day,&$month,&$year) { /* {{{ */
-		$d=getDate(mktime(12,0,0, $month, $day, $year));
-		$month=$d["mon"];
-		$day=$d["mday"];
-		$year=$d["year"];
-	} /* }}} */
+	function events() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$eventtype = $this->params['eventtype'];
+		$start = explode('-', $this->params['start']);
+		$end = explode('-', $this->params['end']);
 
-	// Generate the HTML for a given month
-	function getMonthHTML($month, $year) { /* {{{ */
-		if (!isset($this->monthNames)) $this->generateCalendarArrays();
-		if (!isset($this->dayNames)) $this->generateCalendarArrays();
+		$arr = array();
+		switch($eventtype) {
+		case 'regular':
+			$events = getEventsInInterval(mktime(0,0,0, $start[1], $start[2], $start[0]), mktime(23,59,59, $end[1], $end[2], $end[0]));
+			foreach ($events as $event){
+				$arr[] = array('start'=>date('Y-m-d', $event["start"]), 'end'=>date('Y-m-d', $event["stop"]), 'title'=>$event["name"].($event['comment'] ? "\n".$event['comment'] : ''), 'eventid'=>$event["id"]);
+			}
+			break;
+		case 'action':
+			if($this->params['start']) {
+				$from = makeTsFromLongDate($this->params['start'].' 00:00:00');
+			} else {
+				$from = time()-7*86400;
+			}
 
-		$startDay = $this->firstdayofweek;
+			if($this->params['end']) {
+				$to = makeTsFromLongDate($this->params['end'].' 23:59:59');
+			} else {
+				$to = time();
+			}
 
-		$day=1;
-		$this->adjustDate($day,$month,$year);
-
-		$daysInMonth = $this->getDaysInMonth($month, $year);
-		$date = getdate(mktime(12, 0, 0, $month, 1, $year));
-
-		$first = $date["wday"];
-		$monthName = $this->monthNames[$month - 1];
-
-		$s  = "<table class=\"table\">\n";
-
-		$s .= "<tr>\n";
-		$s .= "<td style=\"border-top: 0px;\" colspan=\"7\"><a href=\"../out/out.Calendar.php?mode=m&year=".$year."&month=".$month."\">".$monthName."</a></td>\n"; ;
-		$s .= "</tr>\n";
-
-		$s .= "<tr>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+1)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+2)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+3)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+4)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+5)%7] . "</th>\n";
-		$s .= "<th class=\"header\">" . $this->dayNames[($startDay+6)%7] . "</th>\n";
-		$s .= "</tr>\n";
-
-		// We need to work out what date to start at so that the first appears in the correct column
-		$d = $startDay + 1 - $first;
-		while ($d > 1) $d -= 7;
-
-		// Make sure we know when today is, so that we can use a different CSS style
-		$today = getdate(time());
-
-		$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month+1, 0, $year));
-		$eventdays = array();
-		if($events) {
-			for($i=1; $i<$daysInMonth; $i++)
-				$eventdays[$i] = 0;
-			foreach($events as $event) {
-				for($i = date('d', $event['start']); $i <= date('d', $event['stop']); $i++) {
-					$eventdays[$i]++;
+			if($data = $dms->getTimeline($from, $to)) {
+				foreach($data as $i=>$item) {
+					switch($item['type']) {
+					case 'add_version':
+						$color = '#20a820';
+						break;
+					case 'add_file':
+						$color = '#a82020';
+						break;
+					case 'status_change':
+						$color = '#a8a8a8';
+						break;
+					default:
+						$color = '#20a8a8';
+					}
+					$arr[] = array(
+						'start'=>$item['date'],
+						'title'=>$item['document']->getName()."\n".$item['msg'],
+						'allDay'=>false,
+						'color'=>$color,
+						'type'=>$item['type'],
+						'documentid'=> (int) $item['document']->getID(),
+						'version'=> isset($item['version']) ? (int) $item['version'] : '',
+						'statusid'=> isset($item['statusid']) ? (int) $item['statusid'] : '',
+						'statuslogid'=> isset($item['statuslogid']) ? (int) $item['statuslogid'] : '',
+						'fileid'=> isset($item['fileid']) ? (int) $item['fileid'] : ''
+					);
 				}
 			}
+			break;
 		}
 
-		while ($d <= $daysInMonth)
-		{
-			$s .= "<tr>\n";
-
-			for ($i = 0; $i < 7; $i++){
-
-				$class = '';
-				if($eventdays && $eventdays[$d])
-					$class = 'event';
-				$class = ($year == $today["year"] && $month == $today["mon"] && $d == $today["mday"]) ? "today" : $class;
-				$s .= "<td".($class ? " class=\"$class\"" : "").">";
-
-				if ($d > 0 && $d <= $daysInMonth){
-
-					$s .= "<a href=\"../out/out.Calendar.php?mode=w&year=".$year."&month=".$month."&day=".$d."\">".$d."</a>";
-							}
-				else $s .= "&nbsp;";
-
-				$s .= "</td>\n";
-				$d++;
-			}
-			$s .= "</tr>\n";
-		}
-
-		$s .= "</table>\n";
-
-		return $s;
-	} /* }}} */
-
-	function printYearTable($year) { /* {{{ */
-		print "<table class=\"table\" style=\"max-width: 700px;\">\n";
-		print "<tr>";
-		print "<td valign=\"top\">" . $this->getMonthHTML(1 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(2 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(3 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(4 , $year) ."</td>\n";
-		print "</tr>\n";
-		print "<tr>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(5 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(6 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(7 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(8 , $year) ."</td>\n";
-		print "</tr>\n";
-		print "<tr>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(9 , $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(10, $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(11, $year) ."</td>\n";
-		print "<td valign=\"top\">" . $this->getMonthHTML(12, $year) ."</td>\n";
-		print "</tr>\n";
-		print "</table>\n";
+		header('Content-Type: application/json');
+		echo json_encode($arr);
 	} /* }}} */
 
 	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript');
+?>
+	$(document).ready(function() {
+		
+		$('#calendar').fullCalendar({
+			height: $(window).height()-210,
+			locale: '<?php echo substr($this->params['session']->getLanguage(), 0, 2); ?>',
+			customButtons: {
+				addEventButton: {
+					text: '<?php printMLText('add_event'); ?>',
+					click: function() {
+//						alert('clicked the custom button!');
+						document.location.href = '../out/out.AddEvent.php';
+					}
+				}
+			},
+			header: {
+				left: 'prev,next today addEventButton',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay,listWeek'
+			},
+			defaultDate: '<?php echo date('Y-m-d'); ?>',
+			navLinks: true, // can click day/week names to navigate views
+			editable: false,
+			weekNumbers: true,
+			eventLimit: true, // allow "more" link when too many events
+			eventDrop: function(event, delta, revertFunc) {
+//				if (!confirm("Are you sure about this change?")) {
+//						revertFunc();
+//				}
+	$.post("../op/op.EditEvent.php", "formtoken=<?php echo createFormKey('editevent'); ?>&eventid="+event.eventid+"&from="+event.start.format()+"&ajax=1", function(response) {
+									noty({
+										text: response.message,
+										type: response.success === true ? 'success' : 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+									$('#calendar').fullCalendar('refetchEvents');
+								}, "json");
+
+			},
+			eventSources: [
+				{
+					url: 'out.Calendar.php?action=events',
+					editable: true,
+					eventStartEditable: false
+				},
+				{
+					url: 'out.Calendar.php?action=events&eventtype=action',
+					editable: false
+				}
+			],
+			eventClick: function(event, element) {
+				$('div.ajax.iteminfo').trigger('update', {
+					documentid: event.documentid,
+					version: event.version,
+					eventid: event.eventid,
+					statusid: event.statusid,
+					statuslogid: event.statuslogid,
+					fileid: event.fileid,
+					callback: function() {
+						$("#form1").validate({
+							debug: false,
+							submitHandler: function(form) {
+								$.post("../op/op.EditEvent.php", $(form).serialize()+"&ajax=1", function(response) {
+									noty({
+										text: response.message,
+										type: response.success === true ? 'success' : 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+									$('#calendar').fullCalendar('refetchEvents');
+								}, "json");
+							},
+							invalidHandler: function(e, validator) {
+								noty({
+									text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
+									type: 'error',
+									dismissQueue: true,
+									layout: 'topRight',
+									theme: 'defaultTheme',
+									timeout: 1500,
+								});
+							},
+							messages: {
+								name: "<?php printMLText("js_no_name");?>",
+								comment: "<?php printMLText("js_no_comment");?>"
+							},
+						});
+						$('#fromdate, #todate')
+							.datepicker()
+							.on('changeDate', function(ev){
+								$(ev.currentTarget).datepicker('hide');
+							});
+					}
+				});
+				$('div.ajax.itemsperday').html('');
+
+			},
+			dayClick: function(date, jsEvent, view) {
+				$('div.ajax.itemsperday').trigger('update', {start: date.format()});
+				$('div.ajax.iteminfo').html('');
+			}
+		});
+		
+	});
+
+/*
+function checkForm()
+{
+	msg = new Array()
+	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+<?php
+	if ($strictformcheck) {
+?>
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+<?php
+	}
+?>
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+$(document).ready(function() {
+	$('body').on('submit', '#form1', function(ev){
+		if(checkForm()) return;
+		ev.preventDefault();
+	});
+});
+*/
+<?php
 	} /* }}} */
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$mode = $this->params['mode'];
-		$year = $this->params['year'];
-		$month = $this->params['month'];
-		$day = $this->params['day'];
-		$this->firstdayofweek = $this->params['firstdayofweek'];
 
-		$this->adjustDate($day,$month,$year);
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fullcalendar/lib/moment.min.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fullcalendar/fullcalendar.min.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fullcalendar/locale-all.js"></script>'."\n", 'js');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/fullcalendar/fullcalendar.min.css" rel="stylesheet"></link>'."\n", 'css');
+		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/fullcalendar/fullcalendar.print.min.css" rel="stylesheet" media="print"></link>'."\n", 'css');
 
 		$this->htmlStartPage(getMLText("calendar"));
 		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation("", "calendar",array($day,$month,$year));
-
-		if ($mode=="y"){
-
-			$this->contentHeading(getMLText("year_view").": ".$year);
-
-			echo "<div class=\"pagination pagination-small\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y&year=".($year-1)."\"><i style=\"color: black;\" class=\"icon-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y\"><i style=\"color: black;\" class=\"icon-circle-blank\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=y&year=".($year+1)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
-
-//			$this->contentContainerStart();
-			$this->printYearTable($year);
-//			$this->contentContainerEnd();
-
-		}else if ($mode=="m"){
-
-			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
-			if (!isset($this->monthNames)) $this->generateCalendarArrays();
-
-			$this->contentHeading(getMLText("month_view").": ".$this->monthNames[$month-1]. " ".$year);
-
-			echo "<div class=\"pagination pagination-small\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month-1)."\"><i style=\"color: black;\" class=\"icon-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m\"><i style=\"color: black;\" class=\"icon-circle-blank\"></i></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month+1)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
-//			$this->contentContainerStart();
-
-			$days=$this->getDaysInMonth($month, $year);
-			$today = getdate(time());
-
-			$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month, $days, $year));
-
-			echo "<div class=\"row-fluid\">";
-			echo "<div class=\"span2\">";
-			echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=1\">".date('W', mktime(12, 0, 0, $month, 1, $year)).". ".getMLText('calendar_week')."</a></h4>";
-			echo "<div class=\"well\">";
-			$fd = getdate(mktime(12, 0, 0, $month, 1, $year));
-			for($i=0; $i<$fd['wday']-1; $i++)
-				echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
-
-			for ($i=1; $i<=$days; $i++){
-
-				// separate weeks
-				$date = getdate(mktime(12, 0, 0, $month, $i, $year));
-				if (($date["wday"]==$this->firstdayofweek) && ($i!=1)) {
-					echo "</div>";
-					echo "</div>";
-					echo "<div class=\"span2\">";
-					echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".date('W', mktime(12, 0, 0, $month, $i, $year)).". ".getMLText('calendar_week')."</a></h4>";
-					echo "<div class=\"well\">";
-				}
-
-				// highlight today
-				$class = ($year == $today["year"] && $month == $today["mon"] && $i == $today["mday"]) ? "todayHeader" : "header";
-
-				echo "<h5>".$i.". - ".$this->dayNamesLong[$date["wday"]]."</h5>";
-
-				if ($class=="todayHeader") $class="today";
-				else $class="";
-
-				$xdate=mktime(0, 0, 0, $month, $i, $year);
-				foreach ($events as $event){
-					echo "<div>";
-					if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
-
-						if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 22) . "...";
-						print "<i class=\"icon-lightbulb\"></i> <a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
-					}
-					echo "</div>";
-				}
-
-			}
-			echo "</div>";
-			echo "</div>\n";
-			echo "</div>\n";
-
-//			$this->contentContainerEnd();
-
-		}else{
-
-			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
-			if (!isset($this->monthNames)) $this->generateCalendarArrays();
-
-			// get the week interval - TODO: $GET
-			$datestart=getdate(mktime(0,0,0,$month,$day,$year));
-			while($datestart["wday"]!=$this->firstdayofweek){
-				$datestart=getdate(mktime(0,0,0,$datestart["mon"],$datestart["mday"]-1,$datestart["year"]));
-			}
-
-			$datestop=getdate(mktime(23,59,59,$month,$day,$year));
-			if ($datestop["wday"]==$this->firstdayofweek){
-				$datestop=getdate(mktime(23,59,59,$datestop["mon"],$datestop["mday"]+1,$datestop["year"]));
-			}
-			while($datestop["wday"]!=$this->firstdayofweek){
-				$datestop=getdate(mktime(23,59,59,$datestop["mon"],$datestop["mday"]+1,$datestop["year"]));
-			}
-			$datestop=getdate(mktime(23,59,59,$datestop["mon"],$datestop["mday"]-1,$datestop["year"]));
-
-			$starttime=mktime(0,0,0,$datestart["mon"],$datestart["mday"],$datestart["year"]);
-			$stoptime=mktime(23,59,59,$datestop["mon"],$datestop["mday"],$datestop["year"]);
-
-			$today = getdate(time());
-			$events = getEventsInInterval($starttime,$stoptime);
-
-			$this->contentHeading(getMLText("week_view").": ".getReadableDate(mktime(12, 0, 0, $month, $day, $year)));
-
-			echo "<div class=\"pagination pagination-small\">";
-			echo "<ul>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day-7)."\"><i style=\"color: black;\" class=\"icon-arrow-left\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w\"><i style=\"color: black;\" class=\"icon-circle-blank\"></i></a></li>";
-			print "<li><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($day+7)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
-			echo "</ul>";
-			echo "</div>";
-//			$this->contentContainerStart();
-
-			echo "<table class='table _table-condensed' style=\"max-width: 700px;\">\n";
-
-			for ($i=$starttime; $i<$stoptime; $i += 86400){
-
-				$date = getdate($i);
-
-				// for daylight saving time TODO: could be better
-				if ( ($i!=$starttime) && ($prev_day==$date["mday"]) ){
-					$i += 3600;
-					$date = getdate($i);
-				}
-
-				// highlight today
-				$class = ($date["year"] == $today["year"] && $date["mon"] == $today["mon"] && $date["mday"]  == $today["mday"]) ? "info" : "";
-
-				echo "<tr class=\"".$class."\">";
-				echo "<td colspan=\"3\"><strong>".$this->dayNamesLong[$date["wday"]].", ";
-				echo getReadableDate($i)."</strong></td>";
-				echo "</tr>";
-
-				foreach ($events as $event){
-					if (($event["start"]<=$i)&&($event["stop"]>=$i)){
-						echo "<tr>";
-						print "<td><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
-						if($event['comment'])
-							echo "<br /><em>".htmlspecialchars($event['comment'])."</em>";
-						print "</td>";
-						echo "<td><a class=\"btn btn-mini\" href=\"../out/out.RemoveEvent.php?id=".$event['id']."\"><i class=\"icon-remove\"></i> ".getMLText('delete')."</a></td>";
-						echo "<td><a class=\"btn btn-mini\" href=\"../out/out.EditEvent.php?id=".$event['id']."\">".getMLText('update')."</a></td>";
-						echo "</tr>\n";
-					}
-				}
-
-				$prev_day=$date["mday"];
-			}
-			echo "</table>\n";
-
-//			$this->contentContainerEnd();
-		}
-
+		$this->pageNavigation("", "calendar", array());
+?>
+<div class="row-fluid">
+	<div id="calendar" class="span8" _style="display: inline-block; float: left;"></div>
+	<div id="docinfo" class="span4" _style="display: inline-block; float: right;">
+		<div class="ajax iteminfo" data-view="Calendar" data-action="iteminfo" ></div>
+		<div class="ajax itemsperday" data-view="Calendar" data-action="itemsperday" ></div>
+	</div>
+</div>
+<?php
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
+
 }
 ?>

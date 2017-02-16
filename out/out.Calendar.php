@@ -24,26 +24,48 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if ($_GET["mode"]) $mode=$_GET["mode"];
+if (isset($_GET["start"])) $start=$_GET["start"];
+else $start = '';
+if (isset($_GET["end"])) $end=$_GET["end"];
+else $end = '';
 
-// get required date else use current
-$currDate = time();
+if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['documentid'])) {
+	$document = $dms->getDocument($_GET["documentid"]);
+	if (!is_object($document)) {
+		$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+	}
+} else
+	$document = null;
 
-if (isset($_GET["year"])&&is_numeric($_GET["year"])) $year=$_GET["year"];
-else $year = (int)date("Y", $currDate);
-if (isset($_GET["month"])&&is_numeric($_GET["month"])) $month=$_GET["month"];
-else $month = (int)date("m", $currDate);
-if (isset($_GET["day"])&&is_numeric($_GET["day"])) $day=$_GET["day"];
-else $day = (int)date("d", $currDate);
+if(isset($_GET['eventid']) && $_GET['eventid'] && is_numeric($_GET['eventid'])) {
+	$event = getEvent($_GET["eventid"]);
+} else
+	$event = null;
+
+if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) {
+	$content = $document->getContentByVersion($_GET['version']);
+} else
+	$content = null;
+
+if(isset($_GET['eventtype']) && $_GET['eventtype']) {
+	$eventtype = $_GET['eventtype'];
+} else
+	$eventtype = 'regular';
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('mode', $mode);
-	$view->setParam('year', $year);
-	$view->setParam('month', $month);
-	$view->setParam('day', $day);
-	$view->setParam('firstdayofweek', $settings->_firstDayOfWeek);
+	$view->setParam('start', $start);
+	$view->setParam('end', $end);
+	$view->setParam('document', $document);
+	$view->setParam('version', $content);
+	$view->setParam('event', $event);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('eventtype', $eventtype);
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);
 	exit;
 }
