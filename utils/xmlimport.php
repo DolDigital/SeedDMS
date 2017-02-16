@@ -1681,7 +1681,6 @@ require_once("SeedDMS/Core.php");
 
 $db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-$db->_debug = 1;
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 if(!$settings->_doNotCheckDBVersion && !$dms->checkVersion()) {
