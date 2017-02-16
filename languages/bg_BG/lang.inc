@@ -786,6 +786,7 @@ $text = array(
 'rm_default_keyword_category' => 'Премахни категория',
 'rm_document' => 'Премахни документ',
 'rm_document_category' => 'Премахни категория',
+'rm_event' => '',
 'rm_file' => 'Премахни файл',
 'rm_folder' => 'Премахни папка',
 'rm_from_clipboard' => 'Премахни от clipboard буфера',
