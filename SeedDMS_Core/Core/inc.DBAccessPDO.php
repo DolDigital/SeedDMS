@@ -158,6 +158,15 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
+	 * Return driver
+	 *
+	 * @return string name of driver as set in constructor
+	 */
+	public function getDriver() { /* {{{ */
+		return $this->_driver;
+	} /* }}} */
+
+	/**
 	 * Connect to database
 	 *
 	 * @return boolean true if connection could be established, otherwise false
