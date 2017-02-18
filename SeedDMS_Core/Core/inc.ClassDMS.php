@@ -1279,11 +1279,15 @@ class SeedDMS_Core_DMS {
 		}
 		if($role == '')
 			$role = '0';
-		if(trim($pwdexpiration) == '' || trim($pwdexpiration) == 'never')
-			$pwdexpiration = null;
-		elseif(trim($pwdexpiration) == 'now')
-			$pwdexpiration = date('Y-m-d H:i:s');
-		$queryStr = "INSERT INTO `tblUsers` (`login`, `pwd`, `fullName`, `email`, `language`, `theme`, `comment`, `role`, `hidden`, `disabled`, `pwdExpiration`, `quota`, `homefolder`) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".($pwdexpiration === null ? 'NULL' : $db->qstr($pwdexpiration)).", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
+		if(trim($pwdexpiration) == '' || trim($pwdexpiration) == 'never') {
+			if($db->getDriver() == 'sqlite')
+				$pwdexpiration = $db->qstr('0000-00-00 00:00:00');
+			else
+				$pwdexpiration = 'DEFAULT';
+		} elseif(trim($pwdexpiration) == 'now')
+			$pwdexpiration = $db->qstr(date('Y-m-d H:i:s'));
+		$queryStr = "INSERT INTO `tblUsers` (`login`, `pwd`, `fullName`, `email`, `language`, `theme`, `comment`, `role`, `hidden`, `disabled`, `pwdExpiration`, `quota`, `homefolder`) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$pwdexpiration.", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
+		echo $queryStr;
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;

@@ -269,7 +269,10 @@ class SeedDMS_Core_User { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if(trim($newPwdExpiration) == '' || trim($newPwdExpiration) == 'never') {
-			$queryStr = "UPDATE `tblUsers` SET `pwdExpiration` = NULL WHERE `id` = " . $this->_id;
+			if($db->getDriver() == 'sqlite')
+				$queryStr = "UPDATE `tblUsers` SET `pwdExpiration` = '0000-00-00 00:00:00' WHERE `id` = " . $this->_id;
+			else
+				$queryStr = "UPDATE `tblUsers` SET `pwdExpiration` = DEFAULT WHERE `id` = " . $this->_id;
 		} else {
 			if(trim($newPwdExpiration) == 'now')
 				$newPwdExpiration = date('Y-m-d H:i:s');
