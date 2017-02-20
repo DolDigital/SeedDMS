@@ -24,5 +24,7 @@ ALTER TABLE `tblWorkflowDocumentContent` CHANGE `date` `date` datetime NOT NULL;
 
 ALTER TABLE `tblVersion` CHANGE `date` `date` datetime NOT NULL;
 
+UPDATE tblVersion set major=5, minor=1, subminor=0;
+
 COMMIT;
 

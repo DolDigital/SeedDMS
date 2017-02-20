@@ -195,5 +195,7 @@ DROP TABLE `tblWorkflowDocumentContent`;
 
 ALTER TABLE `__tblWorkflowDocumentContent` RENAME TO `tblWorkflowDocumentContent`;
 
+UPDATE tblVersion set major=5, minor=1, subminor=0;
+
 COMMIT;
 
