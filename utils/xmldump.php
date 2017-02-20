@@ -408,6 +408,8 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 					echo $indent."   <attr name=\"mimetype\">".$file->getMimeType()."</attr>\n";
 					echo $indent."   <attr name=\"date\" format=\"Y-m-d H:i:s\">".date('Y-m-d H:i:s', $file->getDate())."</attr>\n";
 					echo $indent."   <attr name=\"filetype\">".wrapWithCData($file->getFileType())."</attr>\n";
+					echo $indent."   <attr name=\"version\">".$file->getVersion()."</attr>\n";
+					echo $indent."   <attr name=\"pulic\">".($file->isPublic() ? 1 : 0)."</attr>\n";
 					echo $indent."   <attr name=\"owner\">".$owner->getId()."</attr>\n";
 					echo $indent."   <attr name=\"comment\">".wrapWithCData($file->getComment())."</attr>\n";
 					echo $indent."   <attr name=\"orgfilename\">".wrapWithCData($file->getOriginalFileName())."</attr>\n";
