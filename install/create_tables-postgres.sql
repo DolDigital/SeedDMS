@@ -266,6 +266,8 @@ CREATE TABLE "tblDocumentFiles" (
   "id" SERIAL UNIQUE,
   "document" INTEGER NOT NULL default 0 REFERENCES "tblDocuments" ("id"),
   "userID" INTEGER NOT NULL default 0 REFERENCES "tblUsers" ("id"),
+  "version" INTEGER NOT NULL default '0',
+  "public" INTEGER NOT NULL default '0',
   "comment" text,
   "name" varchar(150) default NULL,
   "date" INTEGER default NULL,
