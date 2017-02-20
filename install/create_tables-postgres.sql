@@ -626,4 +626,4 @@ INSERT INTO "tblUsers" VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '',
 SELECT nextval('"tblUsers_id_seq"');
 INSERT INTO "tblFolders" VALUES (1, 'DMS', 0, '', 'DMS root', extract(epoch from now()), 1, 0, 2, 0);
 SELECT nextval('"tblFolders_id_seq"');
-INSERT INTO "tblVersion" VALUES (CURRENT_TIMESTAMP, 5, 0, 0);
+INSERT INTO "tblVersion" VALUES (CURRENT_TIMESTAMP, 5, 1, 0);

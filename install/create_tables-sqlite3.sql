@@ -621,4 +621,4 @@ CREATE TABLE `tblVersion` (
 INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0, 0, 0);
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0, 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', strftime('%s','now'), 1, 0, 2, 0);
-INSERT INTO tblVersion VALUES (DATETIME(), 5, 0, 0);
+INSERT INTO tblVersion VALUES (DATETIME(), 5, 1, 0);
