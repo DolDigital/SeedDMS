@@ -388,9 +388,9 @@ $(document).ready(function() {
 		$this->htmlStartPage(getMLText("calendar"));
 		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation("", "calendar", array());
+//		$this->pageNavigation("", "calendar", array());
 ?>
-<div class="row-fluid">
+<div class="row-fluid" style="margin-bottom: 20px;">
 	<div id="calendar" class="span8" _style="display: inline-block; float: left;"></div>
 	<div id="docinfo" class="span4" _style="display: inline-block; float: right;">
 		<div class="ajax iteminfo" data-view="Calendar" data-action="iteminfo" ></div>
