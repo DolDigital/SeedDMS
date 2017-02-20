@@ -171,6 +171,10 @@ CREATE TABLE `tblWorkflowDocumentContent` (
 
 INSERT INTO `tblWorkflowDocumentContent` SELECT * FROM `__tblWorkflowDocumentContent`;
 
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` INTEGER NOT NULL default '0';
+
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` INTEGER NOT NULL default '0';
+
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
 COMMIT;
