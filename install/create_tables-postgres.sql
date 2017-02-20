@@ -61,7 +61,7 @@ CREATE TABLE "tblUsers" (
   "pwdExpiration" TIMESTAMP default NULL,
   "loginfailures" INTEGER NOT NULL default '0',
   "disabled" INTEGER NOT NULL default '0',
-  "quota" INTEGER,
+  "quota" BIGINT,
   "homefolder" INTEGER default NULL,
   UNIQUE ("login")
 );
@@ -102,7 +102,7 @@ CREATE TABLE "tblUserImages" (
   "id" SERIAL UNIQUE,
   "userID" INTEGER NOT NULL default '0' REFERENCES "tblUsers" ("id") ON DELETE CASCADE,
   "image" TEXT NOT NULL,
-  "mimeType" varchar(10) NOT NULL default ''
+  "mimeType" varchar(100) NOT NULL default ''
 ) ;
 
 -- --------------------------------------------------------
@@ -606,7 +606,7 @@ CREATE TABLE "tblWorkflowMandatoryWorkflow" (
 -- 
 
 CREATE TABLE "tblVersion" (
-  "date" TIMESTAMP default NULL,
+  "date" TIMESTAMP NOT NULL,
   "major" INTEGER,
   "minor" INTEGER,
   "subminor" INTEGER
