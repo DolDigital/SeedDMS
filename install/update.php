@@ -33,11 +33,14 @@ if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 	exit;
 }
 
-$theme = "blue";
+$theme = "bootstrap";
 require_once("../inc/inc.Language.php");
+include "../languages/en_GB/lang.inc";
 require_once("../inc/inc.ClassUI.php");
 
 UI::htmlStartPage('Database update');
+UI::globalBanner();
+UI::contentStart();
 UI::contentHeading("SeedDMS Installation for version ".$_GET['version']);
 UI::contentContainerStart();
 
@@ -104,6 +107,11 @@ if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 }
 $db = null;
 
+// just remove info for web page installation
+$settings->_printDisclaimer = false;
+$settings->_footNote = false;
+// end of the page
 UI::contentContainerEnd();
+UI::contentEnd();
 UI::htmlEndPage();
 ?>
