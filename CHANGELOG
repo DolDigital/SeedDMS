@@ -4,6 +4,12 @@
 - added support for postgresql
 
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.10
+--------------------------------------------------------------------------------
+- merged changes from 4.3.33
+- new javascript base calendar
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.9
 --------------------------------------------------------------------------------
 - merged changes from 4.3.32
@@ -74,6 +80,8 @@
 - add support for fine-uploader as a replacement for the old jumploader
 - when importing from filesystem, the imported folder can be deleted afterwards
 - new calendar
+- move folder/document properly checks for access right if done by drag and
+  drop (Closes #309)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.32

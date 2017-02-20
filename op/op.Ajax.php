@@ -251,7 +251,7 @@ switch($command) {
 			} else {
 				$mfolder = $dms->getFolder($_REQUEST['folderid']);
 				if($mfolder) {
-					if ($mfolder->getAccessMode($user) >= M_READ) {
+					if ($mfolder->getAccessMode($user) >= M_READWRITE) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mfolder->setParent($folder)) {
@@ -290,7 +290,7 @@ switch($command) {
 			} else {
 				$mdocument = $dms->getDocument($_REQUEST['docid']);
 				if($mdocument) {
-					if ($mdocument->getAccessMode($user) >= M_READ) {
+					if ($mdocument->getAccessMode($user) >= M_READWRITE) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
 							if($folder->getAccessMode($user) >= M_READWRITE) {
 								if($mdocument->setFolder($folder)) {
