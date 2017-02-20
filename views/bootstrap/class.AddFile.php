@@ -143,7 +143,6 @@ $(document).ready( function() {
 
 <form class="form-horizontal" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
 <input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
-
 <div class="control-group">
 	<label class="control-label"><?php printMLText("local_file");?>:</label>
 	<div class="controls">
@@ -155,28 +154,39 @@ $(document).ready( function() {
 ?>
 	</div>
 </div>
-
-
+<div class="control-group">
+	<label class="control-label"><?php printMLText("link_to_version");?>:</label>
+	<div class="controls"><select name="version" id="version">
+		<option value=""></option>
+<?php
+		$versions = $document->getContent();
+		foreach($versions as $version)
+			echo "<option value=\"".$version->getVersion()."\">".getMLText('version')." ".$version->getVersion()."</option>";
+?>
+	</select></div>
+</div>
 <div class="control-group">
 	<label class="control-label"><?php printMLText("name");?>:</label>
-	<div class="controls">
-		<input type="text" name="name" id="name" size="60">
-	</div>
+	<div class="controls"><input type="text" name="name" id="name" size="60"></div>
 </div>
-
-
 <div class="control-group">
 	<label class="control-label"><?php printMLText("comment");?>:</label>
 	<div class="controls">
 		<textarea name="comment" id="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea>
 	</div>
 </div>
-
-
-<div class="controls">
-	<input class="btn" type="submit" value="<?php printMLText("add");?>">
+<?php
+	if ($document->getAccessMode($user) >= M_READWRITE) {
+		print "<div class=\"control-group\"><label class=\"control-label\">".getMLText("document_link_public")."</label>";
+		print "<div class=\"controls\">";
+		print "<input type=\"checkbox\" name=\"public\" value=\"true\" checked />";
+		print "</div></div>";
+	}
+?>
+<div class="control-group">
+	<label class="control-label"></label>
+	<div class="controls"><input class="btn" type="submit" value="<?php printMLText("add");?>"></div>
 </div>
-
 </form>
 <?php
 		$this->contentContainerEnd();

@@ -301,7 +301,9 @@ CREATE TABLE `tblDocumentLinks` (
 CREATE TABLE `tblDocumentFiles` (
   `id` int(11) NOT NULL auto_increment,
   `document` int(11) NOT NULL default '0',
+  `version` smallint(5) unsigned NOT NULL default '0',
   `userID` int(11) NOT NULL default '0',
+  `public` tinyint(1) NOT NULL default '0',
   `comment` text,
   `name` varchar(150) default NULL,
   `date` int(12) default NULL,

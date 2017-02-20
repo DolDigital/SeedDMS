@@ -263,7 +263,9 @@ CREATE TABLE `tblDocumentLinks` (
 CREATE TABLE `tblDocumentFiles` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `document` INTEGER NOT NULL default 0 REFERENCES `tblDocuments` (`id`),
+  `version` INTEGER unsigned NOT NULL default '0',
   `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`),
+  `public` INTEGER NOT NULL default '0',
   `comment` text,
   `name` varchar(150) default NULL,
   `date` INTEGER default NULL,

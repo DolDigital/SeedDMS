@@ -316,6 +316,25 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Filter out document attachments which can not be accessed by a given user
+	 *
+	 * Returns a filtered list of files which are accessible by the
+	 * given user. A file is only accessible, if it is publically visible,
+	 * owned by the user, or the accessing user is an administrator.
+	 *
+	 * @param array $files list of objects of type SeedDMS_Core_DocumentFile
+	 * @param object $user user for which access is being checked
+	 * @return array filtered list of files
+	 */
+	static function filterDocumentFiles($user, $files) { /* {{{ */
+		$tmp = array();
+		foreach ($files as $file)
+			if ($file->isPublic() || ($file->getUser()->getID() == $user->getID()) || $user->isAdmin())
+				array_push($tmp, $file);
+		return $tmp;
+	} /* }}} */
+
+	/**
 	 * Create a new instance of the dms
 	 *
 	 * @param object $db object of class {@link SeedDMS_Core_DatabaseAccess}
