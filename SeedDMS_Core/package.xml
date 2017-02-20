@@ -15,8 +15,8 @@
  <date>2017-02-20</date>
  <time>06:23:34</time>
  <version>
-  <release>5.1.0</release>
-  <api>5.1.0</api>
+  <release>5.0.10</release>
+  <api>5.0.10</api>
  </version>
  <stability>
   <release>stable</release>
@@ -1291,6 +1291,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - all changes from 4.3.32 merged
+   </notes>
+  </release>
+  <release>
+   <date>2017-02-20</date>
+   <time>06:23:34</time>
+   <version>
+    <release>5.0.10</release>
+    <api>5.0.10</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.33 merged
    </notes>
   </release>
  </changelog>
