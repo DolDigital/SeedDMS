@@ -1,0 +1,10 @@
+Caution when you update an sqlite database
+==========================================
+
+The database changes for this version will require to change the
+definition of various columns. This is not easily possible when using
+sqlite. Therefore, the affected tables are first renamed, than
+new tables with the modified columns are created in the old table
+content will be copied into the new table. The old tables will not
+be removed and are prefixed with '__'. You may manunally remove them
+once you have successfully checked the update.
