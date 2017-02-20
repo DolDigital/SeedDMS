@@ -142,14 +142,14 @@ function insert_user($user) { /* {{{ */
 } /* }}} */
 
 function set_homefolders() { /* {{{ */
-	global $dms, $debug, $defaultUser, $users, $objmap;
+	global $logger, $dms, $debug, $defaultUser, $users, $objmap;
 
 	foreach($users as $user) {
 		if(isset($user['attributes']['homefolder']) && $user['attributes']['homefolder']) {
 			if(array_key_exists($user['id'], $objmap['users'])) {
 				$userobj = $dms->getUser($objmap['users'][$user['id']]);
 				if(!array_key_exists((int) $user['attributes']['homefolder'], $objmap['folders'])) {
-					echo "Warning: homefolder ".$user['attributes']['homefolder']." cannot be found\n";
+					$logger->warning("homefolder ".$user['attributes']['homefolder']." cannot be found");
 				} else {
 					$userobj->setHomeFolder($objmap['folders'][(int) $user['attributes']['homefolder']]);
 				}
