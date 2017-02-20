@@ -61,7 +61,7 @@ CREATE TABLE `tblUsers` (
   `comment` text NOT NULL,
   `role` smallint(1) NOT NULL default '0',
   `hidden` smallint(1) NOT NULL default '0',
-  `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00',
+  `pwdExpiration` datetime default NULL,
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
   `quota` bigint,
@@ -80,7 +80,7 @@ CREATE TABLE `tblUserPasswordRequest` (
   `id` int(11) NOT NULL auto_increment,
   `userID` int(11) NOT NULL default '0',
   `hash` varchar(50) default NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblUserPasswordRequest_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -95,7 +95,7 @@ CREATE TABLE `tblUserPasswordHistory` (
   `id` int(11) NOT NULL auto_increment,
   `userID` int(11) NOT NULL default '0',
   `pwd` varchar(50) default NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblUserPasswordHistory_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -110,7 +110,7 @@ CREATE TABLE `tblUserImages` (
   `id` int(11) NOT NULL auto_increment,
   `userID` int(11) NOT NULL default '0',
   `image` blob NOT NULL,
-  `mimeType` varchar(10) NOT NULL default '',
+  `mimeType` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblUserImages_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -226,7 +226,7 @@ CREATE TABLE `tblDocumentApproveLog` (
   `approveID` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`approveLogID`),
   CONSTRAINT `tblDocumentApproveLog_approve` FOREIGN KEY (`approveID`) REFERENCES `tblDocumentApprovers` (`approveID`) ON DELETE CASCADE,
@@ -358,7 +358,7 @@ CREATE TABLE `tblDocumentReviewLog` (
   `reviewID` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`reviewLogID`),
   CONSTRAINT `tblDocumentReviewLog_review` FOREIGN KEY (`reviewID`) REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
@@ -391,7 +391,7 @@ CREATE TABLE `tblDocumentStatusLog` (
   `statusID` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`statusLogID`),
   KEY `statusID` (`statusID`),
@@ -651,7 +651,7 @@ CREATE TABLE `tblWorkflowLog` (
   `workflow` int(11) default NULL,
   `userid` int(11) default NULL,
   `transition` int(11) default NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `comment` text,
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblWorkflowLog_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
@@ -672,7 +672,7 @@ CREATE TABLE `tblWorkflowDocumentContent` (
   `document` int(11) DEFAULT NULL,
   `version` smallint(5) DEFAULT NULL,
   `state` int(11) DEFAULT NULL,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   CONSTRAINT `tblWorkflowDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowDocument_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowDocument_state` FOREIGN KEY (`state`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
@@ -699,7 +699,7 @@ CREATE TABLE `tblWorkflowMandatoryWorkflow` (
 -- 
 
 CREATE TABLE `tblVersion` (
-  `date` datetime,
+  `date` datetime NOT NULL,
   `major` smallint,
   `minor` smallint,
   `subminor` smallint

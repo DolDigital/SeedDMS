@@ -58,7 +58,7 @@ CREATE TABLE `tblUsers` (
   `comment` text NOT NULL,
   `role` INTEGER NOT NULL default '0',
   `hidden` INTEGER NOT NULL default '0',
-  `pwdExpiration` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `pwdExpiration` TEXT default NULL,
   `loginfailures` INTEGER NOT NULL default '0',
   `disabled` INTEGER NOT NULL default '0',
   `quota` INTEGER,
@@ -76,7 +76,7 @@ CREATE TABLE `tblUserPasswordRequest` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `hash` varchar(50) default NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00'
+  `date` TEXT NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -89,7 +89,7 @@ CREATE TABLE `tblUserPasswordHistory` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `pwd` varchar(50) default NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00'
+  `date` TEXT NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -102,7 +102,7 @@ CREATE TABLE `tblUserImages` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `image` blob NOT NULL,
-  `mimeType` varchar(10) NOT NULL default ''
+  `mimeType` varchar(100) NOT NULL default ''
 ) ;
 
 -- --------------------------------------------------------
@@ -200,7 +200,7 @@ CREATE TABLE `tblDocumentApproveLog` (
   `approveID` INTEGER NOT NULL default '0' REFERENCES `tblDocumentApprovers` (`approveID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default '0',
   `comment` TEXT NOT NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `date` TEXT NOT NULL,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ;
 
@@ -220,7 +220,7 @@ CREATE TABLE `tblDocumentContent` (
   `dir` varchar(255) NOT NULL default '',
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
-  `mimeType` varchar(70) NOT NULL default '',
+  `mimeType` varchar(100) NOT NULL default '',
   `fileSize` INTEGER,
   `checksum` char(32),
   UNIQUE (`document`,`version`)
@@ -270,7 +270,7 @@ CREATE TABLE `tblDocumentFiles` (
   `dir` varchar(255) NOT NULL default '',
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
-  `mimeType` varchar(70) NOT NULL default ''
+  `mimeType` varchar(100) NOT NULL default ''
 ) ;
 
 -- --------------------------------------------------------
@@ -310,7 +310,7 @@ CREATE TABLE `tblDocumentReviewLog` (
   `reviewID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default 0,
   `comment` TEXT NOT NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `date` TEXT NOT NULL,
   `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ;
 
@@ -338,7 +338,7 @@ CREATE TABLE `tblDocumentStatusLog` (
   `statusID` INTEGER NOT NULL default '0' REFERENCES `tblDocumentStatus` (`statusID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default '0',
   `comment` text NOT NULL,
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `date` TEXT NOT NULL,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ;
 
@@ -566,7 +566,7 @@ CREATE TABLE `tblWorkflowLog` (
   `workflow` INTEGER default NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `userid` INTEGER default NULL REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `transition` INTEGER default NULL REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `comment` text
 ) ;
 
@@ -582,7 +582,7 @@ CREATE TABLE `tblWorkflowDocumentContent` (
   `document` INTEGER DEFAULT NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` INTEGER DEFAULT NULL,
   `state` INTEGER DEFAULT NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
-  `date` datetime NOT NULL default '0000-00-00 00:00:00'
+  `date` datetime NOT NULL
 ) ;
 
 -- --------------------------------------------------------
@@ -604,7 +604,7 @@ CREATE TABLE `tblWorkflowMandatoryWorkflow` (
 -- 
 
 CREATE TABLE `tblVersion` (
-  `date` TEXT NOT NULL default '0000-00-00 00:00:00',
+  `date` TEXT NOT NULL,
   `major` INTEGER,
   `minor` INTEGER,
   `subminor` INTEGER
