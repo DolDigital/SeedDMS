@@ -1,32 +1,30 @@
 BEGIN;
 
-CREATE TABLE `__tblVersion` (
+ALTER TABLE `tblVersion` RENAME TO `__tblVersion`;
+
+CREATE TABLE `tblVersion` (
   `date` TEXT default NULL,
   `major` INTEGER,
   `minor` INTEGER,
   `subminor` INTEGER
 );
 
-INSERT INTO `__tblVersion` SELECT * FROM `tblVersion`;
+INSERT INTO `tblVersion` SELECT * FROM `__tblVersion`;
 
-DROP TABLE `tblVersion`;
+ALTER TABLE `tblUserImages` RENAME TO `__tblUserImages`;
 
-ALTER TABLE `__tblVersion` RENAME TO `tblVersion`;
-
-CREATE TABLE `__tblUserImages` (
+CREATE TABLE `tblUserImages` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `image` blob NOT NULL,
   `mimeType` varchar(100) NOT NULL default ''
 );
 
-INSERT INTO `__tblUserImages` SELECT * FROM `tblUserImages`;
+INSERT INTO `tblUserImages` SELECT * FROM `__tblUserImages`;
 
-DROP TABLE `tblUserImages`;
+ALTER TABLE `tblDocumentContent` RENAME TO `__tblDocumentContent`;
 
-ALTER TABLE `__tblUserImages` RENAME TO `tblUserImages`;
-
-CREATE TABLE `__tblDocumentContent` (
+CREATE TABLE `tblDocumentContent` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `document` INTEGER NOT NULL default '0' REFERENCES `tblDocuments` (`id`),
   `version` INTEGER unsigned NOT NULL,
@@ -42,13 +40,11 @@ CREATE TABLE `__tblDocumentContent` (
   UNIQUE (`document`,`version`)
 );
 
-INSERT INTO `__tblDocumentContent` SELECT * FROM `tblDocumentContent`;
+INSERT INTO `tblDocumentContent` SELECT * FROM `__tblDocumentContent`;
 
-DROP TABLE `tblDocumentContent`;
+ALTER TABLE `tblDocumentFiles` RENAME TO `__tblDocumentFiles`;
 
-ALTER TABLE `__tblDocumentContent` RENAME TO `tblDocumentContent`;
-
-CREATE TABLE `__tblDocumentFiles` (
+CREATE TABLE `tblDocumentFiles` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `document` INTEGER NOT NULL default 0 REFERENCES `tblDocuments` (`id`),
   `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`),
@@ -61,13 +57,11 @@ CREATE TABLE `__tblDocumentFiles` (
   `mimeType` varchar(100) NOT NULL default ''
 ) ;
 
-INSERT INTO `__tblDocumentFiles` SELECT * FROM `tblDocumentFiles`;
+INSERT INTO `tblDocumentFiles` SELECT * FROM `__tblDocumentFiles`;
 
-DROP TABLE `tblDocumentFiles`;
+ALTER TABLE `tblUsers` RENAME TO `__tblUsers`;
 
-ALTER TABLE `__tblDocumentFiles` RENAME TO `tblDocumentFiles`;
-
-CREATE TABLE `__tblUsers` (
+CREATE TABLE `tblUsers` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `login` varchar(50) default NULL,
   `pwd` varchar(50) default NULL,
@@ -86,39 +80,33 @@ CREATE TABLE `__tblUsers` (
   UNIQUE (`login`)
 );
 
-INSERT INTO `__tblUsers` SELECT * FROM `tblUsers`;
+INSERT INTO `tblUsers` SELECT * FROM `__tblUsers`;
 
-DROP TABLE `tblUsers`;
+ALTER TABLE `tblUserPasswordRequest` RENAME TO `__tblUserPasswordRequest`;
 
-ALTER TABLE `__tblUsers` RENAME TO `tblUsers`;
-
-CREATE TABLE `__tblUserPasswordRequest` (
+CREATE TABLE `tblUserPasswordRequest` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `hash` varchar(50) default NULL,
   `date` TEXT NOT NULL
 );
 
-INSERT INTO `__tblUserPasswordRequest` SELECT * FROM `tblUserPasswordRequest`;
+INSERT INTO `tblUserPasswordRequest` SELECT * FROM `__tblUserPasswordRequest`;
 
-DROP TABLE `tblUserPasswordRequest`;
+ALTER TABLE `tblUserPasswordHistory` RENAME TO `__tblUserPasswordHistory`;
 
-ALTER TABLE `__tblUserPasswordRequest` RENAME TO `tblUserPasswordRequest`;
-
-CREATE TABLE `__tblUserPasswordHistory` (
+CREATE TABLE `tblUserPasswordHistory` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
   `pwd` varchar(50) default NULL,
   `date` TEXT NOT NULL
 );
 
-INSERT INTO `__tblUserPasswordHistory` SELECT * FROM `tblUserPasswordHistory`;
+INSERT INTO `tblUserPasswordHistory` SELECT * FROM `__tblUserPasswordHistory`;
 
-DROP TABLE `tblUserPasswordHistory`;
+ALTER TABLE `tblDocumentReviewLog` RENAME TO `__tblDocumentReviewLog`;
 
-ALTER TABLE `__tblUserPasswordHistory` RENAME TO `tblUserPasswordHistory`;
-
-CREATE TABLE `__tblDocumentReviewLog` (
+CREATE TABLE `tblDocumentReviewLog` (
   `reviewLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
   `reviewID` INTEGER NOT NULL default 0 REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default 0,
@@ -127,13 +115,11 @@ CREATE TABLE `__tblDocumentReviewLog` (
   `userID` INTEGER NOT NULL default 0 REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 );
 
-INSERT INTO `__tblDocumentReviewLog` SELECT * FROM `tblDocumentReviewLog`;
+INSERT INTO `tblDocumentReviewLog` SELECT * FROM `__tblDocumentReviewLog`;
 
-DROP TABLE `tblDocumentReviewLog`;
+ALTER TABLE `tblDocumentStatusLog` RENAME TO `__tblDocumentStatusLog`;
 
-ALTER TABLE `__tblDocumentReviewLog` RENAME TO `tblDocumentReviewLog`;
-
-CREATE TABLE `__tblDocumentStatusLog` (
+CREATE TABLE `tblDocumentStatusLog` (
   `statusLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
   `statusID` INTEGER NOT NULL default '0' REFERENCES `tblDocumentStatus` (`statusID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default '0',
@@ -142,13 +128,11 @@ CREATE TABLE `__tblDocumentStatusLog` (
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ;
 
-INSERT INTO `__tblDocumentStatusLog` SELECT * FROM `tblDocumentStatusLog`;
+INSERT INTO `tblDocumentStatusLog` SELECT * FROM `__tblDocumentStatusLog`;
 
-DROP TABLE `tblDocumentStatusLog`;
+ALTER TABLE `tblDocumentApproveLog` RENAME TO `__tblDocumentApproveLog`;
 
-ALTER TABLE `__tblDocumentStatusLog` RENAME TO `tblDocumentStatusLog`;
-
-CREATE TABLE `__tblDocumentApproveLog` (
+CREATE TABLE `tblDocumentApproveLog` (
   `approveLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
   `approveID` INTEGER NOT NULL default '0' REFERENCES `tblDocumentApprovers` (`approveID`) ON DELETE CASCADE,
   `status` INTEGER NOT NULL default '0',
@@ -157,13 +141,11 @@ CREATE TABLE `__tblDocumentApproveLog` (
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 );
 
-INSERT INTO `__tblDocumentApproveLog` SELECT * FROM `tblDocumentApproveLog`;
+INSERT INTO `tblDocumentApproveLog` SELECT * FROM `__tblDocumentApproveLog`;
 
-DROP TABLE `tblDocumentApproveLog`;
+ALTER TABLE `tblWorkflowLog` RENAME TO `__tblWorkflowLog`;
 
-ALTER TABLE `__tblDocumentApproveLog` RENAME TO `tblDocumentApproveLog`;
-
-CREATE TABLE `__tblWorkflowLog` (
+CREATE TABLE `tblWorkflowLog` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `document` INTEGER default NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` INTEGER default NULL,
@@ -174,13 +156,11 @@ CREATE TABLE `__tblWorkflowLog` (
   `comment` text
 );
 
-INSERT INTO `__tblWorkflowLog` SELECT * FROM `tblWorkflowLog`;
+INSERT INTO `tblWorkflowLog` SELECT * FROM `__tblWorkflowLog`;
 
-DROP TABLE `tblWorkflowLog`;
+ALTER TABLE `tblWorkflowDocumentContent` RENAME TO `__tblWorkflowDocumentContent`;
 
-ALTER TABLE `__tblWorkflowLog` RENAME TO `tblWorkflowLog`;
-
-CREATE TABLE `__tblWorkflowDocumentContent` (
+CREATE TABLE `tblWorkflowDocumentContent` (
   `parentworkflow` INTEGER DEFAULT 0,
   `workflow` INTEGER DEFAULT NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `document` INTEGER DEFAULT NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
@@ -189,11 +169,7 @@ CREATE TABLE `__tblWorkflowDocumentContent` (
   `date` datetime NOT NULL
 );
 
-INSERT INTO `__tblWorkflowDocumentContent` SELECT * FROM `tblWorkflowDocumentContent`;
-
-DROP TABLE `tblWorkflowDocumentContent`;
-
-ALTER TABLE `__tblWorkflowDocumentContent` RENAME TO `tblWorkflowDocumentContent`;
+INSERT INTO `tblWorkflowDocumentContent` SELECT * FROM `__tblWorkflowDocumentContent`;
 
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
