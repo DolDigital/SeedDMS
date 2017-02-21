@@ -37,7 +37,7 @@ if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['docume
 } else
 	$document = null;
 
-$calendar = new SeedDMS_Calendar($dms->getDB());
+$calendar = new SeedDMS_Calendar($dms->getDB(), $user);
 
 if(isset($_GET['eventid']) && $_GET['eventid'] && is_numeric($_GET['eventid'])) {
 	$event = $calendar->getEvent($_GET["eventid"]);

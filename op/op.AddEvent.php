@@ -64,7 +64,7 @@ if ($to<=$from){
 	UI::exitError(getMLText("add_event"),getMLText("to_before_from"));
 }
 
-$calendar = new SeedDMS_Calendar($dms->getDB());
+$calendar = new SeedDMS_Calendar($dms->getDB(), $user);
 
 $res = $calendar->addEvent($from, $to, $name, $comment);
                                 

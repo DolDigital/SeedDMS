@@ -33,8 +33,9 @@ class SeedDMS_Calendar {
 	 */
 	protected $db;
 
-	function __construct($db) {
+	function __construct($db, $user) {
 		$this->db = $db;
+		$this->user = $user;
 	}
 
 	function getEvents($day, $month, $year) { /* {{{ */
@@ -54,10 +55,8 @@ class SeedDMS_Calendar {
 	} /* }}} */
 
 	function addEvent($from, $to, $name, $comment ) { /* {{{ */
-		global $user;
-
 		$queryStr = "INSERT INTO `tblEvents` (`name`, `comment`, `start`, `stop`, `date`, `userID`) VALUES ".
-			"(".$this->db->qstr($name).", ".$this->db->qstr($comment).", ".(int) $from.", ".(int) $to.", ".$this->db->getCurrentTimestamp().", ".$user->getID().")";
+			"(".$this->db->qstr($name).", ".$this->db->qstr($comment).", ".(int) $from.", ".(int) $to.", ".$this->db->getCurrentTimestamp().", ".$this->user->getID().")";
 		
 		$ret = $this->db->getResult($queryStr);
 		return $ret;

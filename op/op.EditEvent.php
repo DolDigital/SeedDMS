@@ -41,7 +41,7 @@ if (!isset($_POST["from"]) && !(isset($_POST["frommonth"]) && isset($_POST["from
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
-$calendar = new SeedDMS_Calendar($dms->getDB());
+$calendar = new SeedDMS_Calendar($dms->getDB(), $user);
 
 if (!isset($_POST["eventid"]) || !($event = $calendar->getEvent($_POST["eventid"]))) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));

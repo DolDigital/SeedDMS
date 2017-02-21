@@ -37,7 +37,7 @@ if (!isset($_POST["eventid"]) || !is_numeric($_POST["eventid"]) || intval($_POST
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
-$calendar = new SeedDMS_Calendar($dms->getDB());
+$calendar = new SeedDMS_Calendar($dms->getDB(), $user);
 $event=$calendar->getEvent($_POST["eventid"]);
 
 if (($user->getID()!=$event["userID"])&&(!$user->isAdmin())){
