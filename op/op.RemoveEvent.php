@@ -25,7 +25,7 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.Calendar.php");
+include("../inc/inc.ClassCalendar.php");
 include("../inc/inc.Authentication.php");
 
 /* Check if the form data comes from a trusted request */
@@ -37,13 +37,14 @@ if (!isset($_POST["eventid"]) || !is_numeric($_POST["eventid"]) || intval($_POST
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
-$event=getEvent($_POST["eventid"]);
+$calendar = new SeedDMS_Calendar($dms->getDB());
+$event=$calendar->getEvent($_POST["eventid"]);
 
 if (($user->getID()!=$event["userID"])&&(!$user->isAdmin())){
 	UI::exitError(getMLText("edit_event"),getMLText("access_denied"));
 }
 
-$res = delEvent($_POST["eventid"]);
+$res = $calendar->delEvent($_POST["eventid"]);
                                 
 if (is_bool($res) && !$res) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));

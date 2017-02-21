@@ -25,7 +25,7 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.Calendar.php");
+include("../inc/inc.ClassCalendar.php");
 include("../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -41,7 +41,9 @@ if (!isset($_POST["from"]) && !(isset($_POST["frommonth"]) && isset($_POST["from
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
-if (!isset($_POST["eventid"]) || !($event = getEvent($_POST["eventid"]))) {
+$calendar = new SeedDMS_Calendar($dms->getDB());
+
+if (!isset($_POST["eventid"]) || !($event = $calendar->getEvent($_POST["eventid"]))) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
@@ -73,7 +75,7 @@ if ($to !== null && $to<=$from){
 	$to = $from + 86400 -1;
 }
 
-$res = editEvent($_POST["eventid"], $from, $to, $name, $comment );
+$res = $calendar->editEvent($_POST["eventid"], $from, $to, $name, $comment );
 
 if(isset($_POST["ajax"]) && $_POST["ajax"]) {
 	header('Content-Type: application/json');

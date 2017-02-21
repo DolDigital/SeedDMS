@@ -18,7 +18,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.Calendar.php");
+include("../inc/inc.ClassCalendar.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
@@ -37,8 +37,10 @@ if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['docume
 } else
 	$document = null;
 
+$calendar = new SeedDMS_Calendar($dms->getDB());
+
 if(isset($_GET['eventid']) && $_GET['eventid'] && is_numeric($_GET['eventid'])) {
-	$event = getEvent($_GET["eventid"]);
+	$event = $calendar->getEvent($_GET["eventid"]);
 } else
 	$event = null;
 
@@ -55,6 +57,7 @@ if(isset($_GET['eventtype']) && $_GET['eventtype']) {
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('calendar', $calendar);
 	$view->setParam('start', $start);
 	$view->setParam('end', $end);
 	$view->setParam('document', $document);

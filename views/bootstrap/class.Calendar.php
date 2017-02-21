@@ -164,6 +164,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 	function events() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$calendar = $this->params['calendar'];
 		$eventtype = $this->params['eventtype'];
 		$start = explode('-', $this->params['start']);
 		$end = explode('-', $this->params['end']);
@@ -171,7 +172,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 		$arr = array();
 		switch($eventtype) {
 		case 'regular':
-			$events = getEventsInInterval(mktime(0,0,0, $start[1], $start[2], $start[0]), mktime(23,59,59, $end[1], $end[2], $end[0]));
+			$events = $calendar->getEventsInInterval(mktime(0,0,0, $start[1], $start[2], $start[0]), mktime(23,59,59, $end[1], $end[2], $end[0]));
 			foreach ($events as $event){
 				$arr[] = array('start'=>date('Y-m-d', $event["start"]), 'end'=>date('Y-m-d', $event["stop"]), 'title'=>$event["name"].($event['comment'] ? "\n".$event['comment'] : ''), 'eventid'=>$event["id"]);
 			}
