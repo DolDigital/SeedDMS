@@ -3,6 +3,7 @@ define('USE_PHP_SESSION', 0);
 
 include("../inc/inc.Settings.php");
 require_once "SeedDMS/Core.php";
+require_once "SeedDMS/Preview.php";
 
 $db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
@@ -52,8 +53,9 @@ if(USE_PHP_SESSION) {
 }
 
 
-require 'Slim/Slim.php';
-\Slim\Slim::registerAutoloader();
+#require 'Slim/Slim.php';
+require "vendor/autoload.php";
+#\Slim\Slim::registerAutoloader();
 
 function doLogin() { /* {{{ */
 	global $app, $dms, $userobj, $session, $settings;
