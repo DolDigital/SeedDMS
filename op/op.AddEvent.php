@@ -27,7 +27,7 @@ include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.Calendar.php");
+include("../inc/inc.ClassCalendar.php");
 include("../inc/inc.Authentication.php");
 
 if ($user->isGuest()) {
@@ -66,7 +66,9 @@ if ($to<=$from){
 	UI::exitError(getMLText("add_event"),getMLText("to_before_from"));
 }
 
-$res = addEvent($from, $to, $name, $comment);
+$calendar = new SeedDMS_Calendar($dms->getDB(), $user);
+
+$res = $calendar->addEvent($from, $to, $name, $comment);
                                 
 if (is_bool($res) && !$res) {
 	UI::exitError(getMLText("add_event"),getMLText("error_occured"));
