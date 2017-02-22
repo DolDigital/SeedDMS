@@ -1148,6 +1148,25 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </notes>
   </release>
   <release>
+   <date>2017-02-22</date>
+   <time>11:25:11</time>
+   <version>
+    <release>4.3.33</release>
+    <api>4.3.33</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- SeedDMЅ_Core_DMS::getTimeline() no longer returns duplicate documents
+- SeedDMЅ_Core_Document::addContent() sets workflow after status was set
+- SeedDMЅ_Core_Keyword::setOwner() fix sql statement
+- SeedDMЅ_Core_User::setFullname() minor fix in sql statement
+   </notes>
+  </release>
+  <release>
    <date>2016-01-22</date>
    <time>14:34:58</time>
    <version>
@@ -1161,7 +1180,7 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - all changes from 4.3.24 merged
-	 </notes>
+   </notes>
   </release>
   <release>
    <date>2016-04-26</date>
