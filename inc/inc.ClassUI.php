@@ -56,16 +56,19 @@ class UI extends UI_Default {
 		 * to rootDir or an extension dir if it has set the include path
 		 */
 		$filename = '';
+		$httpbasedir = '';
 		foreach($EXT_CONF as $extname=>$extconf) {
 			if(!isset($extconf['disable']) || $extconf['disable'] == false) {
 				$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/class.".$class.".php";
 				if(file_exists($filename)) {
+					$httpbasedir = 'ext/'.$extname.'/';
 					break;
 				}
 				$filename = '';
 				if(isset($extconf['views'][$class])) {
 					$filename = $settings->_rootDir.'ext/'.$extname.'/views/'.$theme."/".$extconf['views'][$class]['file'];
 					if(file_exists($filename)) {
+						$httpbasedir = 'ext/'.$extname.'/';
 						$classname = $extconf['views'][$class]['name'];
 						break;
 					}
@@ -81,6 +84,7 @@ class UI extends UI_Default {
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
 			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
+			$view->setParam('absbaseprefix', $settings->_httpRoot.$httpbasedir);
 			$view->setParam('class', $class);
 			$view->setParam('session', $session);
 			$view->setParam('settings', $settings);

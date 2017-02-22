@@ -149,12 +149,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
 			$tmp['action'] = 'footerjs';
 			$tmp['hash'] = $hashjs;
-			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		if(method_exists($this, 'js')) {
 			parse_str($_SERVER['QUERY_STRING'], $tmp);
 			$tmp['action'] = 'js';
-			echo '<script src="../out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
+			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
 	} /* }}} */
