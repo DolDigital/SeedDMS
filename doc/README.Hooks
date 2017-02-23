@@ -25,6 +25,24 @@ being called.
 
 Currently available controller hooks
 ------------------------------------
+AddDocument::preAddDocument
+  Called before a new document will be added
+
+AddDocument::postAddDocument
+  Called after a new document has been added
+
+AddDocument::preIndexDocument
+  Called before a new document will be indexed
+
+UpdateDocument::preUpdateDocument
+  Called before a new document will be updated
+
+UpdateDocument::postUpdateDocument
+  Called after a new document has been updated
+
+UpdateDocument::preIndexDocument
+  Called before an updated document will be indexed
+
 RemoveDocument::preRemoveDocument
   Called before a document will be removed
 
