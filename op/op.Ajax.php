@@ -671,8 +671,8 @@ switch($command) {
 						}
 					}
 
-					if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
-						foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
+					if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
+						foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 							if (method_exists($hookObj, 'postAddDocument')) {
 								$hookObj->postAddDocument($document);
 							}
@@ -682,7 +682,15 @@ switch($command) {
 						$index = $indexconf['Indexer']::open($settings->_luceneDir);
 						if($index) {
 							$indexconf['Indexer']::init($settings->_stopWordsFile);
-							$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
+							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
+							if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
+								foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
+									if (method_exists($hookObj, 'preIndexDocument')) {
+										$hookObj->preIndexDocument($document, $idoc);
+									}
+								}
+							}
+							$index->addDocument($idoc);
 						}
 					}
 
