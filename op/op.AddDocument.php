@@ -336,7 +336,15 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$index = $indexconf['Indexer']::open($settings->_luceneDir);
 			if($index) {
 				$indexconf['Indexer']::init($settings->_stopWordsFile);
-				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
+				$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
+				if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
+					foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
+						if (method_exists($hookObj, 'preIndexDocument')) {
+							$hookObj->preIndexDocument($document, $idoc);
+						}
+					}
+				}
+				$index->addDocument($idoc);
 			}
 		}
 
