@@ -1,5 +1,5 @@
 Extensions in SeedDMS
-====================
+=====================
 
 Since verson 5.0.0 SeedDMS can be extended by extensions. Extensions
 can hook up functions into certain operations, e.g.
