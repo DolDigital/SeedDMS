@@ -237,12 +237,27 @@ if ($_FILES['userfile']['error'] == 0) {
 		$attributes = array();
 	}
 
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
+			if (method_exists($hookObj, 'preUpdateDocument')) {
+				$hookObj->preUpdateDocument(array('name'=>&$name, 'comment'=>&$comment));
+			}
+		}
+	}
+
 	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
 	else {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
+				if (method_exists($hookObj, 'postUpdateDocument')) {
+					$hookObj->postUpdateDocument($document);
+				}
+			}
+		}
 		if($settings->_enableFullSearch) {
 			$index = $indexconf['Indexer']::open($settings->_luceneDir);
 			if($index) {
@@ -251,7 +266,15 @@ if ($_FILES['userfile']['error'] == 0) {
 					$index->delete($hit->id);
 				}
 				$indexconf['Indexer']::init($settings->_stopWordsFile);
-				$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText)));
+				$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
+				if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
+					foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
+						if (method_exists($hookObj, 'preIndexDocument')) {
+							$hookObj->preIndexDocument($document, $idoc);
+						}
+					}
+				}
+				$index->addDocument($idoc);
 				$index->commit();
 			}
 		}
