@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2368), dgrutsch (22)
+//    Translators: Admin (2376), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -553,8 +553,13 @@ URL: [url]',
 'include_content' => 'Inhalte mit exportieren',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
+'indexing_tasks_in_queue' => 'Indiziervorgänge in der Warteschleife',
 'index_converters' => 'Index Dokumentenumwandlung',
+'index_done' => 'Fertig',
+'index_error' => 'Fehler',
 'index_folder' => 'Indiziere Ordner',
+'index_pending' => 'Vorgemerkt',
+'index_waiting' => 'Warte',
 'individuals' => 'Einzelpersonen',
 'indivіduals_in_groups' => 'Mitglieder einer Gruppe',
 'inherited' => 'geerbt',
@@ -772,6 +777,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Es sind nur JPG-Bilder erlaubt',
 'order_by_sequence_off' => 'Die Sortierung nach Folge ist in den Einstellungen ausgeschaltet. Wenn dieser Parameter wirksam sein soll, muss sie wieder eingeschaltet werden.',
 'original_filename' => 'Original filename',
+'overall_indexing_progress' => 'Gesamtfortschritt bei der Indizierung',
 'owner' => 'Besitzer',
 'ownership_changed_email' => 'Besitzer geändert',
 'ownership_changed_email_body' => 'Besitzer geändert
@@ -1380,9 +1386,11 @@ URL: [url]',
 'splash_document_added' => 'Dokument hinzugefügt',
 'splash_document_checkedout' => 'Dokument ausgecheckt',
 'splash_document_edited' => 'Dokument gespeichert',
+'splash_document_indexed' => 'Dokument \'[name]\' indiziert.',
 'splash_document_locked' => 'Dokument gesperrt',
 'splash_document_unlocked' => 'Dokumentensperre aufgehoben',
 'splash_edit_attribute' => 'Attribut gespeichert',
+'splash_edit_event' => 'Ereignis gespeichert',
 'splash_edit_group' => 'Gruppe gespeichert',
 'splash_edit_role' => 'Rolle gespeichert',
 'splash_edit_user' => 'Benutzer gespeichert',
