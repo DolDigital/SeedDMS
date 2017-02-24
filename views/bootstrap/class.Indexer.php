@@ -31,25 +31,121 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 
-	function tree($dms, $index, $indexconf, $folder, $indent='') { /* {{{ */
+	function js() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+
+		header('Content-Type: application/javascript');
+?>
+var queue_count = 0;          // Number of functions being called
+var funcArray = [];     // Array of functions waiting
+var MAX_REQUESTS = 5;   // Max requests
+var CALL_WAIT = 100;        // 100ms
+var docstoindex = 0; // total number of docs to index
+
+function check_queue() {
+		// Check if count doesn't exceeds or if there aren't any functions to call
+		console.log('Queue has ' + funcArray.length + '/' + docstoindex + ' items');
+		console.log('Currently processing ' + queue_count + ' requests (' + $.active + ')');
+    if(queue_count >= MAX_REQUESTS) {
+			setTimeout(function() { check_queue() }, CALL_WAIT);
+			return;
+		}
+		if(funcArray.length == 0) {
+			return;
+		}
+		docid = funcArray.pop();
+		$('#status_'+docid).html('Processsing ...');
+		$.ajax({url: '../op/op.Ajax.php',
+			type: 'GET',
+			dataType: "json",
+			data: {command: 'indexdocument', id: docid},
+			beforeSend: function() {
+				queue_count++;            // Add request to the counter
+			},
+			error: function(xhr, textstatus) {
+				noty({
+					text: textstatus,
+					type: 'error',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			},
+			success: function(data) {
+				// console.log('success ' + data.data);
+				if(data.success) {
+					$('#status_'+data.data).html('done');
+				} else {
+					$('#status_'+data.data).html('error');
+					noty({
+						text: data.message,
+						type: (data.success) ? 'success' : 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			complete: function(xhr, textstatus) {
+				queue_count--;        // Substract request to the counter
+				$('.queue-bar').css('width', (queue_count*100/MAX_REQUESTS)+'%');
+				$('.total-bar').css('width', (100 - (funcArray.length+queue_count)*100/docstoindex)+'%');
+				$('.total-bar').text(Math.round(100 - (funcArray.length+queue_count)*100/docstoindex)+' %');
+				if(funcArray.length+queue_count == 0)
+					$('.total-bar').addClass('bar-success');
+			}
+		}); 
+		setTimeout(function() { check_queue() }, CALL_WAIT);
+}
+
+$(document).ready( function() {
+	$('.tree-toggle').click(function () {
+		$(this).parent().children('ul.tree').toggle(200);
+	});
+
+	$('.indexme').each(function(index) {
+		var element = $(this);
+		var docid = element.data('docid');
+		element.html('Pending');
+    funcArray.push(docid);
+	});
+	docstoindex = funcArray.length;
+	check_queue();  // First call to start polling. It will call itself each 100ms
+});
+<?php
+	} /* }}} */
+
+	protected function tree($dms, $index, $indexconf, $folder, $indent='') { /* {{{ */
+		$forceupdate = $this->params['forceupdate'];
+
 		set_time_limit(30);
-		echo $indent."D ".htmlspecialchars($folder->getName())."\n";
+//		echo $indent."D ".htmlspecialchars($folder->getName())."\n";
+		echo '<ul class="nav nav-list"><li><label class="tree-toggle nav-header">'.htmlspecialchars($folder->getName()).'</label>'."\n";
 		$subfolders = $folder->getSubFolders();
 		foreach($subfolders as $subfolder) {
 			$this->tree($dms, $index, $indexconf, $subfolder, $indent.'  ');
 		}
 		$documents = $folder->getDocuments();
+		if($documents) {
+		echo '<ul class="nav nav-list">'."\n";
 		foreach($documents as $document) {
-			echo $indent."  ".$document->getId().":".htmlspecialchars($document->getName())." ";
+//			echo $indent."  ".$document->getId().":".htmlspecialchars($document->getName());
+			echo "<li class=\"document\">".$document->getId().":".htmlspecialchars($document->getName());
 			/* If the document wasn't indexed before then just add it */
 			$lucenesearch = new $indexconf['Search']($index);
 			if(!($hit = $lucenesearch->getDocument($document->getId()))) {
+				echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">Waiting</span>";
+				/*
 				try {
 					$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, $this->converters ? $this->converters : null, false, $this->timeout));
 					echo "(document added)";
 				} catch(Exception $e) {
 					echo $indent."(adding document failed '".$e->getMessage()."')";
 				}
+				 */
 			} else {
 				/* Check if the attribute created is set or has a value older
 				 * than the lasted content. Documents without such an attribute
@@ -62,20 +158,27 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 					$created = 0;
 				}
 				$content = $document->getLatestContent();
-				if($created >= $content->getDate()) {
-					echo $indent."(document unchanged)";
+				if($created >= $content->getDate() && !$forceupdate) {
+					echo $indent."<span id=\"status_".$document->getID()."\" class=\"indexstatus\" data-docid=\"".$document->getID()."\">document unchanged</span>";
 				} else {
 					$index->delete($hit->id);
+					echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">Waiting</span>";
+					/*
 					try {
 						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, $this->converters ? $this->converters : null, false, $this->timeout));
 						echo $indent."(document updated)";
 					} catch(Exception $e) {
 						echo $indent."(updating document failed)";
 					}
+					 */
 				}
 			}
+			echo "</li>";
 			echo "\n";
 		}
+		echo "</ul>\n";
+		}
+		echo "</li></ul>\n";
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -83,7 +186,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$index = $this->params['index'];
 		$indexconf = $this->params['indexconf'];
-		$recreate = $this->params['recreate'];
+		$forceupdate = $this->params['forceupdate'];
 		$folder = $this->params['folder'];
 		$this->converters = $this->params['converters'];
 		$this->timeout = $this->params['timeout'];
@@ -93,10 +196,32 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentHeading(getMLText("update_fulltext_index"));
-
-		echo "<pre>";
+?>
+<style type="text/css">
+li {line-height: 20px;}
+.nav-header {line-height: 19px; margin-bottom: 0px;}
+.nav-list {padding-right: 0px;}
+.nav-list>li.document:hover {background-color: #eee;}
+.indexstatus {font-weight: bold; float: right;}
+.progress {margin-bottom: 2px;}
+.bar-legend {text-align: right; font-size: 85%; margin-bottom: 15px;}
+</style>
+		<div style="max-width: 900px;">
+		<div>
+			<div class="progress">
+				<div class="bar total-bar" role="progressbar" style="width: 100%;"></div>
+			</div>
+			<div class="bar-legend">Overall progress</div>
+		</div>
+		<div>
+			<div class="progress">
+				<div class="bar queue-bar" role="progressbar" style="width: 100%;"></div>
+			</div>
+			<div class="bar-legend">Indexing tasks in queue</div>
+		</div>
+<?php
 		$this->tree($dms, $index, $indexconf, $folder);
-		echo "</pre>";
+		echo "</div>";
 
 		$index->commit();
 		$index->optimize();
