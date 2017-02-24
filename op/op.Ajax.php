@@ -746,5 +746,38 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'indexdocument': /* {{{ */
+		if($user && $user->isAdmin()) {
+			if($settings->_enableFullSearch) {
+				$document = $dms->getDocument($_REQUEST['id']);
+				if($document) {
+						$index = $indexconf['Indexer']::open($settings->_luceneDir);
+						if($index) {
+							$indexconf['Indexer']::init($settings->_stopWordsFile);
+							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false);
+							if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
+								foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
+									if (method_exists($hookObj, 'preIndexDocument')) {
+										$hookObj->preIndexDocument(null, $document, $idoc);
+									}
+								}
+							}
+							$index->addDocument($idoc);
+							header('Content-Type: application/json');
+							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID()));
+						} else {
+							header('Content-Type: application/json');
+							echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>$document->getID()));
+						}
+				} else {
+					header('Content-Type: application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_doc_id'), 'data'=>''));
+				}
+			} else {
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>''));
+			}
+		}
+		break; /* }}} */
 }
 ?>
