@@ -76,9 +76,9 @@ function check_queue() {
 			success: function(data) {
 				// console.log('success ' + data.data);
 				if(data.success) {
-					$('#status_'+data.data).html('done');
+					$('#status_'+data.data).html('<?php printMLText('index_done'); ?>');
 				} else {
-					$('#status_'+data.data).html('error');
+					$('#status_'+data.data).html('<?php printMLText('index_error'); ?>');
 					noty({
 						text: data.message,
 						type: (data.success) ? 'success' : 'error',
@@ -109,7 +109,7 @@ $(document).ready( function() {
 	$('.indexme').each(function(index) {
 		var element = $(this);
 		var docid = element.data('docid');
-		element.html('Pending');
+		element.html('<?php printMLText('index_pending'); ?>');
     funcArray.push(docid);
 	});
 	docstoindex = funcArray.length;
@@ -137,7 +137,7 @@ $(document).ready( function() {
 			/* If the document wasn't indexed before then just add it */
 			$lucenesearch = new $indexconf['Search']($index);
 			if(!($hit = $lucenesearch->getDocument($document->getId()))) {
-				echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">Waiting</span>";
+				echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">".getMLText('index_waiting')."</span>";
 				/*
 				try {
 					$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, $this->converters ? $this->converters : null, false, $this->timeout));
@@ -162,7 +162,7 @@ $(document).ready( function() {
 					echo $indent."<span id=\"status_".$document->getID()."\" class=\"indexstatus\" data-docid=\"".$document->getID()."\">document unchanged</span>";
 				} else {
 					$index->delete($hit->id);
-					echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">Waiting</span>";
+					echo " <span id=\"status_".$document->getID()."\" class=\"indexme indexstatus\" data-docid=\"".$document->getID()."\">".getMLText('index_waiting')."</span>";
 					/*
 					try {
 						$index->addDocument(new $indexconf['IndexedDocument']($dms, $document, $this->converters ? $this->converters : null, false, $this->timeout));
@@ -211,13 +211,13 @@ li {line-height: 20px;}
 			<div class="progress">
 				<div class="bar total-bar" role="progressbar" style="width: 100%;"></div>
 			</div>
-			<div class="bar-legend">Overall progress</div>
+			<div class="bar-legend"><?php printMLText('overall_indexing_progress'); ?></div>
 		</div>
 		<div>
 			<div class="progress">
 				<div class="bar queue-bar" role="progressbar" style="width: 100%;"></div>
 			</div>
-			<div class="bar-legend">Indexing tasks in queue</div>
+			<div class="bar-legend"><?php printMLText('indexing_tasks_in_queue'); ?></div>
 		</div>
 <?php
 		$this->tree($dms, $index, $indexconf, $folder);
