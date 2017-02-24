@@ -2222,7 +2222,7 @@ class SeedDMS_Core_DMS {
 			$endts = $startts+86400;
 		$timeline = array();
 
-		$queryStr = "SELECT DISTINCT `document` FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts." UNION SELECT DISTINCT `document` FROM `tblDocumentFiles` WHERE `date` > ".$startts." AND `date` < ".$endts;
+		$queryStr = "SELECT DISTINCT document FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts." UNION SELECT DISTINCT document FROM `tblDocumentFiles` WHERE `date` > ".$startts." AND `date` < ".$endts;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ($resArr === false)
 			return false;
