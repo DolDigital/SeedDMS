@@ -2,6 +2,7 @@
                      Changes in version 5.1.0
 --------------------------------------------------------------------------------
 - added support for postgresql
+- document attachments can linked to a version and be public or hidden
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.10
