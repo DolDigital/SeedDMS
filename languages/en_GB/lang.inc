@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1495), dgrutsch (9), netixw (14)
+//    Translators: Admin (1503), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -553,8 +553,13 @@ URL: [url]',
 'include_content' => 'Include content',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
+'indexing_tasks_in_queue' => 'Indexing tasks in queue',
 'index_converters' => 'Index document conversion',
+'index_done' => 'Done',
+'index_error' => 'Error',
 'index_folder' => 'Index folder',
+'index_pending' => 'Pending',
+'index_waiting' => 'Waiting',
 'individuals' => 'Individuals',
 'indivіduals_in_groups' => 'Members of a group',
 'inherited' => 'inherited',
@@ -773,6 +778,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Only .jpg-images may be used as user-images',
 'order_by_sequence_off' => 'Ordering by sequence is turned off in the settings. If you want this parameter to have effect, you will have to turn it back on.',
 'original_filename' => 'Original filename',
+'overall_indexing_progress' => 'Overall indexing progress',
 'owner' => 'Owner',
 'ownership_changed_email' => 'Owner changed',
 'ownership_changed_email_body' => 'Owner changed
@@ -1374,9 +1380,11 @@ URL: [url]',
 'splash_document_added' => 'Document added',
 'splash_document_checkedout' => 'Document checked out',
 'splash_document_edited' => 'Document saved',
+'splash_document_indexed' => 'Document \'[name]\' indexed.',
 'splash_document_locked' => 'Document locked',
 'splash_document_unlocked' => 'Document unlocked',
 'splash_edit_attribute' => 'Attribute saved',
+'splash_edit_event' => 'Event saved',
 'splash_edit_group' => 'Group saved',
 'splash_edit_role' => 'Role saved',
 'splash_edit_user' => 'User saved',
