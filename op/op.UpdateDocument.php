@@ -270,7 +270,7 @@ if ($_FILES['userfile']['error'] == 0) {
 				if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
 					foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
 						if (method_exists($hookObj, 'preIndexDocument')) {
-							$hookObj->preIndexDocument($document, $idoc);
+							$hookObj->preIndexDocument(null, $document, $idoc);
 						}
 					}
 				}

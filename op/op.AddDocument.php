@@ -340,7 +340,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 					foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 						if (method_exists($hookObj, 'preIndexDocument')) {
-							$hookObj->preIndexDocument($document, $idoc);
+							$hookObj->preIndexDocument(null, $document, $idoc);
 						}
 					}
 				}
