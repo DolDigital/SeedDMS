@@ -6,9 +6,9 @@ ALTER TABLE `tblDocumentFiles` CHANGE `mimeType` `mimeType` varchar(100) NOT NUL
 
 ALTER TABLE `tblUserImages` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL default '';
 
-ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` INTEGER NOT NULL default '0' AFTER `document`;
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` tinyint(1) NOT NULL default '0' AFTER `document`;
 
-ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` INTEGER NOT NULL default '0' AFTER `document`;
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` smallint(5) NOT NULL default '0' AFTER `document`;
 
 ALTER TABLE `tblUsers` CHANGE `pwdExpiration` `pwdExpiration` datetime default NULL;
 
