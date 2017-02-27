@@ -78,6 +78,7 @@
 - new calendar
 - move folder/document properly checks for access right if done by drag and
   drop (Closes #309)
+- show workflow log on document details page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.32
