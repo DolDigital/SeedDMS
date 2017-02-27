@@ -1,6 +1,6 @@
--- 
+--
 -- Table structure for table `tblACLs`
--- 
+--
 
 CREATE TABLE `tblACLs` (
   `id` int(11) NOT NULL auto_increment,
@@ -14,9 +14,9 @@ CREATE TABLE `tblACLs` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblCategory`
--- 
+--
 
 CREATE TABLE `tblCategory` (
   `id` int(11) NOT NULL auto_increment,
@@ -26,9 +26,9 @@ CREATE TABLE `tblCategory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblAttributeDefinitions`
--- 
+--
 
 CREATE TABLE `tblAttributeDefinitions` (
   `id` int(11) NOT NULL auto_increment,
@@ -46,9 +46,9 @@ CREATE TABLE `tblAttributeDefinitions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUsers`
--- 
+--
 
 CREATE TABLE `tblUsers` (
   `id` int(11) NOT NULL auto_increment,
@@ -71,9 +71,9 @@ CREATE TABLE `tblUsers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserPasswordRequest`
--- 
+--
 
 CREATE TABLE `tblUserPasswordRequest` (
   `id` int(11) NOT NULL auto_increment,
@@ -86,9 +86,9 @@ CREATE TABLE `tblUserPasswordRequest` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserPasswordHistory`
--- 
+--
 
 CREATE TABLE `tblUserPasswordHistory` (
   `id` int(11) NOT NULL auto_increment,
@@ -101,9 +101,9 @@ CREATE TABLE `tblUserPasswordHistory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserImages`
--- 
+--
 
 CREATE TABLE `tblUserImages` (
   `id` int(11) NOT NULL auto_increment,
@@ -116,9 +116,9 @@ CREATE TABLE `tblUserImages` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblFolders`
--- 
+--
 
 CREATE TABLE `tblFolders` (
   `id` int(11) NOT NULL auto_increment,
@@ -138,9 +138,9 @@ CREATE TABLE `tblFolders` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblFolderAttributes`
--- 
+--
 
 CREATE TABLE `tblFolderAttributes` (
   `id` int(11) NOT NULL auto_increment,
@@ -155,9 +155,9 @@ CREATE TABLE `tblFolderAttributes` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocuments`
--- 
+--
 
 CREATE TABLE `tblDocuments` (
   `id` int(11) NOT NULL auto_increment,
@@ -180,9 +180,9 @@ CREATE TABLE `tblDocuments` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentAttributes`
--- 
+--
 
 CREATE TABLE `tblDocumentAttributes` (
   `id` int(11) NOT NULL auto_increment,
@@ -197,9 +197,9 @@ CREATE TABLE `tblDocumentAttributes` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentApprovers`
--- 
+--
 
 CREATE TABLE `tblDocumentApprovers` (
   `approveID` int(11) NOT NULL auto_increment,
@@ -214,9 +214,9 @@ CREATE TABLE `tblDocumentApprovers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentApproveLog`
--- 
+--
 
 CREATE TABLE `tblDocumentApproveLog` (
   `approveLogID` int(11) NOT NULL auto_increment,
@@ -232,9 +232,9 @@ CREATE TABLE `tblDocumentApproveLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentContent`
--- 
+--
 
 CREATE TABLE `tblDocumentContent` (
   `id` int(11) NOT NULL auto_increment,
@@ -256,9 +256,9 @@ CREATE TABLE `tblDocumentContent` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentContentAttributes`
--- 
+--
 
 CREATE TABLE `tblDocumentContentAttributes` (
   `id` int(11) NOT NULL auto_increment,
@@ -273,9 +273,9 @@ CREATE TABLE `tblDocumentContentAttributes` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentLinks`
--- 
+--
 
 CREATE TABLE `tblDocumentLinks` (
   `id` int(11) NOT NULL auto_increment,
@@ -291,9 +291,9 @@ CREATE TABLE `tblDocumentLinks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentFiles`
--- 
+--
 
 CREATE TABLE `tblDocumentFiles` (
   `id` int(11) NOT NULL auto_increment,
@@ -305,7 +305,7 @@ CREATE TABLE `tblDocumentFiles` (
   `dir` varchar(255) NOT NULL default '',
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
-  `mimeType` varchar(100) NOT NULL default '',  
+  `mimeType` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblDocumentFiles_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentFiles_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`)
@@ -315,9 +315,9 @@ CREATE TABLE `tblDocumentFiles` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentLocks`
--- 
+--
 
 CREATE TABLE `tblDocumentLocks` (
   `document` int(11) NOT NULL default '0',
@@ -329,9 +329,9 @@ CREATE TABLE `tblDocumentLocks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentReviewers`
--- 
+--
 
 CREATE TABLE `tblDocumentReviewers` (
   `reviewID` int(11) NOT NULL auto_increment,
@@ -346,9 +346,9 @@ CREATE TABLE `tblDocumentReviewers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentReviewLog`
--- 
+--
 
 CREATE TABLE `tblDocumentReviewLog` (
   `reviewLogID` int(11) NOT NULL auto_increment,
@@ -364,9 +364,9 @@ CREATE TABLE `tblDocumentReviewLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentStatus`
--- 
+--
 
 CREATE TABLE `tblDocumentStatus` (
   `statusID` int(11) NOT NULL auto_increment,
@@ -379,9 +379,9 @@ CREATE TABLE `tblDocumentStatus` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentStatusLog`
--- 
+--
 
 CREATE TABLE `tblDocumentStatusLog` (
   `statusLogID` int(11) NOT NULL auto_increment,
@@ -398,9 +398,9 @@ CREATE TABLE `tblDocumentStatusLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblGroups`
--- 
+--
 
 CREATE TABLE `tblGroups` (
   `id` int(11) NOT NULL auto_increment,
@@ -411,9 +411,9 @@ CREATE TABLE `tblGroups` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblGroupMembers`
--- 
+--
 
 CREATE TABLE `tblGroupMembers` (
   `groupID` int(11) NOT NULL default '0',
@@ -426,9 +426,9 @@ CREATE TABLE `tblGroupMembers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblKeywordCategories`
--- 
+--
 
 CREATE TABLE `tblKeywordCategories` (
   `id` int(11) NOT NULL auto_increment,
@@ -439,9 +439,9 @@ CREATE TABLE `tblKeywordCategories` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblKeywords`
--- 
+--
 
 CREATE TABLE `tblKeywords` (
   `id` int(11) NOT NULL auto_increment,
@@ -453,9 +453,9 @@ CREATE TABLE `tblKeywords` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentCategory`
--- 
+--
 
 CREATE TABLE `tblDocumentCategory` (
   `categoryID` int(11) NOT NULL default 0,
@@ -466,9 +466,9 @@ CREATE TABLE `tblDocumentCategory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblNotify`
--- 
+--
 
 CREATE TABLE `tblNotify` (
   `target` int(11) NOT NULL default '0',
@@ -480,9 +480,9 @@ CREATE TABLE `tblNotify` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblSessions`
--- 
+--
 
 CREATE TABLE `tblSessions` (
   `id` varchar(50) NOT NULL default '',
@@ -499,9 +499,9 @@ CREATE TABLE `tblSessions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for mandatory reviewers
--- 
+--
 
 CREATE TABLE `tblMandatoryReviewers` (
   `userID` int(11) NOT NULL default '0',
@@ -513,9 +513,9 @@ CREATE TABLE `tblMandatoryReviewers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for mandatory approvers
--- 
+--
 
 CREATE TABLE `tblMandatoryApprovers` (
   `userID` int(11) NOT NULL default '0',
@@ -527,9 +527,9 @@ CREATE TABLE `tblMandatoryApprovers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for events (calendar)
--- 
+--
 
 CREATE TABLE `tblEvents` (
   `id` int(11) NOT NULL auto_increment,
@@ -544,9 +544,9 @@ CREATE TABLE `tblEvents` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow states
--- 
+--
 
 CREATE TABLE `tblWorkflowStates` (
   `id` int(11) NOT NULL auto_increment,
@@ -560,9 +560,9 @@ CREATE TABLE `tblWorkflowStates` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow actions
--- 
+--
 
 CREATE TABLE `tblWorkflowActions` (
   `id` int(11) NOT NULL auto_increment,
@@ -572,9 +572,9 @@ CREATE TABLE `tblWorkflowActions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflows
--- 
+--
 
 CREATE TABLE `tblWorkflows` (
   `id` int(11) NOT NULL auto_increment,
@@ -586,9 +586,9 @@ CREATE TABLE `tblWorkflows` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow transitions
--- 
+--
 
 CREATE TABLE `tblWorkflowTransitions` (
   `id` int(11) NOT NULL auto_increment,
@@ -606,9 +606,9 @@ CREATE TABLE `tblWorkflowTransitions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow transition users
--- 
+--
 
 CREATE TABLE `tblWorkflowTransitionUsers` (
   `id` int(11) NOT NULL auto_increment,
@@ -621,9 +621,9 @@ CREATE TABLE `tblWorkflowTransitionUsers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow transition groups
--- 
+--
 
 CREATE TABLE `tblWorkflowTransitionGroups` (
   `id` int(11) NOT NULL auto_increment,
@@ -637,9 +637,9 @@ CREATE TABLE `tblWorkflowTransitionGroups` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow log
--- 
+--
 
 CREATE TABLE `tblWorkflowLog` (
   `id` int(11) NOT NULL auto_increment,
@@ -659,9 +659,9 @@ CREATE TABLE `tblWorkflowLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for workflow document relation
--- 
+--
 
 CREATE TABLE `tblWorkflowDocumentContent` (
   `parentworkflow` int(11) DEFAULT 0,
@@ -677,9 +677,9 @@ CREATE TABLE `tblWorkflowDocumentContent` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for mandatory workflows
--- 
+--
 
 CREATE TABLE `tblWorkflowMandatoryWorkflow` (
   `userid` int(11) default NULL,
@@ -691,9 +691,9 @@ CREATE TABLE `tblWorkflowMandatoryWorkflow` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for version
--- 
+--
 
 CREATE TABLE `tblVersion` (
   `date` datetime,
