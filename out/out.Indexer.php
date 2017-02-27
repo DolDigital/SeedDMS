@@ -69,6 +69,7 @@ if($view) {
 	$view->setParam('index', $index);
 	$view->setParam('indexconf', $indexconf);
 	$view->setParam('recreate', (isset($_GET['create']) && $_GET['create']==1));
+	$view->setParam('forceupdate', (isset($_GET['forceupdate']) && $_GET['forceupdate']==1));
 	$view->setParam('folder', $folder);
 	$view->setParam('converters', $settings->_converters['fulltext']);
 	$view->setParam('timeout', $settings->_cmdTimeout);

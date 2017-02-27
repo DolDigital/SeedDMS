@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_AddEvent extends SeedDMS_Bootstrap_Style {
 
 	function js() { /* {{{ */
+		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 ?>
 function checkForm()
@@ -39,7 +40,7 @@ function checkForm()
 	msg = new Array();
 	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
-	if (isset($settings->_strictFormCheck) && $settings->_strictFormCheck) {
+	if ($strictformcheck) {
 ?>
 	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php

@@ -108,7 +108,6 @@ op/op.TriggerWorkflow.php
 * Workflow transition was triggered
   subscribers of the document
 
-op/op.UpdateDocument2.php
 op/op.UpdateDocument.php
 * document was updated
   subscribers of the document

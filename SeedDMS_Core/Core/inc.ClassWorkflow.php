@@ -75,7 +75,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflows SET name = ".$db->qstr($newName)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflows` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -89,7 +89,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function setInitState($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflows SET initstate = ".$state->getID()." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflows` SET `initstate` = ".$state->getID()." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -104,7 +104,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		if($this->_transitions)
 			return $this->_transitions;
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE workflow=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `workflow`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -165,7 +165,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function getNextTransitions($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE workflow=".$this->_id." AND state=".$state->getID();
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `workflow`=".$this->_id." AND `state`=".$state->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -189,7 +189,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function getPreviousTransitions($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE workflow=".$this->_id." AND nextstate=".$state->getID();
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `workflow`=".$this->_id." AND `nextstate`=".$state->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -214,7 +214,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function getTransitionsByStates($state, $nextstate) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE workflow=".$this->_id." AND state=".$state->getID()." AND nextstate=".$nextstate->getID();
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `workflow`=".$this->_id." AND `state`=".$state->getID()." AND `nextstate`=".$nextstate->getID();
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -254,7 +254,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		$db = $this->_dms->getDB();
 		
 		$db->startTransaction();
-		$queryStr = "INSERT INTO tblWorkflowTransitions (workflow, state, action, nextstate) VALUES (".$this->_id.", ".$state->getID().", ".$action->getID().", ".$nextstate->getID().")";
+		$queryStr = "INSERT INTO `tblWorkflowTransitions` (`workflow`, `state`, `action`, `nextstate`) VALUES (".$this->_id.", ".$state->getID().", ".$action->getID().", ".$nextstate->getID().")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -267,7 +267,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		$transition = $this->getTransition($db->getInsertID());
 
 		foreach($users as $user) {
-			$queryStr = "INSERT INTO tblWorkflowTransitionUsers (transition, userid) VALUES (".$transition->getID().", ".$user->getID().")";
+			$queryStr = "INSERT INTO `tblWorkflowTransitionUsers` (`transition`, `userid`) VALUES (".$transition->getID().", ".$user->getID().")";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -275,7 +275,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		}
 
 		foreach($groups as $group) {
-			$queryStr = "INSERT INTO tblWorkflowTransitionGroups (transition, groupid, minusers) VALUES (".$transition->getID().", ".$group->getID().", 1)";
+			$queryStr = "INSERT INTO `tblWorkflowTransitionGroups` (`transition`, `groupid`, `minusers`) VALUES (".$transition->getID().", ".$group->getID().", 1)";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -294,7 +294,7 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblWorkflowDocumentContent WHERE workflow=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowDocumentContent` WHERE `workflow`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -345,20 +345,20 @@ class SeedDMS_Core_Workflow { /* {{{ */
 
 		$db->startTransaction();
 
-		$queryStr = "DELETE FROM tblWorkflowTransitions WHERE workflow = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowTransitions` WHERE `workflow` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE workflow = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowMandatoryWorkflow` WHERE `workflow` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
 		}
 
 		// Delete workflow itself
-		$queryStr = "DELETE FROM tblWorkflows WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflows` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -443,7 +443,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowStates SET name = ".$db->qstr($newName)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowStates` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -457,7 +457,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function setMaxTime($maxtime) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowStates SET maxtime = ".intval($maxtime)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowStates` SET `maxtime` = ".intval($maxtime)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -471,7 +471,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function setPreCondFunc($precondfunc) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowStates SET precondfunc = ".$db->qstr($precondfunc)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowStates` SET `precondfunc` = ".$db->qstr($precondfunc)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -493,7 +493,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function setDocumentStatus($docstatus) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowStates SET documentstatus = ".intval($docstatus)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowStates` SET `documentstatus` = ".intval($docstatus)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -510,7 +510,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE state=".$this->_id. " OR nextstate=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `state`=".$this->_id. " OR `nextstate`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -525,7 +525,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	function getTransitions() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE state=".$this->_id. " OR nextstate=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `state`=".$this->_id. " OR `nextstate`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -555,7 +555,7 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 		$db->startTransaction();
 
 		// Delete workflow state itself
-		$queryStr = "DELETE FROM tblWorkflowStates WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowStates` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -616,7 +616,7 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowActions SET name = ".$db->qstr($newName)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowActions` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -633,7 +633,7 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE action=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `action`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -648,7 +648,7 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 	function getTransitions() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE action=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitions` WHERE `action`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
@@ -678,7 +678,7 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 		$db->startTransaction();
 
 		// Delete workflow state itself
-		$queryStr = "DELETE FROM tblWorkflowActions WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowActions` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -785,7 +785,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	function setWorkflow($newWorkflow) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowTransitions SET workflow = ".$newWorkflow->getID()." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowTransitions` SET `workflow` = ".$newWorkflow->getID()." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -799,7 +799,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	function setState($newState) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowTransitions SET state = ".$newState->getID()." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowTransitions` SET `state` = ".$newState->getID()." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -813,7 +813,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	function setNextState($newNextState) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowTransitions SET nextstate = ".$newNextState->getID()." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowTransitions` SET `nextstate` = ".$newNextState->getID()." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -827,7 +827,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	function setAction($newAction) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowTransitions SET action = ".$newAction->getID()." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowTransitions` SET `action` = ".$newAction->getID()." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -841,7 +841,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	function setMaxTime($maxtime) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblWorkflowTransitions SET maxtime = ".intval($maxtime)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblWorkflowTransitions` SET `maxtime` = ".intval($maxtime)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -861,7 +861,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		if($this->_users)
 			return $this->_users;
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitionUsers WHERE transition=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitionUsers` WHERE `transition`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -889,7 +889,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		if($this->_groups)
 			return $this->_groups;
 
-		$queryStr = "SELECT * FROM tblWorkflowTransitionGroups WHERE transition=".$this->_id;
+		$queryStr = "SELECT * FROM `tblWorkflowTransitionGroups` WHERE `transition`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -918,7 +918,7 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		$db->startTransaction();
 
 		// Delete workflow transition itself
-		$queryStr = "DELETE FROM tblWorkflowTransitions WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblWorkflowTransitions` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;

@@ -66,9 +66,14 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 			/* Setting drop folder dir to "" will force to take the default from settings.xml */
 			$this->printDropFolderChooserHtml("form1", "", 1);
 			print "</div></div>";
+
+			print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('removeFolderFromDropFolder')."</label><div class=\"controls\">";
+			print "<input type='checkbox' name='remove' value='1'/>";
+			print "</div></div>";
+
 			print "<div class=\"control-group\"><label class=\"control-label\">";
 			print "</label><div class=\"controls\">";
-			print "<input type='submit' class='btn' name='' value='".getMLText("import")."'/><br />";
+			print "<input type='submit' class='btn' name='' value='".getMLText("import")."'/>";
 			print "</div></div>";
 			print "</form>\n";
 			$this->contentContainerEnd();

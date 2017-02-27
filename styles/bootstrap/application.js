@@ -385,7 +385,7 @@ $(document).ready( function() {
 		});
 	}); /* }}} */
 
-	$('div.ajax').on('update', function(event, param1) { /* {{{ */
+	$('div.ajax').on('update', function(event, param1, callback) { /* {{{ */
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
@@ -397,7 +397,10 @@ $(document).ready( function() {
 			url = href;
 		if(typeof param1 === 'object') {
 			for(var key in param1) {
-				url += "&"+key+"="+param1[key];
+				if(key == 'callback')
+					callback = param1[key];
+				else
+					url += "&"+key+"="+param1[key];
 			}
 		} else {
 			url += "&"+param1;
@@ -432,6 +435,8 @@ $(document).ready( function() {
 					}
 				}
 			}); /* }}} */
+			if(callback)
+				callback.call();
 		});
 	}); /* }}} */
 

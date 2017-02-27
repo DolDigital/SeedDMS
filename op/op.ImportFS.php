@@ -42,8 +42,9 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 if (empty($_GET["dropfolderfileform1"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_target_folder"));
 }
-$dirname = $settings->_dropFolderDir.'/'.$user->getLogin()."/".$_GET["dropfolderfileform1"];
-if(!is_dir($dirname)) {
+
+$dirname = realpath($settings->_dropFolderDir.'/'.$user->getLogin()."/".$_GET["dropfolderfileform1"]);
+if(strpos($dirname, realpath($settings->_dropFolderDir.'/'.$user->getLogin().'/')) !== 0 || !is_dir($dirname)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_dropfolder_folder"));
 }
 
@@ -104,8 +105,14 @@ $foldercount = $doccount = 0;
 if($newfolder = $folder->addSubFolder($_GET["dropfolderfileform1"], '', $user, 1)) {
 	if(!import_folder($dirname, $newfolder))
 		$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_importfs')));
-	else
+	else {
+		if(isset($_GET['remove']) && $_GET["remove"]) {
+			$cmd = 'rm -rf '.$dirname;
+			$ret = null;
+			system($cmd, $ret);
+		}
 		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_importfs', array('docs'=>$doccount, 'folders'=>$foldercount))));
+	}
 } else {
 	$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_importfs')));
 }

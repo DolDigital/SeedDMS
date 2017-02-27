@@ -207,21 +207,21 @@ class SeedDMS_Core_Attribute { /* {{{ */
 		switch(get_class($this->_obj)) {
 			case $this->_dms->getClassname('document'):
 				if(trim($value) === '')
-					$queryStr = "DELETE FROM tblDocumentAttributes WHERE `document` = " . $this->_obj->getID() . " AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "DELETE FROM `tblDocumentAttributes` WHERE `document` = " . $this->_obj->getID() . " AND `attrdef` = " . $this->_attrdef->getId();
 				else
-					$queryStr = "UPDATE tblDocumentAttributes SET value = ".$db->qstr($value)." WHERE `document` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "UPDATE `tblDocumentAttributes` SET `value` = ".$db->qstr($value)." WHERE `document` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
 				break;
 			case $this->_dms->getClassname('documentcontent'):
 				if(trim($value) === '')
-					$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE `content` = " . $this->_obj->getID() . " AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "DELETE FROM `tblDocumentContentAttributes` WHERE `content` = " . $this->_obj->getID() . " AND `attrdef` = " . $this->_attrdef->getId();
 				else
-					$queryStr = "UPDATE tblDocumentContentAttributes SET value = ".$db->qstr($value)." WHERE `content` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "UPDATE `tblDocumentContentAttributes` SET `value` = ".$db->qstr($value)." WHERE `content` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
 				break;
 			case $this->_dms->getClassname('folder'):
 				if(trim($value) === '')
-					$queryStr = "DELETE FROM tblFolderAttributes WHERE `folder` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "DELETE FROM `tblFolderAttributes WHERE` `folder` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
 				else
-					$queryStr = "UPDATE tblFolderAttributes SET value = ".$db->qstr($value)." WHERE `folder` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
+					$queryStr = "UPDATE `tblFolderAttributes` SET `value` = ".$db->qstr($value)." WHERE `folder` = " . $this->_obj->getID() .	" AND `attrdef` = " . $this->_attrdef->getId();
 				break;
 			default:
 				return false;
@@ -446,7 +446,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setName($name) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET name =".$db->qstr($name)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `name` =".$db->qstr($name)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -476,7 +476,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setObjType($objtype) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET objtype =".intval($objtype)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `objtype` =".intval($objtype)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -506,7 +506,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setType($type) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET type =".intval($type)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `type` =".intval($type)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -531,7 +531,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setMultipleValues($mv) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET multiple =".intval($mv)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `multiple` =".intval($mv)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -553,7 +553,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setMinValues($minvalues) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET minvalues =".intval($minvalues)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `minvalues` =".intval($minvalues)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -575,7 +575,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setMaxValues($maxvalues) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET maxvalues =".intval($maxvalues)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `maxvalues` =".intval($maxvalues)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -671,7 +671,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET valueset =".$db->qstr($valuesetstr)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `valueset` =".$db->qstr($valuesetstr)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -701,7 +701,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function setRegex($regex) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblAttributeDefinitions SET regex =".$db->qstr($regex)." WHERE id = " . $this->_id;
+		$queryStr = "UPDATE `tblAttributeDefinitions` SET `regex` =".$db->qstr($regex)." WHERE `id` = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -721,13 +721,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
-		$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id;
+		$queryStr = "SELECT * FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_array($resArr) && count($resArr) == 0) {
-			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id;
+			$queryStr = "SELECT * FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id;
 			$resArr = $db->getResultArray($queryStr);
 			if (is_array($resArr) && count($resArr) == 0) {
-				$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id;
+				$queryStr = "SELECT * FROM `tblDocumentContentAttributes` WHERE `attrdef`=".$this->_id;
 				$resArr = $db->getResultArray($queryStr);
 				if (is_array($resArr) && count($resArr) == 0) {
 
@@ -780,7 +780,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
-			$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id;
+			$queryStr = "SELECT * FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id;
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -791,7 +791,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
-			$queryStr = "SELECT count(*) c, value FROM tblDocumentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$queryStr = "SELECT count(*) c, `value` FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
 				$result['frequencies']['document'] = $resArr;
@@ -800,7 +800,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
-			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id;
+			$queryStr = "SELECT * FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id;
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -811,7 +811,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
-			$queryStr = "SELECT count(*) c, value FROM tblFolderAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$queryStr = "SELECT count(*) c, `value` FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
 				$result['frequencies']['folder'] = $resArr;
@@ -820,7 +820,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
-			$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id;
+			$queryStr = "SELECT * FROM `tblDocumentContentAttributes` WHERE `attrdef`=".$this->_id;
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -831,7 +831,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
-			$queryStr = "SELECT count(*) c, value FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$queryStr = "SELECT count(*) c, `value` FROM `tblDocumentContentAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
 				$result['frequencies']['content'] = $resArr;
@@ -854,7 +854,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			return false;
 
 		// Delete user itself
-		$queryStr = "DELETE FROM tblAttributeDefinitions WHERE id = " . $this->_id;
+		$queryStr = "DELETE FROM `tblAttributeDefinitions` WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
 		return true;
@@ -873,7 +873,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
-			$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id." AND value=".$db->qstr($attrvalue);
+			$queryStr = "SELECT * FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id." AND `value`=".$db->qstr($attrvalue);
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -888,7 +888,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
-			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id." AND value=".$db->qstr($attrvalue);
+			$queryStr = "SELECT * FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id." AND `value`=".$db->qstr($attrvalue);
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);

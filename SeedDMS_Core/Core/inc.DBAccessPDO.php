@@ -214,6 +214,16 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
+	 * Replace back ticks by '"'
+	 *
+	 * @param string text
+	 * @return string sanitized string
+	 */
+	function rbt($text) { /* {{{ */
+		return str_replace('`', '"');
+	} /* }}} */
+
+	/**
 	 * Execute SQL query and return result
 	 *
 	 * Call this function only with sql query which return data records.
@@ -402,7 +412,7 @@ class SeedDMS_Core_DatabaseAccess {
 		else if (!strcasecmp($tableName, "ttcontentid")) {
 			switch($this->_driver) {
 				case 'sqlite':
-					$queryStr = "CREATE TEMPORARY TABLE `ttcontentid` AS ".
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` AS ".
 						"SELECT `tblDocumentContent`.`document` AS `document`, ".
 						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
 						"FROM `tblDocumentContent` ".
@@ -410,7 +420,7 @@ class SeedDMS_Core_DatabaseAccess {
 						"ORDER BY `tblDocumentContent`.`document`";
 					break;
 				default:
-					$queryStr = "CREATE TEMPORARY TABLE `ttcontentid` (PRIMARY KEY (`document`), INDEX (`maxVersion`)) ".
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` (PRIMARY KEY (`document`), INDEX (`maxVersion`)) ".
 						"SELECT `tblDocumentContent`.`document`, ".
 						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
 						"FROM `tblDocumentContent` ".

@@ -54,6 +54,14 @@ ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
 		font-weight: bold;
 }
 
+td.today {
+	background-color: rgb(255, 200, 0);
+}
+
+td.event {
+	background-color: rgb(0, 200, 255);
+}
+
 .wordbreak {
 	word-break: break-word;
 }
@@ -204,6 +212,45 @@ div.popupbox span.closepopupbox {
 	position: absolute;
 	right: 5px;
 	top: 0px;
+}
+
+ul.qq-upload-list {
+	/*
+	background-color: #fff;
+	border-radius: 4px;
+	border: 1px solid #cccccc;
+	*/
+}
+
+ul.qq-upload-list li {
+	display: inline-block;
+	margin: 5px 5px 5px 0;
+	padding: 5px;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+}
+
+ul.qq-upload-list li img {
+	display: block;
+}
+
+ul.qq-upload-list li span {
+	display: block;
+}
+
+.qq-upload-button {
+	display: inline-block;
+}
+
+.qq-upload-drop-area {
+	display: inline-block;
+	width: 200px;
+	height: 22px;
+	padding: 3px;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
 }
 
 @media (max-width: 480px) { 
