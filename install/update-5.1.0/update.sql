@@ -8,7 +8,7 @@ ALTER TABLE `tblUserImages` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL d
 
 ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` tinyint(1) NOT NULL default '0' AFTER `document`;
 
-ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` smallint(5) NOT NULL default '0' AFTER `document`;
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` smallint(5) unsigned NOT NULL default '0' AFTER `document`;
 
 ALTER TABLE `tblUsers` CHANGE `pwdExpiration` `pwdExpiration` datetime default NULL;
 
