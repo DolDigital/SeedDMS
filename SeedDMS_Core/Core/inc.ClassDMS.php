@@ -1300,10 +1300,12 @@ class SeedDMS_Core_DMS {
 			$role = '0';
 		if(trim($pwdexpiration) == '' || trim($pwdexpiration) == 'never') {
 			$pwdexpiration = 'NULL';
-		} elseif(trim($pwdexpiration) == 'now')
+		} elseif(trim($pwdexpiration) == 'now') {
 			$pwdexpiration = $db->qstr(date('Y-m-d H:i:s'));
+		} else {
+			$pwdexpiration = $db->qstr($pwdexpiration);
+		}
 		$queryStr = "INSERT INTO `tblUsers` (`login`, `pwd`, `fullName`, `email`, `language`, `theme`, `comment`, `role`, `hidden`, `disabled`, `pwdExpiration`, `quota`, `homefolder`) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$pwdexpiration.", '".intval($quota)."', ".($homefolder ? intval($homefolder) : "NULL").")";
-		echo $queryStr;
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
