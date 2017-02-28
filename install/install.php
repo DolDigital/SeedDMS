@@ -311,7 +311,7 @@ if ($action=="setSettings") {
 						$connTmp->exec($query);
 
 						if ($connTmp->errorCode() != 0) {
-							$errorMsg .= $connTmp->errorInfo() . "<br/>";
+							$errorMsg .= $connTmp->errorInfo()[2] . "<br/>";
 						}
 					}
 				}
