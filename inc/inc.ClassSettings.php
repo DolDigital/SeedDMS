@@ -1223,6 +1223,7 @@ class Settings { /* {{{ */
 					case 'mysql':
 					case 'mysqli':
 					case 'mysqlnd':
+					case 'pgsql':
 						$tmp = explode(":", $this->_dbHostname);
 						$dsn = $this->_dbDriver.":dbname=".$this->_dbDatabase.";host=".$tmp[0];
 						if(!empty($tmp[1]))
@@ -1236,7 +1237,7 @@ class Settings { /* {{{ */
 							"status" => "notfound",
 							"type" => "error",
 							"currentvalue" => $this->_dbDriver,
-							"suggestionvalue" => "mysql|sqlite"
+							"suggestionvalue" => "mysql|sqlite|pgsql"
 						);
 				}
 				if($dsn) {
