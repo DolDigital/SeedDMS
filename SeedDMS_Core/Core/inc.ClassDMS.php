@@ -756,7 +756,7 @@ class SeedDMS_Core_DMS {
 				// Only search if the offset is not beyond the number of folders
 				if($totalFolders > $offset) {
 					// Prepare the complete search query, including the LIMIT clause.
-					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery." GROUP BY `tblFolders`.`id`";
+					$searchQuery = "SELECT DISTINCT `tblFolders`.`id` ".$searchQuery." GROUP BY `tblFolders`.`id`";
 
 					if($limit) {
 						$searchQuery .= " LIMIT ".$limit." OFFSET ".$offset;
