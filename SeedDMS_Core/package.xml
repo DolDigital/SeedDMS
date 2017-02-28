@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-02-22</date>
- <time>11:25:11</time>
+ <date>2017-02-28</date>
+ <time>06:38:12</time>
  <version>
-  <release>4.3.33</release>
-  <api>4.3.33</api>
+  <release>4.3.34</release>
+  <api>4.3.34</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- SeedDMЅ_Core_DMS::getTimeline() no longer returns duplicate documents
-- SeedDMЅ_Core_Document::addContent() sets workflow after status was set
-- SeedDMЅ_Core_Keyword::setOwner() fix sql statement
-- SeedDMЅ_Core_User::setFullname() minor fix in sql statement
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1107,6 +1103,25 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - order groups by name returned by getReadAccessList()
 - add optional parameter to SeedDMS_Core_DMS::filterDocumentLinks()
 - SeedDMS_Core_DMS::search() can search for document/folder id
+   </notes>
+  </release>
+  <release>
+   <date>2017-02-22</date>
+   <time>11:25:11</time>
+   <version>
+    <release>4.3.33</release>
+    <api>4.3.33</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- SeedDMЅ_Core_DMS::getTimeline() no longer returns duplicate documents
+- SeedDMЅ_Core_Document::addContent() sets workflow after status was set
+- SeedDMЅ_Core_Keyword::setOwner() fix sql statement
+- SeedDMЅ_Core_User::setFullname() minor fix in sql statement
    </notes>
   </release>
  </changelog>
