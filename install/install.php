@@ -345,7 +345,18 @@ if ($action=="setSettings") {
 			$needsupdate = false;
 			$connTmp =openDBConnection($settings);
 			if ($connTmp) {
-				$res = $connTmp->query('select * from tblVersion');
+				switch($settings->_dbDriver) {
+					case 'mysql':
+					case 'mysqli':
+					case 'mysqlnd':
+					case 'sqlite':
+						$sql = 'select * from `tblVersion`';
+						break;
+					case 'pgsql':
+						$sql = 'select * from "tblVersion"';
+						break;
+				}
+				$res = $connTmp->query($sql);
 				if($res) {
 					if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 						$updatedirs = array();
