@@ -353,11 +353,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
 			echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
-			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
-			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
-			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
-			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"4\" />";
-			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
+			echo "      <input name=\"query\" class=\"search-query\" ".($this->params['defaultsearchmethod'] == 'fulltext' ? "" : "id=\"searchfield\"")." data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
 			if($this->params['defaultsearchmethod'] == 'fulltext')
 				echo "      <input type=\"hidden\" name=\"fullsearch\" value=\"1\" />";
 //			if($this->params['enablefullsearch']) {
