@@ -759,7 +759,7 @@ class SeedDMS_Core_DMS {
 					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery." GROUP BY `tblFolders`.`id`";
 
 					if($limit) {
-						$searchQuery .= " LIMIT ".$offset.",".$limit;
+						$searchQuery .= " LIMIT ".$limit." OFFSET ".$offset;
 					}
 
 					// Send the complete search query to the database.
@@ -1006,7 +1006,7 @@ class SeedDMS_Core_DMS {
 					else
 						$offset = 0;
 					if($limit)
-						$searchQuery .= " LIMIT ".$offset.",".$remain;
+						$searchQuery .= " LIMIT ".$limit." OFFSET ".$offset;
 
 					// Send the complete search query to the database.
 					$resArr = $this->db->getResultArray($searchQuery);
