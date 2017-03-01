@@ -90,10 +90,10 @@ function check_queue() {
 				}
 			},
 			complete: function(xhr, textstatus) {
-				queue_count--;        // Substract request to the counter
 				$('.queue-bar').css('width', (queue_count*100/MAX_REQUESTS)+'%');
 				$('.total-bar').css('width', (100 - (funcArray.length+queue_count)*100/docstoindex)+'%');
 				$('.total-bar').text(Math.round(100 - (funcArray.length+queue_count)*100/docstoindex)+' %');
+				queue_count--;        // Substract request to the counter
 				if(funcArray.length+queue_count == 0)
 					$('.total-bar').addClass('bar-success');
 			}
