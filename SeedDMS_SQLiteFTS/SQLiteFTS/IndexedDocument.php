@@ -37,7 +37,7 @@ class SeedDMS_SQLiteFTS_IndexedDocument extends SeedDMS_SQLiteFTS_Document {
 		);
 		$pipes = array();
 	 
-	  $timeout += time();
+		$timeout += time();
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
@@ -53,7 +53,7 @@ class SeedDMS_SQLiteFTS_IndexedDocument extends SeedDMS_SQLiteFTS_Document {
 					 
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
-													}
+			}
 			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
  
