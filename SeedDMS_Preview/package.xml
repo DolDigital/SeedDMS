@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2016-11-15</date>
- <time>21:00:26</time>
+ <date>2017-03-02</date>
+ <time>07:14:59</time>
  <version>
-  <release>1.2.1</release>
+  <release>1.2.2</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-setConverters() overrides exiting converters
+commands can be set for mimetypes 'xxxx/*' and '*'
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -252,6 +252,22 @@ check if cache dir exists before deleting it in deleteDocumentPreviews()
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 add new previewer which converts document to pdf instead of png
+   </notes>
+  </release>
+  <release>
+   <date>2016-11-15</date>
+   <time>21:00:26</time>
+   <version>
+    <release>1.2.1</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+setConverters() overrides exiting converters
    </notes>
   </release>
  </changelog>
