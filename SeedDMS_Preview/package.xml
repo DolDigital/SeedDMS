@@ -24,6 +24,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 commands can be set for mimetypes 'xxxx/*' and '*'
+pass mimetype as parameter '%m' to converter
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
