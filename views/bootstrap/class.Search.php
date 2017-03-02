@@ -466,7 +466,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == $dms->getClassname('document')) {
-					$txt = $this->callHook('documentListItem', $entry, $previewer);
+					$txt = $this->callHook('documentListItem', $entry, $previewer, 'search');
 					if(is_string($txt))
 						echo $txt;
 					else {

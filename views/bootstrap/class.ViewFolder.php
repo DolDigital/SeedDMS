@@ -315,7 +315,7 @@ function folderSelected(id, name) {
 
 		foreach($documents as $document) {
 			$document->verifyLastestContentExpriry();
-			$txt = $this->callHook('documentListItem', $document, $previewer);
+			$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
 			if(is_string($txt))
 				echo $txt;
 			else {
