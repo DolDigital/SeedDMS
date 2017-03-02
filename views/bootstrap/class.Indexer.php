@@ -62,6 +62,7 @@ function check_queue() {
 			data: {command: 'indexdocument', id: docid},
 			beforeSend: function() {
 				queue_count++;            // Add request to the counter
+				$('.queue-bar').css('width', (queue_count*100/MAX_REQUESTS)+'%');
 			},
 			error: function(xhr, textstatus) {
 				noty({

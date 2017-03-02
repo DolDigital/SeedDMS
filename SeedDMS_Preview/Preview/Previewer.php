@@ -106,9 +106,15 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 			$target = $this->previewDir.$dir.md5($infile).'-'.$width;
 		if($target != '' && (!file_exists($target.'.png') || filectime($target.'.png') < filectime($infile))) {
 			$cmd = '';
+			$mimeparts = explode('/', $mimetype, 2);
 			if(isset($this->converters[$mimetype])) {
-				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimetype]);
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters[$mimetype]);
+			} elseif(isset($this->converters[$mimeparts[0].'/*'])) {
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters[$mimeparts[0].'/*']);
+			} elseif(isset($this->converters['*'])) {
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters['*']);
 			}
+
 			/*
 			switch($mimetype) {
 				case "image/png":
@@ -131,7 +137,6 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 			}
 			 */
 			if($cmd) {
-				//exec($cmd);
 				try {
 					self::execWithTimeout($cmd, $this->timeout);
 				} catch(Exception $e) {
