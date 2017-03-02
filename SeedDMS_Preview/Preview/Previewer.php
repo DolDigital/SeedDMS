@@ -108,11 +108,11 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 			$cmd = '';
 			$mimeparts = explode('/', $mimetype, 2);
 			if(isset($this->converters[$mimetype])) {
-				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimetype]);
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters[$mimetype]);
 			} elseif(isset($this->converters[$mimeparts[0].'/*'])) {
-				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters[$mimeparts[0].'/*']);
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters[$mimeparts[0].'/*']);
 			} elseif(isset($this->converters['*'])) {
-				$cmd = str_replace(array('%w', '%f', '%o'), array($width, $infile, $target.'.png'), $this->converters['*']);
+				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters['*']);
 			}
 
 			/*
