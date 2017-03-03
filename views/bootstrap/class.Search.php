@@ -454,19 +454,24 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
 
-			print "<table class=\"table table-hover\">";
-			print "<thead>\n<tr>\n";
-			print "<th></th>\n";
-			print "<th>".getMLText("name")."</th>\n";
-			print "<th>".getMLText("attributes")."</th>\n";
-			print "<th>".getMLText("status")."</th>\n";
-			print "<th>".getMLText("action")."</th>\n";
-			print "</tr>\n</thead>\n<tbody>\n";
+			$txt = $this->callHook('searchListHeader', $folder, $orderby);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				print "<table class=\"table table-hover\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("attributes")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+			}
 
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == $dms->getClassname('document')) {
-					$txt = $this->callHook('documentListItem', $entry, $previewer);
+					$txt = $this->callHook('documentListItem', $entry, $previewer, 'search');
 					if(is_string($txt))
 						echo $txt;
 					else {

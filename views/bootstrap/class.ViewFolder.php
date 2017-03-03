@@ -300,36 +300,34 @@ function folderSelected(id, name) {
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 			}
-		}
-		else printMLText("empty_folder_list");
 
-
-		foreach($subFolders as $subFolder) {
-			$txt = $this->callHook('folderListItem', $subFolder);
-			if(is_string($txt))
-				echo $txt;
-			else {
-				echo $this->folderListRow($subFolder);
+			foreach($subFolders as $subFolder) {
+				$txt = $this->callHook('folderListItem', $subFolder, 'viewfolder');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->folderListRow($subFolder);
+				}
 			}
-		}
 
-		foreach($documents as $document) {
-			$document->verifyLastestContentExpriry();
-			$txt = $this->callHook('documentListItem', $document, $previewer);
-			if(is_string($txt))
-				echo $txt;
-			else {
-				echo $this->documentListRow($document, $previewer);
+			foreach($documents as $document) {
+				$document->verifyLastestContentExpriry();
+				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->documentListRow($document, $previewer);
+				}
 			}
-		}
 
-		if ((count($subFolders) > 0)||(count($documents) > 0)) {
 			$txt = $this->callHook('folderListFooter', $folder);
 			if(is_string($txt))
 				echo $txt;
 			else
 				echo "</tbody>\n</table>\n";
+
 		}
+		else printMLText("empty_folder_list");
 
 		echo "</div>\n"; // End of right column div
 		echo "</div>\n"; // End of div around left and right column

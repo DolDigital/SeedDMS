@@ -340,6 +340,27 @@ function dskspace($dir) { /* {{{ */
 } /* }}} */
 
 /**
+ * Replacement of PHP's basename function
+ *
+ * Because basename is locale dependent and strips off non ascii chars
+ * from the beginning of filename, it cannot be used in a environment
+ * where locale is set to e.g. 'C'
+ */
+function utf8_basename($path, $suffix='') { /* {{{ */
+	$rpos = strrpos($path, DIRECTORY_SEPARATOR);
+	if($rpos === false)
+		return $path;
+	$file = substr($path, $rpos+1);
+
+	$suflen = strlen($suffix);
+	if($suflen && (substr($file, -$suflen) == $suffix)){
+			$file = substr($file, 0, -$suflen);
+	}
+
+	return $file;
+} /* }}} */
+
+/**
  * Log a message
  *
  * This function is still here for convienice and because it is
