@@ -276,7 +276,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($attributes = $document->getAttributes()) {
 				foreach($attributes as $attribute) {
 					$attrdef = $attribute->getAttributeDefinition();
-					echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+					echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 				}
 			}
 
@@ -332,7 +332,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 					if($attributes = $version->getAttributes()) {
 						foreach($attributes as $attribute) {
 							$attrdef = $attribute->getAttributeDefinition();
-							echo $indent."   <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+							echo $indent."   <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 						}
 					}
 					if($statuslog = $version->getStatusLog()) {
