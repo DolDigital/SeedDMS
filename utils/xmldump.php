@@ -622,7 +622,7 @@ if($attrdefs) {
 		echo "\">\n";
 		echo "  <attr name=\"name\">".$attrdef->getName()."</attr>\n";
 		echo "  <attr name=\"multiple\">".$attrdef->getMultipleValues()."</attr>\n";
-		echo "  <attr name=\"valueset\">".$attrdef->getValueSet()."</attr>\n";
+		echo "  <attr name=\"valueset\">".wrapWithCData($attrdef->getValueSet())."</attr>\n";
 		echo "  <attr name=\"type\">".$attrdef->getType()."</attr>\n";
 		echo "  <attr name=\"minvalues\">".$attrdef->getMinValues()."</attr>\n";
 		echo "  <attr name=\"maxvalues\">".$attrdef->getMaxValues()."</attr>\n";
