@@ -686,7 +686,7 @@ switch($command) {
 							if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 								foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 									if (method_exists($hookObj, 'preIndexDocument')) {
-										$hookObj->preIndexDocument($document, $idoc);
+										$hookObj->preIndexDocument(null, $document, $idoc);
 									}
 								}
 							}
