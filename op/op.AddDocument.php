@@ -262,7 +262,7 @@ if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
 	$uuids = explode(';', $_POST['fineuploaderuuids']);
 	$names = explode(';', $_POST['fineuploadernames']);
 	foreach($uuids as $i=>$uuid) {
-		$fullfile = $settings->_stagingDir.'/'.basename($uuid);
+		$fullfile = $settings->_stagingDir.'/'.utf8_basename($uuid);
 		if(file_exists($fullfile)) {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mimetype = finfo_file($finfo, $fullfile);
@@ -299,7 +299,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
 		$name = trim($_POST["name"]);
-	else $name = basename($userfilename);
+	else $name = utf8_basename($userfilename);
 
 	/* Check if name already exists in the folder */
 	if(!$settings->_enableDuplicateDocNames) {
@@ -317,7 +317,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 	$res = $folder->addDocument($name, $comment, $expires, $owner, $keywords,
-															$cats, $userfiletmp, basename($userfilename),
+															$cats, $userfiletmp, utf8_basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
 	                            $reviewers, $approvers, $reqversion,
 	                            $version_comment, $attributes, $attributes_version, $workflow);
