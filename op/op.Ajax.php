@@ -582,7 +582,7 @@ switch($command) {
 				if (!empty($_POST["name"]))
 					$name = $_POST["name"];
 				else
-					$name = basename($userfilename);
+					$name = utf8_basename($userfilename);
 
 				/* Check if name already exists in the folder */
 				if(!$settings->_enableDuplicateDocNames) {
@@ -651,7 +651,7 @@ switch($command) {
 
 				$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
 				$res = $folder->addDocument($name, '', $expires, $user, '',
-																		array(), $userfiletmp, basename($userfilename),
+																		array(), $userfiletmp, utf8_basename($userfilename),
 																		$fileType, $userfiletype, 0,
 																		$reviewers, $approvers, 1,
 																		'', array(), array(), $workflow);
