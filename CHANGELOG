@@ -77,6 +77,8 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.34
 --------------------------------------------------------------------------------
+- add multibyte save basename() replacement, which fixes uploading files whose
+  name starts with a multibyte char
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.33
