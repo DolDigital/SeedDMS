@@ -203,7 +203,8 @@ function insert_attributedefinition($attrdef) { /* {{{ */
 		$logger->info("Attribute definition already exists");
 	} else {
 		if(in_array('attributedefinitions', $sections)) {
-			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $attrdef['objecttype'], $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
+			$objtype = ($attrdef['objecttype'] == 'folder' ? SeedDMS_Core_AttributeDefinition::objtype_folder : ($attrdef['objecttype'] == 'document' ? SeedDMS_Core_AttributeDefinition::objtype_document : ($attrdef['objecttype'] == 'documentcontent' ? SeedDMS_Core_AttributeDefinition::objtype_documentcontent : 0)));
+			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $objtype, $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
 				$logger->err("Could not add attribute definition");
 				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
