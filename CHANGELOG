@@ -90,6 +90,8 @@
 --------------------------------------------------------------------------------
 - add multibyte save basename() replacement, which fixes uploading files whose
   name starts with a multibyte char
+- show both number of links from a document A to B and vise versa in tab header
+  on ViewDocuments page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.33
