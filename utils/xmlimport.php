@@ -507,7 +507,7 @@ function insert_document($document) { /* {{{ */
 			$document['attributes']['comment'],
 			isset($document['attributes']['expires']) ? dateToTimestamp($document['attributes']['expires']) : 0,
 			$owner,
-			isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : 0,
+			isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : '',
 			$categories,
 			$filename,
 			$initversion['attributes']['orgfilename'],
