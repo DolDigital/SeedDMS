@@ -1,10 +1,8 @@
 <?php
 if(isset($_SERVER['SEEDDMS_HOME'])) {
 	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassSettings.php");
-	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassAcl.php");
 } else {
 	require_once("../inc/inc.ClassSettings.php");
-	require_once("../inc/inc.ClassAcl.php");
 }
 
 function usage() { /* {{{ */
