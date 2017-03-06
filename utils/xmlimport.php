@@ -1,5 +1,11 @@
 <?php
-require_once("../inc/inc.ClassSettings.php");
+if(isset($_SERVER['SEEDDMS_HOME'])) {
+	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassSettings.php");
+	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassAcl.php");
+} else {
+	require_once("../inc/inc.ClassSettings.php");
+	require_once("../inc/inc.ClassAcl.php");
+}
 require("Log.php");
 
 function usage() { /* {{{ */
@@ -39,10 +45,15 @@ function getRevAppLog($reviews) { /* {{{ */
 		if($review['attributes']['type'] == 1) {
 			if(isset($objmap['groups'][(int) $review['attributes']['required']]))
 				$newreview['required'] = $dms->getGroup($objmap['groups'][(int) $review['attributes']['required']]);
+			else
+				$logger->warning("Group ".(int) $review['attributes']['required']." for Log cannot be mapped");
 		} else {
 			if(isset($objmap['users'][(int) $review['attributes']['required']]))
 				$newreview['required'] = $dms->getUser($objmap['users'][(int) $review['attributes']['required']]);
+			else
+				$logger->warning("User ".(int) $review['attributes']['required']." for Log cannot be mapped");
 		}
+		if(isset($newreview['required'])) {
 		$newreview['logs'] = array();
 		foreach($review['logs'] as $j=>$log) {
 			if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
@@ -63,6 +74,7 @@ function getRevAppLog($reviews) { /* {{{ */
 			}
 		}
 		$newreviews[] = $newreview;
+		}
 	}
 	return $newreviews;
 } /* }}} */
@@ -1704,6 +1716,7 @@ if($defaultuserid) {
 	$defaultUser = null;
 }
 
+$users = array();
 $elementstack = array();
 $objmap = array(
 	'attributedefs' => array(),
