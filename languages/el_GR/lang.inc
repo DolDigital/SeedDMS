@@ -350,6 +350,7 @@ $text = array(
 'dump_creation_warning' => '',
 'dump_list' => '',
 'dump_remove' => '',
+'duplicates' => '',
 'duplicate_content' => '',
 'edit' => '',
 'edit_attributes' => '',
