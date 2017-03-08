@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (718), kreml (455)
+//    Translators: Admin (719), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -278,6 +278,7 @@ URL: [url]',
 'converter_new_cmd' => '',
 'converter_new_mimetype' => '',
 'copied_to_checkout_as' => '',
+'create_download_link' => '',
 'create_fulltext_index' => 'Vytvořit fulltext index',
 'create_fulltext_index_warning' => 'Hodláte znovu vytvořit fulltext index. Může to trvat dlouho a zpomalit běh systému. Pokud víte, co děláte, potvďte operaci.',
 'creation_date' => 'Vytvořeno',
@@ -383,6 +384,7 @@ URL: [url]',
 'does_not_expire' => 'Platnost nikdy nevyprší',
 'does_not_inherit_access_msg' => 'Zdědit přístup',
 'download' => 'Stáhnout',
+'download_links' => '',
 'do_object_repair' => 'Opravit všechny složky a dokumenty.',
 'do_object_setchecksum' => 'Nastavit kontrolní součet',
 'do_object_setfilesize' => 'Nastavit velikost souboru',
@@ -512,6 +514,7 @@ URL: [url]',
 'fr_FR' => 'Francouzština',
 'fullsearch' => 'Fulltextové vyhledávání',
 'fullsearch_hint' => 'Použijte fultext index',
+'fulltextsearch_disabled' => '',
 'fulltext_info' => 'Fulltext index info',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Atributy',
@@ -630,7 +633,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Hodláte-li nahrát soubory větší než je maximální velikost pro nahrávání, použijte prosím <a href="%s">alternativní stránku</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Seznam všech přístupových práv ...',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Lokální soubor',
