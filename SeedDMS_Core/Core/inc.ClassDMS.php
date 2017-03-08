@@ -2179,8 +2179,7 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new SeedDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
-			$document->setDMS($this);
+			$document = $this->getDocument($row['document']);
 			$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			if(!isset($versions[$row['dupid']])) {
 				$versions[$row['id']]['content'] = $version;
