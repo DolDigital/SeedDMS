@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1048), aydin (83)
+//    Translators: Admin (1049), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -277,6 +277,7 @@ URL: [url]',
 'converter_new_cmd' => '',
 'converter_new_mimetype' => '',
 'copied_to_checkout_as' => '',
+'create_download_link' => '',
 'create_fulltext_index' => 'Tam metin indeksi oluştur',
 'create_fulltext_index_warning' => 'Tam metin indeksi yeniden oluşturmak üzeresiniz. Bu işlem bir hayli uzun sürebilir ve sistem performansını olumsuz etkileyebilir. Buna rağmen indeksi oluşturmak istiyorsanız lütfen bu işlemi onaylayın.',
 'creation_date' => 'Oluşturma tarihi',
@@ -382,6 +383,7 @@ URL: [url]',
 'does_not_expire' => 'Süresiz',
 'does_not_inherit_access_msg' => 'Erişim haklarını devir al',
 'download' => 'İndir',
+'download_links' => '',
 'do_object_repair' => 'Tüm klasörleri ve dokümanları onar.',
 'do_object_setchecksum' => 'Sağlama (checksum) ayarla',
 'do_object_setfilesize' => 'Dosya boyutu ayarla',
@@ -511,6 +513,7 @@ URL: [url]',
 'fr_FR' => 'Fransızca',
 'fullsearch' => 'Tam metinde ara',
 'fullsearch_hint' => 'Tam metin indeks kullan',
+'fulltextsearch_disabled' => '',
 'fulltext_info' => 'Tam metin indeks bilgi',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Nitelikler',
@@ -1428,7 +1431,7 @@ URL: [url]',
 'thursday' => 'Perşembe',
 'thursday_abbr' => 'Pe',
 'timeline' => 'Zaman Çizelgesi',
-'timeline_add_file' => '',
+'timeline_add_file' => 'Yeni Ek',
 'timeline_add_version' => '',
 'timeline_full_add_file' => '',
 'timeline_full_add_version' => '',

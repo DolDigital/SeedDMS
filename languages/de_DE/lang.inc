@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2376), dgrutsch (22)
+//    Translators: Admin (2379), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -283,6 +283,7 @@ URL: [url]',
 'converter_new_cmd' => 'Kommando',
 'converter_new_mimetype' => 'Neuer Mime-Type',
 'copied_to_checkout_as' => 'Datei am [date] in den Checkout-Space als \'[filename]\' kopiert.',
+'create_download_link' => 'Erzeuge Download Link',
 'create_fulltext_index' => 'Erzeuge Volltextindex',
 'create_fulltext_index_warning' => 'Sie möchten den Volltextindex neu erzeugen. Dies kann beträchtlich Zeit in Anspruch nehmen und Gesamtleistung Ihres System beeinträchtigen. Bestätigen Sie bitte diese Operation.',
 'creation_date' => 'Erstellt am',
@@ -388,6 +389,7 @@ URL: [url]',
 'does_not_expire' => 'Kein Ablaufdatum',
 'does_not_inherit_access_msg' => 'Berechtigungen wieder erben',
 'download' => 'Download',
+'download_links' => 'Download Links',
 'do_object_repair' => 'Repariere alle Ordner und Dokumente.',
 'do_object_setchecksum' => 'Setze Check-Summe',
 'do_object_setfilesize' => 'Setze Dateigröße',
@@ -517,6 +519,7 @@ URL: [url]',
 'fr_FR' => 'Französisch',
 'fullsearch' => 'Volltext',
 'fullsearch_hint' => 'Volltextindex benutzen',
+'fulltextsearch_disabled' => 'Volltext-Index ist ausgeschaltet',
 'fulltext_info' => 'Volltext-Index Info',
 'global_attributedefinitiongroups' => 'Attributgruppen',
 'global_attributedefinitions' => 'Attribute',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1503), dgrutsch (9), netixw (14)
+//    Translators: Admin (1506), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -283,6 +283,7 @@ URL: [url]',
 'converter_new_cmd' => 'Command',
 'converter_new_mimetype' => 'New mimetype',
 'copied_to_checkout_as' => 'File copied to checkout space as \'[filename]\' on [date]',
+'create_download_link' => 'Create download link',
 'create_fulltext_index' => 'Create fulltext index',
 'create_fulltext_index_warning' => 'You are about to recreate the fulltext index. This can take a considerable amount of time and reduce your overall system performance. If you really want to recreate the index, please confirm your operation.',
 'creation_date' => 'Created',
@@ -388,6 +389,7 @@ URL: [url]',
 'does_not_expire' => 'Does not expire',
 'does_not_inherit_access_msg' => 'Inherit access',
 'download' => 'Download',
+'download_links' => 'Download links',
 'do_object_repair' => 'Repair all folders and documents.',
 'do_object_setchecksum' => 'Set checksum',
 'do_object_setfilesize' => 'Set file size',
@@ -517,6 +519,7 @@ URL: [url]',
 'fr_FR' => 'French',
 'fullsearch' => 'Full text search',
 'fullsearch_hint' => 'Use fulltext index',
+'fulltextsearch_disabled' => 'Fulltext index is disabled',
 'fulltext_info' => 'Fulltext index info',
 'global_attributedefinitiongroups' => 'Attribute groups',
 'global_attributedefinitions' => 'Attributes',
