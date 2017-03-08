@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2379), dgrutsch (22)
+//    Translators: Admin (2380), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -407,6 +407,7 @@ URL: [url]',
 'dump_creation_warning' => 'Mit dieser Operation können Sie einen Dump der Datenbank erzeugen. Nach der Erstellung wird der Dump im Datenordner Ihres Servers gespeichert.',
 'dump_list' => 'Vorhandene DB dumps',
 'dump_remove' => 'DB dump löschen',
+'duplicates' => 'Duplikate',
 'duplicate_content' => 'Doppelte Dateien',
 'edit' => 'Bearbeiten',
 'edit_attributes' => 'Edit attributes',

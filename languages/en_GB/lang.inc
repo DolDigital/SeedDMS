@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1506), dgrutsch (9), netixw (14)
+//    Translators: Admin (1507), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -407,6 +407,7 @@ URL: [url]',
 'dump_creation_warning' => 'With this operation you can create a dump file of your database content. After the creation the dump file will be saved in the data folder of your server.',
 'dump_list' => 'Existings dump files',
 'dump_remove' => 'Remove dump file',
+'duplicates' => 'Duplicates',
 'duplicate_content' => 'Duplicate Content',
 'edit' => 'Edit',
 'edit_attributes' => 'Edit attributes',

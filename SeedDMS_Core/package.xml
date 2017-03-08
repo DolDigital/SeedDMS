@@ -24,6 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
