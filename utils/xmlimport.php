@@ -772,6 +772,8 @@ function insert_document($document) { /* {{{ */
 					$file['attributes']['orgfilename'],
 					$file['attributes']['filetype'],
 					$file['attributes']['mimetype']
+					$file['attributes']['version']
+					$file['attributes']['public']
 				);
 				unlink($filename);
 			}
