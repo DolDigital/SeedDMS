@@ -59,6 +59,10 @@ CREATE TABLE `tblDocumentFiles` (
 
 INSERT INTO `tblDocumentFiles` SELECT * FROM `__tblDocumentFiles`;
 
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` INTEGER unsigned NOT NULL DEFAULT '0';
+
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` INTEGER unsigned NOT NULL DEFAULT '0';
+
 ALTER TABLE `tblUsers` RENAME TO `__tblUsers`;
 
 CREATE TABLE `tblUsers` (
