@@ -111,7 +111,7 @@ function insert_user($user) { /* {{{ */
 	if($debug) print_r($user);
 
 	if ($newUser = $dms->getUserByLogin($user['attributes']['login'])) {
-		$logger->info("User '".$user['attributes']['login']."' already exists");
+		$logger->warning("User '".$user['attributes']['login']."' already exists");
 	} else {
 		if(in_array('users', $sections)) {
 			if(substr($user['attributes']['pwdexpiration'], 0, 10) == '0000-00-00')
@@ -174,7 +174,7 @@ function insert_group($group) { /* {{{ */
 	if($debug) print_r($group);
 
 	if ($newGroup = $dms->getGroupByName($group['attributes']['name'])) {
-		$logger->info("Group already exists");
+		$logger->warning("Group already exists");
 	} else {
 		if(in_array('groups', $sections)) {
 			$newGroup = $dms->addGroup($group['attributes']['name'], $group['attributes']['comment']);
@@ -219,7 +219,7 @@ function insert_attributedefinition($attrdef) { /* {{{ */
 	if($debug)
 		print_r($attrdef);
 	if($newAttrdef = $dms->getAttributeDefinitionByName($attrdef['attributes']['name'])) {
-		$logger->info("Attribute definition already exists");
+		$logger->warning("Attribute definition already exists");
 	} else {
 		if(in_array('attributedefinitions', $sections)) {
 			$objtype = ($attrdef['objecttype'] == 'folder' ? SeedDMS_Core_AttributeDefinition::objtype_folder : ($attrdef['objecttype'] == 'document' ? SeedDMS_Core_AttributeDefinition::objtype_document : ($attrdef['objecttype'] == 'documentcontent' ? SeedDMS_Core_AttributeDefinition::objtype_documentcontent : 0)));
@@ -245,7 +245,7 @@ function insert_documentcategory($documentcat) { /* {{{ */
 	if($debug) print_r($documentcat);
 
 	if($newCategory = $dms->getDocumentCategoryByName($documentcat['attributes']['name'])) {
-		$logger->info("Document category already exists");
+		$logger->warning("Document category already exists");
 	} else {
 		if(in_array('documentcategories', $sections)) {
 			if(!$newCategory = $dms->addDocumentCategory($documentcat['attributes']['name'])) {
@@ -277,7 +277,7 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 	$owner = $objmap['users'][(int) $keywordcat['attributes']['owner']];
 
 	if($newCategory = $dms->getKeywordCategoryByName($keywordcat['attributes']['name'], $owner)) {
-		$logger->info("Document category already exists");
+		$logger->warning("Keyword category already exists");
 	} else {
 		if(in_array('keywordcategories', $sections)) {
 			if(!$newCategory = $dms->addKeywordCategory($owner, $keywordcat['attributes']['name'])) {
@@ -310,7 +310,7 @@ function insert_workflow($workflow) { /* {{{ */
 	if($debug)
 		print_r($workflow);
 	if($newWorkflow = $dms->getWorkflowByName($workflow['attributes']['name'])) {
-		$logger->info("Workflow already exists");
+		$logger->warning("Workflow already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$initstate = $dms->getWorkflowState($objmap['workflowstates'][(int)$workflow['attributes']['initstate']])) {
@@ -383,7 +383,7 @@ function insert_workflowstate($workflowstate) { /* {{{ */
 	if($debug)
 		print_r($workflowstate);
 	if($newWorkflowstate = $dms->getWorkflowStateByName($workflowstate['attributes']['name'])) {
-		$logger->info("Workflow state already exists");
+		$logger->warning("Workflow state already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowstate = $dms->addWorkflowState($workflowstate['attributes']['name'], isset($workflowstate['attributes']['documentstate']) ? $workflowstate['attributes']['documentstate'] : 0)) {
@@ -407,7 +407,7 @@ function insert_workflowaction($workflowaction) { /* {{{ */
 	if($debug)
 		print_r($workflowaction);
 	if($newWorkflowaction = $dms->getWorkflowActionByName($workflowaction['attributes']['name'])) {
-		$logger->info("Workflow action already exists");
+		$logger->warning("Workflow action already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowaction = $dms->addWorkflowAction($workflowaction['attributes']['name'])) {
