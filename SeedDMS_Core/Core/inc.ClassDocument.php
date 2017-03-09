@@ -2793,7 +2793,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		/* Second, insert the new entries */
 		foreach($reviewers as $review) {
 			$queryStr = "INSERT INTO `tblDocumentReviewers` (`documentID`, `version`, `type`, `required`) ".
-				"VALUES ('".$this->_document->getID()."', '".$this->_version."', ".$review['type'] .", ".$review['required']->getID().")";
+				"VALUES ('".$this->_document->getID()."', '".$this->_version."', ".$review['type'] .", ".(is_object($review['required']) ? $review['required']->getID() : (int) $review['required']).")";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -2806,7 +2806,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					return false;
 				}
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('".$reviewID ."', '".(int) $log['status']."', ".$db->qstr($log['comment']) .", ".$db->qstr($log['date']).", ".$log['user']->getID().")";
+					"VALUES ('".$reviewID ."', '".(int) $log['status']."', ".$db->qstr($log['comment']) .", ".$db->qstr($log['date']).", ".(is_object($log['user']) ? $log['user']->getID() : (int) $log['user']).")";
 				if (!$db->getResult($queryStr)) {
 					$db->rollbackTransaction();
 					return false;
@@ -2921,7 +2921,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		/* Second, insert the new entries */
 		foreach($reviewers as $review) {
 			$queryStr = "INSERT INTO `tblDocumentApprovers` (`documentID`, `version`, `type`, `required`) ".
-				"VALUES ('".$this->_document->getID()."', '".$this->_version."', ".$review['type'] .", ".$review['required']->getID().")";
+				"VALUES ('".$this->_document->getID()."', '".$this->_version."', ".$review['type'] .", ".(is_object($review['required']) ? $review['required']->getID() : (int) $review['required']).")";
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -2934,7 +2934,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					return false;
 				}
 				$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-					"VALUES ('".$reviewID ."', '".(int) $log['status']."', ".$db->qstr($log['comment']) .", ".$db->qstr($log['date']).", ".$log['user']->getID().")";
+					"VALUES ('".$reviewID ."', '".(int) $log['status']."', ".$db->qstr($log['comment']) .", ".$db->qstr($log['date']).", ".(is_object($log['user']) ? $log['user']->getID() : (int) $log['user']).")";
 				if (!$db->getResult($queryStr)) {
 					$db->rollbackTransaction();
 					return false;
