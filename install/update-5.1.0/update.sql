@@ -1,16 +1,16 @@
 START TRANSACTION;
 
-ALTER TABLE `tblDocumentContent` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL default '';
+ALTER TABLE `tblDocumentContent` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL DEFAULT '';
 
-ALTER TABLE `tblDocumentFiles` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL default '';
+ALTER TABLE `tblDocumentFiles` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL DEFAULT '';
 
-ALTER TABLE `tblUserImages` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL default '';
+ALTER TABLE `tblUserImages` CHANGE `mimeType` `mimeType` varchar(100) NOT NULL DEFAULT '';
 
-ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` tinyint(1) NOT NULL default '0' AFTER `document`;
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `public` tinyint(1) NOT NULL DEFAULT '0' AFTER `document`;
 
-ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` smallint(5) unsigned NOT NULL default '0' AFTER `document`;
+ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` smallint(5) unsigned NOT NULL DEFAULT '0' AFTER `document`;
 
-ALTER TABLE `tblUsers` CHANGE `pwdExpiration` `pwdExpiration` datetime default NULL;
+ALTER TABLE `tblUsers` CHANGE `pwdExpiration` `pwdExpiration` datetime DEFAULT NULL;
 
 ALTER TABLE `tblUserPasswordRequest` CHANGE `date` `date` datetime NOT NULL;
 
