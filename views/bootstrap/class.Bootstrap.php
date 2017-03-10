@@ -129,7 +129,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if(!$nofooter) {
 			$this->footNote();
 			if($this->params['showmissingtranslations']) {
-				$this->missingḺanguageKeys();
+				$this->missingLanguageKeys();
 			}
 		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
@@ -172,7 +172,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function missingḺanguageKeys() { /* {{{ */
+	function documentListItem() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$previewwidth = $this->params['previewWidthList'];
+		$cachedir = $this->params['cachedir'];
+		$document = $dms->getDocument($_GET['id']);
+		if($document) {
+			if ($document->getAccessMode($user) >= M_READ) {
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$content = $this->documentListRow($document, $previewer, true);
+				echo $content;
+			}
+		}
+	} /* }}} */
+
+	function missingLanguageKeys() { /* {{{ */
 		global $MISSING_LANG, $LANG;
 		if($MISSING_LANG) {
 			echo '<div class="container-fluid">'."\n";
