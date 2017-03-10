@@ -123,7 +123,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if(!$nofooter) {
 			$this->footNote();
 			if($this->params['showmissingtranslations']) {
-				$this->missingḺanguageKeys();
+				$this->missingLanguageKeys();
 			}
 		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
@@ -166,7 +166,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function missingḺanguageKeys() { /* {{{ */
+	function missingLanguageKeys() { /* {{{ */
 		global $MISSING_LANG, $LANG;
 		if($MISSING_LANG) {
 			echo '<div class="container-fluid">'."\n";

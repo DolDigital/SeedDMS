@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1507), dgrutsch (9), netixw (14)
+//    Translators: Admin (1517), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -390,6 +390,13 @@ URL: [url]',
 'does_not_inherit_access_msg' => 'Inherit access',
 'download' => 'Download',
 'download_links' => 'Download links',
+'download_link_email_body' => 'Click on the link below to download the version [version] of document
+\'[docname]\'.
+
+[url]
+
+The link is valid until [valid].',
+'download_link_email_subject' => 'Download link',
 'do_object_repair' => 'Repair all folders and documents.',
 'do_object_setchecksum' => 'Set checksum',
 'do_object_setfilesize' => 'Set file size',
@@ -457,6 +464,7 @@ URL: [url]',
 'event_details' => 'Event details',
 'exclude_items' => 'Exclude items',
 'expired' => 'Expired',
+'expired_at_date' => 'Expired at [datetime]',
 'expires' => 'Expires',
 'expiry_changed_email' => 'Expiry date changed',
 'expiry_changed_email_body' => 'Expiry date changed
@@ -540,6 +548,7 @@ URL: [url]',
 'group_review_summary' => 'Group review summary',
 'guest_login' => 'Login as guest',
 'guest_login_disabled' => 'Guest login is disabled.',
+'hash' => 'Hash',
 'help' => 'Help',
 'home_folder' => 'Home folder',
 'hook_name' => 'Name of hook',
@@ -1052,6 +1061,7 @@ URL: [url]',
 'select_one' => 'Select one',
 'select_users' => 'Click to select users',
 'select_workflow' => 'Select workflow',
+'send_email' => 'Send email',
 'send_test_mail' => 'Send test mail',
 'september' => 'September',
 'sequence' => 'Sequence',
@@ -1393,6 +1403,7 @@ URL: [url]',
 'splash_edit_role' => 'Role saved',
 'splash_edit_user' => 'User saved',
 'splash_error_add_to_transmittal' => 'Error while adding document to transmittal',
+'splash_error_send_download_link'' => 'Error while sending download link',
 'splash_folder_edited' => 'Save folder changes',
 'splash_importfs' => 'Imported [docs] documents and [folders] folders',
 'splash_invalid_folder_id' => 'Invalid folder ID',
@@ -1410,6 +1421,7 @@ URL: [url]',
 'splash_rm_transmittal' => 'Transmittal deleted',
 'splash_rm_user' => 'User removed',
 'splash_saved_file' => 'Version saved',
+'splash_send_download_link' => 'Download link sent by email.',
 'splash_settings_saved' => 'Settings saved',
 'splash_substituted_user' => 'Substituted user',
 'splash_switched_back_user' => 'Switched back to original user',
@@ -1559,6 +1571,7 @@ URL: [url]',
 'use_comment_of_document' => 'Use comment of document',
 'use_default_categories' => 'Use predefined categories',
 'use_default_keywords' => 'Use predefined keywords',
+'valid_till' => 'Valid till',
 'version' => 'Version',
 'versioning_file_creation' => 'Versioning file creation',
 'versioning_file_creation_warning' => 'With this operation you can create a file for each document containing the versioning information of that document. After the creation every file will be saved inside the document folder. Those files are not needed for the regular operation of the dms, but could be of value if the complete repository shall be transferred to an other system.',
