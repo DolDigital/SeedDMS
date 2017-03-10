@@ -69,10 +69,14 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	 * @return false or -1 in case of error, otherwise true
 	 */
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
-		if ($recipient->isDisabled() || $recipient->getEmail()=="") return 0;
-
-		if(!is_object($recipient) || strcasecmp(get_class($recipient), $this->_dms->getClassname('user'))) {
-			return -1;
+		if(is_object($recipient) && !strcasecmp(get_class($recipient), $this->_dms->getClassname('user')) && !$recipient->isDisabled() && $recipient->getEmail()!="") {
+			$to = $recipient->getEmail();
+			$lang = $recipient->getLanguage();
+		} elseif(is_string($recipient) && trim($recipient) != "") {
+			$to = $recipient;
+			$lang = 'en_GB';
+		} else {
+			return false;
 		}
 
 		if(is_object($sender) && !strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) {
@@ -83,14 +87,13 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$from = $this->from_address;
 		}
 
-		$lang = $recipient->getLanguage();
 
 		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
 		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
 
 		$headers = array ();
 		$headers['From'] = $from;
-		$headers['To'] = $recipient->getEmail();
+		$headers['To'] = $to;
 		$preferences = array("input-charset" => "UTF-8", "output-charset" => "UTF-8");
 		$encoded_subject = iconv_mime_encode("Subject", getMLText($subject, $params, "", $lang), $preferences);
 		$headers['Subject'] = substr($encoded_subject, strlen('Subject: '));
@@ -113,7 +116,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$mail = Mail::factory('mail', $mail_params);
 		}
  
-		$result = $mail->send($recipient->getEmail(), $headers, $message);
+		$result = $mail->send($to, $headers, $message);
 		if (PEAR::isError($result)) {
 			return false;
 		} else {
