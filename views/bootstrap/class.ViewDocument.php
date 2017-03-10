@@ -121,6 +121,25 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 	} /* }}} */
 
+	function documentListItem() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$previewwidth = $this->params['previewWidthList'];
+		$cachedir = $this->params['cachedir'];
+		$document = $this->params['document'];
+		if($document) {
+			if ($document->getAccessMode($user) >= M_READ) {
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$txt = $this->callHook('documentListItem', $document, $previewer, false, '');
+				if(is_string($txt))
+					$content = $txt;
+				else 
+					$content = $this->documentListRow($document, $previewer, true);
+				echo $content;
+			}
+		}
+	} /* }}} */
+
 	function timelinedata() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
