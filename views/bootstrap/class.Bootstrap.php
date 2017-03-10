@@ -172,21 +172,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function documentListItem() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$previewwidth = $this->params['previewWidthList'];
-		$cachedir = $this->params['cachedir'];
-		$document = $dms->getDocument($_GET['id']);
-		if($document) {
-			if ($document->getAccessMode($user) >= M_READ) {
-				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
-				$content = $this->documentListRow($document, $previewer, true);
-				echo $content;
-			}
-		}
-	} /* }}} */
-
 	function missingLanguageKeys() { /* {{{ */
 		global $MISSING_LANG, $LANG;
 		if($MISSING_LANG) {
@@ -245,45 +230,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
-	} /* }}} */
-
-	/**
-	 * Returns the html needed for the clipboard list in the menu
-	 *
-	 * This function renders the clipboard in a way suitable to be
-	 * used as a menu
-	 *
-	 * @param array $clipboard clipboard containing two arrays for both
-	 *        documents and folders.
-	 * @return string html code
-	 */
-	function menuClipboard($clipboard) { /* {{{ */
-		if ($this->params['user']->isGuest() || (count($clipboard['docs']) + count($clipboard['folders'])) == 0) {
-			return '';
-		}
-		$content = '';
-		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
-		$content .= "    <li class=\"dropdown add-clipboard-area\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-clipboard-area\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
-		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		foreach($clipboard['folders'] as $folderid) {
-			if($folder = $this->params['dms']->getFolder($folderid))
-				$content .= "    <li><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
-		}
-		foreach($clipboard['docs'] as $docid) {
-			if($document = $this->params['dms']->getDocument($docid))
-				$content .= "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
-		}
-		$content .= "    <li class=\"divider\"></li>\n";
-		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
-			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
-		}
-//		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
-		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
-		$content .= "     </ul>\n";
-		$content .= "    </li>\n";
-		$content .= "   </ul>\n";
-		return $content;
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
@@ -355,7 +301,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 			if($this->params['enableclipboard']) {
 				echo "   <div id=\"menu-clipboard\">";
-				echo $this->menuClipboard($this->params['session']->getClipboard());
+				echo "     <div class=\"ajax\" data-view=\"Clipboard\" data-action=\"menuClipboard\"></div>";
 				echo "   </div>";
 			}
 
@@ -1514,88 +1460,6 @@ $(function() {
 	} /* }}} */
 
 	/**
-	 * Return clipboard content rendered as html
-	 *
-	 * @param array clipboard
-	 * @return string rendered html content
-	 */
-	function mainClipboard($clipboard, $previewer){ /* {{{ */
-		$dms = $this->params['dms'];
-		$content = '';
-		$foldercount = $doccount = 0;
-		if($clipboard['folders']) {
-			foreach($clipboard['folders'] as $folderid) {
-				/* FIXME: check for access rights, which could have changed after adding the folder to the clipboard */
-				if($folder = $dms->getFolder($folderid)) {
-					$comment = $folder->getComment();
-					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
-					if($comment) {
-						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-					}
-					$content .= "</td>\n";
-					$content .= "<td>\n";
-					$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"F".$folderid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-					$content .= "</td>\n";
-					$content .= "</tr>\n";
-					$foldercount++;
-				}
-			}
-		}
-		if($clipboard['docs']) {
-			foreach($clipboard['docs'] as $docid) {
-				/* FIXME: check for access rights, which could have changed after adding the document to the clipboard */
-				if($document = $dms->getDocument($docid)) {
-					$comment = $document->getComment();
-					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					if($latestContent = $document->getLatestContent()) {
-						$previewer->createPreview($latestContent);
-						$version = $latestContent->getVersion();
-						$status = $latestContent->getStatus();
-						
-						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
-
-						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
-							if($previewer->hasPreview($latestContent)) {
-								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							} else {
-								$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							}
-							$content .= "</a></td>";
-						} else
-							$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-						
-						$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
-						if($comment) {
-							$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-						}
-						$content .= "</td>\n";
-						$content .= "<td>\n";
-						$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"D".$docid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-						$content .= "</td>\n";
-						$content .= "</tr>";
-						$doccount++;
-					}
-				}
-			}
-		}
-
-		/* $foldercount or $doccount will only count objects which are
-		 * actually available
-		 */
-		if($foldercount || $doccount) {
-			$content = "<table class=\"table\">".$content;
-			$content .= "</table>";
-		} else {
-		}
-		$content .= "<div class=\"alert add-clipboard-area\">".getMLText("drag_icon_here")."</div>";
-		return $content;
-	} /* }}} */
-
-	/**
 	 * Print clipboard in div container
 	 *
 	 * @param array clipboard
@@ -1603,7 +1467,9 @@ $(function() {
 	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div id=\"main-clipboard\">\n";
-		echo $this->mainClipboard($clipboard, $previewer);
+?>
+		<div class="ajax" data-view="Clipboard" data-action="mainClipboard"></div>
+<?php
 		echo "</div>\n";
 	} /* }}} */
 
