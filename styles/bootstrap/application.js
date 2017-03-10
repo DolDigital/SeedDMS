@@ -165,8 +165,10 @@ $(document).ready( function() {
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -200,8 +202,10 @@ $(document).ready( function() {
 			{ command: 'removefromclipboard', type: type, id: id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -234,7 +238,8 @@ $(document).ready( function() {
 			{ command: 'tooglelockdocument', id: id },
 			function(data) {
 				if(data.success) {
-					$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
+					//$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
+					$("#table-row-document-"+id).html('Loading').load('../out/out.ViewDocument.php?action=documentlistitem&documentid='+id)
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -450,8 +455,10 @@ $(document).ready( function() {
 			success: function(data){
 				if(data.success) {
 					if(element.data('param1') == 'command=clearclipboard') {
-						$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-						$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//						$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+						$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+						//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+						$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					}
 					noty({
 						text: data.message,
@@ -493,8 +500,10 @@ function onAddClipboard(ev) { /* {{{ */
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: data.message,
 						type: 'success',

@@ -489,41 +489,6 @@ switch($command) {
 		}
 		break; /* }}} */
 
-	case 'view': /* {{{ */
-		require_once("SeedDMS/Preview.php");
-		$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
-		if($view) {
-			$view->setParam('refferer', '');
-			$view->setParam('cachedir', $settings->_cacheDir);
-		}
-		$content = '';
-		$viewname = $_REQUEST["view"];
-		switch($viewname) {
-			case 'menuclipboard':
-				$content = $view->menuClipboard($session->getClipboard());
-				break;
-			case 'mainclipboard':
-				$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
-				$content = $view->mainClipboard($session->getClipboard(), $previewer);
-				break;
-			case 'documentlistrow':
-				$document = $dms->getDocument($_REQUEST['id']);
-				if($document) {
-					if ($document->getAccessMode($user) >= M_READ) {
-						$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
-						$view->setParam('previewWidthList', $settings->_previewWidthList);
-						$view->setParam('showtree', showtree());
-						$content = $view->documentListRow($document, $previewer, true);
-					}
-				}
-				break;
-			default:
-				$content = '';
-		}
-		echo $content;
-
-		break; /* }}} */
-
 	case 'uploaddocument': /* {{{ */
 		if($user) {
 			if(checkFormKey('adddocument')) {
