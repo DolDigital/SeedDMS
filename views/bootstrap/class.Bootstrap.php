@@ -64,6 +64,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				header($csp . ": " . $csp_rules);
 			}
 		}
+		$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'startPage')) {
+				$hookObj->startPage($this);
+			}
+		}
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
