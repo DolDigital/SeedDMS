@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2389), dgrutsch (22)
+//    Translators: Admin (2400), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -465,6 +465,14 @@ Der Link ist bis zum [valid] gültig.',
 'expired' => 'abgelaufen',
 'expired_at_date' => 'Abgelaufen am [datetime]',
 'expires' => 'Ablaufdatum',
+'expires_today' => 'Ablauf heute',
+'expires_tomorrow' => 'Ablauf morgen',
+'expire_by_date' => 'Ablauf nach Datum',
+'expire_in_1d' => 'Ablauf in 1 Tag',
+'expire_in_1h' => 'Ablauf in 1 Std.',
+'expire_in_1m' => 'Ablauf in 1 Monat',
+'expire_in_1w' => 'Ablauf in 1 Woche',
+'expire_in_2h' => 'Ablauf in 2 Std.',
 'expiry_changed_email' => 'Ablaufdatum geändert',
 'expiry_changed_email_body' => 'Ablaufdatum geändert
 Dokument: [name]
@@ -832,6 +840,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
 'possible_substitutes' => 'Vertreter',
+'preset_expires' => 'Fester Ablaufzeitpunkt',
 'preview' => 'Vorschau',
 'preview_converters' => 'Vorschau Dokumentenumwandlung',
 'preview_images' => 'Vorschaubilder',
@@ -1408,6 +1417,7 @@ URL: [url]',
 'splash_edit_role' => 'Rolle gespeichert',
 'splash_edit_user' => 'Benutzer gespeichert',
 'splash_error_add_to_transmittal' => 'Fehler beim Hinzufügen zur Dokumentenliste',
+'splash_error_rm_download_link' => 'Fehler beim Löschen des Download-Links',
 'splash_error_send_download_link' => 'Fehler beim Verschicken des Download-Links',
 'splash_folder_edited' => 'Änderungen am Ordner gespeichert',
 'splash_importfs' => '[docs] Dokumente und [folders] Ordner importiert',
@@ -1419,6 +1429,7 @@ URL: [url]',
 'splash_removed_from_clipboard' => 'Aus der Zwischenablage entfernt',
 'splash_rm_attribute' => 'Attribut gelöscht',
 'splash_rm_document' => 'Dokument gelöscht',
+'splash_rm_download_link' => 'Download-Link gelöscht',
 'splash_rm_folder' => 'Ordner gelöscht',
 'splash_rm_group' => 'Gruppe gelöscht',
 'splash_rm_group_member' => 'Mitglied der Gruppe gelöscht',
