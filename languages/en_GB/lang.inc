@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1517), dgrutsch (9), netixw (14)
+//    Translators: Admin (1528), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -466,6 +466,14 @@ The link is valid until [valid].',
 'expired' => 'Expired',
 'expired_at_date' => 'Expired at [datetime]',
 'expires' => 'Expires',
+'expires_today' => 'Expires today',
+'expires_tomorrow' => 'Expires tomorrow',
+'expire_by_date' => 'Expires by date',
+'expire_in_1d' => 'Expires in 1 day',
+'expire_in_1h' => 'Expires in 1h',
+'expire_in_1m' => 'Expires in 1 month',
+'expire_in_1w' => 'Expires in 1 week',
+'expire_in_2h' => 'Expires in 2h',
 'expiry_changed_email' => 'Expiry date changed',
 'expiry_changed_email_body' => 'Expiry date changed
 Document: [name]
@@ -834,6 +842,7 @@ If you have still problems to login, then please contact your administrator.',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
 'possible_substitutes' => 'Substitutes',
+'preset_expires' => 'Preset expiration',
 'preview' => 'Preview',
 'preview_converters' => 'Preview document conversion',
 'preview_images' => 'Preview images',
@@ -1403,6 +1412,7 @@ URL: [url]',
 'splash_edit_role' => 'Role saved',
 'splash_edit_user' => 'User saved',
 'splash_error_add_to_transmittal' => 'Error while adding document to transmittal',
+'splash_error_rm_download_link' => 'Error when removing download link',
 'splash_error_send_download_link' => 'Error while sending download link',
 'splash_folder_edited' => 'Save folder changes',
 'splash_importfs' => 'Imported [docs] documents and [folders] folders',
@@ -1414,6 +1424,7 @@ URL: [url]',
 'splash_removed_from_clipboard' => 'Removed from clipboard',
 'splash_rm_attribute' => 'Attribute removed',
 'splash_rm_document' => 'Document removed',
+'splash_rm_download_link' => 'Removed download link',
 'splash_rm_folder' => 'Folder deleted',
 'splash_rm_group' => 'Group removed',
 'splash_rm_group_member' => 'Member of group removed',
