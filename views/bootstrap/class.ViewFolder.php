@@ -310,9 +310,11 @@ function folderSelected(id, name) {
 				}
 			}
 
-			$txt = $this->callHook('folderListSeparator', $folder);
-			if(is_string($txt))
-				echo $txt;
+			if($subFolders && $documents) {
+				$txt = $this->callHook('folderListSeparator', $folder);
+				if(is_string($txt))
+					echo $txt;
+			}
 
 			foreach($documents as $document) {
 				$document->verifyLastestContentExpriry();
