@@ -310,6 +310,10 @@ function folderSelected(id, name) {
 				}
 			}
 
+			$txt = $this->callHook('folderListSeparator', $folder);
+			if(is_string($txt))
+				echo $txt;
+
 			foreach($documents as $document) {
 				$document->verifyLastestContentExpriry();
 				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
