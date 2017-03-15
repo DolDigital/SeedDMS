@@ -164,8 +164,10 @@ class Settings { /* {{{ */
 	var $_logFileRotation = "d";
 	// Enable file upload by jumploader
 	var $_enableLargeFileUpload = false;
-	// size of partitions for file upload by jumploader
+	// size of partitions for file uploaded by fine-loader
 	var $_partitionSize = 2000000;
+	// max size of files uploaded by fine-uploader, set to 0 for unlimited
+	var $_maxUploadSize = 0;
 	// enable/disable users images
 	var $_enableUserImage = false;
 	// enable/disable calendar
@@ -447,6 +449,7 @@ class Settings { /* {{{ */
 		$this->_logFileRotation = strval($tab["logFileRotation"]);
 		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
 		$this->_partitionSize = strval($tab["partitionSize"]);
+		$this->_maxUploadSize = strval($tab["maxUploadSize"]);
 
 		// XML Path: /configuration/system/authentication
 		$node = $xml->xpath('/configuration/system/authentication');
@@ -752,6 +755,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
     $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);
     $this->setXMLAttributValue($node, "partitionSize", $this->_partitionSize);
+    $this->setXMLAttributValue($node, "maxUploadSize", $this->_maxUploadSize);
 
     // XML Path: /configuration/system/authentication
     $node = $this->getXMLNode($xml, '/configuration/system', 'authentication');

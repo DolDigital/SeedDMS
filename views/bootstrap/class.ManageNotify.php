@@ -114,9 +114,9 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					print "<tr>\n";
 					print "<td>";
 					if($previewer->hasPreview($latest)) {
-						print "<img class=\"mimeicon\" width=\"".$this->previewwidth."\"src=\"../op/op.Preview.php?documentid=".$doc->getID()."&version=".$latest->getVersion()."&width=".$this->previewwidth."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$this->previewwidth."\" src=\"../op/op.Preview.php?documentid=".$doc->getID()."&version=".$latest->getVersion()."&width=".$this->previewwidth."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
 					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latest->getFileType())."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$this->previewwidth."\" src=\"".$this->getMimeIcon($latest->getFileType())."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
 					}
 					print "</td>";
 
