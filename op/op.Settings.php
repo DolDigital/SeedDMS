@@ -110,6 +110,7 @@ if ($action == "saveSettings")
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
   $settings->_partitionSize = $_POST["partitionSize"];
+  $settings->_maxUploadSize = $_POST["maxUploadSize"];
 
   // SETTINGS - SYSTEM - AUTHENTICATION
   $settings->_enableGuestLogin = getBoolValue("enableGuestLogin");
