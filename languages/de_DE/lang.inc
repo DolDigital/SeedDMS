@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2400), dgrutsch (22)
+//    Translators: Admin (2402), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -465,14 +465,14 @@ Der Link ist bis zum [valid] gültig.',
 'expired' => 'abgelaufen',
 'expired_at_date' => 'Abgelaufen am [datetime]',
 'expires' => 'Ablaufdatum',
-'expires_today' => 'Ablauf heute',
-'expires_tomorrow' => 'Ablauf morgen',
 'expire_by_date' => 'Ablauf nach Datum',
 'expire_in_1d' => 'Ablauf in 1 Tag',
 'expire_in_1h' => 'Ablauf in 1 Std.',
 'expire_in_1m' => 'Ablauf in 1 Monat',
 'expire_in_1w' => 'Ablauf in 1 Woche',
 'expire_in_2h' => 'Ablauf in 2 Std.',
+'expire_today' => 'Ablauf heute',
+'expire_tomorrow' => 'Ablauf morgen',
 'expiry_changed_email' => 'Ablaufdatum geändert',
 'expiry_changed_email_body' => 'Ablaufdatum geändert
 Dokument: [name]
@@ -1277,6 +1277,8 @@ URL: [url]',
 'settings_maxRecursiveCount_desc' => 'Dies ist die maximale Anzahl der Dokumente und Ordner die auf Zugriffsrechte geprüft werden, wenn rekursiv gezählt wird. Wenn diese Anzahl überschritten wird, wird die Anzahl der Dokumente und Unterordner in der Ordner Ansicht geschätzt.',
 'settings_maxSizeForFullText' => 'Maximale Dateigröße für sofortige Indezierung',
 'settings_maxSizeForFullText_desc' => 'Alle neuen Versionen eines Dokuments, die kleiner als die konfigurierte Dateigröße in Bytes sind, werden sofort indiziert. In allen anderen Fällen werden nur die Metadaten erfasst.',
+'settings_maxUploadSize' => 'Maximale Größe hochzuladener Dateien',
+'settings_maxUploadSize_desc' => 'Dies ist die maximale Größe einer hochzuladenen Datei. Es begrenzt sowohl Dokumentenversionen als auch Anhänge.',
 'settings_more_settings' => 'Weitere Einstellungen. Login mit admin/admin',
 'settings_notfound' => 'Nicht gefunden',
 'settings_Notification' => 'Benachrichtigungen-Einstellungen',

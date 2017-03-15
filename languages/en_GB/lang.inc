@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1528), dgrutsch (9), netixw (14)
+//    Translators: Admin (1530), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -466,14 +466,14 @@ The link is valid until [valid].',
 'expired' => 'Expired',
 'expired_at_date' => 'Expired at [datetime]',
 'expires' => 'Expires',
-'expires_today' => 'Expires today',
-'expires_tomorrow' => 'Expires tomorrow',
 'expire_by_date' => 'Expires by date',
 'expire_in_1d' => 'Expires in 1 day',
 'expire_in_1h' => 'Expires in 1h',
 'expire_in_1m' => 'Expires in 1 month',
 'expire_in_1w' => 'Expires in 1 week',
 'expire_in_2h' => 'Expires in 2h',
+'expire_today' => 'Expires today',
+'expire_tomorrow' => 'Expires tomorrow',
 'expiry_changed_email' => 'Expiry date changed',
 'expiry_changed_email_body' => 'Expiry date changed
 Document: [name]
@@ -1272,6 +1272,8 @@ URL: [url]',
 'settings_maxRecursiveCount_desc' => 'This is the maximum number of documents or folders that will be checked for access rights, when recursively counting objects. If this number is exceeded, the number of documents and folders in the folder view will be estimated.',
 'settings_maxSizeForFullText' => 'Maximum filesize for instant indexing',
 'settings_maxSizeForFullText_desc' => 'All new document version smaller than the configured size will be fully indexed right after uploading. In all other cases only the metadata will be indexed.',
+'settings_maxUploadSize' => 'Maxium size for uploaded files',
+'settings_maxUploadSize_desc' => 'This is the maximum size for uploaded files. It will take affect for document versions and attachments.',
 'settings_more_settings' => 'Configure more settings. Default login: admin/admin',
 'settings_notfound' => 'Not found',
 'settings_Notification' => 'Notification settings',

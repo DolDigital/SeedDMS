@@ -174,9 +174,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								$previewer->createPreview($latestContent);
 								print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
 								if($previewer->hasPreview($latestContent)) {
-									print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								} else {
-									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								}
 								print "</a></td>";
 								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
@@ -212,9 +212,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 								$previewer->createPreview($latestContent);
 								print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
 								if($previewer->hasPreview($latestContent)) {
-									print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								} else {
-									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								}
 								print "</a></td>";
 								print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
@@ -262,9 +262,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
@@ -297,9 +297,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."&currenttab=revapp\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
@@ -389,9 +389,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						$previewer->createPreview($latestContent);
 						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 						if($previewer->hasPreview($latestContent)) {
-							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						} else {
-							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						}
 						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
@@ -508,9 +508,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
 							$workflowstate = $latestContent->getWorkflowState();
@@ -550,9 +550,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 							$previewer->createPreview($latestContent);
 							print "<td><a href=\"../op/op.Download.php?documentid=".$st["document"]."&version=".$st["version"]."\">";
 							if($previewer->hasPreview($latestContent)) {
-								print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							} else {
-								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 							}
 							print "</a></td>";
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$st["document"]."&currenttab=workflow\">".htmlspecialchars($docIdx[$st["document"]][$st["version"]]["name"])."</a></td>";
@@ -633,9 +633,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 						$previewer->createPreview($latestContent);
 						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 						if($previewer->hasPreview($latestContent)) {
-							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						} else {
-							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 						}
 						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=workflow\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
@@ -714,9 +714,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					$previewer->createPreview($latestContent);
 					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 					if($previewer->hasPreview($latestContent)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					}
 					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
@@ -817,9 +817,9 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					$previewer->createPreview($latestContent);
 					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
 					if($previewer->hasPreview($latestContent)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					}
 					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
