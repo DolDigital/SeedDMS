@@ -244,6 +244,9 @@ ul.qq-upload-list li span {
 	border: 1px solid #cccccc;
 	border-radius: 4px;
 }
+.qq-hide, .qq-uploader dialog {
+	display: none;
+}
 
 @media (max-width: 480px) { 
     .nav-tabs > li {
