@@ -83,7 +83,7 @@ $('.folderselect').click(function(ev) {
 							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
 							echo "<tr><td style=\"min-width: ".$previewwidth."px;\">";
 							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
-								echo "<img style=\"cursor: pointer;\" class=\"fileselect mimeicon\" filename=\"".$entry."\" width=\"".$previewwidth."\"src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
+								echo "<img style=\"cursor: pointer;\" class=\"fileselect mimeicon\" filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\">";
 							}
 							echo "</td><td><span style=\"cursor: pointer;\" class=\"fileselect\" filename=\"".$entry."\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td><td>".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</td></tr>\n";
 						} elseif($showfolders && is_dir($dir.'/'.$entry)) {

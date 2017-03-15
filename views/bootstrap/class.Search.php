@@ -485,9 +485,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					}
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
 					if($previewer->hasPreview($lc)) {
-						print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 					}
 					print "</a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
