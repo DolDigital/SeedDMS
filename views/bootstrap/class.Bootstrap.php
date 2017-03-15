@@ -746,74 +746,74 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function getMimeIcon($fileType) { /* {{{ */
 		// for extension use LOWER CASE only
 		$icons = array();
-		$icons["txt"]  = "txt.png";
-		$icons["text"] = "txt.png";
-		$icons["doc"]  = "word.png";
-		$icons["dot"]  = "word.png";
-		$icons["docx"] = "word.png";
-		$icons["dotx"] = "word.png";
-		$icons["rtf"]  = "document.png";
-		$icons["xls"]  = "excel.png";
-		$icons["xlt"]  = "excel.png";
-		$icons["xlsx"] = "excel.png";
-		$icons["xltx"] = "excel.png";
-		$icons["ppt"]  = "powerpoint.png";
-		$icons["pot"]  = "powerpoint.png";
-		$icons["pptx"] = "powerpoint.png";
-		$icons["potx"] = "powerpoint.png";
-		$icons["exe"]  = "binary.png";
-		$icons["html"] = "html.png";
-		$icons["htm"]  = "html.png";
-		$icons["gif"]  = "image.png";
-		$icons["jpg"]  = "image.png";
-		$icons["jpeg"] = "image.png";
-		$icons["bmp"]  = "image.png";
-		$icons["png"]  = "image.png";
-		$icons["tif"]  = "image.png";
-		$icons["tiff"] = "image.png";
+		$icons["txt"]  = "text-x-preview.svg";
+		$icons["text"] = "text-x-preview.svg";
+		$icons["doc"]  = "office-document.svg";
+		$icons["dot"]  = "office-document.svg";
+		$icons["docx"] = "office-document.svg";
+		$icons["dotx"] = "office-document.svg";
+		$icons["rtf"]  = "office-document.svg";
+		$icons["xls"]  = "office-spreadsheet.svg";
+		$icons["xlt"]  = "office-spreadsheet.svg";
+		$icons["xlsx"] = "office-spreadsheet.svg";
+		$icons["xltx"] = "office-spreadsheet.svg";
+		$icons["ppt"]  = "office-presentation.svg";
+		$icons["pot"]  = "office-presentation.svg";
+		$icons["pptx"] = "office-presentation.svg";
+		$icons["potx"] = "office-presentation.svg";
+		$icons["exe"]  = "executable.svg";
+		$icons["html"] = "web.svg";
+		$icons["htm"]  = "web.svg";
+		$icons["gif"]  = "image.svg";
+		$icons["jpg"]  = "image.svg";
+		$icons["jpeg"] = "image.svg";
+		$icons["bmp"]  = "image.svg";
+		$icons["png"]  = "image.svg";
+		$icons["tif"]  = "image.svg";
+		$icons["tiff"] = "image.svg";
 		$icons["log"]  = "log.png";
-		$icons["midi"] = "midi.png";
+		$icons["midi"] = "audio.svg";
 		$icons["pdf"]  = "pdf.png";
-		$icons["wav"]  = "sound.png";
-		$icons["mp3"]  = "sound.png";
+		$icons["wav"]  = "audio.svg";
+		$icons["mp3"]  = "audio.svg";
 		$icons["c"]    = "source_c.png";
 		$icons["cpp"]  = "source_cpp.png";
 		$icons["h"]    = "source_h.png";
 		$icons["java"] = "source_java.png";
 		$icons["py"]   = "source_py.png";
-		$icons["tar"]  = "tar.png";
+		$icons["tar"]  = "package.svg";
 		$icons["gz"]   = "gz.png";
 		$icons["7z"]   = "gz.png";
 		$icons["bz"]   = "gz.png";
 		$icons["bz2"]  = "gz.png";
 		$icons["tgz"]  = "gz.png";
-		$icons["zip"]  = "gz.png";
+		$icons["zip"]  = "package.svg";
 		$icons["rar"]  = "gz.png";
-		$icons["mpg"]  = "video.png";
-		$icons["avi"]  = "video.png";
+		$icons["mpg"]  = "video.svg";
+		$icons["avi"]  = "video.svg";
 		$icons["tex"]  = "tex.png";
-		$icons["ods"]  = "x-office-spreadsheet.png";
-		$icons["ots"]  = "x-office-spreadsheet.png";
-		$icons["sxc"]  = "x-office-spreadsheet.png";
-		$icons["stc"]  = "x-office-spreadsheet.png";
-		$icons["odt"]  = "x-office-document.png";
-		$icons["ott"]  = "x-office-document.png";
-		$icons["sxw"]  = "x-office-document.png";
-		$icons["stw"]  = "x-office-document.png";
-		$icons["odp"]  = "ooo_presentation.png";
-		$icons["otp"]  = "ooo_presentation.png";
-		$icons["sxi"]  = "ooo_presentation.png";
-		$icons["sti"]  = "ooo_presentation.png";
-		$icons["odg"]  = "ooo_drawing.png";
-		$icons["otg"]  = "ooo_drawing.png";
-		$icons["sxd"]  = "ooo_drawing.png";
-		$icons["std"]  = "ooo_drawing.png";
+		$icons["ods"]  = "office-spreadsheet.svg";
+		$icons["ots"]  = "office-spreadsheet.svg";
+		$icons["sxc"]  = "office-spreadsheet.svg";
+		$icons["stc"]  = "office-spreadsheet.svg";
+		$icons["odt"]  = "office-document.svg";
+		$icons["ott"]  = "office-document.svg";
+		$icons["sxw"]  = "office-document.svg";
+		$icons["stw"]  = "office-document.svg";
+		$icons["odp"]  = "office-presentation.svg";
+		$icons["otp"]  = "office-presentation.svg";
+		$icons["sxi"]  = "office-presentation.svg";
+		$icons["sti"]  = "office-presentation.svg";
+		$icons["odg"]  = "office-drawing.png";
+		$icons["otg"]  = "office-drawing.png";
+		$icons["sxd"]  = "office-drawing.png";
+		$icons["std"]  = "office-drawing.png";
 		$icons["odf"]  = "ooo_formula.png";
 		$icons["sxm"]  = "ooo_formula.png";
 		$icons["smf"]  = "ooo_formula.png";
 		$icons["mml"]  = "ooo_formula.png";
 
-		$icons["default"] = "default.png";
+		$icons["default"] = "text-x-preview.svg"; //"default.png";
 
 		$ext = strtolower(substr($fileType, 1));
 		if (isset($icons[$ext])) {
@@ -1406,7 +1406,7 @@ $(function() {
 					$comment = $folder->getComment();
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.svg\" width=\"24\" height=\"24\" border=0></a></td>\n";
 					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 					if($comment) {
 						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1829,11 +1829,11 @@ $(document).ready( function() {
 				if($previewer->hasPreview($latestContent)) {
 					$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				} else {
-					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					$content .= "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" ".($previewwidth ? "width=\"".$previewwidth."\"" : "")."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 				}
 				$content .= "</a></td>";
 			} else
-				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+				$content .= "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" ".($previewwidth ? "width=\"".$previewwidth."\"" : "")."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 			
 			$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b>".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
@@ -1907,7 +1907,7 @@ $(document).ready( function() {
 		$content = '';
 		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.svg\" width=\"24\" height=\"24\" border=0></a></td>\n";
 		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
 		$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 		if($comment) {
@@ -2269,6 +2269,71 @@ mayscript>
 	} /* }}} */
 
 	/**
+	 * Return HTML Template for jumploader
+	 *
+	 * @param string $uploadurl URL where post data is send
+	 * @param integer $folderid id of folder where document is saved
+	 * @param integer $maxfiles maximum number of files allowed to upload
+	 * @param array $fields list of post fields
+	 */
+	function getFineUploaderTemplate() { /* {{{ */
+		return '
+<script type="text/template" id="qq-template">
+<div class="qq-uploader-selector qq-uploader" qq-drop-area-text="'.getMLText('drop_files_here').'">
+	<div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+		<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+		</div>
+	<div class="input-append">
+	<div class="qq-upload-drop-area-selector qq-upload-drop-area" _qq-hide-dropzone>
+		<span class="qq-upload-drop-area-text-selector"></span>
+	</div>
+	<button class="btn qq-upload-button-selector qq-upload-button">'.getMLText('browse').'&hellip;</button>
+	</div>
+	<span class="qq-drop-processing-selector qq-drop-processing">
+		<span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+	</span>
+	<ul class="qq-upload-list-selector qq-upload-list unstyled" aria-live="polite" aria-relevant="additions removals">
+		<li>
+			<div class="progress qq-progress-bar-container-selector">
+				<div class="bar qq-progress-bar-selector qq-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			</div>
+			<span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+			<img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+			<span class="qq-upload-file-selector qq-upload-file"></span>
+			<span class="qq-upload-size-selector qq-upload-size"></span>
+			<button class="btn btn-mini qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+			<span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+		</li>
+	</ul>
+	<dialog class="qq-alert-dialog-selector">
+		<div class="qq-dialog-message-selector"></div>
+		<div class="qq-dialog-buttons">
+			<button class="btn qq-cancel-button-selector">Cancel</button>
+		</div>
+	</dialog>
+
+	<dialog class="qq-confirm-dialog-selector">
+		<div class="qq-dialog-message-selector"></div>
+		<div class="qq-dialog-buttons">
+			<button class="btn qq-cancel-button-selector">Cancel</button>
+			<button class="btn qq-ok-button-selector">Ok</button>
+		</div>
+	</dialog>
+
+	<dialog class="qq-prompt-dialog-selector">
+		<div class="qq-dialog-message-selector"></div>
+		<input type="text">
+		<div class="qq-dialog-buttons">
+			<button class="btn qq-cancel-button-selector">Cancel</button>
+			<button class="btn qq-ok-button-selector">Ok</button>
+		</div>
+	</dialog>
+</div>
+</script>
+';
+	} /* }}} */
+
+	/**
 	 * Output HTML Code for jumploader
 	 *
 	 * @param string $uploadurl URL where post data is send
@@ -2278,58 +2343,6 @@ mayscript>
 	 */
 	function printFineUploaderHtml() { /* {{{ */
 ?>
-		<script type="text/template" id="qq-template">
-		<div class="qq-uploader-selector qq-uploader" qq-drop-area-text="">
-			<div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
-				<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
-				</div>
-			<div class="input-append">
-			<div class="qq-upload-drop-area-selector qq-upload-drop-area" _qq-hide-dropzone>Drop files here
-				<span class="qq-upload-drop-area-text-selector"></span>
-			</div>
-			<button class="btn qq-upload-button-selector qq-upload-button"><?php printMLText('browse'); ?>&hellip;</button>
-			</div>
-			<span class="qq-drop-processing-selector qq-drop-processing">
-				<span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-			</span>
-			<ul class="qq-upload-list-selector qq-upload-list unstyled" aria-live="polite" aria-relevant="additions removals">
-				<li>
-					<div class="progress qq-progress-bar-container-selector">
-						<div class="bar qq-progress-bar-selector qq-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
-					<span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-					<img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
-					<span class="qq-upload-file-selector qq-upload-file"></span>
-					<span class="qq-upload-size-selector qq-upload-size"></span>
-					<button class="btn btn-mini qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
-					<span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
-				</li>
-			</ul>
-			<dialog class="qq-alert-dialog-selector">
-				<div class="qq-dialog-message-selector"></div>
-				<div class="qq-dialog-buttons">
-					<button class="btn qq-cancel-button-selector">Cancel</button>
-				</div>
-			</dialog>
-
-			<dialog class="qq-confirm-dialog-selector">
-				<div class="qq-dialog-message-selector"></div>
-				<div class="qq-dialog-buttons">
-					<button class="btn qq-cancel-button-selector">Cancel</button>
-					<button class="btn qq-ok-button-selector">Ok</button>
-				</div>
-			</dialog>
-
-			<dialog class="qq-prompt-dialog-selector">
-				<div class="qq-dialog-message-selector"></div>
-				<input type="text">
-				<div class="qq-dialog-buttons">
-					<button class="btn qq-cancel-button-selector">Cancel</button>
-					<button class="btn qq-ok-button-selector">Ok</button>
-				</div>
-			</dialog>
-		</div>
-		</script>
 		<div id="manual-fine-uploader"></div>
 		<input type="hidden" class="do_validate" id="fineuploaderuuids" name="fineuploaderuuids" value="" />
 		<input type="hidden" id="fineuploadernames" name="fineuploadernames" value="" />
@@ -2344,21 +2357,30 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderJs($uploadurl, $partsize=0, $multiple=true) { /* {{{ */
+	function printFineUploaderJs($uploadurl, $partsize=0, $maxuploadsize=0, $multiple=true) { /* {{{ */
 ?>
 $(document).ready(function() {
 	manualuploader = new qq.FineUploader({
-		debug: true,
+		debug: false,
 		autoUpload: false,
 		multiple: <?php echo ($multiple ? 'true' : 'false'); ?>,
 		element: $('#manual-fine-uploader')[0],
+		template: 'qq-template',
 		request: {
 			endpoint: '<?php echo $uploadurl; ?>'
 		},
+<?php echo ($maxuploadsize > 0 ? '
+		validation: {
+			sizeLimit: '.$maxuploadsize.'
+		},
+' : ''); ?>
 		chunking: {
 			enabled: true,
 			<?php echo $partsize ? 'partSize: '.(int)$partsize.",\n" : ''; ?>
 			mandatory: true
+		},
+		messages: {
+			sizeError: '{file} is too large, maximum file size is {sizeLimit}.'
 		},
 		callbacks: {
 			onComplete: function(id, name, json, xhr) {
