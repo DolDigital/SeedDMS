@@ -278,7 +278,11 @@ function folderSelected(id, name) {
 			echo "</div>";
 		}
 
-		$this->contentHeading(getMLText("folder_contents"));
+		$txt = $this->callHook('listHeader', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else
+			$this->contentHeading(getMLText("folder_contents"));
 
 		$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
