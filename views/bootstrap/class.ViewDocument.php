@@ -639,7 +639,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 		}
 
-		$items = $this->callHook('extraVersionActions', $version);
+		$items = $this->callHook('extraVersionActions', $latestContent);
 		if($items) {
 			foreach($items as $item) {
 				echo "<li>".$item."</li>";
@@ -1180,6 +1180,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 				}
 				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i>".getMLText("details")."</a></li>";
+				$items = $this->callHook('extraVersionActions', $version);
+				if($items) {
+					foreach($items as $item) {
+						echo "<li>".$item."</li>";
+					}
+				}
 				print "</ul>";
 				print "</td>\n</tr>\n";
 			}
