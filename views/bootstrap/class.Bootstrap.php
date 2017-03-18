@@ -119,6 +119,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			$this->params['session']->clearSplashMsg();
 			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
 		}
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'startBody')) {
+				$hookObj->startBody($this);
+			}
+		}
 	} /* }}} */
 
 	function htmlAddHeader($head, $type='js') { /* {{{ */
