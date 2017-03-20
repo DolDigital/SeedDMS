@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1048), balan (87)
+//    Translators: Admin (1050), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -152,7 +152,7 @@ URL: [url]',
 'attrdef_regex' => 'Expresie regulată',
 'attrdef_type' => 'Tip',
 'attrdef_type_boolean' => 'Boolean',
-'attrdef_type_date' => '',
+'attrdef_type_date' => 'Data',
 'attrdef_type_email' => 'Email',
 'attrdef_type_float' => 'Float',
 'attrdef_type_int' => 'Intreg',
@@ -310,7 +310,7 @@ URL: [url]',
 'docs_in_reception_no_access' => '',
 'docs_in_revision_no_access' => '',
 'document' => 'Document',
-'documentcontent' => '',
+'documentcontent' => 'Continut Document',
 'documents' => 'Documente',
 'documents_checked_out_by_you' => 'Documente verificate de tine',
 'documents_in_process' => 'Documente în procesare',

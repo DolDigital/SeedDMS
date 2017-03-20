@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1538), rickr (144), s.pnt (26)
+//    Translators: Admin (1539), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -652,7 +652,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Se vuoi caricare file più grandi del limite massimo attuale, usa la <a href="%s">pagina alternativa di upload</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Elenca tutti i diritti di accesso...',
 'list_contains_no_access_docs' => '',
 'list_hooks' => 'Lista ganci',
 'local_file' => 'File locale',
