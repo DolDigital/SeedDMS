@@ -475,7 +475,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 ?>
 		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links) || count($reverselinks)) ? " (".count($links)."/".count($reverselinks).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
@@ -526,7 +526,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($previewer->hasPreview($latestContent)) {
 			print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">");
 		} else {
-			print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+			print "<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 		}
 		if ($file_exists) {
 			print "</a>";
@@ -618,7 +618,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 		}
 
-		//print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-info-sign\"></i>".getMLText("versioning_info")."</a></li>";	
+		$items = $this->callHook('extraVersionActions', $latestContent);
+		if($items) {
+			foreach($items as $item) {
+				echo "<li>".$item."</li>";
+			}
+		}
 
 		print "</ul>";
 		echo "</td>";
@@ -1101,7 +1106,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($previewer->hasPreview($version)) {
 					print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($version->getMimeType())."\">");
 				} else {
-					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				}
 				if($file_exists) {
 					print "</a>\n";
@@ -1154,6 +1159,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
 				}
 				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i>".getMLText("details")."</a></li>";
+				$items = $this->callHook('extraVersionActions', $version);
+				if($items) {
+					foreach($items as $item) {
+						echo "<li>".$item."</li>";
+					}
+				}
 				print "</ul>";
 				print "</td>\n</tr>\n";
 			}
@@ -1197,7 +1208,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($previewer->hasPreview($file)) {
 					print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&file=".$file->getID()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($file->getMimeType())."\">");
 				} else {
-					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
 				}
 				if($file_exists) {
 					print "</a>";
@@ -1263,9 +1274,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<tr>";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."\">";
 				if($previewer->hasPreview($targetlc)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\"src=\"../op/op.Preview.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"../op/op.Preview.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
 				} else {
-					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($targetlc->getFileType())."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"".$this->getMimeIcon($targetlc->getFileType())."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
 				}
 				print "</td>";
 				print "<td><a href=\"out.ViewDocument.php?documentid=".$targetDoc->getID()."\" class=\"linklist\">".htmlspecialchars($targetDoc->getName())."</a></td>";
@@ -1334,9 +1345,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<tr>";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."\">";
 				if($previewer->hasPreview($sourcelc)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\"src=\"../op/op.Preview.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"../op/op.Preview.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
 				} else {
-					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($sourcelc->getFileType())."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"".$this->getMimeIcon($sourcelc->getFileType())."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
 				}
 				print "</td>";
 				print "<td><a href=\"out.ViewDocument.php?documentid=".$sourceDoc->getID()."\" class=\"linklist\">".htmlspecialchars($sourceDoc->getName())."</a></td>";

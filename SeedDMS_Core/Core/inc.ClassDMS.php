@@ -344,7 +344,7 @@ class SeedDMS_Core_DMS {
 		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.0.10';
+			$this->version = '5.0.11';
 	} /* }}} */
 
 	/**
@@ -804,10 +804,10 @@ class SeedDMS_Core_DMS {
 				// Only search if the offset is not beyond the number of folders
 				if($totalFolders > $offset) {
 					// Prepare the complete search query, including the LIMIT clause.
-					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery." GROUP BY `tblFolders`.`id`";
+					$searchQuery = "SELECT DISTINCT `tblFolders`.`id` ".$searchQuery." GROUP BY `tblFolders`.`id`";
 
 					if($limit) {
-						$searchQuery .= " LIMIT ".$offset.",".$limit;
+						$searchQuery .= " LIMIT ".$limit." OFFSET ".$offset;
 					}
 
 					// Send the complete search query to the database.
@@ -1039,7 +1039,7 @@ class SeedDMS_Core_DMS {
 						else
 							$offset = 0;
 						if($limit)
-							$searchQuery .= " LIMIT ".$offset.",".$remain;
+							$searchQuery .= " LIMIT ".$limit." OFFSET ".$offset;
 
 						// Send the complete search query to the database.
 						$resArr = $this->db->getResultArray($searchQuery);
@@ -2115,8 +2115,7 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
-			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
-			$document->setDMS($this);
+			$document = $this->getDocument($row['document']);
 			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			if(!isset($versions[$row['dupid']])) {
 				$versions[$row['id']]['content'] = $version;

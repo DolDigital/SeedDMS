@@ -34,9 +34,10 @@ class SeedDMS_View_AddFile extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$partitionsize = $this->params['partitionsize'];
+		$maxuploadsize = $this->params['maxuploadsize'];
 		header('Content-Type: application/javascript');
 		if($enablelargefileupload)
-			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize);
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize);
 ?>
 
 $(document).ready( function() {
@@ -119,8 +120,10 @@ $(document).ready( function() {
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
-		if($enablelargefileupload)
+		if($enablelargefileupload) {
 			$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fine-uploader/jquery.fine-uploader.min.js"></script>'."\n", 'js');
+			$this->htmlAddHeader($this->getFineUploaderTemplate(), 'js');
+		}
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);

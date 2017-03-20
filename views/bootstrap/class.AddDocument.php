@@ -34,11 +34,12 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$partitionsize = $this->params['partitionsize'];
+		$maxuploadsize = $this->params['maxuploadsize'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
 		if($enablelargefileupload)
-			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize);
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize);
 ?>
 $(document).ready(function() {
 	$('#new-file').click(function(event) {
@@ -146,8 +147,10 @@ $(document).ready(function() {
 		$folderid = $folder->getId();
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
-		if($enablelargefileupload)
+		if($enablelargefileupload) {
 			$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fine-uploader/jquery.fine-uploader.min.js"></script>'."\n", 'js');
+			$this->htmlAddHeader($this->getFineUploaderTemplate(), 'js');
+		}
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);

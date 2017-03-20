@@ -112,6 +112,7 @@ if ($action == "saveSettings")
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
   $settings->_partitionSize = $_POST["partitionSize"];
+  $settings->_maxUploadSize = $_POST["maxUploadSize"];
 
   // SETTINGS - SYSTEM - AUTHENTICATION
   $settings->_enableGuestLogin = getBoolValue("enableGuestLogin");
@@ -188,7 +189,7 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - INDEX CMD
 	$settings->_converters['fulltext'] = $_POST["converters"];
-	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.-]+#', '', $_POST["converters_newmimetype"]);
+	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.-*]+#', '', $_POST["converters_newmimetype"]);
   if($newmimetype && trim($_POST["converters_newcmd"])) {
     $settings->_converters['fulltext'][$newmimetype] = trim($_POST["converters_newcmd"]);
   }

@@ -382,12 +382,13 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 
 		if($duplicateversions) {
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
 			print "<th>".getMLText("original_filename")."</th>\n";
 			print "<th>".getMLText("mimetype")."</th>\n";
+			print "<th>".getMLText("duplicates")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 			foreach($duplicateversions as $rec) {
 				$version = $rec['content'];
@@ -396,7 +397,9 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				print "<td>";
 				foreach($rec['duplicates'] as $duplicate) {
-					print $duplicate->getVersion();
+					$dupdoc = $duplicate->getDocument();
+					print "<a href=\"../out/out.ViewDocument.php?documentid=".$dupdoc->getID()."\">".$dupdoc->getID()."/".$duplicate->getVersion()."</a>";
+					echo "<br />";
 				}
 				print "</td>";
 				print "</tr>\n";

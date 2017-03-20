@@ -1,5 +1,9 @@
 <?php
-require_once("../inc/inc.ClassSettings.php");
+if(isset($_SERVER['SEEDDMS_HOME'])) {
+	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassSettings.php");
+} else {
+	require_once("../inc/inc.ClassSettings.php");
+}
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
@@ -276,7 +280,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 			if($attributes = $document->getAttributes()) {
 				foreach($attributes as $attribute) {
 					$attrdef = $attribute->getAttributeDefinition();
-					echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+					echo $indent." <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 				}
 			}
 
@@ -332,7 +336,7 @@ function tree($folder, $parent=null, $indent='', $skipcurrent=false) { /* {{{ */
 					if($attributes = $version->getAttributes()) {
 						foreach($attributes as $attribute) {
 							$attrdef = $attribute->getAttributeDefinition();
-							echo $indent."   <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".$attribute->getValue()."</attr>\n";
+							echo $indent."   <attr type=\"user\" attrdef=\"".$attrdef->getID()."\">".wrapWithCData($attribute->getValue())."</attr>\n";
 						}
 					}
 					if($statuslog = $version->getStatusLog()) {
@@ -623,7 +627,7 @@ if($attrdefs) {
 		echo "\">\n";
 		echo "  <attr name=\"name\">".$attrdef->getName()."</attr>\n";
 		echo "  <attr name=\"multiple\">".$attrdef->getMultipleValues()."</attr>\n";
-		echo "  <attr name=\"valueset\">".$attrdef->getValueSet()."</attr>\n";
+		echo "  <attr name=\"valueset\">".wrapWithCData($attrdef->getValueSet())."</attr>\n";
 		echo "  <attr name=\"type\">".$attrdef->getType()."</attr>\n";
 		echo "  <attr name=\"minvalues\">".$attrdef->getMinValues()."</attr>\n";
 		echo "  <attr name=\"maxvalues\">".$attrdef->getMaxValues()."</attr>\n";

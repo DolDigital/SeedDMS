@@ -89,8 +89,13 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 			$target = $this->previewDir.$dir.md5($infile);
 		if($target != '' && (!file_exists($target.'.pdf') || filectime($target.'.pdf') < filectime($infile))) {
 			$cmd = '';
+			$mimeparts = explode('/', $mimetype, 2);
 			if(isset($this->converters[$mimetype])) {
-				$cmd = str_replace(array('%f', '%o'), array($infile, $target.'.pdf'), $this->converters[$mimetype]);
+				$cmd = str_replace(array('%f', '%o', '%m'), array($infile, $target.'.pdf', $mimetype), $this->converters[$mimetype]);
+			} elseif(isset($this->converters[$mimeparts[0].'/*'])) {
+				$cmd = str_replace(array('%f', '%o', '%m'), array($infile, $target.'.pdf', $mimetype), $this->converters[$mimeparts[0].'/*']);
+			} elseif(isset($this->converters['*'])) {
+				$cmd = str_replace(array('%f', '%o', '%m'), array($infile, $target.'.pdf', $mimetype), $this->converters['*']);
 			}
 			if($cmd) {
 				try {

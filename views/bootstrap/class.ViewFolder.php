@@ -278,7 +278,11 @@ function folderSelected(id, name) {
 			echo "</div>";
 		}
 
-		$this->contentHeading(getMLText("folder_contents"));
+		$txt = $this->callHook('listHeader', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else
+			$this->contentHeading(getMLText("folder_contents"));
 
 		$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
@@ -300,36 +304,40 @@ function folderSelected(id, name) {
 				print "<th>".getMLText("action")."</th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 			}
-		}
-		else printMLText("empty_folder_list");
 
-
-		foreach($subFolders as $subFolder) {
-			$txt = $this->callHook('folderListItem', $subFolder);
-			if(is_string($txt))
-				echo $txt;
-			else {
-				echo $this->folderListRow($subFolder);
+			foreach($subFolders as $subFolder) {
+				$txt = $this->callHook('folderListItem', $subFolder, 'viewfolder');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->folderListRow($subFolder);
+				}
 			}
-		}
 
-		foreach($documents as $document) {
-			$document->verifyLastestContentExpriry();
-			$txt = $this->callHook('documentListItem', $document, $previewer);
-			if(is_string($txt))
-				echo $txt;
-			else {
-				echo $this->documentListRow($document, $previewer);
+			if($subFolders && $documents) {
+				$txt = $this->callHook('folderListSeparator', $folder);
+				if(is_string($txt))
+					echo $txt;
 			}
-		}
 
-		if ((count($subFolders) > 0)||(count($documents) > 0)) {
+			foreach($documents as $document) {
+				$document->verifyLastestContentExpriry();
+				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->documentListRow($document, $previewer);
+				}
+			}
+
 			$txt = $this->callHook('folderListFooter', $folder);
 			if(is_string($txt))
 				echo $txt;
 			else
 				echo "</tbody>\n</table>\n";
+
 		}
+		else printMLText("empty_folder_list");
 
 		echo "</div>\n"; // End of right column div
 		echo "</div>\n"; // End of div around left and right column

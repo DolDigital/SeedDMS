@@ -1,5 +1,9 @@
 <?php
-require_once("../inc/inc.ClassSettings.php");
+if(isset($_SERVER['SEEDDMS_HOME'])) {
+	require_once($_SERVER['SEEDDMS_HOME']."/inc/inc.ClassSettings.php");
+} else {
+	require_once("../inc/inc.ClassSettings.php");
+}
 require("Log.php");
 
 function usage() { /* {{{ */
@@ -39,10 +43,15 @@ function getRevAppLog($reviews) { /* {{{ */
 		if($review['attributes']['type'] == 1) {
 			if(isset($objmap['groups'][(int) $review['attributes']['required']]))
 				$newreview['required'] = $dms->getGroup($objmap['groups'][(int) $review['attributes']['required']]);
+			else
+				$logger->warning("Group ".(int) $review['attributes']['required']." for Log cannot be mapped");
 		} else {
 			if(isset($objmap['users'][(int) $review['attributes']['required']]))
 				$newreview['required'] = $dms->getUser($objmap['users'][(int) $review['attributes']['required']]);
+			else
+				$logger->warning("User ".(int) $review['attributes']['required']." for Log cannot be mapped");
 		}
+		if(isset($newreview['required'])) {
 		$newreview['logs'] = array();
 		foreach($review['logs'] as $j=>$log) {
 			if(!array_key_exists($log['attributes']['user'], $objmap['users'])) {
@@ -63,6 +72,7 @@ function getRevAppLog($reviews) { /* {{{ */
 			}
 		}
 		$newreviews[] = $newreview;
+		}
 	}
 	return $newreviews;
 } /* }}} */
@@ -101,7 +111,7 @@ function insert_user($user) { /* {{{ */
 	if($debug) print_r($user);
 
 	if ($newUser = $dms->getUserByLogin($user['attributes']['login'])) {
-		$logger->info("User '".$user['attributes']['login']."' already exists");
+		$logger->warning("User '".$user['attributes']['login']."' already exists");
 	} else {
 		if(in_array('users', $sections)) {
 			if(substr($user['attributes']['pwdexpiration'], 0, 10) == '0000-00-00')
@@ -164,7 +174,7 @@ function insert_group($group) { /* {{{ */
 	if($debug) print_r($group);
 
 	if ($newGroup = $dms->getGroupByName($group['attributes']['name'])) {
-		$logger->info("Group already exists");
+		$logger->warning("Group already exists");
 	} else {
 		if(in_array('groups', $sections)) {
 			$newGroup = $dms->addGroup($group['attributes']['name'], $group['attributes']['comment']);
@@ -209,10 +219,11 @@ function insert_attributedefinition($attrdef) { /* {{{ */
 	if($debug)
 		print_r($attrdef);
 	if($newAttrdef = $dms->getAttributeDefinitionByName($attrdef['attributes']['name'])) {
-		$logger->info("Attribute definition already exists");
+		$logger->warning("Attribute definition already exists");
 	} else {
 		if(in_array('attributedefinitions', $sections)) {
-			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $attrdef['objecttype'], $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
+			$objtype = ($attrdef['objecttype'] == 'folder' ? SeedDMS_Core_AttributeDefinition::objtype_folder : ($attrdef['objecttype'] == 'document' ? SeedDMS_Core_AttributeDefinition::objtype_document : ($attrdef['objecttype'] == 'documentcontent' ? SeedDMS_Core_AttributeDefinition::objtype_documentcontent : 0)));
+			if(!$newAttrdef = $dms->addAttributeDefinition($attrdef['attributes']['name'], $objtype, $attrdef['attributes']['type'], $attrdef['attributes']['multiple'], $attrdef['attributes']['minvalues'], $attrdef['attributes']['maxvalues'], $attrdef['attributes']['valueset'], $attrdef['attributes']['regex'])) {
 				$logger->err("Could not add attribute definition");
 				$logger->debug($dms->getDB()->getErrorMsg());
 				return false;
@@ -234,7 +245,7 @@ function insert_documentcategory($documentcat) { /* {{{ */
 	if($debug) print_r($documentcat);
 
 	if($newCategory = $dms->getDocumentCategoryByName($documentcat['attributes']['name'])) {
-		$logger->info("Document category already exists");
+		$logger->warning("Document category already exists");
 	} else {
 		if(in_array('documentcategories', $sections)) {
 			if(!$newCategory = $dms->addDocumentCategory($documentcat['attributes']['name'])) {
@@ -266,7 +277,7 @@ function insert_keywordcategory($keywordcat) { /* {{{ */
 	$owner = $objmap['users'][(int) $keywordcat['attributes']['owner']];
 
 	if($newCategory = $dms->getKeywordCategoryByName($keywordcat['attributes']['name'], $owner)) {
-		$logger->info("Document category already exists");
+		$logger->warning("Keyword category already exists");
 	} else {
 		if(in_array('keywordcategories', $sections)) {
 			if(!$newCategory = $dms->addKeywordCategory($owner, $keywordcat['attributes']['name'])) {
@@ -299,7 +310,7 @@ function insert_workflow($workflow) { /* {{{ */
 	if($debug)
 		print_r($workflow);
 	if($newWorkflow = $dms->getWorkflowByName($workflow['attributes']['name'])) {
-		$logger->info("Workflow already exists");
+		$logger->warning("Workflow already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$initstate = $dms->getWorkflowState($objmap['workflowstates'][(int)$workflow['attributes']['initstate']])) {
@@ -372,7 +383,7 @@ function insert_workflowstate($workflowstate) { /* {{{ */
 	if($debug)
 		print_r($workflowstate);
 	if($newWorkflowstate = $dms->getWorkflowStateByName($workflowstate['attributes']['name'])) {
-		$logger->info("Workflow state already exists");
+		$logger->warning("Workflow state already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowstate = $dms->addWorkflowState($workflowstate['attributes']['name'], isset($workflowstate['attributes']['documentstate']) ? $workflowstate['attributes']['documentstate'] : 0)) {
@@ -396,7 +407,7 @@ function insert_workflowaction($workflowaction) { /* {{{ */
 	if($debug)
 		print_r($workflowaction);
 	if($newWorkflowaction = $dms->getWorkflowActionByName($workflowaction['attributes']['name'])) {
-		$logger->info("Workflow action already exists");
+		$logger->warning("Workflow action already exists");
 	} else {
 		if(in_array('workflows', $sections)) {
 			if(!$newWorkflowaction = $dms->addWorkflowAction($workflowaction['attributes']['name'])) {
@@ -516,7 +527,7 @@ function insert_document($document) { /* {{{ */
 			$document['attributes']['comment'],
 			isset($document['attributes']['expires']) ? dateToTimestamp($document['attributes']['expires']) : 0,
 			$owner,
-			isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : 0,
+			isset($document['attributes']['keywords']) ? $document['attributes']['keywords'] : '',
 			$categories,
 			$filename,
 			$initversion['attributes']['orgfilename'],
@@ -1704,6 +1715,7 @@ if($defaultuserid) {
 	$defaultUser = null;
 }
 
+$users = array();
 $elementstack = array();
 $objmap = array(
 	'attributedefs' => array(),

@@ -31,24 +31,25 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 			2 => array("pipe", "w")
 		);
 		$pipes = array();
-	 
-	  $timeout += time();
+
+		$timeout += time();
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
 		}
 			 
 		$output = '';
+		$timeleft = $timeout - time();
+		$read = array($pipes[1]);
+		$write = NULL;
+		$exeptions = NULL;
 		do {
-			$timeleft = $timeout - time();
-			$read = array($pipes[1]);
-			$write = NULL;
-			$exeptions = NULL;
 			stream_select($read, $write, $exeptions, $timeleft, 200000);
 					 
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
-													}
+			}
+			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
  
 		if ($timeleft <= 0) {
@@ -127,19 +128,12 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 			$mimetype = $version->getMimeType();
 			if(isset($_convcmd[$mimetype])) {
 				$cmd = sprintf($_convcmd[$mimetype], $path);
-				$content = self::execWithTimeout($cmd, $timeout);
-				/*
-				$fp = popen($cmd, 'r');
-				if($fp) {
-					$content = '';
-					while(!feof($fp)) {
-						$content .= fread($fp, 2048);
+				try {
+					$content = self::execWithTimeout($cmd, $timeout);
+					if($content) {
+						$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
 					}
-					pclose($fp);
-				}
-				 */
-				if($content) {
-					$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
+				} catch (Exception $e) {
 				}
 			}
 		}

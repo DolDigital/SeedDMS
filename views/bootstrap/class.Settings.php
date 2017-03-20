@@ -411,6 +411,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_partitionSize");?>:</td>
         <td><?php $this->showTextField("partitionSize", $settings->_partitionSize); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_maxUploadSize_desc");?>">
+        <td><?php printMLText("settings_maxUploadSize");?>:</td>
+        <td><?php $this->showTextField("maxUploadSize", $settings->_maxUploadSize); ?></td>
+      </tr>
       <!--
         -- SETTINGS - SYSTEM - AUTHENTICATION
       -->

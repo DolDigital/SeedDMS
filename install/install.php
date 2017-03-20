@@ -118,7 +118,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "5.0.10");
+define("SEEDDMS_VERSION", "5.0.11");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -311,7 +311,7 @@ if ($action=="setSettings") {
 						$connTmp->exec($query);
 
 						if ($connTmp->errorCode() != 0) {
-							$errorMsg .= $connTmp->errorInfo() . "<br/>";
+							$errorMsg .= $connTmp->errorInfo()[2] . "<br/>";
 						}
 					}
 				}

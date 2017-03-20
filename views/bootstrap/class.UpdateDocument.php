@@ -36,13 +36,14 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$partitionsize = $this->params['partitionsize'];
+		$maxuploadsize = $this->params['maxuploadsize'];
 		header('Content-Type: application/javascript');
 		$this->printDropFolderChooserJs("form1");
 		$this->printSelectPresetButtonJs();
 		$this->printInputPresetButtonJs();
 		$this->printCheckboxPresetButtonJs();
 		if($enablelargefileupload)
-			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, false);
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, false);
 ?>
 $(document).ready( function() {
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
@@ -129,6 +130,7 @@ console.log(element);
 		$document = $this->params['document'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$maxuploadsize = $this->params['maxuploadsize'];
 		$enableadminrevapp = $this->params['enableadminrevapp'];
 		$enableownerrevapp = $this->params['enableownerrevapp'];
 		$enableselfrevapp = $this->params['enableselfrevapp'];
@@ -138,8 +140,10 @@ console.log(element);
 		$documentid = $document->getId();
 
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/validate/jquery.validate.js"></script>'."\n", 'js');
-		if($enablelargefileupload)
+		if($enablelargefileupload) {
 			$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/fine-uploader/jquery.fine-uploader.min.js"></script>'."\n", 'js');
+			$this->htmlAddHeader($this->getFineUploaderTemplate(), 'js');
+		}
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -182,11 +186,20 @@ console.log(element);
 			}
 		}
 
-		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
 		if($enablelargefileupload) {
+			if($maxuploadsize) {
+				$msg = getMLText("max_upload_size").": ".SeedDMS_Core_File::format_filesize($maxuploadsize);
+			} else {
+				$msg = '';
+			}
+		} else {
+			$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
+		}
+		if(0 && $enablelargefileupload) {
 			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folder->getID()."&showtree=".showtree())."</p>";
 		}
-		$this->warningMsg($msg);
+		if($msg)
+			$this->warningMsg($msg);
 		$this->contentContainerStart();
 ?>
 
