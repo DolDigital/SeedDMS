@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (678), fengjohn (5)
+//    Translators: Admin (679), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '',
@@ -683,7 +683,7 @@ URL: [url]',
 'no_revision_planed' => '',
 'no_update_cause_locked' => '您不能更新此文档，请联系该文档锁定人',
 'no_user_image' => '无图片',
-'no_version_check' => '',
+'no_version_check' => '检查SeedDMS的新版本失败！这可能是由于在您的php配置中allow_url_fopen设置为0引起的。',
 'no_version_modification' => '',
 'no_workflow_available' => '',
 'objectcheck' => '文件夹/文件检查',

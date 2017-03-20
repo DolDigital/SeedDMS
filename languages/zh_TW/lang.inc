@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2376)
+//    Translators: Admin (2377)
 
 $text = array(
 '2_factor_auth' => '',
@@ -854,7 +854,7 @@ URL: [url]',
 'search_query' => '搜索',
 'search_report' => '找到 [count] 個文檔',
 'search_report_fulltext' => '',
-'search_resultmode' => '',
+'search_resultmode' => '搜尋結果',
 'search_resultmode_both' => '',
 'search_results' => '搜索結果',
 'search_results_access_filtered' => '搜索到得結果中可能包含受限訪問的文檔',
