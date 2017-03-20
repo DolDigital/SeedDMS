@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (719), kreml (455)
+//    Translators: Admin (720), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -305,7 +305,7 @@ URL: [url]',
 'docs_in_reception_no_access' => '',
 'docs_in_revision_no_access' => '',
 'document' => 'Dokument',
-'documentcontent' => '',
+'documentcontent' => 'Obsah dokumentu',
 'documents' => 'Dokumenty',
 'documents_checked_out_by_you' => '',
 'documents_in_process' => 'Zpracovávané dokumenty',

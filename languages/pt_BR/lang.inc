@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (934), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (937), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -173,7 +173,7 @@ URL: [url]',
 'attr_malformed_int' => '',
 'attr_malformed_url' => '',
 'attr_max_values' => '',
-'attr_min_values' => '',
+'attr_min_values' => 'O valor mínimo para o atributo [attrname] não foi alcançado.',
 'attr_not_in_valueset' => '',
 'attr_no_regex_match' => 'O valor do atributo não corresponde à expressão regular',
 'attr_validation_error' => '',
@@ -563,7 +563,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Tarefas de indexação em fila',
 'index_converters' => 'Índice de conversão de documentos',
 'index_done' => '',
 'index_error' => '',
@@ -787,7 +787,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Somente imagens jpg podem ser utilizadas como avatar',
 'order_by_sequence_off' => '',
 'original_filename' => 'Arquivo original',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Progresso geral da indexação',
 'owner' => 'Proprietário',
 'ownership_changed_email' => 'O proprietário mudou',
 'ownership_changed_email_body' => 'Proprietário mudou
