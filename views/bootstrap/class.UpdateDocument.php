@@ -189,6 +189,8 @@ console.log(element);
 		if($enablelargefileupload) {
 			if($maxuploadsize) {
 				$msg = getMLText("max_upload_size").": ".SeedDMS_Core_File::format_filesize($maxuploadsize);
+			} else {
+				$msg = '';
 			}
 		} else {
 			$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
@@ -196,7 +198,8 @@ console.log(element);
 		if(0 && $enablelargefileupload) {
 			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folder->getID()."&showtree=".showtree())."</p>";
 		}
-		$this->warningMsg($msg);
+		if($msg)
+			$this->warningMsg($msg);
 		$this->contentContainerStart();
 ?>
 
