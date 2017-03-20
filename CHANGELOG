@@ -6,6 +6,10 @@
 - show both number of links from a document A to B and vise versa in tab header
   on ViewDocuments page
 - add link to duplicate document on ObjectCheck page
+- fix some incompatibilities in sql statements
+- new config parameter maxUploadSize
+- fix document upload by fine-uploader, when using firefox
+- scale default icons for document types, use svg images when available
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.33
