@@ -2,6 +2,7 @@
                      Changes in version 4.3.35
 --------------------------------------------------------------------------------
 - fix authentication in webdav.php (Closes #250)
+- update last access time only once a minute
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.34
