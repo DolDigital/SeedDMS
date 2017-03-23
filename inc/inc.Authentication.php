@@ -48,7 +48,8 @@ if (!isset($_COOKIE["mydms_session"])) {
 }
 
 /* Update last access time */
-$session->updateAccess($dms_session);
+if((int)$resArr['lastAccess']+60 < time())
+	$session->updateAccess($dms_session);
 
 /* Load user data */
 $user = $dms->getUser($resArr["userID"]);
