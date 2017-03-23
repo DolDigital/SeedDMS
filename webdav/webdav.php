@@ -138,7 +138,14 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 
 		if(!$userobj)
 			return false;
-		if(md5($pass) != $userobj->getPwd())
+
+		if(($userobj->getID() == $settings->_guestID) && (!$settings->_enableGuestLogin))
+			return false;
+
+		if($userobj->isDisabled())
+			return false;
+
+		if($userobj->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != ""))
 			return false;
 
 		$this->user = $userobj;

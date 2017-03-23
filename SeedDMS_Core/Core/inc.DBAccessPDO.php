@@ -38,7 +38,7 @@ class SeedDMS_Core_DatabaseAccess {
 	protected $_hostname;
 
 	/**
-	 * @var int port number of database 
+	 * @var int port number of database
 	 */
 	protected $_port;
 
@@ -91,7 +91,17 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @var boolean set to true if in a database transaction
 	 */
 	private $_intransaction;
-	
+
+	/**
+	 * @var string set a valid file name for logging all sql queries
+	 */
+	private $_logfile;
+
+	/**
+	 * @var resource file pointer of log file
+	 */
+	private $_logfp;
+
 	/**
 	 * Return list of all database tables
 	 *
@@ -142,6 +152,13 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_user = $user;
 		$this->_passw = $passw;
 		$this->_connected = false;
+		$this->_logfile = '';
+		if($this->_logfile) {
+			$this->_logfp = fopen($this->_logfile, 'a+');
+			if($this->_logfp)
+				fwrite($this->_logfp, microtime()."	BEGIN ------------------------------------------\n");
+		} else
+			$this->_logfp = null;
 		// $tt*****id is a hack to ensure that we do not try to create the
 		// temporary table twice during a single connection. Can be fixed by
 		// using Views (MySQL 5.0 onward) instead of temporary tables.
@@ -164,6 +181,16 @@ class SeedDMS_Core_DatabaseAccess {
 	 */
 	public function getDriver() { /* {{{ */
 		return $this->_driver;
+	} /* }}} */
+
+	/**
+	 * Destructor of SeedDMS_Core_DatabaseAccess
+	 */
+	function __destruct() { /* {{{ */
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	END --------------------------------------------\n");
+			fclose($this->_logfp);
+		}
 	} /* }}} */
 
 	/**
@@ -250,6 +277,10 @@ class SeedDMS_Core_DatabaseAccess {
 		if($retick && $this->_driver == 'pgsql') {
 			$queryStr = $this->rbt($queryStr);
 		}
+
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->query($queryStr);
 		if ($res === false) {
 			if($this->_debug)
@@ -274,6 +305,10 @@ class SeedDMS_Core_DatabaseAccess {
 		if($retick && $this->_driver == 'pgsql') {
 			$queryStr = $this->rbt($queryStr);
 		}
+
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->exec($queryStr);
 		if($res === false) {
 			if($this->_debug)
@@ -281,7 +316,7 @@ class SeedDMS_Core_DatabaseAccess {
 			return false;
 		} else
 			return true;
-		
+
 		return $res;
 	} /* }}} */
 
