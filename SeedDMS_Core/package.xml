@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-02-28</date>
+ <date>2017-03-23</date>
  <time>07:07:02</time>
  <version>
-  <release>5.0.11</release>
-  <api>5.0.11</api>
+  <release>5.0.12</release>
+  <api>5.0.12</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1179,6 +1178,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
+SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
+   </notes>
+  </release>
+  <release>
+   <date>2017-03-23</date>
+   <time>06:38:12</time>
+   <version>
+    <release>4.3.35</release>
+    <api>4.3.35</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
    </notes>
   </release>
   <release>
@@ -1343,5 +1358,21 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - all changes from 4.3.33 merged
    </notes>
   </release>
+  <release>
+   <date>2017-02-28</date>
+   <time>07:07:02</time>
+   <version>
+    <release>5.0.11</release>
+    <api>5.0.11</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- all changes from 4.3.34 merged
+   </notes>
+  <release>
  </changelog>
 </package>
