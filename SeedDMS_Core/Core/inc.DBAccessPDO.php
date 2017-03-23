@@ -93,6 +93,16 @@ class SeedDMS_Core_DatabaseAccess {
 	private $_intransaction;
 
 	/**
+	 * @var string set a valid file name for logging all sql queries
+	 */
+	private $_logfile;
+
+	/**
+	 * @var resource file pointer of log file
+	 */
+	private $_logfp;
+
+	/**
 	 * Return list of all database tables
 	 *
 	 * This function is used to retrieve a list of database tables for backup
@@ -139,6 +149,13 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_user = $user;
 		$this->_passw = $passw;
 		$this->_connected = false;
+		$this->_logfile = '';
+		if($this->_logfile) {
+			$this->_logfp = fopen($this->_logfile, 'a+');
+			if($this->_logfp)
+				fwrite($this->_logfp, microtime()."	BEGIN ------------------------------------------\n");
+		} else
+			$this->_logfp = null;
 		// $tt*****id is a hack to ensure that we do not try to create the
 		// temporary table twice during a single connection. Can be fixed by
 		// using Views (MySQL 5.0 onward) instead of temporary tables.
@@ -152,6 +169,24 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_ttstatid = false;
 		$this->_ttcontentid = false;
 		$this->_debug = false;
+	} /* }}} */
+
+	/**
+	 * Constructor of SeedDMS_Core_DatabaseAccess
+	 *
+	 * Sets all database parameters but does not connect.
+	 *
+	 * @param string $driver the database type e.g. mysql, sqlite
+	 * @param string $hostname host of database server
+	 * @param string $user name of user having access to database
+	 * @param string $passw password of user
+	 * @param string $database name of database
+	 */
+	function __destruct() { /* {{{ */
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	END --------------------------------------------\n");
+			fclose($this->_logfp);
+		}
 	} /* }}} */
 
 	/**
@@ -234,6 +269,9 @@ class SeedDMS_Core_DatabaseAccess {
 	function getResultArray($queryStr) { /* {{{ */
 		$resArr = array();
 
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->query($queryStr);
 		if ($res === false) {
 			if($this->_debug)
@@ -256,6 +294,9 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @return boolean true if query could be executed otherwise false
 	 */
 	function getResult($queryStr, $silent=false) { /* {{{ */
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->exec($queryStr);
 		if($res === false) {
 			if($this->_debug)
