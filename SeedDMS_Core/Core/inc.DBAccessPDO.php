@@ -38,7 +38,7 @@ class SeedDMS_Core_DatabaseAccess {
 	protected $_hostname;
 
 	/**
-	 * @var int port number of database 
+	 * @var int port number of database
 	 */
 	protected $_port;
 
@@ -91,7 +91,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @var boolean set to true if in a database transaction
 	 */
 	private $_intransaction;
-	
+
 	/**
 	 * Return list of all database tables
 	 *
@@ -233,7 +233,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 */
 	function getResultArray($queryStr) { /* {{{ */
 		$resArr = array();
-		
+
 		$res = $this->_conn->query($queryStr);
 		if ($res === false) {
 			if($this->_debug)
@@ -263,7 +263,7 @@ class SeedDMS_Core_DatabaseAccess {
 			return false;
 		} else
 			return true;
-		
+
 		return $res;
 	} /* }}} */
 

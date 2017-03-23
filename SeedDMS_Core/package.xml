@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-02-28</date>
+ <date>2017-03-22</date>
  <time>06:38:12</time>
  <version>
-  <release>4.3.34</release>
-  <api>4.3.34</api>
+  <release>4.3.35</release>
+  <api>4.3.35</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1123,6 +1122,22 @@ SeedDMS_Core_DMS::getNotificationsByUser() are deprecated
 - SeedDMЅ_Core_Document::addContent() sets workflow after status was set
 - SeedDMЅ_Core_Keyword::setOwner() fix sql statement
 - SeedDMЅ_Core_User::setFullname() minor fix in sql statement
+   </notes>
+  </release>
+  <release>
+   <date>2017-02-28</date>
+   <time>06:38:12</time>
+   <version>
+    <release>4.3.34</release>
+    <api>4.3.34</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
    </notes>
   </release>
  </changelog>
