@@ -11,6 +11,8 @@ CREATE TABLE `tblVersion` (
 
 INSERT INTO `tblVersion` SELECT * FROM `__tblVersion`;
 
+DROP TABLE `__tblVersion`;
+
 ALTER TABLE `tblUserImages` RENAME TO `__tblUserImages`;
 
 CREATE TABLE `tblUserImages` (
@@ -21,6 +23,8 @@ CREATE TABLE `tblUserImages` (
 );
 
 INSERT INTO `tblUserImages` SELECT * FROM `__tblUserImages`;
+
+DROP TABLE `__tblUserImages`;
 
 ALTER TABLE `tblDocumentContent` RENAME TO `__tblDocumentContent`;
 
@@ -42,6 +46,8 @@ CREATE TABLE `tblDocumentContent` (
 
 INSERT INTO `tblDocumentContent` SELECT * FROM `__tblDocumentContent`;
 
+DROP TABLE `__tblDocumentContent`;
+
 ALTER TABLE `tblDocumentFiles` RENAME TO `__tblDocumentFiles`;
 
 CREATE TABLE `tblDocumentFiles` (
@@ -58,6 +64,8 @@ CREATE TABLE `tblDocumentFiles` (
 ) ;
 
 INSERT INTO `tblDocumentFiles` SELECT * FROM `__tblDocumentFiles`;
+
+DROP TABLE `__tblDocumentFiles`;
 
 ALTER TABLE `tblDocumentFiles` ADD COLUMN `version` INTEGER unsigned NOT NULL DEFAULT '0';
 
@@ -86,6 +94,8 @@ CREATE TABLE `tblUsers` (
 
 INSERT INTO `tblUsers` SELECT * FROM `__tblUsers`;
 
+DROP TABLE `__tblUsers`;
+
 ALTER TABLE `tblUserPasswordRequest` RENAME TO `__tblUserPasswordRequest`;
 
 CREATE TABLE `tblUserPasswordRequest` (
@@ -97,6 +107,8 @@ CREATE TABLE `tblUserPasswordRequest` (
 
 INSERT INTO `tblUserPasswordRequest` SELECT * FROM `__tblUserPasswordRequest`;
 
+DROP TABLE `__tblUserPasswordRequest`;
+
 ALTER TABLE `tblUserPasswordHistory` RENAME TO `__tblUserPasswordHistory`;
 
 CREATE TABLE `tblUserPasswordHistory` (
@@ -107,6 +119,8 @@ CREATE TABLE `tblUserPasswordHistory` (
 );
 
 INSERT INTO `tblUserPasswordHistory` SELECT * FROM `__tblUserPasswordHistory`;
+
+DROP TABLE `__tblUserPasswordHistory`;
 
 ALTER TABLE `tblDocumentReviewLog` RENAME TO `__tblDocumentReviewLog`;
 
@@ -121,6 +135,8 @@ CREATE TABLE `tblDocumentReviewLog` (
 
 INSERT INTO `tblDocumentReviewLog` SELECT * FROM `__tblDocumentReviewLog`;
 
+DROP TABLE `__tblDocumentReviewLog`;
+
 ALTER TABLE `tblDocumentStatusLog` RENAME TO `__tblDocumentStatusLog`;
 
 CREATE TABLE `tblDocumentStatusLog` (
@@ -134,6 +150,8 @@ CREATE TABLE `tblDocumentStatusLog` (
 
 INSERT INTO `tblDocumentStatusLog` SELECT * FROM `__tblDocumentStatusLog`;
 
+DROP TABLE `__tblDocumentStatusLog`;
+
 ALTER TABLE `tblDocumentApproveLog` RENAME TO `__tblDocumentApproveLog`;
 
 CREATE TABLE `tblDocumentApproveLog` (
@@ -146,6 +164,8 @@ CREATE TABLE `tblDocumentApproveLog` (
 );
 
 INSERT INTO `tblDocumentApproveLog` SELECT * FROM `__tblDocumentApproveLog`;
+
+DROP TABLE `__tblDocumentApproveLog`;
 
 ALTER TABLE `tblWorkflowLog` RENAME TO `__tblWorkflowLog`;
 
@@ -162,6 +182,8 @@ CREATE TABLE `tblWorkflowLog` (
 
 INSERT INTO `tblWorkflowLog` SELECT * FROM `__tblWorkflowLog`;
 
+DROP TABLE `__tblWorkflowLog`;
+
 ALTER TABLE `tblWorkflowDocumentContent` RENAME TO `__tblWorkflowDocumentContent`;
 
 CREATE TABLE `tblWorkflowDocumentContent` (
@@ -174,6 +196,8 @@ CREATE TABLE `tblWorkflowDocumentContent` (
 );
 
 INSERT INTO `tblWorkflowDocumentContent` SELECT * FROM `__tblWorkflowDocumentContent`;
+
+DROP TABLE `__tblWorkflowDocumentContent`;
 
 UPDATE tblVersion set major=5, minor=1, subminor=0;
 
