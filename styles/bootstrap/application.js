@@ -367,6 +367,8 @@ $(document).ready( function() {
 			}
 		} else
 			url = href;
+		if(!element.data('no-spinner'))
+			element.prepend('<div style="position: _absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: 200px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
 //			$(".chzn-select").chosen();
