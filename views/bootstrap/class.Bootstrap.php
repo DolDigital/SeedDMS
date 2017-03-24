@@ -306,7 +306,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 			if($this->params['enableclipboard']) {
 				echo "   <div id=\"menu-clipboard\">";
-				echo "     <div class=\"ajax\" data-view=\"Clipboard\" data-action=\"menuClipboard\"></div>";
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Clipboard\" data-action=\"menuClipboard\"></div>";
 				echo "   </div>";
 			}
 
