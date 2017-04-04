@@ -500,14 +500,16 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 						}
 						print "</a></td>";
-						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
+						print $docName;
+						print "</a>";
+						print "<br /><span style=\"font-size: 85%;\">".getMLText('in_folder').": /";
 						$folder = $document->getFolder();
 						$path = $folder->getPath();
 						for ($i = 1; $i  < count($path); $i++) {
 							print htmlspecialchars($path[$i]->getName())."/";
 						}
-						print $docName;
-						print "</a>";
+						print "</span>";
 					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $lc->getDate())."</b></span>";
 						if($comment) {
 							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
