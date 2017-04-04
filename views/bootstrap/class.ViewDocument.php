@@ -1238,7 +1238,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".htmlspecialchars($file->getName())."</li>\n";
-				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
+				if($file->getName() != $file->getOriginalFileName())
+					print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
 				if ($file_exists)
 					print "<li>".SeedDMS_Core_File::format_filesize(filesize($dms->contentDir . $file->getPath())) ." bytes, ".htmlspecialchars($file->getMimeType())."</li>";
 				else print "<li>".htmlspecialchars($file->getMimeType())." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
