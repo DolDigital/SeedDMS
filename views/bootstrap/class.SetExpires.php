@@ -31,6 +31,20 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_SetExpires extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		header('Content-Type: application/javascript');
+?>
+$(document).ready( function() {
+	$('#presetexpdate').on('change', function(ev){
+		if($(this).val() == 'date')
+			$('#control_expdate').show();
+		else
+			$('#control_expdate').hide();
+	});
+});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -53,15 +67,25 @@ class SeedDMS_View_SetExpires extends SeedDMS_Bootstrap_Style {
 <form class="form-horizontal" action="../op/op.SetExpires.php" method="post">
 <input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("preset_expires");?>:</label>
+		<div class="controls">
+			<select name="presetexpdate" id="presetexpdate">
+				<option value="never"><?php printMLText('does_not_expire');?></option>
+				<option value="date"<?php echo ($expdate != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
+				<option value="1w"><?php printMLText('expire_in_1w');?></option>
+				<option value="1m"><?php printMLText('expire_in_1m');?></option>
+				<option value="1y"><?php printMLText('expire_in_1y');?></option>
+				<option value="2y"><?php printMLText('expire_in_2y');?></option>
+			</select>
+		</div>
+	</div>
+	<div class="control-group" id="control_expdate">
 		<label class="control-label"><?php printMLText("expires");?>:</label>
 		<div class="controls">
     <span class="input-append date span12" id="expirationdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-      <input class="span6" name="expdate" type="text" value="<?php echo $expdate; ?>">
+      <input class="span3" name="expdate" type="text" value="<?php echo $expdate; ?>">
       <span class="add-on"><i class="icon-calendar"></i></span>
-    </span><br />
-    <label class="checkbox inline">
-		  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
-    </label>
+    </span>
 		</div>
 	</div>
 	<div class="controls">

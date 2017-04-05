@@ -116,14 +116,31 @@ if (!is_numeric($sequence)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_sequence"));
 }
 
-$expires = false;
-if (!isset($_POST['expires']) || $_POST["expires"] != "false") {
-	if($_POST["expdate"]) {
-		$tmp = explode('-', $_POST["expdate"]);
-		$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
-	} else {
-		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
-	}
+switch($_POST["presetexpdate"]) {
+case "date":
+	$tmp = explode('-', $_POST["expdate"]);
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
+	break;
+case "1w":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2]+7, $tmp[0]);
+	break;
+case "1m":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1]+1, $tmp[2], $tmp[0]);
+	break;
+case "1y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+1);
+	break;
+case "2y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+2);
+	break;
+case "never":
+default:
+	$expires = null;
+	break;
 }
 
 // Get the list of reviewers and approvers for this document.
