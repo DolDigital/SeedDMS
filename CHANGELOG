@@ -3,6 +3,8 @@
 --------------------------------------------------------------------------------
 - do not show spinner when clipboard is loaded in menu (prevents flickering of
   page)
+- add select menu for predifined expiration dates
+- add some more hooks
 - merged changes from 5.0.12
 
 --------------------------------------------------------------------------------
