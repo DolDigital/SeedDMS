@@ -240,7 +240,7 @@ if ($_FILES['userfile']['error'] == 0) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'preUpdateDocument')) {
-				$hookObj->preUpdateDocument(array('name'=>&$name, 'comment'=>&$comment));
+				$hookObj->preUpdateDocument(null, array('name'=>&$name, 'comment'=>&$comment));
 			}
 		}
 	}
@@ -254,7 +254,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postUpdateDocument')) {
-					$hookObj->postUpdateDocument($document);
+					$hookObj->postUpdateDocument(null, $document);
 				}
 			}
 		}

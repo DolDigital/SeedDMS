@@ -77,7 +77,7 @@ default:
 if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
 		if (method_exists($hookObj, 'preSetExpires')) {
-			$hookObj->preSetExpires(array('document'=>$document, 'expires'=>&$expires));
+			$hookObj->preSetExpires(null, array('document'=>$document, 'expires'=>&$expires));
 		}
 	}
 }
@@ -91,7 +91,7 @@ $document->verifyLastestContentExpriry();
 if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
 		if (method_exists($hookObj, 'postSetExpires')) {
-			$hookObj->postSetExpires(array('document'=>$document, 'expires'=>$expires));
+			$hookObj->postSetExpires(null, array('document'=>$document, 'expires'=>$expires));
 		}
 	}
 }

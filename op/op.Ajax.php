@@ -639,7 +639,7 @@ switch($command) {
 					if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 						foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 							if (method_exists($hookObj, 'postAddDocument')) {
-								$hookObj->postAddDocument($document);
+								$hookObj->postAddDocument(null, $document);
 							}
 						}
 					}

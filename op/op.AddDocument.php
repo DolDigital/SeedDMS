@@ -317,7 +317,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'preAddDocument')) {
-				$hookObj->preAddDocument(array('name'=>&$name, 'comment'=>&$comment));
+				$hookObj->preAddDocument(null, array('name'=>&$name, 'comment'=>&$comment));
 			}
 		}
 	}
@@ -345,7 +345,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postAddDocument')) {
-					$hookObj->postAddDocument($document);
+					$hookObj->postAddDocument(null, $document);
 				}
 			}
 		}
