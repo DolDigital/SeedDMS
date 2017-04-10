@@ -454,7 +454,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			$this->pageList($pageNumber, $totalpages, "../out/out.Search.php", $urlparams);
 //			$this->contentContainerStart();
 
-			$txt = $this->callHook('searchListHeader', $folder, '');
+			$txt = $this->callHook('searchListHeader');
 			if(is_string($txt))
 				echo $txt;
 			else {
