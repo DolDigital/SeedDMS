@@ -304,7 +304,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "    </li>\n";
 			echo "   </ul>\n";
 
-			if($this->params['user']->isAdmin()) {
+			if($this->params['enablesessionlist']) {
 				echo "   <div id=\"menu-session\">";
 				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Session\" data-action=\"menuSessions\"></div>";
 				echo "   </div>";
