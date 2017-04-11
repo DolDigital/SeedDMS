@@ -1373,6 +1373,6 @@ SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
    <notes>
 - all changes from 4.3.34 merged
    </notes>
-  <release>
+  </release>
  </changelog>
 </package>
