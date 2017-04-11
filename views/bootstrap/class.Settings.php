@@ -268,7 +268,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
 	    <tr title="<?php printMLText("settings_enableSessionList_desc");?>">
         <td><?php printMLText("settings_enableSessionList");?>:</td>
-        <td><input name="enableSessionList" type="checkbox" <?php if ($settings->_enableClipboard) echo "checked" ?> /></td>
+        <td><input name="enableSessionList" type="checkbox" <?php if ($settings->_enableSessionList) echo "checked" ?> /></td>
       </tr>
 	    <tr title="<?php printMLText("settings_enableDropUpload_desc");?>">
         <td><?php printMLText("settings_enableDropUpload");?>:</td>
