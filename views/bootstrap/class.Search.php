@@ -577,13 +577,14 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					print "<tr id=\"table-row-folder-".$folder->getID()."\" draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
+					print $folderName;
+					print "</a>";
+					print "<br /><span style=\"font-size: 85%;\">".getMLText('in_folder').": /";
 					$path = $folder->getPath();
-					print "/";
 					for ($i = 1; $i  < count($path)-1; $i++) {
 						print htmlspecialchars($path[$i]->getName())."/";
 					}
-					print $folderName;
-					print "</a>";
+					print "</span>";
 					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $folder->getDate())."</b></span>";
 					if (in_array(3, $searchin)) $comment = $this->markQuery(htmlspecialchars($folder->getComment()));
 					else $comment = htmlspecialchars($folder->getComment());
@@ -603,7 +604,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					}
 					print "</td>";
 					print "<td></td>";
-					print "<td>";
+					print "<td nowrap>";
 					print "<div class=\"list-action\">";
 					if($folder->getAccessMode($user) >= M_ALL) {
 						$this->printDeleteFolderButton($folder, 'splash_rm_folder');
