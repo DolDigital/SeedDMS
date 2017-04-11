@@ -81,7 +81,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
-//		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
+		if(method_exists($this, 'css'))
+			echo '<link href="../out/out.'.$this->params['class'].'.php?action=css'.(!empty($_SERVER['QUERY_STRING']) ? '&'.$_SERVER['QUERY_STRING'] : '').'" rel="stylesheet">'."\n";
 
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader['js'])

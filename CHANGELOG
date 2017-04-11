@@ -89,6 +89,7 @@
 --------------------------------------------------------------------------------
 - fix authentication in webdav.php (Closes #250)
 - update last access time only once a minute
+- run action 'css' in view if it exists, move css code for timeline
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.34
