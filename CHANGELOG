@@ -1,6 +1,9 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.0.12
 --------------------------------------------------------------------------------
+- show name and parent folder of document/folder in search list on different
+  lines
+- check for guest login, admin ip and disabled accounts in webdav server
 - merged changes from 4.3.35
 
 --------------------------------------------------------------------------------
