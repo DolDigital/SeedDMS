@@ -53,11 +53,12 @@ class SeedDMS_View_Session extends SeedDMS_Bootstrap_Style {
 		$content = '';
 		$content .= "   <ul id=\"main-menu-session\" class=\"nav pull-right\">\n";
 		$content .= "    <li class=\"dropdown add-session-area\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-session-area\">".getMLText('Sessions')." (".count($sessions).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-session-area\">".getMLText('sessions')." (".count($sessions).") <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($sessions as $session) {
 			if($sesuser = $dms->getUser($session->getUser()))
-				$content .= "    <li><a href=\"../out/out.ViewFolder.php?folderid=".$sesuser->getID(). "\"><i class=\"icon-user\"></i> ".htmlspecialchars($sesuser->getFullName())." ".getReadableDuration(time()-$session->getLastAccess())."</a></li>\n";
+				if(!$sesuser->isHidden())
+					$content .= "    <li><a _href=\"\"><i class=\"icon-user\"></i> ".htmlspecialchars($sesuser->getFullName())." ".getReadableDuration(time()-$session->getLastAccess())."</a></li>\n";
 		}
 		$content .= "     </ul>\n";
 		$content .= "    </li>\n";

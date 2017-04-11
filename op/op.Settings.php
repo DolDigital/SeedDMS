@@ -81,6 +81,7 @@ if ($action == "saveSettings")
   $settings->_fullSearchEngine = $_POST["fullSearchEngine"];
   $settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
   $settings->_showSingleSearchHit = getBoolValue("showSingleSearchHit");
+  $settings->_enableSessionList = getBoolValue("enableSessionList");
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");

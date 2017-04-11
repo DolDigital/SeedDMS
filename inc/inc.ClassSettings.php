@@ -178,6 +178,8 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the clipboard
 	var $_enableClipboard = true;
+	// enable/disable display of the session list
+	var $_enableSessionList = true;
 	// enable/disable display of the drop zone for file upload
 	var $_enableDropUpload = true;
 	// enable/disable display of the folder tree
@@ -410,6 +412,7 @@ class Settings { /* {{{ */
 		$this->_enableConverting = Settings::boolVal($tab["enableConverting"]);
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
+		$this->_enableSessionList = Settings::boolVal($tab["enableSessionList"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
@@ -717,6 +720,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableConverting", $this->_enableConverting);
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
+		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableSessionList);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
