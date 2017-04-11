@@ -104,6 +104,7 @@ class UI extends UI_Default {
 			$view->setParam('enablefoldertree', $settings->_enableFolderTree);
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 			$view->setParam('enableclipboard', $settings->_enableClipboard);
+			$view->setParam('enablesessionlist', $settings->_enableSessionList);
 			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', (int) $settings->_partitionSize);
 			$view->setParam('maxuploadsize', (int) $settings->_maxUploadSize);
