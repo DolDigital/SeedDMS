@@ -5,6 +5,7 @@
   page)
 - add select menu for predifined expiration dates
 - add some more hooks
+- add list of currently logged in users in menu
 - merged changes from 5.0.12
 
 --------------------------------------------------------------------------------
