@@ -141,17 +141,42 @@ if (($oldcomment = $document->getComment()) != $comment) {
 	}
 }
 
-$expires = false;
-if (!isset($_POST["expires"]) || $_POST["expires"] != "false") {
-	if(isset($_POST["expdate"]) && $_POST["expdate"]) {
-		$tmp = explode('-', $_POST["expdate"]);
-		$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
-	} else {
-		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
-	}
+switch($_POST["presetexpdate"]) {
+case "date":
+	$tmp = explode('-', $_POST["expdate"]);
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
+	break;
+case "1w":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2]+7, $tmp[0]);
+	break;
+case "1m":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1]+1, $tmp[2], $tmp[0]);
+	break;
+case "1y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+1);
+	break;
+case "2y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+2);
+	break;
+case "never":
+default:
+	$expires = null;
+	break;
 }
 
 if ($expires != $document->getExpires()) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetExpires')) {
+				$hookObj->preSetExpires(null, array('document'=>$document, 'expires'=>&$expires));
+			}
+		}
+	}
+
 	if($document->setExpires($expires)) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
@@ -180,13 +205,39 @@ if ($expires != $document->getExpires()) {
 	} else {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
+
+	$document->verifyLastestContentExpriry();
+
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+			if (method_exists($hookObj, 'postSetExpires')) {
+				$hookObj->postSetExpires(null, array('document'=>$document, 'expires'=>$expires));
+			}
+		}
+	}
 }
 
 if (($oldkeywords = $document->getKeywords()) != $keywords) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['setKeywords'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['setKeywords'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetKeywords')) {
+				$hookObj->preSetExpires(null, array('document'=>$document, 'keywords'=>&$keywords));
+			}
+		}
+	}
+
 	if($document->setKeywords($keywords)) {
 	}
 	else {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['setKeywords'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['setKeywords'] as $hookObj) {
+			if (method_exists($hookObj, 'postSetKeywords')) {
+				$hookObj->preSetExpires(null, array('document'=>$document, 'keywords'=>&$keywords));
+			}
+		}
 	}
 }
 
@@ -205,9 +256,23 @@ if($categories) {
 
 	if (count($categoriesarr) != count($oldcategories) ||
 			array_diff($categories, $oldcatsids)) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['setCategories'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['setCategories'] as $hookObj) {
+				if (method_exists($hookObj, 'preSetCategories')) {
+					$hookObj->preSetExpires(null, array('document'=>$document, 'categories'=>&$categoriesarr));
+				}
+			}
+		}
 		if($document->setCategories($categoriesarr)) {
 		} else {
 			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+		}
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['setCategories'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['setCategories'] as $hookObj) {
+				if (method_exists($hookObj, 'postSetCategories')) {
+					$hookObj->preSetExpires(null, array('document'=>$document, 'categories'=>&$categoriesarr));
+				}
+			}
 		}
 	}
 } else {
