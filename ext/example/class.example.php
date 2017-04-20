@@ -48,6 +48,7 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	function init() { /* {{{ */
 		$GLOBALS['SEEDDMS_HOOKS']['view']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
 		$GLOBALS['SEEDDMS_HOOKS']['view']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
+		$GLOBALS['SEEDDMS_SCHEDULER']['tasks']['example']['example'] = new SeedDMS_ExtExample_Task;
 	} /* }}} */
 
 	function main() { /* {{{ */
@@ -110,6 +111,18 @@ class SeedDMS_ExtExample_ViewFolder {
 		return $view->infoMsg("Content created by viewFolder::postContent hook");
 	} /* }}} */
 
+}
+
+/**
+ * Class containing methods for running a scheduled task
+ *
+ * @author  Uwe Steinmann <uwe@steinmann.cx>
+ * @package SeedDMS
+ * @subpackage  example
+ */
+class SeedDMS_ExtExample_Task {
+	public function execute() {
+	}
 }
 
 ?>
