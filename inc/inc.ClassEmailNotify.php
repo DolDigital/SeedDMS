@@ -74,7 +74,10 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			$lang = $recipient->getLanguage();
 		} elseif(is_string($recipient) && trim($recipient) != "") {
 			$to = $recipient;
-			$lang = 'en_GB';
+			if(isset($params['__lang__']))
+				$lang = $params['__lang__'];
+			else
+				$lang = 'en_GB';
 		} else {
 			return false;
 		}
