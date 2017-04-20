@@ -169,8 +169,8 @@ default:
 }
 
 if ($expires != $document->getExpires()) {
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'preSetExpires')) {
 				$hookObj->preSetExpires(null, array('document'=>$document, 'expires'=>&$expires));
 			}
@@ -208,8 +208,8 @@ if ($expires != $document->getExpires()) {
 
 	$document->verifyLastestContentExpriry();
 
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'postSetExpires')) {
 				$hookObj->postSetExpires(null, array('document'=>$document, 'expires'=>$expires));
 			}
@@ -218,10 +218,10 @@ if ($expires != $document->getExpires()) {
 }
 
 if (($oldkeywords = $document->getKeywords()) != $keywords) {
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['setKeywords'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['setKeywords'] as $hookObj) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'preSetKeywords')) {
-				$hookObj->preSetExpires(null, array('document'=>$document, 'keywords'=>&$keywords));
+				$hookObj->preSetKeywords(null, array('document'=>$document, 'keywords'=>&$keywords, 'oldkeywords'=>&$oldkeywords));
 			}
 		}
 	}
@@ -232,15 +232,16 @@ if (($oldkeywords = $document->getKeywords()) != $keywords) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
 
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['setKeywords'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['setKeywords'] as $hookObj) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 			if (method_exists($hookObj, 'postSetKeywords')) {
-				$hookObj->preSetExpires(null, array('document'=>$document, 'keywords'=>&$keywords));
+				$hookObj->postSetKeywords(null, array('document'=>$document, 'keywords'=>&$keywords, 'oldkeywords'=>&$oldkeywords));
 			}
 		}
 	}
 }
 
+$oldcategories = $document->getCategories();
 if($categories) {
 	$categoriesarr = array();
 	foreach($categories as $catid) {
@@ -249,17 +250,16 @@ if($categories) {
 		}
 		
 	}
-	$oldcategories = $document->getCategories();
 	$oldcatsids = array();
 	foreach($oldcategories as $oldcategory)
 		$oldcatsids[] = $oldcategory->getID();
 
 	if (count($categoriesarr) != count($oldcategories) ||
 			array_diff($categories, $oldcatsids)) {
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['setCategories'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['setCategories'] as $hookObj) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'preSetCategories')) {
-					$hookObj->preSetExpires(null, array('document'=>$document, 'categories'=>&$categoriesarr));
+					$hookObj->preSetCategories(null, array('document'=>$document, 'categories'=>&$categoriesarr, 'oldcategories'=>&$oldcategories));
 				}
 			}
 		}
@@ -267,18 +267,32 @@ if($categories) {
 		} else {
 			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['setCategories'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['setCategories'] as $hookObj) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postSetCategories')) {
-					$hookObj->preSetExpires(null, array('document'=>$document, 'categories'=>&$categoriesarr));
+					$hookObj->postSetCategories(null, array('document'=>$document, 'categories'=>&$categoriesarr, 'oldcategories'=>&$oldcategories));
 				}
 			}
 		}
 	}
-} else {
+} elseif($oldcategories) {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetCategories')) {
+				$hookObj->preSetCategories(null, array('document'=>$document, 'categories'=>array(), 'oldcategories'=>&$oldcategories));
+			}
+		}
+	}
 	if($document->setCategories(array())) {
 	} else {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['editDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['editDocument'] as $hookObj) {
+			if (method_exists($hookObj, 'postSetCategories')) {
+				$hookObj->postSetCategories(null, array('document'=>$document, 'categories'=>array(), 'oldcategories'=>&$oldcategories));
+			}
+		}
 	}
 }
 
