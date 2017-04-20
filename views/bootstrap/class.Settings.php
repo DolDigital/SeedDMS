@@ -751,6 +751,49 @@ if(!is_writeable($settings->_configFilePath)) {
         <input type="checkbox" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" value="1" <?php if(isset($settings->_extensions[$extname][$confkey]) && $settings->_extensions[$extname][$confkey]) echo 'checked'; ?> />
 <?php
 								break;
+							case 'select':
+								if(!empty($conf['options'])) {
+									$selections = explode(",", $settings->_extensions[$extname][$confkey]);
+									echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+									foreach($conf['options'] as $key=>$opt) {
+										echo "<option value=\"".$key."\"";
+										if(in_array($key, $selections))
+											echo " selected";
+										echo ">".htmlspecialchars($opt)."</option>";
+									}
+									echo "</select>";
+								} elseif(!empty($conf['internal'])) {
+									$selections = empty($settings->_extensions[$extname][$confkey]) ? array() : explode(",", $settings->_extensions[$extname][$confkey]);
+									switch($conf['internal']) {
+									case "categories":
+										$categories = $dms->getDocumentCategories();
+										if($categories) {
+											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											foreach($categories as $category) {
+												echo "<option value=\"".$category->getID()."\"";
+												if(in_array($category->getID(), $selections))
+													echo " selected";
+												echo ">".htmlspecialchars($category->getName())."</option>";
+											}
+											echo "</select>";
+										}
+										break;
+									case "users":
+										$users = $dms->getAllUsers();
+										if($users) {
+											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											foreach($users as $curuser) {
+												echo "<option value=\"".$curuser->getID()."\"";
+												if(in_array($curuser->getID(), $selections))
+													echo " selected";
+												echo ">".htmlspecialchars($curuser->getLogin()." - ".$curuser->getFullName())."</option>";
+											}
+											echo "</select>";
+										}
+										break;
+									}
+								}
+								break;
 							default:
 ?>
         <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
