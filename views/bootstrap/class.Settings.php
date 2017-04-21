@@ -791,6 +791,32 @@ if(!is_writeable($settings->_configFilePath)) {
 											echo "</select>";
 										}
 										break;
+									case "groups":
+										$recs = $dms->getAllGroups();
+										if($recs) {
+											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											foreach($recs as $rec) {
+												echo "<option value=\"".$rec->getID()."\"";
+												if(in_array($rec->getID(), $selections))
+													echo " selected";
+												echo ">".htmlspecialchars($rec->getName())."</option>";
+											}
+											echo "</select>";
+										}
+										break;
+									case "attributedefinitions":
+										$recs = $dms->getAllAttributeDefinitions();
+										if($recs) {
+											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											foreach($recs as $rec) {
+												echo "<option value=\"".$rec->getID()."\"";
+												if(in_array($rec->getID(), $selections))
+													echo " selected";
+												echo ">".htmlspecialchars($rec->getName())."</option>";
+											}
+											echo "</select>";
+										}
+										break;
 									}
 								}
 								break;
