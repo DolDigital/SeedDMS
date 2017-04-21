@@ -35,6 +35,18 @@ $EXT_CONF['example'] = array(
 			'internal'=>'users',
 			'multiple' => true,
 		),
+		'groups' => array(
+			'title'=>'Example select menu from groups',
+			'type'=>'select',
+			'internal'=>'groups',
+			'multiple' => true,
+		),
+		'attributedefinitions' => array(
+			'title'=>'Example select menu from attribute definitions',
+			'type'=>'select',
+			'internal'=>'attributedefinitions',
+			'multiple' => true,
+		),
 	),
 	'constraints' => array(
 		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.3.0-'),
