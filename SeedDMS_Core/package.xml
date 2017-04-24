@@ -24,7 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-???
+SeedDMS_Core_DMS::filterDocumentFiles() returns also documents which are not public
+if the owner tries to access them
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
