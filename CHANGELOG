@@ -6,6 +6,7 @@
 - add select menu for predifined expiration dates
 - add some more hooks
 - add list of currently logged in users in menu
+- the owner of a document can see even none public attachments
 - merged changes from 5.0.12
 
 --------------------------------------------------------------------------------
