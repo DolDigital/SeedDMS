@@ -329,7 +329,7 @@ class SeedDMS_Core_DMS {
 	static function filterDocumentFiles($user, $files) { /* {{{ */
 		$tmp = array();
 		foreach ($files as $file)
-			if ($file->isPublic() || ($file->getUser()->getID() == $user->getID()) || $user->isAdmin())
+			if ($file->isPublic() || ($file->getUser()->getID() == $user->getID()) || $user->isAdmin() || ($file->getDocument()->getOwner()->getID() == $user->getID()))
 				array_push($tmp, $file);
 		return $tmp;
 	} /* }}} */
