@@ -36,16 +36,27 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$partitionsize = $this->params['partitionsize'];
 		$maxuploadsize = $this->params['maxuploadsize'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enablemultiupload = $this->params['enablemultiupload'];
+		$enableattachmentupload = $this->params['enableattachmentupload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
-		if($enablelargefileupload)
-			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize);
+		if($enablelargefileupload) {
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, $enablemultiupload);
+			if($enableattachmentupload) {
+				//$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, , $enablemultiupload, 'attachment');
+			}
+		}
 ?>
 $(document).ready(function() {
 	$('#new-file').click(function(event) {
-			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
+		$("#userfile-upload-file").clone().appendTo("#userfile-upload-files").removeAttr("id").children('div').children('input').val('');
 	});
-
+<?php if($enableattachmentupload) { ?>
+	$('#new-attachment').click(function(event) {
+console.log('Hallo');
+		$("#attachment-upload-file").clone().appendTo("#attachment-upload-files").removeAttr("id").children('div').children('input').val('');
+	});
+<?php } ?>
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
 		if(value == '' && params.val() == '')
 			return false;
@@ -84,7 +95,10 @@ $(document).ready(function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			manualuploader.uploadStoredFiles();
+			userfileuploader.uploadStoredFiles();
+<?php if($enableattachmentupload) { ?>
+//			attachmentuploader.uploadStoredFiles();
+<?php } ?>
 		},
 <?php
 		}
@@ -93,8 +107,8 @@ $(document).ready(function() {
 <?php
 		if($enablelargefileupload) {
 ?>
-			fineuploaderuuids: {
-				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			'userfile-fine-uploader-uuids': {
+				fineuploader: [ userfileuploader, $('#dropfolderfileform1') ]
 			}
 <?php
 		} else {
@@ -141,6 +155,8 @@ $(document).ready(function() {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enablemultiupload = $this->params['enablemultiupload'];
+		$enableattachmentupload = $this->params['enableattachmentupload'];
 		$enableadminrevapp = $this->params['enableadminrevapp'];
 		$enableownerrevapp = $this->params['enableownerrevapp'];
 		$enableselfrevapp = $this->params['enableselfrevapp'];
@@ -164,9 +180,6 @@ $(document).ready(function() {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
-		if(0 && $enablelargefileupload) {
-			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree())."</p>";
-		}
 		$this->warningMsg($msg);
 		$this->contentHeading(getMLText("add_document"));
 		$this->contentContainerStart();
@@ -306,20 +319,16 @@ $(document).ready(function() {
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
 			<td>
-<!--
-			<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
-			<ol id="files">
-			<li><input type="file" name="userfile[]" size="60"></li>
-			</ol>
--->
 <?php
 		if($enablelargefileupload)
 			$this->printFineUploaderHtml();
 		else {
 			$this->printFileChooser('userfile[]', false);
+			if($enablemultiupload) {
 ?>
 			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
 <?php
+			}
 		}
 ?>
 			</td>
@@ -355,6 +364,32 @@ $(document).ready(function() {
 					}
 				}
 			}
+			/* Do not allow upload of attachments if multiple documents can be uploaded,
+			 * because attachments cannot be assigned uniquely to a document */
+			if($enableattachmentupload && !$enablemultiupload) {
+?>
+		<tr>
+      <td>
+		<?php $this->contentSubHeading(getMLText("linked_files")); ?>
+      </td>
+		</tr>	
+		<tr>
+			<td><?php printMLText("local_file");?>:</td>
+			<td>
+<?php
+				if(0 && $enablelargefileupload)
+					$this->printFineUploaderHtml('attachment');
+				else {
+					$this->printFileChooser('attachment[]', false);
+?>
+			<a class="" id="new-attachment"><?php printMLtext("add_multiple_files") ?></a>
+<?php
+				}
+?>
+			</td>
+		</tr>
+<?php
+		}
 		if($workflowmode == 'advanced') {
 ?>
 		<tr>	

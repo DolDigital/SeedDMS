@@ -54,6 +54,8 @@ if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('strictformcheck', $settings->_strictFormCheck);
 	$view->setParam('enablelargefileupload', $settings->_enableLargeFileUpload);
+	$view->setParam('enableattachmentupload', $settings->_enableAttachmentUpload);
+	$view->setParam('enablemultiupload', $settings->_enableMultiUpload);
 	$view->setParam('enableadminrevapp', $settings->_enableAdminRevApp);
 	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
 	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
