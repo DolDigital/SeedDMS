@@ -28,6 +28,10 @@ include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('adddocument')) {
@@ -77,6 +81,13 @@ if($version_comment == "" && isset($_POST["use_comment"]))
 
 $keywords = trim($_POST["keywords"]);
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
+$cats = array();
+if($categories) {
+	foreach($categories as $catid) {
+		$cats[] = $dms->getDocumentCategory($catid);
+	}
+}
+
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
@@ -237,10 +248,13 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 	}
 }
 
+$docsource = 'upload';
+
 if($settings->_dropFolderDir) {
 	if(isset($_POST["dropfolderfileform1"]) && $_POST["dropfolderfileform1"]) {
 		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
 		if(file_exists($fullfile)) {
+			$docsource = 'dropfolder';
 			/* Check if a local file is uploaded as well */
 			if(isset($_FILES["userfile"]['error'][0])) {
 				if($_FILES["userfile"]['error'][0] != 0)
@@ -271,6 +285,33 @@ if(isset($_POST[$prefix.'-fine-uploader-uuids']) && $_POST[$prefix.'-fine-upload
 			$_FILES["userfile"]['name'][] = isset($names[$i]) ? $names[$i] : $uuid;
 			$_FILES["userfile"]['size'][] = filesize($fullfile);
 			$_FILES["userfile"]['error'][] = 0;
+		}
+	}
+}
+
+if($settings->_enableFullSearch) {
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
+} else {
+	$index = null;
+}
+
+/* Check if additional notification shall be added */
+$notusers = array();
+if(!empty($_POST['notification_users'])) {
+	foreach($_POST['notification_users'] as $notuserid) {
+		$notuser = $dms->getUser($notuserid);
+		if($notuser) {
+			$notusers[] = $notuser;
+		}
+	}
+}
+$notgroups = array();
+if(!empty($_POST['notification_groups'])) {
+	foreach($_POST['notification_groups'] as $notgroupid) {
+		$notgroup = $dms->getGroup($notgroupid);
+		if($notgroup) {
+			$notgroups[] = $notgroup;
 		}
 	}
 }
@@ -308,88 +349,36 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		}
 	}
 
-	$cats = array();
-	if($categories) {
-		foreach($categories as $catid) {
-			$cats[] = $dms->getDocumentCategory($catid);
-		}
-	}
+	$controller->setParam('documentsource', $docsource);
+	$controller->setParam('folder', $folder);
+	$controller->setParam('index', $index);
+	$controller->setParam('indexconf', $indexconf);
+	$controller->setParam('name', $name);
+	$controller->setParam('comment', $comment);
+	$controller->setParam('expires', $expires);
+	$controller->setParam('keywords', $keywords);
+	$controller->setParam('categories', $cats);
+	$controller->setParam('owner', $owner);
+	$controller->setParam('userfiletmp', $userfiletmp);
+	$controller->setParam('userfilename', $userfilename);
+	$controller->setParam('filetype', $fileType);
+	$controller->setParam('userfiletype', $userfiletype);
+	$controller->setParam('sequence', $sequence);
+	$controller->setParam('reviewers', $reviewers);
+	$controller->setParam('approvers', $approvers);
+	$controller->setParam('reqversion', $reqversion);
+	$controller->setParam('versioncomment', $version_comment);
+	$controller->setParam('attributes', $attributes);
+	$controller->setParam('attributesversion', $attributes_version);
+	$controller->setParam('workflow', $workflow);
+	$controller->setParam('notificationgroups', $notgroups);
+	$controller->setParam('notificationusers', $notusers);
+	$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+	$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
 
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-			if (method_exists($hookObj, 'preAddDocument')) {
-				$hookObj->preAddDocument(null, array('name'=>&$name, 'comment'=>&$comment));
-			}
-		}
-	}
-
-	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-	$res = $folder->addDocument($name, $comment, $expires, $owner, $keywords,
-															$cats, $userfiletmp, utf8_basename($userfilename),
-	                            $fileType, $userfiletype, $sequence,
-	                            $reviewers, $approvers, $reqversion,
-	                            $version_comment, $attributes, $attributes_version, $workflow);
-
-	if (is_bool($res) && !$res) {
-		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	if(!$document = $controller->run()) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText($controller->getErrorMsg()));
 	} else {
-		$document = $res[0];
-
-		/* Set access as specified in settings. */
-		if($settings->_defaultAccessDocs) {
-			if($settings->_defaultAccessDocs > 0 && $settings->_defaultAccessDocs < 4) {
-				$document->setInheritAccess(0, true);
-				$document->setDefaultAccess($settings->_defaultAccessDocs, true);
-			}
-		}
-
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-				if (method_exists($hookObj, 'postAddDocument')) {
-					$hookObj->postAddDocument(null, $document);
-				}
-			}
-		}
-		if($settings->_enableFullSearch) {
-			$index = $indexconf['Indexer']::open($settings->_luceneDir);
-			if($index) {
-				$indexconf['Indexer']::init($settings->_stopWordsFile);
-				$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
-				if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-					foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-						if (method_exists($hookObj, 'preIndexDocument')) {
-							$hookObj->preIndexDocument(null, $document, $idoc);
-						}
-					}
-				}
-				$index->addDocument($idoc);
-			}
-		}
-
-		/* Add a default notification for the owner of the document */
-		if($settings->_enableOwnerNotification) {
-			$res = $document->addNotify($user->getID(), true);
-		}
-		/* Check if additional notification shall be added */
-		if(!empty($_POST['notification_users'])) {
-			foreach($_POST['notification_users'] as $notuserid) {
-				$notuser = $dms->getUser($notuserid);
-				if($notuser) {
-					if($document->getAccessMode($user) >= M_READ)
-						$res = $document->addNotify($notuserid, true);
-				}
-			}
-		}
-		if(!empty($_POST['notification_groups'])) {
-			foreach($_POST['notification_groups'] as $notgroupid) {
-				$notgroup = $dms->getGroup($notgroupid);
-				if($notgroup) {
-					if($document->getGroupAccessMode($notgroup) >= M_READ)
-						$res = $document->addNotify($notgroupid, false);
-				}
-			}
-		}
-
 		// Send notification to subscribers of folder.
 		if($notifier) {
 			$fnl = $folder->getNotifyList();
@@ -489,29 +478,6 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			if(file_exists($userfiletmp)) {
 				unlink($userfiletmp);
 			}
-		}
-
-		/* Check for attachments */
-		for ($attach_num=0;$attach_num<count($_FILES["attachment"]["tmp_name"]);$attach_num++){
-			if ($_FILES["attachment"]["size"][$attach_num]==0) {
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_zerosize"));
-			}
-			if ($_FILES['attachment']['error'][$attach_num]!=0){
-				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
-			}
-
-			$attachfiletmp = $_FILES["attachment"]["tmp_name"][$file_num];
-			$attachfiletype = $_FILES["attachment"]["type"][$file_num];
-			$attachfilename = $_FILES["attachment"]["name"][$file_num];
-
-			$fileType = ".".pathinfo($attachfilename, PATHINFO_EXTENSION);
-
-			if($settings->_overrideMimeType) {
-				$finfo = finfo_open(FILEINFO_MIME_TYPE);
-				$attachfiletype = finfo_file($finfo, $attachfiletmp);
-			}
-
-			$res = $document->addDocumentFile(utf8_basename($attachfilename), '', $user, $attachfiletmp, utf8_basename($attachfilename),$fileType, $attachfiletype);
 		}
 	}
 	
