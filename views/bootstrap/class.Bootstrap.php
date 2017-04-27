@@ -865,13 +865,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+		$id = preg_replace('/[^A-Za-z]/', '', $varname);
 ?>
-	<div id="upload-files">
-		<div id="upload-file">
+	<div id="<?php echo $id; ?>-upload-files">
+		<div id="<?php echo $id; ?>-upload-file" class="upload-file">
 			<div class="input-append">
 				<input type="text" class="form-control" readonly>
 				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+					<?php printMLText("browse");?>&hellip; <input id="<?php echo $id; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
@@ -2354,11 +2355,11 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderHtml() { /* {{{ */
+	function printFineUploaderHtml($prefix='userfile') { /* {{{ */
 ?>
-		<div id="manual-fine-uploader"></div>
-		<input type="hidden" class="do_validate" id="fineuploaderuuids" name="fineuploaderuuids" value="" />
-		<input type="hidden" id="fineuploadernames" name="fineuploadernames" value="" />
+		<div id="<?php echo $prefix; ?>-fine-uploader"></div>
+		<input type="hidden" <?php echo ($prefix=='userfile' ? 'class="do_validate"' : ''); ?> id="<?php echo $prefix; ?>-fine-uploader-uuids" name="<?php echo $prefix; ?>-fine-uploader-uuids" value="" />
+		<input type="hidden" id="<?php echo $prefix; ?>-fine-uploader-names" name="<?php echo $prefix; ?>-fine-uploader-names" value="" />
 <?php
 	} /* }}} */
 
@@ -2370,14 +2371,14 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderJs($uploadurl, $partsize=0, $maxuploadsize=0, $multiple=true) { /* {{{ */
+	function printFineUploaderJs($uploadurl, $partsize=0, $maxuploadsize=0, $multiple=true, $prefix='userfile') { /* {{{ */
 ?>
 $(document).ready(function() {
-	manualuploader = new qq.FineUploader({
+	<?php echo $prefix; ?>uploader = new qq.FineUploader({
 		debug: false,
 		autoUpload: false,
 		multiple: <?php echo ($multiple ? 'true' : 'false'); ?>,
-		element: $('#manual-fine-uploader')[0],
+		element: $('#<?php echo $prefix; ?>-fine-uploader')[0],
 		template: 'qq-template',
 		request: {
 			endpoint: '<?php echo $uploadurl; ?>'
@@ -2405,8 +2406,8 @@ $(document).ready(function() {
 					uuids.push(this.getUuid(succeeded[i]))
 					names.push(this.getName(succeeded[i]))
 				}
-				$('#fineuploaderuuids').val(uuids.join(';'));
-				$('#fineuploadernames').val(names.join(';'));
+				$('#<?php echo $prefix; ?>-fine-uploader-uuids').val(uuids.join(';'));
+				$('#<?php echo $prefix; ?>-fine-uploader-names').val(names.join(';'));
 				/* Run upload only if all files could be uploaded */
 				if(succeeded.length > 0 && failed.length == 0)
 					document.getElementById('form1').submit();
