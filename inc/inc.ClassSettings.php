@@ -162,7 +162,7 @@ class Settings { /* {{{ */
 	var $_logFileEnable = true;
 	// the log file rotation
 	var $_logFileRotation = "d";
-	// Enable file upload by jumploader
+	// Enable file upload by fine-uploader (was 'jumploader')
 	var $_enableLargeFileUpload = false;
 	// size of partitions for file uploaded by fine-loader
 	var $_partitionSize = 2000000;
@@ -182,6 +182,10 @@ class Settings { /* {{{ */
 	var $_enableSessionList = false;
 	// enable/disable display of the drop zone for file upload
 	var $_enableDropUpload = true;
+	// Enable multiple file upload
+	var $_enableMultiUpload = false;
+	// Enable upload of attachments with document upload
+	var $_enableAttachmentUpload = false;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
 	// count documents and folders for folderview recursively
@@ -415,6 +419,8 @@ class Settings { /* {{{ */
 		$this->_enableSessionList = Settings::boolVal($tab["enableSessionList"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
+		$this->_enableAttachmentUpload = Settings::boolVal($tab["enableAttachmentUpload"]);
+		$this->_enableMultiUpload = Settings::boolVal($tab["enableMultiUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
@@ -723,6 +729,8 @@ class Settings { /* {{{ */
 		$this->setXMLAttributValue($node, "enableSessionList", $this->_enableSessionList);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
+		$this->setXMLAttributValue($node, "enableMultiUpload", $this->_enableMultiUpload);
+		$this->setXMLAttributValue($node, "enableAttachmentUpload", $this->_enableAttachmentUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);

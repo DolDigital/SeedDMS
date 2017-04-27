@@ -84,6 +84,8 @@ if ($action == "saveSettings")
   $settings->_enableSessionList = getBoolValue("enableSessionList");
   $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
+  $settings->_enableMultiUpload = getBoolValue("enableMultiUpload");
+  $settings->_enableAttachmentUpload = getBoolValue("enableAttachmentUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);

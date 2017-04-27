@@ -274,6 +274,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableDropUpload");?>:</td>
         <td><input name="enableDropUpload" type="checkbox" <?php if ($settings->_enableDropUpload) echo "checked" ?> /></td>
       </tr>
+	    <tr title="<?php printMLText("settings_enableMultiUpload_desc");?>">
+        <td><?php printMLText("settings_enableMultiUpload");?>:</td>
+        <td><input name="enableMultiUpload" type="checkbox" <?php if ($settings->_enableMultiUpload) echo "checked" ?> /></td>
+      </tr>
+	    <tr title="<?php printMLText("settings_enableAttachmentUpload_desc");?>">
+        <td><?php printMLText("settings_enableAttachmentUpload");?>:</td>
+        <td><input name="enableAttachmentUpload" type="checkbox" <?php if ($settings->_enableAttachmentUpload) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableFolderTree_desc");?>">
         <td><?php printMLText("settings_enableFolderTree");?>:</td>
         <td><input name="enableFolderTree" type="checkbox" <?php if ($settings->_enableFolderTree) echo "checked" ?> /></td>
