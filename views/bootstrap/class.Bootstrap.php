@@ -864,7 +864,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
+	function getFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+		$id = preg_replace('/[^A-Za-z]/', '', $varname);
+		$html = '
+	<div id="'.$id.'-upload-files">
+		<div id="'.$id.'-upload-file" class="upload-file">
+			<div class="input-append">
+				<input type="text" class="form-control" readonly>
+				<span class="btn btn-default btn-file">
+					'.getMLText("browse").'&hellip; <input id="'.$id.'" type="file" name="'.$varname.'"'.($multiple ? " multiple" : "").($accept ? ' accept="'.$accept.'"' : "").'">
+				</span>
+			</div>
+		</div>
+	</div>
+';
+		return $html;
+	} /* }}} */
+
 	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+		echo $this->getFileChooser($varname, $multiple, $accept);
+		return;
 		$id = preg_replace('/[^A-Za-z]/', '', $varname);
 ?>
 	<div id="<?php echo $id; ?>-upload-files">
