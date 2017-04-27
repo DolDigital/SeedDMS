@@ -37,26 +37,16 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$maxuploadsize = $this->params['maxuploadsize'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$enablemultiupload = $this->params['enablemultiupload'];
-		$enableattachmentupload = $this->params['enableattachmentupload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
 		if($enablelargefileupload) {
 			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, $enablemultiupload);
-			if($enableattachmentupload) {
-				//$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, , $enablemultiupload, 'attachment');
-			}
 		}
 ?>
 $(document).ready(function() {
 	$('#new-file').click(function(event) {
 		$("#userfile-upload-file").clone().appendTo("#userfile-upload-files").removeAttr("id").children('div').children('input').val('');
 	});
-<?php if($enableattachmentupload) { ?>
-	$('#new-attachment').click(function(event) {
-console.log('Hallo');
-		$("#attachment-upload-file").clone().appendTo("#attachment-upload-files").removeAttr("id").children('div').children('input').val('');
-	});
-<?php } ?>
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
 		if(value == '' && params.val() == '')
 			return false;
@@ -96,9 +86,6 @@ console.log('Hallo');
 ?>
 		submitHandler: function(form) {
 			userfileuploader.uploadStoredFiles();
-<?php if($enableattachmentupload) { ?>
-//			attachmentuploader.uploadStoredFiles();
-<?php } ?>
 		},
 <?php
 		}
@@ -156,7 +143,6 @@ console.log('Hallo');
 		$folder = $this->params['folder'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$enablemultiupload = $this->params['enablemultiupload'];
-		$enableattachmentupload = $this->params['enableattachmentupload'];
 		$enableadminrevapp = $this->params['enableadminrevapp'];
 		$enableownerrevapp = $this->params['enableownerrevapp'];
 		$enableselfrevapp = $this->params['enableselfrevapp'];
@@ -348,7 +334,7 @@ console.log('Hallo');
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+					$arr = $this->callHook('editDocumentContentAttribute', null, $attrdef);
 					if(is_array($arr)) {
 						echo "<tr>";
 						echo "<td>".$arr[0].":</td>";
@@ -364,32 +350,17 @@ console.log('Hallo');
 					}
 				}
 			}
-			/* Do not allow upload of attachments if multiple documents can be uploaded,
-			 * because attachments cannot be assigned uniquely to a document */
-			if($enableattachmentupload && !$enablemultiupload) {
-?>
-		<tr>
-      <td>
-		<?php $this->contentSubHeading(getMLText("linked_files")); ?>
-      </td>
-		</tr>	
-		<tr>
-			<td><?php printMLText("local_file");?>:</td>
-			<td>
-<?php
-				if(0 && $enablelargefileupload)
-					$this->printFineUploaderHtml('attachment');
-				else {
-					$this->printFileChooser('attachment[]', false);
-?>
-			<a class="" id="new-attachment"><?php printMLtext("add_multiple_files") ?></a>
-<?php
+
+			$arrs = $this->callHook('addDocumentContentAttributes', $folder);
+			if(is_array($arrs)) {
+				foreach($arrs as $arr) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
 				}
-?>
-			</td>
-		</tr>
-<?php
-		}
+			}
+
 		if($workflowmode == 'advanced') {
 ?>
 		<tr>	
