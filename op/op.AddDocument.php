@@ -257,9 +257,10 @@ if($settings->_dropFolderDir) {
 	}
 }
 
-if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
-	$uuids = explode(';', $_POST['fineuploaderuuids']);
-	$names = explode(';', $_POST['fineuploadernames']);
+$prefix = 'userfile';
+if(isset($_POST[$prefix.'-fine-uploader-uuids']) && $_POST[$prefix.'-fine-uploader-uuids']) {
+	$uuids = explode(';', $_POST[$prefix.'-fine-uploader-uuids']);
+	$names = explode(';', $_POST[$prefix.'-fine-uploader-names']);
 	foreach($uuids as $i=>$uuid) {
 		$fullfile = $settings->_stagingDir.'/'.utf8_basename($uuid);
 		if(file_exists($fullfile)) {
@@ -488,6 +489,29 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			if(file_exists($userfiletmp)) {
 				unlink($userfiletmp);
 			}
+		}
+
+		/* Check for attachments */
+		for ($attach_num=0;$attach_num<count($_FILES["attachment"]["tmp_name"]);$attach_num++){
+			if ($_FILES["attachment"]["size"][$attach_num]==0) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_zerosize"));
+			}
+			if ($_FILES['attachment']['error'][$attach_num]!=0){
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
+			}
+
+			$attachfiletmp = $_FILES["attachment"]["tmp_name"][$file_num];
+			$attachfiletype = $_FILES["attachment"]["type"][$file_num];
+			$attachfilename = $_FILES["attachment"]["name"][$file_num];
+
+			$fileType = ".".pathinfo($attachfilename, PATHINFO_EXTENSION);
+
+			if($settings->_overrideMimeType) {
+				$finfo = finfo_open(FILEINFO_MIME_TYPE);
+				$attachfiletype = finfo_file($finfo, $attachfiletmp);
+			}
+
+			$res = $document->addDocumentFile(utf8_basename($attachfilename), '', $user, $attachfiletmp, utf8_basename($attachfilename),$fileType, $attachfiletype);
 		}
 	}
 	
