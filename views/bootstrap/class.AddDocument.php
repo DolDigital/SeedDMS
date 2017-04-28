@@ -45,7 +45,9 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 ?>
 $(document).ready(function() {
 	$('#new-file').click(function(event) {
-		$("#userfile-upload-file").clone().appendTo("#userfile-upload-files").removeAttr("id").children('div').children('input').val('');
+		tttttt = $("#userfile-upload-file").clone().appendTo("#userfile-upload-files").removeAttr("id");
+		tttttt.children('div').children('input').val('');
+		tttttt.children('div').children('span').children('input').val('');
 	});
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
 		if(value == '' && params.val() == '')
