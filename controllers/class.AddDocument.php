@@ -22,33 +22,6 @@
  */
 class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 
-	protected function addAttachments($document) { /* {{{ */
-		$user = $this->params['user'];
-		$settings = $this->params['settings'];
-		/* Check for attachments */
-		for ($attach_num=0;$attach_num<count($_FILES["attachment"]["tmp_name"]);$attach_num++){
-			if ($_FILES["attachment"]["size"][$attach_num]==0) {
-//				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_zerosize"));
-			}
-			if ($_FILES['attachment']['error'][$attach_num]!=0){
-//				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
-			}
-
-			$attachfiletmp = $_FILES["attachment"]["tmp_name"][$attach_num];
-			$attachfiletype = $_FILES["attachment"]["type"][$attach_num];
-			$attachfilename = $_FILES["attachment"]["name"][$attach_num];
-
-			$fileType = ".".pathinfo($attachfilename, PATHINFO_EXTENSION);
-
-			if($settings->_overrideMimeType) {
-				$finfo = finfo_open(FILEINFO_MIME_TYPE);
-				$attachfiletype = finfo_file($finfo, $attachfiletmp);
-			}
-
-			$res = $document->addDocumentFile(utf8_basename($attachfilename), '', $user, $attachfiletmp, utf8_basename($attachfilename),$fileType, $attachfiletype);
-		}
-	} /* }}} */
-
 	public function run() { /* {{{ */
 		$name = $this->getParam('name');
 		$comment = $this->getParam('comment');
