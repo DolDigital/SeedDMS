@@ -746,7 +746,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 					foreach($extconf['config'] as $confkey=>$conf) {
 ?>
-      <tr title="<?php echo $conf['help'];?>">
+      <tr title="<?php echo isset($conf['help']) ? $conf['help'] : '';?>">
         <td><?php echo $conf['title'];?>:</td><td>
 <?php
 						switch($conf['type']) {
@@ -826,7 +826,7 @@ if(!is_writeable($settings->_configFilePath)) {
 								break;
 							default:
 ?>
-        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
+        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" <?php echo isset($conf['size']) ? 'size="'.$conf['size'].'"' : ""; ?>" />
 <?php
 						}
 ?>
