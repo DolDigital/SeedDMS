@@ -124,6 +124,9 @@ class SeedDMS_Controller_Common {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					switch(func_num_args()) {
+						case 3:
+							$result = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							break;
 						case 2:
 							$result = $hookObj->$hook($this, func_get_arg(1));
 							break;
