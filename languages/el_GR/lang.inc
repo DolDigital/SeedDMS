@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (220)
+//    Translators: Admin (224)
 
 $text = array(
 '2_factor_auth' => '',
@@ -166,7 +166,7 @@ $text = array(
 'backup_remove' => '',
 'backup_tools' => 'Εργαλεία εφεδρικής καταγραφής',
 'between' => 'μεταξύ',
-'bg_BG' => '',
+'bg_BG' => 'Βουλγάρικα',
 'browse' => '',
 'calendar' => 'Ημερολόγιο',
 'calendar_week' => 'Εβδομάδα',
@@ -187,7 +187,7 @@ $text = array(
 'category_info' => '',
 'category_in_use' => 'Η Κατηγορία αυτή είναι σε χρήση.',
 'category_noname' => 'Δεν δόθηκε όνομα κατηγορίας.',
-'ca_ES' => '',
+'ca_ES' => 'Καταλανικά',
 'change_assignments' => '',
 'change_password' => 'Αλλαγή κωδικού',
 'change_password_message' => 'Ο κωδικός σας έχει αλλάξει.',
@@ -226,7 +226,7 @@ $text = array(
 'clear_cache' => '',
 'clear_clipboard' => '',
 'clear_password' => '',
-'clipboard' => '',
+'clipboard' => 'Πρόχειρο',
 'close' => 'Κλέισιμο',
 'command' => '',
 'comment' => 'Σχόλιο',
@@ -342,7 +342,7 @@ $text = array(
 'draft' => '',
 'draft_pending_approval' => '',
 'draft_pending_review' => '',
-'drag_icon_here' => '',
+'drag_icon_here' => 'Σείρτε την εικόνα του φακέλου ή το έγγραφο εδώ!',
 'dropfolderdir_missing' => '',
 'dropfolder_file' => '',
 'dropfolder_folder' => '',
@@ -1005,6 +1005,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => '',
 'settings_enableMenuTasks' => '',
 'settings_enableMenuTasks_desc' => '',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => '',
 'settings_enableNotificationAppRev_desc' => '',
 'settings_enableNotificationWorkflow' => '',

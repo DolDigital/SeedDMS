@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (720), kreml (455)
+//    Translators: Admin (722), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -566,7 +566,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => 'Včetně dokumentů',
 'include_subdirectories' => 'Včetně podadresářů',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Indexování úkolů ve frontě',
 'index_converters' => 'Index konverze dokumentu',
 'index_done' => '',
 'index_error' => '',
@@ -792,7 +792,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Pro obrázky uživatelů je možné použít pouze obrázky .jpg',
 'order_by_sequence_off' => '',
 'original_filename' => 'Originální název souboru',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Celkový průběh indexování',
 'owner' => 'Vlastník',
 'ownership_changed_email' => 'Vlastník změněn',
 'ownership_changed_email_body' => 'Vlastník změněn
@@ -1138,6 +1138,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step.',
 'settings_enableMenuTasks' => '',
 'settings_enableMenuTasks_desc' => '',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Povolit oznámení posuzovateli/schvalovateli',
 'settings_enableNotificationAppRev_desc' => 'Označit pro oznamování posuzovateli/schvalovateli, pokud je přidána nová verze dokumentu.',
 'settings_enableNotificationWorkflow' => '',

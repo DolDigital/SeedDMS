@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1643)
+//    Translators: Admin (1644)
 
 $text = array(
 '2_factor_auth' => 'Двухфакторная аутентификация',
@@ -310,7 +310,7 @@ URL: [url]',
 'docs_in_reception_no_access' => '',
 'docs_in_revision_no_access' => '',
 'document' => 'Документ',
-'documentcontent' => '',
+'documentcontent' => 'Содержание документа',
 'documents' => 'док.',
 'documents_checked_out_by_you' => 'Документ проверен вами',
 'documents_in_process' => 'Документы в работе',
@@ -1173,6 +1173,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Если включено, загрузка файлов доступна так же через Java-апплет, называемый jumploader, без ограничения размера файла. Это также позволит загружать несколько файлов за раз.',
 'settings_enableMenuTasks' => 'Включить список задач в меню',
 'settings_enableMenuTasks_desc' => 'Включить/отключить пункт меню, который содержит все задачи пользователя. Там содержатся документы, которые нуждаются в рецензии, утверждении и т.д.',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Извещать рецензента или утверждающего',
 'settings_enableNotificationAppRev_desc' => 'Включите для отправки извещения рецензенту или утверждающему при добавлении новой версии документа.',
 'settings_enableNotificationWorkflow' => 'Отправить уведомление пользователям в следующей стадии процесса',
