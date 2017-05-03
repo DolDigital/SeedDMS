@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (767), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (768), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -559,7 +559,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => 'Uwzględnij dokumenty',
 'include_subdirectories' => 'Uwzględnij podkatalogi',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Zadanie indeksowania w kolejce',
 'index_converters' => 'Konwersja indeksu dokumentów',
 'index_done' => '',
 'index_error' => '',
@@ -1123,6 +1123,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Jeśli zaznaczone, wczytywanie plików będzie możliwe również przez aplet javy nazywany jumploader bez limitu rozmiaru plików. Aplet ten pozwala również na wczytywanie wielu plików jednocześnie.',
 'settings_enableMenuTasks' => '',
 'settings_enableMenuTasks_desc' => '',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Włącz/Wyłącz powiadomienia dla zatwierdzających/recenzentów',
 'settings_enableNotificationAppRev_desc' => 'Zaznacz aby wysyłać powiadomienia do zatwierdzających i recenzentów kiedy pojawi się nowa wersja dokumentu',
 'settings_enableNotificationWorkflow' => '',

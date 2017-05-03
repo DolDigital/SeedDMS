@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1538), dgrutsch (9), netixw (14)
+//    Translators: Admin (1540), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1189,6 +1189,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step. Turning this on will turn off http only cookies.',
 'settings_enableMenuTasks' => 'Enable task list in menu',
 'settings_enableMenuTasks_desc' => 'Enable/Disable the menu item which contains all tasks for the user. This contains documents, that need to be reviewed, approved, etc.',
+'settings_enableMultiUpload' => 'Allow upload of multiple files',
+'settings_enableMultiUpload_desc' => 'When creating a new document, multiple files can be uploaded. Each will create a new document.',
 'settings_enableNotificationAppRev' => 'Enable reviewer/approver notification',
 'settings_enableNotificationAppRev_desc' => 'Check to send a notification to the reviewer/approver when a new document version is added',
 'settings_enableNotificationWorkflow' => 'Send notification to users in next workflow transition',

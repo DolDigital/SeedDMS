@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1195), marbanas (16)
+//    Translators: Admin (1196), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -654,7 +654,7 @@ Internet poveznica: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Ako želite prenijeti datoteke veće od trenutne maksimalne veličine prijenosa, molimo koristite alternativu <a href="%s">upload page</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Izlistaj sve dozvole pristupa',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Lokalna datoteka',
@@ -1165,6 +1165,8 @@ Internet poveznica: [url]',
 'settings_enableLargeFileUpload_desc' => 'Ako je postavljeno, učitavanje datoteke je također dostupno kroz Java aplet naziva "jumploader" bez postavljenog ograničenja veličine datoteke od strane pretraživača. To također omogućuje učitavanje nekoliko datoteka u jednom koraku. Uključivanjem ovoga isključit će se samo http kolačići.',
 'settings_enableMenuTasks' => 'Omogućavanje liste zadataka u izborniku',
 'settings_enableMenuTasks_desc' => 'Omogućavanje/onemogućavanje stavke izbornika koja sadrži sve zadatke za korisnika. Ovo sadrži dokumente koji trebaju biti revidirani, odobreni itd.',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Omogući bilježenje recezenta/validatora',
 'settings_enableNotificationAppRev_desc' => 'Označi za slanje obavijesti recezentu/validatoru kada je dodana nova verzija dokumenta',
 'settings_enableNotificationWorkflow' => 'Omogući obavijesti o zadanom toku rada',
