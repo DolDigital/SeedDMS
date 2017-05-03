@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2411), dgrutsch (22)
+//    Translators: Admin (2413), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1194,6 +1194,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Wenn dies gesetzt ist, dann ist ebenfalls der Upload von Dokumenten durch ein java applet mit Namen \'jumploader\' ohne Begrenzung der maximalen Dateigröße möglich. Auch das Hochladen mehrerer Dokumente in einem Schritt wird dadurch ermöglicht. Das Einschalten bewirkt, dass keine http only Cookies mehr gesetzt werden.',
 'settings_enableMenuTasks' => 'Aufgabenliste im Menü',
 'settings_enableMenuTasks_desc' => 'Ein-/Ausschalten des Menüeintrags, der anstehenden Aufgaben des Benutzers enthält. Diese Liste beinhaltet Dokumente die geprüft, freigegeben, usw. werden müssen.',
+'settings_enableMultiUpload' => 'Erlaube Hochladen mehrerer Dateien',
+'settings_enableMultiUpload_desc' => 'Beim Erstellen eines neuen Dokuments können mehrere Dateien in einem Vorgang hochgeladen werden. Jede Datei erzeugt ein neues Dokument.',
 'settings_enableNotificationAppRev' => 'Prűfer/Freigeber benachrichtigen',
 'settings_enableNotificationAppRev_desc' => 'Setzen Sie diese Option, wenn die Prüfer und Freigeber eines Dokuments beim Hochladen einer neuen Version benachrichtigt werden sollen.',
 'settings_enableNotificationWorkflow' => 'Sende Benachrichtigung an Benutzer im nächsten Workflow-Schritt',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (723), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (724), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1171,6 +1171,8 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Indien ingeschakeld, is bestandsupload ook beschikbaar via een java applet jumploader genaamd zonder een bestandsgrootte limiet door de browser. Het staat ook toe om meerdere bestanden in een keer te versturen.',
 'settings_enableMenuTasks' => 'Menu-taken aanzetten',
 'settings_enableMenuTasks_desc' => 'Menu-taken aanzetten',
+'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Inschakelen controleur/beoordeler notificatie',
 'settings_enableNotificationAppRev_desc' => 'Vink aan om een notificatie te versturen naar de controleur/beoordeler als een nieuw document versie is toegevoegd.',
 'settings_enableNotificationWorkflow' => 'Workflow-notificatie aanzetten',
@@ -1310,7 +1312,7 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'ID van basismap (meestal geen verandering nodig)',
 'settings_SaveError' => 'Opslagfout Configuratiebestand',
 'settings_Server' => 'Server instellingen',
-'settings_showFullPreview' => '',
+'settings_showFullPreview' => 'Toon volledige document',
 'settings_showFullPreview_desc' => '',
 'settings_showMissingTranslations' => 'Ontbrekende vertalingen weergeven',
 'settings_showMissingTranslations_desc' => 'Geef alle ontbrekende vertalingen onder aan de pagina weer. De gebruiker kan een verzoek tot vertaling indienen dat wordt opgeslagen als csv bestand. Let op! Zet deze functie niet aan in productieomgevingen!',
