@@ -303,6 +303,17 @@ console.log(element);
 			}
 		}
 	}
+
+	$arrs = $this->callHook('addDocumentContentAttributes', $folder);
+	if(is_array($arrs)) {
+		foreach($arrs as $arr) {
+			echo "<tr>";
+			echo "<td>".$arr[0].":</td>";
+			echo "<td>".$arr[1]."</td>";
+			echo "</tr>";
+		}
+	}
+
 	if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
