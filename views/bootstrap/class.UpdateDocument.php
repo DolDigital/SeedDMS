@@ -68,6 +68,8 @@ $(document).ready( function() {
 		return false;
 	}, "<?php printMLText("js_no_file");?>");
 	$("#form1").validate({
+		debug: false,
+		ignore: ":hidden:not(.do_validate)",
 		invalidHandler: function(e, validator) {
 			noty({
 				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
@@ -82,7 +84,11 @@ $(document).ready( function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			manualuploader.uploadStoredFiles();
+			/* fileuploader may not have any files if drop folder is used */
+			if(userfileuploader.getUploads().length)
+				userfileuploader.uploadStoredFiles();
+			else
+				form.submit();
 		},
 <?php
 		}
@@ -91,8 +97,8 @@ $(document).ready( function() {
 <?php
 		if($enablelargefileupload) {
 ?>
-			fineuploaderuuids: {
-				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			'userfile-fine-uploader-uuids': {
+				fineuploader: [ userfileuploader, $('#dropfolderfileform1') ]
 			}
 <?php
 		} else {
@@ -210,6 +216,7 @@ console.log(element);
 ?>
 
 <form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
+	<?php echo createHiddenFieldWithKey('updatedocument'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table class="table-condensed">
 	
