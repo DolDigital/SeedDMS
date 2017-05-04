@@ -87,7 +87,11 @@ $(document).ready(function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			userfileuploader.uploadStoredFiles();
+			/* fileuploader may not have any files if drop folder is used */
+			if(userfileuploader.getUploads().length)
+				userfileuploader.uploadStoredFiles();
+			else
+				form.submit();
 		},
 <?php
 		}
