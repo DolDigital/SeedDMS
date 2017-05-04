@@ -24,8 +24,17 @@ include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
-include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
+
+/* Check if the form data comes from a trusted request */
+if(!checkFormKey('updatedocument')) {
+	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
+}
 
 if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -58,11 +67,12 @@ if ($document->isLocked()) {
 	else $document->setLocked(false);
 }
 
-if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
-	$uuids = explode(';', $_POST['fineuploaderuuids']);
-	$names = explode(';', $_POST['fineuploadernames']);
+$prefix = 'userfile';
+if(isset($_POST[$prefix.'-fine-uploader-uuids']) && $_POST[$prefix.'-fine-uploader-uuids']) {
+	$uuids = explode(';', $_POST[$prefix.'-fine-uploader-uuids']);
+	$names = explode(';', $_POST[$prefix.'-fine-uploader-names']);
 	$uuid = $uuids[0];
-	$fullfile = $settings->_stagingDir.'/'.basename($uuid);
+	$fullfile = $settings->_stagingDir.'/'.utf8_basename($uuid);
 	if(file_exists($fullfile)) {
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$mimetype = finfo_file($finfo, $fullfile);
@@ -74,12 +84,7 @@ if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
 	}
 }
 
-if(isset($_POST["comment"]))
-	$comment  = $_POST["comment"];
-else
-	$comment = "";
-
-if ($_FILES['userfile']['error'] == 0) {
+if (isset($_FILES['userfile']) && $_FILES['userfile']['error'] == 0) {
 //	if(!is_uploaded_file($_FILES["userfile"]["tmp_name"]))
 //		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured")."lsajdflk");
 
@@ -120,6 +125,46 @@ if ($_FILES['userfile']['error'] == 0) {
 	}
 
 	$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
+
+if($settings->_enableFullSearch) {
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
+} else {
+	$index = null;
+}
+
+if(isset($_POST["comment"]))
+	$comment  = $_POST["comment"];
+else
+	$comment = "";
+
+$oldexpires = $document->getExpires();
+switch($_POST["presetexpdate"]) {
+case "date":
+	$tmp = explode('-', $_POST["expdate"]);
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
+	break;
+case "1w":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2]+7, $tmp[0]);
+	break;
+case "1m":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1]+1, $tmp[2], $tmp[0]);
+	break;
+case "1y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+1);
+	break;
+case "2y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+2);
+	break;
+case "never":
+default:
+	$expires = null;
+	break;
+}
 
 	// Get the list of reviewers and approvers for this document.
 	$reviewers = array();
@@ -237,48 +282,25 @@ if ($_FILES['userfile']['error'] == 0) {
 		$attributes = array();
 	}
 
-	if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
-		foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
-			if (method_exists($hookObj, 'preUpdateDocument')) {
-				$hookObj->preUpdateDocument(null, $document, array('name'=>&$name, 'comment'=>&$comment));
-			}
-		}
-	}
+	$controller->setParam('folder', $folder);
+	$controller->setParam('document', $document);
+	$controller->setParam('index', $index);
+	$controller->setParam('indexconf', $indexconf);
+	$controller->setParam('comment', $comment);
+	if($oldexpires != $expires)
+		$controller->setParam('expires', $expires);
+	$controller->setParam('userfiletmp', $userfiletmp);
+	$controller->setParam('userfilename', $userfilename);
+	$controller->setParam('filetype', $fileType);
+	$controller->setParam('userfiletype', $userfiletype);
+	$controller->setParam('reviewers', $reviewers);
+	$controller->setParam('approvers', $approvers);
+	$controller->setParam('attributes', $attributes);
+	$controller->setParam('workflow', $workflow);
 
-	$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
-	if (is_bool($contentResult) && !$contentResult) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
-	}
-	else {
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
-				if (method_exists($hookObj, 'postUpdateDocument')) {
-					$hookObj->postUpdateDocument(null, $document, $contentResult->getContent());
-				}
-			}
-		}
-		if($settings->_enableFullSearch) {
-			$index = $indexconf['Indexer']::open($settings->_luceneDir);
-			if($index) {
-				$lucenesearch = new $indexconf['Search']($index);
-				if($hit = $lucenesearch->getDocument((int) $document->getId())) {
-					$index->delete($hit->id);
-				}
-				$indexconf['Indexer']::init($settings->_stopWordsFile);
-				$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
-				if(isset($GLOBALS['SEEDDMS_HOOKS']['updateDocument'])) {
-					foreach($GLOBALS['SEEDDMS_HOOKS']['updateDocument'] as $hookObj) {
-						if (method_exists($hookObj, 'preIndexDocument')) {
-							$hookObj->preIndexDocument(null, $document, $idoc);
-						}
-					}
-				}
-				$index->addDocument($idoc);
-				$index->commit();
-			}
-		}
-
+	if(!$content = $controller->run()) {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText($controller->getErrorMsg()));
+	} else {
 		// Send notification to subscribers.
 		if ($notifier){
 			$notifyList = $document->getNotifyList();
@@ -291,7 +313,7 @@ if ($_FILES['userfile']['error'] == 0) {
 			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['comment'] = $document->getComment();
-			$params['version_comment'] = $contentResult->getContent()->getComment();
+			$params['version_comment'] = $content->getComment();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
@@ -308,7 +330,7 @@ if ($_FILES['userfile']['error'] == 0) {
 				$message = "request_workflow_action_email_body";
 				$params = array();
 				$params['name'] = $document->getName();
-				$params['version'] = $contentResult->getContent()->getVersion();
+				$params['version'] = $content->getVersion();
 				$params['workflow'] = $workflow->getName();
 				$params['folder_path'] = $folder->getFolderPathPlain();
 				$params['current_state'] = $workflow->getInitState()->getName();
@@ -335,8 +357,8 @@ if ($_FILES['userfile']['error'] == 0) {
 					$params = array();
 					$params['name'] = $document->getName();
 					$params['folder_path'] = $folder->getFolderPathPlain();
-					$params['version'] = $contentResult->getContent()->getVersion();
-					$params['comment'] = $contentResult->getContent()->getComment();
+					$params['version'] = $content->getVersion();
+					$params['comment'] = $content->getComment();
 					$params['username'] = $user->getFullName();
 					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 					$params['sitename'] = $settings->_siteName;
@@ -356,8 +378,8 @@ if ($_FILES['userfile']['error'] == 0) {
 					$params = array();
 					$params['name'] = $document->getName();
 					$params['folder_path'] = $folder->getFolderPathPlain();
-					$params['version'] = $contentResult->getContent()->getVersion();
-					$params['comment'] = $contentResult->getContent()->getComment();
+					$params['version'] = $content->getVersion();
+					$params['comment'] = $content->getComment();
 					$params['username'] = $user->getFullName();
 					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 					$params['sitename'] = $settings->_siteName;
@@ -371,60 +393,25 @@ if ($_FILES['userfile']['error'] == 0) {
 					}
 				}
 			}
-		}
 
-		switch($_POST["presetexpdate"]) {
-		case "date":
-			$tmp = explode('-', $_POST["expdate"]);
-			$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
-			break;
-		case "1w":
-			$tmp = explode('-', date('Y-m-d'));
-			$expires = mktime(0,0,0, $tmp[1], $tmp[2]+7, $tmp[0]);
-			break;
-		case "1m":
-			$tmp = explode('-', date('Y-m-d'));
-			$expires = mktime(0,0,0, $tmp[1]+1, $tmp[2], $tmp[0]);
-			break;
-		case "1y":
-			$tmp = explode('-', date('Y-m-d'));
-			$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+1);
-			break;
-		case "2y":
-			$tmp = explode('-', date('Y-m-d'));
-			$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+2);
-			break;
-		case "never":
-		default:
-			$expires = null;
-			break;
-		}
-
-		if ($expires) {
-			if($document->setExpires($expires)) {
-				if($notifier) {
-					$notifyList = $document->getNotifyList();
-					$folder = $document->getFolder();
-
-					// Send notification to subscribers.
-					$subject = "expiry_changed_email_subject";
-					$message = "expiry_changed_email_body";
-					$params = array();
-					$params['name'] = $document->getName();
-					$params['folder_path'] = $folder->getFolderPathPlain();
-					$params['username'] = $user->getFullName();
-					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
-					$params['sitename'] = $settings->_siteName;
-					$params['http_root'] = $settings->_httpRoot;
-					$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-					foreach ($notifyList["groups"] as $grp) {
-						$notifier->toGroup($user, $grp, $subject, $message, $params);
-					}
+			if($oldexpires != $document->getExpires()) {
+				// Send notification to subscribers.
+				$subject = "expiry_changed_email_subject";
+				$message = "expiry_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+				$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+				foreach ($notifyList["groups"] as $grp) {
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
 				}
-			} else {
-				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
 		}
+
 		if($settings->_removeFromDropFolder) {
 			if(file_exists($userfiletmp)) {
 				unlink($userfiletmp);
