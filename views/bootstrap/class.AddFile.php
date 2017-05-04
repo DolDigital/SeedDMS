@@ -158,7 +158,7 @@ $(document).ready( function() {
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label"><?php printMLText("link_to_version");?>:</label>
+	<label class="control-label"><?php printMLText("version");?>:</label>
 	<div class="controls"><select name="version" id="version">
 		<option value=""></option>
 <?php
