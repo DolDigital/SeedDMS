@@ -633,6 +633,345 @@ class SeedDMS_Core_DMS {
 		return $version;
 	} /* }}} */
 
+	/**
+	 * Returns all documents with a predefined search criteria
+	 *
+	 * The records return have the following elements
+	 *
+	 * From Table tblDocuments
+	 * [id] => id of document
+	 * [name] => name of document
+	 * [comment] => comment of document
+	 * [date] => timestamp of creation date of document
+	 * [expires] => timestamp of expiration date of document
+	 * [owner] => user id of owner
+	 * [folder] => id of parent folder
+	 * [folderList] => column separated list of folder ids, e.g. :1:41:
+	 * [inheritAccess] => 1 if access is inherited
+	 * [defaultAccess] => default access mode
+	 * [locked] => always -1 (TODO: is this field still used?)
+	 * [keywords] => keywords of document
+	 * [sequence] => sequence of document
+	 *
+	 * From Table tblDocumentLocks
+	 * [lockUser] => id of user locking the document
+	 *
+	 * From Table tblDocumentStatusLog
+	 * [version] => latest version of document
+	 * [statusID] => id of latest status log
+	 * [documentID] => id of document
+	 * [status] => current status of document
+	 * [statusComment] => comment of current status
+	 * [statusDate] => datetime when the status was entered, e.g. 2014-04-17 21:35:51
+	 * [userID] => id of user who has initiated the status change
+	 *
+	 * From Table tblUsers
+	 * [ownerName] => name of owner of document
+	 * [statusName] => name of user who has initiated the status change
+	 *
+	 * @param string $listtype type of document list, can be 'AppRevByMe',
+	 * 'AppRevOwner', 'ReceiptByMe', 'ReviseByMe', 'LockedByMe', 'MyDocs'
+	 * @param object $param1 user
+	 * @param string $param2 set to true
+	 * if 'AppRevByMe', 'ReviseByMe', 'ReceiptByMe' shall return even documents
+	 * І have already taken care of.
+	 * @param string $param3 sort list by this field
+	 * @param string $param4 order direction
+	 * @return array list of documents records
+	 */
+	function getDocumentList($listtype, $param1=null, $param2=false, $param3='', $param4='') { /* {{{ */
+		/* The following query will get all documents and lots of additional
+		 * information. It requires the two temporary tables ttcontentid and
+		 * ttstatid.
+		 */
+		if (!$this->db->createTemporaryTable("ttstatid") || !$this->db->createTemporaryTable("ttcontentid")) {
+			return false;
+		}
+		/* The following statement retrieves the status of the last version of all
+		 * documents. It must be restricted by further where clauses.
+		 */
+		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
+			"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
+			"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
+			"`tblDocumentStatusLog`.`userID`, `oTbl`.`fullName` AS `ownerName`, `sTbl`.`fullName` AS `statusName` ".
+			"FROM `tblDocumentContent` ".
+			"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
+			"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
+			"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
+			"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
+			"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
+			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
+			"LEFT JOIN `tblUsers` AS `oTbl` on `oTbl`.`id` = `tblDocuments`.`owner` ".
+			"LEFT JOIN `tblUsers` AS `sTbl` on `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ".
+			"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
+			"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version` ";
+
+		switch($listtype) {
+		case 'AppRevByMe': // Documents I have to review/approve {{{
+			$user = $param1;
+			// Get document list for the current user.
+			$reviewStatus = $user->getReviewStatus();
+			$approvalStatus = $user->getApprovalStatus();
+
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			// Take only those documents into account which hasn't be touched by the user
+			$dList = array();
+			foreach ($reviewStatus["indstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($reviewStatus["grpstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($approvalStatus["indstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($approvalStatus["grpstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+
+			if (strlen($docCSV)>0) {
+				$queryStr .= "AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.", ".S_EXPIRED.") ".
+							"AND `tblDocuments`.`id` IN (" . $docCSV . ") ".
+							"ORDER BY `statusDate` DESC";
+			} else {
+				$queryStr = '';
+			}
+			break; // }}}
+		case 'ReviewByMe': // Documents I have to review {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+
+			// Get document list for the current user.
+			$reviewStatus = $user->getReviewStatus();
+
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			// Take only those documents into account which hasn't be touched by the user
+			// ($st["status"]==0)
+			$dList = array();
+			foreach ($reviewStatus["indstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($reviewStatus["grpstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+
+			if (strlen($docCSV)>0) {
+				$queryStr .= "AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_EXPIRED.") ".
+							"AND `tblDocuments`.`id` IN (" . $docCSV . ") ";
+				//$queryStr .= "ORDER BY `statusDate` DESC";
+				if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+				else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+				else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+				else $queryStr .= "ORDER BY `name`";
+				$queryStr .= " ".$orderdir;
+			} else {
+				$queryStr = '';
+			}
+			break; // }}}
+		case 'ApproveByMe': // Documents I have to approve {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+
+			// Get document list for the current user.
+			$approvalStatus = $user->getApprovalStatus();
+
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			// Take only those documents into account which hasn't be touched by the user
+			// ($st["status"]==0)
+			$dList = array();
+			foreach ($approvalStatus["indstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			foreach ($approvalStatus["grpstatus"] as $st) {
+				if (($st["status"]==0 || $param2) && !in_array($st["documentID"], $dList)) {
+					$dList[] = $st["documentID"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+
+			if (strlen($docCSV)>0) {
+				$queryStr .= "AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_APP.", ".S_EXPIRED.") ".
+							"AND `tblDocuments`.`id` IN (" . $docCSV . ") ";
+				//$queryStr .= "ORDER BY `statusDate` DESC";
+				if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+				else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+				else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+				else $queryStr .= "ORDER BY `name`";
+				$queryStr .= " ".$orderdir;
+			} else {
+				$queryStr = '';
+			}
+			break; // }}}
+		case 'WorkflowByMe': // Documents I to trigger in Worklflow {{{
+			$user = $param1;
+			// Get document list for the current user.
+			$workflowStatus = $user->getWorkflowStatus();
+
+			// Create a comma separated list of all the documentIDs whose information is
+			// required.
+			$dList = array();
+			foreach ($workflowStatus["u"] as $st) {
+				if (!in_array($st["document"], $dList)) {
+					$dList[] = $st["document"];
+				}
+			}
+			foreach ($workflowStatus["g"] as $st) {
+				if (!in_array($st["document"], $dList)) {
+					$dList[] = $st["document"];
+				}
+			}
+			$docCSV = "";
+			foreach ($dList as $d) {
+				$docCSV .= (strlen($docCSV)==0 ? "" : ", ")."'".$d."'";
+			}
+
+			if (strlen($docCSV)>0) {
+				$queryStr .=
+							//"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.", ".S_EXPIRED.") ".
+							"AND `tblDocuments`.`id` IN (" . $docCSV . ") ".
+							"ORDER BY `statusDate` DESC";
+			} else {
+				$queryStr = '';
+			}
+			break; // }}}
+		case 'AppRevOwner': // Documents waiting for review/approval/revision I'm owning {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+			$queryStr .=	"AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+				"AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.", ".S_IN_REVISION.") ";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+//			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+//				"AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.") ".
+//				"ORDER BY `statusDate` DESC";
+			break; // }}}
+		case 'RejectOwner': // Documents that has been rejected and I'm owning {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+				"AND `tblDocumentStatusLog`.`status` IN (".S_REJECTED.") ";
+			//$queryStr .= "ORDER BY `statusDate` DESC";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+			break; // }}}
+		case 'LockedByMe': // Documents locked by me {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+
+			$qs = 'SELECT `document` FROM `tblDocumentLocks` WHERE `userID`='.$user->getID();
+			$ra = $this->db->getResultArray($qs);
+			if (is_bool($ra) && !$ra) {
+				return false;
+			}
+			$docs = array();
+			foreach($ra as $d) {
+				$docs[] = $d['document'];
+			}
+
+			if ($docs) {
+				$queryStr .= "AND `tblDocuments`.`id` IN (" . implode(',', $docs) . ") ";
+				if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+				else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+				else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+				else $queryStr .= "ORDER BY `name`";
+				$queryStr .= " ".$orderdir;
+			} else {
+				$queryStr = '';
+			}
+			break; // }}}
+		case 'WorkflowOwner': // Documents waiting for workflow trigger I'm owning {{{
+			$user = $param1;
+			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+				"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.") ".
+				"ORDER BY `statusDate` DESC";
+			break; // }}}
+		case 'MyDocs': // Documents owned by me {{{
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+			$queryStr .=	"AND `tblDocuments`.`owner` = '".$user->getID()."' ";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+			break; // }}}
+		}
+
+		if($queryStr) {
+			$resArr = $this->db->getResultArray($queryStr);
+			if (is_bool($resArr) && !$resArr) {
+				return false;
+			}
+			/*
+			$documents = array();
+			foreach($resArr as $row)
+				$documents[] = $this->getDocument($row["id"]);
+			 */
+		} else {
+			return array();
+		}
+
+		return $resArr;
+	} /* }}} */
+
 	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) { /* {{{ */
 		$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
 		$thirty = array (4, 6, 9, 11);
@@ -2071,7 +2410,7 @@ class SeedDMS_Core_DMS {
 			$versions[] = $version;
 		}
 		return $versions;
-		
+
 	} /* }}} */
 
 	/**
@@ -2095,7 +2434,7 @@ class SeedDMS_Core_DMS {
 			$versions[] = $version;
 		}
 		return $versions;
-		
+
 	} /* }}} */
 
 	/**
@@ -2119,7 +2458,7 @@ class SeedDMS_Core_DMS {
 			$versions[] = $version;
 		}
 		return $versions;
-		
+
 	} /* }}} */
 
 	/**
@@ -2130,7 +2469,7 @@ class SeedDMS_Core_DMS {
 	 * in version 4.0.0 of SeedDMS for finding duplicates.
 	 */
 	function getDuplicateDocumentContent() { /* {{{ */
-		$queryStr = "SELECT a.*, b.`id` as dupid FROM `tblDocumentContent` a LEFT JOIN `tblDocumentContent` b ON a.`checksum`=b.`checksum` where a.`id`!=b.`id` ORDER by a.`id`";
+		$queryStr = "SELECT a.*, b.`id` as dupid FROM `tblDocumentContent` a LEFT JOIN `tblDocumentContent` b ON a.`checksum`=b.`checksum` where a.`id`!=b.`id` ORDER by a.`id` LIMIT 1000";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
@@ -2146,7 +2485,7 @@ class SeedDMS_Core_DMS {
 				$versions[$row['dupid']]['duplicates'][] = $version;
 		}
 		return $versions;
-		
+
 	} /* }}} */
 
 	/**
@@ -2302,11 +2641,11 @@ class SeedDMS_Core_DMS {
 				foreach ($record as $column) {
 					if (is_numeric($column)) $values .= $column;
 					else $values .= $this->db->qstr($column);
-			
+
 					if ($i<(count($record))) $values .= ",";
 					$i++;
 				}
-		
+
 				fwrite($h, "INSERT INTO `".$table."` VALUES (".$values.");\n");
 			}
 		}
