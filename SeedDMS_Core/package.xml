@@ -26,6 +26,7 @@
  <notes>
 SeedDMS_Core_DMS::filterDocumentFiles() returns also documents which are not public
 if the owner tries to access them
+Check return value of onPreRemove[Document|Folder], return from calling method if bool
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
