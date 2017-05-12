@@ -882,9 +882,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Check if 'onPreRemoveFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
 			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
-				if(!call_user_func($callback[0], $callback[1], $this)) {
-					return false;
-				}
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
 			}
 		}
 
