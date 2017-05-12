@@ -27,6 +27,8 @@
 SeedDMS_Core_DMS::filterDocumentFiles() returns also documents which are not public
 if the owner tries to access them
 Check return value of onPreRemove[Document|Folder], return from calling method if bool
+Add SeedDMS_Core_DMS::getDocumentList()
+Limit number of duplicate files to 1000
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

@@ -1015,3 +1015,25 @@ $(document).ready(function() { /* {{{ */
 		$(this).parent().hide();
 	});
 }); /* }}} */
+
+	var approval_count, review_count, receipt_count, revision_count;
+	var checkTasks = function() {
+		$.ajax({url: '../out/out.Tasks.php',
+			type: 'GET',
+			dataType: "json",
+			data: {action: 'mytasks'},
+			success: function(data) {
+				if(data) {
+					if(approval_count != data.data.approval.length ||
+						 review_count != data.data.review.length) {
+						$("#menu-tasks > ul > li").html('Loading').hide().load('../out/out.Tasks.php?action=menutasks').fadeIn('500')
+						approval_count = data.data.approval.length;
+						review_count = data.data.review.length;
+					}
+				}
+			},
+			timeout: 3000
+		}); 
+		timeOutId = setTimeout(checkTasks, 30000);
+	}
+

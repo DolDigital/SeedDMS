@@ -83,6 +83,7 @@ if ($action == "saveSettings")
   $settings->_showSingleSearchHit = getBoolValue("showSingleSearchHit");
   $settings->_enableSessionList = getBoolValue("enableSessionList");
   $settings->_enableClipboard = getBoolValue("enableClipboard");
+  $settings->_enableMenuTasks = getBoolValue("enableMenuTasks");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
   $settings->_enableMultiUpload = getBoolValue("enableMultiUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");

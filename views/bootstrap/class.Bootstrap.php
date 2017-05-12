@@ -145,6 +145,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
+		if(isset($this->params['user']) && $this->params['user']) {
+			$this->addFooterJS('checkTasks();');
+		}
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
@@ -304,6 +307,17 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "     </ul>\n";
 			echo "    </li>\n";
 			echo "   </ul>\n";
+
+			if($this->params['enablemenutasks']) {
+				echo "   <div id=\"menu-tasks\">";
+				echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
+				echo "    <li class=\"dropdown\">\n";
+//				echo $this->menuTasks(array('review'=>array(), 'approval'=>array(), 'receipt'=>array(), 'revision'=>array()));
+				echo "    </li>\n";
+				echo "   </ul>\n";
+				echo "   </div>";
+				//$this->addFooterJS('checkTasks();');
+			}
 
 			if($this->params['enablesessionlist']) {
 				echo "   <div id=\"menu-session\">";
@@ -1525,7 +1539,7 @@ $(function() {
 	function printDeleteDocumentButton($document, $msg, $return=false){ /* {{{ */
 		$docid = $document->getID();
 		$content = '';
-    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
+    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
 		if($return)
 			return $content;
 		else

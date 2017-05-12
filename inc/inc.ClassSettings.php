@@ -178,6 +178,8 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the clipboard
 	var $_enableClipboard = true;
+	// enable/disable list of tasks in main menu
+	var $_enableMenuTasks = true;
 	// enable/disable display of the session list
 	var $_enableSessionList = false;
 	// enable/disable display of the drop zone for file upload
@@ -416,6 +418,7 @@ class Settings { /* {{{ */
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableSessionList = Settings::boolVal($tab["enableSessionList"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
+		$this->_enableMenuTasks = Settings::boolVal($tab["enableMenuTasks"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
 		$this->_enableMultiUpload = Settings::boolVal($tab["enableMultiUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
@@ -725,6 +728,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
 		$this->setXMLAttributValue($node, "enableSessionList", $this->_enableSessionList);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
+		$this->setXMLAttributValue($node, "enableMenuTasks", $this->_enableMenuTasks);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
 		$this->setXMLAttributValue($node, "enableMultiUpload", $this->_enableMultiUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
@@ -852,7 +856,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "smtpPassword", $this->_smtpPassword);
 
     // XML Path: /configuration/advanced/display
-    $this->getXMLNode($xml, '/configuration', 'advanced');
+    $advnode = $this->getXMLNode($xml, '/configuration', 'advanced');
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'display');
     $this->setXMLAttributValue($node, "siteDefaultPage", $this->_siteDefaultPage);
     $this->setXMLAttributValue($node, "rootFolderID", $this->_rootFolderID);
