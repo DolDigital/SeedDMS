@@ -273,7 +273,7 @@ $(document).ready(function() {
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+					$arr = $this->callHook('addDocumentAttribute', null, $attrdef);
 					if(is_array($arr)) {
 						echo "<tr>";
 						echo "<td>".$arr[0].":</td>";
@@ -340,7 +340,7 @@ $(document).ready(function() {
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('editDocumentContentAttribute', null, $attrdef);
+					$arr = $this->callHook('addDocumentContentAttribute', null, $attrdef);
 					if(is_array($arr)) {
 						echo "<tr>";
 						echo "<td>".$arr[0].":</td>";
