@@ -144,6 +144,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
+		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?action=webrootjs"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 			$this->addFooterJS('checkTasks();');
@@ -172,6 +173,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function webrootjs() { /* {{{ */
+		header('Content-Type: application/javascript');
+		echo "var seeddms_absbaseprefix=\"".$this->params['absbaseprefix']."\";\n";
+		echo "var seeddms_webroot=\"".$this->params['settings']->_httpRoot."\";\n";
 	} /* }}} */
 
 	function footerjs() { /* {{{ */
