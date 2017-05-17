@@ -366,7 +366,7 @@ $(document).ready( function() {
 		var action = element.data('action');
 		var query = element.data('query');
 		if(view && action) {
-			url = "out."+view+".php?action="+action;
+			url = seeddms_webroot+"out/out."+view+".php?action="+action;
 			if(query) {
 				url += "&"+query;
 			}
