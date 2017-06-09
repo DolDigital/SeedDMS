@@ -123,6 +123,15 @@ class SeedDMS_Controller_Common {
 	} /* }}} */
 
 	/**
+	 * Set error message
+	 *
+	 * @param string $msg error message
+	 */
+	public function setErrorMsg($msg) { /* {{{ */
+		$this->errormsg = $msg;
+	} /* }}} */
+
+	/**
 	 * Call a controller hook
 	 *
 	 * If a hook returns false, then no other hook will be called, because the
