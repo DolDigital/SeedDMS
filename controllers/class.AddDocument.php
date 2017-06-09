@@ -30,10 +30,13 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 		 * of the parameters.
 		 */
 		if(false === $this->callHook('preAddDocument', array('name'=>&$name, 'comment'=>&$comment))) {
-			$this->errormsg = 'hook_preAddDocument_failed';
+			if(empty($this->errormsg))
+				$this->errormsg = 'hook_preAddDocument_failed';
 			return null;
 		}
 
+		$name = $this->getParam('name');
+		$comment = $this->getParam('comment');
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$settings = $this->params['settings'];
