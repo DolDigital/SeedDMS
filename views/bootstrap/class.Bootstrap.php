@@ -144,7 +144,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
-		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?action=webrootjs"></script>'."\n";
+		parse_str($_SERVER['QUERY_STRING'], $tmp);
+		$tmp['action'] = 'webrootjs';
+		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 			$this->addFooterJS('checkTasks();');
@@ -162,7 +164,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			if(is_dir($this->params['cachedir'].'/js')) {
 				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
 			}
-			parse_str($_SERVER['QUERY_STRING'], $tmp);
 			$tmp['action'] = 'footerjs';
 			$tmp['hash'] = $hashjs;
 			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
