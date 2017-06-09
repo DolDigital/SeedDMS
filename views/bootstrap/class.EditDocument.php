@@ -192,10 +192,12 @@ $(document).ready( function() {
 			foreach($attrdefs as $attrdef) {
 				$arr = $this->callHook('editDocumentAttribute', $document, $attrdef);
 				if(is_array($arr)) {
-					echo "<tr>";
-					echo "<td>".$arr[0].":</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
+					if($arr) {
+						echo "<tr>";
+						echo "<td>".$arr[0].":</td>";
+						echo "<td>".$arr[1]."</td>";
+						echo "</tr>";
+					}
 				} else {
 ?>
 		<tr>

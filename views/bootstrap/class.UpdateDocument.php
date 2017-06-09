@@ -277,13 +277,14 @@ console.log(element);
 	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
-			$arr = $this->callHook('editDocumentContentAttribute', null, $attrdef);
+			$arr = $this->callHook('editDocumentContentAttribute', $document, $attrdef);
 			if(is_array($arr)) {
-				echo $txt;
-				echo "<tr>";
-				echo "<td>".$arr[0].":</td>";
-				echo "<td>".$arr[1]."</td>";
-				echo "</tr>";
+				if($arr) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				}
 			} else {
 ?>
     <tr>

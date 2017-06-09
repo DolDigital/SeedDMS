@@ -132,13 +132,14 @@ $(document).ready(function() {
 
 		if($attrdefs) {
 			foreach($attrdefs as $attrdef) {
-				$arr = $this->callHook('folderEditAttribute', $folder, $attrdef);
+				$arr = $this->callHook('editFolderAttribute', $folder, $attrdef);
 				if(is_array($arr)) {
-					echo $txt;
-					echo "<div class=\"control-group\">";
-					echo "<label class=\"control-label\">".$arr[0]."</label>";
-					echo "<div class=\"controls\">".$arr[1]."</div>";
-					echo "</div>";
+					if($arr) {
+						echo "<div class=\"control-group\">";
+						echo "<label class=\"control-label\">".$arr[0]."</label>";
+						echo "<div class=\"controls\">".$arr[1]."</div>";
+						echo "</div>";
+					}
 				} else {
 ?>
 			<div class="control-group">
