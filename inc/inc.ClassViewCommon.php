@@ -112,7 +112,7 @@ class SeedDMS_View_Common {
 					if($tmpret) {
 						if(is_string($tmpret))
 							$ret .= $tmpret;
-						elseif(is_array($tmpret) || is_object($tmpret))
+						elseif((is_array($tmpret) && $tmpret) || is_object($tmpret))
 							$ret = ($ret === null) ? $tmpret : array_merge($ret, $tmpret);
 						else
 							$ret = $tmpret;
