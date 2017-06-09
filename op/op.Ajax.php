@@ -27,6 +27,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassNotificationService.php");
 include("../inc/inc.ClassEmailNotify.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 
 require_once("../inc/inc.ClassSession.php");
 include("../inc/inc.ClassPasswordStrength.php");
@@ -614,73 +615,54 @@ switch($command) {
 
 				$cats = array();
 
-				$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-				$res = $folder->addDocument($name, '', $expires, $user, '',
-																		array(), $userfiletmp, utf8_basename($userfilename),
-																		$fileType, $userfiletype, 0,
-																		$reviewers, $approvers, 1,
-																		'', array(), array(), $workflow);
+				if($settings->_enableFullSearch) {
+					$index = $indexconf['Indexer']::open($settings->_luceneDir);
+					$indexconf['Indexer']::init($settings->_stopWordsFile);
+				} else {
+					$index = null;
+				}
 
-				if (is_bool($res) && !$res) {
+				$controller = Controller::factory('AddDocument');
+				$controller->setParam('documentsource', 'upload');
+				$controller->setParam('folder', $folder);
+				$controller->setParam('index', $index);
+				$controller->setParam('indexconf', $indexconf);
+				$controller->setParam('name', $name);
+				$controller->setParam('comment', '');
+				$controller->setParam('expires', $expires);
+				$controller->setParam('keywords', '');
+				$controller->setParam('categories', $cats);
+				$controller->setParam('owner', $user);
+				$controller->setParam('userfiletmp', $userfiletmp);
+				$controller->setParam('userfilename', $userfilename);
+				$controller->setParam('filetype', $fileType);
+				$controller->setParam('userfiletype', $userfiletype);
+				$controller->setParam('sequence', 0);
+				$controller->setParam('reviewers', $reviewers);
+				$controller->setParam('approvers', $approvers);
+				$controller->setParam('reqversion', 1);
+				$controller->setParam('versioncomment', '');
+				$controller->setParam('attributes', array());
+				$controller->setParam('attributesversion', array());
+				$controller->setParam('workflow', $workflow);
+				$controller->setParam('notificationgroups', array());
+				$controller->setParam('notificationusers', array());
+				$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+				$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
+
+				if(!$document = $controller->run()) {
 					header('Content-Type: application/json');
-					echo json_encode(array('success'=>false, 'message'=>getMLText("error_occured")));
+					echo json_encode(array('success'=>false, 'message'=>getMLText($controller->getErrorMsg())));
 					exit;
 				} else {
-					$document = $res[0];
-
-					/* Set access as specified in settings. */
-					if($settings->_defaultAccessDocs) {
-						if($settings->_defaultAccessDocs > 0 && $settings->_defaultAccessDocs < 4) {
-							$document->setInheritAccess(0, true);
-							$document->setDefaultAccess($settings->_defaultAccessDocs, true);
-						}
-					}
-
-					if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-						foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-							if (method_exists($hookObj, 'postAddDocument')) {
-								$hookObj->postAddDocument(null, $document);
-							}
-						}
-					}
-					if($settings->_enableFullSearch) {
-						$index = $indexconf['Indexer']::open($settings->_luceneDir);
-						if($index) {
-							$indexconf['Indexer']::init($settings->_stopWordsFile);
-							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, !($filesize < $settings->_maxSizeForFullText));
-							if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
-								foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
-									if (method_exists($hookObj, 'preIndexDocument')) {
-										$hookObj->preIndexDocument(null, $document, $idoc);
-									}
-								}
-							}
-							$index->addDocument($idoc);
-						}
-					}
-
-					/* Add a default notification for the owner of the document */
-					if($settings->_enableOwnerNotification) {
-						$res = $document->addNotify($user->getID(), true);
-					}
 					// Send notification to subscribers of folder.
 					if($notifier) {
-						$notifyList = $folder->getNotifyList();
-						if($settings->_enableNotificationAppRev) {
-							/* Reviewers and approvers will be informed about the new document */
-							foreach($reviewers['i'] as $reviewerid) {
-								$notifyList['users'][] = $dms->getUser($reviewerid);
-							}
-							foreach($approvers['i'] as $approverid) {
-								$notifyList['users'][] = $dms->getUser($approverid);
-							}
-							foreach($reviewers['g'] as $reviewergrpid) {
-								$notifyList['groups'][] = $dms->getGroup($reviewergrpid);
-							}
-							foreach($approvers['g'] as $approvergrpid) {
-								$notifyList['groups'][] = $dms->getGroup($approvergrpid);
-							}
-						}
+						$fnl = $folder->getNotifyList();
+						$dnl = $document->getNotifyList();
+						$nl = array(
+							'users'=>array_merge($dnl['users'], $fnl['users']),
+							'groups'=>array_merge($dnl['groups'], $fnl['groups'])
+						);
 
 						$subject = "new_document_email_subject";
 						$message = "new_document_email_body";
@@ -694,9 +676,78 @@ switch($command) {
 						$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 						$params['sitename'] = $settings->_siteName;
 						$params['http_root'] = $settings->_httpRoot;
-						$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-						foreach ($notifyList["groups"] as $grp) {
+						$notifier->toList($user, $nl["users"], $subject, $message, $params);
+						foreach ($nl["groups"] as $grp) {
 							$notifier->toGroup($user, $grp, $subject, $message, $params);
+						}
+
+						if($workflow && $settings->_enableNotificationWorkflow) {
+							$subject = "request_workflow_action_email_subject";
+							$message = "request_workflow_action_email_body";
+							$params = array();
+							$params['name'] = $document->getName();
+							$params['version'] = 1;
+							$params['workflow'] = $workflow->getName();
+							$params['folder_path'] = $folder->getFolderPathPlain();
+							$params['current_state'] = $workflow->getInitState()->getName();
+							$params['username'] = $user->getFullName();
+							$params['sitename'] = $settings->_siteName;
+							$params['http_root'] = $settings->_httpRoot;
+							$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+
+							foreach($workflow->getNextTransitions($workflow->getInitState()) as $ntransition) {
+								foreach($ntransition->getUsers() as $tuser) {
+									$notifier->toIndividual($user, $tuser->getUser(), $subject, $message, $params);
+								}
+								foreach($ntransition->getGroups() as $tuser) {
+									$notifier->toGroup($user, $tuser->getGroup(), $subject, $message, $params);
+								}
+							}
+						}
+
+						if($settings->_enableNotificationAppRev) {
+							/* Reviewers and approvers will be informed about the new document */
+							if($reviewers['i'] || $reviewers['g']) {
+								$subject = "review_request_email_subject";
+								$message = "review_request_email_body";
+								$params = array();
+								$params['name'] = $document->getName();
+								$params['folder_path'] = $folder->getFolderPathPlain();
+								$params['version'] = 1;
+								$params['comment'] = '';
+								$params['username'] = $user->getFullName();
+								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+								$params['sitename'] = $settings->_siteName;
+								$params['http_root'] = $settings->_httpRoot;
+
+								foreach($reviewers['i'] as $reviewerid) {
+									$notifier->toIndividual($user, $dms->getUser($reviewerid), $subject, $message, $params);
+								}
+								foreach($reviewers['g'] as $reviewergrpid) {
+									$notifier->toGroup($user, $dms->getGroup($reviewergrpid), $subject, $message, $params);
+								}
+							}
+
+							elseif($approvers['i'] || $approvers['g']) {
+								$subject = "approval_request_email_subject";
+								$message = "approval_request_email_body";
+								$params = array();
+								$params['name'] = $document->getName();
+								$params['folder_path'] = $folder->getFolderPathPlain();
+								$params['version'] = 1;
+								$params['comment'] = '';
+								$params['username'] = $user->getFullName();
+								$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+								$params['sitename'] = $settings->_siteName;
+								$params['http_root'] = $settings->_httpRoot;
+
+								foreach($approvers['i'] as $approverid) {
+									$notifier->toIndividual($user, $dms->getUser($approverid), $subject, $message, $params);
+								}
+								foreach($approvers['g'] as $approvergrpid) {
+									$notifier->toGroup($user, $dms->getGroup($approvergrpid), $subject, $message, $params);
+								}
+							}
 						}
 
 					}
