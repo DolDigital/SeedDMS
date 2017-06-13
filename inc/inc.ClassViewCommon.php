@@ -109,12 +109,12 @@ class SeedDMS_View_Common {
 							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2), func_get_arg(3), func_get_arg(4));
 							break;
 					}
-					if($tmpret) {
+					if($tmpret !== null) {
 						if(is_string($tmpret))
 							$ret .= $tmpret;
-						elseif((is_array($tmpret) && $tmpret) || is_object($tmpret))
+						elseif(is_array($tmpret) || is_object($tmpret)) {
 							$ret = ($ret === null) ? $tmpret : array_merge($ret, $tmpret);
-						else
+						} else
 							$ret = $tmpret;
 					}
 				}
