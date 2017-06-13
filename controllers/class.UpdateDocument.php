@@ -29,8 +29,9 @@ class SeedDMS_Controller_UpdateDocument extends SeedDMS_Controller_Common {
 		/* Call preUpdateDocument early, because it might need to modify some
 		 * of the parameters.
 		 */
-		if(false === $this->callHook('preUpdateDocument')) {
-			$this->errormsg = 'hook_preUpdateDocument_failed';
+		if(false === $this->callHook('preUpdateDocument', $this->params['document'])) {
+			if(empty($this->errormsg))
+				$this->errormsg = 'hook_preUpdateDocument_failed';
 			return null;
 		}
 
