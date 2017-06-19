@@ -13,7 +13,7 @@
  * @version    Release: @package_version@
  */
 
-require_once "inc/inc.ClassHook.php";
+require_once "inc.ClassHook.php";
 
 /**
  * Parent class for all view classes
