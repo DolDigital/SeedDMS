@@ -83,7 +83,8 @@ class SeedDMS_View_Common {
 	 * a list of hook objects with getHookObjects() and call the hooks yourself.
 	 *
 	 * @params string $hook name of hook
-	 * @return string concatenated string of whatever the hook function returns
+	 * @return string concatenated string, merged arrays or whatever the hook
+	 * function returns
 	 */
 	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
