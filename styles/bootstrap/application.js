@@ -362,11 +362,14 @@ $(document).ready( function() {
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
+		var base = element.data('base');
+		if(typeof base == 'undefined')
+			base = '';
 		var view = element.data('view');
 		var action = element.data('action');
 		var query = element.data('query');
 		if(view && action) {
-			url = seeddms_webroot+"out/out."+view+".php?action="+action;
+			url = seeddms_webroot+base+"out/out."+view+".php?action="+action;
 			if(query) {
 				url += "&"+query;
 			}
