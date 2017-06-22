@@ -399,10 +399,13 @@ $(document).ready( function() {
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
+		var base = element.data('base');
+		if(typeof base == 'undefined')
+			base = '';
 		var view = element.data('view');
 		var action = element.data('action');
 		if(view && action)
-			url = "out."+view+".php?action="+action;
+			url = seeddms_webroot+base+"out/out."+view+".php?action="+action;
 		else
 			url = href;
 		if(typeof param1 === 'object') {
