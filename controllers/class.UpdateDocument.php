@@ -35,6 +35,8 @@ class SeedDMS_Controller_UpdateDocument extends SeedDMS_Controller_Common {
 			return null;
 		}
 
+		$name = $this->getParam('name');
+		$comment = $this->getParam('comment');
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$document = $this->params['document'];
