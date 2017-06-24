@@ -158,23 +158,6 @@ else {
 				$eU = $version->_document->_dms->getGroup($eID);
 				$grouprecipients[] = $eU;
 			}
-/*
-			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("version_deleted_email");
-			$message = getMLText("version_deleted_email")."\r\n";
-			$message .= 
-				getMLText("document").": "User.$document->getName()."\r\n".
-				getMLText("version").": ".$version->_version."\r\n".
-				getMLText("comment").": ".$version->getComment()."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
-			$notifier->toList($user, $recipients, $subject, $message);
-			
-			// Send notification to subscribers.
-			$notifier->toList($user, $nl["users"], $subject, $message);
-			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 
 			$subject = "version_deleted_email_subject";
 			$message = "version_deleted_email_body";
