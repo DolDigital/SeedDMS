@@ -1271,7 +1271,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				/* $attribute can be a string or an array */
 				if($attribute)
 					if(!$content->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
-						$this->removeContent($content);
+						$this->_removeContent($content);
 						$db->rollbackTransaction();
 						return false;
 					}
@@ -1285,7 +1285,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentStatus` (`documentID`, `version`) ".
 			"VALUES (". $this->_id .", ". (int) $version .")";
 		if (!$db->getResult($queryStr)) {
-			$this->removeContent($content);
+			$this->_removeContent($content);
 			$db->rollbackTransaction();
 			return false;
 		}
@@ -1512,7 +1512,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_latestContent;
 	} /* }}} */
 
-	function removeContent($version) { /* {{{ */
+	/**
+	 * Remove version of document
+	 *
+	 * @param interger $version version number of content
+	 * @return boolean true if successful, otherwise false
+	 */
+	private function _removeContent($version) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (file_exists( $this->_dms->contentDir.$version->getPath() ))
@@ -1621,6 +1627,36 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$db->commitTransaction();
 		return true;
+	} /* }}} */
+
+	/**
+	 * Call callback onPreRemoveDocument before deleting content
+	 *
+	 * @param integer $version version number of content
+	 */
+	function removeContent($version) { /* {{{ */
+		/* Check if 'onPreRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveContent'])) {
+			foreach($this->_dms->callbacks['onPreRemoveContent'] as $callback) {
+				$ret = call_user_func($callback[0], $callback[1], $this, $version);
+				if(is_bool($ret))
+					return $ret;
+			}
+		}
+
+		if(false === ($ret = self::_removeContent($version))) {
+			return false;
+		}
+
+		/* Check if 'onPostRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveContent'])) {
+			foreach($this->_dms->callbacks['onPostRemoveContent'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $version)) {
+				}
+			}
+		}
+
+		return $ret;
 	} /* }}} */
 
 	/**
@@ -1874,7 +1910,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		// remove content of document
 		foreach ($this->_content as $version) {
-			if (!$this->removeContent($version)) {
+			if (!$this->_removeContent($version)) {
 				$db->rollbackTransaction();
 				return false;
 			}
