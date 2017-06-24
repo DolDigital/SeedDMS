@@ -29,6 +29,7 @@ if the owner tries to access them
 Check return value of onPreRemove[Document|Folder], return from calling method if bool
 Add SeedDMS_Core_DMS::getDocumentList()
 Limit number of duplicate files to 1000
+Add hook on(Pre|Post)RemoveContent
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
