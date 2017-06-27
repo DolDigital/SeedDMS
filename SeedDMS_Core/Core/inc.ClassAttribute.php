@@ -259,6 +259,13 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	function getValidationError() { return $this->_validation_error; }
 
 	/**
+	 * Set validation error
+	 *
+	 * @param integer error code
+	 */
+	function setValidationError($error) { $this->_validation_error = $error; }
+
+	/**
 	 * Get definition of attribute
 	 *
 	 * @return object attribute definition
@@ -916,6 +923,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 * @return boolean true if validation succeds, otherwise false
 	 */
 	function validate($attrvalue) { /* {{{ */
+		/* Check if 'onAttributeValidate' callback is set */
+		if(isset($this->_dms->callbacks['onAttributeValidate'])) {
+			foreach($this->_dms->callbacks['onAttributeValidate'] as $callback) {
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
+			}
+		}
+
 		if($this->getMultipleValues()) {
 			if(is_string($attrvalue)) {
 				$sep = $attrvalue[0];
