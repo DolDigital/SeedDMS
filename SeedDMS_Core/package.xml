@@ -30,6 +30,7 @@ Check return value of onPreRemove[Document|Folder], return from calling method i
 Add SeedDMS_Core_DMS::getDocumentList()
 Limit number of duplicate files to 1000
 Add hook on(Pre|Post)RemoveContent
+Add hook onAttributeValidate
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
