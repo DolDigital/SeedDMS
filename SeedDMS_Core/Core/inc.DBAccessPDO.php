@@ -381,8 +381,8 @@ class SeedDMS_Core_DatabaseAccess {
 						"INSERT INTO `ttreviewid` SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
-						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` ";//.
+//						"ORDER BY `maxLogID`";
 				break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (PRIMARY KEY (`reviewID`), INDEX (`maxLogID`)) ".
@@ -422,8 +422,8 @@ class SeedDMS_Core_DatabaseAccess {
 						"INSERT INTO `ttapproveid` SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
-						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` (PRIMARY KEY (`approveID`), INDEX (`maxLogID`)) ".
@@ -463,8 +463,8 @@ class SeedDMS_Core_DatabaseAccess {
 						"INSERT INTO `ttstatid` SELECT `tblDocumentStatusLog`.`statusID`, ".
 						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentStatusLog` ".
-						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (PRIMARY KEY (`statusID`), INDEX (`maxLogID`)) ".
