@@ -358,16 +358,16 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
-						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
+//						"ORDER BY `maxLogID`";
 				break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (PRIMARY KEY (`reviewID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
-						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttreviewid) {
 				if (!$this->getResult($queryStr))
@@ -391,16 +391,16 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
-						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` (PRIMARY KEY (`approveID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
-						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttapproveid) {
 				if (!$this->getResult($queryStr))
@@ -424,16 +424,16 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentStatusLog`.`statusID` AS `statusID`, ".
 						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentStatusLog` ".
-						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (PRIMARY KEY (`statusID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentStatusLog`.`statusID`, ".
 						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentStatusLog` ".
-						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttstatid) {
 				if (!$this->getResult($queryStr))
