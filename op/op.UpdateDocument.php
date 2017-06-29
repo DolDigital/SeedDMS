@@ -265,8 +265,8 @@ default:
 		}
 	}
 
-	if(isset($_POST["attributes"]) && $_POST["attributes"]) {
-		$attributes = $_POST["attributes"];
+	if(isset($_POST["attributes_version"]) && $_POST["attributes_version"]) {
+		$attributes = $_POST["attributes_version"];
 		foreach($attributes as $attrdefid=>$attribute) {
 			$attrdef = $dms->getAttributeDefinition($attrdefid);
 			if($attribute) {

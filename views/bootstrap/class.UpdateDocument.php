@@ -289,7 +289,7 @@ console.log(element);
 ?>
     <tr>
 	    <td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-			<td><?php $this->printAttributeEditField($attrdef, '') ?>
+			<td><?php $this->printAttributeEditField($attrdef, '', 'attributes_version') ?>
 <?php
 			if($latestContent->getAttributeValue($attrdef)) {
 				switch($attrdef->getType()) {
@@ -297,10 +297,10 @@ console.log(element);
 				case SeedDMS_Core_AttributeDefinition::type_date:
 				case SeedDMS_Core_AttributeDefinition::type_int:
 				case SeedDMS_Core_AttributeDefinition::type_float:
-					$this->printInputPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
+					$this->printInputPresetButtonHtml('attributes_version'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
 					break;
 				case SeedDMS_Core_AttributeDefinition::type_boolean:
-					$this->printCheckboxPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
+					$this->printCheckboxPresetButtonHtml('attributes_version'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
 					break;
 				}
 //				print_r($latestContent->getAttributeValue($attrdef));
