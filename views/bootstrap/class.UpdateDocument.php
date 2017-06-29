@@ -297,7 +297,7 @@ console.log(element);
 				case SeedDMS_Core_AttributeDefinition::type_date:
 				case SeedDMS_Core_AttributeDefinition::type_int:
 				case SeedDMS_Core_AttributeDefinition::type_float:
-					$this->printInputPresetButtonHtml('attributes_versiont_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
+					$this->printInputPresetButtonHtml('attributes_version_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
 					break;
 				case SeedDMS_Core_AttributeDefinition::type_boolean:
 					$this->printCheckboxPresetButtonHtml('attributes_version_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
