@@ -4,6 +4,13 @@
 - show name and parent folder of document/folder in search list on different
   lines
 - check for guest login, admin ip and disabled accounts in webdav server
+- update last access time in session only once a minute
+- set Return-Path in emails if from_address in settings is set
+- pass more arguments to hooks (pre|post)UpdateDocument and searchListHeader
+- show help messages on settings page if available
+- fix regex expression in op/op.Settings.php (Closes #317)
+- better debugging of sql statements in SeedDM_Core
+- move css for timeline into Timeline view
 - merged changes from 4.3.35
 
 --------------------------------------------------------------------------------

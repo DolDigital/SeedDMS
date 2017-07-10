@@ -24,6 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+all sql statements can be logged to a file
 do not sort some temporary tables anymore, because it causes an error in mysql if sql_mode=only_full_group_by is set
  </notes>
  <contents>
