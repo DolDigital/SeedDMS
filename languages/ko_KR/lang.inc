@@ -19,15 +19,15 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (940), daivoc (418)
+//    Translators: Admin (940), daivoc (421)
 
 $text = array(
-'2_factor_auth' => '',
+'2_factor_auth' => '관리자 ({LOCALE}/lang.inc)',
 '2_factor_auth_info' => '',
 '2_fact_auth_secret' => '',
 'accept' => '동의',
-'access_control' => '',
-'access_control_is_off' => '',
+'access_control' => '접근 제어',
+'access_control_is_off' => '접근 제어 불가',
 'access_denied' => '접근가 거부되었습니다.',
 'access_inheritance' => '접근 상속',
 'access_mode' => '접근 모드',
@@ -236,6 +236,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '요청한 문서파일이 사라져 버렸습니다. 확인이 불가능 합니다.',
 'checkedout_file_is_unchanged' => '요청한 문서가 아직 변경전 상태입니다. 변경을 원하지 않는 경우 재설정 할 수 있습니다.',
 'checkin_document' => '체크인',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '체크아웃',
 'checkout_is_disabled' => '체크아웃된 문서는 설정에서 비활성화됩니다.',
 'choose_attrdef' => '속성의 정의를 선택하세요',

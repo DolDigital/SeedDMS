@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (544), destinqo (19)
+//    Translators: Admin (547), destinqo (19)
 
 $text = array(
 '2_factor_auth' => '',
@@ -211,6 +211,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => '',
@@ -422,7 +423,7 @@ URL: [url]',
 'expiry_changed_email_body' => '',
 'expiry_changed_email_subject' => '',
 'export' => '',
-'extension_manager' => '',
+'extension_manager' => 'Správa rozšírení',
 'february' => 'Február',
 'file' => 'Súbor',
 'files' => 'Súbory',
@@ -489,7 +490,7 @@ URL: [url]',
 'identical_version' => '',
 'import' => '',
 'importfs' => '',
-'import_fs' => '',
+'import_fs' => 'Importovanie zo súborového systému',
 'import_fs_warning' => '',
 'include_content' => '',
 'include_documents' => 'Vrátane súborov',
@@ -635,7 +636,7 @@ URL: [url]',
 'new_attrdef' => '',
 'new_default_keywords' => 'Pridať kľúčové slová',
 'new_default_keyword_category' => 'Pridať kategóriu',
-'new_document_category' => '',
+'new_document_category' => 'Pridať kategóriu',
 'new_document_email' => 'Novy dokument',
 'new_document_email_body' => '',
 'new_document_email_subject' => '',
