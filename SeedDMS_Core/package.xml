@@ -1378,6 +1378,21 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </notes>
   </release>
   <release>
+   <date>2017-07-10</date>
+   <time>15:06:09</time>
+   <version>
+    <release>5.0.12</release>
+    <api>5.0.12</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+   </notes>
+  </release>
+  <release>
    <date>2017-02-20</date>
    <time>07:07:02</time>
    <version>
