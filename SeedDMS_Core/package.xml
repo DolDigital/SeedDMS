@@ -24,8 +24,13 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-all sql statements can be logged to a file
-do not sort some temporary tables anymore, because it causes an error in mysql if sql_mode=only_full_group_by is set
+SeedDMS_Core_DMS::filterDocumentFiles() returns also documents which are not public
+if the owner tries to access them
+Check return value of onPreRemove[Document|Folder], return from calling method if bool
+Add SeedDMS_Core_DMS::getDocumentList()
+Limit number of duplicate files to 1000
+Add hook on(Pre|Post)RemoveContent
+Add hook onAttributeValidate
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1389,7 +1394,9 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
     <api>stable</api>
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
-   <notes>
+	 <notes>
+all sql statements can be logged to a file
+do not sort some temporary tables anymore, because it causes an error in mysql if            sql_mode=only_full_group_by is set
    </notes>
   </release>
   <release>
