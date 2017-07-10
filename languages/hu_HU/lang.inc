@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (606), ribaz (1023)
+//    Translators: Admin (607), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
@@ -229,6 +229,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => 'Kérem válasszon jellemző meghatározást',
@@ -649,7 +650,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Ha a jelenlegi maximális feltöltési méretnél nagyobb állományokat szeretne feltölteni, akkor használja az alternatív <a href="%s">feltöltő oldalt</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Összes jogosultság felsorolása...',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Helyi állomány',

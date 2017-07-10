@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (724), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (726), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -227,6 +227,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => 'File is onvindbaar',
 'checkedout_file_is_unchanged' => 'Checkout-document ongewijzigd',
 'checkin_document' => 'Veranderd document',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => 'Checkout-document',
 'checkout_is_disabled' => 'Checkout is niet mogelijk',
 'choose_attrdef' => 'Selecteer een kenmerk definitie',
@@ -600,7 +601,7 @@ URL: [url]',
 'invalid_target_folder' => 'Foutief Doel Map ID',
 'invalid_user_id' => 'Foutief Gebruiker ID',
 'invalid_version' => 'Foutief Document Versie',
-'in_folder' => '',
+'in_folder' => 'In map',
 'in_revision' => 'In herziening',
 'in_workflow' => 'In workflow',
 'is_disabled' => 'Deactiveer account',
@@ -647,7 +648,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Als u bestanden wilt uploaden groter dan het huidige maximum, gebruik aub de alternatieve <a href="%s">upload pagina</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Oplijsten toegangsrechten',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Lokaal bestand',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (224)
+//    Translators: Admin (226)
 
 $text = array(
 '2_factor_auth' => '',
@@ -194,7 +194,7 @@ $text = array(
 'change_recipients' => '',
 'change_revisors' => '',
 'change_status' => '',
-'charts' => '',
+'charts' => 'Διαγράμματα',
 'chart_docsaccumulated_title' => 'Αριθμός Εγγράφων',
 'chart_docspercategory_title' => 'Έγγραφα κατά κατηγορία',
 'chart_docspermimetype_title' => '',
@@ -207,12 +207,13 @@ $text = array(
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => '',
 'choose_attrdefgroup' => '',
 'choose_category' => 'Επιλέξτε',
-'choose_group' => '',
+'choose_group' => 'Επιλέξτε Ομάδα',
 'choose_role' => '',
 'choose_target_category' => 'Επιλογή κατηγορίας',
 'choose_target_document' => 'Επιλογή εγγράφου',

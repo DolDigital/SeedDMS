@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1551), rickr (144), s.pnt (26)
+//    Translators: Admin (1554), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -235,6 +235,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => 'File documento approvato non trovato. Impossibile caricare.',
 'checkedout_file_is_unchanged' => 'La versione approvata è uguale alla versione corrente. Impossibile caricare.',
 'checkin_document' => 'Da approvare',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => 'Approvato',
 'checkout_is_disabled' => 'Approvazione dei documenti disabilitata',
 'choose_attrdef' => 'Seleziona l\'Attributo',
@@ -608,7 +609,7 @@ URL: [url]',
 'invalid_target_folder' => 'ID cartella selezionata non valido',
 'invalid_user_id' => 'ID utente non valido',
 'invalid_version' => 'Versione del documento non valida',
-'in_folder' => '',
+'in_folder' => 'nella cartella',
 'in_revision' => 'In fase di revisione',
 'in_workflow' => 'In fase di lavorazione',
 'is_disabled' => 'Account Disabilitato',
@@ -798,7 +799,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Possono essere utilizzate solo immagini di tipo jpeg',
 'order_by_sequence_off' => 'Ordina in sequenza disabilitato',
 'original_filename' => 'Nome file originale',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Totale processo di indicizzazione',
 'owner' => 'Proprietario',
 'ownership_changed_email' => 'Proprietario cambiato',
 'ownership_changed_email_body' => 'Cambio di proprietario
@@ -894,7 +895,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Flusso di lavoro rimosso dalla versione del documento',
-'removeFolderFromDropFolder' => '',
+'removeFolderFromDropFolder' => 'Rimuovi la cartella dopo l\'importazione',
 'remove_marked_files' => 'Rimuovi i files contrassegnati',
 'repaired' => 'riparato',
 'repairing_objects' => 'Riparazione documenti e cartelle in corso...',

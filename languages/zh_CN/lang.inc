@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (681), fengjohn (5)
+//    Translators: Admin (683), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '',
@@ -211,6 +211,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => '请选择属性',
@@ -496,7 +497,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => '包含文档',
 'include_subdirectories' => '包含子目录',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => '队列中的检索任务',
 'index_converters' => '索引文件转换',
 'index_done' => '',
 'index_error' => '',
@@ -1044,7 +1045,7 @@ URL: [url]',
 'settings_expandFolderTree_val0' => '',
 'settings_expandFolderTree_val1' => '',
 'settings_expandFolderTree_val2' => '',
-'settings_Extensions' => '',
+'settings_Extensions' => '设置扩展',
 'settings_extraPath' => '额外的PHP的include路径',
 'settings_extraPath_desc' => '附加软件的路径。这是包含目录，例如在ADODB目录或额外的PEAR包',
 'settings_firstDayOfWeek' => '每周第一天',

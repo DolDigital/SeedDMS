@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1049), aydin (83)
+//    Translators: Admin (1051), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -228,6 +228,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => 'Lütfen nitelik tanımını seçiniz',
@@ -648,7 +649,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Mevcut maksimum yükleme boyutundan daha büyük dosya yüklemek istiyorsanız <a href="%s">alternatif yükleme sayfası için tıklayın</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Tüm erişim haklarini listele',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'Yerel dosya',
@@ -1448,7 +1449,7 @@ URL: [url]',
 'sunday_abbr' => 'Pa',
 'sv_SE' => 'İsveççe',
 'switched_to' => 'Yerine geçilen',
-'takeOverAttributeValue' => '',
+'takeOverAttributeValue' => 'Son versiyondaki özellikleri devral',
 'takeOverGrpApprover' => 'Bir önceki versiyon onayını yapan grubu al.',
 'takeOverGrpReviewer' => 'Bir önceki versiyon kontrolünü yapan grubu al.',
 'takeOverIndApprover' => 'Bir önceki versiyonu onaylayanı al.',
