@@ -7,6 +7,7 @@
 - show role of users in user list and substitute user list
 - mysql sql_mode=only_full_group_by can be set without causing errors when
   creating a temporary table
+- translation updates
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.34
