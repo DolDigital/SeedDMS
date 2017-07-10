@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (768), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (770), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -140,7 +140,7 @@ URL: [url]',
 'attrdef_regex' => 'Wyrażenie regularne',
 'attrdef_type' => 'Typ',
 'attrdef_type_boolean' => '',
-'attrdef_type_date' => '',
+'attrdef_type_date' => 'Data',
 'attrdef_type_email' => '',
 'attrdef_type_float' => 'Liczna zmiennoprzecinkowa',
 'attrdef_type_int' => 'Liczba całkowita',
@@ -222,6 +222,7 @@ URL: [url]',
 'checkedout_file_has_disappeared' => '',
 'checkedout_file_is_unchanged' => '',
 'checkin_document' => '',
+'checkoutpath_does_not_exist' => '',
 'checkout_document' => '',
 'checkout_is_disabled' => '',
 'choose_attrdef' => 'Proszę wybrać definicję atrybutu',
@@ -595,7 +596,7 @@ URL: [url]',
 'invalid_target_folder' => 'Nieprawidłowy identyfikator folderu docelowego',
 'invalid_user_id' => 'Nieprawidłowy identyfikator użytkownika',
 'invalid_version' => 'Nieprawidłowa wersja dokumentu',
-'in_folder' => '',
+'in_folder' => 'w folderze',
 'in_revision' => '',
 'in_workflow' => 'W procesie',
 'is_disabled' => 'Konto nieaktywne',
