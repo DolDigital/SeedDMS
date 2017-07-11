@@ -43,20 +43,41 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-$expires = false;
-if (!isset($_POST["expires"]) || $_POST["expires"] != "false") {
-	if(isset($_POST["expdate"]) && $_POST["expdate"]) {
-		$tmp = explode('-', $_POST["expdate"]);
-		$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
-	} else {
-		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
-	}
+if (!isset($_POST["presetexpdate"]) || $_POST["presetexpdate"] == "") {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_expiration_date"));
+}
+
+switch($_POST["presetexpdate"]) {
+case "date":
+	$tmp = explode('-', $_POST["expdate"]);
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
+	break;
+case "1w":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2]+7, $tmp[0]);
+	break;
+case "1m":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1]+1, $tmp[2], $tmp[0]);
+	break;
+case "1y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+1);
+	break;
+case "2y":
+	$tmp = explode('-', date('Y-m-d'));
+	$expires = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]+2);
+	break;
+case "never":
+default:
+	$expires = null;
+	break;
 }
 
 if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
 		if (method_exists($hookObj, 'preSetExpires')) {
-			$hookObj->preSetExpires(array('document'=>$document, 'expires'=>&$expires));
+			$hookObj->preSetExpires(null, array('document'=>$document, 'expires'=>&$expires));
 		}
 	}
 }
@@ -70,7 +91,7 @@ $document->verifyLastestContentExpriry();
 if(isset($GLOBALS['SEEDDMS_HOOKS']['setExpires'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['setExpires'] as $hookObj) {
 		if (method_exists($hookObj, 'postSetExpires')) {
-			$hookObj->postSetExpires(array('document'=>$document, 'expires'=>$expires));
+			$hookObj->postSetExpires(null, array('document'=>$document, 'expires'=>$expires));
 		}
 	}
 }

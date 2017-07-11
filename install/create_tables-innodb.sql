@@ -61,7 +61,7 @@ CREATE TABLE `tblUsers` (
   `comment` text NOT NULL,
   `role` smallint(1) NOT NULL DEFAULT '0',
   `hidden` smallint(1) NOT NULL DEFAULT '0',
-  `pwdExpiration` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pwdExpiration` datetime DEFAULT NULL,
   `loginfailures` tinyint(4) NOT NULL DEFAULT '0',
   `disabled` smallint(1) NOT NULL DEFAULT '0',
   `quota` bigint(20) DEFAULT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `tblUserPasswordRequest` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL DEFAULT '0',
   `hash` varchar(50) DEFAULT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `tblUserPasswordRequest_user` (`userID`),
   CONSTRAINT `tblUserPasswordRequest_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -96,7 +96,7 @@ CREATE TABLE `tblUserPasswordHistory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL DEFAULT '0',
   `pwd` varchar(50) DEFAULT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `tblUserPasswordHistory_user` (`userID`),
   CONSTRAINT `tblUserPasswordHistory_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -112,7 +112,7 @@ CREATE TABLE `tblUserImages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL DEFAULT '0',
   `image` blob NOT NULL,
-  `mimeType` varchar(10) NOT NULL DEFAULT '',
+  `mimeType` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `tblUserImages_user` (`userID`),
   CONSTRAINT `tblUserImages_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -234,7 +234,7 @@ CREATE TABLE `tblDocumentApproveLog` (
   `approveID` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`approveLogID`),
   KEY `tblDocumentApproveLog_approve` (`approveID`),
@@ -315,6 +315,8 @@ CREATE TABLE `tblDocumentLinks` (
 CREATE TABLE `tblDocumentFiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `document` int(11) NOT NULL DEFAULT '0',
+  `version` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `public` tinyint(1) NOT NULL DEFAULT '0',
   `userID` int(11) NOT NULL DEFAULT '0',
   `comment` text,
   `name` varchar(150) DEFAULT NULL,
@@ -373,7 +375,7 @@ CREATE TABLE `tblDocumentReviewLog` (
   `reviewID` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`reviewLogID`),
   KEY `tblDocumentReviewLog_review` (`reviewID`),
@@ -408,7 +410,7 @@ CREATE TABLE `tblDocumentStatusLog` (
   `statusID` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `userID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`statusLogID`),
   KEY `statusID` (`statusID`),
@@ -683,7 +685,7 @@ CREATE TABLE `tblWorkflowLog` (
   `workflow` int(11) DEFAULT NULL,
   `userid` int(11) DEFAULT NULL,
   `transition` int(11) DEFAULT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   `comment` text,
   PRIMARY KEY (`id`),
   KEY `tblWorkflowLog_document` (`document`),
@@ -708,7 +710,7 @@ CREATE TABLE `tblWorkflowDocumentContent` (
   `document` int(11) DEFAULT NULL,
   `version` smallint(5) DEFAULT NULL,
   `state` int(11) DEFAULT NULL,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` datetime NOT NULL,
   KEY `tblWorkflowDocument_document` (`document`),
   KEY `tblWorkflowDocument_workflow` (`workflow`),
   KEY `tblWorkflowDocument_state` (`state`),
@@ -751,7 +753,7 @@ CREATE TABLE `tblVersion` (
 -- Initial content for database
 --
 
-INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '0000-00-00 00:00:00', 0, 0, 0, NULL);
-INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '0000-00-00 00:00:00', 0, 0, 0, NULL);
+INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, NULL, 0, 0, 0, NULL);
+INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, NULL, 0, 0, 0, NULL);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
-INSERT INTO tblVersion VALUES (NOW(), 5, 0, 0);
+INSERT INTO tblVersion VALUES (NOW(), 5, 1, 0);

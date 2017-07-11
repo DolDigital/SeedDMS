@@ -68,6 +68,8 @@ $(document).ready( function() {
 		return false;
 	}, "<?php printMLText("js_no_file");?>");
 	$("#form1").validate({
+		debug: false,
+		ignore: ":hidden:not(.do_validate)",
 		invalidHandler: function(e, validator) {
 			noty({
 				text:  (validator.numberOfInvalids() == 1) ? "<?php printMLText("js_form_error");?>".replace('#', validator.numberOfInvalids()) : "<?php printMLText("js_form_errors");?>".replace('#', validator.numberOfInvalids()),
@@ -82,7 +84,11 @@ $(document).ready( function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			manualuploader.uploadStoredFiles();
+			/* fileuploader may not have any files if drop folder is used */
+			if(userfileuploader.getUploads().length)
+				userfileuploader.uploadStoredFiles();
+			else
+				form.submit();
 		},
 <?php
 		}
@@ -91,8 +97,8 @@ $(document).ready( function() {
 <?php
 		if($enablelargefileupload) {
 ?>
-			fineuploaderuuids: {
-				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			'userfile-fine-uploader-uuids': {
+				fineuploader: [ userfileuploader, $('#dropfolderfileform1') ]
 			}
 <?php
 		} else {
@@ -118,6 +124,12 @@ console.log(element);
 				error.appendTo( element.parent());
 			}
 		}
+	});
+	$('#presetexpdate').on('change', function(ev){
+		if($(this).val() == 'date')
+			$('#control_expdate').show();
+		else
+			$('#control_expdate').hide();
 	});
 });
 <?php
@@ -204,6 +216,7 @@ console.log(element);
 ?>
 
 <form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
+	<?php echo createHiddenFieldWithKey('updatedocument'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table class="table-condensed">
 	
@@ -233,39 +246,50 @@ console.log(element);
 <?php
 			if($presetexpiration) {
 				if(!($expts = strtotime($presetexpiration)))
-					$expts = time();
+					$expts = false;
 			} else {
-				$expts = time();
+				$expts = false;
 			}
 ?>
 		<tr>
+			<td><?php printMLText("preset_expires");?>:</td>
+			<td>
+				<select class="span6" name="presetexpdate" id="presetexpdate">
+					<option value="never"><?php printMLText('does_not_expire');?></option>
+					<option value="date"<?php echo ($expts != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
+					<option value="1w"><?php printMLText('expire_in_1w');?></option>
+					<option value="1m"><?php printMLText('expire_in_1m');?></option>
+					<option value="1y"><?php printMLText('expire_in_1y');?></option>
+					<option value="2y"><?php printMLText('expire_in_2y');?></option>
+				</select>
+			</td>
+		</tr>
+		<tr id="control_expdate" <?php echo ($expts == false ? 'style="display: none;"' : ''); ?>>
 			<td><?php printMLText("expires");?>:</td>
 			<td class="standardText">
-        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span6" size="16" name="expdate" type="text" value="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
-        </span><br />
-        <label class="checkbox inline">
-				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
-        </label>
+        </span>
 			</td>
 		</tr>
 <?php
 	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
-			$arr = $this->callHook('editDocumentContentAttribute', null, $attrdef);
+			$arr = $this->callHook('editDocumentContentAttribute', $document, $attrdef);
 			if(is_array($arr)) {
-				echo $txt;
-				echo "<tr>";
-				echo "<td>".$arr[0].":</td>";
-				echo "<td>".$arr[1]."</td>";
-				echo "</tr>";
+				if($arr) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				}
 			} else {
 ?>
     <tr>
 	    <td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-			<td><?php $this->printAttributeEditField($attrdef, '') ?>
+			<td><?php $this->printAttributeEditField($attrdef, '', 'attributes_version') ?>
 <?php
 			if($latestContent->getAttributeValue($attrdef)) {
 				switch($attrdef->getType()) {
@@ -273,10 +297,10 @@ console.log(element);
 				case SeedDMS_Core_AttributeDefinition::type_date:
 				case SeedDMS_Core_AttributeDefinition::type_int:
 				case SeedDMS_Core_AttributeDefinition::type_float:
-					$this->printInputPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
+					$this->printInputPresetButtonHtml('attributes_version_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef), $attrdef->getValueSetSeparator());
 					break;
 				case SeedDMS_Core_AttributeDefinition::type_boolean:
-					$this->printCheckboxPresetButtonHtml('attributes_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
+					$this->printCheckboxPresetButtonHtml('attributes_version_'.$attrdef->getID(), $latestContent->getAttributeValue($attrdef));
 					break;
 				}
 //				print_r($latestContent->getAttributeValue($attrdef));
@@ -287,6 +311,17 @@ console.log(element);
 			}
 		}
 	}
+
+	$arrs = $this->callHook('addDocumentContentAttributes', $folder);
+	if(is_array($arrs)) {
+		foreach($arrs as $arr) {
+			echo "<tr>";
+			echo "<td>".$arr[0].":</td>";
+			echo "<td>".$arr[1]."</td>";
+			echo "</tr>";
+		}
+	}
+
 	if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.

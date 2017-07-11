@@ -13,6 +13,8 @@
  * @version    Release: @package_version@
  */
 
+require_once "inc.ClassHook.php";
+
 /**
  * Parent class for all view classes
  *
@@ -81,7 +83,8 @@ class SeedDMS_View_Common {
 	 * a list of hook objects with getHookObjects() and call the hooks yourself.
 	 *
 	 * @params string $hook name of hook
-	 * @return string concatenated string of whatever the hook function returns
+	 * @return string concatenated string, merged arrays or whatever the hook
+	 * function returns
 	 */
 	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
@@ -92,39 +95,28 @@ class SeedDMS_View_Common {
 					switch(func_num_args()) {
 						case 1:
 							$tmpret = $hookObj->$hook($this);
-							if(is_string($tmpret))
-								$ret .= $tmpret;
-							else
-								$ret = $tmpret;
 							break;
 						case 2:
 							$tmpret = $hookObj->$hook($this, func_get_arg(1));
-							if(is_string($tmpret))
-								$ret .= $tmpret;
-							else
-								$ret = $tmpret;
 							break;
 						case 3:
 							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
-							if(is_string($tmpret))
-								$ret .= $tmpret;
-							else
-								$ret = $tmpret;
 							break;
 						case 4:
 							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2), func_get_arg(3));
-							if(is_string($tmpret))
-								$ret .= $tmpret;
-							else
-								$ret = $tmpret;
 							break;
 						default:
 						case 5:
 							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2), func_get_arg(3), func_get_arg(4));
-							if(is_string($tmpret))
-								$ret .= $tmpret;
-							else
-								$ret = $tmpret;
+							break;
+					}
+					if($tmpret !== null) {
+						if(is_string($tmpret))
+							$ret .= $tmpret;
+						elseif(is_array($tmpret) || is_object($tmpret)) {
+							$ret = ($ret === null) ? $tmpret : array_merge($ret, $tmpret);
+						} else
+							$ret = $tmpret;
 					}
 				}
 			}

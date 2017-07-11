@@ -121,6 +121,25 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 	} /* }}} */
 
+	function documentListItem() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$previewwidth = $this->params['previewWidthList'];
+		$cachedir = $this->params['cachedir'];
+		$document = $this->params['document'];
+		if($document) {
+			if ($document->getAccessMode($user) >= M_READ) {
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
+				$txt = $this->callHook('documentListItem', $document, $previewer, true, '');
+				if(is_string($txt))
+					$content = $txt;
+				else 
+					$content = $this->documentListRow($document, $previewer, true);
+				echo $content;
+			}
+		}
+	} /* }}} */
+
 	function timelinedata() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -332,20 +351,20 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$this->contentHeading(getMLText("preview"));
 	?>
 			<audio controls style="width: 100%;">
-			<source  src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
+			<source  src="../op/op.ViewOnline.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
 			</audio>
 	<?php
 				break;
 			case 'application/pdf':
 				$this->contentHeading(getMLText("preview"));
 	?>
-				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.Download.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
+				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.ViewOnline.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
 	<?php
 				break;
 			case 'image/svg+xml':
 				$this->contentHeading(getMLText("preview"));
 	?>
-				<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+				<img src="../op/op.ViewOnline.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
 	<?php
 				break;
 			default:
@@ -413,7 +432,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		/* Retrieve attacheѕ files */
-		$files = $document->getDocumentFiles();
+		$latestContent = $document->getLatestContent();
+		$files = $document->getDocumentFiles($latestContent->getVersion());
+		$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
 
 		/* Retrieve linked documents */
 		$links = $document->getDocumentLinks();
@@ -1217,13 +1238,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".htmlspecialchars($file->getName())."</li>\n";
-				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
+				if($file->getName() != $file->getOriginalFileName())
+					print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
 				if ($file_exists)
 					print "<li>".SeedDMS_Core_File::format_filesize(filesize($dms->contentDir . $file->getPath())) ." bytes, ".htmlspecialchars($file->getMimeType())."</li>";
 				else print "<li>".htmlspecialchars($file->getMimeType())." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
+				if($file->getVersion())
+					print "<li>".getMLText('linked_to_current_version')."</li>";
+				else
+					print "<li>".getMLText('linked_to_document')."</li>";
 				print "</ul></td>";
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
 			

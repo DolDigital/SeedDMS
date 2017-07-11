@@ -126,12 +126,22 @@ $(document).ready( function() {
 	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
+			$arr = $this->callHook('addFolderAttribute', null, $attrdef);
+			if(is_array($arr)) {
+				if($arr) {
+					echo "<div class=\"control-group\">";
+					echo "	<label class=\"control-label\">".$arr[0].":</label>";
+					echo "	<div class=\"controls\">".$arr[1]."</div>";
+					echo "</div>";
+				}
+			} else {
 ?>
 <div class="control-group">
 	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
 	<div class="controls"><?php $this->printAttributeEditField($attrdef, '') ?></div>
 </div>
 <?php
+			}
 		}
 	}
 ?>

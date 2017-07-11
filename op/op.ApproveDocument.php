@@ -181,7 +181,7 @@ if ($_POST["approvalStatus"]==-1){
 			$params = array();
 			$params['name'] = $document->getName();
 			$params['folder_path'] = $folder->getFolderPathPlain();
-			$params['status'] = getOverallStatusText($status);
+			$params['status'] = getOverallStatusText(S_REJECTED);
 			$params['comment'] = $document->getComment();
 			$params['username'] = $user->getFullName();
 			$params['sitename'] = $settings->_siteName;
@@ -194,8 +194,13 @@ if ($_POST["approvalStatus"]==-1){
 			}
 		}
 		
-		// TODO: if user os not owner send notification to owner
-
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['approveDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['approveDocument'] as $hookObj) {
+				if (method_exists($hookObj, 'postApproveDocument')) {
+					$hookObj->postApproveDocument(null, $content, S_REJECTED);
+				}
+			}
+		}
 	}
 }else{
 
@@ -241,7 +246,13 @@ if ($_POST["approvalStatus"]==-1){
 				}
 			}
 			
-			// TODO: if user os not owner send notification to owner
+			if(isset($GLOBALS['SEEDDMS_HOOKS']['approveDocument'])) {
+				foreach($GLOBALS['SEEDDMS_HOOKS']['approveDocument'] as $hookObj) {
+					if (method_exists($hookObj, 'postApproveDocument')) {
+						$hookObj->postApproveDocument(null, $content, S_RELEASED);
+					}
+				}
+			}
 		}
 	}
 }

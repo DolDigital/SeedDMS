@@ -162,7 +162,7 @@ class Settings { /* {{{ */
 	var $_logFileEnable = true;
 	// the log file rotation
 	var $_logFileRotation = "d";
-	// Enable file upload by jumploader
+	// Enable file upload by fine-uploader (was 'jumploader')
 	var $_enableLargeFileUpload = false;
 	// size of partitions for file uploaded by fine-loader
 	var $_partitionSize = 2000000;
@@ -178,8 +178,14 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the clipboard
 	var $_enableClipboard = true;
+	// enable/disable list of tasks in main menu
+	var $_enableMenuTasks = true;
+	// enable/disable display of the session list
+	var $_enableSessionList = false;
 	// enable/disable display of the drop zone for file upload
 	var $_enableDropUpload = true;
+	// Enable multiple file upload
+	var $_enableMultiUpload = false;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
 	// count documents and folders for folderview recursively
@@ -410,8 +416,11 @@ class Settings { /* {{{ */
 		$this->_enableConverting = Settings::boolVal($tab["enableConverting"]);
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
+		$this->_enableSessionList = Settings::boolVal($tab["enableSessionList"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
+		$this->_enableMenuTasks = Settings::boolVal($tab["enableMenuTasks"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
+		$this->_enableMultiUpload = Settings::boolVal($tab["enableMultiUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
@@ -717,8 +726,11 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableConverting", $this->_enableConverting);
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
+		$this->setXMLAttributValue($node, "enableSessionList", $this->_enableSessionList);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
+		$this->setXMLAttributValue($node, "enableMenuTasks", $this->_enableMenuTasks);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
+		$this->setXMLAttributValue($node, "enableMultiUpload", $this->_enableMultiUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
@@ -844,7 +856,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "smtpPassword", $this->_smtpPassword);
 
     // XML Path: /configuration/advanced/display
-    $this->getXMLNode($xml, '/configuration', 'advanced');
+    $advnode = $this->getXMLNode($xml, '/configuration', 'advanced');
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'display');
     $this->setXMLAttributValue($node, "siteDefaultPage", $this->_siteDefaultPage);
     $this->setXMLAttributValue($node, "rootFolderID", $this->_rootFolderID);
@@ -936,13 +948,13 @@ class Settings { /* {{{ */
 			$extnodes = $xml->addChild("extensions");
 		}
     foreach($this->_extensions as $name => $extension)
-    {
+		{
       // search XML node
 			$extnode = $extnodes->addChild('extension');
       $this->setXMLAttributValue($extnode, 'name', $name);
 			foreach($GLOBALS['EXT_CONF'][$name]['config'] as $fieldname=>$conf) {
 				$parameter = $extnode->addChild('parameter');
-				$parameter[0] = isset($extension[$fieldname]) ? $extension[$fieldname] : '';
+				$parameter[0] = isset($extension[$fieldname]) ? (is_array($extension[$fieldname]) ? implode(',', $extension[$fieldname]) : $extension[$fieldname]) : '';
 				$this->setXMLAttributValue($parameter, 'name', $fieldname);
 			}
 
@@ -1227,6 +1239,7 @@ class Settings { /* {{{ */
 					case 'mysql':
 					case 'mysqli':
 					case 'mysqlnd':
+					case 'pgsql':
 						$tmp = explode(":", $this->_dbHostname);
 						$dsn = $this->_dbDriver.":dbname=".$this->_dbDatabase.";host=".$tmp[0];
 						if(!empty($tmp[1]))
@@ -1240,7 +1253,7 @@ class Settings { /* {{{ */
 							"status" => "notfound",
 							"type" => "error",
 							"currentvalue" => $this->_dbDriver,
-							"suggestionvalue" => "mysql|sqlite"
+							"suggestionvalue" => "mysql|sqlite|pgsql"
 						);
 				}
 				if($dsn) {

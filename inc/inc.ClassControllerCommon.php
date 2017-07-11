@@ -41,6 +41,24 @@ class SeedDMS_Controller_Common {
 		$this->errormsg = '';
 	}
 
+	/**
+	 * Call methods with name in $get['action']
+	 *
+	 * @params array $get $_GET or $_POST variables
+	 * @return mixed return value of called method
+	 */
+	function __invoke($get=array()) {
+		if(isset($get['action']) && $get['action']) {
+			if(method_exists($this, $get['action'])) {
+				return $this->{$get['action']}();
+			} else {
+				echo "Missing action '".$get['action']."'";
+				return false;
+			}
+		} else
+			return $this->run();
+	}
+
 	function setParams($params) {
 		$this->params = $params;
 	}
@@ -105,6 +123,15 @@ class SeedDMS_Controller_Common {
 	} /* }}} */
 
 	/**
+	 * Set error message
+	 *
+	 * @param string $msg error message
+	 */
+	public function setErrorMsg($msg) { /* {{{ */
+		$this->errormsg = $msg;
+	} /* }}} */
+
+	/**
 	 * Call a controller hook
 	 *
 	 * If a hook returns false, then no other hook will be called, because the
@@ -124,6 +151,9 @@ class SeedDMS_Controller_Common {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					switch(func_num_args()) {
+						case 3:
+							$result = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							break;
 						case 2:
 							$result = $hookObj->$hook($this, func_get_arg(1));
 							break;

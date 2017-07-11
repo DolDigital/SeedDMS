@@ -49,13 +49,23 @@ switch($settings->_dbDriver) {
 	case 'mysql':
 	case 'mysqli':
 	case 'mysqlnd':
-		$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$settings->_dbHostname;
+		$tmp = explode(":", $settings->_dbHostname);
+		$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$tmp[0];
+		if(isset($tmp[1]))
+			$dsn .= ";port=".$tmp[1];
 		break;
 	case 'sqlite':
 		$dsn = $settings->_dbDriver.":".$settings->_dbDatabase;
 		if(file_exists('update-'.$_GET['version'].'/update-sqlite3.sql'))
 			$sqlfile = "update-sqlite3.sql";
 		break;
+	case 'pgsql':
+		$tmp = explode(":", $settings->_dbHostname);
+		$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$tmp[0];
+		if(isset($tmp[1]))
+			$dsn .= ";port=".$tmp[1];
+		if(file_exists('update-'.$_GET['version'].'/update-postgres.sql'))
+			$sqlfile = "update-postgres.sql";
 }
 $db = new PDO($dsn, $settings->_dbUser, $settings->_dbPass);
 if (!$db) {

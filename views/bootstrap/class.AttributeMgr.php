@@ -90,8 +90,8 @@ $(document).ready( function() {
 							$content .= "<td>";
 							/* Check if value is in value set */
 							if($selattrdef->getValueSet()) {
-								foreach($values as $v) {
-									if(!in_array($value, $selattrdef->getValueSetAsArray()))
+								foreach($value as $v) {
+									if(!in_array($v, $selattrdef->getValueSetAsArray()))
 										$content .= getMLText("attribute_value_not_in_valueset");
 								}
 							}

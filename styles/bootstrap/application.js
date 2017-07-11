@@ -165,8 +165,10 @@ $(document).ready( function() {
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -200,8 +202,10 @@ $(document).ready( function() {
 			{ command: 'removefromclipboard', type: type, id: id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -234,7 +238,8 @@ $(document).ready( function() {
 			{ command: 'tooglelockdocument', id: id },
 			function(data) {
 				if(data.success) {
-					$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
+					//$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
+					$("#table-row-document-"+id).html('Loading').load('../out/out.ViewDocument.php?action=documentlistitem&documentid='+id)
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -342,7 +347,7 @@ $(document).ready( function() {
 		input.trigger('fileselect', [numFiles, label]);
 	});
 
-	$(document).on('fileselect', '#upload-file .btn-file :file', function(event, numFiles, label) {
+	$(document).on('fileselect', '.upload-file .btn-file :file', function(event, numFiles, label) {
 		var input = $(this).parents('.input-append').find(':text'),
 		log = numFiles > 1 ? numFiles + ' files selected' : label;
 
@@ -357,16 +362,21 @@ $(document).ready( function() {
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
+		var base = element.data('base');
+		if(typeof base == 'undefined')
+			base = '';
 		var view = element.data('view');
 		var action = element.data('action');
 		var query = element.data('query');
 		if(view && action) {
-			url = "out."+view+".php?action="+action;
+			url = seeddms_webroot+base+"out/out."+view+".php?action="+action;
 			if(query) {
 				url += "&"+query;
 			}
 		} else
 			url = href;
+		if(!element.data('no-spinner'))
+			element.prepend('<div style="position: _absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: 200px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
 //			$(".chzn-select").chosen();
@@ -389,10 +399,13 @@ $(document).ready( function() {
 		var element = $(this);
 		var url = '';
 		var href = element.data('href');
+		var base = element.data('base');
+		if(typeof base == 'undefined')
+			base = '';
 		var view = element.data('view');
 		var action = element.data('action');
 		if(view && action)
-			url = "out."+view+".php?action="+action;
+			url = seeddms_webroot+base+"out/out."+view+".php?action="+action;
 		else
 			url = href;
 		if(typeof param1 === 'object') {
@@ -450,8 +463,10 @@ $(document).ready( function() {
 			success: function(data){
 				if(data.success) {
 					if(element.data('param1') == 'command=clearclipboard') {
-						$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-						$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//						$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+						$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+						//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+						$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					}
 					noty({
 						text: data.message,
@@ -493,8 +508,10 @@ function onAddClipboard(ev) { /* {{{ */
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
 			function(data) {
 				if(data.success) {
-					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
-					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+//					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#main-clipboard").html('Loading').load('../out/out.Clipboard.php?action=mainclipboard')
+					//$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					$("#menu-clipboard").html('Loading').load('../out/out.Clipboard.php?action=menuclipboard')
 					noty({
 						text: data.message,
 						type: 'success',
@@ -1004,3 +1021,25 @@ $(document).ready(function() { /* {{{ */
 		$(this).parent().hide();
 	});
 }); /* }}} */
+
+	var approval_count, review_count, receipt_count, revision_count;
+	var checkTasks = function() {
+		$.ajax({url: '../out/out.Tasks.php',
+			type: 'GET',
+			dataType: "json",
+			data: {action: 'mytasks'},
+			success: function(data) {
+				if(data) {
+					if(approval_count != data.data.approval.length ||
+						 review_count != data.data.review.length) {
+						$("#menu-tasks > ul > li").html('Loading').hide().load('../out/out.Tasks.php?action=menutasks').fadeIn('500')
+						approval_count = data.data.approval.length;
+						review_count = data.data.review.length;
+					}
+				}
+			},
+			timeout: 3000
+		}); 
+		timeOutId = setTimeout(checkTasks, 30000);
+	}
+

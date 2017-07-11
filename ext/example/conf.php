@@ -16,6 +16,37 @@ $EXT_CONF['example'] = array(
 			'title'=>'Example check box',
 			'type'=>'checkbox',
 		),
+		'list' => array(
+			'title'=>'Example select menu from options',
+			'type'=>'select',
+			'options' => array('Option 1', 'Option 2', 'Option 3'),
+			'multiple' => true,
+			'size' => 2,
+		),
+		'categories' => array(
+			'title'=>'Example select menu from categories',
+			'type'=>'select',
+			'internal'=>'categories',
+			'multiple' => true,
+		),
+		'users' => array(
+			'title'=>'Example select menu from users',
+			'type'=>'select',
+			'internal'=>'users',
+			'multiple' => true,
+		),
+		'groups' => array(
+			'title'=>'Example select menu from groups',
+			'type'=>'select',
+			'internal'=>'groups',
+			'multiple' => true,
+		),
+		'attributedefinitions' => array(
+			'title'=>'Example select menu from attribute definitions',
+			'type'=>'select',
+			'internal'=>'attributedefinitions',
+			'multiple' => true,
+		),
 	),
 	'constraints' => array(
 		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.3.0-'),

@@ -175,7 +175,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * 4=attributes)
 	 * @return array list of database fields
 	 */
-	public static function getSearchFields($searchin) { /* {{{ */
+	public static function getSearchFields($dms, $searchin) { /* {{{ */
+		$db = $dms->getDB();
+
 		$searchFields = array();
 		if (in_array(1, $searchin)) {
 			$searchFields[] = "`tblDocuments`.`keywords`";
@@ -192,7 +194,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$searchFields[] = "`tblDocumentContentAttributes`.`value`";
 		}
 		if (in_array(5, $searchin)) {
-			$searchFields[] = "`tblDocuments`.`id`";
+			$searchFields[] = $db->castToText("`tblDocuments`.`id`");
 		}
 
 		return $searchFields;
@@ -1242,7 +1244,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		$contentID = $db->getInsertID();
+		$contentID = $db->getInsertID('tblDocumentContent');
 
 		// copy file
 		if (!SeedDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) {
@@ -1269,7 +1271,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				/* $attribute can be a string or an array */
 				if($attribute)
 					if(!$content->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
-						$this->removeContent($content);
+						$this->_removeContent($content);
 						$db->rollbackTransaction();
 						return false;
 					}
@@ -1283,12 +1285,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentStatus` (`documentID`, `version`) ".
 			"VALUES (". $this->_id .", ". (int) $version .")";
 		if (!$db->getResult($queryStr)) {
-			$this->removeContent($content);
+			$this->_removeContent($content);
 			$db->rollbackTransaction();
 			return false;
 		}
 
-		$statusID = $db->getInsertID();
+		$statusID = $db->getInsertID('tblDocumentStatus', 'statusID');
 
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
@@ -1510,7 +1512,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_latestContent;
 	} /* }}} */
 
-	function removeContent($version) { /* {{{ */
+	/**
+	 * Remove version of document
+	 *
+	 * @param interger $version version number of content
+	 * @return boolean true if successful, otherwise false
+	 */
+	private function _removeContent($version) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (file_exists( $this->_dms->contentDir.$version->getPath() ))
@@ -1619,6 +1627,36 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$db->commitTransaction();
 		return true;
+	} /* }}} */
+
+	/**
+	 * Call callback onPreRemoveDocument before deleting content
+	 *
+	 * @param integer $version version number of content
+	 */
+	function removeContent($version) { /* {{{ */
+		/* Check if 'onPreRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveContent'])) {
+			foreach($this->_dms->callbacks['onPreRemoveContent'] as $callback) {
+				$ret = call_user_func($callback[0], $callback[1], $this, $version);
+				if(is_bool($ret))
+					return $ret;
+			}
+		}
+
+		if(false === ($ret = self::_removeContent($version))) {
+			return false;
+		}
+
+		/* Check if 'onPostRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveContent'])) {
+			foreach($this->_dms->callbacks['onPostRemoveContent'] as $callback) {
+				if(!call_user_func($callback[0], $callback[1], $version)) {
+				}
+			}
+		}
+
+		return $ret;
 	} /* }}} */
 
 	/**
@@ -1762,36 +1800,44 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if ((is_bool($resArr) && !$resArr) || count($resArr)==0) return false;
 
 		$resArr = $resArr[0];
-		return new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"]);
+		return new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"],$resArr["version"],$resArr["public"]);
 	} /* }}} */
 
-	function getDocumentFiles() { /* {{{ */
+	function getDocumentFiles($version=0) { /* {{{ */
 		if (!isset($this->_documentFiles)) {
 			$db = $this->_dms->getDB();
 
-			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id." ORDER BY `date` DESC";
+			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id;
+			if($version) {
+				$queryStr .= " AND (`version`=0 OR `version`=".(int) $version.")";
+			}	
+			$queryStr .= " ORDER BY ";
+			if($version) {
+				$queryStr .= "`version` DESC,";
+			}
+			$queryStr .= "`date` DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 
 			$this->_documentFiles = array();
 
 			foreach ($resArr as $row) {
-				array_push($this->_documentFiles, new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"]));
+				array_push($this->_documentFiles, new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"], $row["version"], $row["public"]));
 			}
 		}
 		return $this->_documentFiles;
 	} /* }}} */
 
-	function addDocumentFile($name, $comment, $user, $tmpFile, $orgFileName,$fileType, $mimeType ) { /* {{{ */
+	function addDocumentFile($name, $comment, $user, $tmpFile, $orgFileName,$fileType, $mimeType,$version=0,$public=1) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$dir = $this->getDir();
 
-		$queryStr = "INSERT INTO `tblDocumentFiles` (`comment`, `date`, `dir`, `document`, `fileType`, `mimeType`, `orgFileName`, `userID`, `name`) VALUES ".
-			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
+		$queryStr = "INSERT INTO `tblDocumentFiles` (`comment`, `date`, `dir`, `document`, `fileType`, `mimeType`, `orgFileName`, `userID`, `name`, `version`, `public`) VALUES ".
+			"(".$db->qstr($comment).", ".$db->getCurrentTimestamp().", ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).", ".((int) $version).", ".($public ? 1 : 0).")";
 		if (!$db->getResult($queryStr)) return false;
 
-		$id = $db->getInsertID();
+		$id = $db->getInsertID('tblDocumentFiles');
 
 		$file = $this->getDocumentFile($id);
 		if (is_bool($file) && !$file) return false;
@@ -1851,9 +1897,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Check if 'onPreRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
 			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
-				if(!call_user_func($callback[0], $callback[1], $this)) {
-					return false;
-				}
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
 			}
 		}
 
@@ -1864,7 +1910,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		// remove content of document
 		foreach ($this->_content as $version) {
-			if (!$this->removeContent($version)) {
+			if (!$this->_removeContent($version)) {
 				$db->rollbackTransaction();
 				return false;
 			}
@@ -2788,7 +2834,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$db->rollbackTransaction();
 				return false;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 			$reviewlog = array_reverse($review['logs']);
 			foreach($reviewlog as $log) {
 				if(!SeedDMS_Core_DMS::checkDate($log['date'], 'Y-m-d H:i:s')) {
@@ -2801,7 +2847,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					$db->rollbackTransaction();
 					return false;
 				}
-				$reviewLogID = $db->getInsertID();
+				$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 				if(!empty($log['file'])) {
 					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 				}
@@ -2916,7 +2962,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$db->rollbackTransaction();
 				return false;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 			$reviewlog = array_reverse($review['logs']);
 			foreach($reviewlog as $log) {
 				if(!SeedDMS_Core_DMS::checkDate($log['date'], 'Y-m-d H:i:s')) {
@@ -2929,7 +2975,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 					$db->rollbackTransaction();
 					return false;
 				}
-				$approveLogID = $db->getInsertID();
+				$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 				if(!empty($log['file'])) {
 					SeedDMS_Core_File::copyFile($log['file'], $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 				}
@@ -2987,7 +3033,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 		}
 		else {
 			$reviewID = isset($indstatus["reviewID"]) ? $indstatus["reviewID"] : NULL;
@@ -3045,7 +3091,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$reviewID = $db->getInsertID();
+			$reviewID = $db->getInsertID('tblDocumentReviewers', 'reviewID');
 		}
 		else {
 			$reviewID = isset($reviewStatus[0]["reviewID"])?$reviewStatus[0]["reviewID"]:NULL;
@@ -3115,7 +3161,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$reviewLogID = $db->getInsertID();
+		$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 		}
@@ -3167,7 +3213,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 		else {
-			$reviewLogID = $db->getInsertID();
+			$reviewLogID = $db->getInsertID('tblDocumentReviewLog', 'reviewLogID');
 			if($file) {
 				SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'r' . $reviewLogID);
 			}
@@ -3220,7 +3266,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$approveID = $db->getInsertID();
+			$approveID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 		}
 		else {
 			$approveID = isset($indstatus["approveID"]) ? $indstatus["approveID"] : NULL;
@@ -3233,7 +3279,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return -1;
 		}
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		return $approveLogID;
 	} /* }}} */
 
@@ -3276,7 +3322,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (is_bool($res) && !$res) {
 				return -1;
 			}
-			$approveID = $db->getInsertID();
+			$approveID = $db->getInsertID('tblDocumentApprovers', 'approveID');
 		}
 		else {
 			$approveID = isset($approvalStatus[0]["approveID"])?$approvalStatus[0]["approveID"]:NULL;
@@ -3292,7 +3338,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		// Add approver to event notification table.
 		//$this->_document->addNotify($groupID, false);
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		return $approveLogID;
 	} /* }}} */
 
@@ -3350,7 +3396,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}
@@ -3394,7 +3440,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($res) && !$res)
 			return -1;
 
-		$approveLogID = $db->getInsertID();
+		$approveLogID = $db->getInsertID('tblDocumentApproveLog', 'approveLogID');
 		if($file) {
 			SeedDMS_Core_File::copyFile($file, $this->_dms->contentDir . $this->_document->getDir() . 'a' . $approveLogID);
 		}
@@ -4371,6 +4417,16 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	protected $_date;
 
 	/**
+	 * @var integer version of document this file is attached to
+	 */
+	protected $_version;
+
+	/**
+	 * @var integer 1 if this link is public, or 0 if is only visible to the owner
+	 */
+	protected $_public;
+
+	/**
 	 * @var string directory where the file is stored. This is the
 	 * document id with a proceding '/'.
 	 * FIXME: looks like this isn't used anymore. The file path is
@@ -4398,7 +4454,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 */
 	protected $_name;
 
-	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name) {
+	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name,$version,$public) {
 		$this->_id = $id;
 		$this->_document = $document;
 		$this->_userID = $userID;
@@ -4409,6 +4465,8 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		$this->_mimeType = $mimeType;
 		$this->_orgFileName = $orgFileName;
 		$this->_name = $name;
+		$this->_version = $version;
+		$this->_public = $public;
 	}
 
 	function getID() { return $this->_id; }
@@ -4431,6 +4489,10 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	function getPath() {
 		return $this->_document->getDir() . "f" .$this->_id . $this->_fileType;
 	}
+
+	function getVersion() { return $this->_version; }
+
+	function isPublic() { return $this->_public; }
 
 } /* }}} */
 

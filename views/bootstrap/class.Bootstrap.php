@@ -64,6 +64,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				header($csp . ": " . $csp_rules);
 			}
 		}
+		$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'startPage')) {
+				$hookObj->startPage($this);
+			}
+		}
 		echo "<!DOCTYPE html>\n";
 		echo "<html lang=\"en\">\n<head>\n";
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
@@ -81,7 +87,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader['css'])
 			echo $this->extraheader['css'];
-//		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
+		if(method_exists($this, 'css'))
+			echo '<link href="../out/out.'.$this->params['class'].'.php?action=css'.(!empty($_SERVER['QUERY_STRING']) ? '&'.$_SERVER['QUERY_STRING'] : '').'" rel="stylesheet">'."\n";
 
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader['js'])
@@ -113,6 +120,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			$this->params['session']->clearSplashMsg();
 			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
 		}
+		foreach($hookObjs as $hookObj) {
+			if (method_exists($hookObj, 'startBody')) {
+				$hookObj->startBody($this);
+			}
+		}
 	} /* }}} */
 
 	function htmlAddHeader($head, $type='js') { /* {{{ */
@@ -132,7 +144,13 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
+		parse_str($_SERVER['QUERY_STRING'], $tmp);
+		$tmp['action'] = 'webrootjs';
+		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
+		if(isset($this->params['user']) && $this->params['user']) {
+			$this->addFooterJS('checkTasks();');
+		}
 		if($this->footerjs) {
 			$jscode = "$(document).ready(function () {\n";
 			foreach($this->footerjs as $script) {
@@ -146,7 +164,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			if(is_dir($this->params['cachedir'].'/js')) {
 				file_put_contents($this->params['cachedir'].'/js/'.$hashjs.'.js', $jscode);
 			}
-			parse_str($_SERVER['QUERY_STRING'], $tmp);
 			$tmp['action'] = 'footerjs';
 			$tmp['hash'] = $hashjs;
 			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
@@ -157,6 +174,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		}
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function webrootjs() { /* {{{ */
+		header('Content-Type: application/javascript');
+		echo "var seeddms_absbaseprefix=\"".$this->params['absbaseprefix']."\";\n";
+		echo "var seeddms_webroot=\"".$this->params['settings']->_httpRoot."\";\n";
 	} /* }}} */
 
 	function footerjs() { /* {{{ */
@@ -226,45 +249,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "</div>\n";
 	} /* }}} */
 
-	/**
-	 * Returns the html needed for the clipboard list in the menu
-	 *
-	 * This function renders the clipboard in a way suitable to be
-	 * used as a menu
-	 *
-	 * @param array $clipboard clipboard containing two arrays for both
-	 *        documents and folders.
-	 * @return string html code
-	 */
-	function menuClipboard($clipboard) { /* {{{ */
-		if ($this->params['user']->isGuest() || (count($clipboard['docs']) + count($clipboard['folders'])) == 0) {
-			return '';
-		}
-		$content = '';
-		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
-		$content .= "    <li class=\"dropdown add-clipboard-area\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-clipboard-area\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
-		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		foreach($clipboard['folders'] as $folderid) {
-			if($folder = $this->params['dms']->getFolder($folderid))
-				$content .= "    <li><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
-		}
-		foreach($clipboard['docs'] as $docid) {
-			if($document = $this->params['dms']->getDocument($docid))
-				$content .= "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
-		}
-		$content .= "    <li class=\"divider\"></li>\n";
-		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
-			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
-		}
-//		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
-		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
-		$content .= "     </ul>\n";
-		$content .= "    </li>\n";
-		$content .= "   </ul>\n";
-		return $content;
-	} /* }}} */
-
 	function globalNavigation($folder=null) { /* {{{ */
 		$dms = $this->params['dms'];
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
@@ -332,9 +316,25 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "    </li>\n";
 			echo "   </ul>\n";
 
+			if($this->params['enablemenutasks']) {
+				echo "   <div id=\"menu-tasks\">";
+				echo "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
+				echo "    <li class=\"dropdown\">\n";
+//				echo $this->menuTasks(array('review'=>array(), 'approval'=>array(), 'receipt'=>array(), 'revision'=>array()));
+				echo "    </li>\n";
+				echo "   </ul>\n";
+				echo "   </div>";
+				//$this->addFooterJS('checkTasks();');
+			}
+
+			if($this->params['enablesessionlist']) {
+				echo "   <div id=\"menu-session\">";
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Session\" data-action=\"menuSessions\"></div>";
+				echo "   </div>";
+			}
 			if($this->params['enableclipboard']) {
 				echo "   <div id=\"menu-clipboard\">";
-				echo $this->menuClipboard($this->params['session']->getClipboard());
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Clipboard\" data-action=\"menuClipboard\"></div>";
 				echo "   </div>";
 			}
 
@@ -886,14 +886,34 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
-?>
-	<div id="upload-files">
-		<div id="upload-file">
+	function getFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+		$id = preg_replace('/[^A-Za-z]/', '', $varname);
+		$html = '
+	<div id="'.$id.'-upload-files">
+		<div id="'.$id.'-upload-file" class="upload-file">
 			<div class="input-append">
 				<input type="text" class="form-control" readonly>
 				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+					'.getMLText("browse").'&hellip; <input _id="'.$id.'" type="file" name="'.$varname.'"'.($multiple ? " multiple" : "").($accept ? ' accept="'.$accept.'"' : "").'">
+				</span>
+			</div>
+		</div>
+	</div>
+';
+		return $html;
+	} /* }}} */
+
+	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+		echo $this->getFileChooser($varname, $multiple, $accept);
+		return;
+		$id = preg_replace('/[^A-Za-z]/', '', $varname);
+?>
+	<div id="<?php echo $id; ?>-upload-files">
+		<div id="<?php echo $id; ?>-upload-file" class="upload-file">
+			<div class="input-append">
+				<input type="text" class="form-control" readonly>
+				<span class="btn btn-default btn-file">
+					<?php printMLText("browse");?>&hellip; <input id="<?php echo $id; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
@@ -1098,7 +1118,7 @@ $(document).ready(function() {
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" disabled name=\"categoryname".$formName."\" value=\"".implode(' ', $names)."\">";
 		print "<button type=\"button\" class=\"btn\" onclick=\"javascript:clearCategory".$formName."();\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#categoryChooser\" href=\"out.CategoryChooser.php?form=form1&cats=".implode(',', $ids)."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("category")."…</a>\n";
+		print "<a data-target=\"#categoryChooser\" href=\"../out/out.CategoryChooser.php?form=form1&cats=".implode(',', $ids)."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("category")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="categoryChooser" tabindex="-1" role="dialog" aria-labelledby="categoryChooserLabel" aria-hidden="true">
@@ -1122,7 +1142,7 @@ $(document).ready(function() {
 ?>
 		    <div class="input-append">
 				<input type="text" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>"<?php echo $strictformcheck ? ' required' : ''; ?> />
-				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="../out/out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
 		    </div>
 <div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-header">
@@ -1221,7 +1241,7 @@ $(document).ready(function() {
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
+		print "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
@@ -1493,88 +1513,6 @@ $(function() {
 	} /* }}} */
 
 	/**
-	 * Return clipboard content rendered as html
-	 *
-	 * @param array clipboard
-	 * @return string rendered html content
-	 */
-	function mainClipboard($clipboard, $previewer){ /* {{{ */
-		$dms = $this->params['dms'];
-		$content = '';
-		$foldercount = $doccount = 0;
-		if($clipboard['folders']) {
-			foreach($clipboard['folders'] as $folderid) {
-				/* FIXME: check for access rights, which could have changed after adding the folder to the clipboard */
-				if($folder = $dms->getFolder($folderid)) {
-					$comment = $folder->getComment();
-					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					$content .= "<tr draggable=\"true\" rel=\"folder_".$folder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.svg\" width=\"24\" height=\"24\" border=0></a></td>\n";
-					$content .= "<td><a draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
-					if($comment) {
-						$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-					}
-					$content .= "</td>\n";
-					$content .= "<td>\n";
-					$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"F".$folderid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-					$content .= "</td>\n";
-					$content .= "</tr>\n";
-					$foldercount++;
-				}
-			}
-		}
-		if($clipboard['docs']) {
-			foreach($clipboard['docs'] as $docid) {
-				/* FIXME: check for access rights, which could have changed after adding the document to the clipboard */
-				if($document = $dms->getDocument($docid)) {
-					$comment = $document->getComment();
-					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					if($latestContent = $document->getLatestContent()) {
-						$previewer->createPreview($latestContent);
-						$version = $latestContent->getVersion();
-						$status = $latestContent->getStatus();
-						
-						$content .= "<tr draggable=\"true\" rel=\"document_".$docid."\" class=\"table-row-document\" formtoken=\"".createFormKey('movedocument')."\">";
-
-						if (file_exists($dms->contentDir . $latestContent->getPath())) {
-							$content .= "<td><a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
-							if($previewer->hasPreview($latestContent)) {
-								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							} else {
-								$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"40\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-							}
-							$content .= "</a></td>";
-						} else
-							$content .= "<td><img draggable=\"false\" class=\"mimeicon\" width=\"40\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-						
-						$content .= "<td><a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
-						if($comment) {
-							$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-						}
-						$content .= "</td>\n";
-						$content .= "<td>\n";
-						$content .= "<div class=\"list-action\"><a class=\"removefromclipboard\" rel=\"D".$docid."\" msg=\"".getMLText('splash_removed_from_clipboard')."\" _href=\"../op/op.RemoveFromClipboard.php?folderid=".(isset($this->params['folder']) ? $this->params['folder']->getID() : '')."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-						$content .= "</td>\n";
-						$content .= "</tr>";
-						$doccount++;
-					}
-				}
-			}
-		}
-
-		/* $foldercount or $doccount will only count objects which are
-		 * actually available
-		 */
-		if($foldercount || $doccount) {
-			$content = "<table class=\"table\">".$content;
-			$content .= "</table>";
-		} else {
-		}
-		$content .= "<div class=\"alert add-clipboard-area\">".getMLText("drag_icon_here")."</div>";
-		return $content;
-	} /* }}} */
-
-	/**
 	 * Print clipboard in div container
 	 *
 	 * @param array clipboard
@@ -1582,7 +1520,9 @@ $(function() {
 	function printClipboard($clipboard, $previewer){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div id=\"main-clipboard\">\n";
-		echo $this->mainClipboard($clipboard, $previewer);
+?>
+		<div class="ajax" data-view="Clipboard" data-action="mainClipboard"></div>
+<?php
 		echo "</div>\n";
 	} /* }}} */
 
@@ -1607,7 +1547,7 @@ $(function() {
 	function printDeleteDocumentButton($document, $msg, $return=false){ /* {{{ */
 		$docid = $document->getID();
 		$content = '';
-    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'"confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
+    $content .= '<a class="delete-document-btn" rel="'.$docid.'" msg="'.getMLText($msg).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_document", array ("documentname" => $document->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
 		if($return)
 			return $content;
 		else
@@ -1925,7 +1865,8 @@ $(document).ready( function() {
 			}
 			
 			/* Retrieve attacheѕ files */
-			$files = $document->getDocumentFiles();
+			$files = $document->getDocumentFiles($latestContent->getVersion());
+			$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
 
 			/* Retrieve linked documents */
 			$links = $document->getDocumentLinks();
@@ -1945,7 +1886,7 @@ $(document).ready( function() {
 			$content .= "</td>";
 
 			$content .= "<td>";	
-			$content .= "<a draggable=\"false\" href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+			$content .= "<a draggable=\"false\" href=\"../out/out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
 			$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b>".($document->expires() ? ", ".getMLText('expires').": <b>".getReadableDate($document->getExpires())."</b>" : "")."</span>";
 			if($comment) {
 				$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -2017,8 +1958,8 @@ $(document).ready( function() {
 		$content = '';
 		$content .= "<tr id=\"table-row-folder-".$subFolder->getID()."\" draggable=\"true\" rel=\"folder_".$subFolder->getID()."\" class=\"folder table-row-folder\" formtoken=\"".createFormKey('movefolder')."\">";
 	//	$content .= "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.svg\" width=\"24\" height=\"24\" border=0></a></td>\n";
-		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+		$content .= "<td><a _rel=\"folder_".$subFolder->getID()."\" draggable=\"false\" href=\"../out/out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.svg\" width=\"24\" height=\"24\" border=0></a></td>\n";
+		$content .= "<td><a draggable=\"false\" _rel=\"folder_".$subFolder->getID()."\" href=\"../out/out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
 		$content .= "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 		if($comment) {
 			$content .= "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -2455,11 +2396,11 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderHtml() { /* {{{ */
+	function printFineUploaderHtml($prefix='userfile') { /* {{{ */
 ?>
-		<div id="manual-fine-uploader"></div>
-		<input type="hidden" class="do_validate" id="fineuploaderuuids" name="fineuploaderuuids" value="" />
-		<input type="hidden" id="fineuploadernames" name="fineuploadernames" value="" />
+		<div id="<?php echo $prefix; ?>-fine-uploader"></div>
+		<input type="hidden" <?php echo ($prefix=='userfile' ? 'class="do_validate"' : ''); ?> id="<?php echo $prefix; ?>-fine-uploader-uuids" name="<?php echo $prefix; ?>-fine-uploader-uuids" value="" />
+		<input type="hidden" id="<?php echo $prefix; ?>-fine-uploader-names" name="<?php echo $prefix; ?>-fine-uploader-names" value="" />
 <?php
 	} /* }}} */
 
@@ -2471,14 +2412,14 @@ mayscript>
 	 * @param integer $maxfiles maximum number of files allowed to upload
 	 * @param array $fields list of post fields
 	 */
-	function printFineUploaderJs($uploadurl, $partsize=0, $maxuploadsize=0, $multiple=true) { /* {{{ */
+	function printFineUploaderJs($uploadurl, $partsize=0, $maxuploadsize=0, $multiple=true, $prefix='userfile') { /* {{{ */
 ?>
 $(document).ready(function() {
-	manualuploader = new qq.FineUploader({
+	<?php echo $prefix; ?>uploader = new qq.FineUploader({
 		debug: false,
 		autoUpload: false,
 		multiple: <?php echo ($multiple ? 'true' : 'false'); ?>,
-		element: $('#manual-fine-uploader')[0],
+		element: $('#<?php echo $prefix; ?>-fine-uploader')[0],
 		template: 'qq-template',
 		request: {
 			endpoint: '<?php echo $uploadurl; ?>'
@@ -2506,8 +2447,8 @@ $(document).ready(function() {
 					uuids.push(this.getUuid(succeeded[i]))
 					names.push(this.getName(succeeded[i]))
 				}
-				$('#fineuploaderuuids').val(uuids.join(';'));
-				$('#fineuploadernames').val(names.join(';'));
+				$('#<?php echo $prefix; ?>-fine-uploader-uuids').val(uuids.join(';'));
+				$('#<?php echo $prefix; ?>-fine-uploader-names').val(names.join(';'));
 				/* Run upload only if all files could be uploaded */
 				if(succeeded.length > 0 && failed.length == 0)
 					document.getElementById('form1').submit();

@@ -223,12 +223,15 @@ class SeedDMS_Core_Object { /* {{{ */
 		if(!isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {
 				case $this->_dms->getClassname('document'):
+					$tablename = 'tblDocumentAttributes';
 					$queryStr = "INSERT INTO `tblDocumentAttributes` (`document`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				case $this->_dms->getClassname('documentcontent'):
+					$tablename = 'tblDocumentContentAttributes';
 					$queryStr = "INSERT INTO `tblDocumentContentAttributes` (`content`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				case $this->_dms->getClassname('folder'):
+					$tablename = 'tblFolderAttributes';
 					$queryStr = "INSERT INTO `tblFolderAttributes` (`folder`, `attrdef`, `value`) VALUES (".$this->_id.", ".$attrdef->getId().", ".$db->qstr($value).")";
 					break;
 				default:
@@ -238,7 +241,7 @@ class SeedDMS_Core_Object { /* {{{ */
 			if (!$res)
 				return false;
 
-			$attr = new SeedDMS_Core_Attribute($db->getInsertID(), $this, $attrdef, $value);
+			$attr = new SeedDMS_Core_Attribute($db->getInsertID($tablename), $this, $attrdef, $value);
 			$attr->setDMS($this->_dms);
 			$this->_attributes[$attrdef->getId()] = $attr;
 			return true;

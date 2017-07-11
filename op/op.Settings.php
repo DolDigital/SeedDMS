@@ -81,8 +81,11 @@ if ($action == "saveSettings")
   $settings->_fullSearchEngine = $_POST["fullSearchEngine"];
   $settings->_defaultSearchMethod = $_POST["defaultSearchMethod"];
   $settings->_showSingleSearchHit = getBoolValue("showSingleSearchHit");
+  $settings->_enableSessionList = getBoolValue("enableSessionList");
   $settings->_enableClipboard = getBoolValue("enableClipboard");
+  $settings->_enableMenuTasks = getBoolValue("enableMenuTasks");
   $settings->_enableDropUpload = getBoolValue("enableDropUpload");
+  $settings->_enableMultiUpload = getBoolValue("enableMultiUpload");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);
@@ -189,7 +192,7 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - INDEX CMD
 	$settings->_converters['fulltext'] = $_POST["converters"];
-	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.-*]+#', '', $_POST["converters_newmimetype"]);
+	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $_POST["converters_newmimetype"]);
   if($newmimetype && trim($_POST["converters_newcmd"])) {
     $settings->_converters['fulltext'][$newmimetype] = trim($_POST["converters_newcmd"]);
   }

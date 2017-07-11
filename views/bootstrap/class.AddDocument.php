@@ -36,16 +36,19 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$partitionsize = $this->params['partitionsize'];
 		$maxuploadsize = $this->params['maxuploadsize'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enablemultiupload = $this->params['enablemultiupload'];
 		header('Content-Type: application/javascript; charset=UTF-8');
 
-		if($enablelargefileupload)
-			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize);
+		if($enablelargefileupload) {
+			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, $enablemultiupload);
+		}
 ?>
 $(document).ready(function() {
 	$('#new-file').click(function(event) {
-			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
+		tttttt = $("#userfile-upload-file").clone().appendTo("#userfile-upload-files").removeAttr("id");
+		tttttt.children('div').children('input').val('');
+		tttttt.children('div').children('span').children('input').val('');
 	});
-
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
 		if(value == '' && params.val() == '')
 			return false;
@@ -84,7 +87,11 @@ $(document).ready(function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			manualuploader.uploadStoredFiles();
+			/* fileuploader may not have any files if drop folder is used */
+			if(userfileuploader.getUploads().length)
+				userfileuploader.uploadStoredFiles();
+			else
+				form.submit();
 		},
 <?php
 		}
@@ -93,8 +100,8 @@ $(document).ready(function() {
 <?php
 		if($enablelargefileupload) {
 ?>
-			fineuploaderuuids: {
-				fineuploader: [ manualuploader, $('#dropfolderfileform1') ]
+			'userfile-fine-uploader-uuids': {
+				fineuploader: [ userfileuploader, $('#dropfolderfileform1') ]
 			}
 <?php
 		} else {
@@ -122,6 +129,12 @@ $(document).ready(function() {
 			}
 		}
 	});
+	$('#presetexpdate').on('change', function(ev){
+		if($(this).val() == 'date')
+			$('#control_expdate').show();
+		else
+			$('#control_expdate').hide();
+	});
 });
 <?php
 			$this->printKeywordChooserJs("form1");
@@ -135,6 +148,7 @@ $(document).ready(function() {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enablemultiupload = $this->params['enablemultiupload'];
 		$enableadminrevapp = $this->params['enableadminrevapp'];
 		$enableownerrevapp = $this->params['enableownerrevapp'];
 		$enableselfrevapp = $this->params['enableselfrevapp'];
@@ -158,9 +172,6 @@ $(document).ready(function() {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
-		if(0 && $enablelargefileupload) {
-			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree())."</p>";
-		}
 		$this->warningMsg($msg);
 		$this->contentHeading(getMLText("add_document"));
 		$this->contentContainerStart();
@@ -209,6 +220,37 @@ $(document).ready(function() {
 			<td><?php printMLText("sequence");?>:</td>
 			<td><?php $this->printSequenceChooser($folder->getDocuments('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); ?></td>
 		</tr>
+<?php
+			if($presetexpiration) {
+				if(!($expts = strtotime($presetexpiration)))
+					$expts = false;
+			} else {
+				$expts = false;
+			}
+?>
+		<tr>
+			<td><?php printMLText("preset_expires");?>:</td>
+			<td>
+				<select class="span3" name="presetexpdate" id="presetexpdate">
+					<option value="never"><?php printMLText('does_not_expire');?></option>
+					<option value="date"<?php echo ($expts != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
+					<option value="1w"><?php printMLText('expire_in_1w');?></option>
+					<option value="1m"><?php printMLText('expire_in_1m');?></option>
+					<option value="1y"><?php printMLText('expire_in_1y');?></option>
+					<option value="2y"><?php printMLText('expire_in_2y');?></option>
+				</select>
+			</td>
+		</tr>
+		<tr id="control_expdate" <?php echo ($expts == false ? 'style="display: none;"' : ''); ?>>
+			<td><?php printMLText("expires");?>:</td>
+			<td>
+        <span class="input-append date span6" id="expirationdate" data-date="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
+          <input class="span3" size="16" name="expdate" type="text" value="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>">
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </span>
+			</td>
+		</tr>
+
 <?php if($user->isAdmin()) { ?>
 		<tr>
 			<td><?php printMLText("owner");?>:</td>
@@ -231,12 +273,14 @@ $(document).ready(function() {
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+					$arr = $this->callHook('addDocumentAttribute', null, $attrdef);
 					if(is_array($arr)) {
-						echo "<tr>";
-						echo "<td>".$arr[0].":</td>";
-						echo "<td>".$arr[1]."</td>";
-						echo "</tr>";
+						if($arr) {
+							echo "<tr>";
+							echo "<td>".$arr[0].":</td>";
+							echo "<td>".$arr[1]."</td>";
+							echo "</tr>";
+						}
 					} else {
 ?>
 		<tr>
@@ -247,26 +291,16 @@ $(document).ready(function() {
 					}
 				}
 			}
-			if($presetexpiration) {
-				if(!($expts = strtotime($presetexpiration)))
-					$expts = time();
-			} else {
-				$expts = time();
+			$arrs = $this->callHook('addDocumentAttributes', $folder);
+			if(is_array($arrs)) {
+				foreach($arrs as $arr) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				}
 			}
 ?>
-		<tr>
-			<td><?php printMLText("expires");?>:</td>
-			<td>
-        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('Y-m-d', $expts); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('Y-m-d', $expts); ?>">
-          <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>&nbsp;
-        <label class="checkbox inline">
-					<input type="checkbox" id="expires" name="expires" value="false" <?php echo  ($presetexpiration ? "" : "checked");?>><?php printMLText("does_not_expire");?>
-        </label>
-			</td>
-		</tr>
-
 		<tr>
 			<td>
 		<?php $this->contentSubHeading(getMLText("version_info")); ?>
@@ -279,20 +313,16 @@ $(document).ready(function() {
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
 			<td>
-<!--
-			<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
-			<ol id="files">
-			<li><input type="file" name="userfile[]" size="60"></li>
-			</ol>
--->
 <?php
 		if($enablelargefileupload)
 			$this->printFineUploaderHtml();
 		else {
 			$this->printFileChooser('userfile[]', false);
+			if($enablemultiupload) {
 ?>
 			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
 <?php
+			}
 		}
 ?>
 			</td>
@@ -312,7 +342,7 @@ $(document).ready(function() {
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('editDocumentAttribute', null, $attrdef);
+					$arr = $this->callHook('addDocumentContentAttribute', null, $attrdef);
 					if(is_array($arr)) {
 						echo "<tr>";
 						echo "<td>".$arr[0].":</td>";
@@ -328,6 +358,17 @@ $(document).ready(function() {
 					}
 				}
 			}
+
+			$arrs = $this->callHook('addDocumentContentAttributes', $folder);
+			if(is_array($arrs)) {
+				foreach($arrs as $arr) {
+					echo "<tr>";
+					echo "<td>".$arr[0].":</td>";
+					echo "<td>".$arr[1]."</td>";
+					echo "</tr>";
+				}
+			}
+
 		if($workflowmode == 'advanced') {
 ?>
 		<tr>	

@@ -1,8 +1,8 @@
-VERSION=5.0.11
+VERSION=5.1.2
 SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc styles TODO LICENSE webdav install restapi pdfviewer
 # webapp
 
-NODISTFILES=utils/importmail.php utils/seedddms-importmail utils/remote-email-upload utils/remote-upload .svn .gitignore styles/blue styles/hc styles/clean views/blue views/hc views/clean
+NODISTFILES=utils/importmail.php utils/seedddms-importmail utils/remote-email-upload utils/remote-upload utils/da-bv-reminder.php utils/seeddms-da-bv-reminder .svn .gitignore styles/blue styles/hc styles/clean views/blue views/hc views/clean
 
 EXTENSIONS := \
 	dynamic_content.tar.gz\

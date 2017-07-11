@@ -71,7 +71,7 @@ $workflow = $transition->getWorkflow();
 if(isset($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'] as $hookObj) {
 		if (method_exists($hookObj, 'preTriggerWorkflowTransition')) {
-			$hookObj->preTriggerWorkflowTransition(array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
+			$hookObj->preTriggerWorkflowTransition(null, array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
 		}
 	}
 }
@@ -130,7 +130,7 @@ if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['triggerWorkflowTransition'] as $hookObj) {
 			if (method_exists($hookObj, 'postTriggerWorkflowTransition')) {
-				$hookObj->postTriggerWorkflowTransition(array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
+				$hookObj->postTriggerWorkflowTransition(null, array('version'=>$version, 'transition'=>$transition, 'comment'=>$_POST["comment"]));
 			}
 		}
 	}

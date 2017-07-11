@@ -37,6 +37,10 @@ if (!file_exists("create_tables-sqlite3.sql")) {
   echo "Can't install SeedDMS, 'create_tables-sqlite3.sql' missing";
   exit;
 }
+if (!file_exists("create_tables-postgres.sql")) {
+  echo "Can't install SeedDMS, 'create_tables-postgres.sql' missing";
+  exit;
+}
 if (!file_exists("settings.xml.template_install")) {
   echo "Can't install SeedDMS, 'settings.xml.template_install' missing";
   exit;
@@ -50,6 +54,7 @@ function openDBConnection($settings) { /* {{{ */
 		case 'mysql':
 		case 'mysqli':
 		case 'mysqlnd':
+		case 'pgsql':
 			$tmp = explode(":", $settings->_dbHostname);
 			$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$tmp[0];
 			if(isset($tmp[1]))
@@ -118,7 +123,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "5.0.11");
+define("SEEDDMS_VERSION", "5.1.2");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -297,6 +302,8 @@ if ($action=="setSettings") {
 					$queries = file_get_contents("create_tables-innodb.sql");
 				elseif($settings->_dbDriver=="sqlite")
 					$queries = file_get_contents("create_tables-sqlite3.sql");
+				elseif($settings->_dbDriver=="pgsql")
+					$queries = file_get_contents("create_tables-postgres.sql");
 				else
 					die();
 
@@ -338,7 +345,18 @@ if ($action=="setSettings") {
 			$needsupdate = false;
 			$connTmp =openDBConnection($settings);
 			if ($connTmp) {
-				$res = $connTmp->query('select * from tblVersion');
+				switch($settings->_dbDriver) {
+					case 'mysql':
+					case 'mysqli':
+					case 'mysqlnd':
+					case 'sqlite':
+						$sql = 'select * from `tblVersion`';
+						break;
+					case 'pgsql':
+						$sql = 'select * from "tblVersion"';
+						break;
+				}
+				$res = $connTmp->query($sql);
 				if($res) {
 					if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 						$updatedirs = array();

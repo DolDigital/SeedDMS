@@ -37,9 +37,6 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	 *
 	 * Use this method to do some initialization like setting up the hooks
 	 * You have access to the following global variables:
-	 * $GLOBALS['dms'] : object representing dms
-	 * $GLOBALS['user'] : currently logged in user
-	 * $GLOBALS['session'] : current session
 	 * $GLOBALS['settings'] : current global configuration
 	 * $GLOBALS['settings']['_extensions']['example'] : configuration of this extension
 	 * $GLOBALS['LANG'] : the language array with translations for all languages
@@ -48,6 +45,7 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	function init() { /* {{{ */
 		$GLOBALS['SEEDDMS_HOOKS']['view']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
 		$GLOBALS['SEEDDMS_HOOKS']['view']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
+		$GLOBALS['SEEDDMS_SCHEDULER']['tasks']['example']['example'] = new SeedDMS_ExtExample_Task;
 	} /* }}} */
 
 	function main() { /* {{{ */
@@ -110,6 +108,18 @@ class SeedDMS_ExtExample_ViewFolder {
 		return $view->infoMsg("Content created by viewFolder::postContent hook");
 	} /* }}} */
 
+}
+
+/**
+ * Class containing methods for running a scheduled task
+ *
+ * @author  Uwe Steinmann <uwe@steinmann.cx>
+ * @package SeedDMS
+ * @subpackage  example
+ */
+class SeedDMS_ExtExample_Task {
+	public function execute() {
+	}
 }
 
 ?>

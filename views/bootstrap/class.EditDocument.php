@@ -88,6 +88,12 @@ $(document).ready( function() {
 			keywords: "<?php printMLText("js_no_keywords");?>"
 		}
 	});
+	$('#presetexpdate').on('change', function(ev){
+		if($(this).val() == 'date')
+			$('#control_expdate').show();
+		else
+			$('#control_expdate').hide();
+	});
 });
 <?php
 	} /* }}} */
@@ -154,13 +160,23 @@ $(document).ready( function() {
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td>
-        <span class="input-append date span12" id="expirationdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
+				<select class="span3" name="presetexpdate" id="presetexpdate">
+					<option value="never"><?php printMLText('does_not_expire');?></option>
+					<option value="date"<?php echo ($expdate != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
+					<option value="1w"><?php printMLText('expire_in_1w');?></option>
+					<option value="1m"><?php printMLText('expire_in_1m');?></option>
+					<option value="1y"><?php printMLText('expire_in_1y');?></option>
+					<option value="2y"><?php printMLText('expire_in_2y');?></option>
+				</select>
+			</td>
+		</tr>
+		<tr id="control_expdate" <?php echo (!$expdate ? 'style="display: none;"' : ''); ?>>
+			<td><?php printMLText("expires");?>:</td>
+			<td>
+        <span class="input-append date span6" id="expirationdate" data-date="<?php echo ($expdate ? $expdate : ''); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
+          <input class="span3" size="16" name="expdate" type="text" value="<?php echo ($expdate ? $expdate : ''); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
-        </span><br />
-        <label class="checkbox inline">
-				  <input type="checkbox" id="expires" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
-        </label>
+        </span>
 			</td>
 		</tr>
 <?php
@@ -176,10 +192,12 @@ $(document).ready( function() {
 			foreach($attrdefs as $attrdef) {
 				$arr = $this->callHook('editDocumentAttribute', $document, $attrdef);
 				if(is_array($arr)) {
-					echo "<tr>";
-					echo "<td>".$arr[0].":</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
+					if($arr) {
+						echo "<tr>";
+						echo "<td>".$arr[0].":</td>";
+						echo "<td>".$arr[1]."</td>";
+						echo "</tr>";
+					}
 				} else {
 ?>
 		<tr>

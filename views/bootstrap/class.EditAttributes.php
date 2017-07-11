@@ -55,6 +55,15 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 <?php
 			if($attrdefs) {
 				foreach($attrdefs as $attrdef) {
+					$arr = $this->callHook('editDocumentContentAttribute', $version, $attrdef);
+					if(is_array($arr)) {
+						if($arr) {
+							echo "<div class=\"control-group\">";
+							echo "<label class=\"control-label\">".$arr[0].":</label>";
+							echo "<div class=\"controls\">".$arr[1]."</div>";
+							echo "</div>";
+						}
+					} else {
 ?>
     <div class="control-group">
 	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?></label>
@@ -63,6 +72,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
         </div>
 	</div>
 <?php
+					}
 				}
 			}
 ?>

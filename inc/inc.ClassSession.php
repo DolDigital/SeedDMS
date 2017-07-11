@@ -187,6 +187,15 @@ class SeedDMS_Session {
 	} /* }}} */
 
 	/**
+	 * Get language of session
+	 *
+	 * @return string language
+	 */
+	function getUser() { /* {{{ */
+		return $this->data['userid'];
+	} /* }}} */
+
+	/**
 	 * Set language of session
 	 *
 	 * @param string $lang language
@@ -466,6 +475,29 @@ class SeedDMS_SessionMgr {
 	 */
 	function getUserSessions($user) { /* {{{ */
 		$queryStr = "SELECT * FROM `tblSessions` WHERE `userID`=".$user->getID();
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$sessions = array();
+		foreach($resArr as $rec) {
+			$session = new SeedDMS_Session($this->db);
+			$session->load($rec['id']);
+			$sessions[] = $session;
+		}
+		return $sessions;
+
+	} /* }}} */
+
+	/**
+	 * Get list of active sessions with a given time
+	 *
+	 * @return array list of sessions
+	 */
+	function getLastAccessedSessions($datetime) { /* {{{ */
+		if(!$ts = makeTsFromLongDate($datetime))
+			return false;
+		$queryStr = "SELECT * FROM `tblSessions` WHERE `lastAccess`>=".$ts;
+		$queryStr .= " ORDER BY `lastAccess` DESC";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;

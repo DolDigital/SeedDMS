@@ -364,6 +364,93 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerEnd();
 
+		$tmpfiles = $document->getDocumentFiles($version->getVersion());
+		/* Do the regular filtering by isPublic and access rights */
+		$tmpfiles = SeedDMS_Core_DMS::filterDocumentFiles($user, $tmpfiles);
+		/* Also filter only those files belonging to this version and skip files
+		 * belonging to the document (version = 0)
+		 */
+		$files = array();
+		foreach($tmpfiles as $file) {
+			if($file->getVersion() == $version->getVersion())
+				$files[] = $file;
+		}
+
+		if (count($files) > 0) {
+			$this->contentHeading(getMLText("linked_files"));
+			$this->contentContainerStart();
+
+			$documentid = $document->getID();
+
+			print "<table class=\"table\">";
+			print "<thead>\n<tr>\n";
+			print "<th width='20%'></th>\n";
+			print "<th width='20%'>".getMLText("file")."</th>\n";
+			print "<th width='40%'>".getMLText("comment")."</th>\n";
+			print "<th width='20%'></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+
+			foreach($files as $file) {
+				if($file->getVersion() != $version->getVersion())
+					continue;
+
+				$file_exists=file_exists($dms->contentDir . $file->getPath());
+
+				$responsibleUser = $file->getUser();
+
+				print "<tr>";
+				print "<td>";
+				$previewer->createPreview($file, $previewwidthdetail);
+				if($file_exists) {
+					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes)) {
+						print "<a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\">";
+					} else {
+						print "<a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\">";
+					}
+				}
+				if($previewer->hasPreview($file)) {
+					print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&file=".$file->getID()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($file->getMimeType())."\">");
+				} else {
+					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+				}
+				if($file_exists) {
+					print "</a>";
+				}
+				print "</td>";
+				
+				print "<td><ul class=\"unstyled\">\n";
+				print "<li>".htmlspecialchars($file->getName())."</li>\n";
+				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
+				if ($file_exists)
+					print "<li>".SeedDMS_Core_File::format_filesize(filesize($dms->contentDir . $file->getPath())) ." bytes, ".htmlspecialchars($file->getMimeType())."</li>";
+				else print "<li>".htmlspecialchars($file->getMimeType())." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
+
+				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
+				print "<li>".getLongReadableDate($file->getDate())."</li>";
+				if($file->getVersion())
+					print "<li>".getMLText('linked_to_this_version')."</li>";
+				print "</ul></td>";
+				print "<td>".htmlspecialchars($file->getComment())."</td>";
+			
+				print "<td><ul class=\"unstyled actions\">";
+				if ($file_exists) {
+					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a></li>";
+					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes)) {
+						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+					}
+				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+				echo "</ul><ul class=\"unstyled actions\">";
+				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
+					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
+				print "</ul></td>";		
+				
+				print "</tr>";
+			}
+			print "</tbody>\n</table>\n";	
+
+			$this->contentContainerEnd();
+		}
+
 		if($user->isAdmin()) {
 			$this->contentHeading(getMLText("status"));
 			$this->contentContainerStart();

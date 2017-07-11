@@ -163,6 +163,39 @@ $(document).ready(function () {
 		$this->printTimelineJs($timelineurl, 550, ''/*date('Y-m-d', $from)*/, ''/*date('Y-m-d', $to+1)*/, $skip);
 	} /* }}} */
 
+	function css() { /* {{{ */
+?>
+#timeline {
+	font-size: 12px;
+	line-height: 14px;
+}
+div.timeline-event-content {
+	margin: 3px 5px;
+}
+div.timeline-frame {
+	border-radius: 4px;
+	border-color: #e3e3e3;
+}
+
+div.status_change_2 {
+	background-color: #DAF6D5;
+	border-color: #AAF897;
+}
+
+div.status_change_-1 {
+	background-color: #F6D5D5;
+	border-color: #F89797;
+}
+
+div.timeline-event-selected {
+	background-color: #fff785;
+	border-color: #ffc200;
+	z-index: 999;
+}
+<?php
+		header('Content-Type: text/css');
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];

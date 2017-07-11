@@ -1,4 +1,44 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.2
+--------------------------------------------------------------------------------
+- do not show spinner when clipboard is loaded in menu (prevents flickering of
+  page)
+- add select menu for predifined expiration dates
+- add some more hooks
+- add list of currently logged in users in menu
+- the owner of a document can see even none public attachments
+- uploading multiple files can be turned off
+- add list of tasks in menu
+- merged changes from 5.0.12
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.1.1
+--------------------------------------------------------------------------------
+- fix initial creation of postgres database
+- merged changes from 5.0.11
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.1.0
+--------------------------------------------------------------------------------
+- added support for postgresql
+- document attachments can linked to a version and be public or hidden
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.12
+--------------------------------------------------------------------------------
+- show name and parent folder of document/folder in search list on different
+  lines
+- check for guest login, admin ip and disabled accounts in webdav server
+- update last access time in session only once a minute
+- set Return-Path in emails if from_address in settings is set
+- pass more arguments to hooks (pre|post)UpdateDocument and searchListHeader
+- show help messages on settings page if available
+- fix regex expression in op/op.Settings.php (Closes #317)
+- better debugging of sql statements in SeedDM_Core
+- move css for timeline into Timeline view
+- merged changes from 4.3.35
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.11
 --------------------------------------------------------------------------------
 - merged changes from 4.3.34
@@ -75,6 +115,17 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.35
+--------------------------------------------------------------------------------
+- fix authentication in webdav.php (Closes #250)
+- update last access time only once a minute
+- run action 'css' in view if it exists, move css code for timeline
+- show role of users in user list and substitute user list
+- mysql sql_mode=only_full_group_by can be set without causing errors when
+  creating a temporary table
+- translation updates
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.34

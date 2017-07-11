@@ -38,7 +38,7 @@ class SeedDMS_Core_DatabaseAccess {
 	protected $_hostname;
 
 	/**
-	 * @var int port number of database 
+	 * @var int port number of database
 	 */
 	protected $_port;
 
@@ -91,7 +91,17 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @var boolean set to true if in a database transaction
 	 */
 	private $_intransaction;
-	
+
+	/**
+	 * @var string set a valid file name for logging all sql queries
+	 */
+	private $_logfile;
+
+	/**
+	 * @var resource file pointer of log file
+	 */
+	private $_logfp;
+
 	/**
 	 * Return list of all database tables
 	 *
@@ -106,6 +116,9 @@ class SeedDMS_Core_DatabaseAccess {
 				break;
 			case 'sqlite':
 				$sql = "select tbl_name as name from sqlite_master where type='table'";
+				break;
+			case 'pgsql':
+				$sql = "select tablename as name from pg_catalog.pg_tables where schemaname='public'";
 				break;
 			default:
 				return false;
@@ -139,6 +152,13 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_user = $user;
 		$this->_passw = $passw;
 		$this->_connected = false;
+		$this->_logfile = '';
+		if($this->_logfile) {
+			$this->_logfp = fopen($this->_logfile, 'a+');
+			if($this->_logfp)
+				fwrite($this->_logfp, microtime()."	BEGIN ------------------------------------------\n");
+		} else
+			$this->_logfp = null;
 		// $tt*****id is a hack to ensure that we do not try to create the
 		// temporary table twice during a single connection. Can be fixed by
 		// using Views (MySQL 5.0 onward) instead of temporary tables.
@@ -155,6 +175,25 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
+	 * Return driver
+	 *
+	 * @return string name of driver as set in constructor
+	 */
+	public function getDriver() { /* {{{ */
+		return $this->_driver;
+	} /* }}} */
+
+	/**
+	 * Destructor of SeedDMS_Core_DatabaseAccess
+	 */
+	function __destruct() { /* {{{ */
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	END --------------------------------------------\n");
+			fclose($this->_logfp);
+		}
+	} /* }}} */
+
+	/**
 	 * Connect to database
 	 *
 	 * @return boolean true if connection could be established, otherwise false
@@ -164,6 +203,7 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'mysql':
 			case 'mysqli':
 			case 'mysqlnd':
+			case 'pgsql':
 				$dsn = $this->_driver.":dbname=".$this->_database.";host=".$this->_hostname;
 				if($this->_port)
 					$dsn .= ";port=".$this->_port;
@@ -220,7 +260,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @return string sanitized string
 	 */
 	function rbt($text) { /* {{{ */
-		return str_replace('`', '"');
+		return str_replace('`', '"', $text);
 	} /* }}} */
 
 	/**
@@ -231,9 +271,16 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @param string $queryStr sql query
 	 * @return array/boolean data if query could be executed otherwise false
 	 */
-	function getResultArray($queryStr) { /* {{{ */
+	function getResultArray($queryStr, $retick=true) { /* {{{ */
 		$resArr = array();
 		
+		if($retick && $this->_driver == 'pgsql') {
+			$queryStr = $this->rbt($queryStr);
+		}
+
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->query($queryStr);
 		if ($res === false) {
 			if($this->_debug)
@@ -251,11 +298,17 @@ class SeedDMS_Core_DatabaseAccess {
 	 * Call this function only with sql query which do not return data records.
 	 *
 	 * @param string $queryStr sql query
-	 * @param boolean $silent not used anymore. This was used when this method
-	 *        still issued an error message
+	 * @param boolean $retick replace all '`' by '"'
 	 * @return boolean true if query could be executed otherwise false
 	 */
-	function getResult($queryStr, $silent=false) { /* {{{ */
+	function getResult($queryStr, $retick=true) { /* {{{ */
+		if($retick && $this->_driver == 'pgsql') {
+			$queryStr = $this->rbt($queryStr);
+		}
+
+		if($this->_logfp) {
+			fwrite($this->_logfp, microtime()."	".$queryStr."\n");
+		}
 		$res = $this->_conn->exec($queryStr);
 		if($res === false) {
 			if($this->_debug)
@@ -263,7 +316,7 @@ class SeedDMS_Core_DatabaseAccess {
 			return false;
 		} else
 			return true;
-		
+
 		return $res;
 	} /* }}} */
 
@@ -293,8 +346,11 @@ class SeedDMS_Core_DatabaseAccess {
 	 *
 	 * @return integer id used in last autoincrement
 	 */
-	function getInsertID() { /* {{{ */
-		return $this->_conn->lastInsertId();
+	function getInsertID($tablename='', $fieldname='id') { /* {{{ */
+		if($this->_driver == 'pgsql')
+			return $this->_conn->lastInsertId('"'.$tablename.'_'.$fieldname.'_seq"');
+		else
+			return $this->_conn->lastInsertId();
 	} /* }}} */
 
 	function getErrorMsg() { /* {{{ */
@@ -317,16 +373,24 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
-						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
+//						"ORDER BY `maxLogID`";
+				break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (`reviewID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`reviewID`));".
+						"INSERT INTO `ttreviewid` SELECT `tblDocumentReviewLog`.`reviewID`, ".
+						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentReviewLog` ".
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` ";//.
+//						"ORDER BY `maxLogID`";
 				break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (PRIMARY KEY (`reviewID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
-						"GROUP BY `tblDocumentReviewLog`.`reviewID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttreviewid) {
 				if (!$this->getResult($queryStr))
@@ -350,16 +414,24 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
-						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` (`approveID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`approveID`));".
+						"INSERT INTO `ttapproveid` SELECT `tblDocumentApproveLog`.`approveID`, ".
+						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentApproveLog` ".
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` (PRIMARY KEY (`approveID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentApproveLog`.`approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
-						"GROUP BY `tblDocumentApproveLog`.`approveID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttapproveid) {
 				if (!$this->getResult($queryStr))
@@ -383,16 +455,24 @@ class SeedDMS_Core_DatabaseAccess {
 						"SELECT `tblDocumentStatusLog`.`statusID` AS `statusID`, ".
 						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentStatusLog` ".
-						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (`statusID` INTEGER, `maxLogID` INTEGER, PRIMARY KEY (`statusID`));".
+						"INSERT INTO `ttstatid` SELECT `tblDocumentStatusLog`.`statusID`, ".
+						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentStatusLog` ".
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
 					break;
 				default:
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` (PRIMARY KEY (`statusID`), INDEX (`maxLogID`)) ".
 						"SELECT `tblDocumentStatusLog`.`statusID`, ".
 						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentStatusLog` ".
-						"GROUP BY `tblDocumentStatusLog`.`statusID` ".
-						"ORDER BY `maxLogID`";
+						"GROUP BY `tblDocumentStatusLog`.`statusID` "; //.
+//						"ORDER BY `maxLogID`";
 			}
 			if (!$this->_ttstatid) {
 				if (!$this->getResult($queryStr))
@@ -414,6 +494,14 @@ class SeedDMS_Core_DatabaseAccess {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` AS ".
 						"SELECT `tblDocumentContent`.`document` AS `document`, ".
+						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
+						"FROM `tblDocumentContent` ".
+						"GROUP BY `tblDocumentContent`.`document` ".
+						"ORDER BY `tblDocumentContent`.`document`";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` (`document` INTEGER, `maxVersion` INTEGER, PRIMARY KEY (`document`)); ".
+						"INSERT INTO `ttcontentid` SELECT `tblDocumentContent`.`document` AS `document`, ".
 						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
 						"FROM `tblDocumentContent` ".
 						"GROUP BY `tblDocumentContent`.`document` ".
@@ -460,6 +548,16 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				return "strftime(".$this->qstr($format).", `".$fieldname."`, 'unixepoch')";
 				break;
+			case 'pgsql':
+				switch($format) {
+				case '%Y-%m':
+					return "to_char(to_timestamp(`".$fieldname."`), 'YYYY-MM')";
+					break;
+				default:
+					return "to_char(to_timestamp(`".$fieldname."`), 'YYYY-MM-DD')";
+					break;
+				}
+				break;
 		}
 		return '';
 	} /* }}} */
@@ -478,6 +576,9 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				return "datetime('now', 'localtime')";
 				break;
+			case 'pgsql':
+				return "now()";
+				break;
 		}
 		return '';
 	} /* }}} */
@@ -495,8 +596,25 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'sqlite':
 				return "strftime('%s', 'now')";
 				break;
+			case 'pgsql':
+				return "date_part('epoch',CURRENT_TIMESTAMP)::int";
+				break;
 		}
 		return '';
+	} /* }}} */
+
+	/**
+	 * Return sql statement for returning the current timestamp
+	 *
+	 * @return string sql code
+	 */
+	function castToText($field) { /* {{{ */
+		switch($this->_driver) {
+			case 'pgsql':
+				return $field."::TEXT";
+				break;
+		}
+		return $field;
 	} /* }}} */
 }
 

@@ -95,7 +95,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * 4=attributes)
 	 * @return array list of database fields
 	 */
-	public static function getSearchFields($searchin) { /* {{{ */
+	public static function getSearchFields($dms, $searchin) { /* {{{ */
+		$db = $dms->getDB();
+
 		$searchFields = array();
 		if (in_array(2, $searchin)) {
 			$searchFields[] = "`tblFolders`.`name`";
@@ -107,7 +109,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$searchFields[] = "`tblFolderAttributes`.`value`";
 		}
 		if (in_array(5, $searchin)) {
-			$searchFields[] = "`tblFolders`.`id`";
+			$searchFields[] = $db->castToText("`tblFolders`.`id`");
 		}
 		return $searchFields;
 	} /* }}} */
@@ -520,7 +522,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$db->rollbackTransaction();
 			return false;
 		}
-		$newFolder = $this->_dms->getFolder($db->getInsertID());
+		$newFolder = $this->_dms->getFolder($db->getInsertID('tblFolders'));
 		unset($this->_subFolders);
 
 		if($attributes) {
@@ -825,7 +827,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 		}
 
-		$document = $this->_dms->getDocument($db->getInsertID());
+		$document = $this->_dms->getDocument($db->getInsertID('tblDocuments'));
 
 //		if ($version_comment!="")
 			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers, $reqversion, $version_attributes, $workflow);
@@ -880,9 +882,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Check if 'onPreRemoveFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
 			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
-				if(!call_user_func($callback[0], $callback[1], $this)) {
-					return false;
-				}
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
 			}
 		}
 
