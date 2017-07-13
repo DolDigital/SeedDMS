@@ -35,37 +35,7 @@ class SeedDMS_View_AddSubFolder extends SeedDMS_Bootstrap_Style {
 		$strictformcheck = $this->params['strictformcheck'];
 		header('Content-Type: application/javascript');
 ?>
-function checkForm()
-{
-	msg = new Array();
-	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
-<?php
-	if ($strictformcheck) {
-?>
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-<?php
-	}
-?>
-	if (msg != "") {
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
 $(document).ready( function() {
-/*	$('body').on('submit', '#form1', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
-	});
-*/
 	$("#form1").validate({
 		invalidHandler: function(e, validator) {
 			noty({
@@ -76,6 +46,12 @@ $(document).ready( function() {
 				theme: 'defaultTheme',
 				timeout: 1500,
 			});
+		},
+		highlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(validClass).addClass(errorClass);
+		},
+		unhighlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(errorClass).addClass(validClass);
 		},
 		messages: {
 			name: "<?php printMLText("js_no_name");?>",

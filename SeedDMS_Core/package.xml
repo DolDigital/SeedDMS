@@ -15,8 +15,8 @@
  <date>2017-03-23</date>
  <time>07:07:02</time>
  <version>
-  <release>5.0.12</release>
-  <api>5.0.12</api>
+  <release>5.0.13</release>
+  <api>5.0.13</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-all sql statements can be logged to a file
-do not sort some temporary tables anymore, because it causes an error in mysql if sql_mode=only_full_group_by is set
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1184,7 +1182,7 @@ SeedDMS_Core_DMS::getDuplicateDocumentContent() returns complete document
    </notes>
   </release>
   <release>
-   <date>2017-03-23</date>
+   <date>2017-07-11</date>
    <time>06:38:12</time>
    <version>
     <release>4.3.35</release>

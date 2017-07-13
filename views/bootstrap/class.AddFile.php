@@ -68,6 +68,12 @@ $(document).ready( function() {
 				timeout: 1500,
 			});
 		},
+		highlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(validClass).addClass(errorClass);
+		},
+		unhighlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(errorClass).addClass(validClass);
+		},
 <?php
 		if($enablelargefileupload) {
 ?>
