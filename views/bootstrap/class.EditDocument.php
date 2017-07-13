@@ -36,41 +36,7 @@ class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript');
 		$this->printKeywordChooserJs('form1');
 ?>
-function checkForm()
-{
-	msg = new Array();
-	if ($("#name").val() == "") msg.push("<?php printMLText("js_no_name");?>");
-<?php
-	if ($strictformcheck) {
-	?>
-	if ($("#comment").val() == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if ($("#keywords").val() == "") msg.push("<?php printMLText("js_no_keywords");?>");
-<?php
-	}
-?>
-	if (msg != "")
-	{
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
 $(document).ready( function() {
-/*
-	$('body').on('submit', '#form1', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
-	});
-*/
 	$("#form1").validate({
 		invalidHandler: function(e, validator) {
 			noty({
