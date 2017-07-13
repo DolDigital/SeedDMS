@@ -125,6 +125,8 @@ if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name
 	$user->setImage($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["type"]);
 }
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_save_user_data')));
+
 add_log_line("?user=".$user->getLogin());
 
 header("Location:../out/out.MyAccount.php");
