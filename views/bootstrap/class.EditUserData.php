@@ -34,35 +34,7 @@ class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
 	function js() { /* {{{ */
 		header('Content-Type: application/javascript');
 ?>
-function checkForm()
-{
-	msg = new Array();
-	if ($("#pwd").val() != $("#pwdconf").val()) msg.push("<?php printMLText("js_pwd_not_conf");?>");
-	if ($("#fullname").val() == "") msg.push("<?php printMLText("js_no_name");?>");
-	if ($("#email").val() == "") msg.push("<?php printMLText("js_no_email");?>");
-//	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
-	if (msg != "") {
-  	noty({
-  		text: msg.join('<br />'),
-  		type: 'error',
-      dismissQueue: true,
-  		layout: 'topRight',
-  		theme: 'defaultTheme',
-			_timeout: 1500,
-  	});
-		return false;
-	}
-	else
-		return true;
-}
-
 $(document).ready( function() {
-/*
-	$('body').on('submit', '#form', function(ev){
-		if(checkForm()) return;
-		ev.preventDefault();
-	});
-*/
 	$("#form").validate({
 		invalidHandler: function(e, validator) {
 			noty({
@@ -74,7 +46,16 @@ $(document).ready( function() {
 				timeout: 1500,
 			});
 		},
+		highlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(validClass).addClass(errorClass);
+		},
+		unhighlight: function(e, errorClass, validClass) {
+			$(e).parent().parent().removeClass(errorClass).addClass(validClass);
+		},
 		rules: {
+			currentpwd: {
+				required: true
+			},
 			fullname: {
 				required: true
 			},
@@ -87,6 +68,7 @@ $(document).ready( function() {
 			}
 		},
 		messages: {
+			currentpwd: "<?php printMLText("js_no_currentpwd");?>",
 			fullname: "<?php printMLText("js_no_name");?>",
 			email: {
 				required: "<?php printMLText("js_no_email");?>",
