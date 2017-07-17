@@ -24,7 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- fix sql statement for creating temp. tables (sqlite)
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1211,6 +1210,7 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
+- fix sql statement for creating temp. tables (sqlite)
    </notes>
   </release>
   <release>
