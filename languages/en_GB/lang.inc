@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1545), dgrutsch (9), netixw (14)
+//    Translators: Admin (1550), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -628,6 +628,7 @@ URL: [url]',
 'js_no_approval_group' => 'Please select a approval group',
 'js_no_approval_status' => 'Please select the approval status',
 'js_no_comment' => 'There is no comment',
+'js_no_currentpwd' => 'Please enter your current password',
 'js_no_email' => 'Type in your Email-address',
 'js_no_file' => 'Please select a file',
 'js_no_keywords' => 'Specify some keywords',
@@ -1446,6 +1447,7 @@ URL: [url]',
 'splash_rm_transmittal' => 'Transmittal deleted',
 'splash_rm_user' => 'User removed',
 'splash_saved_file' => 'Version saved',
+'splash_save_user_data' => 'User data saved',
 'splash_send_download_link' => 'Download link sent by email.',
 'splash_settings_saved' => 'Settings saved',
 'splash_substituted_user' => 'Substituted user',
@@ -1518,7 +1520,9 @@ URL: [url]',
 'timeline_skip_status_change_0' => 'pending review',
 'timeline_skip_status_change_1' => 'pending approval',
 'timeline_skip_status_change_2' => 'released',
-'timeline_skip_status_change_3' => 'within workflow',
+'timeline_skip_status_change_3' => 'in workflow',
+'timeline_skip_status_change_4' => 'in revision',
+'timeline_skip_status_change_5' => 'draft',
 'timeline_status_change' => 'Version [version]: [status]',
 'to' => 'To',
 'toggle_manager' => 'Toggle manager',
