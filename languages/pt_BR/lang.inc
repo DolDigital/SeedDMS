@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (945), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (946), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -306,7 +306,7 @@ URL: [url]',
 'docs_in_reception_no_access' => '',
 'docs_in_revision_no_access' => '',
 'document' => 'Documento',
-'documentcontent' => '',
+'documentcontent' => 'Conteúdo do Documento',
 'documents' => 'Documentos',
 'documents_checked_out_by_you' => '',
 'documents_in_process' => 'Documentos em Processo',
@@ -615,6 +615,7 @@ URL: [url]',
 'js_no_approval_group' => '',
 'js_no_approval_status' => '',
 'js_no_comment' => 'não há comentário',
+'js_no_currentpwd' => '',
 'js_no_email' => 'Digite seu endereço de e-mail',
 'js_no_file' => 'Por favor selecione um arquivo',
 'js_no_keywords' => 'Especifique algumas palavras-chave',
@@ -1398,6 +1399,7 @@ URL: [url]',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Usuário removido',
 'splash_saved_file' => '',
+'splash_save_user_data' => '',
 'splash_send_download_link' => '',
 'splash_settings_saved' => 'Configurações salvas',
 'splash_substituted_user' => 'Usuário substituido',
@@ -1471,6 +1473,8 @@ URL: [url]',
 'timeline_skip_status_change_1' => 'aprovação pendente',
 'timeline_skip_status_change_2' => 'liberado',
 'timeline_skip_status_change_3' => 'dentro do fluxo de trabalho',
+'timeline_skip_status_change_4' => '',
+'timeline_skip_status_change_5' => '',
 'timeline_status_change' => 'Versão [versão]: [estado]',
 'to' => 'To',
 'toggle_manager' => 'Toggle manager',
