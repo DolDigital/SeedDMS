@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2420), dgrutsch (22)
+//    Translators: Admin (2424), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -627,6 +627,7 @@ URL: [url]',
 'js_no_approval_group' => 'Wählen Sie bitte eine Freigabe-Gruppe aus',
 'js_no_approval_status' => 'Wählen Sie bitte einen Freigabe-Status aus',
 'js_no_comment' => 'Geben Sie einen Kommentar an',
+'js_no_currentpwd' => 'Bitte das aktuelle Passwort eintragen',
 'js_no_email' => 'Geben Sie eine Email-Adresse an',
 'js_no_file' => 'Bitte wählen Sie eine Datei',
 'js_no_keywords' => 'Geben Sie einige Stichwörter an',
@@ -1451,6 +1452,7 @@ URL: [url]',
 'splash_rm_transmittal' => 'Dokumentenliste gelöscht',
 'splash_rm_user' => 'Benutzer gelöscht',
 'splash_saved_file' => 'Version gespeichert',
+'splash_save_user_data' => 'Benutzerdaten gespeichert',
 'splash_send_download_link' => 'Download-Link per E-Mail verschickt.',
 'splash_settings_saved' => 'Einstellungen gesichert',
 'splash_substituted_user' => 'Benutzer gewechselt',
@@ -1524,6 +1526,8 @@ URL: [url]',
 'timeline_skip_status_change_1' => 'bevorstehende Freigabe',
 'timeline_skip_status_change_2' => 'freigegeben',
 'timeline_skip_status_change_3' => 'im Workflow',
+'timeline_skip_status_change_4' => 'In Revision',
+'timeline_skip_status_change_5' => 'Entwurf',
 'timeline_status_change' => 'Version [version]: [status]',
 'to' => 'bis',
 'toggle_manager' => 'Managerstatus wechseln',

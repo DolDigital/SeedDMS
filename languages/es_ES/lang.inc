@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1021), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1022), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -405,7 +405,7 @@ URL: [url]',
 'dump_creation_warning' => 'Con esta operación se creará un volcado a fichero del contenido de la base de datos. Después de la creación del volcado el fichero se guardará en la carpeta de datos de su servidor.',
 'dump_list' => 'Ficheros de volcado existentes',
 'dump_remove' => 'Eliminar fichero de volcado',
-'duplicates' => '',
+'duplicates' => 'Duplicados',
 'duplicate_content' => 'Contenido duplicado',
 'edit' => 'editar',
 'edit_attributes' => 'Editar atributos',
@@ -616,6 +616,7 @@ URL: [url]',
 'js_no_approval_group' => 'Por favor, seleccione grupo de aprobación',
 'js_no_approval_status' => 'Por favor, seleccione el estado de aprobación',
 'js_no_comment' => 'No hay comentarios',
+'js_no_currentpwd' => '',
 'js_no_email' => 'Escriba su dirección de correo electrónico',
 'js_no_file' => 'Por favor, seleccione un archivo',
 'js_no_keywords' => 'Especifique palabras clave',
@@ -1401,6 +1402,7 @@ URL: [url]',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => 'Usuario eliminado',
 'splash_saved_file' => '',
+'splash_save_user_data' => '',
 'splash_send_download_link' => '',
 'splash_settings_saved' => 'Configuración guardada',
 'splash_substituted_user' => 'Usuario sustituido',
@@ -1474,6 +1476,8 @@ URL: [url]',
 'timeline_skip_status_change_1' => 'aprovaciones pendientes',
 'timeline_skip_status_change_2' => 'versiones',
 'timeline_skip_status_change_3' => 'con flujo de trabajo',
+'timeline_skip_status_change_4' => '',
+'timeline_skip_status_change_5' => '',
 'timeline_status_change' => 'Versión [version]: [estado]',
 'to' => 'Hasta',
 'toggle_manager' => 'Intercambiar mánager',
