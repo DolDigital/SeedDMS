@@ -370,7 +370,7 @@ class SeedDMS_Core_DatabaseAccess {
 			switch($this->_driver) {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` AS ".
-						"SELECT `tblDocumentReviewLog`.`reviewID`, ".
+						"SELECT `tblDocumentReviewLog`.`reviewID` AS `reviewID`, ".
 						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentReviewLog` ".
 						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
@@ -411,7 +411,7 @@ class SeedDMS_Core_DatabaseAccess {
 			switch($this->_driver) {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` AS ".
-						"SELECT `tblDocumentApproveLog`.`approveID`, ".
+						"SELECT `tblDocumentApproveLog`.`approveID` AS `approveID`, ".
 						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
 						"FROM `tblDocumentApproveLog` ".
 						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.

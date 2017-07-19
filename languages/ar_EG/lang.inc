@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1274)
+//    Translators: Admin (1275)
 
 $text = array(
 '2_factor_auth' => '',
@@ -609,6 +609,7 @@ URL: [url]',
 'js_no_approval_group' => 'من فضلك اختر مجموعة الموافقة',
 'js_no_approval_status' => 'من فضلك اختر حالة الموافقة',
 'js_no_comment' => 'لايوجد تعليق',
+'js_no_currentpwd' => '',
 'js_no_email' => 'اكتب بريدك الالكتروني',
 'js_no_file' => 'من فضلك اختر ملف',
 'js_no_keywords' => 'من فضلك اختر بعض الكلمات البحثية',
@@ -643,7 +644,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'اذا كنت تود تحميل ملفات اكبر من حجم الملفات المتاحة حاليا, من فضلك استخدم البديل <a href="%s">صفحة التحميل</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'ﻉﺮﺿ ﻚﻟ ﺎﻠﺻﻼﺤﻳﺎﺗ',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => 'ملف محلي',
@@ -1386,6 +1387,7 @@ URL: [url]',
 'splash_rm_transmittal' => '',
 'splash_rm_user' => '',
 'splash_saved_file' => '',
+'splash_save_user_data' => '',
 'splash_send_download_link' => '',
 'splash_settings_saved' => '',
 'splash_substituted_user' => '',
@@ -1459,6 +1461,8 @@ URL: [url]',
 'timeline_skip_status_change_1' => '',
 'timeline_skip_status_change_2' => '',
 'timeline_skip_status_change_3' => '',
+'timeline_skip_status_change_4' => '',
+'timeline_skip_status_change_5' => '',
 'timeline_status_change' => 'ﺖﻐﻳﺭ ﺎﻠﺣﺎﻟﺓ ﻢﻋ ﺎﻟﺰﻤﻧ',
 'to' => 'الى',
 'toggle_manager' => 'رجح مدير',
