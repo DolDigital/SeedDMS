@@ -172,4 +172,3 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 }
 ?>
-

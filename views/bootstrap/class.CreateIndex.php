@@ -52,4 +52,3 @@ class SeedDMS_View_CreateIndex extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 }
 ?>
-

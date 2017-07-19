@@ -215,4 +215,3 @@ $(document).ready(function() {
 	} /* }}} */
 }
 ?>
-

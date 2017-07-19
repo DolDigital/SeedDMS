@@ -24,6 +24,11 @@
 - document attachments can linked to a version and be public or hidden
 
 --------------------------------------------------------------------------------
+                     Changes in version 5.0.13
+--------------------------------------------------------------------------------
+- merged changes from 4.3.36
+
+--------------------------------------------------------------------------------
                      Changes in version 5.0.12
 --------------------------------------------------------------------------------
 - show name and parent folder of document/folder in search list on different
@@ -120,6 +125,7 @@
                      Changes in version 4.3.36
 --------------------------------------------------------------------------------
 - fix sql statement for creating temp. tables (sqlite)
+- remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
