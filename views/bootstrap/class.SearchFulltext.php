@@ -128,4 +128,3 @@ class SeedDMS_View_SearchFulltext extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 }
 ?>
-
