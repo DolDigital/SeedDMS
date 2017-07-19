@@ -2,6 +2,7 @@
                      Changes in version 4.3.36
 --------------------------------------------------------------------------------
 - fix sql statement for creating temp. tables (sqlite)
+- remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
