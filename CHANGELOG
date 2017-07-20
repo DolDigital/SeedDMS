@@ -129,8 +129,12 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36
 --------------------------------------------------------------------------------
+- mark disabled users in user list and substitute user list
+- if expandFolderTree is set to hidden the tree actually is hidden (partially
+  closes #312)
 - fix sql statement for creating temp. tables (sqlite)
 - remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
+- make sure contentDir ends with DIRECTORY_SEPARATOR (Closes #323)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35

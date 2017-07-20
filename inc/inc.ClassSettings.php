@@ -450,6 +450,8 @@ class Settings { /* {{{ */
 		$this->_rootDir = strval($tab["rootDir"]);
 		$this->_httpRoot = strval($tab["httpRoot"]);
 		$this->_contentDir = strval($tab["contentDir"]);
+		if(substr($this->_contentDir, -1, 1) != DIRECTORY_SEPARATOR)
+			$this->_contentDir .= DIRECTORY_SEPARATOR;
 		$this->_cacheDir = strval($tab["cacheDir"]);
 		$this->_stagingDir = strval($tab["stagingDir"]);
 		$this->_luceneDir = strval($tab["luceneDir"]);

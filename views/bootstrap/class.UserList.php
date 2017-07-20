@@ -44,7 +44,6 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation("", "admin_tools");
 		$this->contentHeading(getMLText("user_list"));
-		$this->contentContainerStart();
 
 		$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 ?>
@@ -53,7 +52,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 	  <thead><tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th><?php printMLText('role'); ?></th><th><?php printMLText('discspace'); ?></th><th><?php printMLText('authentication'); ?></th><th></th></tr></thead><tbody>
 <?php
 		foreach ($allUsers as $currUser) {
-			echo "<tr>";
+			echo "<tr".($currUser->isDisabled() ? " class=\"error\"" : "").">";
 			echo "<td>";
 			if ($currUser->hasImage())
 				print "<img width=\"100\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
@@ -124,7 +123,6 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		}
 		echo "</tbody></table>";
 
-		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
