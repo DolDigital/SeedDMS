@@ -122,7 +122,7 @@ function cmpVersion($ver1, $ver2) {
 //	$string = str_replace("/*", "", $string);
 //	$string = str_replace("*/", "", $string);
 //	$string = str_replace("\"", "&quot;", $string);
-//	
+//
 //	return $string;
 //}
 
@@ -184,48 +184,48 @@ function mydmsDecodeString($string) { /* {{{ */
 
 function createVersionigFile($document) { /* {{{ */
 	global $settings, $dms;
-	
+
 	// if directory has been removed recreate it
 	if (!file_exists($dms->contentDir . $document->getDir()))
 		if (!SeedDMS_Core_File::makeDir($dms->contentDir . $document->getDir())) return false;
-	
+
 	$handle = fopen($dms->contentDir . $document->getDir() .$settings-> _versioningFileName , "wb");
-	
+
 	if (is_bool($handle)&&!$handle) return false;
-	
+
 	$tmp = $document->getName()." (ID ".$document->getID().")\n\n";
 	fwrite($handle, $tmp);
 
 	$owner = $document->getOwner();
 	$tmp = getMLText("owner")." = ".$owner->getFullName()." <".$owner->getEmail().">\n";
 	fwrite($handle, $tmp);
-	
+
 	$tmp = getMLText("creation_date")." = ".getLongReadableDate($document->getDate())."\n";
 	fwrite($handle, $tmp);
-	
+
 	$latestContent = $document->getLatestContent();
 	$tmp = "\n### ".getMLText("current_version")." ###\n\n";
 	fwrite($handle, $tmp);
-	
+
 	$tmp = getMLText("version")." = ".$latestContent->getVersion()."\n";
-	fwrite($handle, $tmp);	
-	
+	fwrite($handle, $tmp);
+
 	$tmp = getMLText("file")." = ".$latestContent->getOriginalFileName()." (".$latestContent->getMimeType().")\n";
 	fwrite($handle, $tmp);
-	
+
 	$tmp = getMLText("comment")." = ". $latestContent->getComment()."\n";
 	fwrite($handle, $tmp);
-	
+
 	$status = $latestContent->getStatus();
 	$tmp = getMLText("status")." = ".getOverallStatusText($status["status"])."\n";
 	fwrite($handle, $tmp);
-	
+
 	$reviewStatus = $latestContent->getReviewStatus();
 	$tmp = "\n### ".getMLText("reviewers")." ###\n";
 	fwrite($handle, $tmp);
-	
+
 	foreach ($reviewStatus as $r) {
-	
+
 		switch ($r["type"]) {
 			case 0: // Reviewer is an individual.
 				$required = $dms->getUser($r["required"]);
@@ -241,25 +241,25 @@ function createVersionigFile($document) { /* {{{ */
 
 		$tmp = "\n".$reqName."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("status")." = ".getReviewStatusText($r["status"])."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("comment")." = ". $r["comment"]."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("last_update")." = ".$r["date"]."\n";
 		fwrite($handle, $tmp);
 
 	}
-	
-	
+
+
 	$approvalStatus = $latestContent->getApprovalStatus();
 	$tmp = "\n### ".getMLText("approvers")." ###\n";
 	fwrite($handle, $tmp);
 
 	foreach ($approvalStatus as $r) {
-	
+
 		switch ($r["type"]) {
 			case 0: // Reviewer is an individual.
 				$required = $dms->getUser($r["required"]);
@@ -275,42 +275,42 @@ function createVersionigFile($document) { /* {{{ */
 
 		$tmp = "\n".$reqName."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("status")." = ".getApprovalStatusText($r["status"])."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("comment")." = ". $r["comment"]."\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("last_update")." = ".$r["date"]."\n";
 		fwrite($handle, $tmp);
-	
+
 	}
 
-	$versions = $document->getContent();	
+	$versions = $document->getContent();
 	$tmp = "\n### ".getMLText("previous_versions")." ###\n";
 	fwrite($handle, $tmp);
 
 	for ($i = count($versions)-2; $i >= 0; $i--){
-	
+
 		$version = $versions[$i];
-		$status = $version->getStatus();		
-		
+		$status = $version->getStatus();
+
 		$tmp = "\n".getMLText("version")." = ".$version->getVersion()."\n";
-		fwrite($handle, $tmp);	
-		
+		fwrite($handle, $tmp);
+
 		$tmp = getMLText("file")." = ".$version->getOriginalFileName()." (".$version->getMimeType().")\n";
 		fwrite($handle, $tmp);
-		
+
 		$tmp = getMLText("comment")." = ". $version->getComment()."\n";
 		fwrite($handle, $tmp);
-		
+
 		$status = $latestContent->getStatus();
 		$tmp = getMLText("status")." = ".getOverallStatusText($status["status"])."\n";
 		fwrite($handle, $tmp);
-			
+
 	}
-	
+
 	fclose($handle);
 	return true;
 } /* }}} */
@@ -388,13 +388,13 @@ function add_log_line($msg="", $priority=null) { /* {{{ */
 
 function _add_log_line($msg="") { /* {{{ */
 	global $settings,$user;
-	
+
 	if ($settings->_logFileEnable!=TRUE) return;
 
 	if ($settings->_logFileRotation=="h") $logname=date("YmdH", time());
 	else if ($settings->_logFileRotation=="d") $logname=date("Ymd", time());
 	else $logname=date("Ym", time());
-	
+
 	if($h = fopen($settings->_contentDir.$logname.".log", "a")) {
 		fwrite($h,date("Y/m/d H:i", time())." ".$user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg."\n");
 		fclose($h);
@@ -419,13 +419,13 @@ function _add_log_line($msg="") { /* {{{ */
 
 		return $txtpath;
 	} /* }}} */
-	
+
 function showtree() { /* {{{ */
 	global $settings;
-	
+
 	if (isset($_GET["showtree"])) return intval($_GET["showtree"]);
-	else if ($settings->_enableFolderTree==0) return 0;
-	
+	else if ($settings->_expandFolderTree==0) return 0;
+
 	return 1;
 } /* }}} */
 
@@ -458,7 +458,7 @@ function createFormKey($formid='') { /* {{{ */
  * @return string input field for html formular
  */
 function createHiddenFieldWithKey($formid='') { /* {{{ */
-	return '<input type="hidden" name="formtoken" value="'.createFormKey($formid).'" />';	
+	return '<input type="hidden" name="formtoken" value="'.createFormKey($formid).'" />';
 } /* }}} */
 
 /**
@@ -482,7 +482,7 @@ function checkFormKey($formid='', $method='POST') { /* {{{ */
 			if(isset($_POST['formtoken']) && $_POST['formtoken'] == createFormKey($formid))
 				return true;
 	}
-	
+
 	return false;
 } /* }}} */
 
