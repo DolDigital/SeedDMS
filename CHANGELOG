@@ -1,6 +1,8 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.3
 --------------------------------------------------------------------------------
+- add link to search for attribute value in attribute mgr
+- fix output of validation errors in attribute mgr
 - check if user has access on document and is not disabled if set as
   reviewer, approver
 - merged changes from 5.0.13
