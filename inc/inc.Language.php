@@ -262,7 +262,7 @@ function getOverallStatusText($status) { /* {{{ */
 	}
 } /* }}} */
 
-function getAttributeValidationText($error, $attrname='', $attrvalue='') { /* {{{ */
+function getAttributeValidationText($error, $attrname='', $attrvalue='', $regex='') { /* {{{ */
 	switch($error) {
 		case 10:
 			return getMLText("attr_not_in_valueset", array('attrname'=>$attrname, 'value'=>$attrvalue));
@@ -286,7 +286,7 @@ function getAttributeValidationText($error, $attrname='', $attrvalue='') { /* {{
 			return getMLText("attr_malformed_url", array('attrname'=>$attrname, 'value'=>$attrvalue));
 			break;
 		case 3:
-			return getMLText("attr_no_regex_match", array('attrname'=>$attrname, 'value'=>$attrvalue));
+			return getMLText("attr_no_regex_match", array('attrname'=>$attrname, 'value'=>$attrvalue, 'regex'=>$regex));
 			break;
 		case 2:
 			return getMLText("attr_max_values", array('attrname'=>$attrname, 'value'=>$attrvalue));
