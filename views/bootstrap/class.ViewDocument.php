@@ -721,6 +721,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach ($reviewStatus as $r) {
 				$required = null;
 				$is_reviewer = false;
+				$accesserr = '';
 				switch ($r["type"]) {
 					case 0: // Reviewer is an individual.
 						$required = $dms->getUser($r["required"]);
@@ -728,7 +729,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 						}
 						else {
-							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							$reqName = "<i class=\"icon-user\"></i> ".htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							if($user->isAdmin()) {
+								if($document->getAccessMode($required) < M_READ || $latestContent->getAccessMode($required) < M_READ)
+									$accesserr = getMLText("access_denied");
+								elseif(is_object($required) && $required->isDisabled())
+									$accesserr = getMLText("login_disabled_title");
+							}
 							if($required->getId() == $user->getId()/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_reviewer = true;
 						}
@@ -739,7 +746,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_group")." '".$r["required"]."'";
 						}
 						else {
-							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							$reqName = "<i class=\"icon-group\"></i> ".htmlspecialchars($required->getName());
+							if($user->isAdmin()) {
+								$grpusers = $required->getUsers();
+								if(!$grpusers)
+									$accesserr = getMLText("no_group_members");
+							}
 							if($required->isMember($user)/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_reviewer = true;
 						}
@@ -759,6 +771,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "</td>\n";
 				print "<td>".getReviewStatusText($r["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
+				if($accesserr)
+					echo "<li><span class=\"alert alert-error\">".$accesserr."</span></li>";
 
 				if($accessop->mayReview()) {
 					if ($is_reviewer) {
@@ -792,6 +806,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach ($approvalStatus as $a) {
 				$required = null;
 				$is_approver = false;
+				$accesserr = '';
 				switch ($a["type"]) {
 					case 0: // Approver is an individual.
 						$required = $dms->getUser($a["required"]);
@@ -799,7 +814,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_user")." '".$a["required"]."'";
 						}
 						else {
-							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							$reqName = "<i class=\"icon-user\"></i> ".htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+							if($user->isAdmin()) {
+								if($document->getAccessMode($required) < M_READ || $latestContent->getAccessMode($required) < M_READ)
+									$accesserr = getMLText("access_denied");
+								elseif(is_object($required) && $required->isDisabled())
+									$accesserr = getMLText("login_disabled_title");
+							}
 							if($required->getId() == $user->getId())
 								$is_approver = true;
 						}
@@ -810,7 +831,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_group")." '".$a["required"]."'";
 						}
 						else {
-							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							$reqName = "<i class=\"icon-group\"></i> ".htmlspecialchars($required->getName());
+							if($user->isAdmin()) {
+								$grpusers = $required->getUsers();
+								if(!$grpusers)
+									$accesserr = getMLText("no_group_members");
+							}
 							if($required->isMember($user)/* && ($user->getId() != $owner->getId() || $enableownerrevapp == 1)*/)
 								$is_approver = true;
 						}
@@ -830,6 +856,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				echo "</td>\n";
 				print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
+				if($accesserr)
+					echo "<li><span class=\"alert alert-error\">".$accesserr."</span></li>";
 
 				if($accessop->mayApprove()) {
 					if ($is_approver) {
