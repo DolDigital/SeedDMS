@@ -90,12 +90,14 @@ $(document).ready( function() {
 								$content .= getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value'], $selattrdef->getRegex());
 							}
 							/* Check if value is in value set */
+							/*
 							if($selattrdef->getValueSet()) {
 								foreach($value as $v) {
 									if(!in_array($v, $selattrdef->getValueSetAsArray()))
 										$content .= getMLText("attribute_value_not_in_valueset");
 								}
 							}
+							 */
 							$content .= "</td>";
 							$content .= "</tr>";
 						}
