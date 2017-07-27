@@ -967,10 +967,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$this->_notifyList = array("groups" => array(), "users" => array());
 			foreach ($resArr as $row)
 			{
-				if ($row["userID"] != -1)
-					array_push($this->_notifyList["users"], $this->_dms->getUser($row["userID"]) );
-				else //if ($row["groupID"] != -1)
-					array_push($this->_notifyList["groups"], $this->_dms->getGroup($row["groupID"]) );
+				if ($row["userID"] != -1) {
+					$u = $this->_dms->getUser($row["userID"]);
+					if($u && !$u->isDisabled())
+						array_push($this->_notifyList["users"], $u);
+				} else { //if ($row["groupID"] != -1)
+					$g = $this->_dms->getGroup($row["groupID"]);
+					if($g)
+						array_push($this->_notifyList["groups"], $g);
+				}
 			}
 		}
 		return $this->_notifyList;
