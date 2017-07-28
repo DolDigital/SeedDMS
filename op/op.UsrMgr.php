@@ -174,6 +174,43 @@ else if ($action == "removeuser") {
 	$userid=-1;
 }
 
+// remove user from all processes (approval, review)
+else if ($action == "removefromprocesses") {
+
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('removefromprocesses')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	/* This used to be a check if an admin is deleted. Now it checks if one
+	 * wants to delete herself.
+	 */
+	if ($userid==$user->getID()) {
+		UI::exitError(getMLText("admin_tools"),getMLText("cannot_delete_yourself"));
+	}
+
+	$userToRemove = $dms->getUser($userid);
+	if (!is_object($userToRemove)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	if (!$userToRemove->removeFromProcesses($user)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+		
+	add_log_line(".php&action=removefromprocesses&userid=".$userid);
+	
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_user_processes')));
+}
+
 // modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
