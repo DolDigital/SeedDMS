@@ -107,8 +107,6 @@ $(document).ready( function() {
 			echo "<tr><td>".getMLText('documents_with_notification')."</td><td>".count($dnot)."</td></tr>\n";
 			$fnot = $seluser->getNotifications(T_FOLDER);
 			echo "<tr><td>".getMLText('folders_with_notification')."</td><td>".count($fnot)."</td></tr>\n";
-			$workflows = $seluser->getWorkflowsInvolved();
-			echo "<tr><td>".getMLText('workflows_involded')."</td><td>".count($workflows)."</td></tr>\n";
 
 			if($workflowmode == "traditional") {
 				$reviewStatus = $seluser->getReviewStatus();
@@ -135,6 +133,8 @@ $(document).ready( function() {
 				}
 			}
 			if($workflowmode == 'advanced') {
+				$workflows = $seluser->getWorkflowsInvolved();
+				echo "<tr><td>".getMLText('workflows_involded')."</td><td>".count($workflows)."</td></tr>\n";
 				$workflowStatus = $seluser->getWorkflowStatus();
 				if($workflowStatus['u'])
 					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus['u'])."</td></tr>\n";
