@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1556), rickr (144), s.pnt (26)
+//    Translators: Admin (1557), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -88,6 +88,9 @@ URL: [url]',
 'already_subscribed' => 'L\'oggetto è già stato sottoscritto',
 'and' => 'e',
 'apply' => 'Applica',
+'approvals_and_reviews_accepted' => '',
+'approvals_and_reviews_not_touched' => '',
+'approvals_and_reviews_rejected' => '',
 'approval_deletion_email' => 'Richiesta di approvazione cancellata',
 'approval_deletion_email_body' => 'Richiesta di approvazione cancellata.
 Documento: [name]
@@ -242,7 +245,7 @@ URL: [url]',
 'choose_attrdefgroup' => 'Scegli gruppo di attributi',
 'choose_category' => 'Seleziona',
 'choose_group' => 'Seleziona il gruppo',
-'choose_role' => '--Scegli ruolo--',
+'choose_role' => 'Scegli ruolo',
 'choose_target_category' => 'Seleziona la categoria',
 'choose_target_document' => 'Seleziona il documento',
 'choose_target_file' => 'Scegli il file',
@@ -278,6 +281,7 @@ URL: [url]',
 'confirm_rm_transmittal' => 'Si prega di confermare l\'eliminazione della trasmissione.',
 'confirm_rm_transmittalitem' => 'Conferma rimozione',
 'confirm_rm_user' => 'Vuoi davvero rimuovere l\'utente "[username]"? Attenzione: questa operazione non può essere annullata.',
+'confirm_rm_user_from_processes' => '',
 'confirm_rm_version' => 'Vuoi veramente eliminare la versione [version] del documento "[documentname]"? Attenzione: questa operazione non può essere annullata.',
 'confirm_update_transmittalitem' => 'Conferma aggiornamento',
 'content' => 'Contenuto',
@@ -1003,6 +1007,7 @@ URL: [url]',
 'rm_transmittal' => 'Rimuovi trasmissione',
 'rm_transmittalitem' => 'Rimuovi oggetto',
 'rm_user' => 'Rimuovi questo utente',
+'rm_user_from_processes' => '',
 'rm_version' => 'Rimuovi versione',
 'rm_workflow' => 'Rimuovi flusso di lavoro',
 'rm_workflow_action' => 'Rimuovi azione del flusso di lavoro',
@@ -1438,6 +1443,7 @@ URL: [url]',
 'splash_rm_role' => 'Ruolo cancellato',
 'splash_rm_transmittal' => 'Trasmissione cancellato',
 'splash_rm_user' => 'Utente eliminato',
+'splash_rm_user_processes' => '',
 'splash_saved_file' => '',
 'splash_save_user_data' => '',
 'splash_send_download_link' => '',

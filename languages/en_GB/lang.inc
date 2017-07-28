@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1556), dgrutsch (9), netixw (14)
+//    Translators: Admin (1568), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -88,6 +88,9 @@ URL: [url]',
 'already_subscribed' => 'Already subscribed',
 'and' => 'and',
 'apply' => 'Apply',
+'approvals_and_reviews_accepted' => '[no_approvals] approvals and [no_reviews] reviews already accepted',
+'approvals_and_reviews_not_touched' => '[no_approvals] approvals and [no_reviews] reviews not being touched',
+'approvals_and_reviews_rejected' => '[no_approvals] approvals and [no_reviews] reviews already rejected',
 'approval_deletion_email' => 'Approval request deleted',
 'approval_deletion_email_body' => 'Approval request deleted
 Document: [name]
@@ -241,7 +244,7 @@ URL: [url]',
 'choose_attrdefgroup' => 'Choose attribute group',
 'choose_category' => 'Please choose',
 'choose_group' => 'Choose group',
-'choose_role' => '--Choose role--',
+'choose_role' => 'Choose role',
 'choose_target_category' => 'Choose category',
 'choose_target_document' => 'Choose document',
 'choose_target_file' => 'Choose file',
@@ -277,6 +280,7 @@ URL: [url]',
 'confirm_rm_transmittal' => 'Please confirm the deletion of the transmittal.',
 'confirm_rm_transmittalitem' => 'Confirm removal',
 'confirm_rm_user' => 'Do you really want to remove the user "[username]"?<br>Be careful: This action cannot be undone.',
+'confirm_rm_user_from_processes' => 'Do you really want to remove the user "[username]" from all processes?<br>Be careful: This action can lead to the release of documents if the user was the only or last approver.',
 'confirm_rm_version' => 'Do you really want to remove version [version] of document "[documentname]"?<br>Be careful: This action cannot be undone.',
 'confirm_update_transmittalitem' => 'Confirm update',
 'content' => 'Content',
@@ -1015,6 +1019,7 @@ URL: [url]',
 'rm_transmittal' => 'Remove transmittal',
 'rm_transmittalitem' => 'Remove item',
 'rm_user' => 'Remove this user',
+'rm_user_from_processes' => 'Remove user from processes',
 'rm_version' => 'Remove version',
 'rm_workflow' => 'Remove Workflow',
 'rm_workflow_action' => 'Remove Workflow Action',
@@ -1450,6 +1455,7 @@ URL: [url]',
 'splash_rm_role' => 'Role deleted',
 'splash_rm_transmittal' => 'Transmittal deleted',
 'splash_rm_user' => 'User removed',
+'splash_rm_user_processes' => 'User removed from all processes',
 'splash_saved_file' => 'Version saved',
 'splash_save_user_data' => 'User data saved',
 'splash_send_download_link' => 'Download link sent by email.',
