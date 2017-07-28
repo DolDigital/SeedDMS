@@ -6,6 +6,7 @@
 - check if user has access on document and is not disabled if set as
   reviewer, approver
 - notifications are only send to none disabled users
+- nicer layout in user manager, group buttons, more information
 - merged changes from 5.0.13
 
 --------------------------------------------------------------------------------
