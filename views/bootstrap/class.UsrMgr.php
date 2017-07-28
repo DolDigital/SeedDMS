@@ -162,7 +162,7 @@ $(document).ready( function() {
 				echo '<a class="btn btn-danger" href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a> ';
 			}
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\" class=\"btn btn-primary\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 
