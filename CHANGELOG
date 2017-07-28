@@ -5,6 +5,7 @@
 - fix output of validation errors in attribute mgr
 - check if user has access on document and is not disabled if set as
   reviewer, approver
+- notifications are only send to none disabled users
 - merged changes from 5.0.13
 
 --------------------------------------------------------------------------------
