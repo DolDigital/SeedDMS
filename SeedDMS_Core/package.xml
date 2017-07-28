@@ -27,6 +27,7 @@
 - SeedDMS_Core_Document::getNotifyList() and SeedDMS_Core_Folder::getNotifyList()
 returns just users which are not disabled
 - add new methods removeFromProcesses(), getWorkflowsInvolved(), getKeywordCategories() to SeedDMS_Core_User
+- add methods isMandatoryReviewerOf() and isMandatoryApproverOf()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
