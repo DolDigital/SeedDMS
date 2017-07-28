@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2424), dgrutsch (22)
+//    Translators: Admin (2430), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -326,6 +326,7 @@ URL: [url]',
 'documents_user_reception' => 'Dokumente mit Empfangsbestätigung',
 'documents_user_rejected' => 'Abgelehnte Dokumente',
 'documents_user_requiring_attention' => 'Diese Dokumente sollte ich mal nachsehen',
+'documents_with_notification' => 'Dokumente unter Beobachtung',
 'document_already_checkedout' => 'Dieses Dokument ist bereits ausgecheckt',
 'document_already_locked' => 'Dieses Dokument ist bereits gesperrt',
 'document_comment_changed_email' => 'Kommentar geändert',
@@ -499,6 +500,7 @@ URL: [url]',
 'folder' => 'Ordner',
 'folders' => 'Verzeichnisse',
 'folders_and_documents_statistic' => 'Ordner- und Dokumentenübersicht',
+'folders_with_notification' => 'Ordner unter Beobachtung',
 'folder_comment_changed_email' => 'Kommentar geändert',
 'folder_comment_changed_email_body' => 'Kommentar geändert
 Ordner: [name]
@@ -842,7 +844,9 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_strength_insuffient' => 'Ungenügend starkes Passwort',
 'password_wrong' => 'Falsches Passwort',
 'pending_approvals' => 'Ausstehende Freigaben',
+'pending_receipt' => 'Ausstehende Empfangsbestätigungen',
 'pending_reviews' => 'Ausstehende Prüfungen',
+'pending_revision' => 'Ausstehende Wiederholungsprüfungen',
 'pending_workflows' => 'Ausstehende Workflows',
 'personal_default_keywords' => 'Persönliche Stichwortlisten',
 'pl_PL' => 'Polnisch',
@@ -897,7 +901,7 @@ URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Anhang gelöscht',
 'removed_recipient' => 'ist von der Empfängerliste entfernt worden',
 'removed_reviewer' => 'ist von der Prüfer-Liste entfernt worden.',
-'removed_revispr' => 'ist von der Liste der Wiederholungsprüfer entfernt worden.',
+'removed_revisor' => 'ist von der Liste der Wiederholungsprüfer entfernt worden.',
 'removed_workflow_email_body' => 'Workflow von Dokumentenversion entfernt
 Dokument: [name]
 Version: [version]
@@ -1158,7 +1162,7 @@ URL: [url]',
 'settings_dropFolderDir' => 'Verzeichnis für Ablageordner',
 'settings_dropFolderDir_desc' => 'Dieses Verzeichnis kann dazu benutzt werden Dokumente auf dem Server abzulegen und von dort zu importieren anstatt sie über den Browser hochzuladen. Das Verzeichnis muss ein Unterverzeichnis mit dem Login-Namen des angemeldeten Benutzers beinhalten.',
 'settings_Edition' => 'Funktions-Einstellungen',
-'settings_editOnlineFileTypes' => 'Dateitypen für Online-Editieren:',
+'settings_editOnlineFileTypes' => 'Dateitypen für Online-Editieren',
 'settings_editOnlineFileTypes_desc' => 'Dateien mit den angegebenen Endungen können Online editiert werden (benutzen Sie ausschließlich Kleinbuchstaben).',
 'settings_enable2FactorAuthentication' => '2-Faktor Authentifizierung einschalten',
 'settings_enable2FactorAuthentication_desc' => 'Schaltet die 2-Faktor Authentifizierung ein, welche den Google Authenticator auf dem Mobiltelefon erfordert.',
@@ -1628,6 +1632,7 @@ URL: [url]',
 'weeks' => 'Wochen',
 'week_view' => 'Wochenansicht',
 'workflow' => 'Workflow',
+'workflows_involded' => 'Beteiligt an Workflow',
 'workflow_actions_management' => 'Workflow-Aktions-Management',
 'workflow_action_in_use' => 'Diese Aktion wird zur Zeit von Workflows benutzt',
 'workflow_action_name' => 'Name',
