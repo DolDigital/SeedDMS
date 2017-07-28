@@ -146,8 +146,23 @@ $(document).ready( function() {
 			}
 			echo "</table>";
 
+		}
+	} /* }}} */
+
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$seluser = $this->params['seluser'];
+		$quota = $this->params['quota'];
+		$workflowmode = $this->params['workflowmode'];
+		$undeluserids = $this->params['undeluserids'];
+
+		if($seluser) {
+			if(!in_array($seluser->getID(), $undeluserids)) {
+				echo '<a class="btn btn-danger" href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a> ';
+			}
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
 		}
 	} /* }}} */
 
@@ -187,16 +202,6 @@ $(document).ready( function() {
 		}
 ?>
 	<table class="table-condensed">
-<?php
-	if($currUser && !in_array($currUser->getID(), $undeluserids)) {
-?>
-		<tr>
-			<td></td>
-			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
-		</tr>
-<?php
-	}
-?>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
 			<td><input type="text" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
@@ -478,11 +483,7 @@ $(document).ready( function() {
 ?>
 <div class="row-fluid">
 <div class="span4">
-<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
 <select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_user")?></option>
 <option value="0"><?php echo getMLText("add_user")?></option>
@@ -492,10 +493,8 @@ $(document).ready( function() {
 		}
 ?>
 </select>
-		</div>
-	</div>
 </form>
-</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="UsrMgr" data-action="actionmenu" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 </div>
 
