@@ -24,7 +24,9 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add new methods removeFromProcesses(), getWorkflowsInvolved(), getKeywordCategories() to SeedDMS_Core_User
+- SeedDMS_Core_Document::getNotifyList() and SeedDMS_Core_Folder::getNotifyList()
+returns just users which are not disabled
+- add new methods removeFromProcesses(), getWorkflowsInvolved(), getKeywordCategories() to SeedDMS_Core_User
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
