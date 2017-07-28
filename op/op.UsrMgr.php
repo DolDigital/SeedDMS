@@ -202,13 +202,15 @@ else if ($action == "removefromprocesses") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
 
-	if (!$userToRemove->removeFromProcesses($user)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
+	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
+		if (!$userToRemove->removeFromProcesses($user, $_POST['status'])) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		add_log_line(".php&action=removefromprocesses&userid=".$userid);
 		
-	add_log_line(".php&action=removefromprocesses&userid=".$userid);
-	
-	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_user_processes')));
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_user_processes')));
+	}
 }
 
 // modify user ------------------------------------------------------------
