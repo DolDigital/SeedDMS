@@ -109,27 +109,27 @@ $(document).ready( function() {
 			echo "<tr><td>".getMLText('folders_with_notification')."</td><td>".count($fnot)."</td></tr>\n";
 
 			if($workflowmode == "traditional") {
-				$reviewStatus = $seluser->getReviewStatus();
-				if($reviewStatus['indstatus']) {
-					$i = 0;
-					foreach($reviewStatus['indstatus'] as $rv) {
-						if($rv['status'] == 0) {
-							$i++;
+				$resArr = $dms->getDocumentList('ReviewByMe', $seluser);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$document = $dms->getDocument($res["id"]);
+						if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+							$tasks['review'][] = array('id'=>$res['id'], 'name'=>$res['name']);
 						}
 					}
-					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
+					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".count($tasks['review'])."</td></tr>\n";
 				}
 			}
 			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
-				$approvalStatus = $seluser->getApprovalStatus();
-				if($approvalStatus['indstatus']) {
-					$i = 0;
-					foreach($approvalStatus['indstatus'] as $rv) {
-						if($rv['status'] == 0) {
-							$i++;
+				$resArr = $dms->getDocumentList('ApproveByMe', $seluser);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$document = $dms->getDocument($res["id"]);
+						if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+							$tasks['approval'][] = array('id'=>$res['id'], 'name'=>$res['name']);
 						}
 					}
-					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
+					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".count($tasks['approval'])."</td></tr>\n";
 				}
 			}
 			if($workflowmode == 'advanced') {
