@@ -161,6 +161,7 @@ $(document).ready( function() {
 			if(!in_array($seluser->getID(), $undeluserids)) {
 				echo '<a class="btn btn-danger" href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a> ';
 			}
+			echo '<a class="btn btn-danger" href="../out/out.RemoveUserFromProcesses.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user_from_processes").'</a> ';
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
 				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\" class=\"btn btn-primary\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a>\n";
 		}
