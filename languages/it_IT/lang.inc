@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1554), rickr (144), s.pnt (26)
+//    Translators: Admin (1556), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -327,6 +327,7 @@ URL: [url]',
 'documents_user_reception' => '',
 'documents_user_rejected' => 'Documenti rifiutati',
 'documents_user_requiring_attention' => 'Tuoi documenti in attesa di revisione o approvazione',
+'documents_with_notification' => '',
 'document_already_checkedout' => 'Questo documento è già approvato',
 'document_already_locked' => 'Questo documento è già bloccato',
 'document_comment_changed_email' => 'Commento modificato',
@@ -494,6 +495,7 @@ URL: [url]',
 'folder' => 'Cartella',
 'folders' => 'Cartelle',
 'folders_and_documents_statistic' => 'Visualizzazione generale',
+'folders_with_notification' => '',
 'folder_comment_changed_email' => 'Commento modificato per la Cartella',
 'folder_comment_changed_email_body' => 'Commento modificato per la Cartella
 Cartella: [name]
@@ -838,7 +840,9 @@ Dovessero esserci ancora problemi al login, prego contatta l\'Amministratore di 
 'password_strength_insuffient' => 'Efficacia della password insufficiente',
 'password_wrong' => 'Password errata',
 'pending_approvals' => 'Approvazioni in sospeso',
+'pending_receipt' => '',
 'pending_reviews' => 'In attesa di recensioni',
+'pending_revision' => '',
 'pending_workflows' => 'I flussi di lavoro in sospeso',
 'personal_default_keywords' => 'Parole-chiave personali',
 'pl_PL' => 'Polacco',
@@ -887,7 +891,7 @@ URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Allegato rimosso',
 'removed_recipient' => 'è stato rimosso dalla lista delle cartelle.',
 'removed_reviewer' => 'è stato rimosso dalla lista dei revisori.',
-'removed_revispr' => 'è stato rimosso dalla lista degli approvatori.',
+'removed_revisor' => 'è stato rimosso dalla lista degli approvatori.',
 'removed_workflow_email_body' => 'Flusso di lavoro rimosso dalla versione del documento
 Documento: [name]
 Versione: [version]
@@ -1205,8 +1209,8 @@ URL: [url]',
 'settings_enableThemeSelector_desc' => 'Abilita/disabilita il selettore di tema grafico nella finestra di login',
 'settings_enableUpdateReceipt' => '',
 'settings_enableUpdateReceipt_desc' => '',
-'settings_enableUpdateRevApp' => '',
-'settings_enableUpdateRevApp_desc' => '',
+'settings_enableUpdateRevApp' => 'Consenti la modifica della revisione / approvazione estesa',
+'settings_enableUpdateRevApp_desc' => 'Abilita questo, se l\'utente che ha effettuato una revisione / approvazione può modificare la decisione finché il passaggio di flusso di lavoro corrente non è stato completato.',
 'settings_enableUserImage' => 'Abilita immagine utente',
 'settings_enableUserImage_desc' => 'L\'opzione permette di attribuire un\'immagine a ciascun utente',
 'settings_enableUsersView' => 'Abilita visualizzazione  utenti',
@@ -1611,6 +1615,7 @@ URL: [url]',
 'weeks' => 'settimane',
 'week_view' => 'Vista settimana',
 'workflow' => 'Flusso di lavoro',
+'workflows_involded' => '',
 'workflow_actions_management' => 'Gestione azioni del flusso di lavoro',
 'workflow_action_in_use' => 'Questa azione è attualmente usata da alcuni flussi di lavoro',
 'workflow_action_name' => 'Nome',

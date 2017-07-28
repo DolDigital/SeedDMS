@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (726), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (728), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,6 +319,7 @@ URL: [url]',
 'documents_user_reception' => '',
 'documents_user_rejected' => 'documenten niet geaccepteerd door gebruiker',
 'documents_user_requiring_attention' => 'Eigen documenten die (nog) aandacht behoeven',
+'documents_with_notification' => '',
 'document_already_checkedout' => 'Al in behandeling genomen documenten',
 'document_already_locked' => 'Dit document is al geblokkeerd',
 'document_comment_changed_email' => 'Commentaar gewijzigd',
@@ -486,6 +487,7 @@ URL: [url]',
 'folder' => 'Map',
 'folders' => 'Mappen',
 'folders_and_documents_statistic' => 'Inhoudsopgave',
+'folders_with_notification' => '',
 'folder_comment_changed_email' => 'Commentaar gewijzigd',
 'folder_comment_changed_email_body' => 'Commentaar gewijzigd
 Map: [name]
@@ -565,7 +567,7 @@ URL: [url]',
 'include_content' => 'inclusief inhoud',
 'include_documents' => 'Inclusief documenten',
 'include_subdirectories' => 'Inclusief submappen',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Indexerings taken in wachtrij',
 'index_converters' => 'Index document conversie',
 'index_done' => '',
 'index_error' => '',
@@ -791,7 +793,7 @@ URL: [url]',
 'only_jpg_user_images' => 'U mag alleen .jpg afbeeldingen gebruiken als gebruikersafbeeldingen.',
 'order_by_sequence_off' => 'Volgorde uit',
 'original_filename' => 'Originele bestandsnaam',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Indexerings voortgang totaal',
 'owner' => 'Eigenaar',
 'ownership_changed_email' => 'Eigenaar gewijzigd',
 'ownership_changed_email_body' => 'Eigenaar gewijzigd
@@ -830,7 +832,9 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'password_strength_insuffient' => 'Onvoldoende sterk wachtwoord',
 'password_wrong' => 'Verkeerd wachtwoord',
 'pending_approvals' => 'Wachten op goedkeuring',
+'pending_receipt' => '',
 'pending_reviews' => 'Wachten op beoordeling',
+'pending_revision' => '',
 'pending_workflows' => 'Wachten op workflow',
 'personal_default_keywords' => 'Persoonlijke sleutelwoorden',
 'pl_PL' => 'Polen',
@@ -879,7 +883,7 @@ URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Bijlage verwijderd',
 'removed_recipient' => 'is verwijderd uit de lijst van ontvangers',
 'removed_reviewer' => 'is verwijderd uit de lijst van beoordelaars',
-'removed_revispr' => 'is verwijderd uit de lijst van herzieners',
+'removed_revisor' => 'is verwijderd uit de lijst van herzieners',
 'removed_workflow_email_body' => 'Workflow verwijderd van document versie document: [name]
 Versie: [version]
 Workflow: [workflow]
@@ -1605,6 +1609,7 @@ URL: [url]',
 'weeks' => 'Weken',
 'week_view' => 'Week Overzicht',
 'workflow' => 'Workflow',
+'workflows_involded' => '',
 'workflow_actions_management' => 'Workflow actiebeheer',
 'workflow_action_in_use' => 'Deze actie wordt momenteel gebruikt door een workflow',
 'workflow_action_name' => 'Naam',
