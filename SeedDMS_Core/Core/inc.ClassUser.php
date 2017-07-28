@@ -475,7 +475,62 @@ class SeedDMS_Core_User { /* {{{ */
 	}	 /* }}} */
 
 	/**
-	 * Remove the user and also remove all its keywords, notifies, etc.
+	 * Remove user from all processes
+	 *
+	 * This includes review, approval and workflow
+	 *
+	 * @param object $user the user doing the removal (needed for entry in
+	 *        review and approve log).
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __removeFromProcesses($user) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$reviewStatus = $this->getReviewStatus();
+		foreach ($reviewStatus["indstatus"] as $ri) {
+			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
+				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
+			$res=$db->getResult($queryStr);
+			if(!$res) {
+				return false;
+			}
+		}
+
+		$approvalStatus = $this->getApprovalStatus();
+		foreach ($approvalStatus["indstatus"] as $ai) {
+			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
+				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
+			$res=$db->getResult($queryStr);
+			if(!$res) {
+				return false;
+			}
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove user from all processes
+	 *
+	 * This includes review, approval and workflow
+	 *
+	 * @param object $user the user doing the removal (needed for entry in
+	 *        review and approve log).
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function removeFromProcesses($user) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$db->startTransaction();
+		if(!$this->__removeFromProcesses($user)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove the user and also remove all its keywords, notifications, etc.
 	 * Do not remove folders and documents of the user, but assign them
 	 * to a different user.
 	 *
@@ -665,27 +720,9 @@ class SeedDMS_Core_User { /* {{{ */
 		// "DELETE FROM `tblDocumentApproveLog` WHERE `userID` = " . $this->_id;
 		// "DELETE FROM `tblDocumentReviewLog` WHERE `userID` = " . $this->_id;
 
-
-		$reviewStatus = $this->getReviewStatus();
-		foreach ($reviewStatus["indstatus"] as $ri) {
-			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-			$res=$db->getResult($queryStr);
-			if(!$res) {
+		if(!$this->__removeFromProcesses($user)) {
 				$db->rollbackTransaction();
 				return false;
-			}
-		}
-
-		$approvalStatus = $this->getApprovalStatus();
-		foreach ($approvalStatus["indstatus"] as $ai) {
-			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-			$res=$db->getResult($queryStr);
-			if(!$res) {
-				$db->rollbackTransaction();
-				return false;
-			}
 		}
 
 		$db->commitTransaction();
@@ -1098,6 +1135,28 @@ class SeedDMS_Core_User { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get a list of workflows this user is involved as in individual
+	 *
+	 * @return array list of all workflows
+	 */
+	function getWorkflowsInvolved() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = 'SELECT DISTINCT b.*, c.`userid` FROM `tblWorkflowTransitions` a LEFT JOIN `tblWorkflows` b ON a.`workflow`=b.`id` LEFT JOIN `tblWorkflowTransitionUsers` c ON a.`id`=c.`transition` WHERE c.`userid`='.$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result[] = $this->_dms->getWorkflow($res['id']);
+			}
+		}
+
+		return $result;
+	} /* }}} */
+
+	/**
 	 * Get a list of mandatory reviewers
 	 * A user which isn't trusted completely may have assigned mandatory
 	 * reviewers (both users and groups).
@@ -1360,6 +1419,30 @@ class SeedDMS_Core_User { /* {{{ */
 		}
 
 		return $notifications;
+	} /* }}} */
+
+	/**
+	 * Return list of personal keyword categories
+	 *
+	 * @return array/boolean list of categories or false in case of an error
+	 */
+	function getKeywordCategories() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblKeywordCategories` WHERE `owner` = ".$this->_id;
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$categories = array();
+		foreach ($resArr as $row) {
+			$cat = new SeedDMS_Core_KeywordCategory($row["id"], $row["owner"], $row["name"]);
+			$cat->setDMS($this->_dms);
+			array_push($categories, $cat);
+		}
+
+		return $categories;
 	} /* }}} */
 
 } /* }}} */
