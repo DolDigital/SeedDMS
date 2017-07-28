@@ -1210,6 +1210,52 @@ class SeedDMS_Core_User { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get a list of users this user is a mandatory reviewer of
+	 *
+	 * This method is the reverse function of getMandatoryReviewers(). It returns
+	 * those user where the current user is a mandatory reviewer.
+	 *
+	 * @return array list of users where this user is a mandatory reviewer.
+	 */
+	function isMandatoryReviewerOf() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `reviewerUserID` = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		$users = array();
+		foreach($resArr as $res) {
+			$users[] = self::getInstance($res['userID'], $this->_dms);
+		}
+
+		return $users;
+	} /* }}} */
+
+	/**
+	 * Get a list of users this user is a mandatory approver of
+	 *
+	 * This method is the reverse function of getMandatoryApprovers(). It returns
+	 * those user where the current user is a mandatory approver.
+	 *
+	 * @return array list of users where this user is a mandatory approver.
+	 */
+	function isMandatoryApproverOf() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `approverUserID` = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		$users = array();
+		foreach($resArr as $res) {
+			$users[] = self::getInstance($res['userID'], $this->_dms);
+		}
+
+		return $users;
+	} /* }}} */
+
+	/**
 	 * Get the mandatory workflow
 	 * A user which isn't trusted completely may have assigned mandatory
 	 * workflow
