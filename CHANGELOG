@@ -8,6 +8,7 @@
 - notifications are only send to none disabled users
 - nicer layout in user manager, group buttons, more information
 - merged changes from 5.0.13
+- show number of users where the select user is a mandatory reviewer/approver of
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.2
