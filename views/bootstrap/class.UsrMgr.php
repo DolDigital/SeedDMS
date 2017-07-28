@@ -131,6 +131,14 @@ $(document).ready( function() {
 					}
 					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".count($tasks['approval'])."</td></tr>\n";
 				}
+				$resArr = $seluser->isMandatoryReviewerOf();
+				if($resArr) {
+					echo "<tr><td>".getMLText('mandatory_reviewers')."</td><td>".count($resArr)."</td></tr>\n";
+				}
+				$resArr = $seluser->isMandatoryApproverOf();
+				if($resArr) {
+					echo "<tr><td>".getMLText('mandatory_approvers')."</td><td>".count($resArr)."</td></tr>\n";
+				}
 			}
 			if($workflowmode == 'advanced') {
 				$workflows = $seluser->getWorkflowsInvolved();
