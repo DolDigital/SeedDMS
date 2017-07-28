@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (770), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (771), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -173,7 +173,7 @@ URL: [url]',
 'at_least_n_users_of_group' => 'Przynajmniej [number_of_users] użytkowników grupy [group]',
 'august' => 'Sierpień',
 'authentication' => 'Autoryzacja',
-'author' => '',
+'author' => 'Autor',
 'automatic_status_update' => 'Automatyczna zmiana statusu',
 'back' => 'Powrót',
 'backup_list' => 'Lista istniejących kopii zapasowych',
@@ -314,6 +314,7 @@ URL: [url]',
 'documents_user_reception' => '',
 'documents_user_rejected' => '',
 'documents_user_requiring_attention' => 'Dokumenty należące do Ciebie, które wymagają uwagi',
+'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Ten dokument jest już zablokowany',
 'document_comment_changed_email' => 'Zmiana komentarza',
@@ -481,6 +482,7 @@ URL: [url]',
 'folder' => 'Folder',
 'folders' => 'Foldery',
 'folders_and_documents_statistic' => 'Podsumowanie zawartości',
+'folders_with_notification' => '',
 'folder_comment_changed_email' => 'Zmiana komentarza',
 'folder_comment_changed_email_body' => 'Komentarz uległ zmianie
 Folder: [name]
@@ -825,7 +827,9 @@ Jeśli nadal będą problemy z zalogowaniem, prosimy o kontakt z administratorem
 'password_strength_insuffient' => 'Niewystarczająca siła hasła',
 'password_wrong' => 'Złe hasło',
 'pending_approvals' => '',
+'pending_receipt' => '',
 'pending_reviews' => '',
+'pending_revision' => '',
 'pending_workflows' => '',
 'personal_default_keywords' => 'Osobiste sława kluczowe',
 'pl_PL' => 'Polski',
@@ -869,7 +873,7 @@ URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Usunięty załącznik',
 'removed_recipient' => '',
 'removed_reviewer' => 'został usunięty z listy recenzentów.',
-'removed_revispr' => '',
+'removed_revisor' => '',
 'removed_workflow_email_body' => 'Usunięcie procesu z wersji dokumentu
 Dokument: [name]
 Wersja: [version]
@@ -1557,6 +1561,7 @@ URL: [url]',
 'weeks' => 'tygodni',
 'week_view' => 'Widok tygodniowy',
 'workflow' => 'Proces',
+'workflows_involded' => '',
 'workflow_actions_management' => 'Zarządzanie akcjami procesu',
 'workflow_action_in_use' => 'Akcja ta jest obecnie zastosowana w procesie',
 'workflow_action_name' => 'Nazwa',

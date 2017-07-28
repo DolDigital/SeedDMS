@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1550), dgrutsch (9), netixw (14)
+//    Translators: Admin (1556), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -326,6 +326,7 @@ URL: [url]',
 'documents_user_reception' => 'Documents awaiting reception',
 'documents_user_rejected' => 'Rejected documents',
 'documents_user_requiring_attention' => 'Documents owned by you that require attention',
+'documents_with_notification' => 'Documents with notification',
 'document_already_checkedout' => 'This document is already checked out',
 'document_already_locked' => 'This document is already locked',
 'document_comment_changed_email' => 'Comment changed',
@@ -500,6 +501,7 @@ URL: [url]',
 'folder' => 'Folder',
 'folders' => 'Folders',
 'folders_and_documents_statistic' => 'Contents overview',
+'folders_with_notification' => 'Folders with notification',
 'folder_comment_changed_email' => 'Comment changed',
 'folder_comment_changed_email_body' => 'Comment changed
 Folder: [name]
@@ -844,7 +846,9 @@ If you have still problems to login, then please contact your administrator.',
 'password_strength_insuffient' => 'Insufficient password strength',
 'password_wrong' => 'Wrong password',
 'pending_approvals' => 'Pending approvals',
+'pending_receipt' => 'Pending receipts',
 'pending_reviews' => 'Pending reviews',
+'pending_revision' => 'Pending revisions',
 'pending_workflows' => 'Pending workflows',
 'personal_default_keywords' => 'Personal keywordlists',
 'pl_PL' => 'Polish',
@@ -899,7 +903,7 @@ URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Removed attachment',
 'removed_recipient' => 'has been removed from the list of recipients.',
 'removed_reviewer' => 'has been removed from the list of reviewers.',
-'removed_revispr' => 'has been removed from the list of revisors.',
+'removed_revisor' => 'has been removed from the list of revisors.',
 'removed_workflow_email_body' => 'Removed workflow from document version
 Document: [name]
 Version: [version]
@@ -1153,7 +1157,7 @@ URL: [url]',
 'settings_dropFolderDir' => 'Directory for drop folder',
 'settings_dropFolderDir_desc' => 'This directory can be used for dropping files on the server\'s file system and importing them from there instead of uploading via the browser. The directory must contain a sub directory for each user who is allowed to import files this way.',
 'settings_Edition' => 'Edition settings',
-'settings_editOnlineFileTypes' => 'Edit Online File Types:',
+'settings_editOnlineFileTypes' => 'Edit Online File Types',
 'settings_editOnlineFileTypes_desc' => 'Files with one of the following endings can be edited online (USE ONLY LOWER CASE CHARACTERS)',
 'settings_enable2FactorAuthentication' => 'Enable 2-factor authentication',
 'settings_enable2FactorAuthentication_desc' => 'Enable/disable 2 factor authentication. The users will need the Google Authenticator on its mobile phone.',
@@ -1623,6 +1627,7 @@ URL: [url]',
 'weeks' => 'weeks',
 'week_view' => 'Week view',
 'workflow' => 'Workflow',
+'workflows_involded' => 'Involved in workflow',
 'workflow_actions_management' => 'Workflow actions management',
 'workflow_action_in_use' => 'This action is currently used by workflows.',
 'workflow_action_name' => 'Name',
