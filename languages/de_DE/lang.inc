@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2430), dgrutsch (22)
+//    Translators: Admin (2439), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -88,6 +88,9 @@ URL: [url]',
 'already_subscribed' => 'Bereits aboniert',
 'and' => 'und',
 'apply' => 'Anwenden',
+'approvals_and_reviews_accepted' => '[no_approvals] Freigaben und [no_reviews] Prüfungen',
+'approvals_and_reviews_not_touched' => '[no_approvals] offene Freigaben und [no_reviews] offenen Prüfungen',
+'approvals_and_reviews_rejected' => '[no_approvals] abgelehnte Freigaben und [no_reviews] abgelehnte Prüfungen',
 'approval_deletion_email' => 'Freigabeaufforderung gelöscht',
 'approval_deletion_email_body' => 'Freigabeaufforderung gelöscht
 Dokument: [name]
@@ -277,6 +280,7 @@ URL: [url]',
 'confirm_rm_transmittal' => 'Bitte bestätigen Sie as Löschen der Dokumentenliste.',
 'confirm_rm_transmittalitem' => 'Löschen bestätigen',
 'confirm_rm_user' => 'Möchten Sie wirklich den Benutzer "[username]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
+'confirm_rm_user_from_processes' => 'Möchten Sie wirklich den Benutzer "[username]" aus allen Prozessen löschen?<br />Beachten Sie, dass dies möglicherweise in der Freigabe von Dokumenten resultiert, wenn der Benutzer der einzige oder letzte Prüfer ist.',
 'confirm_rm_version' => 'Wollen Sie die Version [version] des Dokumentes "[documentname]" wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
 'confirm_update_transmittalitem' => 'Aktualisierung bestätigen',
 'content' => 'Inhalt',
@@ -1020,6 +1024,7 @@ URL: [url]',
 'rm_transmittal' => 'Dokumentenliste entfernen',
 'rm_transmittalitem' => 'Eintrag löschen',
 'rm_user' => 'Diesen Benutzer löschen',
+'rm_user_from_processes' => 'Benutzer aus Prozessen löschen',
 'rm_version' => 'Version löschen',
 'rm_workflow' => 'Lösche Workflow',
 'rm_workflow_action' => 'Lösche Workflow-Aktion',
@@ -1455,6 +1460,7 @@ URL: [url]',
 'splash_rm_role' => 'Rolle gelöscht',
 'splash_rm_transmittal' => 'Dokumentenliste gelöscht',
 'splash_rm_user' => 'Benutzer gelöscht',
+'splash_rm_user_processes' => 'Benutzer aus allen Prozessen gelöscht',
 'splash_saved_file' => 'Version gespeichert',
 'splash_save_user_data' => 'Benutzerdaten gespeichert',
 'splash_send_download_link' => 'Download-Link per E-Mail verschickt.',
