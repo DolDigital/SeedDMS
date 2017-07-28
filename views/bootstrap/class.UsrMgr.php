@@ -101,6 +101,15 @@ $(document).ready( function() {
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
 			$documents = $seluser->getDocumentsLocked();
 			echo "<tr><td>".getMLText('documents_locked')."</td><td>".count($documents)."</td></tr>\n";
+			$categories = $seluser->getKeywordCategories();
+			echo "<tr><td>".getMLText('personal_default_keywords')."</td><td>".count($categories)."</td></tr>\n";
+			$dnot = $seluser->getNotifications(T_DOCUMENT);
+			echo "<tr><td>".getMLText('documents_with_notification')."</td><td>".count($dnot)."</td></tr>\n";
+			$fnot = $seluser->getNotifications(T_FOLDER);
+			echo "<tr><td>".getMLText('folders_with_notification')."</td><td>".count($fnot)."</td></tr>\n";
+			$workflows = $seluser->getWorkflowsInvolved();
+			echo "<tr><td>".getMLText('workflows_involded')."</td><td>".count($workflows)."</td></tr>\n";
+
 			if($workflowmode == "traditional") {
 				$reviewStatus = $seluser->getReviewStatus();
 				if($reviewStatus['indstatus']) {
