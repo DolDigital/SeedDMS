@@ -166,12 +166,25 @@ $(document).ready( function() {
 		$undeluserids = $this->params['undeluserids'];
 
 		if($seluser) {
+?>
+<div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		<?php echo getMLText('action'); ?>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+<?php
 			if(!in_array($seluser->getID(), $undeluserids)) {
-				echo '<a class="btn btn-danger" href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a> ';
+				echo '<li><a href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a><li>';
 			}
-			echo '<a class="btn btn-danger" href="../out/out.RemoveUserFromProcesses.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user_from_processes").'</a> ';
+			echo '<li><a href="../out/out.RemoveUserFromProcesses.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user_from_processes").'</a></li>';
+			echo '<li><a href="../out/out.TransferObjects.php?userid='.$seluser->getID().'"><i class="icon-share-alt"></i> '.getMLText("transfer_objects").'</a></li>';
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\" class=\"btn btn-primary\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a>\n";
+				echo "<li><a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a></li>\n";
+?>
+	</ul>
+</div>
+<?php
 		}
 	} /* }}} */
 

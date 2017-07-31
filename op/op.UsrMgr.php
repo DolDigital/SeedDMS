@@ -213,6 +213,53 @@ else if ($action == "removefromprocesses") {
 	}
 }
 
+// transfer all objects from one user to another one
+else if ($action == "transferobjects") {
+
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('transferobjects')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	/* Check if one  wants to transfer his/her own objects.
+	 */
+	if ($userid==$user->getID()) {
+		UI::exitError(getMLText("admin_tools"),getMLText("cannot_transfer_your_objects"));
+	}
+
+	$userToRemove = $dms->getUser($userid);
+	if (!is_object($userToRemove)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	$userToAssign = $dms->getUser($_POST["assignTo"]);
+	if (!$userToRemove->remove($user, $userToAssign)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+		
+//	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
+		if (!$userToRemove->transferDocumentsFolders($userToAssign)) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		if (!$userToRemove->transferEvents($userToAssign)) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		add_log_line(".php&action=transferobjects&userid=".$userid);
+		
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_transfer_objects')));
+//	}
+}
+
 // modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
