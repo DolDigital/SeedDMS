@@ -44,11 +44,12 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-if(isset($_POST['fineuploaderuuids']) && $_POST['fineuploaderuuids']) {
-	$uuids = explode(';', $_POST['fineuploaderuuids']);
-	$names = explode(';', $_POST['fineuploadernames']);
+$prefix = 'userfile';
+if(isset($_POST[$prefix.'-fine-uploader-uuids']) && $_POST[$prefix.'-fine-uploader-uuids']) {
+	$uuids = explode(';', $_POST[$prefix.'-fine-uploader-uuids']);
+	$names = explode(';', $_POST[$prefix.'-fine-uploader-names']);
 	foreach($uuids as $i=>$uuid) {
-		$fullfile = $settings->_stagingDir.'/'.basename($uuid);
+		$fullfile = $settings->_stagingDir.'/'.utf8_basename($uuid);
 		if(file_exists($fullfile)) {
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
 			$mimetype = finfo_file($finfo, $fullfile);
