@@ -203,6 +203,10 @@ else if ($action == "removefromprocesses") {
 	}
 
 	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
+		if(!isset($_POST["status"]["review"]))
+			$_POST["status"]["review"] = array();
+		if(!isset($_POST["status"]["approval"]))
+			$_POST["status"]["approval"] = array();
 		if (!$userToRemove->removeFromProcesses($user, $_POST['status'])) {
 			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 		}
