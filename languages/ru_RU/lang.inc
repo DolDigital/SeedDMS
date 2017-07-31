@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Уже подписан',
 'and' => 'и',
 'apply' => 'Применить',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Запрос на утверждение удалён',
 'approval_deletion_email_body' => 'Запрос на утверждение удален 
 Имя: [name]
@@ -934,6 +937,9 @@ URL: [url]',
 'reviewers' => 'Рецензирующие',
 'reviewer_already_assigned' => 'уже назначен на рецензирование',
 'reviewer_already_removed' => 'уже удалён из списка рецензирующих или уже оставил рецензию',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Запрос на рецензию удалён',
 'review_deletion_email_body' => 'Запрос на рецензию удалён
 Документ: [name]

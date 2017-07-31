@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1577), dgrutsch (9), netixw (14)
+//    Translators: Admin (1585), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Already subscribed',
 'and' => 'and',
 'apply' => 'Apply',
+'approvals_accepted' => '[no_approvals] approvals already accepted',
 'approvals_and_reviews_accepted' => '[no_approvals] approvals and [no_reviews] reviews already accepted',
 'approvals_and_reviews_not_touched' => '[no_approvals] approvals and [no_reviews] reviews not being touched',
 'approvals_and_reviews_rejected' => '[no_approvals] approvals and [no_reviews] reviews already rejected',
+'approvals_not_touched' => '[no_approvals] approvals not being touched',
+'approvals_rejected' => '[no_approvals] approvals already rejected',
 'approval_deletion_email' => 'Approval request deleted',
 'approval_deletion_email_body' => 'Approval request deleted
 Document: [name]
@@ -950,6 +953,9 @@ URL: [url]',
 'reviewers' => 'Reviewers',
 'reviewer_already_assigned' => 'User is already assigned as a reviewer',
 'reviewer_already_removed' => 'Reviewer has already been removed from review process or has already submitted a review',
+'reviews_accepted' => '[no_reviews] reviews already accepted',
+'reviews_not_touched' => '[no_reviews] reviews not being touched',
+'reviews_rejected' => '[no_reviews] reviews already rejected',
 'review_deletion_email' => 'Review request deleted',
 'review_deletion_email_body' => 'Review request deleted
 Document: [name]
@@ -986,7 +992,7 @@ URL: [url]',
 'revise_document_on' => 'Next revision of document version on [date]',
 'revisions_accepted' => '[no_revisions] revisions already accepted',
 'revisions_not_touched' => '[no_revisions] revisions not being touched',
-'revisions_rejected' => '',
+'revisions_rejected' => '[no_revisions] revisions already rejected',
 'revision_date' => 'Date of revision',
 'revision_log' => 'Revision log',
 'revision_request_email_body' => 'Revision request
@@ -1488,7 +1494,7 @@ URL: [url]',
 'status_reviewer_rejected' => 'Draft rejected',
 'status_reviewer_removed' => 'Reviewer removed from process',
 'status_revised' => 'revised',
-'status_revision_rejected' => 'rejected',
+'status_revision_rejected' => 'Rejected',
 'status_revision_sleeping' => 'pending',
 'status_revisor_removed' => 'Revisor removed from list',
 'status_unknown' => 'Unknown',

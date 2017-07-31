@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => '가입된',
 'and' => '와',
 'apply' => '적용',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => '승인 요청 삭제',
 'approval_deletion_email_body' => '승인 요청 삭제
 문서: [name]
@@ -924,6 +927,9 @@ URL: [url]',
 'reviewers' => '검토',
 'reviewer_already_assigned' => '이미 검토 지정됩',
 'reviewer_already_removed' => '이미 검토 과정에서 제거되었거나 리뷰로 제출',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => '검토 요청 삭제',
 'review_deletion_email_body' => '검토 요청 삭제
 문서: [name]

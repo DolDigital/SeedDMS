@@ -88,9 +88,12 @@ Internet poveznica: [url]',
 'already_subscribed' => 'Već prijavljeno',
 'and' => 'i',
 'apply' => 'Primjeni',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Izbrisan zahtjev za odobrenje',
 'approval_deletion_email_body' => 'Zahtjev za odobrenjem izbrisan
 Dokument: [name]
@@ -931,6 +934,9 @@ Internet poveznica: [url]',
 'reviewers' => 'Recezenti',
 'reviewer_already_assigned' => 'je već dodijeljen kao recezent',
 'reviewer_already_removed' => 'je već uklonjen iz postupka pregleda ili je već podnijet pregled.',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Izbrisan zahtjev za pregled',
 'review_deletion_email_body' => 'Zahtjev za pregled izbrisan
 Dokument: [name]
