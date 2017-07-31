@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1572), dgrutsch (9), netixw (14)
+//    Translators: Admin (1577), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -871,6 +871,9 @@ If you have still problems to login, then please contact your administrator.',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',
 'quota_is_disabled' => 'Quota support is currently disabled in the settings. Setting a user quota will have no effect until it is enabled again.',
 'quota_warning' => 'Your maximum disc usage is exceeded by [bytes]. Please remove documents or previous versions.',
+'receipts_accepted' => '[no_receipts] receipts already accepted',
+'receipts_not_touched' => '[no_receipts] receipts not being touched',
+'receipts_rejected' => '[no_receipts] receipts already rejected',
 'receipt_deletion_email_body' => 'User has been removed from the list of recipients
 Document: [name]
 Version: [version]
@@ -981,6 +984,9 @@ URL: [url]',
 'review_update_failed' => 'Error updating review status. Update failed.',
 'revise_document' => 'Revise document',
 'revise_document_on' => 'Next revision of document version on [date]',
+'revisions_accepted' => '[no_revisions] revisions already accepted',
+'revisions_not_touched' => '[no_revisions] revisions not being touched',
+'revisions_rejected' => '',
 'revision_date' => 'Date of revision',
 'revision_log' => 'Revision log',
 'revision_request_email_body' => 'Revision request

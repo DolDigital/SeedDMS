@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2443), dgrutsch (22)
+//    Translators: Admin (2448), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -869,6 +869,9 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'quota_exceeded' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten.',
 'quota_is_disabled' => 'Quota-Unterstützung ist zur Zeit ausgeschaltet. Benutzer-Quota werden ignoriert bis Quota-Unterstützung in den Einstellungen eingeschaltet wird.',
 'quota_warning' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten. Bitte löschen Sie Dokumente oder ältere Versionen.',
+'receipts_accepted' => '[no_receipts] Empfangsbestätigungen',
+'receipts_not_touched' => '[no_receipts] offene Empfangsbestätigungen',
+'receipts_rejected' => '[no_receipts] abgelehnte Empfangsbestätigungen',
 'receipt_deletion_email_body' => 'Benutzer von Liste der Empfänger gelöscht
 Dokument: [name]
 Version: [version]
@@ -979,6 +982,9 @@ URL: [url]',
 'review_update_failed' => 'Störung bei Aktualisierung des Prüfstatus. Aktualisierung gescheitert.',
 'revise_document' => 'Dokument überprüfen',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
+'revisions_accepted' => '[no_revisions] Wiederholungsprüfungen',
+'revisions_not_touched' => '[no_revisions] offene Wiederholungspüfungen',
+'revisions_rejected' => '',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
 'revision_request_email_body' => 'Aufforderung zur Wiederholungsprüfung
