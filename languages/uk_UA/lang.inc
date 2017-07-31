@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Вже підписаний',
 'and' => 'і',
 'apply' => 'Застосувати',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Запит на підтвердження скасовано',
 'approval_deletion_email_body' => 'Запит на підтвердження скасовано
 Назва: [name]
@@ -927,6 +930,9 @@ URL: [url]',
 'reviewers' => 'Рецензенти',
 'reviewer_already_assigned' => 'вже призначений для рецензування',
 'reviewer_already_removed' => 'вже видалено зі списку рецензентів або вже лишив рецензію',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Запит на редагування видалено',
 'review_deletion_email_body' => 'Запит на рецензування видалено
 Документ: [name]

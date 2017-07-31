@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'L\'oggetto è già stato sottoscritto',
 'and' => 'e',
 'apply' => 'Applica',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Richiesta di approvazione cancellata',
 'approval_deletion_email_body' => 'Richiesta di approvazione cancellata.
 Documento: [name]
@@ -938,6 +941,9 @@ URL: [url]',
 'reviewers' => 'Revisori',
 'reviewer_already_assigned' => 'è già assegnato come revisore',
 'reviewer_already_removed' => 'è già stato rimosso dal processo di revisione oppure ha già inserito una revisione.',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Richiesta di revisione cancellata',
 'review_deletion_email_body' => 'Richiesta di revisione cancellata.
 Documento: [name]

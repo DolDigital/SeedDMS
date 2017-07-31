@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Deja trimis',
 'and' => 'si',
 'apply' => 'Aplică',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Cerere de aprobare stearsă',
 'approval_deletion_email_body' => 'Cerere aprobare stearsa
 Document: [name]
@@ -932,6 +935,9 @@ URL: [url]',
 'reviewers' => 'Revizuitori',
 'reviewer_already_assigned' => 'este deja alocat ca un revizuitor',
 'reviewer_already_removed' => 'a fost deja eliminat din procesul de revizuire sau a postat deja o revizuire',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Cerere de revizuire eliminată',
 'review_deletion_email_body' => 'Cerere de revizuire eliminata
 Document: [name]

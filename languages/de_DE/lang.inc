@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2448), dgrutsch (22)
+//    Translators: Admin (2455), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Bereits aboniert',
 'and' => 'und',
 'apply' => 'Anwenden',
+'approvals_accepted' => '[no_approvals] Freigaben',
 'approvals_and_reviews_accepted' => '[no_approvals] Freigaben und [no_reviews] Prüfungen',
 'approvals_and_reviews_not_touched' => '[no_approvals] offene Freigaben und [no_reviews] offenen Prüfungen',
 'approvals_and_reviews_rejected' => '[no_approvals] abgelehnte Freigaben und [no_reviews] abgelehnte Prüfungen',
+'approvals_not_touched' => '[no_approvals] offene Freigaben',
+'approvals_rejected' => '[no_approvals] abgelehnte Freigaben',
 'approval_deletion_email' => 'Freigabeaufforderung gelöscht',
 'approval_deletion_email_body' => 'Freigabeaufforderung gelöscht
 Dokument: [name]
@@ -948,6 +951,9 @@ URL: [url]',
 'reviewers' => 'Prüfer',
 'reviewer_already_assigned' => 'Prüfer bereits zugewiesen',
 'reviewer_already_removed' => 'Prüfer wurde bereits aus dem Prüfvorgang entfernt oder hat die Prüfung bereits abgeschlossen',
+'reviews_accepted' => '[no_reviews] Prüfungen',
+'reviews_not_touched' => '[no_reviews] offene Prüfungen',
+'reviews_rejected' => '[no_reviews] abgelehnte Prüfungen',
 'review_deletion_email' => 'Prüfungsaufforderung gelöscht',
 'review_deletion_email_body' => 'Prüfungsaufforderung gelöscht
 Dokument: [name]
@@ -984,7 +990,7 @@ URL: [url]',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
 'revisions_accepted' => '[no_revisions] Wiederholungsprüfungen',
 'revisions_not_touched' => '[no_revisions] offene Wiederholungspüfungen',
-'revisions_rejected' => '',
+'revisions_rejected' => '[no_revisions] abgelehnte Wiederholungsprüfungen',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
 'revision_request_email_body' => 'Aufforderung zur Wiederholungsprüfung
