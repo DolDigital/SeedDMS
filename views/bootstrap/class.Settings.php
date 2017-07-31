@@ -270,6 +270,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableMenuTasks");?>:</td>
         <td><input name="enableMenuTasks" type="checkbox" <?php if ($settings->_enableMenuTasks) echo "checked" ?> /></td>
       </tr>
+	    <tr title="<?php printMLText("settings_enableDropFolderList_desc");?>">
+        <td><?php printMLText("settings_enableDropFolderList");?>:</td>
+        <td><input name="enableDropFolderList" type="checkbox" <?php if ($settings->_enableDropFolderList) echo "checked" ?> /></td>
+      </tr>
 	    <tr title="<?php printMLText("settings_enableSessionList_desc");?>">
         <td><?php printMLText("settings_enableSessionList");?>:</td>
         <td><input name="enableSessionList" type="checkbox" <?php if ($settings->_enableSessionList) echo "checked" ?> /></td>

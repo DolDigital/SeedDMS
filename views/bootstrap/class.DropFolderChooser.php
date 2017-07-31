@@ -50,6 +50,53 @@ $('.folderselect').click(function(ev) {
 <?php
 	} /* }}} */
 
+	public function menuList() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$dropfolderdir = $this->params['dropfolderdir'];
+		$cachedir = $this->params['cachedir'];
+		$timeout = $this->params['timeout'];
+
+		$previewwidth = 40;
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+
+		$content = '';
+		$content .= "   <ul id=\"main-menu-dropfolderlist\" class=\"nav pull-right\">\n";
+		$content .= "    <li class=\"dropdown add-dropfolderlist-area\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-dropfolderlist-area\">".getMLText('dropfolder')." <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		$dir = $dropfolderdir.'/'.$user->getLogin();
+		/* Check if we are still looking in the configured directory and
+		 * not somewhere else, e.g. if the login was '../test'
+		 */
+		if(dirname($dir) == $dropfolderdir) {
+			if(is_dir($dir)) {
+				$d = dir($dir);
+
+				$finfo = finfo_open(FILEINFO_MIME_TYPE);
+				while (false !== ($entry = $d->read())) {
+					if($entry != '..' && $entry != '.') {
+						if($showfolders == 0 && !is_dir($dir.'/'.$entry)) {
+							$mimetype = finfo_file($finfo, $dir.'/'.$entry);
+							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
+							$content .= "<li><a _href=\"\">";
+							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
+								$content .= "<div style=\"float: left; display:inline; width:40px;\"><img filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\"></div>";
+							}
+							$content .= "<div style=\"margin-left:10px; margin-right: 40px; display:inline-block;\">".$entry."<br /><span style=\"font-size: 85%;\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry)).", ".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</span></div></a></li>\n";
+						} elseif($showfolders && is_dir($dir.'/'.$entry)) {
+							$content .= "<li><a _href=\"\">".$entry."</a></li>";
+						}
+					}
+				}
+			}
+		}
+		$content .= "     </ul>\n";
+		$content .= "    </li>\n";
+		$content .= "   </ul>\n";
+		echo $content;
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];

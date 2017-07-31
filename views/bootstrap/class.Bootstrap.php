@@ -327,6 +327,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				//$this->addFooterJS('checkTasks();');
 			}
 
+			if($this->params['dropfolderdir'] && $this->params['enabledropfolderlist']) {
+				echo "   <div id=\"menu-dropfolder\">";
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"DropFolderChooser\" data-action=\"menuList\"></div>";
+				echo "   </div>";
+			}
 			if($this->params['enablesessionlist']) {
 				echo "   <div id=\"menu-session\">";
 				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Session\" data-action=\"menuSessions\"></div>";
