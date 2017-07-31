@@ -478,7 +478,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * Remove user from all processes
 	 *
 	 * This method adds another log entry to the reviews and approvals
-	 * which indicates the user has been deleted from the process. It will
+	 * which indicates the user has been deleted from the process. By default it will
 	 * do so for each review/approval regardless of its current state. So even
 	 * reviews/approvals already processed by the user will be added the log
 	 * entry. Only if the last log entry was a removal already, it will not be
@@ -487,6 +487,8 @@ class SeedDMS_Core_User { /* {{{ */
 	 * @param object $user the user doing the removal (needed for entry in
 	 *        review and approve log).
 	 * @param array $states remove user only from reviews/approvals in one of the states
+	 *        If passing array(0), the method will operate on reviews/approval which
+	 *        has not been touched.
 	 * @return boolean true on success or false in case of an error
 	 */
 	private function __removeFromProcesses($user, $states = array()) { /* {{{ */
@@ -533,6 +535,114 @@ class SeedDMS_Core_User { /* {{{ */
 
 		$db->startTransaction();
 		if(!$this->__removeFromProcesses($user, $states)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer documents and folders to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of folders and
+	 *        documents which previously were owned by the delete user.
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __transferDocumentsFolders($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$assignToUser)
+			return false;
+
+		/* Assign documents of the removed user to the given user */
+		$queryStr = "UPDATE `tblFolders` SET `owner` = " . $assignToUser->getID() . " WHERE `owner` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocuments` SET `owner` = " . $assignToUser->getID() . " WHERE `owner` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentContent` SET `createdBy` = " . $assignToUser->getID() . " WHERE `createdBy` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		// ... but keep public links
+		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		// set administrator for deleted user's attachments
+		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer documents and folders to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of folders and
+	 *        documents which previously were owned by the delete user.
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function transferDocumentsFolders($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($assignToUser->getID() == $this->_id)
+			return true;
+
+		$db->startTransaction();
+		if(!$this->__transferDocumentsFolders($assignToUser)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer events to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of events
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __transferEvents($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$assignToUser)
+			return false;
+
+		// set new owner of events
+		$queryStr = "UPDATE `tblEvents` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer events to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of events
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function transferEvents($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($assignToUser->getID() == $this->_id)
+			return true;
+
+		$db->startTransaction();
+		if(!$this->__transferEvents($assignToUser)) {
 			$db->rollbackTransaction();
 			return false;
 		}
@@ -594,25 +704,6 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		/* Assign documents of the removed user to the given user */
-		$queryStr = "UPDATE `tblFolders` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		$queryStr = "UPDATE `tblDocuments` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		$queryStr = "UPDATE `tblDocumentContent` SET `createdBy` = " . $assignTo . " WHERE `createdBy` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
 		// Remove private links on documents ...
 		$queryStr = "DELETE FROM `tblDocumentLinks` WHERE `userID` = " . $this->_id . " AND `public` = 0";
 		if (!$db->getResult($queryStr)) {
@@ -620,18 +711,10 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		// ... but keep public links
-		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		// set administrator for deleted user's attachments
-		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
+		/* Assign documents, folders, files, public document links of the removed user to the given user */
+		if(!$this->__transferDocumentsFolders($assignToUser)) {
+				$db->rollbackTransaction();
+				return false;
 		}
 
 		// unlock documents locked by the user
@@ -713,11 +796,10 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		// set administrator for deleted user's events
-		$queryStr = "UPDATE `tblEvents` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
+		/* Assign events of the removed user to the given user */
+		if(!$this->__transferEvents($assignToUser)) {
+				$db->rollbackTransaction();
+				return false;
 		}
 
 		// Delete user itself
