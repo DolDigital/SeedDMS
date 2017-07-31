@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1568), dgrutsch (9), netixw (14)
+//    Translators: Admin (1572), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -282,6 +282,7 @@ URL: [url]',
 'confirm_rm_user' => 'Do you really want to remove the user "[username]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_user_from_processes' => 'Do you really want to remove the user "[username]" from all processes?<br>Be careful: This action can lead to the release of documents if the user was the only or last approver.',
 'confirm_rm_version' => 'Do you really want to remove version [version] of document "[documentname]"?<br>Be careful: This action cannot be undone.',
+'confirm_transfer_objects' => 'Do you really want to transfer the documents, folders, etc. of the user "[username]"?<br>Be careful: This action cannot be undone.',
 'confirm_update_transmittalitem' => 'Confirm update',
 'content' => 'Content',
 'continue' => 'Continue',
@@ -1463,6 +1464,7 @@ URL: [url]',
 'splash_substituted_user' => 'Substituted user',
 'splash_switched_back_user' => 'Switched back to original user',
 'splash_toogle_group_manager' => 'Group manager toogled',
+'splash_transfer_objects' => 'Objects transfered',
 'state_and_next_state' => 'State/Next state',
 'statistic' => 'Statistic',
 'status' => 'Status',
@@ -1538,6 +1540,8 @@ URL: [url]',
 'toggle_manager' => 'Toggle manager',
 'toggle_qrcode' => 'Show/hide QR code',
 'to_before_from' => 'End date may not be before start date',
+'transfer_objects' => 'Transfer objects',
+'transfer_objects_to_user' => 'New owner',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered
 Document: [name]

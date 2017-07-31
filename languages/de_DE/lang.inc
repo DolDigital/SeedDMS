@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2439), dgrutsch (22)
+//    Translators: Admin (2443), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -282,6 +282,7 @@ URL: [url]',
 'confirm_rm_user' => 'Möchten Sie wirklich den Benutzer "[username]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_user_from_processes' => 'Möchten Sie wirklich den Benutzer "[username]" aus allen Prozessen löschen?<br />Beachten Sie, dass dies möglicherweise in der Freigabe von Dokumenten resultiert, wenn der Benutzer der einzige oder letzte Prüfer ist.',
 'confirm_rm_version' => 'Wollen Sie die Version [version] des Dokumentes "[documentname]" wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
+'confirm_transfer_objects' => 'Möchten Sie wirklich die Dokumente, Ordner, etc. des Benutzer "[username]" übertragen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_update_transmittalitem' => 'Aktualisierung bestätigen',
 'content' => 'Inhalt',
 'continue' => 'fortführen',
@@ -1468,6 +1469,7 @@ URL: [url]',
 'splash_substituted_user' => 'Benutzer gewechselt',
 'splash_switched_back_user' => 'Zum ursprünglichen Benutzer zurückgekehrt',
 'splash_toogle_group_manager' => 'Gruppenverwalter gewechselt',
+'splash_transfer_objects' => 'Objekte übertragen',
 'state_and_next_state' => 'Status/Nächster Status',
 'statistic' => 'Statistik',
 'status' => 'Status',
@@ -1543,6 +1545,8 @@ URL: [url]',
 'toggle_manager' => 'Managerstatus wechseln',
 'toggle_qrcode' => 'Zeige/verberge QR-Code',
 'to_before_from' => 'Endedatum darf nicht vor dem Startdatum liegen',
+'transfer_objects' => 'Objekte übertragen',
+'transfer_objects_to_user' => 'Neuer Eigentümer',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered
 Document: [name]
