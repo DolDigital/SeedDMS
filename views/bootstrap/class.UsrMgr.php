@@ -93,9 +93,13 @@ $(document).ready( function() {
 			$this->contentHeading(getMLText("user_info"));
 			echo "<table class=\"table table-condensed\">\n";
 			echo "<tr><td>".getMLText('discspace')."</td><td>";
-			$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
-			echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
-			echo $this->getProgressBar($seluser->getUsedDiskSpace(), $qt);
+			if($quota) {
+				$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
+				echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
+				echo $this->getProgressBar($seluser->getUsedDiskSpace(), $qt);
+			} else {
+				echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())."<br />";
+			}
 			echo "</td></tr>\n";
 			$documents = $seluser->getDocuments();
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
