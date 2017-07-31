@@ -26,7 +26,10 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
+if(isset($_GET["form"]))
+	$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
+else
+	$form = '';
 
 if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
 	$dropfolderdir = substr($settings->_dropFolderDir, 0, -1);
