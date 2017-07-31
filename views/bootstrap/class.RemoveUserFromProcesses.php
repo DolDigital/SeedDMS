@@ -69,29 +69,57 @@ class SeedDMS_View_RemoveUserFromProcesses extends SeedDMS_Bootstrap_Style {
 				$tmpa[$ai['status']] = array($ai);
 		}
 ?>
-<?php if(isset($tmpa["0"]) || isset($tmpr["0"])) { ?>
+<?php if(isset($tmpr["0"])) { ?>
 <div class="control-group">
 	<div class="controls">
 		<label class="checkbox">
-	<input type="checkbox" name="status[]" value="0" checked> <?php echo getMLText('approvals_and_reviews_not_touched', array('no_approvals' => count($tmpa["0"]), 'no_reviews' => count($tmpr["0"]))); ?>
+	<input type="checkbox" name="status[review][]" value="0" checked> <?php echo getMLText('reviews_not_touched', array('no_reviews' => count($tmpr["0"]))); ?>
 		</label>
 	</div>
 </div>
 <?php } ?>
-<?php if(isset($tmpa["1"]) || isset($tmpr["1"])) { ?>
+<?php if(isset($tmpr["1"])) { ?>
 <div class="control-group">
 	<div class="controls">
 		<label class="checkbox">
-	<input type="checkbox" name="status[]" value="1" checked> <?php echo getMLText('approvals_and_reviews_accepted', array('no_approvals' => count($tmpa["1"]), 'no_reviews' => count($tmpr["1"]))); ?><br />
+	<input type="checkbox" name="status[review][]" value="1"> <?php echo getMLText('reviews_accepted', array('no_reviews' => count($tmpr["1"]))); ?><br />
 		</label>
 	</div>
 </div>
 <?php } ?>
-<?php if(isset($tmpa["-1"]) || isset($tmpr["-1"])) { ?>
+<?php if(isset($tmpr["-1"])) { ?>
 <div class="control-group">
 	<div class="controls">
 		<label class="checkbox">
-	<input type="checkbox" name="status[]" value="-1" checked> <?php echo getMLText('approvals_and_reviews_rejected', array('no_approvals' => count($tmpa["-1"]), 'no_reviews' => count($tmpr["-1"]))); ?><br />
+	<input type="checkbox" name="status[review][]" value="-1"> <?php echo getMLText('reviews_rejected', array('no_reviews' => count($tmpr["-1"]))); ?><br />
+		</label>
+	</div>
+</div>
+<?php } ?>
+
+<?php if(isset($tmpa["0"])) { ?>
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
+	<input type="checkbox" name="status[approval][]" value="0" checked> <?php echo getMLText('approvals_not_touched', array('no_approvals' => count($tmpa["0"]))); ?>
+		</label>
+	</div>
+</div>
+<?php } ?>
+<?php if(isset($tmpa["1"])) { ?>
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
+	<input type="checkbox" name="status[approval][]" value="1"> <?php echo getMLText('approvals_accepted', array('no_approvals' => count($tmpa["1"]))); ?><br />
+		</label>
+	</div>
+</div>
+<?php } ?>
+<?php if(isset($tmpa["-1"])) { ?>
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
+	<input type="checkbox" name="status[approval][]" value="-1"> <?php echo getMLText('approvals_rejected', array('no_approvals' => count($tmpa["-1"]))); ?><br />
 		</label>
 	</div>
 </div>
