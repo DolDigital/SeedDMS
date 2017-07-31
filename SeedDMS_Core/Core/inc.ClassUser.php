@@ -499,7 +499,6 @@ class SeedDMS_Core_User { /* {{{ */
 			if($ri['status'] != -2 && (!isset($states['review']) || in_array($ri['status'], $states['review']))) {
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-				echo $queryStr;
 				$res=$db->getResult($queryStr);
 				if(!$res) {
 					return false;
@@ -512,7 +511,6 @@ class SeedDMS_Core_User { /* {{{ */
 			if($ai['status'] != -2 && (!isset($states['approval']) || in_array($ai['status'], $states['approval']))) {
 				$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-				echo $queryStr;
 				$res=$db->getResult($queryStr);
 				if(!$res) {
 					return false;
