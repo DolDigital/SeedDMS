@@ -36,17 +36,19 @@ class SeedDMS_View_RemoveUserFromProcesses extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentHeading(getMLText("rm_user"));
+		$this->contentHeading(getMLText("rm_user_from_processes"));
 
+?>
+<div class="alert">
+<?php printMLText("confirm_rm_user_from_processes", array ("username" => htmlspecialchars($rmuser->getFullName())));?>
+</div>
+<?php
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.UsrMgr.php" name="form1" method="post">
+<form class="form-horizontal" action="../op/op.UsrMgr.php" name="form1" method="post">
 <input type="hidden" name="userid" value="<?php print $rmuser->getID();?>">
 <input type="hidden" name="action" value="removefromprocesses">
 <?php echo createHiddenFieldWithKey('removefromprocesses'); ?>
-<p>
-<?php printMLText("confirm_rm_user_from_processes", array ("username" => htmlspecialchars($rmuser->getFullName())));?>
-</p>
 
 <?php
 		$reviewStatus = $rmuser->getReviewStatus();
@@ -67,19 +69,39 @@ class SeedDMS_View_RemoveUserFromProcesses extends SeedDMS_Bootstrap_Style {
 				$tmpa[$ai['status']] = array($ai);
 		}
 ?>
-<p>
 <?php if(isset($tmpa["0"]) || isset($tmpr["0"])) { ?>
-	<input type="checkbox" name="status[]" value="0" checked> <?php echo getMLText('approvals_and_reviews_not_touched', array('no_approvals' => count($tmpa["0"]), 'no_reviews' => count($tmpr["0"]))); ?><br />
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
+	<input type="checkbox" name="status[]" value="0" checked> <?php echo getMLText('approvals_and_reviews_not_touched', array('no_approvals' => count($tmpa["0"]), 'no_reviews' => count($tmpr["0"]))); ?>
+		</label>
+	</div>
+</div>
 <?php } ?>
 <?php if(isset($tmpa["1"]) || isset($tmpr["1"])) { ?>
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
 	<input type="checkbox" name="status[]" value="1" checked> <?php echo getMLText('approvals_and_reviews_accepted', array('no_approvals' => count($tmpa["1"]), 'no_reviews' => count($tmpr["1"]))); ?><br />
+		</label>
+	</div>
+</div>
 <?php } ?>
 <?php if(isset($tmpa["-1"]) || isset($tmpr["-1"])) { ?>
+<div class="control-group">
+	<div class="controls">
+		<label class="checkbox">
 	<input type="checkbox" name="status[]" value="-1" checked> <?php echo getMLText('approvals_and_reviews_rejected', array('no_approvals' => count($tmpa["-1"]), 'no_reviews' => count($tmpr["-1"]))); ?><br />
+		</label>
+	</div>
+</div>
 <?php } ?>
 
-</p>
-<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user");?></button></p>
+<div class="control-group">
+	<div class="controls">
+<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user_from_processes");?></button>
+	</div>
+</div>
 
 </form>
 <?php
