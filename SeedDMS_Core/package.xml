@@ -28,6 +28,7 @@
 returns just users which are not disabled
 - add new methods removeFromProcesses(), getWorkflowsInvolved(), getKeywordCategories() to SeedDMS_Core_User
 - add methods isMandatoryReviewerOf() and isMandatoryApproverOf()
+- add methods transferDocumentsFolders() and transferEvents()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
