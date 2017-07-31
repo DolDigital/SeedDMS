@@ -88,9 +88,12 @@ URL: [url]',
 'already_subscribed' => 'Al ingetekend',
 'and' => 'en',
 'apply' => 'Toepassen',
+'approvals_accepted' => '',
 'approvals_and_reviews_accepted' => '',
 'approvals_and_reviews_not_touched' => '',
 'approvals_and_reviews_rejected' => '',
+'approvals_not_touched' => '',
+'approvals_rejected' => '',
 'approval_deletion_email' => 'Goedkeuring verzoek verwijderd',
 'approval_deletion_email_body' => 'Vraag om goedkeuring verwijderd
 Document: [name]
@@ -929,6 +932,9 @@ URL: [url]',
 'reviewers' => 'Beoordelaars',
 'reviewer_already_assigned' => 'is reeds aangewezen als beoordelaar',
 'reviewer_already_removed' => 'is reeds verwijderd uit het beoordelingsproces of heeft reeds een beoordeling uitgevoerd',
+'reviews_accepted' => '',
+'reviews_not_touched' => '',
+'reviews_rejected' => '',
 'review_deletion_email' => 'Beoordelingsverzoek verwijderd',
 'review_deletion_email_body' => 'Beoordelingsverzoek verwijderd
 Document: [name]
