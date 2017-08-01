@@ -59,6 +59,7 @@ if($view) {
 	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
 	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
 	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('dropfolderfile', isset($_REQUEST["dropfolderfileform1"]) ?$_REQUEST["dropfolderfileform1"] : '');
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
 	$view->setParam('sortusersinlist', $settings->_sortUsersInList);
