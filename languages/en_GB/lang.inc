@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1588), dgrutsch (9), netixw (14)
+//    Translators: Admin (1591), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1033,7 +1033,7 @@ URL: [url]',
 'rm_role' => 'Delete this role',
 'rm_transmittal' => 'Remove transmittal',
 'rm_transmittalitem' => 'Remove item',
-'rm_user' => 'Remove this user',
+'rm_user' => 'Remove user',
 'rm_user_from_processes' => 'Remove user from processes',
 'rm_version' => 'Remove version',
 'rm_workflow' => 'Remove Workflow',
@@ -1193,7 +1193,7 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Enable/disable the clipboard on the \'View Folder\' page',
 'settings_enableConverting' => 'Enable Converting',
 'settings_enableConverting_desc' => 'Enable/disable converting of files',
-'settings_enableDropFolderList' => 'Enable/disable list of files in drop folder in the menu',
+'settings_enableDropFolderList' => 'Enable list of files in drop folder in menu',
 'settings_enableDropFolderList_desc' => '',
 'settings_enableDropUpload' => 'Enable Fast Upload',
 'settings_enableDropUpload_desc' => 'Enable/Disable the drop area on the \'View Folder\' page for uploading files by Drag&Drop.',
@@ -1237,7 +1237,7 @@ URL: [url]',
 'settings_enableRevisionWorkflow_desc' => 'Enable, to be able to run the workflow for revising a document after a given period of time.',
 'settings_enableSelfRevApp' => 'Allow review/approval for logged in user',
 'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
-'settings_enableSessionList' => 'Enable list of users online',
+'settings_enableSessionList' => 'Enable list of users online in menu',
 'settings_enableSessionList_desc' => 'Enable list of currently logged in users in menu.',
 'settings_enableThemeSelector' => 'Theme selection',
 'settings_enableThemeSelector_desc' => 'Turns on/off the theme selector on the login page.',
