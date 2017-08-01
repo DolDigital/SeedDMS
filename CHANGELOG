@@ -7,6 +7,7 @@
 - fix sql statement for creating temp. tables (sqlite)
 - remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
 - make sure contentDir ends with DIRECTORY_SEPARATOR (Closes #323)
+- minor improvements of installation
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
