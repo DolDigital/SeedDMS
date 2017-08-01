@@ -160,13 +160,16 @@ do {
 
 if(!$settings->_rootDir)
 	$settings->_rootDir = $rootDir;
-//$settings->_coreDir = $settings->_rootDir;
-//$settings->_luceneClassDir = $settings->_rootDir;
+elseif(realpath ("..") != realpath($settings->_rootDir)) { // Fix rootDir if required
+	$msg = "Your Root directory has been modified to fit your installation path!";
+	$settings->_rootDir = realpath ("..")."/";
+}
+
 if(!$settings->_contentDir) {
-	$settings->_contentDir = $settings->_rootDir . 'data/';
-	$settings->_luceneDir = $settings->_rootDir . 'data/lucene/';
-	$settings->_stagingDir = $settings->_rootDir . 'data/staging/';
-	$settings->_cacheDir = $settings->_rootDir . 'data/cache/';
+	$settings->_contentDir = realpath($settings->_rootDir."..") . '/data/';
+	$settings->_luceneDir = $settings->_contentDir . 'lucene/';
+	$settings->_stagingDir = $settings->_contentDir . 'staging/';
+	$settings->_cacheDir = $settings->_contentDir . 'cache/';
 } else {
 	if(!$settings->_cacheDir) {
 		$settings->_cacheDir = $settings->_contentDir . 'cache/';
@@ -190,6 +193,8 @@ UI::htmlStartPage("INSTALL");
 UI::globalBanner();
 UI::contentStart();
 UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
+if(isset($msg))
+	echo "<div class=\"alert alert-warning\">".$msg."</div>";
 UI::contentContainerStart();
 
 
