@@ -54,8 +54,10 @@ $('.folderselect').click(function(ev) {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$showfolders = $this->params['showfolders'];
 		$cachedir = $this->params['cachedir'];
 		$timeout = $this->params['timeout'];
+		$folderid = isset($_GET['folderid']) ? $_GET['folderid'] : 0;
 
 		$previewwidth = 40;
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
@@ -63,7 +65,7 @@ $('.folderselect').click(function(ev) {
 		$content = '';
 		$content .= "   <ul id=\"main-menu-dropfolderlist\" class=\"nav pull-right\">\n";
 		$content .= "    <li class=\"dropdown add-dropfolderlist-area\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-dropfolderlist-area\">".getMLText('dropfolder')." <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" class=\"add-dropfolderlist-area\">".getMLText('menu_dropfolder')." <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		$dir = $dropfolderdir.'/'.$user->getLogin();
 		/* Check if we are still looking in the configured directory and
@@ -79,9 +81,9 @@ $('.folderselect').click(function(ev) {
 						if($showfolders == 0 && !is_dir($dir.'/'.$entry)) {
 							$mimetype = finfo_file($finfo, $dir.'/'.$entry);
 							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
-							$content .= "<li><a _href=\"\">";
+							$content .= "<li><a".($folderid ? " href=\"../out/out.AddDocument.php?folderid=".$folderid."&dropfolderfileform1=".urldecode($entry)."\"" : "").">";
 							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
-								$content .= "<div style=\"float: left; display:inline; width:40px;\"><img filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\"></div>";
+								$content .= "<div style=\"float: left; display:inline; width:40px; max-height:40px;overflow:hidden;\"><img filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\"></div>";
 							}
 							$content .= "<div style=\"margin-left:10px; margin-right: 40px; display:inline-block;\">".$entry."<br /><span style=\"font-size: 85%;\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry)).", ".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</span></div></a></li>\n";
 						} elseif($showfolders && is_dir($dir.'/'.$entry)) {
