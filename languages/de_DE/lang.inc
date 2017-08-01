@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2455), dgrutsch (22)
+//    Translators: Admin (2461), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -115,7 +115,7 @@ URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Aufforderung zur Freigabe',
 'approval_status' => 'Freigabestatus',
 'approval_submit_email' => '',
-'approval_submit_email_body' => 'Freigabe erteilen
+'approval_submit_email_body' => 'Freigabe erteilt
 Dokument: [name]
 Version: [version]
 Elternordner: [folder_path]
@@ -702,6 +702,7 @@ URL: [url]',
 'march' => 'März',
 'max_upload_size' => 'Maximale Dateigröße',
 'may' => 'Mai',
+'menu_dropfolder' => 'Ablageordner',
 'mimetype' => 'Mime-Type',
 'minutes' => 'Minuten',
 'misc' => 'Sonstiges',
@@ -990,6 +991,7 @@ URL: [url]',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
 'revisions_accepted' => '[no_revisions] Wiederholungsprüfungen',
 'revisions_not_touched' => '[no_revisions] offene Wiederholungspüfungen',
+'revisions_pending' => '[no_revisions] zukünftige Wiederholungsprüfungen',
 'revisions_rejected' => '[no_revisions] abgelehnte Wiederholungsprüfungen',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
@@ -1001,7 +1003,7 @@ Benutzer: [username]
 URL: [url]',
 'revision_request_email_subject' => '[sitename]: [name] - Aufforderung zur Wiederholungsprüfung',
 'revision_status' => 'Status',
-'revision_submit_email_body' => 'Erneute Freigabe erteilen
+'revision_submit_email_body' => 'Erneute Freigabe erteilt
 Dokument: [name]
 Version: [version]
 Elternordner: [folder_path]
@@ -1196,6 +1198,8 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Schaltet die Zwischenablage auf der \'View Folder\' Seite ein/aus',
 'settings_enableConverting' => 'Dokumentenkonvertierung einschalten',
 'settings_enableConverting_desc' => 'Ein/Auschalten der automatischen Konvertierung von Dokumenten',
+'settings_enableDropFolderList' => 'Ein-/Ausschalten der Liste der Dateien im Ablageordner im Menü',
+'settings_enableDropFolderList_desc' => '',
 'settings_enableDropUpload' => 'Schnelles Hochladen einschalten',
 'settings_enableDropUpload_desc' => 'Ein/Ausschalten des Bereichs auf der \'View Folder\' Seite zum Hochladen von Dateien per Drag&Drop.',
 'settings_enableDuplicateDocNames' => 'Erlaube doppelte Dokumentennamen',
