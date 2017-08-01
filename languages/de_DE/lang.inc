@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2461), dgrutsch (22)
+//    Translators: Admin (2464), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1038,7 +1038,7 @@ URL: [url]',
 'rm_role' => 'Diese Rolle löschen',
 'rm_transmittal' => 'Dokumentenliste entfernen',
 'rm_transmittalitem' => 'Eintrag löschen',
-'rm_user' => 'Diesen Benutzer löschen',
+'rm_user' => 'Benutzer löschen',
 'rm_user_from_processes' => 'Benutzer aus Prozessen löschen',
 'rm_version' => 'Version löschen',
 'rm_workflow' => 'Lösche Workflow',
@@ -1198,7 +1198,7 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Schaltet die Zwischenablage auf der \'View Folder\' Seite ein/aus',
 'settings_enableConverting' => 'Dokumentenkonvertierung einschalten',
 'settings_enableConverting_desc' => 'Ein/Auschalten der automatischen Konvertierung von Dokumenten',
-'settings_enableDropFolderList' => 'Ein-/Ausschalten der Liste der Dateien im Ablageordner im Menü',
+'settings_enableDropFolderList' => 'Liste der Dateien im Ablageordner im Menü',
 'settings_enableDropFolderList_desc' => '',
 'settings_enableDropUpload' => 'Schnelles Hochladen einschalten',
 'settings_enableDropUpload_desc' => 'Ein/Ausschalten des Bereichs auf der \'View Folder\' Seite zum Hochladen von Dateien per Drag&Drop.',
@@ -1242,7 +1242,7 @@ URL: [url]',
 'settings_enableRevisionWorkflow_desc' => 'Anwählen, um den Workflow der Wiederholungsprüfung von Dokumenten nach einer einstellbaren Zeit zu ermöglichen.',
 'settings_enableSelfRevApp' => 'Erlaube Prüfung/Freigabe durch angemeldeten Benutzer',
 'settings_enableSelfRevApp_desc' => 'Anwählen, um den aktuell angemeldeten Benutzer in der Liste der Prüfer/Freigeber und für Workflow-Aktionen auswählbar zu machen.',
-'settings_enableSessionList' => 'Liste angemeldeter Benutzer einschalten',
+'settings_enableSessionList' => 'Liste angemeldeter Benutzer im Menü',
 'settings_enableSessionList_desc' => 'Schaltet die Liste der zur Zeit angemeldeten Benutzer im Menu ein/aus.',
 'settings_enableThemeSelector' => 'Auswahl des Themas',
 'settings_enableThemeSelector_desc' => 'Schaltet das Auswahlmenü für die Themenauswahl in der Anmeldemaske ein oder aus.',
