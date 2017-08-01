@@ -11,7 +11,7 @@
 - show number of users where the select user is a mandatory reviewer/approver of
 - fix upload of attachments
 - documents, folders, files, events can be moved to a new user
-- do not quota information in user manager if quotas are turn off
+- do not show quota information in user manager if quotas are turn off
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.2
