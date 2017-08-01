@@ -329,7 +329,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 			if($this->params['dropfolderdir'] && $this->params['enabledropfolderlist']) {
 				echo "   <div id=\"menu-dropfolder\">";
-				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"DropFolderChooser\" data-action=\"menuList\"></div>";
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"DropFolderChooser\" data-action=\"menuList\"";
+				if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), $dms->getClassname('folder')))
+					echo " data-query=\"folderid=".$folder->getID()."\"";
+				echo "></div>";
 				echo "   </div>";
 			}
 			if($this->params['enablesessionlist']) {
