@@ -61,9 +61,12 @@ class SeedDMS_AccessOperation {
 	 * document may delete versions. The admin may even delete a version
 	 * even if is disallowed in the settings.
 	 */
-	function mayEditVersion() { /* {{{ */
+	function mayEditVersion($vno=0) { /* {{{ */
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
-			$version = $this->obj->getLatestContent();
+			if($vno)
+				$version = $this->obj->getContentByVersion($vno);
+			else
+				$version = $this->obj->getLatestContent();
 			if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($version->getFileType()), $this->settings->_editOnlineFileTypes))
 				return false;
 			if ($this->obj->getAccessMode($this->user) == M_ALL || $this->user->isAdmin()) {
