@@ -205,6 +205,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$nofilesizeversions = $this->params['nofilesizeversions'];
 		$nochecksumversions = $this->params['nochecksumversions'];
 		$duplicateversions = $this->params['duplicateversions'];
+		$processwithoutusergroup = $this->params['processwithoutusergroup'];
 		$repair = $this->params['repair'];
 		$unlink = $this->params['unlink'];
 		$setfilesize = $this->params['setfilesize'];
@@ -403,6 +404,37 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				}
 				print "</td>";
 				print "</tr>\n";
+			}
+			print "</tbody></table>\n";
+		}
+
+		$this->contentContainerEnd();
+
+		$this->contentHeading(getMLText("process_without_user_group"));
+		$this->contentContainerStart();
+
+		if($processwithoutusergroup) {
+			print "<table class=\"table table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th>".getMLText("process")."</th>\n";
+			print "<th>".getMLText("user_group")."</th>\n";
+			print "<th>".getMLText("documentid")."</th>\n";
+			print "<th>".getMLText("version")."</th>\n";
+			print "<th>".getMLText("required")."</th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			foreach(array('review', 'approval') as $process) {
+				foreach(array('user', 'group') as $ug) {
+					if($processwithoutusergroup[$process][$ug]) {
+						foreach($processwithoutusergroup[$process][$ug] as $rec) {
+							print "<tr>";
+							print "<td>".$process."</td>";
+							print "<td>".$ug."</td>";
+							print "<td>".$rec['documentID']."</td><td>".$rec['version']."</td><td>".$rec['name']."</td>";
+							print "<td>".$rec['required']."</td>";
+							print "</tr>\n";
+						}
+					}
+				}
 			}
 			print "</tbody></table>\n";
 		}
