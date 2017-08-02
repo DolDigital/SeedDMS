@@ -2137,19 +2137,19 @@ class SeedDMS_Core_DMS {
 	function getProcessWithoutUserGroup($process, $usergroup) { /* {{{ */
 		switch($process) {
 		case 'review':
-			$queryStr = "SELECT a.*, b.name FROM tblDocumentReviewers";
+			$queryStr = "SELECT a.*, b.`name` FROM `tblDocumentReviewers`";
 			break;
 		case 'approval':
-			$queryStr = "SELECT a.*, b.name FROM tblDocumentApprovers";
+			$queryStr = "SELECT a.*, b.`name` FROM `tblDocumentApprovers`";
 			break;
 		}
-		$queryStr .= " a LEFT JOIN tblDocuments b ON a.documentID=b.id where";
+		$queryStr .= " a LEFT JOIN `tblDocuments` b ON a.`documentID`=b.`id` where";
 		switch($usergroup) {
 		case 'user':
-			$queryStr .= " a.type=0 and a.required not in (select id from tblUsers) ORDER by b.id";
+			$queryStr .= " a.`type`=0 and a.`required` not in (select `id` from `tblUsers`) ORDER by b.`id`";
 			break;
 		case 'group':
-			$queryStr .= " a.type=1 and a.required not in (select id from tblGroups) ORDER by b.id";
+			$queryStr .= " a.`type`=1 and a.`required` not in (select `id` from `tblGroups`) ORDER by b.`id`";
 			break;
 		}
 		return $this->db->getResultArray($queryStr);
