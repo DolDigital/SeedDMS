@@ -10,6 +10,9 @@
 - minor improvements of installation
 - better checking in out/*.php for allowed operation (e.g. EditOnline,
   RemoveVersion, SetReviewersApprovers, ...)
+- SetReviewersApprovers checks for mandatory reviewers/approvers
+- reviewers/approvers can only be modified by users with unrestricted access
+  and as long as no reviewer/approver has reviewed/approved the document
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
