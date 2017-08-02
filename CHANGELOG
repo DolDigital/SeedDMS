@@ -8,6 +8,8 @@
 - remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
 - make sure contentDir ends with DIRECTORY_SEPARATOR (Closes #323)
 - minor improvements of installation
+- better checking in out/*.php for allowed operation (e.g. EditOnline,
+  RemoveVersion, SetReviewersApprovers, ...)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
