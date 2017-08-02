@@ -51,21 +51,13 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-// control for document state. Must correspond to check in
-// SeedDMS_AccessOperation::maySetReviewersApprovers()
-if(!$settings->_enableVersionModification) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
-}
-
-$overallStatus = $content->getStatus();
-if ($overallStatus["status"]!=S_DRAFT_REV && $overallStatus["status"]!=S_DRAFT_APP) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_assign_invalid_state"));
-}
-
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
 $accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
+if(!$accessop->maySetReviewersApprovers()) {
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
