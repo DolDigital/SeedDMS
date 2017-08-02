@@ -62,6 +62,7 @@ if ($overallStatus["status"]==S_REJECTED || $overallStatus["status"]==S_OBSOLETE
 }
 
 $folder = $document->getFolder();
+$owner = $document->getOwner();
 
 // Retrieve a list of all users and groups that have review / approve
 // privileges.
@@ -106,6 +107,18 @@ foreach ($approvalStatus as $i=>$rs) {
 // Get the list of proposed reviewers, stripping out any duplicates.
 $pIndRev = (isset($_POST["indReviewers"]) ? array_values(array_unique($_POST["indReviewers"])) : array());
 $pGrpRev = (isset($_POST["grpReviewers"]) ? array_values(array_unique($_POST["grpReviewers"])) : array());
+if($user->getID() != $owner->getID()) {
+	$res=$owner->getMandatoryReviewers();
+	if($user->isAdmin())
+		$res = array();
+} else
+	$res=$user->getMandatoryReviewers();
+foreach ($res as $r) {
+	if(!in_array($r['reviewerUserID'], $pIndRev))
+		$pIndRev[] = $r['reviewerUserID'];
+	if(!in_array($r['reviewerGroupID'], $pGrpRev))
+		$pGrpRev[] = $r['reviewerGroupID'];
+}
 foreach ($pIndRev as $p) {
 	if (is_numeric($p)) {
 		if (isset($accessIndex["i"][$p])) {
@@ -326,6 +339,18 @@ if (count($reviewIndex["g"]) > 0) {
 // Get the list of proposed approvers, stripping out any duplicates.
 $pIndApp = (isset($_POST["indApprovers"]) ? array_values(array_unique($_POST["indApprovers"])) : array());
 $pGrpApp = (isset($_POST["grpApprovers"]) ? array_values(array_unique($_POST["grpApprovers"])) : array());
+if($user->getID() != $owner->getID()) {
+	$res=$owner->getMandatoryApprovers();
+	if($user->isAdmin())
+		$res = array();
+} else
+	$res=$user->getMandatoryApprovers();
+foreach ($res as $r) {
+	if(!in_array($r['approverUserID'], $pIndApp))
+		$pIndApp[] = $r['approverUserID'];
+	if(!in_array($r['approverGroupID'], $pGrpApp))
+		$pGrpApp[] = $r['approverGroupID'];
+}
 foreach ($pIndApp as $p) {
 	if (is_numeric($p)) {
 		if (isset($accessIndex["i"][$p])) {
