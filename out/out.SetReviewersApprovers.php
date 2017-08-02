@@ -49,16 +49,12 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-if(!$settings->_enableVersionModification) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
-}
-
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
 $accessop = new SeedDMS_AccessOperation($document, $user, $settings);
 if(!$accessop->maySetReviewersApprovers()) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_assign_invalid_state"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
