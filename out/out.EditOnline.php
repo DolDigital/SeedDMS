@@ -53,6 +53,7 @@ if(isset($_GET["version"])) {
 	$lc = $document->getLatestContent();
 
 }	else {
+	$version = 0;
 	$content = $document->getLatestContent();
 	$lc = $document->getLatestContent();
 }
@@ -74,6 +75,9 @@ if (!isset($settings->_editOnlineFileTypes) || !is_array($settings->_editOnlineF
 
 /* Create object for checking access to certain operations */
 $accessop = new SeedDMS_AccessOperation($dms, $user, $settings);
+if(!$accessop->mayEditVersion($version)) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+}
 
 $folder = $document->getFolder();
 

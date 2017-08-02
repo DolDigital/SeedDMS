@@ -51,6 +51,9 @@ $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
 $accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+if(!$accessop->mayEditComment()) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));

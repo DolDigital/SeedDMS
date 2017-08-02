@@ -50,17 +50,13 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-$overallStatus = $content->getStatus();
-
-// status change control
-if ($overallStatus["status"] == S_REJECTED || $overallStatus["status"] == S_EXPIRED || $overallStatus["status"] == S_DRAFT_REV || $overallStatus["status"] == S_DRAFT_APP ) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_change_final_states"));
-}
-
 $folder = $document->getFolder();
 
 /* Create object for checking access to certain operations */
 $accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+if(!$accessop->mayOverwriteStatus()) {
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_change_final_states"));
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
