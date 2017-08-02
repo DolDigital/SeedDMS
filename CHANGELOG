@@ -13,6 +13,7 @@
 - SetReviewersApprovers checks for mandatory reviewers/approvers
 - reviewers/approvers can only be modified by users with unrestricted access
   and as long as no reviewer/approver has reviewed/approved the document
+- use only svg icons for mimetypes
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
