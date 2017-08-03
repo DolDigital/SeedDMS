@@ -418,9 +418,9 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("process")."</th>\n";
 			print "<th>".getMLText("user_group")."</th>\n";
-			print "<th>".getMLText("documentid")."</th>\n";
+			print "<th>".getMLText("document")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("required")."</th>\n";
+			print "<th>".getMLText("userid_groupid")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 			foreach(array('review', 'approval') as $process) {
 				foreach(array('user', 'group') as $ug) {
