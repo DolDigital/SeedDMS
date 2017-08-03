@@ -866,6 +866,7 @@ Dacă aveți în continuare probleme la autentificare, vă rugăm să contactaț
 'previous_state' => 'Stare precedentă',
 'previous_versions' => 'Versiune precedentă',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugheză (BR)',
 'quota' => 'Spatiu alocat',
 'quota_exceeded' => 'Spatiul tău alocat pe disc este depășit cu [bytes].',

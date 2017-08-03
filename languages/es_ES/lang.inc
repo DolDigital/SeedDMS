@@ -861,6 +861,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'previous_state' => 'Estado anterior',
 'previous_versions' => 'Versiones anteriores',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portuges (BR)',
 'quota' => 'Cuota',
 'quota_exceeded' => 'Su cuota de disco se ha excedido en [bytes].',

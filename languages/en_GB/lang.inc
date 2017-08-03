@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1602), dgrutsch (9), netixw (14)
+//    Translators: Admin (1603), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -873,6 +873,7 @@ If you have still problems to login, then please contact your administrator.',
 'previous_state' => 'Previous state',
 'previous_versions' => 'Previous versions',
 'process' => 'Process',
+'process_without_user_group' => 'Processes without user/group',
 'pt_BR' => 'Portugese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',

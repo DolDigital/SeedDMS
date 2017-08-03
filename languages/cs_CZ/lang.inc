@@ -857,6 +857,7 @@ Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Adm
 'previous_state' => 'Předchozí stav',
 'previous_versions' => 'Předešlé verze',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugalština (BR)',
 'quota' => 'Kvóta',
 'quota_exceeded' => 'Vaše kvóta disku je překročena o [bytes].',

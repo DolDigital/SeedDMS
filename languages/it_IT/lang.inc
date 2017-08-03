@@ -867,6 +867,7 @@ Dovessero esserci ancora problemi al login, prego contatta l\'Amministratore di 
 'previous_state' => 'Stato precedente',
 'previous_versions' => 'Versioni precedenti',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portoghese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'La quota-disco è stata superata di [bytes].',

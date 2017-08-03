@@ -859,6 +859,7 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'previous_state' => 'Vorige staat',
 'previous_versions' => 'Vorige versies',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugees (BR)',
 'quota' => 'Quotum',
 'quota_exceeded' => 'Uw data quotum is overschreden met [bytes].',

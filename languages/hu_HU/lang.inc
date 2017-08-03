@@ -861,6 +861,7 @@ Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a
 'previous_state' => 'Előző állapot',
 'previous_versions' => 'Előző változatok',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugál (BR)',
 'quota' => 'Kvóta',
 'quota_exceeded' => 'Túllépte a lemezterület korlátot [bytes].',

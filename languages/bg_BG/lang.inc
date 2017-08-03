@@ -747,6 +747,7 @@ $text = array(
 'previous_state' => 'Предишно състояние',
 'previous_versions' => 'Предишни версии',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Португалски (Бразилия)',
 'quota' => 'Квота',
 'quota_exceeded' => 'Вашата дискова квота е превишена с [bytes].',

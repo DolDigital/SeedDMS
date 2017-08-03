@@ -854,6 +854,7 @@ Jeśli nadal będą problemy z zalogowaniem, prosimy o kontakt z administratorem
 'previous_state' => 'Poprzedni stan',
 'previous_versions' => 'Poprzednie wersje',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugalski(BR)',
 'quota' => 'Przydział',
 'quota_exceeded' => 'Twój limit przydzielonej przestrzeni dyskowej został przekroczony o [bytes].',

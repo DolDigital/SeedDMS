@@ -859,6 +859,7 @@ Se você ainda tiver problemas para fazer o login, por favor, contate o administ
 'previous_state' => 'Estado anterior',
 'previous_versions' => 'Previous Versions',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Português (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Sua cota de disco foi ultrapassada em [bytes].',

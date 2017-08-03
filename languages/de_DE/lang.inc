@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2475), dgrutsch (22)
+//    Translators: Admin (2476), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -871,6 +871,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',
 'process' => 'Prozess',
+'process_without_user_group' => 'Prozesse ohne Benutzer/Gruppe',
 'pt_BR' => 'Portugiesisch (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten.',

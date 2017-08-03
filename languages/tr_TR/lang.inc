@@ -862,6 +862,7 @@ Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görü
 'previous_state' => 'Önceki durum',
 'previous_versions' => 'Önceki versiyonlar',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portekizce',
 'quota' => 'Kota',
 'quota_exceeded' => 'Size ayrılan disk kotası [bytes] aşıldı.',

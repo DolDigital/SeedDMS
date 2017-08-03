@@ -865,6 +865,7 @@ Ako i dalje imate problema s prijavom, molimo kontaktirajte Vašeg administrator
 'previous_state' => 'Prethodni status',
 'previous_versions' => 'Prethodne verzije',
 'process' => '',
+'process_without_user_group' => '',
 'pt_BR' => 'Portugalski (BR)',
 'quota' => 'Kvota',
 'quota_exceeded' => 'Vaša kvota na disku je premašena za [bytes].',
