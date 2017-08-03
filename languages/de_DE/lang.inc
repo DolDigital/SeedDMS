@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2464), dgrutsch (22)
+//    Translators: Admin (2475), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -94,6 +94,8 @@ URL: [url]',
 'approvals_and_reviews_rejected' => '[no_approvals] abgelehnte Freigaben und [no_reviews] abgelehnte Prüfungen',
 'approvals_not_touched' => '[no_approvals] offene Freigaben',
 'approvals_rejected' => '[no_approvals] abgelehnte Freigaben',
+'approvals_without_group' => 'Freigaben ohne Gruppe',
+'approvals_without_user' => 'Freigaben ohne Benutzer',
 'approval_deletion_email' => 'Freigabeaufforderung gelöscht',
 'approval_deletion_email_body' => 'Freigabeaufforderung gelöscht
 Dokument: [name]
@@ -868,6 +870,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'preview_plain' => 'Text',
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',
+'process' => 'Prozess',
 'pt_BR' => 'Portugiesisch (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten.',
@@ -876,6 +879,8 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'receipts_accepted' => '[no_receipts] Empfangsbestätigungen',
 'receipts_not_touched' => '[no_receipts] offene Empfangsbestätigungen',
 'receipts_rejected' => '[no_receipts] abgelehnte Empfangsbestätigungen',
+'receipts_without_group' => 'Empfangsbestätigungen ohne Gruppe',
+'receipts_without_user' => 'Empfangsbestätigungen ohne Benutzer',
 'receipt_deletion_email_body' => 'Benutzer von Liste der Empfänger gelöscht
 Dokument: [name]
 Version: [version]
@@ -955,6 +960,8 @@ URL: [url]',
 'reviews_accepted' => '[no_reviews] Prüfungen',
 'reviews_not_touched' => '[no_reviews] offene Prüfungen',
 'reviews_rejected' => '[no_reviews] abgelehnte Prüfungen',
+'reviews_without_group' => 'Prüfungen ohne Gruppe',
+'reviews_without_user' => 'Prüfungen ohne Benutzer',
 'review_deletion_email' => 'Prüfungsaufforderung gelöscht',
 'review_deletion_email_body' => 'Prüfungsaufforderung gelöscht
 Dokument: [name]
@@ -993,6 +1000,8 @@ URL: [url]',
 'revisions_not_touched' => '[no_revisions] offene Wiederholungspüfungen',
 'revisions_pending' => '[no_revisions] zukünftige Wiederholungsprüfungen',
 'revisions_rejected' => '[no_revisions] abgelehnte Wiederholungsprüfungen',
+'revisions_without_group' => 'Wiederholungsprüfungen ohne Gruppe',
+'revisions_without_user' => 'Wiederholungsprüfungen ohne Benutzer',
 'revision_date' => 'Datum der Wiederholungsprüfung',
 'revision_log' => 'Protokoll der erneuten Prüfung',
 'revision_request_email_body' => 'Aufforderung zur Wiederholungsprüfung
@@ -1621,10 +1630,12 @@ URL: [url]',
 'uploading_zerosize' => 'Versuch eine leere Datei hochzuladen. Vorgang wird abgebrochen.',
 'used_discspace' => 'Verbrauchter Speicherplatz',
 'user' => 'Benutzer',
+'userid_groupid' => 'Benutzer-ID/Gruppen-ID',
 'users' => 'Benutzer',
 'users_and_groups' => 'Benutzer/Gruppen',
 'users_done_work' => 'Bereits aktive Benutzer',
 'user_exists' => 'Benutzer besteht bereits.',
+'user_group' => 'Benutzer/Gruppe',
 'user_group_management' => 'Benutzer-/Gruppenmanagement',
 'user_image' => 'Bild',
 'user_info' => 'Benutzerinformation',

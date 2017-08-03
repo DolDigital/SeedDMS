@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1591), dgrutsch (9), netixw (14)
+//    Translators: Admin (1602), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -94,6 +94,8 @@ URL: [url]',
 'approvals_and_reviews_rejected' => '[no_approvals] approvals and [no_reviews] reviews already rejected',
 'approvals_not_touched' => '[no_approvals] approvals not being touched',
 'approvals_rejected' => '[no_approvals] approvals already rejected',
+'approvals_without_group' => 'Approvals without group',
+'approvals_without_user' => 'Approvals without user',
 'approval_deletion_email' => 'Approval request deleted',
 'approval_deletion_email_body' => 'Approval request deleted
 Document: [name]
@@ -870,6 +872,7 @@ If you have still problems to login, then please contact your administrator.',
 'preview_plain' => 'Text',
 'previous_state' => 'Previous state',
 'previous_versions' => 'Previous versions',
+'process' => 'Process',
 'pt_BR' => 'Portugese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',
@@ -878,6 +881,8 @@ If you have still problems to login, then please contact your administrator.',
 'receipts_accepted' => '[no_receipts] receipts already accepted',
 'receipts_not_touched' => '[no_receipts] receipts not being touched',
 'receipts_rejected' => '[no_receipts] receipts already rejected',
+'receipts_without_group' => 'Receipts without group',
+'receipts_without_user' => 'Receipts without user',
 'receipt_deletion_email_body' => 'User has been removed from the list of recipients
 Document: [name]
 Version: [version]
@@ -957,6 +962,8 @@ URL: [url]',
 'reviews_accepted' => '[no_reviews] reviews already accepted',
 'reviews_not_touched' => '[no_reviews] reviews not being touched',
 'reviews_rejected' => '[no_reviews] reviews already rejected',
+'reviews_without_group' => 'Reviews without group',
+'reviews_without_user' => 'Reviews without user',
 'review_deletion_email' => 'Review request deleted',
 'review_deletion_email_body' => 'Review request deleted
 Document: [name]
@@ -995,6 +1002,8 @@ URL: [url]',
 'revisions_not_touched' => '[no_revisions] revisions not being touched',
 'revisions_pending' => '[no_revisions] revisions due in future',
 'revisions_rejected' => '[no_revisions] revisions already rejected',
+'revisions_without_group' => 'Revisions without group',
+'revisions_without_user' => 'Revisions without user',
 'revision_date' => 'Date of revision',
 'revision_log' => 'Revision log',
 'revision_request_email_body' => 'Revision request
@@ -1616,10 +1625,12 @@ URL: [url]',
 'uploading_zerosize' => 'Uploading an empty file. Upload is canceled.',
 'used_discspace' => 'Used disk space',
 'user' => 'User',
+'userid_groupid' => 'User id/Group id',
 'users' => 'Users',
 'users_and_groups' => 'Users/Groups',
 'users_done_work' => 'Users done work',
 'user_exists' => 'User already exists.',
+'user_group' => 'User/Group',
 'user_group_management' => 'Users/Groups management',
 'user_image' => 'Image',
 'user_info' => 'User Information',
