@@ -24,8 +24,13 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1]);
+if(!$view) {
+}
+
 if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+	$view->exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
@@ -47,9 +52,9 @@ if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) 
 } else
 	$content = null;
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('dms', $dms);
+	$view->setParam('user', $user);
 	$view->setParam('fromdate', isset($_GET['fromdate']) ? $_GET['fromdate'] : '');
 	$view->setParam('todate', isset($_GET['todate']) ? $_GET['todate'] : '');
 	$view->setParam('skip', $skip);
