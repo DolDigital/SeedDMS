@@ -2228,6 +2228,9 @@ class SeedDMS_Core_DMS {
 	 * If the optional parameter $id is set, only this user/group id is removed.
 	 */
 	function removeProcessWithoutUserGroup($process, $usergroup, $id=0) { /* {{{ */
+		/* Entries of tblDocumentReviewLog or tblDocumentApproveLog are deleted
+		 * because of CASCADE ON
+		 */
 		switch($process) {
 		case 'review':
 			$queryStr = "DELETE FROM tblDocumentReviewers";
