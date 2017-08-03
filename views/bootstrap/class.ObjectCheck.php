@@ -429,7 +429,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 							print "<tr>";
 							print "<td>".$process."</td>";
 							print "<td>".$ug."</td>";
-							print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$rec['documentID']."\"></a>".$rec['name']."</td><td>".$rec['version']."</td>";
+							print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$rec['documentID']."\">".$rec['name']."</a></td><td>".$rec['version']."</td>";
 							print "<td>".$rec['required']."</td>";
 							print "</tr>\n";
 						}
