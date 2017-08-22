@@ -22,6 +22,7 @@
 
 include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
