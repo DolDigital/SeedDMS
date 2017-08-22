@@ -2156,6 +2156,44 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Removes all reviews, approvals which are not linked
+	 * to a user, group anymore
+	 *
+	 * This method is for removing all reviews or approvals whose user
+	 * or group  was deleted and not just removed from the process.
+	 * If the optional parameter $id is set, only this user/group id is removed.
+	 */
+	function removeProcessWithoutUserGroup($process, $usergroup, $id=0) { /* {{{ */
+		/* Entries of tblDocumentReviewLog or tblDocumentApproveLog are deleted
+		 * because of CASCADE ON
+		 */
+		switch($process) {
+		case 'review':
+			$queryStr = "DELETE FROM tblDocumentReviewers";
+			break;
+		case 'approval':
+			$queryStr = "DELETE FROM tblDocumentApprovers";
+			break;
+		}
+		$queryStr .= " WHERE";
+		switch($usergroup) {
+		case 'user':
+			$queryStr .= " type=0 AND";
+			if($id)
+				$queryStr .= " required=".((int) $id)." AND";
+			$queryStr .= " required NOT IN (SELECT id FROM tblUsers)";
+			break;
+		case 'group':
+			$queryStr .= " type=1 AND";
+			if($id)
+				$queryStr .= " required=".((int) $id)." AND";
+			$queryStr .= " required NOT IN (SELECT id FROM tblGroups)";
+			break;
+		}
+		return $this->db->getResultArray($queryStr);
+	} /* }}} */
+
+	/**
 	 * Returns statitical information
 	 *
 	 * This method returns all kind of statistical information like

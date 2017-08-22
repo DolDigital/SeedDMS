@@ -112,6 +112,7 @@
 - reviewers/approvers can only be modified by users with unrestricted access
   and as long as no reviewer/approver has reviewed/approved the document
 - use only svg icons for mimetypes
+- add check for processes (reviews/approvals) where the user/group is deleted
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
