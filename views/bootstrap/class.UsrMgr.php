@@ -185,6 +185,7 @@ $(document).ready( function() {
 			echo '<li><a href="../out/out.TransferObjects.php?userid='.$seluser->getID().'"><i class="icon-share-alt"></i> '.getMLText("transfer_objects").'</a></li>';
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
 				echo "<li><a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a></li>\n";
+			echo '<li><a href="../out/out.SendLoginData.php?userid='.$seluser->getID().'"><i class="icon-envelope-alt"></i> '.getMLText("send_login_data").'</a></li>';
 ?>
 	</ul>
 </div>
