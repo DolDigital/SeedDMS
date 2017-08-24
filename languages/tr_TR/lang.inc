@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1051), aydin (83)
+//    Translators: Admin (1052), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -853,7 +853,7 @@ Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görü
 'personal_default_keywords' => 'Kişisel anahtar kelimeler',
 'pl_PL' => 'Polonyaca',
 'possible_substitutes' => '',
-'preset_expires' => '',
+'preset_expires' => 'Son Kullanım Tarihi Tanımla',
 'preview' => 'Önizle',
 'preview_converters' => '',
 'preview_images' => '',
@@ -1068,6 +1068,9 @@ URL: [url]',
 'select_users' => 'Kullanıcı seçmek için tıklayın',
 'select_workflow' => 'İş akışı seç',
 'send_email' => '',
+'send_login_data' => '',
+'send_login_data_body' => '',
+'send_login_data_subject' => '',
 'send_test_mail' => '',
 'september' => 'Eylül',
 'sequence' => 'Sıralama',
@@ -1442,6 +1445,7 @@ URL: [url]',
 'splash_saved_file' => '',
 'splash_save_user_data' => '',
 'splash_send_download_link' => '',
+'splash_send_login_data' => '',
 'splash_settings_saved' => 'Ayarlar kaydedildi',
 'splash_substituted_user' => 'Yerine geçilen kullanıcı',
 'splash_switched_back_user' => 'Orijinal kullanıcıya geri dönüldü',

@@ -116,6 +116,7 @@
 - add check for processes (reviews/approvals) where the user/group is deleted
 - redirect in op/op.Login.php to referuri will not add protocol and host,
   because this doesn't work if a reverse proxy is used (Closes #336)
+- major update of korean translations
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
