@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1603), dgrutsch (9), netixw (14)
+//    Translators: Admin (1607), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1112,6 +1112,14 @@ URL: [url]',
 'select_users' => 'Click to select users',
 'select_workflow' => 'Select workflow',
 'send_email' => 'Send email',
+'send_login_data' => 'Send login data',
+'send_login_data_body' => 'Login data
+
+Login: [login]
+Name: [name]
+
+[comment]',
+'send_login_data_subject' => '[sitename]: [login] - Your login data',
 'send_test_mail' => 'Send test mail',
 'september' => 'September',
 'sequence' => 'Sequence',
@@ -1486,6 +1494,7 @@ URL: [url]',
 'splash_saved_file' => 'Version saved',
 'splash_save_user_data' => 'User data saved',
 'splash_send_download_link' => 'Download link sent by email.',
+'splash_send_login_data' => 'Login data sent',
 'splash_settings_saved' => 'Settings saved',
 'splash_substituted_user' => 'Substituted user',
 'splash_switched_back_user' => 'Switched back to original user',
