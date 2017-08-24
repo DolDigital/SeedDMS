@@ -7,9 +7,7 @@
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
- * @copyright  Copyright (C) 2002-2005 Markus Westphal,
- *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
- *             2010-2012 Uwe Steinmann
+ * @copyright  Copyright (C) 2017 Uwe Steinmann
  * @version    Release: @package_version@
  */
 
@@ -23,10 +21,8 @@ require_once("class.Bootstrap.php");
  *
  * @category   DMS
  * @package    SeedDMS
- * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
- * @copyright  Copyright (C) 2002-2005 Markus Westphal,
- *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
- *             2010-2012 Uwe Steinmann
+ * @author     Uwe Steinmann <uwe@steinmann.cx>
+ * @copyright  Copyright (C) 2017 Uwe Steinmann
  * @version    Release: @package_version@
  */
 class SeedDMS_View_TransferObjects extends SeedDMS_Bootstrap_Style {
