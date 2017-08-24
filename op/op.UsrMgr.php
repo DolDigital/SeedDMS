@@ -265,7 +265,7 @@ else if ($action == "transferobjects") {
 }
 
 // send login data to user
-else if ($action == "sendlogindata") {
+else if ($action == "sendlogindata" && $settings->_enableEmail) {
 	/* Check if the form data comes from a trusted request */
 	if(!checkFormKey('sendlogindata')) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
