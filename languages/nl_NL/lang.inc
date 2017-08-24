@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (733), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (734), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -657,7 +657,7 @@ URL: [url]',
 'linked_documents' => 'Gerelateerde Documenten',
 'linked_files' => 'Bijlagen',
 'linked_to_current_version' => '',
-'linked_to_document' => '',
+'linked_to_document' => 'Gekoppeld aan document',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Als u bestanden wilt uploaden groter dan het huidige maximum, gebruik aub de alternatieve <a href="%s">upload pagina</a>.',
 'link_to_version' => '',
@@ -1090,6 +1090,9 @@ URL: [url]',
 'select_users' => 'Klik om gebruikers te selecteren',
 'select_workflow' => 'Selecteer workflow',
 'send_email' => '',
+'send_login_data' => '',
+'send_login_data_body' => '',
+'send_login_data_subject' => '',
 'send_test_mail' => 'Testmail versturen',
 'september' => 'september',
 'sequence' => 'Volgorde',
@@ -1468,6 +1471,7 @@ URL: [url]',
 'splash_saved_file' => '',
 'splash_save_user_data' => '',
 'splash_send_download_link' => '',
+'splash_send_login_data' => '',
 'splash_settings_saved' => 'Instellingen opgeslagen',
 'splash_substituted_user' => 'Invallers gebruiker',
 'splash_switched_back_user' => 'Teruggeschakeld naar de oorspronkelijke gebruiker',

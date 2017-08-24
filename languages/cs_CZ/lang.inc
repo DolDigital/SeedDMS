@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (725), kreml (455)
+//    Translators: Admin (726), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -471,7 +471,7 @@ URL: [url]',
 'expire_by_date' => '',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
-'expire_in_1m' => '',
+'expire_in_1m' => 'Expiruje o mesiac',
 'expire_in_1w' => '',
 'expire_in_1y' => '',
 'expire_in_2h' => '',
@@ -1061,6 +1061,9 @@ URL: [url]',
 'select_users' => 'Kliknutím vyberte uživatele',
 'select_workflow' => 'Vyberte postup práce',
 'send_email' => '',
+'send_login_data' => '',
+'send_login_data_body' => '',
+'send_login_data_subject' => '',
 'send_test_mail' => '',
 'september' => 'Září',
 'sequence' => 'Posloupnost',
@@ -1435,6 +1438,7 @@ URL: [url]',
 'splash_saved_file' => '',
 'splash_save_user_data' => '',
 'splash_send_download_link' => '',
+'splash_send_login_data' => '',
 'splash_settings_saved' => 'Nastavení uloženo',
 'splash_substituted_user' => 'Zaměněný uživatel',
 'splash_switched_back_user' => 'Přepnuto zpět na původního uživatele',

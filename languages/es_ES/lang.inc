@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1022), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1026), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -471,11 +471,11 @@ URL: [url]',
 'expire_by_date' => '',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
-'expire_in_1m' => '',
-'expire_in_1w' => '',
-'expire_in_1y' => '',
+'expire_in_1m' => 'Expira en 1 mes',
+'expire_in_1w' => 'Expira en 1 semana',
+'expire_in_1y' => 'Expira en 1 año',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => 'Expira en 2 años',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => 'Fecha de caducidad modificada',
@@ -1067,6 +1067,9 @@ URL: [url]',
 'select_users' => 'Haga Click para seleccionar usuarios',
 'select_workflow' => 'Selecionar Flujo de Trabajo',
 'send_email' => '',
+'send_login_data' => '',
+'send_login_data_body' => '',
+'send_login_data_subject' => '',
 'send_test_mail' => 'Enviar correo de prueba',
 'september' => 'Septiembre',
 'sequence' => 'Secuencia',
@@ -1441,6 +1444,7 @@ URL: [url]',
 'splash_saved_file' => '',
 'splash_save_user_data' => '',
 'splash_send_download_link' => '',
+'splash_send_login_data' => '',
 'splash_settings_saved' => 'Configuración guardada',
 'splash_substituted_user' => 'Usuario sustituido',
 'splash_switched_back_user' => 'Cambió de nuevo al usuario original',
