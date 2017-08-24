@@ -264,6 +264,43 @@ else if ($action == "transferobjects") {
 //	}
 }
 
+// send login data to user
+else if ($action == "sendlogindata") {
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('sendlogindata')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	$newuser = $dms->getUser($userid);
+	if (!is_object($newuser)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	if($notifier) {
+		$subject = "send_login_data_subject";
+		$message = "send_login_data_body";
+		$params = array();
+		$params['username'] = $newuser->getFullName();
+		$params['login'] = $newuser->getLogin();
+		$params['comment'] = $comment;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php";
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toIndividual($user, $newuser, $subject, $message, $params);
+	}
+	add_log_line(".php&action=sendlogindata&userid=".$userid);
+		
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_send_login_data')));
+}
+
 // modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
