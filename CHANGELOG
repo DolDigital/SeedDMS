@@ -13,6 +13,7 @@
 - documents, folders, files, events can be moved to a new user
 - do not show quota information in user manager if quotas are turn off
 - files in drop folder can be listed in main menu
+- webdav can use orig. filename of last version instead of document name (experimental)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.2
