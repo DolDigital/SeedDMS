@@ -610,6 +610,43 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Returns a document by the original file name of the last version
+	 *
+	 * This function searches a document by the name of the last document
+	 * version and restricts the search
+	 * to given folder if passed as the second parameter.
+	 *
+	 * @param string $name
+	 * @param object $folder
+	 * @return object/boolean found document or false
+	 */
+	function getDocumentByOriginalFilename($name, $folder=null) { /* {{{ */
+		if (!$name) return false;
+
+		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
+			"FROM `tblDocuments` ".
+			"LEFT JOIN `ttcontentid` ON `ttcontentid`.`document` = `tblDocuments`.`id` ".
+			"LEFT JOIN `tblDocumentContent` ON `tblDocumentContent`.`document` = `tblDocuments`.`id` AND `tblDocumentContent`.`version` = `ttcontentid`.`maxVersion` ".
+			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
+			"WHERE `tblDocumentContent`.`orgFileName` = " . $this->db->qstr($name);
+		if($folder)
+			$queryStr .= " AND `tblDocuments`.`folder` = ". $folder->getID();
+		$queryStr .= " LIMIT 1";
+
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		if(!$resArr)
+			return false;
+
+		$row = $resArr[0];
+		$document = new $this->classnames['document']($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+		$document->setDMS($this);
+		return $document;
+	} /* }}} */
+
+	/**
 	 * Return a document content by its id
 	 *
 	 * This function retrieves a document content from the database by its id.
