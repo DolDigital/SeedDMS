@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1062), jeromerobert (50), lonnnew (9), Oudiceval (275)
+//    Translators: Admin (1063), jeromerobert (50), lonnnew (9), Oudiceval (275)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -1066,7 +1066,7 @@ URL: [url]',
 'send_login_data_body' => 'Informations de connexion
 
 Identifiant : [login]
-Nom : [name]
+Nom : [username]
 
 [comment]',
 'send_login_data_subject' => '[sitename] : [login] - Vos informations de connexion',
