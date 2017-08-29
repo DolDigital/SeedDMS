@@ -117,6 +117,8 @@
 - redirect in op/op.Login.php to referuri will not add protocol and host,
   because this doesn't work if a reverse proxy is used (Closes #336)
 - major update of korean translations
+- fix browse button of fine-uploader when 'Enable large file upload' is
+  turned on firefox is used (Closes #339 and #338)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35
