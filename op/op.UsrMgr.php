@@ -275,6 +275,11 @@ else if ($action == "sendlogindata" && $settings->_enableEmail) {
 		$userid = $_POST["userid"];
 	}
 
+	$comment = '';
+	if (isset($_POST["comment"])) {
+		$comment = $_POST["comment"];
+	}
+
 	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
