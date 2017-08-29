@@ -40,11 +40,6 @@ class SeedDMS_View_SendLoginData extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentHeading(getMLText("send_login_data"));
 
-?>
-<div class="alert">
-<?php printMLText("confirm_transfer_objects", array ("username" => htmlspecialchars($newuser->getFullName())));?>
-</div>
-<?php
 		$this->contentContainerStart();
 ?>
 <form class="form-horizontal" action="../op/op.UsrMgr.php" name="form1" method="post">
