@@ -2402,7 +2402,7 @@ mayscript>
 	<div class="qq-upload-drop-area-selector qq-upload-drop-area" _qq-hide-dropzone>
 		<span class="qq-upload-drop-area-text-selector"></span>
 	</div>
-	<button class="btn qq-upload-button-selector qq-upload-button">'.getMLText('browse').'&hellip;</button>
+	<span class="btn qq-upload-button-selector qq-upload-button">'.getMLText('browse').'&hellip;</span>
 	</div>
 	<span class="qq-drop-processing-selector qq-drop-processing">
 		<span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
