@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2480), dgrutsch (22)
+//    Translators: Admin (2481), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1121,7 +1121,7 @@ URL: [url]',
 'send_login_data_body' => 'Login-Daten
 
 Login: [login]
-Name: [name]
+Name: [username]
 
 [comment]',
 'send_login_data_subject' => '[sitename]: [login] - Ihre Login-Daten',
