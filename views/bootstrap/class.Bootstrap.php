@@ -327,6 +327,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				//$this->addFooterJS('checkTasks();');
 			}
 
+			if($this->params['dropfolderdir'] && $this->params['enabledropfolderlist']) {
+				echo "   <div id=\"menu-dropfolder\">";
+				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"DropFolderChooser\" data-action=\"menuList\"";
+				if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), $dms->getClassname('folder')))
+					echo " data-query=\"folderid=".$folder->getID()."\"";
+				echo "></div>";
+				echo "   </div>";
+			}
 			if($this->params['enablesessionlist']) {
 				echo "   <div id=\"menu-session\">";
 				echo "     <div class=\"ajax\" data-no-spinner=\"true\" data-view=\"Session\" data-action=\"menuSessions\"></div>";
@@ -810,6 +818,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons = array();
 		$icons["txt"]  = "text-x-preview.svg";
 		$icons["text"] = "text-x-preview.svg";
+		$icons["tex"]  = "text-x-preview.svg";
 		$icons["doc"]  = "office-document.svg";
 		$icons["dot"]  = "office-document.svg";
 		$icons["docx"] = "office-document.svg";
@@ -833,27 +842,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons["png"]  = "image.svg";
 		$icons["tif"]  = "image.svg";
 		$icons["tiff"] = "image.svg";
-		$icons["log"]  = "log.png";
+		$icons["log"]  = "text-x-preview.svg";
 		$icons["midi"] = "audio.svg";
-		$icons["pdf"]  = "pdf.png";
+		$icons["pdf"]  = "gnome-mime-application-pdf.svg";
 		$icons["wav"]  = "audio.svg";
 		$icons["mp3"]  = "audio.svg";
-		$icons["c"]    = "source_c.png";
-		$icons["cpp"]  = "source_cpp.png";
-		$icons["h"]    = "source_h.png";
-		$icons["java"] = "source_java.png";
-		$icons["py"]   = "source_py.png";
+		$icons["c"]    = "text-x-preview.svg";
+		$icons["cpp"]  = "text-x-preview.svg";
+		$icons["h"]    = "text-x-preview.svg";
+		$icons["java"] = "text-x-preview.svg";
+		$icons["py"]   = "text-x-preview.svg";
 		$icons["tar"]  = "package.svg";
-		$icons["gz"]   = "gz.png";
-		$icons["7z"]   = "gz.png";
-		$icons["bz"]   = "gz.png";
-		$icons["bz2"]  = "gz.png";
-		$icons["tgz"]  = "gz.png";
+		$icons["gz"]   = "package.svg";
+		$icons["7z"]   = "package.svg";
+		$icons["bz"]   = "package.svg";
+		$icons["bz2"]  = "package.svg";
+		$icons["tgz"]  = "package.svg";
 		$icons["zip"]  = "package.svg";
-		$icons["rar"]  = "gz.png";
+		$icons["rar"]  = "package.svg";
 		$icons["mpg"]  = "video.svg";
 		$icons["avi"]  = "video.svg";
-		$icons["tex"]  = "tex.png";
 		$icons["ods"]  = "office-spreadsheet.svg";
 		$icons["ots"]  = "office-spreadsheet.svg";
 		$icons["sxc"]  = "office-spreadsheet.svg";
@@ -866,10 +874,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons["otp"]  = "office-presentation.svg";
 		$icons["sxi"]  = "office-presentation.svg";
 		$icons["sti"]  = "office-presentation.svg";
-		$icons["odg"]  = "office-drawing.png";
-		$icons["otg"]  = "office-drawing.png";
-		$icons["sxd"]  = "office-drawing.png";
-		$icons["std"]  = "office-drawing.png";
+		$icons["odg"]  = "office-drawing.svg";
+		$icons["otg"]  = "office-drawing.svg";
+		$icons["sxd"]  = "office-drawing.svg";
+		$icons["std"]  = "office-drawing.svg";
 		$icons["odf"]  = "ooo_formula.png";
 		$icons["sxm"]  = "ooo_formula.png";
 		$icons["smf"]  = "ooo_formula.png";
@@ -2342,7 +2350,7 @@ mayscript>
 	<div class="qq-upload-drop-area-selector qq-upload-drop-area" _qq-hide-dropzone>
 		<span class="qq-upload-drop-area-text-selector"></span>
 	</div>
-	<button class="btn qq-upload-button-selector qq-upload-button">'.getMLText('browse').'&hellip;</button>
+	<span class="btn qq-upload-button-selector qq-upload-button">'.getMLText('browse').'&hellip;</span>
 	</div>
 	<span class="qq-drop-processing-selector qq-drop-processing">
 		<span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>

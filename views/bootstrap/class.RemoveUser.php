@@ -42,20 +42,25 @@ class SeedDMS_View_RemoveUser extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentHeading(getMLText("rm_user"));
-		$this->contentContainerStart();
 
 ?>
-<form action="../op/op.UsrMgr.php" name="form1" method="post">
+<div class="alert">
+<?php printMLText("confirm_rm_user", array ("username" => htmlspecialchars($rmuser->getFullName())));?>
+</div>
+<?php
+		$this->contentContainerStart();
+?>
+<form class="form-horizontal" action="../op/op.UsrMgr.php" name="form1" method="post">
 <input type="hidden" name="userid" value="<?php print $rmuser->getID();?>">
 <input type="hidden" name="action" value="removeuser">
 <?php echo createHiddenFieldWithKey('removeuser'); ?>
-<p>
-<?php printMLText("confirm_rm_user", array ("username" => htmlspecialchars($rmuser->getFullName())));?>
-</p>
 
-<p>
+<div class="control-group">
+	<label class="control-label" for="assignTo">
 <?php printMLText("assign_user_property_to"); ?>:
-<select name="assignTo">
+	</label>
+	<div class="controls">
+<select name="assignTo" class="chzn-select">
 <?php
 		foreach ($allusers as $currUser) {
 			if ($currUser->isGuest() || ($currUser->getID() == $rmuser->getID()) )
@@ -66,9 +71,14 @@ class SeedDMS_View_RemoveUser extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 </select>
-</p>
+	</div>
+</div>
 
-<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user");?></button></p>
+<div class="control-group">
+	<div class="controls">
+		<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user");?></button>
+	</div>
+</div>
 
 </form>
 <?php

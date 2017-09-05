@@ -154,6 +154,7 @@ $(document).ready(function() {
 		$enableselfrevapp = $this->params['enableselfrevapp'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$dropfolderfile = $this->params['dropfolderfile'];
 		$workflowmode = $this->params['workflowmode'];
 		$presetexpiration = $this->params['presetexpiration'];
 		$sortusersinlist = $this->params['sortusersinlist'];
@@ -330,7 +331,7 @@ $(document).ready(function() {
 <?php if($dropfolderdir) { ?>
 		<tr>
 			<td><?php printMLText("dropfolder_file");?>:</td>
-			<td><?php $this->printDropFolderChooserHtml("form1");?></td>
+			<td><?php $this->printDropFolderChooserHtml("form1", $dropfolderfile);?></td>
 		</tr>
 <?php } ?>
 		<tr>

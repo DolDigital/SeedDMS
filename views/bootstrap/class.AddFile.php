@@ -78,7 +78,7 @@ $(document).ready( function() {
 		if($enablelargefileupload) {
 ?>
 		submitHandler: function(form) {
-			manualuploader.uploadStoredFiles();
+			userfileuploader.uploadStoredFiles();
 		},
 <?php
 		}
@@ -88,7 +88,7 @@ $(document).ready( function() {
 		if($enablelargefileupload) {
 ?>
 			fineuploaderuuids: {
-				fineuploader: [ manualuploader ]
+				fineuploader: [ userfileuploader ]
 			}
 <?php
 		} else {

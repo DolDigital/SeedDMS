@@ -93,39 +93,60 @@ $(document).ready( function() {
 			$this->contentHeading(getMLText("user_info"));
 			echo "<table class=\"table table-condensed\">\n";
 			echo "<tr><td>".getMLText('discspace')."</td><td>";
-			$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
-			echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
-			echo $this->getProgressBar($seluser->getUsedDiskSpace(), $qt);
+			if($quota) {
+				$qt = $seluser->getQuota() ? $seluser->getQuota() : $quota;
+				echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())." / ".SeedDMS_Core_File::format_filesize($qt)."<br />";
+				echo $this->getProgressBar($seluser->getUsedDiskSpace(), $qt);
+			} else {
+				echo SeedDMS_Core_File::format_filesize($seluser->getUsedDiskSpace())."<br />";
+			}
 			echo "</td></tr>\n";
 			$documents = $seluser->getDocuments();
 			echo "<tr><td>".getMLText('documents')."</td><td>".count($documents)."</td></tr>\n";
 			$documents = $seluser->getDocumentsLocked();
 			echo "<tr><td>".getMLText('documents_locked')."</td><td>".count($documents)."</td></tr>\n";
+			$categories = $seluser->getKeywordCategories();
+			echo "<tr><td>".getMLText('personal_default_keywords')."</td><td>".count($categories)."</td></tr>\n";
+			$dnot = $seluser->getNotifications(T_DOCUMENT);
+			echo "<tr><td>".getMLText('documents_with_notification')."</td><td>".count($dnot)."</td></tr>\n";
+			$fnot = $seluser->getNotifications(T_FOLDER);
+			echo "<tr><td>".getMLText('folders_with_notification')."</td><td>".count($fnot)."</td></tr>\n";
+
 			if($workflowmode == "traditional") {
-				$reviewStatus = $seluser->getReviewStatus();
-				if($reviewStatus['indstatus']) {
-					$i = 0;
-					foreach($reviewStatus['indstatus'] as $rv) {
-						if($rv['status'] == 0) {
-							$i++;
+				$resArr = $dms->getDocumentList('ReviewByMe', $seluser);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$document = $dms->getDocument($res["id"]);
+						if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+							$tasks['review'][] = array('id'=>$res['id'], 'name'=>$res['name']);
 						}
 					}
-					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".$i."</td></tr>\n";
+					echo "<tr><td>".getMLText('pending_reviews')."</td><td>".count($tasks['review'])."</td></tr>\n";
 				}
 			}
 			if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
-				$approvalStatus = $seluser->getApprovalStatus();
-				if($approvalStatus['indstatus']) {
-					$i = 0;
-					foreach($approvalStatus['indstatus'] as $rv) {
-						if($rv['status'] == 0) {
-							$i++;
+				$resArr = $dms->getDocumentList('ApproveByMe', $seluser);
+				if($resArr) {
+					foreach ($resArr as $res) {
+						$document = $dms->getDocument($res["id"]);
+						if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+							$tasks['approval'][] = array('id'=>$res['id'], 'name'=>$res['name']);
 						}
 					}
-					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".$i."</td></tr>\n";
+					echo "<tr><td>".getMLText('pending_approvals')."</td><td>".count($tasks['approval'])."</td></tr>\n";
+				}
+				$resArr = $seluser->isMandatoryReviewerOf();
+				if($resArr) {
+					echo "<tr><td>".getMLText('mandatory_reviewers')."</td><td>".count($resArr)."</td></tr>\n";
+				}
+				$resArr = $seluser->isMandatoryApproverOf();
+				if($resArr) {
+					echo "<tr><td>".getMLText('mandatory_approvers')."</td><td>".count($resArr)."</td></tr>\n";
 				}
 			}
 			if($workflowmode == 'advanced') {
+				$workflows = $seluser->getWorkflowsInvolved();
+				echo "<tr><td>".getMLText('workflows_involded')."</td><td>".count($workflows)."</td></tr>\n";
 				$workflowStatus = $seluser->getWorkflowStatus();
 				if($workflowStatus['u'])
 					echo "<tr><td>".getMLText('pending_workflows')."</td><td>".count($workflowStatus['u'])."</td></tr>\n";
@@ -137,8 +158,40 @@ $(document).ready( function() {
 			}
 			echo "</table>";
 
+		}
+	} /* }}} */
+
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$seluser = $this->params['seluser'];
+		$quota = $this->params['quota'];
+		$workflowmode = $this->params['workflowmode'];
+		$undeluserids = $this->params['undeluserids'];
+		$enableemail = $this->params['enableemail'];
+
+		if($seluser) {
+?>
+<div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		<?php echo getMLText('action'); ?>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+<?php
+			if(!in_array($seluser->getID(), $undeluserids)) {
+				echo '<li><a href="../out/out.RemoveUser.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user").'</a><li>';
+			}
+			echo '<li><a href="../out/out.RemoveUserFromProcesses.php?userid='.$seluser->getID().'"><i class="icon-remove"></i> '.getMLText("rm_user_from_processes").'</a></li>';
+			echo '<li><a href="../out/out.TransferObjects.php?userid='.$seluser->getID().'"><i class="icon-share-alt"></i> '.getMLText("transfer_objects").'</a></li>';
 			if($user->isAdmin() && $seluser->getID() != $user->getID())
-				echo "<a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."\" class=\"btn btn-primary\">".getMLText("substitute_user")."</a>\n";
+				echo "<li><a href=\"../op/op.SubstituteUser.php?userid=".$seluser->getID()."&formtoken=".createFormKey('substituteuser')."\"><i class=\"icon-exchange\"></i> ".getMLText("substitute_user")."</a></li>\n";
+			if($enableemail)
+				echo '<li><a href="../out/out.SendLoginData.php?userid='.$seluser->getID().'"><i class="icon-envelope-alt"></i> '.getMLText("send_login_data").'</a></li>';
+?>
+	</ul>
+</div>
+<?php
 		}
 	} /* }}} */
 
@@ -178,16 +231,6 @@ $(document).ready( function() {
 		}
 ?>
 	<table class="table-condensed">
-<?php
-	if($currUser && !in_array($currUser->getID(), $undeluserids)) {
-?>
-		<tr>
-			<td></td>
-			<td><a class="btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
-		</tr>
-<?php
-	}
-?>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
 			<td><input type="text" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
@@ -469,11 +512,7 @@ $(document).ready( function() {
 ?>
 <div class="row-fluid">
 <div class="span4">
-<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
 <select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_user")?></option>
 <option value="0"><?php echo getMLText("add_user")?></option>
@@ -483,10 +522,8 @@ $(document).ready( function() {
 		}
 ?>
 </select>
-		</div>
-	</div>
 </form>
-</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="UsrMgr" data-action="actionmenu" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 </div>
 

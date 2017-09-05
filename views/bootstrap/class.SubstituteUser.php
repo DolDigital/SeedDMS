@@ -45,7 +45,6 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
 		$this->contentHeading(getMLText("substitute_user"));
-		$this->contentContainerStart();
 ?>
 	<table class="table table-condensed">
 		<thead>
@@ -54,7 +53,7 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		<tbody>
 <?php
 		foreach ($allUsers as $currUser) {
-			echo "<tr>";
+			echo "<tr".($currUser->isDisabled() ? " class=\"error\"" : "").">";
 			echo "<td>";
 			echo htmlspecialchars($currUser->getFullName())." (".htmlspecialchars($currUser->getLogin()).")<br />";
 			echo "<small>".htmlspecialchars($currUser->getComment())."</small>";
@@ -94,11 +93,9 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 		}
 		echo "</tbody>";
 		echo "</table>";
-		$this->contentContainerEnd();
 
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>
-

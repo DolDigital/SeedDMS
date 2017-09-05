@@ -39,17 +39,46 @@ class SeedDMS_View_Help extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("help"));
 		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation(getMLText("help").": ".getMLText('help_'.strtolower($context), array(), $context), "");
-
-		$this->contentContainerStart('help');
+//		$this->pageNavigation(getMLText("help").": ".getMLText('help_'.strtolower($context), array(), $context), "");
+?>
+<div class="row-fluid">
+<div class="span4">
+	<legend>Table of contents</legend>
+<?php
+		$d = dir("../languages/".$this->params['session']->getLanguage()."/help");
+		echo "<ul>";
+		while (false !== ($entry = $d->read())) {
+			if($entry != '..' && $entry != '.') {
+				$path_parts = pathinfo($dir."/".$entry);
+				if($path_parts['extension'] == 'html' || $path_parts['extension'] == 'md') {
+					echo "<li><a href=\"../out/out.Help.php?context=".$path_parts['filename']."\">".getMLText('help_'.$path_parts['filename'], array(), $path_parts['filename'])."</a></li>";
+				}
+			}
+		}
+		echo "</ul>";
+?>
+</div>
+<div class="span8">
+<legend><?php printMLText('help_'.strtolower($context), array(), $context); ?></legend>
+<?php
 
 		$helpfile = "../languages/".$this->params['session']->getLanguage()."/help/".$context.".html";
 		if(file_exists($helpfile))
 			readfile($helpfile);
-		else
+		else {
+			$helpfile = "../languages/".$this->params['session']->getLanguage()."/help/".$context.".md";
+			if(file_exists($helpfile)) {
+				require_once('parsedown/Parsedown.php');
+				$Parsedown = new Parsedown();
+				echo $Parsedown->text(file_get_contents($helpfile));
+			} else
 			readfile("../languages/".$this->params['session']->getLanguage()."/help.htm");
+		}
 
-		$this->contentContainerEnd();
+?>
+</div>
+</div>
+<?php
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

@@ -620,6 +620,7 @@ switch($command) {
 					$indexconf['Indexer']::init($settings->_stopWordsFile);
 				} else {
 					$index = null;
+					$indexconf = null;
 				}
 
 				$controller = Controller::factory('AddDocument');

@@ -180,6 +180,8 @@ class Settings { /* {{{ */
 	var $_enableClipboard = true;
 	// enable/disable list of tasks in main menu
 	var $_enableMenuTasks = true;
+	// enable/disable list of files in drop folder
+	var $_enableDropFolderList = false;
 	// enable/disable display of the session list
 	var $_enableSessionList = false;
 	// enable/disable display of the drop zone for file upload
@@ -419,6 +421,7 @@ class Settings { /* {{{ */
 		$this->_enableSessionList = Settings::boolVal($tab["enableSessionList"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
 		$this->_enableMenuTasks = Settings::boolVal($tab["enableMenuTasks"]);
+		$this->_enableDropFolderList = Settings::boolVal($tab["enableDropFolderList"]);
 		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
 		$this->_enableMultiUpload = Settings::boolVal($tab["enableMultiUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
@@ -450,6 +453,8 @@ class Settings { /* {{{ */
 		$this->_rootDir = strval($tab["rootDir"]);
 		$this->_httpRoot = strval($tab["httpRoot"]);
 		$this->_contentDir = strval($tab["contentDir"]);
+		if($this->_contentDir && substr($this->_contentDir, -1, 1) != DIRECTORY_SEPARATOR)
+			$this->_contentDir .= DIRECTORY_SEPARATOR;
 		$this->_cacheDir = strval($tab["cacheDir"]);
 		$this->_stagingDir = strval($tab["stagingDir"]);
 		$this->_luceneDir = strval($tab["luceneDir"]);
@@ -729,6 +734,7 @@ class Settings { /* {{{ */
 		$this->setXMLAttributValue($node, "enableSessionList", $this->_enableSessionList);
 		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
 		$this->setXMLAttributValue($node, "enableMenuTasks", $this->_enableMenuTasks);
+		$this->setXMLAttributValue($node, "enableDropFolderList", $this->_enableDropFolderList);
 		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
 		$this->setXMLAttributValue($node, "enableMultiUpload", $this->_enableMultiUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);

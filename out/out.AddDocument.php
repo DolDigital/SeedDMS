@@ -20,6 +20,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
@@ -59,6 +60,7 @@ if($view) {
 	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
 	$view->setParam('enableselfrevapp', $settings->_enableSelfRevApp);
 	$view->setParam('dropfolderdir', $settings->_dropFolderDir);
+	$view->setParam('dropfolderfile', isset($_REQUEST["dropfolderfileform1"]) ?$_REQUEST["dropfolderfileform1"] : '');
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
 	$view->setParam('sortusersinlist', $settings->_sortUsersInList);

@@ -82,19 +82,22 @@ $(document).ready( function() {
 						foreach($res['frequencies'][$type] as $entry) {
 							$value = $selattrdef->parseValue($entry['value']);
 							$content .= "<tr>";
-							$content .= "<td>".implode(';', $value)."</td><td>".$entry['c']."</td>";
+							$content .= "<td>".implode(';', $value)."</td>";
+							$content .= "<td><a href=\"../out/out.Search.php?resultmode=".($type == 'folder' ? 2 : ($type == 'document' ? 1 : 3))."&attributes[".$selattrdef->getID()."]=".$entry['value']."\">".urlencode($entry['c'])."</a></td>";
+							$content .= "<td>";
 							/* various checks, if the value is valid */
 							if(!$selattrdef->validate($entry['value'])) {
-								$content .= getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value']);
+								$content .= getAttributeValidationText($selattrdef->getValidationError(), $selattrdef->getName(), $entry['value'], $selattrdef->getRegex());
 							}
-							$content .= "<td>";
 							/* Check if value is in value set */
+							/*
 							if($selattrdef->getValueSet()) {
 								foreach($value as $v) {
 									if(!in_array($v, $selattrdef->getValueSetAsArray()))
 										$content .= getMLText("attribute_value_not_in_valueset");
 								}
 							}
+							 */
 							$content .= "</td>";
 							$content .= "</tr>";
 						}

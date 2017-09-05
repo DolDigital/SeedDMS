@@ -1,4 +1,21 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.3
+--------------------------------------------------------------------------------
+- add link to search for attribute value in attribute mgr
+- fix output of validation errors in attribute mgr
+- check if user has access on document and is not disabled if set as
+  reviewer, approver
+- notifications are only send to none disabled users
+- nicer layout in user manager, group buttons, more information
+- merged changes from 5.0.13
+- show number of users where the select user is a mandatory reviewer/approver of
+- fix upload of attachments
+- documents, folders, files, events can be moved to a new user
+- do not show quota information in user manager if quotas are turn off
+- files in drop folder can be listed in main menu
+- webdav can use orig. filename of last version instead of document name (experimental)
+
+--------------------------------------------------------------------------------
                      Changes in version 5.1.2
 --------------------------------------------------------------------------------
 - do not show spinner when clipboard is loaded in menu (prevents flickering of
@@ -22,6 +39,12 @@
 --------------------------------------------------------------------------------
 - added support for postgresql
 - document attachments can linked to a version and be public or hidden
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.13
+--------------------------------------------------------------------------------
+- fix php warning if an error occurs in one of the out/*.php pages
+- merged changes from 4.3.36
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.12
@@ -119,7 +142,25 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36
 --------------------------------------------------------------------------------
+- mark disabled users in user list and substitute user list
+- if expandFolderTree is set to hidden the tree actually is hidden (partially
+  closes #312)
 - fix sql statement for creating temp. tables (sqlite)
+- remove empty lines at end of view/bootstrap/class.*.php files (Closes #329)
+- make sure contentDir ends with DIRECTORY_SEPARATOR (Closes #323)
+- minor improvements of installation
+- better checking in out/*.php for allowed operation (e.g. EditOnline,
+  RemoveVersion, SetReviewersApprovers, ...)
+- SetReviewersApprovers checks for mandatory reviewers/approvers
+- reviewers/approvers can only be modified by users with unrestricted access
+  and as long as no reviewer/approver has reviewed/approved the document
+- use only svg icons for mimetypes
+- add check for processes (reviews/approvals) where the user/group is deleted
+- redirect in op/op.Login.php to referuri will not add protocol and host,
+  because this doesn't work if a reverse proxy is used (Closes #336)
+- major update of korean translations
+- fix browse button of fine-uploader when 'Enable large file upload' is
+  turned on firefox is used (Closes #339 and #338)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.35

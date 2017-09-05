@@ -105,6 +105,8 @@ class UI extends UI_Default {
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 			$view->setParam('enableclipboard', $settings->_enableClipboard);
 			$view->setParam('enablemenutasks', $settings->_enableMenuTasks);
+			$view->setParam('enabledropfolderlist', $settings->_enableDropFolderList);
+			$view->setParam('dropfolderdir', $settings->_dropFolderDir);
 			$view->setParam('enablesessionlist', $settings->_enableSessionList);
 			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', (int) $settings->_partitionSize);

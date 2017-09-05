@@ -61,9 +61,12 @@ class SeedDMS_AccessOperation {
 	 * document may delete versions. The admin may even delete a version
 	 * even if is disallowed in the settings.
 	 */
-	function mayEditVersion() { /* {{{ */
+	function mayEditVersion($vno=0) { /* {{{ */
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
-			$version = $this->obj->getLatestContent();
+			if($vno)
+				$version = $this->obj->getContentByVersion($vno);
+			else
+				$version = $this->obj->getLatestContent();
 			if (!isset($this->settings->_editOnlineFileTypes) || !is_array($this->settings->_editOnlineFileTypes) || !in_array(strtolower($version->getFileType()), $this->settings->_editOnlineFileTypes))
 				return false;
 			if ($this->obj->getAccessMode($this->user) == M_ALL || $this->user->isAdmin()) {
@@ -118,15 +121,28 @@ class SeedDMS_AccessOperation {
 	 *
 	 * This check can only be done for documents. Overwriting the document
 	 * reviewers/approvers is only allowed if version modification is turned on
-	 * in the settings and the document is in 'draft review' status.  The
-	 * admin may even set reviewers/approvers if is disallowed in the
+	 * in the settings and the document has not been reviewed/approved by any
+	 * user/group already.
+	 * The admin may even set reviewers/approvers if is disallowed in the
 	 * settings.
 	 */
 	function maySetReviewersApprovers() { /* {{{ */
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP && $this->settings->_workflowMode == 'traditional_only_approval')) {
+			$reviewstatus = $latestContent->getReviewStatus();
+			$hasreview = false;
+			foreach($reviewstatus as $r) {
+				if($r['status'] == 1 || $r['status'] == -1)
+					$hasreview = true;
+			}
+			$approvalstatus = $latestContent->getApprovalStatus();
+			$hasapproval = false;
+			foreach($approvalstatus as $r) {
+				if($r['status'] == 1 || $r['status'] == -1)
+					$hasapproval = true;
+			}
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (($status["status"]==S_DRAFT_REV && !$hasreview) || ($status["status"]==S_DRAFT_APP && !$hasreview && !$hasapproval))) {
 				return true;
 			}
 		}

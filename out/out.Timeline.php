@@ -18,6 +18,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
@@ -26,8 +27,13 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1]);
+if(!$view) {
+}
+
 if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+	$view->exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
@@ -36,22 +42,19 @@ if(isset($_GET['skip']))
 else
 	$skip = array();
 
+$document = null;
+$content = null;
 if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['documentid'])) {
-	$document = $dms->getDocument($_GET["documentid"]);
-	if (!is_object($document)) {
-		$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+	if($document = $dms->getDocument($_GET["documentid"])) {
+		if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) {
+			$content = $document->getContentByVersion($_GET['version']);
+		}
 	}
-} else
-	$document = null;
+}
 
-if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) {
-	$content = $document->getContentByVersion($_GET['version']);
-} else
-	$content = null;
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
+	$view->setParam('dms', $dms);
+	$view->setParam('user', $user);
 	$view->setParam('fromdate', isset($_GET['fromdate']) ? $_GET['fromdate'] : '');
 	$view->setParam('todate', isset($_GET['todate']) ? $_GET['todate'] : '');
 	$view->setParam('skip', $skip);

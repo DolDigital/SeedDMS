@@ -43,6 +43,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		$enableselfrevapp = $this->params['enableselfrevapp'];
 
 		$overallStatus = $content->getStatus();
+		$owner = $document->getOwner();
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -92,7 +93,12 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
   <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 
-		$res=$user->getMandatoryReviewers();
+		if($user->getID() != $owner->getID()) {
+			$res=$owner->getMandatoryReviewers();
+			if($user->isAdmin())
+				$res = array();
+		} else
+			$res=$user->getMandatoryReviewers();
 		foreach ($docAccess["users"] as $usr) {
 			$mandatory=false;
 			foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
@@ -100,7 +106,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			if ($mandatory){
 
 				print "<option value=\"".$usr->getID()."\" disabled=\"disabled\">". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;</option>";
-				print "<input id='revInd".$usr->getID()."' type='hidden' name='indReviewers[]' value='". $usr->getID() ."'>";
+//				print "<input id='revInd".$usr->getID()."' type='hidden' name='indReviewers[]' value='". $usr->getID() ."'>";
 
 			} elseif (isset($reviewIndex["i"][$usr->getID()])) {
 
@@ -121,8 +127,24 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-  </select>
-
+	</select>
+<?php
+			/* List all mandatory reviewers */
+			if($res) {
+				$tmp = array();
+				foreach ($res as $r) {
+					if($r['reviewerUserID'] > 0) {
+						$u = $dms->getUser($r['reviewerUserID']);
+						$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
+					}
+				}
+				if($tmp) {
+					echo '<div class="mandatories"><span>'.getMLText('mandatory_reviewers').':</span> ';
+					echo implode(', ', $tmp);
+					echo "</div>\n";
+				}
+			}
+?>
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
   <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
@@ -134,7 +156,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			if ($mandatory){
 
 				print "<option value=\"".$group->getID()."\" disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
-				print "<input id='revGrp".$group->getID()."' type='hidden' name='grpReviewers[]' value='". $group->getID() ."' />";
+//				print "<input id='revGrp".$group->getID()."' type='hidden' name='grpReviewers[]' value='". $group->getID() ."' />";
 
 			} elseif (isset($reviewIndex["g"][$group->getID()])) {
 
@@ -154,8 +176,25 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-  </select>
-<?php } ?>
+	</select>
+<?php
+			/* List all mandatory groups of reviewers */
+			if($res) {
+				$tmp = array();
+				foreach ($res as $r) {
+					if($r['reviewerGroupID'] > 0) {
+						$u = $dms->getGroup($r['reviewerGroupID']);
+						$tmp[] =  htmlspecialchars($u->getName());
+					}
+				}
+				if($tmp) {
+					echo '<div class="mandatories"><span>'.getMLText('mandatory_reviewergroups').':</span> ';
+					echo implode(', ', $tmp);
+					echo "</div>\n";
+				}
+			}
+		}
+?>
 
 <?php $this->contentSubHeading(getMLText("update_approvers"));?>
 
@@ -163,8 +202,12 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
   <select class="chzn-select span9" name="indApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 
-		$res=$user->getMandatoryApprovers();
-
+		if($user->getID() != $owner->getID()) {
+			$res=$owner->getMandatoryApprovers();
+			if($user->isAdmin())
+				$res = array();
+		} else
+			$res=$user->getMandatoryApprovers();
 		foreach ($docAccess["users"] as $usr) {
 
 			$mandatory=false;
@@ -173,7 +216,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			if ($mandatory){
 			
 				print "<option value='". $usr->getID() ."' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;</option>";
-				print "<input id='appInd".$usr->getID()."' type='hidden' name='indApprovers[]' value='". $usr->getID() ."'>";
+//				print "<input id='appInd".$usr->getID()."' type='hidden' name='indApprovers[]' value='". $usr->getID() ."'>";
 
 			} elseif (isset($approvalIndex["i"][$usr->getID()])) {
 			
@@ -195,7 +238,23 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-  </select>
+	</select>
+<?php
+		if($res) {
+			$tmp = array();
+			foreach ($res as $r) {
+				if($r['approverUserID'] > 0) {
+					$u = $dms->getUser($r['approverUserID']);
+					$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
+				}
+			}
+			if($tmp) {
+				echo '<div class="mandatories"><span>'.getMLText('mandatory_approvers').':</span> ';
+				echo implode(', ', $tmp);
+				echo "</div>\n";
+			}
+		}
+?>
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
 
   <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
@@ -208,7 +267,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			if ($mandatory){
 
 				print "<option type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
-				print "<input id='appGrp".$group->getID()."' type='hidden' name='grpApprovers[]' value='". $group->getID() ."'>";
+//				print "<input id='appGrp".$group->getID()."' type='hidden' name='grpApprovers[]' value='". $group->getID() ."'>";
 
 			} elseif (isset($approvalIndex["g"][$group->getID()])) {
 
@@ -229,8 +288,24 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-  </select>
-
+	</select>
+<?php
+		/* List all mandatory groups of approvers */
+		if($res) {
+			$tmp = array();
+			foreach ($res as $r) {
+				if($r['approverGroupID'] > 0) {
+					$u = $dms->getGroup($r['approverGroupID']);
+					$tmp[] =  htmlspecialchars($u->getName());
+				}
+			}
+			if($tmp) {
+				echo '<div class="mandatories"><span>'.getMLText('mandatory_approvergroups').':</span> ';
+				echo implode(', ', $tmp);
+				echo "</div>\n";
+			}
+		}
+?>
 <p>
 <input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
 <input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>

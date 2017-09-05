@@ -21,6 +21,7 @@
 
 include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
@@ -66,6 +67,11 @@ $unlinkeddocuments = $dms->checkDocuments();
 $nofilesizeversions = $dms->getNoFileSizeDocumentContent();
 $nochecksumversions = $dms->getNoChecksumDocumentContent();
 $duplicateversions = $dms->getDuplicateDocumentContent();
+foreach(array('review', 'approval') as $process) {
+	foreach(array('user', 'group') as $ug) {
+		$processwithoutusergroup[$process][$ug] = $dms->getProcessWithoutUserGroup($process, $ug);
+	}
+}
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
 if($view) {
@@ -76,6 +82,7 @@ if($view) {
 	$view->setParam('nofilesizeversions', $nofilesizeversions);
 	$view->setParam('nochecksumversions', $nochecksumversions);
 	$view->setParam('duplicateversions', $duplicateversions);
+	$view->setParam('processwithoutusergroup', $processwithoutusergroup);
 	$view->setParam('unlink', $unlink);
 	$view->setParam('setfilesize', $setfilesize);
 	$view->setParam('setchecksum', $setchecksum);

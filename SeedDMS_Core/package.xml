@@ -12,8 +12,8 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-07-13</date>
- <time>06:34:50</time>
+ <date>2017-08-29</date>
+ <time>09:19:24</time>
  <version>
   <release>5.1.3</release>
   <api>5.1.3</api>
@@ -24,6 +24,12 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+- SeedDMS_Core_Document::getNotifyList() and SeedDMS_Core_Folder::getNotifyList()
+returns just users which are not disabled
+- add new methods removeFromProcesses(), getWorkflowsInvolved(), getKeywordCategories() to SeedDMS_Core_User
+- add methods isMandatoryReviewerOf() and isMandatoryApproverOf()
+- add methods transferDocumentsFolders() and transferEvents()
+- add method SeedDMS_Core_DMS::getDocumentByOriginalFilename()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1392,8 +1398,8 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </notes>
   </release>
   <release>
-   <date>2017-07-10</date>
-   <time>15:06:09</time>
+   <date>2017-03-23</date>
+   <time>07:07:02</time>
    <version>
     <release>5.0.12</release>
     <api>5.0.12</api>
@@ -1421,6 +1427,7 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
+- all changes from 4.3.36 merged
    </notes>
   </release>
   <release>

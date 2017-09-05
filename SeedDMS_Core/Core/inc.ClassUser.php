@@ -475,7 +475,183 @@ class SeedDMS_Core_User { /* {{{ */
 	}	 /* }}} */
 
 	/**
-	 * Remove the user and also remove all its keywords, notifies, etc.
+	 * Remove user from all processes
+	 *
+	 * This method adds another log entry to the reviews and approvals
+	 * which indicates the user has been deleted from the process. By default it will
+	 * do so for each review/approval regardless of its current state. So even
+	 * reviews/approvals already processed by the user will be added the log
+	 * entry. Only if the last log entry was a removal already, it will not be
+	 * added a second time.
+	 *
+	 * @param object $user the user doing the removal (needed for entry in
+	 *        review and approve log).
+	 * @param array $states remove user only from reviews/approvals in one of the states
+	 *        If passing array(0), the method will operate on reviews/approval which
+	 *        has not been touched.
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __removeFromProcesses($user, $states = array()) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$reviewStatus = $this->getReviewStatus();
+		foreach ($reviewStatus["indstatus"] as $ri) {
+			if($ri['status'] != -2 && (!isset($states['review']) || in_array($ri['status'], $states['review']))) {
+				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
+					"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
+				$res=$db->getResult($queryStr);
+				if(!$res) {
+					return false;
+				}
+			}
+		}
+
+		$approvalStatus = $this->getApprovalStatus();
+		foreach ($approvalStatus["indstatus"] as $ai) {
+			if($ai['status'] != -2 && (!isset($states['approval']) || in_array($ai['status'], $states['approval']))) {
+				$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
+					"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
+				$res=$db->getResult($queryStr);
+				if(!$res) {
+					return false;
+				}
+			}
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove user from all processes
+	 *
+	 * This includes review, approval and workflow
+	 *
+	 * @param object $user the user doing the removal (needed for entry in
+	 *        review and approve log).
+	 * @param array $states remove user only from reviews/approvals in one of the states
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function removeFromProcesses($user, $states=array()) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$db->startTransaction();
+		if(!$this->__removeFromProcesses($user, $states)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer documents and folders to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of folders and
+	 *        documents which previously were owned by the delete user.
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __transferDocumentsFolders($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$assignToUser)
+			return false;
+
+		/* Assign documents of the removed user to the given user */
+		$queryStr = "UPDATE `tblFolders` SET `owner` = " . $assignToUser->getID() . " WHERE `owner` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocuments` SET `owner` = " . $assignToUser->getID() . " WHERE `owner` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentContent` SET `createdBy` = " . $assignToUser->getID() . " WHERE `createdBy` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		// ... but keep public links
+		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		// set administrator for deleted user's attachments
+		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer documents and folders to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of folders and
+	 *        documents which previously were owned by the delete user.
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function transferDocumentsFolders($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($assignToUser->getID() == $this->_id)
+			return true;
+
+		$db->startTransaction();
+		if(!$this->__transferDocumentsFolders($assignToUser)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer events to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of events
+	 * @return boolean true on success or false in case of an error
+	 */
+	private function __transferEvents($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$assignToUser)
+			return false;
+
+		// set new owner of events
+		$queryStr = "UPDATE `tblEvents` SET `userID` = " . $assignToUser->getID() . " WHERE `userID` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Transfer events to another user
+	 *
+	 * @param object $assignToUser the user who is new owner of events
+	 * @return boolean true on success or false in case of an error
+	 */
+	public function transferEvents($assignToUser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($assignToUser->getID() == $this->_id)
+			return true;
+
+		$db->startTransaction();
+		if(!$this->__transferEvents($assignToUser)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove the user and also remove all its keywords, notifications, etc.
 	 * Do not remove folders and documents of the user, but assign them
 	 * to a different user.
 	 *
@@ -528,25 +704,6 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		/* Assign documents of the removed user to the given user */
-		$queryStr = "UPDATE `tblFolders` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		$queryStr = "UPDATE `tblDocuments` SET `owner` = " . $assignTo . " WHERE `owner` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		$queryStr = "UPDATE `tblDocumentContent` SET `createdBy` = " . $assignTo . " WHERE `createdBy` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
 		// Remove private links on documents ...
 		$queryStr = "DELETE FROM `tblDocumentLinks` WHERE `userID` = " . $this->_id . " AND `public` = 0";
 		if (!$db->getResult($queryStr)) {
@@ -554,18 +711,10 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		// ... but keep public links
-		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
-		}
-
-		// set administrator for deleted user's attachments
-		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
+		/* Assign documents, folders, files, public document links of the removed user to the given user */
+		if(!$this->__transferDocumentsFolders($assignToUser)) {
+				$db->rollbackTransaction();
+				return false;
 		}
 
 		// unlock documents locked by the user
@@ -647,11 +796,10 @@ class SeedDMS_Core_User { /* {{{ */
 			return false;
 		}
 
-		// set administrator for deleted user's events
-		$queryStr = "UPDATE `tblEvents` SET `userID` = " . $assignTo . " WHERE `userID` = " . $this->_id;
-		if (!$db->getResult($queryStr)) {
-			$db->rollbackTransaction();
-			return false;
+		/* Assign events of the removed user to the given user */
+		if(!$this->__transferEvents($assignToUser)) {
+				$db->rollbackTransaction();
+				return false;
 		}
 
 		// Delete user itself
@@ -665,27 +813,9 @@ class SeedDMS_Core_User { /* {{{ */
 		// "DELETE FROM `tblDocumentApproveLog` WHERE `userID` = " . $this->_id;
 		// "DELETE FROM `tblDocumentReviewLog` WHERE `userID` = " . $this->_id;
 
-
-		$reviewStatus = $this->getReviewStatus();
-		foreach ($reviewStatus["indstatus"] as $ri) {
-			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-			$res=$db->getResult($queryStr);
-			if(!$res) {
+		if(!$this->__removeFromProcesses($user)) {
 				$db->rollbackTransaction();
 				return false;
-			}
-		}
-
-		$approvalStatus = $this->getApprovalStatus();
-		foreach ($approvalStatus["indstatus"] as $ai) {
-			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', ".$db->getCurrentDatetime().", '". $user->getID() ."')";
-			$res=$db->getResult($queryStr);
-			if(!$res) {
-				$db->rollbackTransaction();
-				return false;
-			}
 		}
 
 		$db->commitTransaction();
@@ -886,11 +1016,14 @@ class SeedDMS_Core_User { /* {{{ */
 
 	/**
 	 * Get a list of reviews
-	 * This function returns a list of all reviews seperated by individual
-	 * and group reviews. If the document id
+	 *
+	 * This function returns a list of all reviews and their latest log entry
+	 * seperated by individuals and groups. If the document id
 	 * is passed, then only this document will be checked for reviews. The
 	 * same is true for the version of a document which limits the list
-	 * further.
+	 * further. If you do not limit on a version it will retrieve the status
+	 * for each version, that includes even older versions which has been superseded
+	 * by a new version.
 	 *
 	 * For a detailed description of the result array see
 	 * {link SeedDMS_Core_User::getApprovalStatus} which does the same for
@@ -964,17 +1097,21 @@ class SeedDMS_Core_User { /* {{{ */
 
 	/**
 	 * Get a list of approvals
-	 * This function returns a list of all approvals seperated by individual
-	 * and group approvals. If the document id
+	 *
+	 * This function returns a list of all approvals and their latest log entry
+	 * seperated by individuals and groups. If the document id
 	 * is passed, then only this document will be checked for approvals. The
 	 * same is true for the version of a document which limits the list
-	 * further.
+	 * further. If you do not limit on a version it will retrieve the status
+	 * for each version, that includes even older versions which has been superseded
+	 * by a new version.
 	 *
 	 * The result array has two elements:
 	 * - indstatus: which contains the approvals by individuals (users)
 	 * - grpstatus: which contains the approvals by groups
 	 *
-	 * Each element is itself an array of approvals with the following elements:
+	 * Each element is itself an array of approvals with the following elements
+	 * (it is a combination of fields from tblDocumentApprovers and tblDocumentApproveLog):
 	 * - approveID: unique id of approval
 	 * - documentID: id of document, that needs to be approved
 	 * - version: version of document, that needs to be approved
@@ -1098,6 +1235,28 @@ class SeedDMS_Core_User { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get a list of workflows this user is involved as in individual
+	 *
+	 * @return array list of all workflows
+	 */
+	function getWorkflowsInvolved() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = 'SELECT DISTINCT b.*, c.`userid` FROM `tblWorkflowTransitions` a LEFT JOIN `tblWorkflows` b ON a.`workflow`=b.`id` LEFT JOIN `tblWorkflowTransitionUsers` c ON a.`id`=c.`transition` WHERE c.`userid`='.$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result[] = $this->_dms->getWorkflow($res['id']);
+			}
+		}
+
+		return $result;
+	} /* }}} */
+
+	/**
 	 * Get a list of mandatory reviewers
 	 * A user which isn't trusted completely may have assigned mandatory
 	 * reviewers (both users and groups).
@@ -1130,6 +1289,52 @@ class SeedDMS_Core_User { /* {{{ */
 		$resArr = $db->getResultArray($queryStr);
 
 		return $resArr;
+	} /* }}} */
+
+	/**
+	 * Get a list of users this user is a mandatory reviewer of
+	 *
+	 * This method is the reverse function of getMandatoryReviewers(). It returns
+	 * those user where the current user is a mandatory reviewer.
+	 *
+	 * @return array list of users where this user is a mandatory reviewer.
+	 */
+	function isMandatoryReviewerOf() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblMandatoryReviewers` WHERE `reviewerUserID` = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		$users = array();
+		foreach($resArr as $res) {
+			$users[] = self::getInstance($res['userID'], $this->_dms);
+		}
+
+		return $users;
+	} /* }}} */
+
+	/**
+	 * Get a list of users this user is a mandatory approver of
+	 *
+	 * This method is the reverse function of getMandatoryApprovers(). It returns
+	 * those user where the current user is a mandatory approver.
+	 *
+	 * @return array list of users where this user is a mandatory approver.
+	 */
+	function isMandatoryApproverOf() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `approverUserID` = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		$users = array();
+		foreach($resArr as $res) {
+			$users[] = self::getInstance($res['userID'], $this->_dms);
+		}
+
+		return $users;
 	} /* }}} */
 
 	/**
@@ -1360,6 +1565,30 @@ class SeedDMS_Core_User { /* {{{ */
 		}
 
 		return $notifications;
+	} /* }}} */
+
+	/**
+	 * Return list of personal keyword categories
+	 *
+	 * @return array/boolean list of categories or false in case of an error
+	 */
+	function getKeywordCategories() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM `tblKeywordCategories` WHERE `owner` = ".$this->_id;
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$categories = array();
+		foreach ($resArr as $row) {
+			$cat = new SeedDMS_Core_KeywordCategory($row["id"], $row["owner"], $row["name"]);
+			$cat->setDMS($this->_dms);
+			array_push($categories, $cat);
+		}
+
+		return $categories;
 	} /* }}} */
 
 } /* }}} */

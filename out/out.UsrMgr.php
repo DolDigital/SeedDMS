@@ -20,6 +20,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
@@ -48,7 +49,7 @@ if(isset($_GET['userid']) && $_GET['userid']) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'undeluserids'=>explode(',', $settings->_undelUserIds), 'workflowmode'=>$settings->_workflowMode, 'quota'=>$settings->_quota, 'strictformcheck'=>$settings->_strictFormCheck, 'enableemail'=>$settings->_enableEmail));
 if($view) {
 	$view($_GET);
 }

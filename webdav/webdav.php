@@ -44,6 +44,14 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	var $user = "";
 
 	/**
+	 * Set to true if original file shall be used instead of document name
+	 *
+	 * @access private
+	 * @var	boolean
+	 */
+	var $useorgfilename = false;
+
+	/**
 	 * Serve a webdav request
 	 *
 	 * @access public
@@ -184,7 +192,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 					$this->logger->log('reverseLookup: found folder '.$root->getName().' ('.$root->getID().')', PEAR_LOG_DEBUG);
 				return $root;
 			} else {
-				if($document = $this->dms->getDocumentByName($docname, $root)) {
+				if($this->useorgfilename)
+					$document = $this->dms->getDocumentByOriginalFilename($docname, $root);
+				else
+					$document = $this->dms->getDocumentByName($docname, $root);
+				if($document) {
 					if($this->logger)
 						$this->logger->log('reverseLookup: found document '.$document->getName().' ('.$document->getID().')', PEAR_LOG_DEBUG);
 					return $document;
@@ -201,7 +213,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 		if($folder) {
 			if($docname) {
-				if($document = $this->dms->getDocumentByName($docname, $folder)) {
+				if($this->useorgfilename)
+					$document = $this->dms->getDocumentByOriginalFilename($docname, $folder);
+				else
+					$document = $this->dms->getDocumentByName($docname, $folder);
+				if($document) {
 					if($this->logger)
 						$this->logger->log('reverseLookup: found document '.$document->getName().' ('.$document->getID().')', PEAR_LOG_DEBUG);
 					return $document;
@@ -341,8 +357,13 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 //				$path .= rawurlencode($pathseg->getName()).'/';
 				$path .= $pathseg->getName().'/';
 //			$info["path"] = htmlspecialchars($path.rawurlencode($obj->getName()));
-			$info["path"] = $path.$obj->getName();
-			$info["props"][] = $this->mkprop("displayname", $obj->getName());
+			if($this->useorgfilename) {
+				$info["path"] = $path.$content->getOriginalFileName();
+				$info["props"][] = $this->mkprop("displayname", $content->getOriginalFileName());
+			} else {
+				$info["path"] = $path.$obj->getName();
+				$info["props"][] = $this->mkprop("displayname", $obj->getName());
+			}
 
 			$info["props"][] = $this->mkprop("resourcetype", "");
 			if (1 /*is_readable($fspath)*/) {
@@ -495,6 +516,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 
 				$fspath = $this->dms->contentDir.'/'.$content->getPath();
 				$filesize = filesize($fspath);
+				if($this->useorgfilename)
+					$filename = $content->getOriginalFileName();;
 			}
 //			$name	 = htmlspecialchars($filename);
 			$name = $filename;
@@ -562,7 +585,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 				else $fileType = substr($name, $lastDotIndex);
 		}
 		/* First check whether there is already a file with the same name */
-		if($document = $this->dms->getDocumentByName($name, $folder)) {
+		if($this->useorgfilename)
+			$document = $this->dms->getDocumentByOriginalFilename($name, $folder);
+		else
+			$document = $this->dms->getDocumentByName($name, $folder);
+		if($document) {
 			if ($document->getAccessMode($this->user) < M_READWRITE) {
 				unlink($tmpFile);
 				return "403 Forbidden";

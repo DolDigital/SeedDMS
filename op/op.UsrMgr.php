@@ -174,6 +174,138 @@ else if ($action == "removeuser") {
 	$userid=-1;
 }
 
+// remove user from all processes (approval, review)
+else if ($action == "removefromprocesses") {
+
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('removefromprocesses')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	/* This used to be a check if an admin is deleted. Now it checks if one
+	 * wants to delete herself.
+	 */
+	if ($userid==$user->getID()) {
+		UI::exitError(getMLText("admin_tools"),getMLText("cannot_delete_yourself"));
+	}
+
+	$userToRemove = $dms->getUser($userid);
+	if (!is_object($userToRemove)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
+		if(!isset($_POST["status"]["review"]))
+			$_POST["status"]["review"] = array();
+		if(!isset($_POST["status"]["approval"]))
+			$_POST["status"]["approval"] = array();
+		if (!$userToRemove->removeFromProcesses($user, $_POST['status'])) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		add_log_line(".php&action=removefromprocesses&userid=".$userid);
+		
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_user_processes')));
+	}
+}
+
+// transfer all objects from one user to another one
+else if ($action == "transferobjects") {
+
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('transferobjects')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	/* Check if one  wants to transfer his/her own objects.
+	 */
+	if ($userid==$user->getID()) {
+		UI::exitError(getMLText("admin_tools"),getMLText("cannot_transfer_your_objects"));
+	}
+
+	$userToRemove = $dms->getUser($userid);
+	if (!is_object($userToRemove)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	$userToAssign = $dms->getUser($_POST["assignTo"]);
+	if (!$userToRemove->remove($user, $userToAssign)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+		
+//	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
+		if (!$userToRemove->transferDocumentsFolders($userToAssign)) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		if (!$userToRemove->transferEvents($userToAssign)) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+
+		add_log_line(".php&action=transferobjects&userid=".$userid);
+		
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_transfer_objects')));
+//	}
+}
+
+// send login data to user
+else if ($action == "sendlogindata" && $settings->_enableEmail) {
+	/* Check if the form data comes from a trusted request */
+	if(!checkFormKey('sendlogindata')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (isset($_POST["userid"])) {
+		$userid = $_POST["userid"];
+	}
+
+	$comment = '';
+	if (isset($_POST["comment"])) {
+		$comment = $_POST["comment"];
+	}
+
+	if (!isset($userid) || !is_numeric($userid) || intval($userid)<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	$newuser = $dms->getUser($userid);
+	if (!is_object($newuser)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
+	}
+
+	if($notifier) {
+		$subject = "send_login_data_subject";
+		$message = "send_login_data_body";
+		$params = array();
+		$params['username'] = $newuser->getFullName();
+		$params['login'] = $newuser->getLogin();
+		$params['comment'] = $comment;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php";
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toIndividual($user, $newuser, $subject, $message, $params);
+	}
+	add_log_line(".php&action=sendlogindata&userid=".$userid);
+		
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_send_login_data')));
+}
+
 // modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
