@@ -1,4 +1,4 @@
-VERSION=5.0.13
+VERSION=5.0.14
 SRC=CHANGELOG inc conf utils index.php languages views op out controllers doc styles TODO LICENSE webdav install restapi pdfviewer
 # webapp
 
