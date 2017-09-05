@@ -1,4 +1,4 @@
-VERSION=4.3.36
+VERSION=4.3.37
 SRC=CHANGELOG inc conf utils index.php languages views op out doc styles LICENSE webdav install restapi pdfviewer
 # webapp
 
