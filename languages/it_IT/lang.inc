@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1557), rickr (144), s.pnt (26)
+//    Translators: Admin (1563), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -474,14 +474,14 @@ URL: [url]',
 'expired' => 'Scaduto',
 'expired_at_date' => '',
 'expires' => 'Scadenza',
-'expire_by_date' => '',
+'expire_by_date' => 'Scadenza per Data',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
-'expire_in_1m' => '',
-'expire_in_1w' => '',
-'expire_in_1y' => '',
+'expire_in_1m' => '1 Mese',
+'expire_in_1w' => '7 Giorni',
+'expire_in_1y' => '1 Anno',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => '2 Anni',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => 'Scadenza cambiata',
@@ -665,7 +665,7 @@ URL: [url]',
 'linked_documents' => 'Documenti collegati',
 'linked_files' => 'Allegati',
 'linked_to_current_version' => '',
-'linked_to_document' => '',
+'linked_to_document' => 'Collegato al documento',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Se vuoi caricare file più grandi del limite massimo attuale, usa la <a href="%s">pagina alternativa di upload</a>.',
 'link_to_version' => '',
