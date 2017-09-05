@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (940), daivoc (421), fofwisdom (166)
+//    Translators: Admin (944), daivoc (421), fofwisdom (166)
 
 $text = array(
 '2_factor_auth' => '이중 인증',
@@ -481,7 +481,7 @@ URL: [url]',
 'expire_in_1w' => '1주 후 만료',
 'expire_in_1y' => '1년 후 만료',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => '2년 후에 만료',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => '유효 기간 변경',
@@ -585,7 +585,7 @@ URL: [url]',
 'include_content' => '내용을 포함',
 'include_documents' => '문서 포함',
 'include_subdirectories' => '하위 디렉터리 포함',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => '큐에서 대기중인 색인 작업들',
 'index_converters' => '인덱스 문서 변환',
 'index_done' => '마침',
 'index_error' => '오류',
@@ -669,7 +669,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => '최대 업로드 크기보다 큰 파일을 업로드하려는 경우, 대체 업로드 페이지를 <a href="%s">upload page</a> 사용하십시오.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => '모든 접근 권한 나열',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'local_file' => '로컬 파일',
@@ -813,7 +813,7 @@ URL : [url]',
 'only_jpg_user_images' => '.JPG - 이미지만 사용자가 이미지로 사용할 수 있습니다',
 'order_by_sequence_off' => '순서에 의한 정렬 설정이 켜져 있습니다. 이 매개 변수를 사용하고 싶은 경우 이것을 활성화 해야 합니다.',
 'original_filename' => '원래본 파일명',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => '전체 색인 진행률',
 'owner' => '소유자',
 'ownership_changed_email' => '소유자 변경',
 'ownership_changed_email_body' => '소유자 변경

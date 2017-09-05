@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (954), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (960), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -470,11 +470,11 @@ URL: [url]',
 'expire_by_date' => 'Data de vencimento',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
-'expire_in_1m' => '',
+'expire_in_1m' => 'Expira em 1 mês',
 'expire_in_1w' => 'Expira em uma (01) semana',
-'expire_in_1y' => '',
+'expire_in_1y' => 'Expira em 1 ano',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => 'Expira em 2 anos',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => 'Data de validade mudou',
@@ -1106,7 +1106,7 @@ URL: [url]',
 'settings_contentOffsetDir' => 'Pasta de Compensação de Conteúdo',
 'settings_contentOffsetDir_desc' => 'Para contornar as limitações do sistema de arquivos subjacente, uma nova estrutura de diretórios foi concebida que existe dentro do diretório de conteúdo (Content Directory). Isso requer um diretório base para começar. Normalmente, deixe Isso para a configuração padrão, 1048576, mas pode ser qualquer número ou cadeia de caracteres que ainda não existe dentro (Diretório de conteúdo)',
 'settings_convertToPdf' => 'Converte o PDF para visualização',
-'settings_convertToPdf_desc' => '',
+'settings_convertToPdf_desc' => 'Se um documento não puder ser mostrado pelo navegador, uma versão em PDF será mostrada.',
 'settings_cookieLifetime' => 'Tempo de Vida dos Cookies',
 'settings_cookieLifetime_desc' => 'O tempo de vida de um cookie em segundos. Se definido como 0, o cookie será removido quando o navegador é fechado.',
 'settings_coreDir' => 'Diretório Núcleo do SeedDMS',
@@ -1275,7 +1275,7 @@ URL: [url]',
 'settings_maxRecursiveCount_desc' => 'Este é o número máximo de documentos ou pastas que serão verificados por direitos de acesso, quando recursivamente contar objetos. Se esse número for ultrapassado, será estimado o número de documentos e pastas na visualização da pasta.',
 'settings_maxSizeForFullText' => '',
 'settings_maxSizeForFullText_desc' => '',
-'settings_maxUploadSize' => '',
+'settings_maxUploadSize' => 'Tamanho máximo para arquivos enviados.',
 'settings_maxUploadSize_desc' => '',
 'settings_more_settings' => 'Configurar outras configurações. Login padrão: admin/admin',
 'settings_notfound' => 'Não encontrado',
