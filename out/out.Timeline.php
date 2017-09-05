@@ -40,18 +40,15 @@ if(isset($_GET['skip']))
 else
 	$skip = array();
 
+$document = null;
+$content = null;
 if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['documentid'])) {
-	$document = $dms->getDocument($_GET["documentid"]);
-	if (!is_object($document)) {
-		$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+	if($document = $dms->getDocument($_GET["documentid"])) {
+		if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) {
+			$content = $document->getContentByVersion($_GET['version']);
+		}
 	}
-} else
-	$document = null;
-
-if(isset($_GET['version']) && $_GET['version'] && is_numeric($_GET['version'])) {
-	$content = $document->getContentByVersion($_GET['version']);
-} else
-	$content = null;
+}
 
 if($view) {
 	$view->setParam('dms', $dms);
