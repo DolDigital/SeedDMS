@@ -754,7 +754,7 @@ switch($command) {
 						$index = $indexconf['Indexer']::open($settings->_luceneDir);
 						if($index) {
 							$indexconf['Indexer']::init($settings->_stopWordsFile);
-							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false);
+							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout);
 							if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
 								foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
 									if (method_exists($hookObj, 'preIndexDocument')) {
