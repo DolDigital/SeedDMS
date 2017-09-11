@@ -1,6 +1,8 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.4
 --------------------------------------------------------------------------------
+- fix javascript error when indexing document, because the indexer was also
+  created when the js-code was requested (Closes #340)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.3
