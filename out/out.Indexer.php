@@ -37,24 +37,27 @@ if(!$settings->_enableFullSearch) {
 	UI::exitError(getMLText("admin_tools"),getMLText("fulltextsearch_disabled"));
 }
 
-if(!isset($_GET['action']) || $_GET['action'] == 'show')
-if(isset($_GET['create']) && $_GET['create'] == 1) {
-	if(isset($_GET['confirm']) && $_GET['confirm'] == 1) {
-		$index = $indexconf['Indexer']::create($settings->_luceneDir);
+if(!isset($_GET['action']) || $_GET['action'] == 'show') {
+	if(isset($_GET['create']) && $_GET['create'] == 1) {
+		if(isset($_GET['confirm']) && $_GET['confirm'] == 1) {
+			$index = $indexconf['Indexer']::create($settings->_luceneDir);
+			if(!$index) {
+				UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
+			}
+			$indexconf['Indexer']::init($settings->_stopWordsFile);
+		} else {
+			header('Location: out.CreateIndex.php');
+			exit;
+		}
+	} else {
+		$index = $indexconf['Indexer']::open($settings->_luceneDir);
 		if(!$index) {
 			UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
 		}
 		$indexconf['Indexer']::init($settings->_stopWordsFile);
-	} else {
-		header('Location: out.CreateIndex.php');
-		exit;
 	}
 } else {
-	$index = $indexconf['Indexer']::open($settings->_luceneDir);
-	if(!$index) {
-		UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
-	}
-	$indexconf['Indexer']::init($settings->_stopWordsFile);
+	$index = null;
 }
 
 if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
