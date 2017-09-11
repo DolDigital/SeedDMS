@@ -37,6 +37,7 @@ if(!$settings->_enableFullSearch) {
 	UI::exitError(getMLText("admin_tools"),getMLText("fulltextsearch_disabled"));
 }
 
+if(!isset($_GET['action']) || $_GET['action'] == 'show')
 if(isset($_GET['create']) && $_GET['create'] == 1) {
 	if(isset($_GET['confirm']) && $_GET['confirm'] == 1) {
 		$index = $indexconf['Indexer']::create($settings->_luceneDir);
