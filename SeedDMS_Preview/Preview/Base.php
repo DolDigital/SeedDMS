@@ -64,13 +64,13 @@ class SeedDMS_Preview_Base {
 			2 => array("pipe", "w")
 		);
 		$pipes = array();
-	 
+
 		$timeout += time();
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
 		}
-			 
+
 		$output = '';
 		$timeleft = $timeout - time();
 		$read = array($pipes[1]);
@@ -78,13 +78,13 @@ class SeedDMS_Preview_Base {
 		$exeptions = NULL;
 		do {
 			stream_select($read, $write, $exeptions, $timeleft, 200000);
-					 
+
 			if (!empty($read)) {
 				$output .= fread($pipes[1], 8192);
 													}
 			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
- 
+
 		if ($timeleft <= 0) {
 			proc_terminate($process);
 			throw new Exception("command timeout on: " . $cmd);
@@ -109,7 +109,7 @@ class SeedDMS_Preview_Base {
 	/**
 	 * Check if converter for a given mimetype is set
 	 *
-	 * @param string $mimetype 
+	 * @param string $mimetype
 	 * @return boolean true if converter exists, otherwise false
 	 */
 	function hasConverter($mimetype) { /* {{{ */

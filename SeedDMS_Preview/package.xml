@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-03-02</date>
- <time>07:14:59</time>
+ <date>2017-09-18</date>
+ <time>07:14:32</time>
  <version>
-  <release>1.2.2</release>
+  <release>1.2.3</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,8 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-commands can be set for mimetypes 'xxxx/*' and '*'
-pass mimetype as parameter '%m' to converter
+createPreview() returns false if running the converter command fails
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -269,6 +268,23 @@ add new previewer which converts document to pdf instead of png
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 setConverters() overrides exiting converters
+   </notes>
+  </release>
+  <release>
+   <date>2017-03-02</date>
+   <time>07:14:59</time>
+   <version>
+    <release>1.2.2</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+commands can be set for mimetypes 'xxxx/*' and '*'
+pass mimetype as parameter '%m' to converter
    </notes>
   </release>
  </changelog>
