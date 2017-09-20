@@ -49,7 +49,8 @@ if($view) {
 	$view->setParam('dropfolderfile', isset($_GET["dropfolderfile"]) ? $_GET["dropfolderfile"] : '');
 	$view->setParam('form', $form);
 	$view->setParam('cachedir', $settings->_cacheDir);
-	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('previewWidthMenuList', $settings->_previewWidthMenuList);
+	$view->setParam('previewWidthList', $settings->_previewWidthDropFolderList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view->setParam('showfolders', $showfolders);
 	$view($_GET);

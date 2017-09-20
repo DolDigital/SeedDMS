@@ -56,10 +56,10 @@ $('.folderselect').click(function(ev) {
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$showfolders = $this->params['showfolders'];
 		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthMenuList'];
 		$timeout = $this->params['timeout'];
 		$folderid = isset($_GET['folderid']) ? $_GET['folderid'] : 0;
 
-		$previewwidth = 40;
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
 		$c = 0; // count files
@@ -78,10 +78,12 @@ $('.folderselect').click(function(ev) {
 						if($showfolders == 0 && !is_dir($dir.'/'.$entry)) {
 							$c++;
 							$mimetype = finfo_file($finfo, $dir.'/'.$entry);
-							$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
-							$filecontent .= "<li><a".($folderid ? " href=\"../out/out.AddDocument.php?folderid=".$folderid."&dropfolderfileform1=".urldecode($entry)."\"" : "").">";
-							if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
-								$filecontent .= "<div style=\"float: left; display:inline; width:40px; max-height:40px;overflow:hidden;\"><img filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\"></div>";
+							$filecontent .= "<li><a".($folderid ? " href=\"../out/out.AddDocument.php?folderid=".$folderid."&dropfolderfileform1=".urldecode($entry)."\" title=\"".getMLText('menu_upload_from_dropfolder')."\"" : "").">";
+							if($previewwidth) {
+								$previewer->createRawPreview($dir.'/'.$entry, 'dropfolder/', $mimetype);
+								if($previewer->hasRawPreview($dir.'/'.$entry, 'dropfolder/')) {
+									$filecontent .= "<div style=\"float: left; display:inline; width:40px; max-height:40px;overflow:hidden;\"><img filename=\"".$entry."\" width=\"".$previewwidth."\" src=\"../op/op.DropFolderPreview.php?filename=".$entry."&width=".$previewwidth."\" title=\"".htmlspecialchars($mimetype)."\"></div>";
+								}
 							}
 							$filecontent .= "<div style=\"margin-left:10px; margin-right: 40px; display:inline-block;\">".$entry."<br /><span style=\"font-size: 85%;\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry)).", ".date('Y-m-d H:i:s', filectime($dir.'/'.$entry))."</span></div></a></li>\n";
 						} elseif($showfolders && is_dir($dir.'/'.$entry)) {

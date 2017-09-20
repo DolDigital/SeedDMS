@@ -65,6 +65,8 @@ if ($action == "saveSettings")
 		$settings->_availablelanguages = $_POST["availablelanguages"];
   $settings->_theme = $_POST["theme"];
   $settings->_previewWidthList = $_POST["previewWidthList"];
+  $settings->_previewWidthMenuList = $_POST["previewWidthMenuList"];
+  $settings->_previewWidthDropFolderList = $_POST["previewWidthDropFolderList"];
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
   $settings->_showFullPreview = getBoolValue("showFullPreview");
   $settings->_convertToPdf = getBoolValue("convertToPdf");
