@@ -82,7 +82,7 @@ document.form1.email.focus();
   <p><?php printMLText("password_forgotten_text"); ?></p>
 
 		<div class="control-group">
-		<label class="control-label"><?php printMLText("login");?>:</label>
+		<label class="control-label"><?php printMLText("user_login");?>:</label>
 			<div class="controls">
 			<input type="text" name="login" id="login">
 			</div>

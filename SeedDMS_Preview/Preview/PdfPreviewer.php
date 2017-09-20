@@ -101,6 +101,7 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 				try {
 					self::execWithTimeout($cmd, $this->timeout);
 				} catch(Exception $e) {
+					return false;
 				}
 			}
 			return true;

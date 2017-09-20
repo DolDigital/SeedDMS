@@ -73,8 +73,15 @@ if(!empty($_GET["width"]))
 	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
 else
 	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
-if(!$previewer->hasPreview($object))
-	$previewer->createPreview($object);
+if(!$previewer->hasPreview($object)) {
+	if(!$previewer->createPreview($object)) {
+	}
+}
+if(!$previewer->hasPreview($object)) {
+	header('Content-Type: image/svg+xml');
+	readfile('../views/'.$theme.'/images/empty.svg');
+	exit;
+}
 header('Content-Type: image/png');
 $previewer->getPreview($object);
 
