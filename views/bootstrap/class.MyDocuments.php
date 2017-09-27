@@ -407,6 +407,84 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 				else printMLText("no_docs_to_look_at");
 				
 				$this->contentContainerEnd();
+
+				// Get list of documents owned by current user that are pending review or
+				// pending approval.
+				$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
+					"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
+					"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
+					"`tblDocumentStatusLog`.`userID`, `oTbl`.`fullName` AS `ownerName`, `sTbl`.`fullName` AS `statusName` ".
+					"FROM `tblDocumentContent` ".
+					"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
+					"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
+					"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
+					"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
+					"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
+					"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
+					"LEFT JOIN `tblUsers` AS `oTbl` on `oTbl`.`id` = `tblDocuments`.`owner` ".
+					"LEFT JOIN `tblUsers` AS `sTbl` on `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ".
+					"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
+					"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version` ".
+					"AND `tblDocuments`.`owner` = '".$user->getID()."' ".
+					"AND `tblDocumentStatusLog`.`status` IN (".S_REJECTED.") ".
+					"ORDER BY `statusDate` DESC";
+
+				$resArr = $db->getResultArray($queryStr);
+				if (is_bool($resArr) && !$resArr) {
+					$this->contentHeading(getMLText("warning"));
+					$this->contentContainer("Internal error. Unable to complete request. Exiting.");
+					$this->htmlEndPage();
+					exit;
+				}
+
+				$this->contentHeading(getMLText("documents_user_rejected"));
+				$this->contentContainerStart();
+				if (count($resArr)>0) {
+
+					print "<table class=\"table table-condensed\">";
+					print "<thead>\n<tr>\n";
+					print "<th></th>";
+					print "<th>".getMLText("name")."</th>\n";
+					print "<th>".getMLText("status")."</th>\n";
+					print "<th>".getMLText("version")."</th>\n";
+					print "<th>".getMLText("last_update")."</th>\n";
+					print "<th>".getMLText("expires")."</th>\n";
+					print "</tr>\n</thead>\n<tbody>\n";
+
+					foreach ($resArr as $res) {
+						$document = $dms->getDocument($res["documentID"]);
+						$document->verifyLastestContentExpriry();
+					
+						// verify expiry
+						if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
+							if  ( $res["status"]==S_REJECTED ){
+								$res["status"]=S_EXPIRED;
+							}
+						}
+					
+						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."&currenttab=revapp\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
+						print "<td>".getOverallStatusText($res["status"])."</td>";
+						print "<td>".$res["version"]."</td>";
+						print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
+						print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
+						print "</tr>\n";
+					}		
+					print "</tbody></table>";	
+					
+				}
+				else printMLText("no_docs_to_look_at");
+				
+				$this->contentContainerEnd();
 			} elseif($workflowmode == 'advanced') {
 				// Get document list for the current user.
 				$workflowStatus = $user->getWorkflowStatus();
