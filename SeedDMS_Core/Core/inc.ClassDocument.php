@@ -59,6 +59,41 @@ define("S_OBSOLETE", -2);
 define("S_EXPIRED",  -3);
 
 /**
+ * The different states a workflow log can be in. This is used in
+ * all tables tblDocumentXXXLog
+ */
+/*
+ * workflow is in a neutral status waiting for action of user
+ */
+define("S_LOG_WAITING",  0);
+
+/*
+ * workflow has been successful ended. The document content has been
+ * approved, reviewed, aknowledged or revised
+ */
+define("S_LOG_ACCEPTED",  1);
+
+/*
+ * workflow has been unsuccessful ended. The document content has been
+ * rejected
+ */
+define("S_LOG_REJECTED",  -1);
+
+/*
+ * user has been removed from workflow. This can be for different reasons
+ * 1. the user has been actively removed from the workflow, 2. the user has
+ * been deleted.
+ */
+define("S_LOG_USER_REMOVED",  -2);
+
+/*
+ * workflow is sleeping until reactivation. The workflow has been set up
+ * but not started. This is only valid for the revision workflow, which
+ * may run over and over again.
+ */
+define("S_LOG_SLEEPING",  -3);
+
+/**
  * Class to represent a document in the document management system
  *
  * A document in SeedDMS is similar to files in a regular file system.
@@ -150,6 +185,16 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 */
 	protected $_sequence;
 
+	/**
+	 * @var object temp. storage for latestcontent
+	 */
+	protected $_latestContent;
+
+	/**
+	 * @var array temp. storage for content
+	 */
+	protected $_content;
+
 	function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
 		parent::__construct($id);
 		$this->_name = $name;
@@ -165,6 +210,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$this->_sequence = $sequence;
 		$this->_categories = array();
 		$this->_notifyList = array();
+		$this->_latestContent = null;
+		$this->_content = null;
 	} /* }}} */
 
 	/**
@@ -712,7 +759,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * 
 	 * @param integer $mode access mode (defaults to M_ANY)
 	 * @param integer $op operation (defaults to O_EQ)
-	 * @return array multi dimensional array
+	 * @return array multi dimensional array or false in case of an error
 	 */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1265,8 +1312,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		unset($this->_content);
-		unset($this->_latestContent);
+		$this->_content = null;
+		$this->_latestContent = null;
 		$content = $this->getLatestContent($contentID);
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
 		$docResultSet->setDMS($this->_dms);
@@ -1438,8 +1485,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		unset($this->_content);
-		unset($this->_latestContent);
+		$this->_content = null;
+		$this->_latestContent = null;
 		$db->commitTransaction();
 
 		return true;
@@ -1501,7 +1548,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	function getLatestContent() { /* {{{ */
-		if (!isset($this->_latestContent)) {
+		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC LIMIT 1";
 			$resArr = $db->getResultArray($queryStr);
@@ -2991,7 +3038,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	function addIndReviewer($user, $requestUser, $listadmin=false) { /* {{{ */
+	function addIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3000,21 +3047,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($this->_document->getAccessMode($user) < M_READ) {
 			return -2;
 		}
-		/*
-		if (!isset($this->_readAccessList)) {
-			$this->_readAccessList = $this->_document->getReadAccessList($listadmin);
-		}
-		$approved = false;
-		foreach ($this->_readAccessList["users"] as $appUser) {
-			if ($userID == $appUser->getID()) {
-				$approved = true;
-				break;
-			}
-		}
-		if (!$approved) {
-			return -2;
-		}
-		*/
 
 		// Check to see if the user has already been added to the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
@@ -3226,7 +3258,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
  } /* }}} */
 
-	function addIndApprover($user, $requestUser, $listadmin=false) { /* {{{ */
+	function addIndApprover($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -3235,19 +3267,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if($this->_document->getAccessMode($user) < M_READ) {
 			return -2;
 		}
-		/*
-		$readAccessList = $this->_document->getReadAccessList($listadmin);
-		$approved = false;
-		foreach ($readAccessList["users"] as $appUser) {
-			if ($userID == $appUser->getID()) {
-				$approved = true;
-				break;
-			}
-		}
-		if (!$approved) {
-			return -2;
-		}
-		*/
 
 		// Check to see if the user has already been added to the approvers list.
 		$approvalStatus = $user->getApprovalStatus($this->_document->getID(), $this->_version);
@@ -3473,7 +3492,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["reviewID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3504,7 +3523,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3536,7 +3555,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $indstatus["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["approveID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -3567,7 +3586,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
+			"VALUES ('". $approvalStatus[0]["approveID"] ."', '".S_LOG_USER_REMOVED."', ".$db->qstr($msg).", ".$db->getCurrentDatetime().", '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
