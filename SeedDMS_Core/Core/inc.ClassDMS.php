@@ -148,6 +148,13 @@ class SeedDMS_Core_DMS {
 	public $viewOnlineFileTypes;
 
 	/**
+	 * @var array $noReadForStatus list of status without read right
+	 *      online.
+	 * @access public
+	 */
+	public $noReadForStatus;
+
+	/**
 	 * @var string $version version of pear package
 	 * @access public
 	 */
@@ -354,6 +361,7 @@ class SeedDMS_Core_DMS {
 		$this->forceRename = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
+		$this->noReadForStatus = array();
 		$this->classnames = array();
 		$this->classnames['folder'] = 'SeedDMS_Core_Folder';
 		$this->classnames['document'] = 'SeedDMS_Core_Document';
@@ -540,6 +548,19 @@ class SeedDMS_Core_DMS {
 	 */
 	function setUser($user) { /* {{{ */
 		$this->user = $user;
+	} /* }}} */
+
+	/**
+	 * Get the logged in user
+	 *
+	 * If user authentication was done externally, this function can
+	 * be used to tell the dms who is currently logged in.
+	 *
+	 * @return object $user
+	 *
+	 */
+	function getLoggedInUser() { /* {{{ */
+		return $this->user;
 	} /* }}} */
 
 	/**
