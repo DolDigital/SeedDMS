@@ -1495,7 +1495,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return all content elements of a document
 	 *
-	 * This functions returns an array of content elements ordered by version
+	 * This functions returns an array of content elements ordered by version.
+	 * Version which are not accessible because of its status, will be filtered
+	 * out. Access rights based on the document status are calculated for the
+	 * currently logged in user.
 	 *
 	 * @return array list of objects of class SeedDMS_Core_DocumentContent
 	 */
@@ -1510,8 +1513,16 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 			$this->_content = array();
 			$classname = $this->_dms->getClassname('documentcontent');
-			foreach ($resArr as $row)
-				array_push($this->_content, new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']));
+			$user = $this->_dms->getLoggedInUser();
+			foreach ($resArr as $row) {
+				$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
+				if($user) {
+					if($content->getAccessMode($user) >= M_READ)
+						array_push($this->_content, $content);
+				} else {
+					array_push($this->_content, $content);
+				}
+			}
 		}
 
 		return $this->_content;
@@ -1520,8 +1531,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return the content element of a document with a given version number
 	 *
+	 * This function will check if the version is accessible and return false
+	 * if not. Access rights based on the document status are calculated for the
+	 * currently logged in user.
+	 *
 	 * @param integer $version version number of content element
-	 * @return object object of class SeedDMS_Core_DocumentContent
+	 * @return object/boolean object of class {@link SeedDMS_Core_DocumentContent}
+	 * or false
 	 */
 	function getContentByVersion($version) { /* {{{ */
 		if (!is_numeric($version)) return false;
@@ -1544,10 +1560,19 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$resArr = $resArr[0];
 		$classname = $this->_dms->getClassname('documentcontent');
-		return new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
+		if($content = new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum'])) {
+			$user = $this->_dms->getLoggedInUser();
+			/* A user with write access on the document may always see the version */
+			if($user && $content->getAccessMode($user) == M_NONE)
+				return false;
+			else
+				return $content;
+		} else {
+			return false;
+		}
 	} /* }}} */
 
-	function getLatestContent() { /* {{{ */
+	function __getLatestContent() { /* {{{ */
 		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC LIMIT 1";
@@ -1561,6 +1586,49 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$classname = $this->_dms->getClassname('documentcontent');
 			$this->_latestContent = new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
 		}
+		return $this->_latestContent;
+	} /* }}} */
+
+	/**
+	 * Get the latest version of document
+	 *
+	 * This function returns the latest accessible version of a document.
+	 * If content access has been restricted by setting
+	 * {@link SeedDMS_Core_DMS::noReadForStatus} the function will go
+	 * backwards in history until an accessible version is found. If none
+	 * is found null will be returned.
+	 * Access rights based on the document status are calculated for the
+	 * currently logged in user.
+	 *
+	 * @return object object of class {@link SeedDMS_Core_DocumentContent}
+	 */
+	function getLatestContent() { /* {{{ */
+		if (!$this->_latestContent) {
+			$db = $this->_dms->getDB();
+			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && !$res)
+				return false;
+
+			$classname = $this->_dms->getClassname('documentcontent');
+			$user = $this->_dms->getLoggedInUser();
+			foreach ($resArr as $row) {
+				if (!$this->_latestContent) {
+					$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
+					if($user) {
+						/* If the user may even write the document, then also allow to see all content.
+						 * This is needed because the user could upload a new version
+						 */
+						if($content->getAccessMode($user) >= M_READ) {
+							$this->_latestContent = $content;
+						}
+					} else {
+						$this->_latestContent = $content;
+					}
+				}
+			}
+		}
+
 		return $this->_latestContent;
 	} /* }}} */
 
@@ -2750,36 +2818,117 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Returns the access mode similar to a document
-	 * There is no real access mode for document content, so this is more
-	 * like a virtual access mode, derived from the status or workflow
-	 * of the document content. The idea is to return an access mode
-	 * M_NONE if the user is still in a workflow or under review/approval.
-	 * In such a case only those user involved in the workflow/review/approval
-	 * process should be allowed to see the document. This method could
-	 * be called by any function that returns the content e.g. getLatestContent() 
-	 * It may as well be used by SeedDMS_Core_Document::getAccessMode() to
-	 * prevent access on the whole document if there is just one version.
-	 * The return value is planed to be either M_NONE or M_READ.
 	 *
-	 * @param object $user
-	 * @return integer mode
+	 * There is no real access mode for document content, so this is more
+	 * like a virtual access mode, derived from the status of the document 
+	 * content. The function checks if {@link SeedDMS_Core_DMS::noReadForStatus}
+	 * contains the status of the version and returns M_NONE if it exists and
+	 * the user is not involved in a workflow or review/approval/revision.
+	 * This method is called by all functions that returns the content e.g.
+	 * {@link SeedDMS_Core_Document::getLatestContent()}
+	 * It is also used by {@link SeedDMS_Core_Document::getAccessMode()} to
+	 * prevent access on the whole document if there is no accessible version.
+	 *
+	 * FIXME: This function only works propperly if $u is the currently logged in
+	 * user, because noReadForStatus will be set for this user. 
+	 * FIXED: instead of using $dms->noReadForStatus it is take from the user's role
+	 *
+	 * @param object $u user
+	 * @return integer either M_NONE or M_READ
 	 */
 	function getAccessMode($u) { /* {{{ */
-		if(!$this->_workflow)
-			$this->getWorkflow();
+		$dms = $this->_document->_dms;
 
-		if($this->_workflow) {
-			if (!$this->_workflowState)
-				$this->getWorkflowState();
-			$transitions = $this->_workflow->getNextTransitions($this->_workflowState);
-			foreach($transitions as $transition) {
-				if($this->triggerWorkflowTransitionIsAllowed($u, $transition))
-					return M_READ;
-			}
+		if(!$u)
 			return M_NONE;
+
+		/* If read access isn't further restricted by status, than grant read access */
+		if(!$dms->noReadForStatus)
+			return M_READ;
+		$noReadForStatus = $dms->noReadForStatus;
+
+		if(!$noReadForStatus)
+			return M_READ;
+
+		/* If the current status is not in list of status without read access, then grant read access */
+		if(!in_array($this->getStatus()['status'], $noReadForStatus))
+			return M_READ;
+
+		/* Administrators have unrestricted access */
+		if ($u->isAdmin()) return M_READ;
+
+		/* The owner of the document has unrestricted access */
+		$owner = $this->_document->getOwner();
+		if ($u->getID() == $owner->getID()) return M_READ;
+
+		/* Read/Write access on the document will also grant access on the version */
+		if($this->_document->getAccessMode($u) >= M_READWRITE) return M_READ;
+
+		/* At this point the current status is in the list of status without read access.
+		 * The only way to still gain read access is, if the user is involved in the
+		 * process, e.g. is a reviewer, approver or an active person in the workflow.
+		 */
+		$s = $this->getStatus();
+		switch($s['status']) {
+		case S_DRAFT_REV:
+			$status = $this->getReviewStatus();
+			foreach ($status as $r) {
+				if($r['status'] != -2) // Check if reviewer was removed
+					switch ($r["type"]) {
+					case 0: // Reviewer is an individual.
+						if($u->getId() == $r["required"])
+							return M_READ;
+						break;
+					case 1: // Reviewer is a group.
+						$required = $dms->getGroup($r["required"]);
+						if (is_object($required) && $required->isMember($u))
+							return M_READ;
+						break;
+					}
+			}
+			break;
+		case S_DRAFT_APP:
+			$status = $this->getApprovalStatus();
+			foreach ($status as $r) {
+				if($r['status'] != -2) // Check if approver was removed
+					switch ($r["type"]) {
+					case 0: // Reviewer is an individual.
+						if($u->getId() == $r["required"])
+							return M_READ;
+						break;
+					case 1: // Reviewer is a group.
+						$required = $dms->getGroup($r["required"]);
+						if (is_object($required) && $required->isMember($u))
+							return M_READ;
+						break;
+					}
+			}
+			break;
+		case S_RELEASED:
+			break;
+		case S_IN_WORKFLOW:
+			if(!$this->_workflow)
+				$this->getWorkflow();
+
+			if($this->_workflow) {
+				if (!$this->_workflowState)
+					$this->getWorkflowState();
+				$transitions = $this->_workflow->getNextTransitions($this->_workflowState);
+				foreach($transitions as $transition) {
+					if($this->triggerWorkflowTransitionIsAllowed($u, $transition))
+						return M_READ;
+				}
+			}
+			break;
+		case S_REJECTED:
+			break;
+		case S_OBSOLETE:
+			break;
+		case S_EXPIRED:
+			break;
 		}
 
-		return M_READ;
+		return M_NONE;
 	} /* }}} */
 
 	/**
@@ -3932,7 +4081,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$this->_workflow->setDMS($this->_document->_dms);
 
 			if($transition) {
-			echo "Trigger transition";
 				if(false === $this->triggerWorkflowTransition($user, $transition, $comment)) {
 					$db->rollbackTransaction();
 					return false;
