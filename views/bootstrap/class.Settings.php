@@ -777,7 +777,7 @@ if(!is_writeable($settings->_configFilePath)) {
 									echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
 									foreach($conf['options'] as $key=>$opt) {
 										echo "<option value=\"".$key."\"";
-										if(in_array($key, $selections))
+										if(in_array($key, $selections, true))
 											echo " selected";
 										echo ">".htmlspecialchars($opt)."</option>";
 									}
