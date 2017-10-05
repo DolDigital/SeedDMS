@@ -1745,6 +1745,19 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
+		// remove document files attached to version
+		$res = $this->getDocumentFiles($version->_version);
+		if (is_bool($res) && !$res) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		foreach ($res as $documentfile)
+			if(!$this->removeDocumentFile($documentfile->getId())) {
+				$db->rollbackTransaction();
+				return false;
+			}
+
 		$db->commitTransaction();
 		return true;
 	} /* }}} */
