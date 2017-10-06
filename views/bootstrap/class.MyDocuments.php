@@ -810,12 +810,63 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					print "</tr>\n";
 				}		
 				print "</tbody></table>";	
-				
+
 			}
 			else printMLText("no_docs_locked");
-			
+
 			$this->contentContainerEnd();
-			
+
+			/* Documents expired */
+			if($docs = $dms->getDocumentsExpired(-3*365, $user)) {
+			$this->contentHeading(getMLText("documents_expired"));
+			$this->contentContainerStart();
+			if (count($resArr)>0) {
+
+				print "<table class=\"table table-condensed\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>";
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("version")."</th>\n";
+				print "<th>".getMLText("last_update")."</th>\n";
+				print "<th>".getMLText("expires")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+
+				foreach ($docs as $document) {
+				
+					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					if($workflowmode == 'advanced')
+						$workflow = $latestContent->getWorkflow();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
+					$status = $latestContent->getStatus();
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$document->getID()."\">" . htmlspecialchars($document->getName()) . "</a></td>\n";
+					if($workflowmode == 'advanced' && $workflow) {
+						$workflowstate = $latestContent->getWorkflowState();
+						print '<td>'.getOverallStatusText($status["status"]).': '.$workflow->getName().'<br />'.$workflowstate->getName().'</td>';
+					} else {
+						print "<td>".getOverallStatusText($status["status"])."</td>";
+					}
+					print "<td>".$latestContent->getVersion()."</td>";
+					print "<td>".$status["date"]." ".htmlspecialchars($dms->getUser($status["userID"])->getFullName())."</td>";
+					print "<td>".(!$document->getExpires() ? "-":getReadableDate($document->getExpires()))."</td>";				
+					print "</tr>\n";
+				}		
+				print "</tbody></table>";	
+
+			}
+			else printMLText("no_docs_locked");
+
+			$this->contentContainerEnd();
+			}
+
 		}
 		else {
 
