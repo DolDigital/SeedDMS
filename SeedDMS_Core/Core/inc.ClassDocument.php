@@ -902,6 +902,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * The function takes inherited access rights into account.
 	 * For a list of possible access rights see @file inc.AccessUtils.php
 	 *
+	 * Having access on a document does not necessarily mean the document
+	 * content is accessible too. Accessing the content is checked by
+	 * {@link SeedDMS_Core_DocumentContent::getAccessMode()} which calls
+	 * a callback function defined by the application. If the callback
+	 * function is not set, access on the content is always granted.
+	 *
 	 * @param $user object instance of class SeedDMS_Core_User
 	 * @return integer access mode
 	 */
@@ -1812,7 +1818,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$resArr = $resArr[0];
 		$document = $this->_dms->getDocument($resArr["document"]);
 		$target = $this->_dms->getDocument($resArr["target"]);
-		return new SeedDMS_Core_DocumentLink($resArr["id"], $document, $target, $resArr["userID"], $resArr["public"]);
+		$link = new SeedDMS_Core_DocumentLink($resArr["id"], $document, $target, $resArr["userID"], $resArr["public"]);
+		$user = $this->_dms->getLoggedInUser();
+		if($link->getAccessMode($user, $document, $target) >= M_READ)
+			return $file;
+		return null;
 	} /* }}} */
 
 	/**
@@ -1847,9 +1857,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 			$this->_documentLinks = array();
 
+			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
 				$target = $this->_dms->getDocument($row["target"]);
-				array_push($this->_documentLinks, new SeedDMS_Core_DocumentLink($row["id"], $this, $target, $row["userID"], $row["public"]));
+				$link = new SeedDMS_Core_DocumentLink($row["id"], $this, $target, $row["userID"], $row["public"]);
+				if($link->getAccessMode($user, $this, $target) >= M_READ)
+					array_push($this->_documentLinks, $link);
 			}
 		}
 		return $this->_documentLinks;
@@ -1893,7 +1906,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$links = array();
 			foreach ($resArr as $row) {
 				$document = $this->_dms->getDocument($row["document"]);
-				array_push($links, new SeedDMS_Core_DocumentLink($row["id"], $document, $this, $row["userID"], $row["public"]));
+				$link = new SeedDMS_Core_DocumentLink($row["id"], $document, $this, $row["userID"], $row["public"]);
+				if($link->getAccessMode($user, $document, $this) >= M_READ)
+					array_push($links, $link);
 			}
 
 		return $links;
@@ -1923,6 +1938,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get attached file by its id
+	 *
+	 * @return object instance of SeedDMS_Core_DocumentFile, null if file is not
+	 * accessible, false in case of an sql error
+	 */
 	function getDocumentFile($ID) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -1933,9 +1954,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if ((is_bool($resArr) && !$resArr) || count($resArr)==0) return false;
 
 		$resArr = $resArr[0];
-		return new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"],$resArr["version"],$resArr["public"]);
+		$file = new SeedDMS_Core_DocumentFile($resArr["id"], $this, $resArr["userID"], $resArr["comment"], $resArr["date"], $resArr["dir"], $resArr["fileType"], $resArr["mimeType"], $resArr["orgFileName"], $resArr["name"],$resArr["version"],$resArr["public"]);
+		$user = $this->_dms->getLoggedInUser();
+		if($file->getAccessMode($user) >= M_READ)
+			return $file;
+		return null;
 	} /* }}} */
 
+	/**
+	 * Get list of files attached to document
+	 *
+	 * @return array list of files, false in case of an sql error
+	 */
 	function getDocumentFiles($version=0) { /* {{{ */
 		if (!isset($this->_documentFiles)) {
 			$db = $this->_dms->getDB();
@@ -1954,8 +1984,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 			$this->_documentFiles = array();
 
+			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
-				array_push($this->_documentFiles, new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"], $row["version"], $row["public"]));
+				$file = new SeedDMS_Core_DocumentFile($row["id"], $this, $row["userID"], $row["comment"], $row["date"], $row["dir"], $row["fileType"], $row["mimeType"], $row["orgFileName"], $row["name"], $row["version"], $row["public"]);
+				if($file->getAccessMode($user) >= M_READ)
+					array_push($this->_documentFiles, $file);
 			}
 		}
 		return $this->_documentFiles;
@@ -2852,6 +2885,17 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function getAccessMode($u) { /* {{{ */
 		$dms = $this->_document->_dms;
 
+		/* Check if 'onCheckAccessDocumentContent' callback is set */
+		if(isset($this->_dms->callbacks['onCheckAccessDocumentContent'])) {
+			foreach($this->_dms->callbacks['onCheckAccessDocumentContent'] as $callback) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $u)) > 0) {
+					return $ret;
+				}
+			}
+		}
+
+		return M_READ;
+
 		if(!$u)
 			return M_NONE;
 
@@ -2859,9 +2903,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if(!$dms->noReadForStatus)
 			return M_READ;
 		$noReadForStatus = $dms->noReadForStatus;
-
-		if(!$noReadForStatus)
-			return M_READ;
 
 		/* If the current status is not in list of status without read access, then grant read access */
 		if(!in_array($this->getStatus()['status'], $noReadForStatus))
@@ -4556,6 +4597,32 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 
 	function isPublic() { return $this->_public; }
 
+	/**
+	 * Returns the access mode similar to a document
+	 *
+	 * There is no real access mode for document links, so this is just
+	 * another way to add more access restrictions than the default restrictions.
+	 * It is only called for public document links, not accessed by the owner
+	 * or the administrator.
+	 *
+	 * @param object $u user
+	 * @return integer either M_NONE or M_READ
+	 */
+	function getAccessMode($u, $source, $target) { /* {{{ */
+		$dms = $this->_document->_dms;
+
+		/* Check if 'onCheckAccessDocumentLink' callback is set */
+		if(isset($this->_dms->callbacks['onCheckAccessDocumentLink'])) {
+			foreach($this->_dms->callbacks['onCheckAccessDocumentLink'] as $callback) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $u, $source, $target)) > 0) {
+					return $ret;
+				}
+			}
+		}
+
+		return M_READ;
+	} /* }}} */
+
 } /* }}} */
 
 /**
@@ -4678,6 +4745,32 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	function getVersion() { return $this->_version; }
 
 	function isPublic() { return $this->_public; }
+
+	/**
+	 * Returns the access mode similar to a document
+	 *
+	 * There is no real access mode for document files, so this is just
+	 * another way to add more access restrictions than the default restrictions.
+	 * It is only called for public document files, not accessed by the owner
+	 * or the administrator.
+	 *
+	 * @param object $u user
+	 * @return integer either M_NONE or M_READ
+	 */
+	function getAccessMode($u) { /* {{{ */
+		$dms = $this->_document->_dms;
+
+		/* Check if 'onCheckAccessDocumentLink' callback is set */
+		if(isset($this->_dms->callbacks['onCheckAccessDocumentFile'])) {
+			foreach($this->_dms->callbacks['onCheckAccessDocumentFile'] as $callback) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $u)) > 0) {
+					return $ret;
+				}
+			}
+		}
+
+		return M_READ;
+	} /* }}} */
 
 } /* }}} */
 
