@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1608), dgrutsch (9), netixw (14)
+//    Translators: Admin (1610), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -324,6 +324,7 @@ URL: [url]',
 'documentcontent' => 'Document content',
 'documents' => 'Documents',
 'documents_checked_out_by_you' => 'Documents checked out by you',
+'documents_expired' => 'Expired documents',
 'documents_in_process' => 'Documents In Process',
 'documents_locked' => 'Locked documents',
 'documents_locked_by_you' => 'Documents locked by you',
@@ -1056,7 +1057,7 @@ URL: [url]',
 'role_info' => 'Information',
 'role_management' => 'Role management',
 'role_name' => 'Name',
-'role_type' => 'Typ of role',
+'role_type' => 'Type of role',
 'role_user' => 'User',
 'ro_RO' => 'Romanian',
 'run_subworkflow' => 'Run sub workflow',
@@ -1212,7 +1213,7 @@ Name: [username]
 'settings_enableConverting' => 'Enable Converting',
 'settings_enableConverting_desc' => 'Enable/disable converting of files',
 'settings_enableDropFolderList' => 'Enable list of files in drop folder in menu',
-'settings_enableDropFolderList_desc' => '',
+'settings_enableDropFolderList_desc' => 'Turn on a list of files in the drop folder. The list is shown in the main menu.',
 'settings_enableDropUpload' => 'Enable Fast Upload',
 'settings_enableDropUpload_desc' => 'Enable/Disable the drop area on the \'View Folder\' page for uploading files by Drag&Drop.',
 'settings_enableDuplicateDocNames' => 'Allow duplicate document names',

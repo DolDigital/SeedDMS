@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (726), kreml (455)
+//    Translators: Admin (729), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,6 +319,7 @@ URL: [url]',
 'documentcontent' => 'Obsah dokumentu',
 'documents' => 'Dokumenty',
 'documents_checked_out_by_you' => '',
+'documents_expired' => '',
 'documents_in_process' => 'Zpracovávané dokumenty',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Vámi uzamčené dokumenty',
@@ -472,10 +473,10 @@ URL: [url]',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
 'expire_in_1m' => 'Expiruje o mesiac',
-'expire_in_1w' => '',
-'expire_in_1y' => '',
+'expire_in_1w' => 'Expiruje za týden',
+'expire_in_1y' => 'Expiruje za rok',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => 'Expiruje za dva roky',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => 'Datum expirace změněno',

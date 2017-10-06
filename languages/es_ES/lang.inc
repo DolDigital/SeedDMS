@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1036), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1038), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,6 +319,7 @@ URL: [url]',
 'documentcontent' => 'Contenido del documento',
 'documents' => 'Documentos',
 'documents_checked_out_by_you' => '',
+'documents_expired' => '',
 'documents_in_process' => 'Documentos en proceso',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Documentos bloqueados por usted',
@@ -459,7 +460,7 @@ URL: [url]',
 'error_no_folder_selected' => 'Ninguna carpeta seleccionada',
 'error_occured' => 'Ha ocurrido un error',
 'error_remove_document' => '',
-'error_remove_folder' => '',
+'error_remove_folder' => 'Error al eliminar la carpeta',
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'es_ES' => 'Castellano',
@@ -1327,7 +1328,7 @@ URL: [url]',
 'settings_SaveError' => 'Error guardando archivo de configuración',
 'settings_Server' => 'Configuración del servidor',
 'settings_showFullPreview' => 'Visualizar documento completo',
-'settings_showFullPreview_desc' => '',
+'settings_showFullPreview_desc' => 'Habilitar/deshabilitar una vista previa completa del documento en la página de detalles, siempre y cuando el navegador lo permita.',
 'settings_showMissingTranslations' => 'Mostrar traducciones faltantes',
 'settings_showMissingTranslations_desc' => 'Listar todos los términos pendientes de traducción de esta página al final de la misma. En entorno productivo no activar esta función',
 'settings_showSingleSearchHit' => '',

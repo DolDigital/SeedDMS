@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1563), rickr (144), s.pnt (26)
+//    Translators: Admin (1567), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -286,7 +286,7 @@ URL: [url]',
 'confirm_rm_transmittal' => 'Si prega di confermare l\'eliminazione della trasmissione.',
 'confirm_rm_transmittalitem' => 'Conferma rimozione',
 'confirm_rm_user' => 'Vuoi davvero rimuovere l\'utente "[username]"? Attenzione: questa operazione non può essere annullata.',
-'confirm_rm_user_from_processes' => '',
+'confirm_rm_user_from_processes' => 'Processo',
 'confirm_rm_version' => 'Vuoi veramente eliminare la versione [version] del documento "[documentname]"? Attenzione: questa operazione non può essere annullata.',
 'confirm_transfer_objects' => '',
 'confirm_update_transmittalitem' => 'Conferma aggiornamento',
@@ -325,6 +325,7 @@ URL: [url]',
 'documentcontent' => 'Contenuto documento',
 'documents' => 'Documenti',
 'documents_checked_out_by_you' => 'Documenti approvati da te',
+'documents_expired' => '',
 'documents_in_process' => 'Documenti in lavorazione',
 'documents_locked' => 'Documenti bloccati',
 'documents_locked_by_you' => 'Documenti bloccati da te',
@@ -866,8 +867,8 @@ Dovessero esserci ancora problemi al login, prego contatta l\'Amministratore di 
 'preview_plain' => 'Testo',
 'previous_state' => 'Stato precedente',
 'previous_versions' => 'Versioni precedenti',
-'process' => '',
-'process_without_user_group' => '',
+'process' => 'Processi',
+'process_without_user_group' => 'Processi senza Utente/Gruppo',
 'pt_BR' => 'Portoghese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'La quota-disco è stata superata di [bytes].',
@@ -1618,7 +1619,7 @@ URL: [url]',
 'uploading_zerosize' => 'Si sta caricando un file vuoto. Operazione abortita.',
 'used_discspace' => 'Spazio su disco occupato',
 'user' => 'Utente',
-'userid_groupid' => '',
+'userid_groupid' => 'id Utente/id Gruppo',
 'users' => 'Utenti',
 'users_and_groups' => 'Utenti/Gruppi',
 'users_done_work' => 'Lavoro eseguito dagli Utenti',
