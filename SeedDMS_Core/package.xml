@@ -24,6 +24,9 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+- add virtual access mode for document links and attachments plus callbacks to
+  check access mode in a hook
+- add new method SeedDMS_Core_DMS::getDocumentsExpired()
 - all changes from 5.0.14 merged
  </notes>
  <contents>
