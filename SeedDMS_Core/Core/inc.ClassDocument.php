@@ -3862,7 +3862,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$this->_workflow->setDMS($this->_document->_dms);
 
 			if($transition) {
-			echo "Trigger transition";
 				if(false === $this->triggerWorkflowTransition($user, $transition, $comment)) {
 					$db->rollbackTransaction();
 					return false;

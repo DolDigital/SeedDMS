@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2481), dgrutsch (22)
+//    Translators: Admin (2483), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -324,6 +324,7 @@ URL: [url]',
 'documentcontent' => 'Dokumentenversion',
 'documents' => 'Dokumente',
 'documents_checked_out_by_you' => 'Von mir ausgecheckte Dokumente',
+'documents_expired' => 'Abgelaufende Dokumente',
 'documents_in_process' => 'Dokumente in Bearbeitung',
 'documents_locked' => 'Gesperrte Dokumente',
 'documents_locked_by_you' => 'Von mir gesperrte Dokumente',
@@ -1217,7 +1218,7 @@ Name: [username]
 'settings_enableConverting' => 'Dokumentenkonvertierung einschalten',
 'settings_enableConverting_desc' => 'Ein/Auschalten der automatischen Konvertierung von Dokumenten',
 'settings_enableDropFolderList' => 'Liste der Dateien im Ablageordner im Menü',
-'settings_enableDropFolderList_desc' => '',
+'settings_enableDropFolderList_desc' => 'Schaltet einen Liste der im Ablageordner befindlichen Dateien als Eintrag im Menü ein.',
 'settings_enableDropUpload' => 'Schnelles Hochladen einschalten',
 'settings_enableDropUpload_desc' => 'Ein/Ausschalten des Bereichs auf der \'View Folder\' Seite zum Hochladen von Dateien per Drag&Drop.',
 'settings_enableDuplicateDocNames' => 'Erlaube doppelte Dokumentennamen',

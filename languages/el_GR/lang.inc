@@ -297,6 +297,7 @@ $text = array(
 'documentcontent' => '',
 'documents' => 'Έγγραφα',
 'documents_checked_out_by_you' => '',
+'documents_expired' => '',
 'documents_in_process' => '',
 'documents_locked' => '',
 'documents_locked_by_you' => '',

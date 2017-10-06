@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1065), balan (87)
+//    Translators: Admin (1066), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -324,6 +324,7 @@ URL: [url]',
 'documentcontent' => 'Continut Document',
 'documents' => 'Documente',
 'documents_checked_out_by_you' => 'Documente verificate de tine',
+'documents_expired' => '',
 'documents_in_process' => 'Documente în procesare',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Documente blocate de tine',
@@ -664,7 +665,7 @@ URL: [url]',
 'linked_documents' => 'Documente relationate',
 'linked_files' => 'Atașamente',
 'linked_to_current_version' => '',
-'linked_to_document' => '',
+'linked_to_document' => 'Atasat documentului',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Dacă doriți să încărcați fișiere mai mari decât dimensiunea maximă curentă de încărcare, vă rugăm să folosiți alternativa <a href="%s">pagină de încărcare</a>.',
 'link_to_version' => '',
