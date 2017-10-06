@@ -3,6 +3,8 @@
 --------------------------------------------------------------------------------
 - fix javascript error when indexing document, because the indexer was also
   created when the js-code was requested (Closes #340)
+- new list of expired documents
+- access on document links and attachments can be controlled by a hook
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.3
