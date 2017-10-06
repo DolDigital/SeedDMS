@@ -661,6 +661,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ExpiredDocuments.php\">".getMLText("documents_expired")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
