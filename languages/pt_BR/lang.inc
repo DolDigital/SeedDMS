@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (960), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (961), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,6 +319,7 @@ URL: [url]',
 'documentcontent' => 'Conteúdo do Documento',
 'documents' => 'Documentos',
 'documents_checked_out_by_you' => '',
+'documents_expired' => '',
 'documents_in_process' => 'Documentos em Processo',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Documentos bloqueados por você',
@@ -658,7 +659,7 @@ URL: [url]',
 'linked_documents' => 'Documentos relacionados',
 'linked_files' => 'Arquivos anexados',
 'linked_to_current_version' => '',
-'linked_to_document' => '',
+'linked_to_document' => 'Ligado ao documento',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Se você gostaria de fazer envio de arquivos maiores que o tamanho permitido, por favor use a página alternativa de <a href="%s">envio</a>.',
 'link_to_version' => '',
