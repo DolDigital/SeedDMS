@@ -40,7 +40,7 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 			'text/plain' => "convert -resize %wx '%f' '%o'",
 			'application/pdf' => "convert -density 100 -resize %wx '%f[0]' '%o'",
 			'application/postscript' => "convert -density 100 -resize %wx '%f[0]' '%o'",
-			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o",
+			'application/x-compressed-tar' => "tar tzvf '%f' | convert -density 100 -resize %wx text:-[0] '%o'",
 		);
 		$this->width = intval($width);
 	} /* }}} */
