@@ -848,6 +848,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons["pdf"]  = "gnome-mime-application-pdf.svg";
 		$icons["wav"]  = "audio.svg";
 		$icons["mp3"]  = "audio.svg";
+		$icons["opus"]  = "audio.svg";
 		$icons["c"]    = "text-x-preview.svg";
 		$icons["cpp"]  = "text-x-preview.svg";
 		$icons["h"]    = "text-x-preview.svg";
