@@ -117,15 +117,29 @@ if ($action == "setowner") {
 	if (!isset($_GET["ownerid"]) || !is_numeric($_GET["ownerid"]) || $_GET["ownerid"]<1) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_user"));	
 	}
-	
+
 	$newOwner = $dms->getUser($_GET["ownerid"]);
 	
 	if (!is_object($newOwner)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_user"));	
 	}
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetOwner')) {
+				$hookObj->preSetOwner(null, array('document'=>$document, 'newowner'=>$newowner));
+			}
+		}
+	}
 	$oldOwner = $document->getOwner();
 	if($document->setOwner($newOwner)) {
 		// Send notification to subscribers.
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+				if (method_exists($hookObj, 'postSetOwner')) {
+					$hookObj->postSetOwner(null, array('document'=>$document, 'newowner'=>$newowner));
+				}
+			}
+		}
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
@@ -153,7 +167,13 @@ if ($action == "setowner") {
 // Change to not inherit ---------------------------------------------------
 else if ($action == "notinherit") {
 
-	$defAccess = $document->getDefaultAccess();
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetNotInherit')) {
+				$hookObj->preSetOwner(null, array('document'=>$document));
+			}
+		}
+	}
 	if($document->setInheritAccess(false)) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
@@ -174,6 +194,7 @@ else if ($action == "notinherit") {
 
 		}
 	}
+	$defAccess = $document->getDefaultAccess();
 	if($document->setDefaultAccess($defAccess)) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
@@ -203,11 +224,33 @@ else if ($action == "notinherit") {
 		foreach ($accessList["groups"] as $groupAccess)
 			$document->addAccess($groupAccess->getMode(), $groupAccess->getGroupID(), false);
 	}
+
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+			if (method_exists($hookObj, 'postSetNotInherit')) {
+				$hookObj->postSetNotInherit(null, array('document'=>$document));
+			}
+		}
+	}
 }
 
 // Change to inherit-----------------------------------------------------
 else if ($action == "inherit") {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetInherit')) {
+				$hookObj->preSetInherit(null, array('document'=>$document));
+			}
+		}
+	}
 	if($document->clearAccessList() && $document->setInheritAccess(true)) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+				if (method_exists($hookObj, 'postSetInherit')) {
+					$hookObj->postSetInherit(null, array('document'=>$document));
+				}
+			}
+		}
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
@@ -231,7 +274,21 @@ else if ($action == "inherit") {
 
 // Set default permissions ----------------------------------------------
 else if ($action == "setdefault") {
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+			if (method_exists($hookObj, 'preSetDefaultAccess')) {
+				$hookObj->preSetDefaultAccess(null, array('document'=>$document));
+			}
+		}
+	}
 	if($document->setDefaultAccess($mode)) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['documentAccess'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['documentAccess'] as $hookObj) {
+				if (method_exists($hookObj, 'postSetDefaultAccess')) {
+					$hookObj->postSetDefaultAccess(null, array('document'=>$document));
+				}
+			}
+		}
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
