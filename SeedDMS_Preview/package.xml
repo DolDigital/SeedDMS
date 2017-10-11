@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-09-18</date>
+ <date>2017-10-11</date>
  <time>07:14:32</time>
  <version>
-  <release>1.2.3</release>
+  <release>1.2.4</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-createPreview() returns false if running the converter command fails
+fix typo in converter for tar.gz files
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -285,6 +285,22 @@ setConverters() overrides exiting converters
    <notes>
 commands can be set for mimetypes 'xxxx/*' and '*'
 pass mimetype as parameter '%m' to converter
+   </notes>
+  </release>
+  <release>
+   <date>2017-09-18</date>
+   <time>07:14:32</time>
+   <version>
+    <release>1.2.3</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+createPreview() returns false if running the converter command fails
    </notes>
   </release>
  </changelog>
