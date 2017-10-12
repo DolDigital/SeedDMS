@@ -36,7 +36,10 @@ class SeedDMS_Controller_RemoveDocument extends SeedDMS_Controller_Common {
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
-		if(!$this->callHook('preRemoveDocument')) {
+		if(false === $this->callHook('preRemoveDocument')) {
+			if(empty($this->errormsg))
+				$this->errormsg = 'hook_preRemoveDocument_failed';
+			return null;
 		}
 
 		$result = $this->callHook('removeDocument', $document);

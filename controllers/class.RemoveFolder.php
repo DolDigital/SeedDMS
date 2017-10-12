@@ -34,7 +34,10 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 		$foldername = $folder->getName();
 		$folderid = $folder->getID();
 
-		if(!$this->callHook('preRemoveFolder')) {
+		if(false === $this->callHook('preRemoveFolder')) {
+			if(empty($this->errormsg))
+				$this->errormsg = 'hook_preRemoveFolder_failed';
+			return null;
 		}
 
 		$result = $this->callHook('removeFolder', $folder);
