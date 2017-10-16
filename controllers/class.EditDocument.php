@@ -38,7 +38,7 @@ class SeedDMS_Controller_EditDocument extends SeedDMS_Controller_Common {
 		$result = $this->callHook('editDocument', $document);
 		if($result === null) {
 			$name = $this->params['name'];
-			$oldname = $document->getName());
+			$oldname = $document->getName();
 			if($oldname != $name)
 				if(!$document->setName($name))
 					return false;
