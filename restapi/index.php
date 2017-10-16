@@ -2,12 +2,15 @@
 define('USE_PHP_SESSION', 0);
 
 include("../inc/inc.Settings.php");
-require_once "SeedDMS/Core.php";
+include("../inc/inc.Extension.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.DBInit.php");
+//require_once "SeedDMS/Core.php";
 require_once "SeedDMS/Preview.php";
 
-$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+//$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+//$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
+//$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
 if(USE_PHP_SESSION) {
 	session_start();
@@ -783,7 +786,8 @@ function doSearch() { /* {{{ */
 	$count = 0;
 	if($resArr['docs']) {
 		foreach ($resArr['docs'] as $entry) {
-			if ($entry->getAccessMode($userobj) >= M_READ) {
+			$lc = $entry->getLatestContent();
+			if ($entry->getAccessMode($userobj) >= M_READ && $lc) {
 				$entries[] = $entry;
 				$count++;
 			}
