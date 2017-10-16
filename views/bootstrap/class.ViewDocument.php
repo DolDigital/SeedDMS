@@ -431,7 +431,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		}
 
-		/* Retrieve attacheѕ files */
+		/* Retrieve latest content and  attacheѕ files */
 		$latestContent = $document->getLatestContent();
 		$files = $document->getDocumentFiles($latestContent->getVersion());
 		$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
@@ -444,8 +444,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$reverselinks = $document->getReverseDocumentLinks();
 		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks, 'source');
 
-		/* Retrieve latest content */
-		$latestContent = $document->getLatestContent();
 		$needwkflaction = false;
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 		} else {
