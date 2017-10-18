@@ -5,6 +5,10 @@
   created when the js-code was requested (Closes #340)
 - new list of expired documents
 - access on document links and attachments can be controlled by a hook
+- move AddSubFolder code into controller, add hooks equivalent to AddDocment (Closes #359)
+- add list of expired documents to MyDocument page
+- move code of DocumentAccess and EditDocument into controller
+- make width of preview images in drop folder configurable
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.3
