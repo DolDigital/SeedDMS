@@ -49,7 +49,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footerjs[] = $script;
 	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
+	function htmlStartPage($title="", $bodyClass="", $base="", $httpheader=array()) { /* {{{ */
 		if(1 || method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
@@ -62,6 +62,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			$csp_rules = "script-src 'self' 'unsafe-eval';"; // style-src 'self';";
 			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
 				header($csp . ": " . $csp_rules);
+			}
+		}
+		if($httpheader) {
+			foreach($httpheader as $name=>$value) {
+				header($name . ": " . $value);
 			}
 		}
 		$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
