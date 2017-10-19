@@ -174,6 +174,15 @@ $(document).ready( function() {
 				}
 			}
 		}
+		$arrs = $this->callHook('addDocumentAttributes', $folder);
+		if(is_array($arrs)) {
+			foreach($arrs as $arr) {
+				echo "<tr>";
+				echo "<td>".$arr[0].":</td>";
+				echo "<td>".$arr[1]."</td>";
+				echo "</tr>";
+			}
+		}
 ?>
 		<tr>
 			<td></td>
