@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2483), dgrutsch (22)
+//    Translators: Admin (2484), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -479,6 +479,7 @@ Der Link ist bis zum [valid] gültig.
 'exclude_items' => 'Einträge auslassen',
 'expired' => 'abgelaufen',
 'expired_at_date' => 'Abgelaufen am [datetime]',
+'expired_documents' => 'Abgelaufende Dokumente',
 'expires' => 'Ablaufdatum',
 'expire_by_date' => 'Ablauf nach Datum',
 'expire_in_1d' => 'Ablauf in 1 Tag',
@@ -1366,8 +1367,12 @@ Name: [username]
 'settings_presetExpirationDate_desc' => 'Alle neu hochgeladenen Dokumente bekommen das eingegebene Datum als Ablaufdatum. Das Datum muss der Form entsprechen, wie es von der PHP-Funktion strtotime() verstanden wird, z.B. +5 weeks.',
 'settings_previewWidthDetail' => 'Breite der Vorschaubilder (Detail)',
 'settings_previewWidthDetail_desc' => 'Breite des Vorschaubildes, das auf der Detailseite angezeigt wird',
+'settings_previewWidthDropFolderList' => '',
+'settings_previewWidthDropFolderList_desc' => '',
 'settings_previewWidthList' => 'Breite der Vorschaubilder (Liste)',
 'settings_previewWidthList_desc' => 'Breite der Vorschaubilder, die in Listen angezeigt werden',
+'settings_previewWidthMenuList' => '',
+'settings_previewWidthMenuList_desc' => '',
 'settings_printDisclaimer' => 'Rechtliche Hinweise',
 'settings_printDisclaimer_desc' => 'Anwählen, um die rechtlichen Hinweise am Ende jeder Seite anzuzeigen.',
 'settings_quota' => 'User\'s quota',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1567), rickr (144), s.pnt (26)
+//    Translators: Admin (1568), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -474,6 +474,7 @@ URL: [url]',
 'exclude_items' => 'Escludi Elementi',
 'expired' => 'Scaduto',
 'expired_at_date' => '',
+'expired_documents' => '',
 'expires' => 'Scadenza',
 'expire_by_date' => 'Scadenza per Data',
 'expire_in_1d' => '',
@@ -1219,7 +1220,7 @@ URL: [url]',
 'settings_enableLargeFileUpload_desc' => 'Se selezionato, il caricamento (upload) dei files può essere effettuato anche attraverso un\'applet Java chiamata Jumploader evitando il limite di dimensioni file imposto dal browser; Jumploader permette anche il caricamento di diversi files contemporaneamente.',
 'settings_enableMenuTasks' => 'Abilita compito delle attività nel menù',
 'settings_enableMenuTasks_desc' => 'Abilita / Disabilita la voce di menu che contiene tutte le attività degli utenti. Questo conterrà i documenti che devono essere rivisti, approvati, etc.',
-'settings_enableMultiUpload' => '',
+'settings_enableMultiUpload' => 'Consenti il caricamento di più files',
 'settings_enableMultiUpload_desc' => '',
 'settings_enableNotificationAppRev' => 'Abilita/disabilita notifica a revisore/approvatore',
 'settings_enableNotificationAppRev_desc' => 'Spuntare per inviare una notifica al revisore/approvatore nel momento in cui viene aggiunta una nuova versione del documento.',
@@ -1344,8 +1345,12 @@ URL: [url]',
 'settings_presetExpirationDate_desc' => 'Tutti i nuovi documenti caricati avranno la data di scadenza impostata su questo valore. La data inserita può essere specificata nel formato accettato dalla funzione strtotime() di PHP, ad esempio +5 settimane.',
 'settings_previewWidthDetail' => 'Larghezza immagini di anteprima (dettagli)',
 'settings_previewWidthDetail_desc' => 'Larghezza delle immagini di anteprima mostrate nella pagina dei dettagli',
+'settings_previewWidthDropFolderList' => '',
+'settings_previewWidthDropFolderList_desc' => '',
 'settings_previewWidthList' => 'Larghezza delle immagini di anteprima (lista)',
 'settings_previewWidthList_desc' => 'Larghezza delle immagini di anteprima mostrate nella lista',
+'settings_previewWidthMenuList' => '',
+'settings_previewWidthMenuList_desc' => '',
 'settings_printDisclaimer' => 'Mostra disclaimer',
 'settings_printDisclaimer_desc' => 'Se abilitato il messaggio circa i termini e le condizioni d\'uso verrà mostrato nel pié di pagina.',
 'settings_quota' => 'Quota utente',
