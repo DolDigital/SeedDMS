@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1283)
+//    Translators: Admin (1284)
 
 $text = array(
 '2_factor_auth' => '',
@@ -453,7 +453,7 @@ URL: [url]',
 'error_no_folder_selected' => 'لم يتم اختيار مجلد',
 'error_occured' => 'حدث خطأ',
 'error_remove_document' => '',
-'error_remove_folder' => '',
+'error_remove_folder' => 'ﺡﺪﺛ ﺦﻃﺃ ﺎﺜﻧﺍﺀ ﺡﺬﻓ ﺎﻠﻤﺠﻟﺩ',
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'es_ES' => 'الإسبانية',
@@ -461,6 +461,7 @@ URL: [url]',
 'exclude_items' => '',
 'expired' => 'انتهى صلاحيته',
 'expired_at_date' => '',
+'expired_documents' => '',
 'expires' => 'تنتهى صلاحيته',
 'expire_by_date' => 'ﻲﻨﺘﻫﻯ ﻑﻯ ﺕﺍﺮﻴﺧ',
 'expire_in_1d' => '',
@@ -1296,8 +1297,12 @@ URL: [url]',
 'settings_presetExpirationDate_desc' => '',
 'settings_previewWidthDetail' => '',
 'settings_previewWidthDetail_desc' => '',
+'settings_previewWidthDropFolderList' => '',
+'settings_previewWidthDropFolderList_desc' => '',
 'settings_previewWidthList' => '',
 'settings_previewWidthList_desc' => '',
+'settings_previewWidthMenuList' => '',
+'settings_previewWidthMenuList_desc' => '',
 'settings_printDisclaimer' => '',
 'settings_printDisclaimer_desc' => '',
 'settings_quota' => '',

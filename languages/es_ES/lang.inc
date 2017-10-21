@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1038), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1040), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -468,6 +468,7 @@ URL: [url]',
 'exclude_items' => 'Registros excluidos',
 'expired' => 'Caducado',
 'expired_at_date' => '',
+'expired_documents' => '',
 'expires' => 'Caduca',
 'expire_by_date' => 'Fecha de expiración',
 'expire_in_1d' => '',
@@ -580,7 +581,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => 'Incluir documentos',
 'include_subdirectories' => 'Incluir subcarpetas',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Tareas de indexación en cola',
 'index_converters' => 'Conversión de índice de documentos',
 'index_done' => '',
 'index_error' => '',
@@ -808,7 +809,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Sólo puede usar imágenes .jpg como imágenes de usuario',
 'order_by_sequence_off' => 'El orden secuencial está desactivado en la configuración. Si quiere utilizar este parámetro, deberá activarlo.',
 'original_filename' => 'Nombre de fichero original',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Proceso de indexación global',
 'owner' => 'Propietario',
 'ownership_changed_email' => 'Propietario modificado',
 'ownership_changed_email_body' => 'Propietario modificado
@@ -1311,8 +1312,12 @@ URL: [url]',
 'settings_presetExpirationDate_desc' => 'Todos los documentos subidos tendrán esta fecha de caducidad. La fecha puede establecerse con una expresión comprensible para  la función strtotime() de PHP, como \'+5 weeks\'',
 'settings_previewWidthDetail' => 'Ancho de las imágenes de vista en miniatura (detalle)',
 'settings_previewWidthDetail_desc' => 'Ancho de las imágenes de vista en miniatura que se muestran en el detalle del documento',
+'settings_previewWidthDropFolderList' => '',
+'settings_previewWidthDropFolderList_desc' => '',
 'settings_previewWidthList' => 'Ancho de las imágenes de vista en miniatura (listas)',
 'settings_previewWidthList_desc' => 'Ancho de las imágenes de vista en miniatura que se muestran en las listas',
+'settings_previewWidthMenuList' => '',
+'settings_previewWidthMenuList_desc' => '',
 'settings_printDisclaimer' => 'Mostrar renuncia',
 'settings_printDisclaimer_desc' => 'Si es Verdadero el mensaje de renuncia de los ficheros lang.inc se mostratá al final de la página',
 'settings_quota' => 'Cuota de usuario',
