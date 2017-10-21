@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1610), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1615), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -480,6 +480,7 @@ The link is valid until [valid].
 'exclude_items' => 'Exclude items',
 'expired' => 'Expired',
 'expired_at_date' => 'Expired at [datetime]',
+'expired_documents' => 'Expired documents',
 'expires' => 'Expires',
 'expire_by_date' => 'Expires by date',
 'expire_in_1d' => 'Expires in 1 day',
@@ -1361,8 +1362,12 @@ Name: [username]
 'settings_presetExpirationDate_desc' => 'All new uploaded documents will have an expiration date set to this value. The date entered can be specified as understood by PHP\'s strtotime() function, e.g. +5 weeks.',
 'settings_previewWidthDetail' => 'Width of preview images (detail)',
 'settings_previewWidthDetail_desc' => 'Width of preview image shown on details page',
+'settings_previewWidthDropFolderList' => 'Width of preview images (dropfolder list)',
+'settings_previewWidthDropFolderList_desc' => 'Width of preview images shown in list when selecting a file from the drop folder.',
 'settings_previewWidthList' => 'Width of preview images (list)',
 'settings_previewWidthList_desc' => 'Width of preview images shown in lists',
+'settings_previewWidthMenuList' => 'Width of preview images (menu list)',
+'settings_previewWidthMenuList_desc' => 'Width of preview images shown as items in drop folder menu.',
 'settings_printDisclaimer' => 'Print Disclaimer',
 'settings_printDisclaimer_desc' => 'If enabled, the disclaimer message will be printed on the bottom of every page',
 'settings_quota' => 'User\'s quota',
