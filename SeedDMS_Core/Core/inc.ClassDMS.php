@@ -74,7 +74,7 @@ require_once("inc.ClassAttribute.php");
  */
 class SeedDMS_Core_DMS {
 	/**
-	 * @var object $db reference to database object. This must be an instance
+	 * @var SeedDMS_Core_DMS $db reference to database object. This must be an instance
 	 *      of {@link SeedDMS_Core_DatabaseAccess}.
 	 * @access protected
 	 */
@@ -88,7 +88,7 @@ class SeedDMS_Core_DMS {
 	protected $classnames;
 
 	/**
-	 * @var object $user reference to currently logged in user. This must be
+	 * @var SeedDMS_Core_User $user reference to currently logged in user. This must be
 	 *      an instance of {@link SeedDMS_Core_User}. This variable is currently not
 	 *      used. It is set by {@link setUser}.
 	 * @access private
@@ -214,7 +214,7 @@ class SeedDMS_Core_DMS {
 	 * The result of the function can be 0 which happens if the first element
 	 * of an indexed array matches.
 	 *
-	 * @param object $object1 object to look for (needle)
+	 * @param object $object object to look for (needle)
 	 * @param array $list list of objects (haystack)
 	 * @return boolean/integer index in array if object was found, otherwise false
 	 */
