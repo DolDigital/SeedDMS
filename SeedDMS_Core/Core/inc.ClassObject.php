@@ -38,12 +38,16 @@ class SeedDMS_Core_Object { /* {{{ */
 	 */
 	public $_dms;
 
+    /**
+     * SeedDMS_Core_Object constructor.
+     * @param $id
+     */
 	function __construct($id) { /* {{{ */
 		$this->_id = $id;
 		$this->_dms = null;
 	} /* }}} */
 
-	/*
+	/**
 	 * Set dms this object belongs to.
 	 *
 	 * Each object needs a reference to the dms it belongs to. It will be
@@ -51,13 +55,13 @@ class SeedDMS_Core_Object { /* {{{ */
 	 * The dms has a references to the currently logged in user
 	 * and the database connection.
 	 *
-	 * @param object $dms reference to dms
+	 * @param SeedDMS_Core_DMS $dms reference to dms
 	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the internal id of the document
 	 *
 	 * @return integer id of document

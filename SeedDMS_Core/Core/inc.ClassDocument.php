@@ -176,7 +176,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	protected $_keywords;
 
 	/**
-	 * @var array list of categories
+	 * @var SeedDMS_Core_DocumentCategory[] list of categories
 	 */
 	protected $_categories;
 
@@ -195,7 +195,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 */
 	protected $_content;
 
-	function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
+    /**
+     * @var SeedDMS_Core_Folder
+     */
+    protected $_folder;
+
+    /** @var  SeedDMS_Core_UserAccess[] */
+    protected $_accessList;
+
+    function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
 		parent::__construct($id);
 		$this->_name = $name;
 		$this->_comment = $comment;
@@ -214,14 +222,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$this->_content = null;
 	} /* }}} */
 
-	/**
-	 * Return an array of database fields which used for searching
-	 * a term entered in the database search form
-	 *
-	 * @param array $searchin integer list of search scopes (2=name, 3=comment,
-	 * 4=attributes)
-	 * @return array list of database fields
-	 */
+    /**
+     * Return an array of database fields which used for searching
+     * a term entered in the database search form
+     *
+     * @param SeedDMS_Core_DMS $dms
+     * @param array $searchin integer list of search scopes (2=name, 3=comment,
+     * 4=attributes)
+     * @return array list of database fields
+     */
 	public static function getSearchFields($dms, $searchin) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -247,6 +256,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $searchFields;
 	} /* }}} */
 
+    /**
+     * @param integer $id
+     * @param SeedDMS_Core_DMS $dms
+     * @return bool|SeedDMS_Core_Document
+     */
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -271,12 +285,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$classname = $dms->getClassname('document');
+		/** @var SeedDMS_Core_Document $document */
 		$document = new $classname($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
 		$document->setDMS($dms);
 		return $document;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the directory of the document in the file system relativ
 	 * to the contentDir
 	 *
@@ -291,18 +306,19 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the name of the document
 	 *
 	 * @return string name of document
 	 */
 	function getName() { return $this->_name; }
 
-	/*
-	 * Set the name of the document
-	 *
-	 * @param $newName string new name of document
-	 */
+    /**
+     * Set the name of the document
+     *
+     * @param $newName string new name of document
+     * @return bool
+     */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -314,18 +330,19 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the comment of the document
 	 *
 	 * @return string comment of document
 	 */
 	function getComment() { return $this->_comment; }
 
-	/*
-	 * Set the comment of the document
-	 *
-	 * @param $newComment string new comment of document
-	 */
+    /**
+     * Set the comment of the document
+     *
+     * @param $newComment string new comment of document
+     * @return bool
+     */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -337,8 +354,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @return string
+     */
 	function getKeywords() { return $this->_keywords; }
 
+    /**
+     * @param string $newKeywords
+     * @return bool
+     */
 	function setKeywords($newKeywords) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -353,8 +377,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Retrieve a list of all categories this document belongs to
 	 *
-	 * @return array list of category objects
-	 */
+	 * @return bool|SeedDMS_Core_DocumentCategory[]
+     */
 	function getCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -373,13 +397,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_categories;
 	} /* }}} */
 
-	/**
-	 * Set a list of categories for the document
-	 * This function will delete currently assigned categories and sets new
-	 * categories.
-	 *
-	 * @param array $newCategories list of category objects
-	 */
+    /**
+     * Set a list of categories for the document
+     * This function will delete currently assigned categories and sets new
+     * categories.
+     *
+     * @param SeedDMS_Core_DocumentCategory[] $newCategories list of category objects
+     * @return bool
+     */
 	function setCategories($newCategories) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -439,7 +464,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return the parent folder of the document
 	 *
-	 * @return object parent folder
+	 * @return SeedDMS_Core_Folder parent folder
 	 */
 	function getFolder() { /* {{{ */
 		if (!isset($this->_folder))
@@ -453,7 +478,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * This function basically moves a document from a folder to another
 	 * folder.
 	 *
-	 * @param object $newFolder
+	 * @param SeedDMS_Core_Folder $newFolder
 	 * @return boolean false in case of an error, otherwise true
 	 */
 	function setFolder($newFolder) { /* {{{ */
@@ -463,12 +488,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_folderID = $newFolder->getID();
-		$this->_folder = $newFolder;
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->_folder = $newFolder;
 
 		// Make sure that the folder search path is also updated.
 		$path = $newFolder->getPath();
 		$flist = "";
-		foreach ($path as $f) {
+		/** @var SeedDMS_Core_Folder[] $path */
+        foreach ($path as $f) {
 			$flist .= ":".$f->getID();
 		}
 		if (strlen($flist)>1) {
@@ -484,7 +511,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return owner of document
 	 *
-	 * @return object owner of document as an instance of {@link SeedDMS_Core_User}
+	 * @return SeedDMS_Core_User owner of document as an instance of {@link SeedDMS_Core_User}
 	 */
 	function getOwner() { /* {{{ */
 		if (!isset($this->_owner))
@@ -495,7 +522,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Set owner of a document
 	 *
-	 * @param object $newOwner new owner
+	 * @param SeedDMS_Core_User $newOwner new owner
 	 * @return boolean true if successful otherwise false
 	 */
 	function setOwner($newOwner) { /* {{{ */
@@ -506,10 +533,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$this->_ownerID = $newOwner->getID();
-		$this->_owner = $newOwner;
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->_owner = $newOwner;
 		return true;
 	} /* }}} */
 
+    /**
+     * @return bool|int
+     */
 	function getDefaultAccess() { /* {{{ */
 		if ($this->inheritsAccess()) {
 			$res = $this->getFolder();
@@ -519,15 +550,16 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_defaultAccess;
 	} /* }}} */
 
-	/**
-	 * Set default access mode
-	 *
-	 * This method sets the default access mode and also removes all notifiers which
-	 * will not have read access anymore.
-	 *
-	 * @param integer $mode access mode
-	 * @param boolean $noclean set to true if notifier list shall not be clean up
-	 */
+    /**
+     * Set default access mode
+     *
+     * This method sets the default access mode and also removes all notifiers which
+     * will not have read access anymore.
+     *
+     * @param integer $mode access mode
+     * @param boolean $noclean set to true if notifier list shall not be clean up
+     * @return bool
+     */
 	function setDefaultAccess($mode, $noclean="false") { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -543,6 +575,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @return bool
+     */
 	function inheritsAccess() { return $this->_inheritAccess; }
 
 	/**
@@ -598,11 +633,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return $this->_expires;
 	} /* }}} */
 
-	/**
-	 * Set expiration date as unix timestamp
-	 *
-	 * @param integer unix timestamp of expiration date
-	 */
+    /**
+     * Set expiration date as unix timestamp
+     *
+     * @param integer $expires unix timestamp of expiration date
+     * @return bool
+     */
 	function setExpires($expires) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -670,7 +706,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Lock or unlock document
 	 *
-	 * @param $falseOrUser user object for locking or false for unlocking
+	 * @param SeedDMS_Core_User|bool $falseOrUser user object for locking or false for unlocking
 	 * @return boolean true if operation was successful otherwise false
 	 */
 	function setLocked($falseOrUser) { /* {{{ */
@@ -698,7 +734,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Get the user currently locking the document
 	 *
-	 * @return object user have a lock
+	 * @return SeedDMS_Core_User|bool user have a lock
 	 */
 	function getLockingUser() { /* {{{ */
 		if (!$this->isLocked())
@@ -709,8 +745,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_lockingUser;
 	} /* }}} */
 
+    /**
+     * @return int
+     */
 	function getSequence() { return $this->_sequence; }
 
+    /**
+     * @param $seq
+     * @return bool
+     */
 	function setSequence($seq) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -743,24 +786,24 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/**
-	 * Returns a list of access privileges
-	 *
-	 * If the document inherits the access privileges from the parent folder
-	 * those will be returned.
-	 * $mode and $op can be set to restrict the list of returned access
-	 * privileges. If $mode is set to M_ANY no restriction will apply
-	 * regardless of the value of $op. The returned array contains a list
-	 * of {@link SeedDMS_Core_UserAccess} and
-	 * {@link SeedDMS_Core_GroupAccess} objects. Even if the document
-	 * has no access list the returned array contains the two elements
-	 * 'users' and 'groups' which are than empty. The methode returns false
-	 * if the function fails.
-	 * 
-	 * @param integer $mode access mode (defaults to M_ANY)
-	 * @param integer $op operation (defaults to O_EQ)
-	 * @return array multi dimensional array or false in case of an error
-	 */
+    /**
+     * Returns a list of access privileges
+     *
+     * If the document inherits the access privileges from the parent folder
+     * those will be returned.
+     * $mode and $op can be set to restrict the list of returned access
+     * privileges. If $mode is set to M_ANY no restriction will apply
+     * regardless of the value of $op. The returned array contains a list
+     * of {@link SeedDMS_Core_UserAccess} and
+     * {@link SeedDMS_Core_GroupAccess} objects. Even if the document
+     * has no access list the returned array contains the two elements
+     * 'users' and 'groups' which are than empty. The methode returns false
+     * if the function fails.
+     *
+     * @param int $mode access mode (defaults to M_ANY)
+     * @param int|string $op operation (defaults to O_EQ)
+     * @return bool|SeedDMS_Core_UserAccess[]
+     */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -796,16 +839,17 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_accessList[$mode];
 	} /* }}} */
 
-	/**
-	 * Add access right to folder
-	 * This function may change in the future. Instead of passing the a flag
-	 * and a user/group id a user or group object will be expected.
-	 *
-	 * @param integer $mode access mode
-	 * @param integer $userOrGroupID id of user or group
-	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
-	 *        user
-	 */
+    /**
+     * Add access right to folder
+     * This function may change in the future. Instead of passing the a flag
+     * and a user/group id a user or group object will be expected.
+     *
+     * @param integer $mode access mode
+     * @param integer $userOrGroupID id of user or group
+     * @param integer $isUser set to 1 if $userOrGroupID is the id of a
+     *        user
+     * @return bool
+     */
 	function addAccess($mode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -826,16 +870,17 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/**
-	 * Change access right of document
-	 * This function may change in the future. Instead of passing the a flag
-	 * and a user/group id a user or group object will be expected.
-	 *
-	 * @param integer $newMode access mode
-	 * @param integer $userOrGroupID id of user or group
-	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
-	 *        user
-	 */
+    /**
+     * Change access right of document
+     * This function may change in the future. Instead of passing the a flag
+     * and a user/group id a user or group object will be expected.
+     *
+     * @param integer $newMode access mode
+     * @param integer $userOrGroupID id of user or group
+     * @param integer $isUser set to 1 if $userOrGroupID is the id of a
+     *        user
+     * @return bool
+     */
 	function changeAccess($newMode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -1182,10 +1227,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * is allowed to remove a notification. This must be checked by the calling
 	 * application.
 	 *
-	 * @param $userOrGroupID id of user or group
-	 * @param $isUser boolean true if a user is passed in $userOrGroupID, false
+	 * @param integer $userOrGroupID id of user or group
+	 * @param boolean $isUser boolean true if a user is passed in $userOrGroupID, false
 	 *        if a group is passed in $userOrGroupID
-	 * @param $type type of notification (0 will delete all) Not used yet!
+	 * @param integer $type type of notification (0 will delete all) Not used yet!
 	 * @return integer 0 if operation was succesful
 	 *                 -1 if the userid/groupid is invalid
 	 *                 -3 if the user/group is already subscribed

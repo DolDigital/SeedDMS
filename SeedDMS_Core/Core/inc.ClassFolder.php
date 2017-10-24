@@ -552,8 +552,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Returns an array of all parents, grand parent, etc. up to root folder.
 	 * The folder itself is the last element of the array.
 	 *
-	 * @return array Array of parents
-	 */
+	 * @return array|bool
+     */
 	function getPath() { /* {{{ */
 		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0) || ($this->_id == $this->_dms->rootFolderID)) {
 			return array($this);

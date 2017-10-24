@@ -74,7 +74,7 @@ require_once("inc.ClassAttribute.php");
  */
 class SeedDMS_Core_DMS {
 	/**
-	 * @var SeedDMS_Core_DMS $db reference to database object. This must be an instance
+	 * @var SeedDMS_Core_DatabaseAccess $db reference to database object. This must be an instance
 	 *      of {@link SeedDMS_Core_DatabaseAccess}.
 	 * @access protected
 	 */
@@ -427,7 +427,7 @@ class SeedDMS_Core_DMS {
 	 * This method returns the database object as it was set by the first
 	 * parameter of the constructor.
 	 *
-	 * @return object database
+	 * @return SeedDMS_Core_DatabaseAccess database
 	 */
 	function getDB() { /* {{{ */
 		return $this->db;
