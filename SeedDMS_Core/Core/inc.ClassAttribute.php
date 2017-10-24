@@ -36,7 +36,7 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	protected $_id;
 
 	/**
-	 * @var object SeedDMS_Core_Object folder, document or document content
+	 * @var SeedDMS_Core_Folder|SeedDMS_Core_Document|SeedDMS_Core_DocumentContent SeedDMS_Core_Object folder, document or document content
 	 * this attribute belongs to
 	 *
 	 * @access protected
@@ -44,7 +44,7 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	protected $_obj;
 
 	/**
-	 * @var object SeedDMS_Core_AttributeDefinition definition of this attribute
+	 * @var SeedDMS_Core_AttributeDefinition definition of this attribute
 	 *
 	 * @access protected
 	 */
@@ -65,20 +65,19 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	protected $_validation_error;
 
 	/**
-	 * @var object SeedDMS_Core_DMS reference to the dms instance this attribute belongs to
+	 * @var SeedDMS_Core_DMS reference to the dms instance this attribute belongs to
 	 *
 	 * @access protected
 	 */
 	protected $_dms;
 
-	/**
-	 * Constructor
-	 *
-	 * @param integer $id internal id of attribute
-	 * @param SeedDMS_Core_Object $obj object this attribute is attached to
-	 * @param SeedDMS_Core_AttributeDefinition $attrdef reference to the attribute definition
-	 * @param string $value value of the attribute
-	 */
+    /**
+     * SeedDMS_Core_Attribute constructor.
+     * @param $id
+     * @param $obj
+     * @param $attrdef
+     * @param $value
+     */
 	function __construct($id, $obj, $attrdef, $value) { /* {{{ */
 		$this->_id = $id;
 		$this->_obj = $obj;
@@ -242,10 +241,11 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	 * If the validation fails the validation error will be set which
 	 * can be requested by SeedDMS_Core_Attribute::getValidationError()
 	 *
-	 * @return boolean true if validation succeds, otherwise false
+	 * @return boolean true if validation succeeds, otherwise false
 	 */
 	function validate() { /* {{{ */
-		$attrdef = $this->_attrdef();
+		/** @var SeedDMS_Core_AttributeDefinition $attrdef */
+		$attrdef = $this->_attrdef(); /** @todo check this out, this method is not existing */
 		$result = $attrdef->validate($this->_value);
 		$this->_validation_error = $attrdef->getValidationError();
 		return $result;
@@ -373,11 +373,16 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	protected $_validation_error;
 
 	/**
-	 * @var object SeedDMS_Core_DMS reference to the dms instance this attribute definition belongs to
+	 * @var SeedDMS_Core_DMS reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
 	 */
 	protected $_dms;
+
+    /**
+     * @var string
+     */
+    protected $_separator;
 
 	/*
 	 * Possible skalar data types of an attribute
@@ -398,20 +403,21 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	const objtype_document = '2';
 	const objtype_documentcontent = '3';
 
-	/**
-	 * Constructor
-	 *
-	 * @param integer $id internal id of attribute definition
-	 * @param string $name name of attribute
-	 * @param integer $objtype type of object for which this attribute definition
-	 *        may be used.
-	 * @param integer $type skalar type of attribute
-	 * @param boolean $multiple set to true if multiple values are allowed
-	 * @param integer $minvalues minimum number of values
-	 * @param integer $maxvalues maximum number of values
-	 * @param string $valueset separated list of allowed values, the first char
-	 *        is taken as the separator
-	 */
+    /**
+     * Constructor
+     *
+     * @param integer $id internal id of attribute definition
+     * @param string $name name of attribute
+     * @param integer $objtype type of object for which this attribute definition
+     *        may be used.
+     * @param integer $type skalar type of attribute
+     * @param boolean $multiple set to true if multiple values are allowed
+     * @param integer $minvalues minimum number of values
+     * @param integer $maxvalues maximum number of values
+     * @param string $valueset separated list of allowed values, the first char
+     *        is taken as the separator
+     * @param $regex
+     */
 	function __construct($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
@@ -472,14 +478,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getObjType() { return $this->_objtype; }
 
-	/**
-	 * Set object type of attribute definition
-	 * 
-	 * This can be one of objtype_all,
-	 * objtype_folder, objtype_document, or objtype_documentcontent.
-	 *
-	 * @param integer $objtype type
-	 */
+    /**
+     * Set object type of attribute definition
+     *
+     * This can be one of objtype_all,
+     * objtype_folder, objtype_document, or objtype_documentcontent.
+     *
+     * @param integer $objtype type
+     * @return bool
+     */
 	function setObjType($objtype) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -502,14 +509,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getType() { return $this->_type; }
 
-	/**
-	 * Set type of attribute definition
-	 * 
-	 * This can be one of type_int, type_float, type_string, type_boolean,
-	 * type_url, type_email.
-	 *
-	 * @param integer $type type
-	 */
+    /**
+     * Set type of attribute definition
+     *
+     * This can be one of type_int, type_float, type_string, type_boolean,
+     * type_url, type_email.
+     *
+     * @param integer $type type
+     * @return bool
+     */
 	function setType($type) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -529,12 +537,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getMultipleValues() { return $this->_multiple; }
 
-	/**
-	 * Set if attribute definition allows multi values for attribute
-	 * 
-	 * @param boolean $mv true if attribute may have multiple values, otherwise
-	 * false
-	 */
+    /**
+     * Set if attribute definition allows multi values for attribute
+     *
+     * @param boolean $mv true if attribute may have multiple values, otherwise
+     * false
+     * @return bool
+     */
 	function setMultipleValues($mv) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -633,13 +642,14 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			return array();
 	} /* }}} */
 
-	/**
-	 * Get the n'th value of a value set
-	 *
-	 * @param interger $index
-	 * @return string n'th value of value set or false if the index is
-	 *         out of range or the value set has less than 2 chars
-	 */
+    /**
+     * Get the n'th value of a value set
+     *
+     * @param $ind
+     * @return string n'th value of value set or false if the index is
+     *         out of range or the value set has less than 2 chars
+     * @internal param int $index
+     */
 	function getValueSetValue($ind) { /* {{{ */
 		if(strlen($this->_valueset) > 1) {
 			$tmp = explode($this->_valueset[0], substr($this->_valueset, 1));
@@ -745,17 +755,16 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/**
-	 * Parse a given value according to attribute definition
-	 *
-	 * The return value is always an array, even if the attribute is single
-	 * value attribute.
-	 *
-	 * @return array list of single values
-	 */
+    /**
+     * Parse a given value according to attribute definition
+     *
+     * The return value is always an array, even if the attribute is single
+     * value attribute.
+     *
+     * @param $value
+     * @return array|bool
+     */
 	function parseValue($value) { /* {{{ */
-		$db = $this->_dms->getDB();
-		
 		if($this->getMultipleValues()) {
 			/* If the value doesn't start with the separator used in the value set,
 			 * then assume that the value was not saved with a leading separator.
@@ -771,7 +780,6 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		} else {
 			return array($value);
 		}
-		return true;
 	} /* }}} */
 
 	/**
@@ -779,8 +787,8 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 * attribute definition is used
 	 *
 	 * @param integer $limit return not more the n objects of each type
-	 * @return boolean true if attribute definition is used, otherwise false
-	 */
+	 * @return array|bool
+     */
 	function getStatistics($limit=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -995,8 +1003,8 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			if(!$success)
 				$this->_validation_error = 3;
 			break;
-		case self::type_boolean:
-			foreach($values as $value) {
+		case self::type_boolean: /** @todo: Same case in LINE 966 */
+            foreach($values as $value) {
 				$success &= preg_match('/^[01]$/', $value);
 			}
 			break;
@@ -1041,4 +1049,3 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	function getValidationError() { return $this->_validation_error; }
 
 } /* }}} */
-?>
