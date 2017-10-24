@@ -294,7 +294,7 @@ class SeedDMS_Core_DMS {
 	 * given user. A link is only accessible, if it is publically visible,
 	 * owned by the user, or the accessing user is an administrator.
 	 *
-	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
+	 * @param SeedDMS_Core_DocumentLink[] $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
 	 * @param string $access set if source or target of link shall be checked
 	 * for sufficient access rights. Set to 'source' if the source document
@@ -1691,7 +1691,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a user from the database by its id.
 	 *
 	 * @param integer $id internal id of user
-	 * @return object instance of {@link SeedDMS_Core_User} or false
+	 * @return SeedDMS_Core_User|boolean instance of {@link SeedDMS_Core_User} or false
 	 */
 	function getUser($id) { /* {{{ */
 		$classname = $this->classnames['user'];
@@ -2095,7 +2095,7 @@ class SeedDMS_Core_DMS {
 	 * its id.
 	 *
 	 * @param integer $id internal id of attribute defintion
-	 * @return object instance of {@link SeedDMS_Core_AttributeDefinition} or false
+	 * @return bool|SeedDMS_Core_AttributeDefinition or false
 	 */
 	function getAttributeDefinition($id) { /* {{{ */
 		if (!is_numeric($id))

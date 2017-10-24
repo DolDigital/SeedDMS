@@ -4552,7 +4552,7 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	protected $_id;
 
 	/**
-	 * @var object reference to document this link belongs to
+	 * @var SeedDMS_Core_Document reference to document this link belongs to
 	 */
 	protected $_document;
 
@@ -4571,6 +4571,14 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	 */
 	protected $_public;
 
+    /**
+     * SeedDMS_Core_DocumentLink constructor.
+     * @param $id
+     * @param $document
+     * @param $target
+     * @param $userID
+     * @param $public
+     */
 	function __construct($id, $document, $target, $userID, $public) {
 		$this->_id = $id;
 		$this->_document = $document;
@@ -4579,35 +4587,52 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 		$this->_public = $public;
 	}
 
+    /**
+     * @return int
+     */
 	function getID() { return $this->_id; }
 
+    /**
+     * @return SeedDMS_Core_Document
+     */
 	function getDocument() {
 		return $this->_document;
 	}
 
+    /**
+     * @return object
+     */
 	function getTarget() {
 		return $this->_target;
 	}
 
+    /**
+     * @return bool|SeedDMS_Core_User
+     */
 	function getUser() {
 		if (!isset($this->_user))
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	}
 
+    /**
+     * @return int
+     */
 	function isPublic() { return $this->_public; }
 
-	/**
-	 * Returns the access mode similar to a document
-	 *
-	 * There is no real access mode for document links, so this is just
-	 * another way to add more access restrictions than the default restrictions.
-	 * It is only called for public document links, not accessed by the owner
-	 * or the administrator.
-	 *
-	 * @param object $u user
-	 * @return integer either M_NONE or M_READ
-	 */
+    /**
+     * Returns the access mode similar to a document
+     *
+     * There is no real access mode for document links, so this is just
+     * another way to add more access restrictions than the default restrictions.
+     * It is only called for public document links, not accessed by the owner
+     * or the administrator.
+     *
+     * @param SeedDMS_Core_User $u user
+     * @param $source
+     * @param $target
+     * @return int either M_NONE or M_READ
+     */
 	function getAccessMode($u, $source, $target) { /* {{{ */
 		$dms = $this->_document->_dms;
 
@@ -4649,7 +4674,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	protected $_id;
 
 	/**
-	 * @var object reference to document this file belongs to
+	 * @var SeedDMS_Core_Document reference to document this file belongs to
 	 */
 	protected $_document;
 
@@ -4706,6 +4731,21 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 */
 	protected $_name;
 
+    /**
+     * SeedDMS_Core_DocumentFile constructor.
+     * @param $id
+     * @param $document
+     * @param $userID
+     * @param $comment
+     * @param $date
+     * @param $dir
+     * @param $fileType
+     * @param $mimeType
+     * @param $orgFileName
+     * @param $name
+     * @param $version
+     * @param $public
+     */
 	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name,$version,$public) {
 		$this->_id = $id;
 		$this->_document = $document;
@@ -4721,29 +4761,80 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		$this->_public = $public;
 	}
 
+    /**
+     * @return int
+     */
 	function getID() { return $this->_id; }
+
+    /**
+     * @return SeedDMS_Core_Document
+     */
 	function getDocument() { return $this->_document; }
+
+    /**
+     * @return int
+     */
 	function getUserID() { return $this->_userID; }
+
+    /**
+     * @return string
+     */
 	function getComment() { return $this->_comment; }
+
+    /**
+     * @return string
+     */
 	function getDate() { return $this->_date; }
+
+    /**
+     * @return string
+     */
 	function getDir() { return $this->_dir; }
+
+    /**
+     * @return string
+     */
 	function getFileType() { return $this->_fileType; }
+
+    /**
+     * @return string
+     */
 	function getMimeType() { return $this->_mimeType; }
+
+    /**
+     * @return string
+     */
 	function getOriginalFileName() { return $this->_orgFileName; }
+
+    /**
+     * @return string
+     */
 	function getName() { return $this->_name; }
 
+    /**
+     * @return bool|SeedDMS_Core_User
+     */
 	function getUser() {
 		if (!isset($this->_user))
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	}
 
+    /**
+     * @return string
+     */
 	function getPath() {
 		return $this->_document->getDir() . "f" .$this->_id . $this->_fileType;
 	}
 
+    /**
+     * @return int
+     */
 	function getVersion() { return $this->_version; }
 
+    /**
+     * @return int
+     */
 	function isPublic() { return $this->_public; }
 
 	/**
@@ -4794,18 +4885,45 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
  */
 class SeedDMS_Core_AddContentResultSet { /* {{{ */
 
+    /**
+     * @var null
+     */
 	protected $_indReviewers;
+
+    /**
+     * @var null
+     */
 	protected $_grpReviewers;
+
+    /**
+     * @var null
+     */
 	protected $_indApprovers;
+
+    /**
+     * @var null
+     */
 	protected $_grpApprovers;
+
+    /**
+     * @var
+     */
 	protected $_content;
+
+    /**
+     * @var null
+     */
 	protected $_status;
 
 	/**
-	 * @var object back reference to document management system
+	 * @var SeedDMS_Core_DMS back reference to document management system
 	 */
 	protected $_dms;
 
+    /**
+     * SeedDMS_Core_AddContentResultSet constructor.
+     * @param $content
+     */
 	function __construct($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
@@ -4816,7 +4934,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		$this->_dms = null;
 	} /* }}} */
 
-	/*
+	/**
 	 * Set dms this object belongs to.
 	 *
 	 * Each object needs a reference to the dms it belongs to. It will be
@@ -4824,12 +4942,18 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	 * The dms has a references to the currently logged in user
 	 * and the database connection.
 	 *
-	 * @param object $dms reference to dms
+	 * @param SeedDMS_Core_DMS $dms reference to dms
 	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
+    /**
+     * @param $reviewer
+     * @param $type
+     * @param $status
+     * @return bool
+     */
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
 		$dms = $this->_dms;
 
@@ -4857,6 +4981,12 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @param $approver
+     * @param $type
+     * @param $status
+     * @return bool
+     */
 	function addApprover($approver, $type, $status) { /* {{{ */
 		$dms = $this->_dms;
 
@@ -4884,6 +5014,10 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @param $status
+     * @return bool
+     */
 	function setStatus($status) { /* {{{ */
 		if (!is_integer($status)) {
 			return false;
@@ -4895,14 +5029,24 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @return null
+     */
 	function getStatus() { /* {{{ */
 		return $this->_status;
 	} /* }}} */
 
+    /**
+     * @return mixed
+     */
 	function getContent() { /* {{{ */
 		return $this->_content;
 	} /* }}} */
 
+    /**
+     * @param $type
+     * @return array|bool|null
+     */
 	function getReviewers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
@@ -4915,6 +5059,10 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		}
 	} /* }}} */
 
+    /**
+     * @param $type
+     * @return array|bool|null
+     */
 	function getApprovers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
@@ -4927,4 +5075,3 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		}
 	} /* }}} */
 } /* }}} */
-?>
