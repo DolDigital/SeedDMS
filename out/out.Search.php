@@ -383,11 +383,13 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"] && $settings->_enableFullSe
 			}
 		}
 	}
-	$totalPages = (int) (count($entries)/$limit);
-	if(count($entries)%$limit)
-		$totalPages++;
-	if (!isset($_GET["pg"]) || strcasecmp($_GET["pg"], "all"))
+	if (!isset($_GET["pg"]) || strcasecmp($_GET["pg"], "all")) {
+		$totalPages = (int) (count($entries)/$limit);
+		if(count($entries)%$limit)
+			$totalPages++;
 		$entries = array_slice($entries, ($pageNumber-1)*$limit, $limit);
+	} else
+		$totalPages = 1;
 // }}}
 }
 
