@@ -9,6 +9,7 @@
 - add list of expired documents to MyDocument page
 - move code of DocumentAccess and EditDocument into controller
 - make width of preview images in drop folder configurable
+- hide pager on search page when all folders/documents are listed
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.3
