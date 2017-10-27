@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (784), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (785), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -312,7 +312,7 @@ URL: [url]',
 'documentcontent' => 'Zawartość dokumentu',
 'documents' => 'Dokumenty',
 'documents_checked_out_by_you' => '',
-'documents_expired' => '',
+'documents_expired' => 'Wygasłe dokumenty',
 'documents_in_process' => 'Dokumenty procesowane',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Dokumenty zablokowane przez Ciebie',
