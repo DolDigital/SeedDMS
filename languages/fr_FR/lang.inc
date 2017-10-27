@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1064), jeromerobert (50), lonnnew (9), Oudiceval (465)
+//    Translators: Admin (1065), jeromerobert (50), lonnnew (9), Oudiceval (465)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -324,7 +324,7 @@ URL: [url]',
 'documentcontent' => 'Version de document',
 'documents' => 'Documents',
 'documents_checked_out_by_you' => 'Documents bloqués par vous',
-'documents_expired' => '',
+'documents_expired' => 'Documents périmés',
 'documents_in_process' => 'Documents en cours',
 'documents_locked' => 'Documents verrouillés',
 'documents_locked_by_you' => 'Documents verrouillés',
