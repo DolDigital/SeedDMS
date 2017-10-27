@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (729), kreml (455)
+//    Translators: Admin (732), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,7 +319,7 @@ URL: [url]',
 'documentcontent' => 'Obsah dokumentu',
 'documents' => 'Dokumenty',
 'documents_checked_out_by_you' => '',
-'documents_expired' => '',
+'documents_expired' => 'Expirované dokumenty',
 'documents_in_process' => 'Zpracovávané dokumenty',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Vámi uzamčené dokumenty',
@@ -470,7 +470,7 @@ URL: [url]',
 'expired_at_date' => '',
 'expired_documents' => '',
 'expires' => 'Platnost vyprší',
-'expire_by_date' => '',
+'expire_by_date' => 'Platnost končí k datu',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
 'expire_in_1m' => 'Expiruje o mesiac',
@@ -494,7 +494,7 @@ URL: [url]',
 'files' => 'Soubory',
 'files_deletion' => 'Soubor odstraněn',
 'files_deletion_warning' => 'Pomocí této volby můžete odstranit všechny soubory z celé složky DMS. Verzovací informace zůstanou viditelné.',
-'files_loading' => 'Vyčkejte dokud se nenahraje seznam souborů ...',
+'files_loading' => 'Vyčkejte dokud se nenahraje seznam souborů …',
 'file_size' => 'Velikost souboru',
 'filter_for_documents' => 'Další filtr pro dokumenty',
 'filter_for_folders' => 'Další filtr pro složky',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (961), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (963), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -319,7 +319,7 @@ URL: [url]',
 'documentcontent' => 'Conteúdo do Documento',
 'documents' => 'Documentos',
 'documents_checked_out_by_you' => '',
-'documents_expired' => '',
+'documents_expired' => 'Documentos Expirados',
 'documents_in_process' => 'Documentos em Processo',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Documentos bloqueados por você',
@@ -1144,7 +1144,7 @@ URL: [url]',
 'settings_dropFolderDir' => 'Diretório para pasta suspensa',
 'settings_dropFolderDir_desc' => 'Este diretório pode ser usado para soltar arquivos no sistema de arquivos do servidor e importá-los de lá, em vez de fazer o upload através do browser. O diretório deve conter um sub-diretório para cada usuário que tem permissão para importar arquivos desta forma.',
 'settings_Edition' => 'Configurações Edição',
-'settings_editOnlineFileTypes' => '',
+'settings_editOnlineFileTypes' => 'Editar online os tipos de arquivos',
 'settings_editOnlineFileTypes_desc' => 'Arquivos com as seguintes extensões podem ser editados online (use somente letras minúsculas)',
 'settings_enable2FactorAuthentication' => '',
 'settings_enable2FactorAuthentication_desc' => '',

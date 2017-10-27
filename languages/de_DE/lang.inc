@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2484), dgrutsch (22)
+//    Translators: Admin (2487), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -310,7 +310,7 @@ URL: [url]',
 'debug' => 'Debug',
 'december' => 'Dezember',
 'default_access' => 'Standardberechtigung',
-'default_keywords' => 'Verfügbare Schlüsselworte',
+'default_keywords' => 'Verfügbare Stichworte',
 'definitions' => 'Definitionen',
 'delete' => 'Löschen',
 'details' => 'Details',
@@ -433,7 +433,7 @@ Der Link ist bis zum [valid] gültig.
 'edit' => 'Bearbeiten',
 'edit_attributes' => 'Edit attributes',
 'edit_comment' => 'Kommentar bearbeiten',
-'edit_default_keywords' => 'Schlüsselworte bearbeiten',
+'edit_default_keywords' => 'Stichworte bearbeiten',
 'edit_document_access' => 'Zugriffsrechte bearbeiten',
 'edit_document_notify' => 'Beobachtung von Dokumenten',
 'edit_document_props' => 'Bearbeiten',
@@ -661,7 +661,7 @@ URL: [url]',
 'keep' => 'Beibehalten',
 'keep_doc_status' => 'Dokumentenstatus beibehalten',
 'keywords' => 'Stichworte',
-'keywords_loading' => 'Bitte warten, bis die Schlüsselwortliste geladen ist …',
+'keywords_loading' => 'Bitte warten, bis die Stichwortliste geladen ist …',
 'keyword_exists' => 'Stichwort besteht bereits',
 'ko_KR' => 'Koreanisch',
 'language' => 'Sprache',
