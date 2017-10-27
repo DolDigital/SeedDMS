@@ -46,6 +46,8 @@ class SeedDMS_View_Session extends SeedDMS_Bootstrap_Style {
 
 		$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 		$sessions = $sessionmgr->getLastAccessedSessions(date('Y-m-d H:i:s', time()-3600));
+		if(!$sessions)
+			return '';
 
 		if ($user->isGuest() || count($sessions) == 0) {
 			return '';
