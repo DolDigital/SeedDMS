@@ -186,7 +186,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	protected $_sequence;
 
 	/**
-	 * @var object temp. storage for latestcontent
+	 * @var SeedDMS_Core_DocumentContent temp. storage for latestcontent
 	 */
 	protected $_latestContent;
 
@@ -200,7 +200,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
      */
     protected $_folder;
 
-    /** @var  SeedDMS_Core_UserAccess[] */
+    /** @var array of SeedDMS_Core_UserAccess and SeedDMS_Core_GroupAccess */
     protected $_accessList;
 
     function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
@@ -557,7 +557,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
      * will not have read access anymore.
      *
      * @param integer $mode access mode
-     * @param boolean $noclean set to true if notifier list shall not be clean up
+     * @param bool|string $noclean set to true if notifier list shall not be clean up
      * @return bool
      */
 	function setDefaultAccess($mode, $noclean="false") { /* {{{ */
@@ -802,7 +802,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
      *
      * @param int $mode access mode (defaults to M_ANY)
      * @param int|string $op operation (defaults to O_EQ)
-     * @return bool|SeedDMS_Core_UserAccess[]
+     * @return bool|array
      */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -970,7 +970,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$accessList = $this->getAccessList();
 		if (!$accessList) return false;
 
-		foreach ($accessList["users"] as $userAccess) {
+		/** @var SeedDMS_Core_UserAccess $userAccess */
+        foreach ($accessList["users"] as $userAccess) {
 			if ($userAccess->getUserID() == $user->getID()) {
 				$mode = $userAccess->getMode();
 				if ($user->isGuest()) {
@@ -983,7 +984,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Get the highest right defined by a group */
 		if($accessList['groups']) {
 			$mode = 0;
-			foreach ($accessList["groups"] as $groupAccess) {
+			/** @var SeedDMS_Core_GroupAccess $groupAccess */
+            foreach ($accessList["groups"] as $groupAccess) {
 				if ($user->isMemberOfGroup($groupAccess->getGroup())) {
 					if ($groupAccess->getMode() > $mode)
 						$mode = $groupAccess->getMode();
@@ -1014,7 +1016,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * The function takes inherited access rights into account.
 	 * For a list of possible access rights see @file inc.AccessUtils.php
 	 *
-	 * @param $group object instance of class SeedDMS_Core_Group
+	 * @param SeedDMS_Core_Group $group object instance of class SeedDMS_Core_Group
 	 * @return integer access mode
 	 */
 	function getGroupAccessMode($group) { /* {{{ */
@@ -1026,7 +1028,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!$accessList)
 			return false;
 
-		foreach ($accessList["groups"] as $groupAccess) {
+		/** @var SeedDMS_Core_GroupAccess $groupAccess */
+        foreach ($accessList["groups"] as $groupAccess) {
 			if ($groupAccess->getGroupID() == $group->getID()) {
 				$foundInACL = true;
 				if ($groupAccess->getMode() > $highestPrivileged)
@@ -1043,7 +1046,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->getDefaultAccess();
 	} /* }}} */
 
-	/**
+    /**
 	 * Returns a list of all notifications
 	 *
 	 * The returned list has two elements called 'users' and 'groups'. Each one
@@ -1051,8 +1054,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * SeedDMS_Core_Group.
 	 *
 	 * @param integer $type type of notification (not yet used)
-	 * @return array list of notifications
-	 */
+	 * @return array|bool
+     */
 	function getNotifyList($type=0) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
@@ -1092,7 +1095,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Make a copy of both notifier lists because removeNotify will empty
 		 * $this->_notifyList and the second foreach will not work anymore.
 		 */
+		/** @var SeedDMS_Core_User[] $nusers */
 		$nusers = $this->_notifyList["users"];
+		/** @var SeedDMS_Core_Group[] $ngroups */
 		$ngroups = $this->_notifyList["groups"];
 		foreach ($nusers as $u) {
 			if ($this->getAccessMode($u) < M_READ) {
@@ -1172,7 +1177,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				// that the current group has not been explicitly excluded.
 				$acl = $this->getAccessList(M_NONE, O_EQ);
 				$found = false;
-				foreach ($acl["groups"] as $group) {
+				/** @var SeedDMS_Core_GroupAccess $group */
+                foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
 						break;
@@ -1190,7 +1196,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 					return -4;
 				}
 				$found = false;
-				foreach ($acl["groups"] as $group) {
+				/** @var SeedDMS_Core_GroupAccess $group */
+                foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
 						break;
@@ -1240,6 +1247,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		/* Verify that user / group exists. */
+		/** @var SeedDMS_Core_Group|SeedDMS_Core_User $obj */
 		$obj = ($isUser ? $this->_dms->getUser($userOrGroupID) : $this->_dms->getGroup($userOrGroupID));
 		if (!is_object($obj)) {
 			return -1;
@@ -1315,8 +1323,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param array $attributes list of version attributes. The element key
 	 *        must be the id of the attribute definition.
 	 * @param object $workflow
-	 * @return bool/array false in case of an error or a result set
-	 */
+	 * @return bool|SeedDMS_Core_AddContentResultSet
+     */
 	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -1365,7 +1373,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$this->_content = null;
 		$this->_latestContent = null;
-		$content = $this->getLatestContent($contentID);
+		$content = $this->getLatestContent($contentID); /** @todo: Parameter not defined in Funktion */
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
 		$docResultSet->setDMS($this->_dms);
 
@@ -1402,7 +1410,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		// and submit comments, if appropriate. Reviewers can also recommend that
 		// a document be rejected.
 		$pendingReview=false;
-		$reviewRes = array();
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $reviewRes = array(); /** @todo unused variable */
 		foreach (array("i", "g") as $i){
 			if (isset($reviewers[$i])) {
 				foreach ($reviewers[$i] as $reviewerID) {
@@ -1420,7 +1429,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		// Add approvers to the database. Approvers must also review the document
 		// and make a recommendation on its release as an approved version.
 		$pendingApproval=false;
-		$approveRes = array();
+        /** @noinspection PhpUnusedLocalVariableInspection */
+		$approveRes = array(); /** @todo unused variable */
 		foreach (array("i", "g") as $i){
 			if (isset($approvers[$i])) {
 				foreach ($approvers[$i] as $approverID) {
@@ -1458,7 +1468,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		$docResultSet->setStatus($status,$comment,$user);
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        $docResultSet->setStatus($status,$comment,$user); /** @todo parameter count wrong */
 
 		$db->commitTransaction();
 		return $docResultSet;
@@ -1496,7 +1507,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if ((int) $version<1) {
 			$queryStr = "SELECT MAX(`version`) as m from `tblDocumentContent` where `document` = ".$this->_id;
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo undefined variable */
 				return false;
 
 			$version = $resArr[0]['m'];
@@ -1551,21 +1562,22 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * out. Access rights based on the document status are calculated for the
 	 * currently logged in user.
 	 *
-	 * @return array list of objects of class SeedDMS_Core_DocumentContent
-	 */
+	 * @return bool|SeedDMS_Core_DocumentContent[]
+     */
 	function getContent() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_content)) {
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version`";
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo undefined variable */
 				return false;
 
 			$this->_content = array();
 			$classname = $this->_dms->getClassname('documentcontent');
 			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
+			    /** @var SeedDMS_Core_DocumentContent $content */
 				$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
 				if($user) {
 					if($content->getAccessMode($user) >= M_READ)
@@ -1587,7 +1599,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * currently logged in user.
 	 *
 	 * @param integer $version version number of content element
-	 * @return object/boolean object of class {@link SeedDMS_Core_DocumentContent}
+	 * @return SeedDMS_Core_DocumentContent|boolean object of class {@link SeedDMS_Core_DocumentContent}
 	 * or false
 	 */
 	function getContentByVersion($version) { /* {{{ */
@@ -1604,13 +1616,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." AND `version` = " . (int) $version;
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$res)
+		if (is_bool($resArr) && !$res) /** @todo undefined variable */
 			return false;
 		if (count($resArr) != 1)
 			return false;
 
 		$resArr = $resArr[0];
 		$classname = $this->_dms->getClassname('documentcontent');
+		/** @var SeedDMS_Core_DocumentContent $content */
 		if($content = new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum'])) {
 			$user = $this->_dms->getLoggedInUser();
 			/* A user with write access on the document may always see the version */
@@ -1623,6 +1636,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 	} /* }}} */
 
+    /**
+     * @return bool|null|SeedDMS_Core_DocumentContent
+     */
 	function __getLatestContent() { /* {{{ */
 		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
@@ -1651,20 +1667,21 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Access rights based on the document status are calculated for the
 	 * currently logged in user.
 	 *
-	 * @return object object of class {@link SeedDMS_Core_DocumentContent}
+	 * @return bool|SeedDMS_Core_DocumentContent object of class {@link SeedDMS_Core_DocumentContent}
 	 */
 	function getLatestContent() { /* {{{ */
 		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC";
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo: $res not defined */
 				return false;
 
 			$classname = $this->_dms->getClassname('documentcontent');
 			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
 				if (!$this->_latestContent) {
+				    /** @var SeedDMS_Core_DocumentContent $content */
 					$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
 					if($user) {
 						/* If the user may even write the document, then also allow to see all content.
@@ -1686,7 +1703,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Remove version of document
 	 *
-	 * @param interger $version version number of content
+	 * @param SeedDMS_Core_DocumentContent $version version number of content
 	 * @return boolean true if successful, otherwise false
 	 */
 	private function _removeContent($version) { /* {{{ */
@@ -1813,11 +1830,12 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/**
-	 * Call callback onPreRemoveDocument before deleting content
-	 *
-	 * @param integer $version version number of content
-	 */
+    /**
+     * Call callback onPreRemoveDocument before deleting content
+     *
+     * @param SeedDMS_Core_DocumentContent $version version number of content
+     * @return bool|mixed
+     */
 	function removeContent($version) { /* {{{ */
 		/* Check if 'onPreRemoveDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPreRemoveContent'])) {
@@ -1847,7 +1865,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Return a certain document link
 	 *
 	 * @param integer $linkID id of link
-	 * @return object instance of SeedDMS_Core_DocumentLink or false in case of
+	 * @return SeedDMS_Core_DocumentLink|bool of SeedDMS_Core_DocumentLink or false in case of
 	 *         an error.
 	 */
 	function getDocumentLink($linkID) { /* {{{ */
@@ -1866,7 +1884,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$link = new SeedDMS_Core_DocumentLink($resArr["id"], $document, $target, $resArr["userID"], $resArr["public"]);
 		$user = $this->_dms->getLoggedInUser();
 		if($link->getAccessMode($user, $document, $target) >= M_READ)
-			return $file;
+            /** @noinspection PhpUndefinedVariableInspection */
+            return $file; /** @todo variable not defined */
 		return null;
 	} /* }}} */
 

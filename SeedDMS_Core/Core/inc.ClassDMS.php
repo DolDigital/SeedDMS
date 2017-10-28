@@ -561,7 +561,7 @@ class SeedDMS_Core_DMS {
 	 * If user authentication was done externally, this function can
 	 * be used to tell the dms who is currently logged in.
 	 *
-	 * @return object $user
+	 * @return SeedDMS_Core_User $user
 	 *
 	 */
 	function getLoggedInUser() { /* {{{ */
