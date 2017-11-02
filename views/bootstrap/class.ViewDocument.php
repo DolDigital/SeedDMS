@@ -130,7 +130,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($document) {
 			if ($document->getAccessMode($user) >= M_READ) {
 				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
-				$txt = $this->callHook('documentListItem', $document, $previewer, true, '');
+				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewitem');
 				if(is_string($txt))
 					$content = $txt;
 				else 
@@ -431,7 +431,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		}
 
-		/* Retrieve attacheѕ files */
+		/* Retrieve latest content and  attacheѕ files */
 		$latestContent = $document->getLatestContent();
 		$files = $document->getDocumentFiles($latestContent->getVersion());
 		$files = SeedDMS_Core_DMS::filterDocumentFiles($user, $files);
@@ -444,8 +444,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$reverselinks = $document->getReverseDocumentLinks();
 		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks, 'source');
 
-		/* Retrieve latest content */
-		$latestContent = $document->getLatestContent();
 		$needwkflaction = false;
 		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
 		} else {

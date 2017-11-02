@@ -148,6 +148,13 @@ class SeedDMS_Core_DMS {
 	public $viewOnlineFileTypes;
 
 	/**
+	 * @var array $noReadForStatus list of status without read right
+	 *      online.
+	 * @access public
+	 */
+	public $noReadForStatus;
+
+	/**
 	 * @var string $version version of pear package
 	 * @access public
 	 */
@@ -354,6 +361,7 @@ class SeedDMS_Core_DMS {
 		$this->forceRename = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
+		$this->noReadForStatus = array();
 		$this->classnames = array();
 		$this->classnames['folder'] = 'SeedDMS_Core_Folder';
 		$this->classnames['document'] = 'SeedDMS_Core_Document';
@@ -363,7 +371,7 @@ class SeedDMS_Core_DMS {
 		$this->callbacks = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '5.1.3';
+			$this->version = '5.1.4';
 	} /* }}} */
 
 	/**
@@ -543,6 +551,19 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Get the logged in user
+	 *
+	 * If user authentication was done externally, this function can
+	 * be used to tell the dms who is currently logged in.
+	 *
+	 * @return object $user
+	 *
+	 */
+	function getLoggedInUser() { /* {{{ */
+		return $this->user;
+	} /* }}} */
+
+	/**
 	 * Return a document by its id
 	 *
 	 * This function retrieves a document from the database by its id.
@@ -573,6 +594,70 @@ class SeedDMS_Core_DMS {
 	 */
 	function getDocumentsLockedByUser($user) { /* {{{ */
 		return $user->getDocumentsLocked();
+	} /* }}} */
+
+	/**
+	 * Returns all documents which already expired or will expire in the future
+	 *
+	 * @param string $date date in format YYYY-MM-DD or an integer with the number
+	 *   of days. A negative value will cover the days in the past.
+	 * @return array list of documents
+	 */
+	function getDocumentsExpired($date, $user=null) { /* {{{ */
+		$db = $this->getDB();
+
+		if(is_int($date)) {
+			$ts = mktime(0, 0, 0) + $date * 86400;
+		} elseif(is_string($date)) {
+			$tmp = explode('-', $date, 3);
+			if(count($tmp) != 3)
+				return false;
+			$ts = mktime(0, 0, 0, $tmp[1], $tmp[2], $tmp[0]);
+		} else
+			return false;
+
+		$tsnow = mktime(0, 0, 0); /* Start of today */
+		if($ts < $tsnow) { /* Check for docs expired in the past */
+			$startts = $ts;
+			$endts = $tsnow+86400; /* Use end of day */
+			$updatestatus = true;
+		} else { /* Check for docs which will expire in the future */
+			$startts = $tsnow;
+			$endts = $ts+86400; /* Use end of day */
+			$updatestatus = false;
+		}
+
+		/* Get all documents which have an expiration date. It doesn't check for
+		 * the latest status which should be S_EXPIRED, but doesn't have to, because
+		 * status may have not been updated after the expiration date has been reached.
+		 **/
+		$queryStr = "SELECT `tblDocuments`.`id`, `tblDocumentStatusLog`.`status`  FROM `tblDocuments` ".
+			"LEFT JOIN `ttcontentid` ON `ttcontentid`.`document` = `tblDocuments`.`id` ".
+			"LEFT JOIN `tblDocumentContent` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` AND `tblDocumentContent`.`version` = `ttcontentid`.`maxVersion` ".
+			"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` AND `tblDocumentContent`.`version` = `tblDocumentStatus`.`version` ".
+			"LEFT JOIN `ttstatid` ON `ttstatid`.`statusID` = `tblDocumentStatus`.`statusID` ".
+			"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusLogID` = `ttstatid`.`maxLogID`";
+		$queryStr .= 
+			" WHERE `tblDocuments`.`expires` > ".$startts." AND `tblDocuments`.`expires` < ".$endts;
+		if($user)
+			$queryStr .=
+				" AND `tblDocuments`.`owner` = '".$user->getID()."' ";
+		$queryStr .= 
+			" ORDER BY `expires` DESC";
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$documents = array();
+		$ts = mktime(0, 0, 0) + 86400;
+		foreach ($resArr as $row) {
+			$document = $this->getDocument($row["id"]);
+			if($updatestatus)
+				$document->verifyLastestContentExpriry();
+			$documents[] = $document;
+		}
+		return $documents;
 	} /* }}} */
 
 	/**

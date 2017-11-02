@@ -2,12 +2,15 @@
 define('USE_PHP_SESSION', 0);
 
 include("../inc/inc.Settings.php");
-require_once "SeedDMS/Core.php";
+include("../inc/inc.Extension.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.DBInit.php");
+//require_once "SeedDMS/Core.php";
 require_once "SeedDMS/Preview.php";
 
-$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+//$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+//$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
+//$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
 if(USE_PHP_SESSION) {
 	session_start();
@@ -783,7 +786,8 @@ function doSearch() { /* {{{ */
 	$count = 0;
 	if($resArr['docs']) {
 		foreach ($resArr['docs'] as $entry) {
-			if ($entry->getAccessMode($userobj) >= M_READ) {
+			$lc = $entry->getLatestContent();
+			if ($entry->getAccessMode($userobj) >= M_READ && $lc) {
 				$entries[] = $entry;
 				$count++;
 			}
@@ -963,6 +967,53 @@ function createAccount() { /* {{{ */
                 );
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
+    return;
+} /* }}} */
+
+/**
+ * Updates the password of an existing Account, the password must be PUT as a md5 string
+ *
+ * @param      <type>  $id     The user name or numerical identifier
+ */
+function changeAccountPassword($id) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    checkIfAdmin();
+
+    if ($app->request()->put('password') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new password', 'data'=>''));
+        return; 
+    }
+
+    $newPassword = $app->request()->put('password');
+
+    if(is_numeric($id))
+        $account = $dms->getUser($id);
+    else {
+        $account = $dms->getUserByLogin($id);
+    }
+
+    /**
+     * User not found
+     */
+    if (!$account) {
+    	$app->response()->status(404);
+    	return;
+    }
+
+    $operation = $account->setPwd($newPassword);
+
+    if (!$operation){
+		$app->response()->header('Content-Type', 'application/json');
+	    echo json_encode(array('success'=>false, 'message'=>'', 'data'=>'Could not change password.'));
+	    return;
+    }
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+
     return;
 } /* }}} */
 
@@ -1389,6 +1440,7 @@ $app->get('/account/locked', 'getLockedDocuments');
 $app->post('/accounts', 'createAccount');
 $app->get('/accounts/:id', 'getAccountById');
 $app->put('/accounts/:id/disable', 'setDisabledAccount');
+$app->put('/accounts/:id/password', 'changeAccountPassword');
 $app->post('/groups', 'createGroup');
 $app->get('/groups/:id', 'getGroup');
 $app->put('/groups/:id/addUser', 'addUserToGroup');

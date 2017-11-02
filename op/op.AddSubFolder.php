@@ -27,7 +27,11 @@ include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('addsubfolder')) {
@@ -75,28 +79,39 @@ foreach($attributes as $attrdefid=>$attribute) {
 	}
 }
 
-$subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attributes);
+/* Check if additional notification shall be added */
+$notusers = array();
+if(!empty($_POST['notification_users'])) {
+	foreach($_POST['notification_users'] as $notuserid) {
+		$notuser = $dms->getUser($notuserid);
+		if($notuser) {
+			$notusers[] = $notuser;
+		}
+	}
+}
+$notgroups = array();
+if(!empty($_POST['notification_groups'])) {
+	foreach($_POST['notification_groups'] as $notgroupid) {
+		$notgroup = $dms->getGroup($notgroupid);
+		if($notgroup) {
+			$notgroups[] = $notgroup;
+		}
+	}
+}
 
-if (is_object($subFolder)) {
+$controller->setParam('folder', $folder);
+$controller->setParam('name', $name);
+$controller->setParam('comment', $comment);
+$controller->setParam('sequence', $sequence);
+$controller->setParam('attributes', $attributes);
+$controller->setParam('notificationgroups', $notgroups);
+$controller->setParam('notificationusers', $notusers);
+if(!$subFolder = $controller->run()) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText($controller->getErrorMsg()));
+} else {
 	// Send notification to subscribers.
 	if($notifier) {
 		$notifyList = $folder->getNotifyList();
-
-/*
-		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_subfolder_email");
-		$message = getMLText("new_subfolder_email")."\r\n";
-		$message .= 
-			getMLText("name").": ".$name."\r\n".
-			getMLText("folder").": ".$subFolder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$comment."\r\n".
-			getMLText("user").": ".$user->getFullName()."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$subFolder->getID()."\r\n";
-
-		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-		foreach ($folder->_notifyList["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
 
 		$subject = "new_subfolder_email_subject";
 		$message = "new_subfolder_email_body";
@@ -114,9 +129,6 @@ if (is_object($subFolder)) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
-
-} else {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 }
 
 add_log_line("?name=".$name."&folderid=".$folderid);

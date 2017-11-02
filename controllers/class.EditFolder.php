@@ -27,28 +27,26 @@ class SeedDMS_Controller_EditFolder extends SeedDMS_Controller_Common {
 		$user = $this->params['user'];
 		$settings = $this->params['settings'];
 		$folder = $this->params['folder'];
-		$name = $this->params['name'];
-		$comment = $this->params['comment'];
-		$sequence = $this->params['sequence'];
-		$attributes = $this->params['attributes'];
 
-		/* Get the document id and name before removing the document */
-		$foldername = $folder->getName();
-		$folderid = $folder->getID();
-
-		if(!$this->callHook('preEditFolder')) {
+		if(false === $this->callHook('preEditFolder')) {
+			if(empty($this->errormsg))
+				$this->errormsg = 'hook_preEditFolder_failed';
+			return null;
 		}
 
 		$result = $this->callHook('editFolder', $folder);
 		if($result === null) {
+			$name = $this->params['name'];
 			if(($oldname = $folder->getName()) != $name)
 				if(!$folder->setName($name))
 					return false;
 
+			$comment = $this->params['comment'];
 			if(($oldcomment = $folder->getComment()) != $comment)
 				if(!$folder->setComment($comment))
 					return false;
 
+			$attributes = $this->params['attributes'];
 			$oldattributes = $folder->getAttributes();
 			if($attributes) {
 				foreach($attributes as $attrdefid=>$attribute) {
@@ -78,6 +76,7 @@ class SeedDMS_Controller_EditFolder extends SeedDMS_Controller_Common {
 				}
 			}
 
+			$sequence = $this->params['sequence'];
 			if(strcasecmp($sequence, "keep")) {
 				if($folder->setSequence($sequence)) {
 				} else {

@@ -49,7 +49,7 @@ $accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 $folder = $document->getFolder();
 
-if ($document->getAccessMode($user) < M_READ) {
+if ($document->getAccessMode($user) < M_READ || !$document->getLatestContent()) {
 	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 

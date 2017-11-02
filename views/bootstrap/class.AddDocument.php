@@ -110,7 +110,7 @@ $(document).ready(function() {
 				alternatives: $('#dropfolderfileform1')
 			},
 			dropfolderfileform1: {
-				 alternatives: $(".btn-file input")
+				 alternatives: $("#userfile") //$(".btn-file input")
 			}
 <?php
 		}

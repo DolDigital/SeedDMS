@@ -2,6 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010 Matteo Lucarelli
 //    Copyright (C) 2010-2016 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -27,32 +28,22 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if(isset($_GET["form"]))
-	$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
-else
-	$form = '';
+if ($user->isGuest()) {
+	UI::exitError(getMLText("expired_documents"),getMLText("access_denied"));
+}
 
-if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
-	$dropfolderdir = substr($settings->_dropFolderDir, 0, -1);
-else
-	$dropfolderdir = $settings->_dropFolderDir;
-
-if(isset($_GET['showfolders']) && $_GET['showfolders'])
-	$showfolders = true;
-else
-	$showfolders = false;
+$orderby='n';
+if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
+	$orderby=$_GET["orderby"];
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
-	$view->setParam('dropfolderdir', $dropfolderdir);
-	$view->setParam('dropfolderfile', isset($_GET["dropfolderfile"]) ? $_GET["dropfolderfile"] : '');
-	$view->setParam('form', $form);
+	$view->setParam('orderby', $orderby);
 	$view->setParam('cachedir', $settings->_cacheDir);
-	$view->setParam('previewWidthMenuList', $settings->_previewWidthMenuList);
-	$view->setParam('previewWidthList', $settings->_previewWidthDropFolderList);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
-	$view->setParam('showfolders', $showfolders);
 	$view($_GET);
 	exit;
 }

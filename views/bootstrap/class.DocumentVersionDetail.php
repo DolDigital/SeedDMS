@@ -67,7 +67,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		case 'image/svg+xml':
 			$this->contentHeading(getMLText("preview"));
 ?>
-			<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" width="100%">
+			<img src="../op/op.Download.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $version->getVersion(); ?>" width="100%">
 <?php
 			break;
 		default:
@@ -96,7 +96,6 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$previewwidthdetail = $this->params['previewWidthDetail'];
 		$timeout = $this->params['timeout'];
 
-		$latestContent = $document->getLatestContent();
 		$status = $version->getStatus();
 		$reviewStatus = $version->getReviewStatus();
 		$approvalStatus = $version->getApprovalStatus();
@@ -254,7 +253,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 			if($status["status"] != S_OBSOLETE)
 				print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-comment\"></i> ".getMLText("edit_comment")."</a></li>";
 			if ( $status["status"] == S_DRAFT_REV){
-				print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_attributes")."</a></li>";
+				print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_attributes")."</a></li>";
 		}
 			print "</ul>";
 		}

@@ -217,8 +217,12 @@ class Settings { /* {{{ */
 	var $_cmdTimeout = 5;
 	// Preview image width in lists
 	var $_previewWidthList = 40;
+	// Preview image width in menu lists
+	var $_previewWidthMenuList = 40;
 	// Preview image width on document details page
 	var $_previewWidthDetail = 100;
+	// Preview image width in drop folder list
+	var $_previewWidthDropFolderList = 100;
 	// show full preview on document details page
 	var $_showFullPreview = false;
 	// convert to pdf for preview on document details page
@@ -404,8 +408,12 @@ class Settings { /* {{{ */
 		$this->_theme = strval($tab["theme"]);
 		if(isset($tab["previewWidthList"]))
 			$this->_previewWidthList = intval($tab["previewWidthList"]);
+		if(isset($tab["previewWidthMenuList"]))
+			$this->_previewWidthMenuList = intval($tab["previewWidthMenuList"]);
 		if(isset($tab["previewWidthDetail"]))
 			$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
+		if(isset($tab["previewWidthDropFolderList"]))
+			$this->_previewWidthDropFolderList = intval($tab["previewWidthDropFolderList"]);
 		$this->_showFullPreview = Settings::boolVal($tab["showFullPreview"]);
 		$this->_convertToPdf = Settings::boolVal($tab["convertToPdf"]);
 
@@ -719,7 +727,9 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "availablelanguages", implode(',', $this->_availablelanguages));
     $this->setXMLAttributValue($node, "theme", $this->_theme);
     $this->setXMLAttributValue($node, "previewWidthList", $this->_previewWidthList);
+    $this->setXMLAttributValue($node, "previewWidthMenuList", $this->_previewWidthMenuList);
     $this->setXMLAttributValue($node, "previewWidthDetail", $this->_previewWidthDetail);
+    $this->setXMLAttributValue($node, "previewWidthDropFolderList", $this->_previewWidthDropFolderList);
     $this->setXMLAttributValue($node, "showFullPreview", $this->_showFullPreview);
     $this->setXMLAttributValue($node, "convertToPdf", $this->_convertToPdf);
 

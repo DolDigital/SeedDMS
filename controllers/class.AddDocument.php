@@ -23,13 +23,17 @@
 class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 
 	public function run() { /* {{{ */
-		$name = $this->getParam('name');
-		$comment = $this->getParam('comment');
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$settings = $this->params['settings'];
+		$index = $this->params['index'];
+		$indexconf = $this->params['indexconf'];
+		$folder = $this->params['folder'];
 
 		/* Call preAddDocument early, because it might need to modify some
 		 * of the parameters.
 		 */
-		if(false === $this->callHook('preAddDocument', array('name'=>&$name, 'comment'=>&$comment))) {
+		if(false === $this->callHook('preAddDocument')) {
 			if(empty($this->errormsg))
 				$this->errormsg = 'hook_preAddDocument_failed';
 			return null;
@@ -37,13 +41,7 @@ class SeedDMS_Controller_AddDocument extends SeedDMS_Controller_Common {
 
 		$name = $this->getParam('name');
 		$comment = $this->getParam('comment');
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$settings = $this->params['settings'];
 		$documentsource = $this->params['documentsource'];
-		$index = $this->params['index'];
-		$indexconf = $this->params['indexconf'];
-		$folder = $this->params['folder'];
 		$expires = $this->getParam('expires');
 		$keywords = $this->getParam('keywords');
 		$cats = $this->getParam('categories');

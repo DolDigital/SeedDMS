@@ -1,4 +1,17 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.4
+--------------------------------------------------------------------------------
+- fix javascript error when indexing document, because the indexer was also
+  created when the js-code was requested (Closes #340)
+- new list of expired documents
+- access on document links and attachments can be controlled by a hook
+- move AddSubFolder code into controller, add hooks equivalent to AddDocment (Closes #359)
+- add list of expired documents to MyDocument page
+- move code of DocumentAccess and EditDocument into controller
+- make width of preview images in drop folder configurable
+- hide pager on search page when all folders/documents are listed
+
+--------------------------------------------------------------------------------
                      Changes in version 5.1.3
 --------------------------------------------------------------------------------
 - add link to search for attribute value in attribute mgr
@@ -39,6 +52,12 @@
 --------------------------------------------------------------------------------
 - added support for postgresql
 - document attachments can linked to a version and be public or hidden
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.0.14
+--------------------------------------------------------------------------------
+- use cmd timeout when indexing documents (Closes #344)
+- add change password function to rest api (merge from sebbuku)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.13
@@ -138,6 +157,12 @@
 - smtp authentification
 - add .xml to online file types by default
 - add home folder for users
+
+--------------------------------------------------------------------------------
+                     Changes in version 4.3.37
+--------------------------------------------------------------------------------
+- fix label in password forgotten form (Closes #346)
+- translation updates
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36

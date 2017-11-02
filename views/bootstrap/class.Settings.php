@@ -187,6 +187,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_previewWidthList");?>:</td>
 				<td><?php $this->showTextField("previewWidthList", $settings->_previewWidthList); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_previewWidthMenuList_desc");?>">
+        <td><?php printMLText("settings_previewWidthMenuList");?>:</td>
+				<td><?php $this->showTextField("previewWidthMenuList", $settings->_previewWidthMenuList); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_previewWidthDropFolderList_desc");?>">
+        <td><?php printMLText("settings_previewWidthDropFolderList");?>:</td>
+				<td><?php $this->showTextField("previewWidthDropFolderList", $settings->_previewWidthDropFolderList); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_previewWidthDetail_desc");?>">
         <td><?php printMLText("settings_previewWidthDetail");?>:</td>
 				<td><?php $this->showTextField("previewWidthDetail", $settings->_previewWidthDetail); ?></td>
@@ -769,7 +777,7 @@ if(!is_writeable($settings->_configFilePath)) {
 									echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
 									foreach($conf['options'] as $key=>$opt) {
 										echo "<option value=\"".$key."\"";
-										if(in_array($key, $selections))
+										if(in_array($key, $selections, true))
 											echo " selected";
 										echo ">".htmlspecialchars($opt)."</option>";
 									}

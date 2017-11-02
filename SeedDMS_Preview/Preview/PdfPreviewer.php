@@ -31,6 +31,13 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 			'application/vnd.oasis.opendocument.text' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
 			'text/rtf' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
 			'application/msword' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
+			'application/vnd.ms-excel' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
+			'text/plain' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
+			'application/postscript' => "ps2pdf '%f' - > '%o'",
+//			'image/jpeg' => "convert '%f' pdf:- > '%o'",
+//			'image/png' => "convert '%f' pdf:- > '%o'",
+//			'image/gif' => "convert '%f' pdf:- > '%o'",
 		);
 	} /* }}} */
 
@@ -101,6 +108,7 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 				try {
 					self::execWithTimeout($cmd, $this->timeout);
 				} catch(Exception $e) {
+					return false;
 				}
 			}
 			return true;

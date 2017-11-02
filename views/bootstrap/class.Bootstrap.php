@@ -49,7 +49,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footerjs[] = $script;
 	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="", $base="") { /* {{{ */
+	function htmlStartPage($title="", $bodyClass="", $base="", $httpheader=array()) { /* {{{ */
 		if(1 || method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
@@ -62,6 +62,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			$csp_rules = "script-src 'self' 'unsafe-eval';"; // style-src 'self';";
 			foreach (array("X-WebKit-CSP", "X-Content-Security-Policy", "Content-Security-Policy") as $csp) {
 				header($csp . ": " . $csp_rules);
+			}
+		}
+		if($httpheader) {
+			foreach($httpheader as $name=>$value) {
+				header($name . ": " . $value);
 			}
 		}
 		$hookObjs = $this->getHookObjects('SeedDMS_View_Bootstrap');
@@ -661,6 +666,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ExpiredDocuments.php\">".getMLText("documents_expired")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
@@ -847,6 +853,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons["pdf"]  = "gnome-mime-application-pdf.svg";
 		$icons["wav"]  = "audio.svg";
 		$icons["mp3"]  = "audio.svg";
+		$icons["opus"]  = "audio.svg";
 		$icons["c"]    = "text-x-preview.svg";
 		$icons["cpp"]  = "text-x-preview.svg";
 		$icons["h"]    = "text-x-preview.svg";
@@ -902,7 +909,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			<div class="input-append">
 				<input type="text" class="form-control" readonly>
 				<span class="btn btn-default btn-file">
-					'.getMLText("browse").'&hellip; <input _id="'.$id.'" type="file" name="'.$varname.'"'.($multiple ? " multiple" : "").($accept ? ' accept="'.$accept.'"' : "").'">
+					'.getMLText("browse").'&hellip; <input id="'.$id.'" type="file" name="'.$varname.'"'.($multiple ? " multiple" : "").($accept ? ' accept="'.$accept.'"' : "").'">
 				</span>
 			</div>
 		</div>
@@ -1249,7 +1256,7 @@ $(document).ready(function() {
 		print "<div class=\"input-append\">\n";
 		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
+		print "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".urlencode($dropfolderfile)."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
