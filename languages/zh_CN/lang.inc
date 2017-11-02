@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (732), archonwang (469), fengjohn (5)
+//    Translators: Admin (733), archonwang (469), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '双重认证',
@@ -320,7 +320,7 @@ URL: [url]',
 'documentcontent' => '文档内容',
 'documents' => '文档',
 'documents_checked_out_by_you' => '您签出的文档',
-'documents_expired' => '',
+'documents_expired' => '过期的文档',
 'documents_in_process' => '待处理文档',
 'documents_locked' => '已锁定的文档',
 'documents_locked_by_you' => '被您锁定的文档',
