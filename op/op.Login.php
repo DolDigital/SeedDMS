@@ -33,7 +33,7 @@ include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) { /* {{{ */
 	global $dms, $theme;
-	$view = UI::factory($theme, 'ErrorDlg', array('dms'=>$dms));
+	$view = UI::factory($theme, 'Login', array('dms'=>$dms));
 	$view->exitError($heading, $message, true);
 	return;
 } /* }}} */
