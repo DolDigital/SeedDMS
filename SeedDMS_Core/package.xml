@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-09-05</date>
+ <date>2017-11-07</date>
  <time>09:19:24</time>
  <version>
-  <release>5.1.4</release>
-  <api>5.1.4</api>
+  <release>5.1.5</release>
+  <api>5.1.5</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- add virtual access mode for document links and attachments plus callbacks to
-  check access mode in a hook
-- add new method SeedDMS_Core_DMS::getDocumentsExpired()
-- all changes from 5.0.14 merged
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1516,6 +1512,25 @@ returns just users which are not disabled
 - add methods isMandatoryReviewerOf() and isMandatoryApproverOf()
 - add methods transferDocumentsFolders() and transferEvents()
 - add method SeedDMS_Core_DMS::getDocumentByOriginalFilename()
+   </notes>
+  </release>
+  <release>
+   <date>2017-09-05</date>
+   <time>09:19:24</time>
+   <version>
+    <release>5.1.4</release>
+    <api>5.1.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- add virtual access mode for document links and attachments plus callbacks to
+  check access mode in a hook
+- add new method SeedDMS_Core_DMS::getDocumentsExpired()
+- all changes from 5.0.14 merged
    </notes>
   </release>
  </changelog>
