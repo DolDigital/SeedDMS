@@ -130,7 +130,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($document) {
 			if ($document->getAccessMode($user) >= M_READ) {
 				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
-				$txt = $this->callHook('documentListItem', $document, $previewer, true, '');
+				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewitem');
 				if(is_string($txt))
 					$content = $txt;
 				else 

@@ -92,6 +92,7 @@ if (get_magic_quotes_gpc()) {
 	unset($process);
 }
 
+$indexconf = null;
 if($settings->_enableFullSearch) {
 	if($settings->_fullSearchEngine == 'sqlitefts') {
 		$indexconf = array(

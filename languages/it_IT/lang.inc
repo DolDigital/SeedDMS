@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1568), rickr (144), s.pnt (26)
+//    Translators: Admin (1571), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -325,7 +325,7 @@ URL: [url]',
 'documentcontent' => 'Contenuto documento',
 'documents' => 'Documenti',
 'documents_checked_out_by_you' => 'Documenti approvati da te',
-'documents_expired' => '',
+'documents_expired' => 'Documenti scaduti',
 'documents_in_process' => 'Documenti in lavorazione',
 'documents_locked' => 'Documenti bloccati',
 'documents_locked_by_you' => 'Documenti bloccati da te',
@@ -860,7 +860,7 @@ Dovessero esserci ancora problemi al login, prego contatta l\'Amministratore di 
 'personal_default_keywords' => 'Parole-chiave personali',
 'pl_PL' => 'Polacco',
 'possible_substitutes' => 'Sostituti',
-'preset_expires' => '',
+'preset_expires' => 'Scadenza preimpostata',
 'preview' => 'Anteprima',
 'preview_converters' => 'Anteprima convesione documento',
 'preview_images' => '',
@@ -1629,7 +1629,7 @@ URL: [url]',
 'users_and_groups' => 'Utenti/Gruppi',
 'users_done_work' => 'Lavoro eseguito dagli Utenti',
 'user_exists' => 'Utente già esistente',
-'user_group' => '',
+'user_group' => 'Utente/Gruppo',
 'user_group_management' => 'Gestione Utenti/Gruppi',
 'user_image' => 'Immagine',
 'user_info' => 'Informazioni utente',

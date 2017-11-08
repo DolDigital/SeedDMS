@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (738), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (739), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -317,7 +317,7 @@ URL: [url]',
 'documentcontent' => '',
 'documents' => 'Documenten',
 'documents_checked_out_by_you' => 'Door u in behandeling genomen documenten',
-'documents_expired' => '',
+'documents_expired' => 'Verlopen documenten',
 'documents_in_process' => 'Documenten in behandeling',
 'documents_locked' => 'Geblokkeerde documenten',
 'documents_locked_by_you' => 'Documenten door U geblokkeerd',

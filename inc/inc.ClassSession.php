@@ -496,8 +496,7 @@ class SeedDMS_SessionMgr {
 	function getLastAccessedSessions($datetime) { /* {{{ */
 		if(!$ts = makeTsFromLongDate($datetime))
 			return false;
-		$queryStr = "SELECT * FROM `tblSessions` WHERE `lastAccess`>=".$ts;
-		$queryStr .= " ORDER BY `lastAccess` DESC";
+		$queryStr = "SELECT a.* FROM `tblSessions` AS a LEFT OUTER JOIN `tblSessions` AS b ON a.`userID`=b.`userID` AND a.`lastAccess`< b.`lastAccess` WHERE b.`userID` IS NULL AND a.`lastAccess` >=".$ts;
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
