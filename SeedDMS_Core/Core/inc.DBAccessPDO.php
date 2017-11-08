@@ -10,6 +10,7 @@
  * @copyright  Copyright (C) 2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
+/** @noinspection PhpUndefinedClassInspection */
 
 /**
  * Class to represent the database access for the document management
@@ -107,7 +108,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 *
 	 * This function is used to retrieve a list of database tables for backup
 	 *
-	 * @return array list of table names
+	 * @return string[]|bool list of table names
 	 */
 	function TableList() { /* {{{ */
 		switch($this->_driver) {
@@ -130,17 +131,17 @@ class SeedDMS_Core_DatabaseAccess {
 		return $res;
 	}	/* }}} */
 
-	/**
-	 * Constructor of SeedDMS_Core_DatabaseAccess
-	 *
-	 * Sets all database parameters but does not connect.
-	 *
-	 * @param string $driver the database type e.g. mysql, sqlite
-	 * @param string $hostname host of database server
-	 * @param string $user name of user having access to database
-	 * @param string $passw password of user
-	 * @param string $database name of database
-	 */
+    /**
+     * Constructor of SeedDMS_Core_DatabaseAccess
+     *
+     * Sets all database parameters but does not connect.
+     *
+     * @param string $driver the database type e.g. mysql, sqlite
+     * @param string $hostname host of database server
+     * @param string $user name of user having access to database
+     * @param string $passw password of user
+     * @param bool|string $database name of database
+     */
 	function __construct($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
 		$this->_driver = $driver;
 		$tmp = explode(":", $hostname);
@@ -212,7 +213,8 @@ class SeedDMS_Core_DatabaseAccess {
 				$dsn = $this->_driver.":".$this->_database;
 				break;
 		}
-		$this->_conn = new PDO($dsn, $this->_user, $this->_passw);
+        /** @noinspection PhpUndefinedVariableInspection */
+        $this->_conn = new PDO($dsn, $this->_user, $this->_passw);
 		if (!$this->_conn)
 			return false;
 
@@ -246,7 +248,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Sanitize String used in database operations
 	 *
-	 * @param string text
+	 * @param string $text
 	 * @return string sanitized string
 	 */
 	function qstr($text) { /* {{{ */
@@ -256,21 +258,22 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Replace back ticks by '"'
 	 *
-	 * @param string text
+	 * @param string $text
 	 * @return string sanitized string
 	 */
 	function rbt($text) { /* {{{ */
 		return str_replace('`', '"', $text);
 	} /* }}} */
 
-	/**
-	 * Execute SQL query and return result
-	 *
-	 * Call this function only with sql query which return data records.
-	 *
-	 * @param string $queryStr sql query
-	 * @return array/boolean data if query could be executed otherwise false
-	 */
+    /**
+     * Execute SQL query and return result
+     *
+     * Call this function only with sql query which return data records.
+     *
+     * @param string $queryStr sql query
+     * @param bool $retick
+     * @return array|bool data if query could be executed otherwise false
+     */
 	function getResultArray($queryStr, $retick=true) { /* {{{ */
 		$resArr = array();
 		
@@ -341,11 +344,13 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_intransaction--;
 	} /* }}} */
 
-	/**
-	 * Return the id of the last instert record
-	 *
-	 * @return integer id used in last autoincrement
-	 */
+    /**
+     * Return the id of the last instert record
+     *
+     * @param string $tablename
+     * @param string $fieldname
+     * @return int id used in last autoincrement
+     */
 	function getInsertID($tablename='', $fieldname='id') { /* {{{ */
 		if($this->_driver == 'pgsql')
 			return $this->_conn->lastInsertId('"'.$tablename.'_'.$fieldname.'_seq"');
@@ -362,9 +367,12 @@ class SeedDMS_Core_DatabaseAccess {
 		return $this->_conn->errorCode();
 	} /* }}} */
 
-	/**
-	 * Create various temporary tables to speed up and simplify sql queries
-	 */
+    /**
+     * Create various temporary tables to speed up and simplify sql queries
+     * @param $tableName
+     * @param bool $override
+     * @return bool
+     */
 	function createTemporaryTable($tableName, $override=false) { /* {{{ */
 		if (!strcasecmp($tableName, "ttreviewid")) {
 			switch($this->_driver) {
@@ -533,13 +541,14 @@ class SeedDMS_Core_DatabaseAccess {
 		return false;
 	} /* }}} */
 
-	/**
-	 * Return sql statement for extracting the date part from a field
-	 * containing a unix timestamp
-	 *
-	 * @param string $fieldname name of field containing the timestamp
-	 * @return string sql code
-	 */
+    /**
+     * Return sql statement for extracting the date part from a field
+     * containing a unix timestamp
+     *
+     * @param string $fieldname name of field containing the timestamp
+     * @param string $format
+     * @return string sql code
+     */
 	function getDateExtract($fieldname, $format='%Y-%m-%d') { /* {{{ */
 		switch($this->_driver) {
 			case 'mysql':
@@ -603,11 +612,12 @@ class SeedDMS_Core_DatabaseAccess {
 		return '';
 	} /* }}} */
 
-	/**
-	 * Return sql statement for returning the current timestamp
-	 *
-	 * @return string sql code
-	 */
+    /**
+     * Return sql statement for returning the current timestamp
+     *
+     * @param $field
+     * @return string sql code
+     */
 	function castToText($field) { /* {{{ */
 		switch($this->_driver) {
 			case 'pgsql':
@@ -617,5 +627,3 @@ class SeedDMS_Core_DatabaseAccess {
 		return $field;
 	} /* }}} */
 }
-
-?>

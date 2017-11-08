@@ -36,6 +36,11 @@ class SeedDMS_Core_Group { /* {{{ */
 	 */
 	protected $_name;
 
+    /**
+     * @var SeedDMS_Core_User[]
+     */
+	protected $_users;
+
 	/**
 	 * The comment of the user group
 	 *
@@ -46,7 +51,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	/**
 	 * Back reference to DMS this user group belongs to
 	 *
-	 * @var object
+	 * @var SeedDMS_Core_DMS
 	 */
 	protected $_dms;
 
@@ -62,10 +67,10 @@ class SeedDMS_Core_Group { /* {{{ */
 	 *
 	 * @param string|integer $id Id, name of group, depending
 	 * on the 3rd parameter.
-	 * @param object $dms instance of dms
+	 * @param SeedDMS_Core_DMS $dms instance of dms
 	 * @param string $by search by group name if set to 'name'. 
 	 * Search by Id of group if left empty.
-	 * @return object instance of class SeedDMS_Core_Group
+	 * @return SeedDMS_Core_Group|false instance of class SeedDMS_Core_Group
 	 */
 	public static function getInstance($id, $dms, $by='') { /* {{{ */
 		$db = $dms->getDB();
@@ -91,6 +96,11 @@ class SeedDMS_Core_Group { /* {{{ */
 		return $group;
 	} /* }}} */
 
+    /**
+     * @param $orderby
+     * @param SeedDMS_Core_DMS $dms
+     * @return array|bool
+     */
 	public static function getAllInstances($orderby, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -113,14 +123,27 @@ class SeedDMS_Core_Group { /* {{{ */
 		return $groups;
 	} /* }}} */
 
+    /**
+     * @param SeedDMS_Core_DMS $dms
+     */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
+    /**
+     * @return int
+     */
 	function getID() { return $this->_id; }
 
+    /**
+     * @return string
+     */
 	function getName() { return $this->_name; }
 
+    /**
+     * @param $newName
+     * @return bool
+     */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -132,8 +155,15 @@ class SeedDMS_Core_Group { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @return string
+     */
 	function getComment() { return $this->_comment; }
 
+    /**
+     * @param $newComment
+     * @return bool
+     */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -145,6 +175,9 @@ class SeedDMS_Core_Group { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @return SeedDMS_Core_User[]|bool
+     */
 	function getUsers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -159,7 +192,8 @@ class SeedDMS_Core_Group { /* {{{ */
 			$this->_users = array();
 
 			$classname = $this->_dms->getClassname('user');
-			foreach ($resArr as $row) {
+            foreach ($resArr as $row) {
+            	/** @var SeedDMS_Core_User $user */
 				$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
 				array_push($this->_users, $user);
 			}
@@ -167,6 +201,9 @@ class SeedDMS_Core_Group { /* {{{ */
 		return $this->_users;
 	} /* }}} */
 
+    /**
+     * @return SeedDMS_Core_User[]|bool
+     */
 	function getManagers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -180,13 +217,19 @@ class SeedDMS_Core_Group { /* {{{ */
 		$managers = array();
 
 		$classname = $this->_dms->getClassname('user');
-		foreach ($resArr as $row) {
+        foreach ($resArr as $row) {
+        	/** @var SeedDMS_Core_User $user */
 			$user = new $classname($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
 			array_push($managers, $user);
 		}
 		return $managers;
 	} /* }}} */
 
+    /**
+     * @param SeedDMS_Core_User $user
+     * @param bool $asManager
+     * @return bool
+     */
 	function addUser($user,$asManager=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -199,6 +242,10 @@ class SeedDMS_Core_Group { /* {{{ */
 		return true;
 	} /* }}} */
 
+    /**
+     * @param SeedDMS_Core_User $user
+     * @return bool
+     */
 	function removeUser($user) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -213,7 +260,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	/**
 	 * Check if user is member of group
 	 *
-	 * @param object $user user to be checked
+	 * @param SeedDMS_Core_User $user user to be checked
 	 * @param boolean $asManager also check whether user is manager of group if
 	 * set to true, otherwise does not care about manager status
 	 * @return boolean true if user is member, otherwise false
@@ -241,7 +288,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	/**
 	 * Toggle manager status of user
 	 *
-	 * @param object $user
+	 * @param SeedDMS_Core_User $user
 	 * @return boolean true if operation was successful, otherwise false
 	 */
 	function toggleManager($user) { /* {{{ */
@@ -261,7 +308,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	 * This function deletes the user group and all it references, like access
 	 * control lists, notifications, as a child of other groups, etc.
 	 *
-	 * @param object $user the user doing the removal (needed for entry in
+	 * @param SeedDMS_Core_User $user the user doing the removal (needed for entry in
 	 *        review log.
 	 * @return boolean true on success or false in case of an error
 	 */
@@ -405,7 +452,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        reviews
 	 * @param int $version optional version of the document
-	 * @return array list of all workflows
+	 * @return bool|array list of all workflows
 	 */
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -432,7 +479,7 @@ class SeedDMS_Core_Group { /* {{{ */
 	 * Get all notifications of group
 	 *
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
-	 * @return array array of notifications
+	 * @return SeedDMS_Core_Notification[]|bool array of notifications
 	 */
 	function getNotifications($type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -457,4 +504,3 @@ class SeedDMS_Core_Group { /* {{{ */
 	} /* }}} */
 
 } /* }}} */
-?>

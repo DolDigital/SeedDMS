@@ -25,25 +25,50 @@
  * @version    Release: @package_version@
  */
 class SeedDMS_Core_File {
-	static function renameFile($old, $new) { /* {{{ */
+    /**
+     * @param $old
+     * @param $new
+     * @return bool
+     */
+    static function renameFile($old, $new) { /* {{{ */
 		return @rename($old, $new);
 	} /* }}} */
 
-	static function removeFile($file) { /* {{{ */
+    /**
+     * @param $file
+     * @return bool
+     */
+    static function removeFile($file) { /* {{{ */
 		return @unlink($file);
 	} /* }}} */
 
-	static function copyFile($source, $target) { /* {{{ */
+    /**
+     * @param $source
+     * @param $target
+     * @return bool
+     */
+    static function copyFile($source, $target) { /* {{{ */
 		return @copy($source, $target);
 	} /* }}} */
 
-	static function moveFile($source, $target) { /* {{{ */
-		if (!@copyFile($source, $target))
+    /**
+     * @param $source
+     * @param $target
+     * @return bool
+     */
+    static function moveFile($source, $target) { /* {{{ */
+        /** @noinspection PhpUndefinedFunctionInspection */
+        if (!@copyFile($source, $target))
 			return false;
-		return @removeFile($source);
+        /** @noinspection PhpUndefinedFunctionInspection */
+        return @removeFile($source);
 	} /* }}} */
 
-	static function fileSize($file) { /* {{{ */
+    /**
+     * @param $file
+     * @return bool|int
+     */
+    static function fileSize($file) { /* {{{ */
 		if(!$a = fopen($file, 'r'))
 			return false;
 		fseek($a, 0, SEEK_END);
@@ -52,12 +77,22 @@ class SeedDMS_Core_File {
 		return $filesize;
 	} /* }}} */
 
-	static function format_filesize($size, $sizes = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')) { /* {{{ */
+    /**
+     * @param $size
+     * @param array $sizes
+     * @return string
+     */
+    static function format_filesize($size, $sizes = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')) { /* {{{ */
 		if ($size == 0) return('0 Bytes');
-		return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
+        /** @noinspection PhpIllegalArrayKeyTypeInspection */
+        return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
 	} /* }}} */
 
-	static function parse_filesize($str) { /* {{{ */
+    /**
+     * @param $str
+     * @return bool|int
+     */
+    static function parse_filesize($str) { /* {{{ */
 		preg_replace('/\s\s+/', ' ', $str);
 		if(strtoupper(substr($str, -1)) == 'B') {
 			$value = (int) substr($str, 0, -2);
@@ -80,18 +115,32 @@ class SeedDMS_Core_File {
 				return $value;
 				break;
 		}
-		return false;
+        /** @noinspection PhpUnreachableStatementInspection */
+        return false;
 	} /* }}} */
 
-	static function checksum($file) { /* {{{ */
+    /**
+     * @param $file
+     * @return string
+     */
+    static function checksum($file) { /* {{{ */
 		return md5_file($file);
 	} /* }}} */
 
-	static function renameDir($old, $new) { /* {{{ */
+    /**
+     * @param $old
+     * @param $new
+     * @return bool
+     */
+    static function renameDir($old, $new) { /* {{{ */
 		return @rename($old, $new);
 	} /* }}} */
 
-	static function makeDir($path) { /* {{{ */
+    /**
+     * @param $path
+     * @return bool
+     */
+    static function makeDir($path) { /* {{{ */
 		
 		if( !is_dir( $path ) ){
 			$res=@mkdir( $path , 0777, true);
@@ -146,7 +195,11 @@ class SeedDMS_Core_File {
 */
 	} /* }}} */
 
-	static function removeDir($path) { /* {{{ */
+    /**
+     * @param $path
+     * @return bool
+     */
+    static function removeDir($path) { /* {{{ */
 		$handle = @opendir($path);
 		while ($entry = @readdir($handle) )
 		{
@@ -167,7 +220,12 @@ class SeedDMS_Core_File {
 		return @rmdir($path);
 	} /* }}} */
 
-	static function copyDir($sourcePath, $targetPath) { /* {{{ */
+    /**
+     * @param $sourcePath
+     * @param $targetPath
+     * @return bool
+     */
+    static function copyDir($sourcePath, $targetPath) { /* {{{ */
 		if (mkdir($targetPath, 0777)) {
 			$handle = @opendir($sourcePath);
 			while ($entry = @readdir($handle) ) {
@@ -189,14 +247,26 @@ class SeedDMS_Core_File {
 		return true;
 	} /* }}} */
 
-	static function moveDir($sourcePath, $targetPath) { /* {{{ */
-		if (!copyDir($sourcePath, $targetPath))
+    /**
+     * @param $sourcePath
+     * @param $targetPath
+     * @return bool
+     */
+    static function moveDir($sourcePath, $targetPath) { /* {{{ */
+        /** @noinspection PhpUndefinedFunctionInspection */
+        if (!copyDir($sourcePath, $targetPath))
 			return false;
-		return removeDir($sourcePath);
+        /** @noinspection PhpUndefinedFunctionInspection */
+        return removeDir($sourcePath);
 	} /* }}} */
 
 	// code by Kioob (php.net manual)
-	static function gzcompressfile($source,$level=false) { /* {{{ */
+    /**
+     * @param $source
+     * @param bool $level
+     * @return bool|string
+     */
+    static function gzcompressfile($source, $level=false) { /* {{{ */
 		$dest=$source.'.gz';
 		$mode='wb'.$level;
 		$error=false;
@@ -215,4 +285,3 @@ class SeedDMS_Core_File {
 		else return $dest;
 	} /* }}} */
 }
-?>

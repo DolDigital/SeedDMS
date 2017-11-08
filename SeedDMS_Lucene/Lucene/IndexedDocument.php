@@ -24,6 +24,12 @@
  */
 class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 
+    /**
+     * @param $cmd
+     * @param int $timeout
+     * @return string
+     * @throws Exception
+     */
 	static function execWithTimeout($cmd, $timeout=2) { /* {{{ */
 		$descriptorspec = array(
 			0 => array("pipe", "r"),
@@ -60,10 +66,15 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		}
 	} /* }}} */
 
-	/**
-	 * Constructor. Creates our indexable document and adds all
-	 * necessary fields to it using the passed in document
-	 */
+    /**
+     * Constructor. Creates our indexable document and adds all
+     * necessary fields to it using the passed in document
+     * @param SeedDMS_Core_DMS $dms
+     * @param SeedDMS_Core_Document $document
+     * @param null $convcmd
+     * @param bool $nocontent
+     * @param int $timeout
+     */
 	public function __construct($dms, $document, $convcmd=null, $nocontent=false, $timeout=5) {
 		$_convcmd = array(
 			'application/pdf' => 'pdftotext -enc UTF-8 -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',

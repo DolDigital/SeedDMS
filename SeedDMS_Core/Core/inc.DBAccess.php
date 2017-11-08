@@ -16,6 +16,7 @@
  * Include the adodb database abstraction
  */
 require_once "adodb/adodb.inc.php";
+/** @noinspection PhpUndefinedClassInspection */
 
 /**
  * Class to represent the database access for the document management
@@ -54,19 +55,19 @@ class SeedDMS_Core_DatabaseAccess {
 	 */
 	function TableList() {
 		return $this->_conn->MetaTables("TABLES");
-	}	
+	}
 
-	/**
-	 * Constructor of SeedDMS_Core_DatabaseAccess
-	 *
-	 * Sets all database parameters but does not connect.
-	 *
-	 * @param string $driver the database type e.g. mysql, sqlite
-	 * @param string $hostname host of database server
-	 * @param string $user name of user having access to database
-	 * @param string $passw password of user
-	 * @param string $database name of database
-	 */
+    /**
+     * Constructor of SeedDMS_Core_DatabaseAccess
+     *
+     * Sets all database parameters but does not connect.
+     *
+     * @param string $driver the database type e.g. mysql, sqlite
+     * @param string $hostname host of database server
+     * @param string $user name of user having access to database
+     * @param string $passw password of user
+     * @param bool|string $database name of database
+     */
 	function __construct($driver, $hostname, $user, $passw, $database = false) {
 		$this->_driver = $driver;
 		$this->_hostname = $hostname;
@@ -127,7 +128,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Sanitize String used in database operations
 	 *
-	 * @param string text
+	 * @param string $text
 	 * @return string sanitized string
 	 */
 	function qstr($text) { /* {{{ */
@@ -141,10 +142,11 @@ class SeedDMS_Core_DatabaseAccess {
 	 * Call this function only with sql query which return data records.
 	 *
 	 * @param string $queryStr sql query
-	 * @return array/boolean data if query could be executed otherwise false
+	 * @return array|boolean data if query could be executed otherwise false
 	 */
 	function getResultArray($queryStr) { /* {{{ */
-		$resArr = array();
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $resArr = array();
 		
 		$res = $this->_conn->Execute($queryStr);
 		if (!$res) {
@@ -157,17 +159,17 @@ class SeedDMS_Core_DatabaseAccess {
 		return $resArr;
 	} /* }}} */
 
-	/**
-	 * Execute SQL query
-	 *
-	 * Call this function only with sql query which do not return data records.
-	 *
-	 * @param string $queryStr sql query
-	 * @param boolean $silent not used anymore. This was used when this method
-	 *        still issued an error message
-	 * @return boolean true if query could be executed otherwise false
-	 */
-	function getResult($queryStr, $silent=false) { /* {{{ */
+    /**
+     * Execute SQL query
+     *
+     * Call this function only with sql query which do not return data records.
+     *
+     * @param string $queryStr sql query
+     * @return bool true if query could be executed otherwise false
+     * @internal param bool $silent not used anymore. This was used when this method
+     *        still issued an error message
+     */
+	function getResult($queryStr) { /* {{{ */
 		$res = $this->_conn->Execute($queryStr);
 		if(!$res) {
 			if($this->_debug)
@@ -215,9 +217,12 @@ class SeedDMS_Core_DatabaseAccess {
 		return $this->_conn->ErrorNo();
 	} /* }}} */
 
-	/**
-	 * Create various temporary tables to speed up and simplify sql queries
-	 */
+    /**
+     * Create various temporary tables to speed up and simplify sql queries
+     * @param $tableName
+     * @param bool $override
+     * @return bool
+     */
 	function createTemporaryTable($tableName, $override=false) { /* {{{ */
 		if (!strcasecmp($tableName, "ttreviewid")) {
 			$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttreviewid` (PRIMARY KEY (`reviewID`), INDEX (`maxLogID`)) ".
@@ -310,5 +315,3 @@ class SeedDMS_Core_DatabaseAccess {
 		return false;
 	} /* }}} */
 }
-
-?>
