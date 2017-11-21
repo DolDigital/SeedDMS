@@ -106,14 +106,14 @@ if ($action == "saveSettings")
   $settings->_firstDayOfWeek = intval($_POST["firstDayOfWeek"]);
 
   // SETTINGS - SYSTEM - SERVER
-  $settings->_rootDir = $_POST["rootDir"];
+  $settings->_rootDir = addDirSep($_POST["rootDir"]);
   $settings->_httpRoot = $_POST["httpRoot"];
-  $settings->_contentDir = $_POST["contentDir"];
-  $settings->_cacheDir = $_POST["cacheDir"];
-  $settings->_stagingDir = $_POST["stagingDir"];
-  $settings->_luceneDir = $_POST["luceneDir"];
-  $settings->_extraPath = $_POST["extraPath"];
-  $settings->_dropFolderDir = $_POST["dropFolderDir"];
+  $settings->_contentDir = addDirSep($_POST["contentDir"]);
+  $settings->_cacheDir = addDirSep($_POST["cacheDir"]);
+  $settings->_stagingDir = addDirSep($_POST["stagingDir"]);
+  $settings->_luceneDir = addDirSep($_POST["luceneDir"]);
+  $settings->_extraPath = addDirSep($_POST["extraPath"]);
+  $settings->_dropFolderDir = addDirSep($_POST["dropFolderDir"]);
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
