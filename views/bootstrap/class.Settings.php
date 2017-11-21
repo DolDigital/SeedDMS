@@ -734,38 +734,27 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php $this->showTextField("cmdTimeout", $settings->_cmdTimeout); ?></td>
       </tr>
 
-      <tr ><td><b> <?php printMLText("index_converters");?></b></td> </tr>
 <?php
-	foreach($settings->_converters['fulltext'] as $mimetype=>$cmd) {
+  foreach(array('fulltext', 'preview', 'pdf') as $target) {
+?>
+      <tr ><td><b> <?php printMLText($target."_converters");?></b></td> </tr>
+<?php
+	foreach($settings->_converters[$target] as $mimetype=>$cmd) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><?php $this->showTextField("converters[fulltext][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
+        <td><?php $this->showTextField("converters[".$target."][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
       </tr>
 <?php
 	}
 ?>
       <tr title="">
-        <td><?php $this->showTextField("converters[fulltext][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
-        <td><?php $this->showTextField("converters[fulltext][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
-      </tr>
-      <tr ><td><b> <?php printMLText("preview_converters");?></b></td> </tr>
-<?php
-	if(isset($settings->_converters['preview'])) {
-		foreach($settings->_converters['preview'] as $mimetype=>$cmd) {
-?>
-      <tr title="<?php echo $mimetype;?>">
-        <td><?php echo $mimetype;?>:</td>
-        <td><?php $this->showTextField("converters[preview][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
+        <td><?php $this->showTextField("converters[".$target."][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
+        <td><?php $this->showTextField("converters[".$target."][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
       </tr>
 <?php
-		}
 	}
 ?>
-      <tr title="">
-        <td><?php $this->showTextField("converters[preview][newmimetype]", "", '', getMLText('mimetype')); ?>:</td>
-        <td><?php $this->showTextField("converters[preview][newcmd]", "", '', getMLText('command')); ?></td>
-      </tr>
     </table>
 <?php		$this->contentContainerEnd(); ?>
   </div>

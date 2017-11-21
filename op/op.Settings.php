@@ -205,13 +205,16 @@ if ($action == "saveSettings")
 	unset($settings->_converters['fulltext']['newmimetype']);
 	unset($settings->_converters['fulltext']['newcmd']);
 
-	if(isset($_POST["converters"]["preview"]))
-		$settings->_converters['preview'] = $_POST["converters"]["preview"];
-	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $settings->_converters["preview"]["newmimetype"]);
-	if($newmimetype && trim($settings->_converters['preview']['newcmd']))
-		$settings->_converters['preview'][$newmimetype] = trim($settings->_converters['preview']['newcmd']);
-	unset($settings->_converters['preview']['newmimetype']);
-	unset($settings->_converters['preview']['newcmd']);
+	foreach(array('preview', 'pdf') as $target) {
+		if(isset($_POST["converters"][$target])) {
+			$settings->_converters[$target] = $_POST["converters"][$target];
+			$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $settings->_converters[$target]["newmimetype"]);
+			if($newmimetype && trim($settings->_converters[$target]['newcmd']))
+				$settings->_converters[$target][$newmimetype] = trim($settings->_converters[$target]['newcmd']);
+			unset($settings->_converters[$target]['newmimetype']);
+			unset($settings->_converters[$target]['newcmd']);
+		}
+	}
 
   // SETTINGS - EXTENSIONS
   $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();
