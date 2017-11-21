@@ -27,6 +27,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (isset($_GET["start"])) $start=$_GET["start"];
 else $start = '';
 if (isset($_GET["end"])) $end=$_GET["end"];
@@ -57,8 +60,6 @@ if(isset($_GET['eventtype']) && $_GET['eventtype']) {
 } else
 	$eventtype = 'regular';
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('calendar', $calendar);
 	$view->setParam('start', $start);

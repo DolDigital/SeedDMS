@@ -31,9 +31,8 @@ include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1]);
-if(!$view) {
-}
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -44,12 +43,14 @@ if (!is_object($document)) {
 	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
-
 $folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ || !$document->getLatestContent()) {
+	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+}
+
+/* Could be that the advanced access rights prohibit access on the content */
+if (!$document->getLatestContent()) {
 	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
@@ -63,8 +64,6 @@ if ($document->verifyLastestContentExpriry()){
 }
 
 if($view) {
-	$view->setParam('dms', $dms);
-	$view->setParam('user', $user);
 	$view->setParam('folder', $folder);
 	$view->setParam('document', $document);
 	$view->setParam('accessobject', $accessop);

@@ -33,6 +33,7 @@ $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
+
 $rootfolder = $dms->getFolder($settings->_rootFolderID);
 
 $type = 'docsperuser';
