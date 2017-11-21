@@ -797,6 +797,7 @@ class SeedDMS_Core_DMS {
 	 * @param string $param2 set to true
 	 * if 'AppRevByMe', 'ReviseByMe', 'ReceiptByMe' shall return even documents
 	 * І have already taken care of.
+	 * if 'ExpiredOwner' contains the date in days or as 'yyyy-mm-dd'
 	 * @param string $param3 sort list by this field
 	 * @param string $param4 order direction
 	 * @return array list of documents records
@@ -812,6 +813,7 @@ class SeedDMS_Core_DMS {
 		/* The following statement retrieves the status of the last version of all
 		 * documents. It must be restricted by further where clauses.
 		 */
+/*
 		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
 			"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 			"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
@@ -827,9 +829,33 @@ class SeedDMS_Core_DMS {
 			"LEFT JOIN `tblUsers` AS `sTbl` on `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ".
 			"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
 			"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version` ";
+ */
+		/* New sql statement which retrieves all documents, its latest version and
+		 * status, the owner and user initiating the latest status.
+		 * It doesn't need the where clause anymore. Hence the statement could be
+		 * extended with further left joins.
+		 */
+		$selectStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser`, ".
+			"`tblDocumentContent`.`version`, `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
+			"`tblDocumentStatusLog`.`comment` AS `statusComment`, `tblDocumentStatusLog`.`date` as `statusDate`, ".
+			"`tblDocumentStatusLog`.`userID`, `oTbl`.`fullName` AS `ownerName`, `sTbl`.`fullName` AS `statusName` ";
+		$queryStr =
+			"FROM `ttcontentid` ".
+			"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `ttcontentid`.`document` ".
+			"LEFT JOIN `tblDocumentContent` ON `tblDocumentContent`.`document` = `ttcontentid`.`document` AND `tblDocumentContent`.`version` = `ttcontentid`.`maxVersion` ".
+			"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID`=`ttcontentid`.`document` AND `tblDocumentStatus`.`version`=`ttcontentid`.`maxVersion` ".
+			"LEFT JOIN `ttstatid` ON `ttstatid`.`statusID` = `tblDocumentStatus`.`statusID` ".
+			"LEFT JOIN `tblDocumentStatusLog` ON `ttstatid`.`statusID` = `tblDocumentStatusLog`.`statusID` AND `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
+			"LEFT JOIN `tblDocumentLocks` ON `ttcontentid`.`document`=`tblDocumentLocks`.`document` ".
+			"LEFT JOIN `tblUsers` `oTbl` ON `oTbl`.`id` = `tblDocuments`.`owner` ".
+			"LEFT JOIN `tblUsers` `sTbl` ON `sTbl`.`id` = `tblDocumentStatusLog`.`userID` ";
+
+//		echo $queryStr;
 
 		switch($listtype) {
 		case 'AppRevByMe': // Documents I have to review/approve {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			// Get document list for the current user.
 			$reviewStatus = $user->getReviewStatus();
@@ -873,12 +899,42 @@ class SeedDMS_Core_DMS {
 			}
 			break; // }}}
 		case 'ReviewByMe': // Documents I have to review {{{
+			if (!$this->db->createTemporaryTable("ttreviewid")) {
+				return false;
+			}
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
 				$orderdir = 'DESC';
 			else
 				$orderdir = 'ASC';
+
+			$groups = array();
+			$tmp = $user->getGroups();
+			foreach($tmp as $group)
+				$groups[] = $group->getID();
+
+			$selectStr .= ", `tblDocumentReviewLog`.`date` as `duedate` ";
+			$queryStr .=
+				"LEFT JOIN `tblDocumentReviewers` on `ttcontentid`.`document`=`tblDocumentReviewers`.`documentID` AND `ttcontentid`.`maxVersion`=`tblDocumentReviewers`.`version` ".
+				"LEFT JOIN `ttreviewid` ON `ttreviewid`.`reviewID` = `tblDocumentReviewers`.`reviewID` ".
+				"LEFT JOIN `tblDocumentReviewLog` ON `tblDocumentReviewLog`.`reviewLogID`=`ttreviewid`.`maxLogID` ";
+
+			if(1) {
+			$queryStr .= "WHERE (`tblDocumentReviewers`.`type` = 0 AND `tblDocumentReviewers`.`required` = ".$user->getID()." ";
+			if($groups)
+				$queryStr .= "OR `tblDocumentReviewers`.`type` = 1 AND `tblDocumentReviewers`.`required` IN (".implode(',', $groups).") ";
+			$queryStr .= ") ";
+			$queryStr .= "AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_EXPIRED.") ";
+			if(!$param2)
+				$queryStr .= " AND `tblDocumentReviewLog`.`status` = 0 ";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+			} else {
+			$queryStr .= "WHERE 1=1 ";
 
 			// Get document list for the current user.
 			$reviewStatus = $user->getReviewStatus();
@@ -915,14 +971,45 @@ class SeedDMS_Core_DMS {
 			} else {
 				$queryStr = '';
 			}
+			}
 			break; // }}}
 		case 'ApproveByMe': // Documents I have to approve {{{
+			if (!$this->db->createTemporaryTable("ttapproveid")) {
+				return false;
+			}
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
 				$orderdir = 'DESC';
 			else
 				$orderdir = 'ASC';
+
+			$groups = array();
+			$tmp = $user->getGroups();
+			foreach($tmp as $group)
+				$groups[] = $group->getID();
+
+			$selectStr .= ", `tblDocumentApproveLog`.`date` as `duedate` ";
+			$queryStr .=
+				"LEFT JOIN `tblDocumentApprovers` on `ttcontentid`.`document`=`tblDocumentApprovers`.`documentID` AND `ttcontentid`.`maxVersion`=`tblDocumentApprovers`.`version` ".
+				"LEFT JOIN `ttapproveid` ON `ttapproveid`.`approveID` = `tblDocumentApprovers`.`approveID` ".
+				"LEFT JOIN `tblDocumentApproveLog` ON `tblDocumentApproveLog`.`approveLogID`=`ttapproveid`.`maxLogID` ";
+
+			if(1) {
+			$queryStr .= "WHERE (`tblDocumentApprovers`.`type` = 0 AND `tblDocumentApprovers`.`required` = ".$user->getID()." ";
+			if($groups)
+				$queryStr .= "OR `tblDocumentApprovers`.`type` = 1 AND `tblDocumentApprovers`.`required` IN (".implode(',', $groups).")";
+			$queryStr .= ") ";
+			$queryStr .= "AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_APP.", ".S_EXPIRED.") ";
+			if(!$param2)
+				$queryStr .= " AND `tblDocumentApproveLog`.`status` = 0 ";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+			} else {
+			$queryStr .= "WHERE 1=1 ";
 
 			// Get document list for the current user.
 			$approvalStatus = $user->getApprovalStatus();
@@ -959,8 +1046,11 @@ class SeedDMS_Core_DMS {
 			} else {
 				$queryStr = '';
 			}
+			}
 			break; // }}}
 		case 'WorkflowByMe': // Documents I to trigger in Worklflow {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			// Get document list for the current user.
 			$workflowStatus = $user->getWorkflowStatus();
@@ -993,6 +1083,8 @@ class SeedDMS_Core_DMS {
 			}
 			break; // }}}
 		case 'AppRevOwner': // Documents waiting for review/approval/revision I'm owning {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
@@ -1011,6 +1103,8 @@ class SeedDMS_Core_DMS {
 //				"ORDER BY `statusDate` DESC";
 			break; // }}}
 		case 'RejectOwner': // Documents that has been rejected and I'm owning {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
@@ -1027,6 +1121,8 @@ class SeedDMS_Core_DMS {
 			$queryStr .= " ".$orderdir;
 			break; // }}}
 		case 'LockedByMe': // Documents locked by me {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
@@ -1055,13 +1151,53 @@ class SeedDMS_Core_DMS {
 				$queryStr = '';
 			}
 			break; // }}}
+		case 'ExpiredOwner': // Documents expired and owned by me {{{
+			if(is_int($param2)) {
+				$ts = mktime(0, 0, 0) + $param2 * 86400;
+			} elseif(is_string($param2)) {
+				$tmp = explode('-', $param2, 3);
+				if(count($tmp) != 3)
+					return false;
+				$ts = mktime(0, 0, 0, $tmp[1], $tmp[2], $tmp[0]);
+			} else
+				$ts = mktime(0, 0, 0)-365*86400; /* Start of today - 1 year */
+
+			$tsnow = mktime(0, 0, 0); /* Start of today */
+			if($ts < $tsnow) { /* Check for docs expired in the past */
+				$startts = $ts;
+				$endts = $tsnow+86400; /* Use end of day */
+			} else { /* Check for docs which will expire in the future */
+				$startts = $tsnow;
+				$endts = $ts+86400; /* Use end of day */
+			}
+
+			$queryStr .= 
+				"WHERE `tblDocuments`.`expires` > ".$startts." AND `tblDocuments`.`expires` < ".$endts." ";
+
+			$user = $param1;
+			$orderby = $param3;
+			if($param4 == 'desc')
+				$orderdir = 'DESC';
+			else
+				$orderdir = 'ASC';
+			$queryStr .=	"AND `tblDocuments`.`owner` = '".$user->getID()."' ";
+			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
+			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
+			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
+			else $queryStr .= "ORDER BY `name`";
+			$queryStr .= " ".$orderdir;
+			break; // }}}
 		case 'WorkflowOwner': // Documents waiting for workflow trigger I'm owning {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			$queryStr .= "AND `tblDocuments`.`owner` = '".$user->getID()."' ".
 				"AND `tblDocumentStatusLog`.`status` IN (".S_IN_WORKFLOW.") ".
 				"ORDER BY `statusDate` DESC";
 			break; // }}}
 		case 'MyDocs': // Documents owned by me {{{
+			$queryStr .= "WHERE 1=1 ";
+
 			$user = $param1;
 			$orderby = $param3;
 			if($param4 == 'desc')
@@ -1078,7 +1214,7 @@ class SeedDMS_Core_DMS {
 		}
 
 		if($queryStr) {
-			$resArr = $this->db->getResultArray($queryStr);
+			$resArr = $this->db->getResultArray($selectStr.$queryStr);
 			if (is_bool($resArr) && !$resArr) {
 				return false;
 			}
