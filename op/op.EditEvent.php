@@ -61,7 +61,8 @@ else
 	$comment = $_POST["comment"];
 
 if(isset($_POST["from"])) {
-	$tmp = explode('-', $_POST["from"]);
+	$from = explode('T', $_POST["from"]);
+	$tmp = explode('-', $from[0]);
 	$from = mktime(0,0,0, $tmp[1], $tmp[2], $tmp[0]);
 } else {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
