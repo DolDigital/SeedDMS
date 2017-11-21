@@ -34,6 +34,13 @@ if (!$user->isAdmin()) {
 }
 
 if($view) {
+	if($settings->_backupDir && file_exists($settings->_backupDir)) {
+		$view->setParam('backupdir', $settings->_backupDir);
+		$view->setParam('hasbackupdir', true);
+	} else {
+		$view->setParam('backupdir', $settings->_contentDir);
+		$view->setParam('hasbackupdir', false);
+	}
 	$view($_GET);
 	exit;
 }

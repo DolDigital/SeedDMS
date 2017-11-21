@@ -114,6 +114,7 @@ if ($action == "saveSettings")
   $settings->_luceneDir = addDirSep($_POST["luceneDir"]);
   $settings->_extraPath = addDirSep($_POST["extraPath"]);
   $settings->_dropFolderDir = addDirSep($_POST["dropFolderDir"]);
+  $settings->_backupDir = addDirSep($_POST["backupDir"]);
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");

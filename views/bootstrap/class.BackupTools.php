@@ -42,24 +42,29 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$contentdir = $this->params['contentdir'];
+		$backupdir = $this->params['backupdir'];
 
 		$this->htmlStartPage(getMLText("backup_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
-		$this->contentHeading(getMLText("backup_tools"));
-		$this->contentContainerStart();
-		print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($contentdir));
-		$this->contentContainerEnd();
+		/* Calculating the size of the backup dir is only reasonable if
+		 * it is not part of the content dir. Otherwise the content will
+		 * be counted as well.
+		 */
+		if($this->params['hasbackupdir']) {
+			$this->contentHeading(getMLText("backup_tools"));
+			$this->contentContainerStart();
+			print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($backupdir));
+			$this->contentContainerEnd();
+		}
 
 		// versioning file creation ////////////////////////////////////////////////////
 
 		$this->contentHeading(getMLText("versioning_file_creation"));
-		$this->contentContainerStart();
 		print "<p>".getMLText("versioning_file_creation_warning")."</p>\n";
-
+		$this->contentContainerStart();
 		print "<form class=\"form-inline\" action=\"../op/op.CreateVersioningFiles.php\" name=\"form1\">";
 		$this->printFolderChooserHtml("form1",M_READWRITE);
 		print "<input type='submit' class='btn' name='' value='".getMLText("versioning_file_creation")."'/>";
@@ -70,9 +75,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		// archive creation ////////////////////////////////////////////////////////////
 
 		$this->contentHeading(getMLText("archive_creation"));
-		$this->contentContainerStart();
 		print "<p>".getMLText("archive_creation_warning")."</p>\n";
-
+		$this->contentContainerStart();
 		print "<form action=\"../op/op.CreateFolderArchive.php\" name=\"form2\">";
 		$this->printFolderChooserHtml("form2",M_READWRITE);
 		print "<label class=\"checkbox\"><input type=\"checkbox\" name=\"human_readable\" value=\"1\">".getMLText("human_readable")."</label>";
@@ -81,10 +85,10 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 		// list backup files
 
-		$handle = opendir($contentdir);
+		$handle = opendir($backupdir);
 		$entries = array();
 		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
+			if (is_dir($backupdir.$e)) continue;
 			if (strpos($e,".tar.gz")==FALSE) continue;
 			$entries[] = $e;
 		}
@@ -113,8 +117,8 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 				print "<td><a href=\"../op/op.Download.php?arkname=".$entry."\">".$entry."</a></td>\n";
 				if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
 				else print "<td>".getMLText("unknown_id")."</td>\n";
-				print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-				print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
+				print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+				print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
 				print "<td>";
 				print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
 				print "</td>\n";	
@@ -128,18 +132,18 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		// dump creation ///////////////////////////////////////////////////////////////
 
 		$this->contentHeading(getMLText("dump_creation"));
-		$this->contentContainerStart();
 		print "<p>".getMLText("dump_creation_warning")."</p>\n";
+		$this->contentContainerStart();
 
 		print "<form action=\"../op/op.CreateDump.php\" name=\"form4\">";
 		print "<input type='submit' class='btn' name='' value='".getMLText("dump_creation")."'/>";
 		print "</form>\n";
 
 		// list backup files
-		$handle = opendir($contentdir);
+		$handle = opendir($backupdir);
 		$entries = array();
 		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
+			if (is_dir($backupdir.$e)) continue;
 			if (strpos($e,".sql.gz")==FALSE) continue;
 			$entries[] = $e;
 		}
@@ -160,9 +164,11 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 
 			foreach ($entries as $entry){
 				print "<tr>\n";
-				print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
-				print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-				print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
+				print "<td>";
+				print "<a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a>";
+				print "</td>\n";
+				print "<td>".getLongReadableDate(filectime($backupdir.$entry))."</td>\n";
+				print "<td>".SeedDMS_Core_File::format_filesize(filesize($backupdir.$entry))."</td>\n";
 				print "<td>";
 				print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
 				print "</td>\n";	

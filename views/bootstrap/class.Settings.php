@@ -398,6 +398,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_contentDir");?>:</td>
         <td><?php $this->showTextField("contentDir", $settings->_contentDir); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_backupDir_desc");?>">
+        <td><?php printMLText("settings_backupDir");?>:</td>
+        <td><?php $this->showTextField("backupDir", $settings->_backupDir); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_cacheDir_desc");?>">
         <td><?php printMLText("settings_cacheDir");?>:</td>
         <td><?php $this->showTextField("cacheDir", $settings->_cacheDir); ?></td>
