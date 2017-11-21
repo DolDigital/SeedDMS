@@ -740,20 +740,37 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><?php $this->showTextField("converters[".$mimetype."]", htmlspecialchars($cmd)); ?></td>
+        <td><?php $this->showTextField("converters[fulltext][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
       </tr>
 <?php
 	}
 ?>
       <tr title="">
-        <td><?php $this->showTextField("converters_newmimetype", "", '', getMLText('mimetype')); ?></td>
-        <td><?php $this->showTextField("converters_newcmd", "", '', getMLText('command')); ?></td>
+        <td><?php $this->showTextField("converters[fulltext][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
+        <td><?php $this->showTextField("converters[fulltext][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
+      </tr>
+      <tr ><td><b> <?php printMLText("preview_converters");?></b></td> </tr>
+<?php
+	if(isset($settings->_converters['preview'])) {
+		foreach($settings->_converters['preview'] as $mimetype=>$cmd) {
+?>
+      <tr title="<?php echo $mimetype;?>">
+        <td><?php echo $mimetype;?>:</td>
+        <td><?php $this->showTextField("converters[preview][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
+      </tr>
+<?php
+		}
+	}
+?>
+      <tr title="">
+        <td><?php $this->showTextField("converters[preview][newmimetype]", "", '', getMLText('mimetype')); ?>:</td>
+        <td><?php $this->showTextField("converters[preview][newcmd]", "", '', getMLText('command')); ?></td>
       </tr>
     </table>
 <?php		$this->contentContainerEnd(); ?>
   </div>
 
-	  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
+  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
 <?php		$this->contentContainerStart(); ?>
     <table class="table-condensed">
       <!--
@@ -762,7 +779,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 ?>
-			<tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
+      <tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
 <?php
 					foreach($extconf['config'] as $confkey=>$conf) {
 ?>
