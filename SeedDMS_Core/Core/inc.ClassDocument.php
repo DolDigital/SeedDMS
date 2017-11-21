@@ -441,6 +441,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 *
 	 * @return object parent folder
 	 */
+	function getParent() { /* {{{ */
+		return self::getFolder();
+	} /* }}} */
+
 	function getFolder() { /* {{{ */
 		if (!isset($this->_folder))
 			$this->_folder = $this->_dms->getFolder($this->_folderID);
