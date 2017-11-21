@@ -1,2 +1,3 @@
 *.tar.gz
 SeedDMS_*/*.tgz
+ext/*
