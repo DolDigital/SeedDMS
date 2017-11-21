@@ -171,6 +171,15 @@ class SeedDMS_Session {
 	} /* }}} */
 
 	/**
+	 * Get user id of session
+	 *
+	 * @return integer user id
+	 */
+	function getUser() { /* {{{ */
+		return $this->data['userid'];
+	} /* }}} */
+
+	/**
 	 * Set user of session
 	 *
 	 * @param integer $userid id of user
@@ -184,15 +193,6 @@ class SeedDMS_Session {
 			$this->data['userid'] = $userid;	
 		}
 		return true;
-	} /* }}} */
-
-	/**
-	 * Get language of session
-	 *
-	 * @return string language
-	 */
-	function getUser() { /* {{{ */
-		return $this->data['userid'];
 	} /* }}} */
 
 	/**
