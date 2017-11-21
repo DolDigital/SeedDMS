@@ -59,6 +59,7 @@ if($document->isLocked()) {
 
 if($settings->_enableFullSearch) {
 	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
 } else {
 	$index = null;
 }
