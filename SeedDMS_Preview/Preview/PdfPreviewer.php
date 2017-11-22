@@ -38,6 +38,7 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 			'image/jpeg' => "convert '%f' pdf:- > '%o'",
 			'image/png' => "convert '%f' pdf:- > '%o'",
 			'image/gif' => "convert '%f' pdf:- > '%o'",
+			'video/mp4' => "convert '%f[1-20]' pdf:- > '%o'",
 		);
 	} /* }}} */
 
