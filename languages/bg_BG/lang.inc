@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (836)
+//    Translators: Admin (838)
 
 $text = array(
 '2_factor_auth' => '',
@@ -297,7 +297,7 @@ $text = array(
 'documentcontent' => '',
 'documents' => 'Документи',
 'documents_checked_out_by_you' => '',
-'documents_expired' => '',
+'documents_expired' => 'просрочени документи',
 'documents_in_process' => 'Документи в процес на работа',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Документи, блокирани от Вас',
@@ -416,7 +416,7 @@ $text = array(
 'exclude_items' => '',
 'expired' => 'Изтекъл',
 'expired_at_date' => '',
-'expired_documents' => '',
+'expired_documents' => 'просрочени документи',
 'expires' => 'Изтича',
 'expire_by_date' => '',
 'expire_in_1d' => '',
@@ -468,6 +468,7 @@ $text = array(
 'fullsearch' => 'Пълнотекстово търсене',
 'fullsearch_hint' => 'Използвай пълнотекстов индекс',
 'fulltextsearch_disabled' => '',
+'fulltext_converters' => 'Index document conversion',
 'fulltext_info' => 'Информация за пълнотекстов индексе',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'атрибути',
@@ -506,7 +507,6 @@ $text = array(
 'include_documents' => 'Включи документи',
 'include_subdirectories' => 'Включи под-папки',
 'indexing_tasks_in_queue' => '',
-'index_converters' => 'Index document conversion',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Индекс на директорията',
@@ -732,6 +732,7 @@ $text = array(
 'password_strength' => 'Устойчивост на паролата',
 'password_strength_insuffient' => 'Недостатъчна устойчивост на паролата',
 'password_wrong' => 'Грешна парола',
+'pdf_converters' => '',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
@@ -745,6 +746,7 @@ $text = array(
 'preview_converters' => '',
 'preview_images' => '',
 'preview_markdown' => '',
+'preview_pdf' => '',
 'preview_plain' => '',
 'previous_state' => 'Предишно състояние',
 'previous_versions' => 'Предишни версии',
