@@ -113,7 +113,7 @@ class SeedDMS_Preview_Base {
 	 * @return boolean true if converter exists, otherwise false
 	 */
 	function hasConverter($mimetype) { /* {{{ */
-		return array_key_exists($mimetype, $this->converters);
+		return array_key_exists($mimetype, $this->converters) && $this->converters[$mimetype];
 	} /* }}} */
 
 }
