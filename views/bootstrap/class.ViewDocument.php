@@ -331,6 +331,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$timeout = $this->params['timeout'];
 		$showfullpreview = $this->params['showFullPreview'];
 		$converttopdf = $this->params['convertToPdf'];
+		$pdfconverters = $this->params['pdfConverters'];
 		$cachedir = $this->params['cachedir'];
 		if(!$showfullpreview)
 			return;
@@ -380,6 +381,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		if($converttopdf) {
 			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
+			$pdfpreviewer->setConverters($pdfconverters);
 			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
 				$this->contentHeading(getMLText("preview"));
 ?>
@@ -402,6 +404,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$previewconverters = $this->params['previewConverters'];
+		$pdfconverters = $this->params['pdfConverters'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
 		$timeout = $this->params['timeout'];
@@ -534,6 +538,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</ul>";
 		*/
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
+		$previewer->setConverters($previewconverters);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
