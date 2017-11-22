@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (619), ribaz (1023)
+//    Translators: Admin (621), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
@@ -544,6 +544,7 @@ URL: [url]',
 'fullsearch' => 'Keresés a teljes szövegben',
 'fullsearch_hint' => 'Használja a teljes szöveg indexet',
 'fulltextsearch_disabled' => '',
+'fulltext_converters' => 'Index dokumentum konverzió',
 'fulltext_info' => 'Teljes szöveg index információ',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Jellemzők',
@@ -582,7 +583,6 @@ URL: [url]',
 'include_documents' => 'Tartalmazó dokumentumok',
 'include_subdirectories' => 'Tartalmazó alkönyvtárak',
 'indexing_tasks_in_queue' => '',
-'index_converters' => 'Index dokumentum konverzió',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Mappa indexelése',
@@ -846,6 +846,7 @@ Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a
 'password_strength' => 'Jelszó erősség',
 'password_strength_insuffient' => 'Jelszó erőssége elégtelen',
 'password_wrong' => 'Hibás jelszó',
+'pdf_converters' => '',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
@@ -859,6 +860,7 @@ Amennyiben problémákba ütközik a bejelentkezés során, kérjük vegye fel a
 'preview_converters' => '',
 'preview_images' => '',
 'preview_markdown' => '',
+'preview_pdf' => '',
 'preview_plain' => '',
 'previous_state' => 'Előző állapot',
 'previous_versions' => 'Előző változatok',
@@ -1530,8 +1532,8 @@ URL: [url]',
 'toggle_manager' => 'Kulcs kezelő',
 'toggle_qrcode' => '',
 'to_before_from' => 'A lejárati dátum nem előzheti meg a kezdési dátumot',
-'transfer_objects' => '',
-'transfer_objects_to_user' => '',
+'transfer_objects' => 'Adatok átadása',
+'transfer_objects_to_user' => 'Új tulajdonos',
 'transition_triggered_email' => 'Munkamenet átmenet kiváltva',
 'transition_triggered_email_body' => 'Munkafolyamat átmenet kiváltva
 Dokumentum: [name]

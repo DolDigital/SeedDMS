@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1615), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1617), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -556,6 +556,7 @@ URL: [url]',
 'fullsearch' => 'Full text search',
 'fullsearch_hint' => 'Use fulltext index',
 'fulltextsearch_disabled' => 'Fulltext index is disabled',
+'fulltext_converters' => 'Index document conversion',
 'fulltext_info' => 'Fulltext index info',
 'global_attributedefinitiongroups' => 'Attribute groups',
 'global_attributedefinitions' => 'Attributes',
@@ -594,7 +595,6 @@ URL: [url]',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
 'indexing_tasks_in_queue' => 'Indexing tasks in queue',
-'index_converters' => 'Index document conversion',
 'index_done' => 'Done',
 'index_error' => 'Error',
 'index_folder' => 'Index folder',
@@ -858,6 +858,7 @@ If you have still problems to login, then please contact your administrator.',
 'password_strength' => 'Password strength',
 'password_strength_insuffient' => 'Insufficient password strength',
 'password_wrong' => 'Wrong password',
+'pdf_converters' => 'PDF converters',
 'pending_approvals' => 'Pending approvals',
 'pending_receipt' => 'Pending receipts',
 'pending_reviews' => 'Pending reviews',
@@ -871,6 +872,7 @@ If you have still problems to login, then please contact your administrator.',
 'preview_converters' => 'Preview document conversion',
 'preview_images' => 'Preview images',
 'preview_markdown' => 'Markdown',
+'preview_pdf' => 'Preview as PDF',
 'preview_plain' => 'Text',
 'previous_state' => 'Previous state',
 'previous_versions' => 'Previous versions',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2487), dgrutsch (22)
+//    Translators: Admin (2489), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -555,6 +555,7 @@ URL: [url]',
 'fullsearch' => 'Volltext',
 'fullsearch_hint' => 'Volltextindex benutzen',
 'fulltextsearch_disabled' => 'Volltext-Index ist ausgeschaltet',
+'fulltext_converters' => 'Index Dokumentenumwandlung',
 'fulltext_info' => 'Volltext-Index Info',
 'global_attributedefinitiongroups' => 'Attributgruppen',
 'global_attributedefinitions' => 'Attribute',
@@ -593,7 +594,6 @@ URL: [url]',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
 'indexing_tasks_in_queue' => 'Indiziervorgänge in der Warteschleife',
-'index_converters' => 'Index Dokumentenumwandlung',
 'index_done' => 'Fertig',
 'index_error' => 'Fehler',
 'index_folder' => 'Indiziere Ordner',
@@ -856,6 +856,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'password_strength' => 'Passwortstärke',
 'password_strength_insuffient' => 'Ungenügend starkes Passwort',
 'password_wrong' => 'Falsches Passwort',
+'pdf_converters' => 'PDF Konvertierer',
 'pending_approvals' => 'Ausstehende Freigaben',
 'pending_receipt' => 'Ausstehende Empfangsbestätigungen',
 'pending_reviews' => 'Ausstehende Prüfungen',
@@ -869,6 +870,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'preview_converters' => 'Vorschau Dokumentenumwandlung',
 'preview_images' => 'Vorschaubilder',
 'preview_markdown' => 'Markdown',
+'preview_pdf' => 'Vorschau als PDF',
 'preview_plain' => 'Text',
 'previous_state' => 'Voriger Status',
 'previous_versions' => 'Vorhergehende Versionen',

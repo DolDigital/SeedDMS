@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1066), balan (87)
+//    Translators: Admin (1067), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -324,7 +324,7 @@ URL: [url]',
 'documentcontent' => 'Continut Document',
 'documents' => 'Documente',
 'documents_checked_out_by_you' => 'Documente verificate de tine',
-'documents_expired' => '',
+'documents_expired' => 'Documente expirate',
 'documents_in_process' => 'Documente în procesare',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Documente blocate de tine',
@@ -549,6 +549,7 @@ URL: [url]',
 'fullsearch' => 'Căutare text complet',
 'fullsearch_hint' => 'Foloseste indexarea intregului text',
 'fulltextsearch_disabled' => '',
+'fulltext_converters' => 'Indexare conversie documente',
 'fulltext_info' => 'Info indexarea intregului text',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Atribute',
@@ -587,7 +588,6 @@ URL: [url]',
 'include_documents' => 'Include documente',
 'include_subdirectories' => 'Include subfoldere',
 'indexing_tasks_in_queue' => 'Actiuni de indexare in stiva',
-'index_converters' => 'Indexare conversie documente',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Index folder',
@@ -851,6 +851,7 @@ Dacă aveți în continuare probleme la autentificare, vă rugăm să contactaț
 'password_strength' => 'Siguranța parolei',
 'password_strength_insuffient' => 'Siguranța parolei este insuficientă',
 'password_wrong' => 'Parolă greșită',
+'pdf_converters' => '',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
@@ -864,6 +865,7 @@ Dacă aveți în continuare probleme la autentificare, vă rugăm să contactaț
 'preview_converters' => '',
 'preview_images' => '',
 'preview_markdown' => '',
+'preview_pdf' => '',
 'preview_plain' => '',
 'previous_state' => 'Stare precedentă',
 'previous_versions' => 'Versiune precedentă',
