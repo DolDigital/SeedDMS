@@ -73,6 +73,8 @@ if($view) {
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
+	$view->setParam('previewConverters', $settings->_converters['preview']);
+	$view->setParam('pdfConverters', $settings->_converters['pdf']);
 	$view->setParam('showFullPreview', $settings->_showFullPreview);
 	$view->setParam('convertToPdf', $settings->_convertToPdf);
 	$view->setParam('currenttab', isset($_GET['currenttab']) ? $_GET['currenttab'] : "");
