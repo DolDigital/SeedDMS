@@ -356,6 +356,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			</audio>
 	<?php
 				break;
+			case 'video/mp4':
+				$this->contentHeading(getMLText("preview"));
+	?>
+			<video controls style="width: 100%;">
+			<source  src="../op/op.ViewOnline.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="video/mp4">
+			</video>
+	<?php
+				break;
 			case 'application/pdf':
 				$this->contentHeading(getMLText("preview"));
 	?>
@@ -383,7 +391,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
 			$pdfpreviewer->setConverters($pdfconverters);
 			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
-				$this->contentHeading(getMLText("preview"));
+				$this->contentHeading(getMLText("preview_pdf"));
 ?>
 				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.PdfPreview.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
 <?php
