@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1041), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1042), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -544,6 +544,7 @@ URL: [url]',
 'fullsearch' => 'Búsqueda en texto completo',
 'fullsearch_hint' => 'Utilizar índice de texto completo',
 'fulltextsearch_disabled' => '',
+'fulltext_converters' => 'Conversión de índice de documentos',
 'fulltext_info' => 'Información de índice de texto completo',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Definición de atributos',
@@ -582,7 +583,6 @@ URL: [url]',
 'include_documents' => 'Incluir documentos',
 'include_subdirectories' => 'Incluir subcarpetas',
 'indexing_tasks_in_queue' => 'Tareas de indexación en cola',
-'index_converters' => 'Conversión de índice de documentos',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Índice de carpetas',
@@ -846,6 +846,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'password_strength' => 'Fortaleza de la contraseña',
 'password_strength_insuffient' => 'Insuficiente Seguridad de la contraseña',
 'password_wrong' => 'Contraseña incorrecta',
+'pdf_converters' => '',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
@@ -859,6 +860,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'preview_converters' => '',
 'preview_images' => '',
 'preview_markdown' => '',
+'preview_pdf' => '',
 'preview_plain' => '',
 'previous_state' => 'Estado anterior',
 'previous_versions' => 'Versiones anteriores',
@@ -1214,7 +1216,7 @@ URL: [url]',
 'settings_enableUpdateReceipt' => '',
 'settings_enableUpdateReceipt_desc' => '',
 'settings_enableUpdateRevApp' => 'Permitir edición de revisión/aprobación existente',
-'settings_enableUpdateRevApp_desc' => '',
+'settings_enableUpdateRevApp_desc' => 'Habilite si el usuario que ha hecho la revisión/aprobación puede cambiar de decisión siempre que el flujo de trabajo no haya culminado.',
 'settings_enableUserImage' => 'Habilitar imágenes de usuario',
 'settings_enableUserImage_desc' => 'Habilitar imágenes de usuario',
 'settings_enableUsersView' => 'Habilitar vista de usuarios',

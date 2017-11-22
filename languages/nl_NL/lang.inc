@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (739), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (740), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -542,6 +542,7 @@ URL: [url]',
 'fullsearch' => 'Zoek in volledige tekst',
 'fullsearch_hint' => 'Volledige tekst index',
 'fulltextsearch_disabled' => '',
+'fulltext_converters' => 'Index document conversie',
 'fulltext_info' => 'Volledige tekst index info',
 'global_attributedefinitiongroups' => '',
 'global_attributedefinitions' => 'Kenmerk definities',
@@ -580,7 +581,6 @@ URL: [url]',
 'include_documents' => 'Inclusief documenten',
 'include_subdirectories' => 'Inclusief submappen',
 'indexing_tasks_in_queue' => 'Indexerings taken in wachtrij',
-'index_converters' => 'Index document conversie',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Inhoud',
@@ -844,6 +844,7 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'password_strength' => 'Sterkte wachtwoord',
 'password_strength_insuffient' => 'Onvoldoende sterk wachtwoord',
 'password_wrong' => 'Verkeerd wachtwoord',
+'pdf_converters' => '',
 'pending_approvals' => 'Wachten op goedkeuring',
 'pending_receipt' => '',
 'pending_reviews' => 'Wachten op beoordeling',
@@ -857,6 +858,7 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'preview_converters' => 'Converters',
 'preview_images' => '',
 'preview_markdown' => 'Voorbeeld in Markdown',
+'preview_pdf' => '',
 'preview_plain' => 'Voorbeeld in platte tekst',
 'previous_state' => 'Vorige staat',
 'previous_versions' => 'Vorige versies',
@@ -1119,7 +1121,7 @@ URL: [url]',
  => ,
  => ,
  =>',
-'settings_available_languages' => '',
+'settings_available_languages' => 'Beschikbare talen',
 'settings_available_languages_desc' => '',
 'settings_backupDir' => 'Instellingen backupmap',
 'settings_backupDir_desc' => 'Instellingen backupmap',
