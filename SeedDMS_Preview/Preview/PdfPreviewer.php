@@ -35,9 +35,9 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
 			'text/plain' => "unoconv -d document -f pdf --stdout -v '%f' > '%o'",
 			'application/postscript' => "ps2pdf '%f' - > '%o'",
-//			'image/jpeg' => "convert '%f' pdf:- > '%o'",
-//			'image/png' => "convert '%f' pdf:- > '%o'",
-//			'image/gif' => "convert '%f' pdf:- > '%o'",
+			'image/jpeg' => "convert '%f' pdf:- > '%o'",
+			'image/png' => "convert '%f' pdf:- > '%o'",
+			'image/gif' => "convert '%f' pdf:- > '%o'",
 		);
 	} /* }}} */
 

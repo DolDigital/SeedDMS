@@ -14,7 +14,7 @@
  <date>2017-10-11</date>
  <time>07:14:32</time>
  <version>
-  <release>1.2.4</release>
+  <release>1.2.5</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-fix typo in converter for tar.gz files
+SeedDMS_Preview_Base::hasConvertert() returns only try if command is set
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -301,6 +301,22 @@ pass mimetype as parameter '%m' to converter
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 createPreview() returns false if running the converter command fails
+   </notes>
+  </release>
+  <release>
+   <date>2017-10-11</date>
+   <time>07:14:32</time>
+   <version>
+    <release>1.2.4</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+fix typo in converter for tar.gz files
    </notes>
   </release>
  </changelog>
