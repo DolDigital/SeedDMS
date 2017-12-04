@@ -56,34 +56,25 @@ $(document).ready( function() {
 		}
 	} /* }}} */
 
-	function showCategoryForm($category) { /* {{{ */
-?>
-				<div class="control-group">
-					<label class="control-label"></label>
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selcat = $this->params['selcategory'];
 
-					<div class="controls">
-<?php
-		if($category) {
-			if($category->isUsed()) {
-?>
-						<p><?php echo getMLText('category_in_use') ?></p>
-<?php
-			} else {
+		if($selcat && !$selcat->isUsed()) {
 ?>
 						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
-						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="hidden" name="categoryid" value="<?php echo $selcat->getID()?>">
 						<input type="hidden" name="action" value="removecategory">
 						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php
-			}
 		}
+	} /* }}} */
+
+	function showCategoryForm($category) { /* {{{ */
 ?>
-					</div>
-				</div>
-
-
 				<form class="form-horizontal" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
 				<?php if(!$category) { ?>
 					<?php echo createHiddenFieldWithKey('addcategory'); ?>
@@ -130,12 +121,8 @@ $(document).ready( function() {
 ?>
 <div class="row-fluid">
 	<div class="span4">
-		<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
-			<select id="selector" class="input-xlarge">
+			<select class="chzn-select" id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 				<option value="0"><?php echo getMLText("new_document_category")?>
 <?php
@@ -144,10 +131,8 @@ $(document).ready( function() {
 				}
 ?>
 			</select>
-		</div>
-	</div>
 </form>
-		</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="Categories" data-action="actionmenu" <?php echo ($selattrdef ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 
