@@ -103,6 +103,19 @@ class SeedDMS_Preview_Base {
 	 * and the value is the command to be called for creating the preview
 	 */
 	function setConverters($arr) { /* {{{ */
+		$this->converters = $arr;
+	} /* }}} */
+
+	/**
+	 * Add a list of converters
+	 *
+	 * Merges the list of passed converters with the already existing ones.
+	 * Existing converters will be overwritten.
+	 *
+	 * @param array list of converters. The key of the array contains the mimetype
+	 * and the value is the command to be called for creating the preview
+	 */
+	function addConverters($arr) { /* {{{ */
 		$this->converters = array_merge($this->converters, $arr);
 	} /* }}} */
 
