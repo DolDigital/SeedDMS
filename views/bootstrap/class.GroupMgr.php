@@ -147,6 +147,28 @@ $(document).ready( function() {
 		}
 	} /* }}} */
 
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selgroup = $this->params['selgroup'];
+
+		if($selgroup) {
+?>
+<div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		<?php echo getMLText('action'); ?>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+<?php
+			echo '<li><a href="../out/out.RemoveGroup.php?groupid='.$selgroup->getID().'"><i class="icon-remove"></i> '.getMLText("rm_group").'</a><li>';
+?>
+	</ul>
+</div>
+<?php
+		}
+	} /* }}} */
+
 	function showGroupForm($group) { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -169,17 +191,6 @@ $(document).ready( function() {
 		}
 ?>
 
-<?php
-		if($group) {
-?>
-		<div class="control-group">
-			<div class="controls">
-				<a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a>
-			</div>
-		</div>
-<?php
-		}
-?>
 		<div class="control-group">
 			<label class="control-label"><?php printMLText("name");?>:</label>
 			<div class="controls">
@@ -281,11 +292,7 @@ $(document).ready( function() {
 
 <div class="row-fluid">
 <div class="span4">
-<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
 <select class="chzn-select" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?></option>
 <option value="0"><?php echo getMLText("add_group")?></option>
@@ -295,10 +302,8 @@ $(document).ready( function() {
 		}
 ?>
 </select>
-		</div>
-	</div>
 </form>
-</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="GroupMgr" data-action="actionmenu" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 </div>
 
