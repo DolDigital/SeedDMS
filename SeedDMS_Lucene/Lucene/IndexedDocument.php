@@ -124,10 +124,17 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		if($version && !$nocontent) {
 			$path = $dms->contentDir . $version->getPath();
 			$content = '';
-			$fp = null;
 			$mimetype = $version->getMimeType();
+			$cmd = '';
+			$mimeparts = explode('/', $mimetype, 2);
 			if(isset($_convcmd[$mimetype])) {
 				$cmd = sprintf($_convcmd[$mimetype], $path);
+			} elseif(isset($_convcmd[$mimeparts[0].'/*'])) {
+				$cmd = sprintf($_convcmd[$mimetype], $path);
+			} elseif(isset($_convcmd['*'])) {
+				$cmd = sprintf($_convcmd[$mimetype], $path);
+			}
+			if($cmd) {
 				try {
 					$content = self::execWithTimeout($cmd, $timeout);
 					if($content) {
