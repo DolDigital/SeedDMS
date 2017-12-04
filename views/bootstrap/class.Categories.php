@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for Categories view
  *
  * @category   DMS
@@ -46,13 +51,30 @@ $(document).ready( function() {
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
 		$selcat = $this->params['selcategory'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
 		if($selcat) {
 			$this->contentHeading(getMLText("category_info"));
-			$documents = $selcat->getDocumentsByCategory();
+			$c = $selcat->countDocumentsByCategory();
 			echo "<table class=\"table table-condensed\">\n";
-			echo "<tr><td>".getMLText('document_count')."</td><td>".(count($documents))."</td></tr>\n";
+			echo "<tr><td>".getMLText('document_count')."</td><td>".($c)."</td></tr>\n";
 			echo "</table>";
+
+			$documents = $selcat->getDocumentsByCategory(10);
+			print "<table id=\"viewfolder-table\" class=\"table\">";
+			print "<thead>\n<tr>\n";
+			print "<th></th>\n";	
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+			foreach($documents as $doc) {
+				echo $this->documentListRow($doc, $previewer);
+			}
+			print "</tbody></table>";
 		}
 	} /* }}} */
 
@@ -132,7 +154,7 @@ $(document).ready( function() {
 ?>
 			</select>
 </form>
-	<div class="ajax" style="margin-bottom: 15px;" data-view="Categories" data-action="actionmenu" <?php echo ($selattrdef ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="Categories" data-action="actionmenu" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 
