@@ -1,4 +1,12 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.5
+--------------------------------------------------------------------------------
+- converters for image previews and pdf previews can be configured in settings
+- show list of documents having the selected category on page for managing
+  categories
+- use same layout group, category manager as already used in user manager
+
+--------------------------------------------------------------------------------
                      Changes in version 5.1.4
 --------------------------------------------------------------------------------
 - fix javascript error when indexing document, because the indexer was also
