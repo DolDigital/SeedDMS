@@ -45,5 +45,9 @@ if(isset($_GET['categoryid']) && $_GET['categoryid']) {
 if($view) {
 	$view->setParam('categories', $categories);
 	$view->setParam('selcategory', $selcat);
+	$view->setParam('showtree', showtree());
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);
 }
