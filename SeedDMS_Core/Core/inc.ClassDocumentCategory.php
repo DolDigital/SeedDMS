@@ -98,10 +98,14 @@ class SeedDMS_Core_DocumentCategory {
 		return true;
 	} /* }}} */
 
-	function getDocumentsByCategory() { /* {{{ */
+	function getDocumentsByCategory($limit=0, $offset=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "SELECT * FROM `tblDocumentCategory` where `categoryID`=".$this->_id;
+		if($limit && is_numeric($limit))
+			$queryStr .= " LIMIT ".(int) $limit;
+		if($offset && is_numeric($offset))
+			$queryStr .= " OFFSET ".(int) $offset;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -111,6 +115,17 @@ class SeedDMS_Core_DocumentCategory {
 			array_push($documents, $this->_dms->getDocument($row["documentID"]));
 		}
 		return $documents;
+	} /* }}} */
+
+	function countDocumentsByCategory() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT COUNT(*) as `c` FROM `tblDocumentCategory` where `categoryID`=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return $resArr[0]['c'];
 	} /* }}} */
 
 }
