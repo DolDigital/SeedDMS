@@ -34,7 +34,7 @@ if (!$user->isAdmin()) {
 }
 
 if (!isset($_GET["groupid"]) || !is_numeric($_GET["groupid"]) || intval($_GET["groupid"])<1) {
-	UI::exitError(getMLText("rm_group"),getMLText("invalid_user_id"));
+	UI::exitError(getMLText("rm_group"),getMLText("invalid_group_id"));
 }
 $group = $dms->getGroup(intval($_GET["groupid"]));
 
