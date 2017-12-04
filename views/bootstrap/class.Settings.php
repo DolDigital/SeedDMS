@@ -737,7 +737,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
   foreach(array('fulltext', 'preview', 'pdf') as $target) {
 ?>
-      <tr ><td><b> <?php printMLText($target."_converters");?></b></td> </tr>
+      <tr><td><b><?php printMLText($target."_converters");?></b></td></tr>
 <?php
 	foreach($settings->_converters[$target] as $mimetype=>$cmd) {
 ?>
