@@ -26,6 +26,7 @@
  <notes>
 - use views instead of temp. tables
 - add list of expired documents in SeedDMS_Core_DMS::getDocumentList()
+- add methods to set comment, name, public, version of document files
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
