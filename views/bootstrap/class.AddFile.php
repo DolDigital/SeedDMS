@@ -166,7 +166,7 @@ $(document).ready( function() {
 <div class="control-group">
 	<label class="control-label"><?php printMLText("version");?>:</label>
 	<div class="controls"><select name="version" id="version">
-		<option value=""></option>
+		<option value=""><?= getMLText('document') ?></option>
 <?php
 		$versions = $document->getContent();
 		foreach($versions as $version)
