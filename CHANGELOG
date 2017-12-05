@@ -5,6 +5,8 @@
 - show list of documents having the selected category on page for managing
   categories
 - use same layout group, category manager as already used in user manager
+- meta data of attachments can be edited
+- show number of reverse document links in folder/document list
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.4
