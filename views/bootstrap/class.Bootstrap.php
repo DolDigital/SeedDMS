@@ -1887,6 +1887,10 @@ $(document).ready( function() {
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+			/* Retrieve reverse linked documents */
+			$revlinks = $document->getReverseDocumentLinks();
+			$revlinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $revlinks);
+
 			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
 				$content .= "<a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
@@ -1921,8 +1925,8 @@ $(document).ready( function() {
 			$content .= "<small>";
 			if(count($files))
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
-			if(count($links))
-				$content .= count($links)." ".getMLText("linked_documents")."<br />";
+			if(count($links) || count($revlinks))
+				$content .= count($links)."/".count($revlinks)." ".getMLText("linked_documents")."<br />";
 			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
 				$workflowstate = $latestContent->getWorkflowState();
 				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';
