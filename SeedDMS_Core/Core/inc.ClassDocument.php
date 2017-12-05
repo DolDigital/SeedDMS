@@ -2429,6 +2429,52 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $timeline;
 	} /* }}} */
 
+	/**
+	 * Transfers the document to a new user
+	 * 
+	 * This method not just sets a new owner of the document but also
+	 * transfers the document links, attachments and locks to the new user.
+	 *
+	 * @return boolean true if successful, otherwise false
+	 */
+	function transferToUser($newuser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($newuser->getId() == $this->_ownerID)
+			return true;
+
+		$db->startTransaction();
+		$queryStr = "UPDATE `tblDocuments` SET `owner` = ".$newuser->getId()." WHERE `id` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentLocks` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$this->_ownerID = $newuser->getID();
+		$this->_owner = $newuser;
+
+		$db->commitTransaction();
+		return true;
+	} /* }}} */
+
 } /* }}} */
 
 
