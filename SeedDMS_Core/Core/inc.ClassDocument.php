@@ -4729,12 +4729,45 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	function getDocument() { return $this->_document; }
 	function getUserID() { return $this->_userID; }
 	function getComment() { return $this->_comment; }
+
+	/*
+	 * Set the comment of the document file
+	 *
+	 * @param $newComment string new comment of document
+	 */
+	function setComment($newComment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `comment` = ".$db->qstr($newComment)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_comment = $newComment;
+		return true;
+	} /* }}} */
+
 	function getDate() { return $this->_date; }
 	function getDir() { return $this->_dir; }
 	function getFileType() { return $this->_fileType; }
 	function getMimeType() { return $this->_mimeType; }
 	function getOriginalFileName() { return $this->_orgFileName; }
 	function getName() { return $this->_name; }
+
+	/*
+	 * Set the name of the document file
+	 *
+	 * @param $newComment string new name of document
+	 */
+	function setName($newName) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `name` = ".$db->qstr($newName)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_name = $newName;
+		return true;
+	} /* }}} */
 
 	function getUser() {
 		if (!isset($this->_user))
@@ -4748,7 +4781,42 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 
 	function getVersion() { return $this->_version; }
 
+	/*
+	 * Set the version of the document file
+	 *
+	 * @param $newComment string new version of document
+	 */
+	function setVersion($newVersion) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!is_numeric($newVersion) && $newVersion != '')
+			return false;
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `version` = ".(int) $newVersion." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_version = (int) $newVersion;
+		return true;
+	} /* }}} */
+
 	function isPublic() { return $this->_public; }
+
+	/*
+	 * Set the public flag of the document file
+	 *
+	 * @param $newComment string new comment of document
+	 */
+	function setPublic($newPublic) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `public` = ".($newPublic ? 1 : 0)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_public = $newPublic ? 1 : 0;
+		return true;
+	} /* }}} */
 
 	/**
 	 * Returns the access mode similar to a document
