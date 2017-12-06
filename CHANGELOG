@@ -7,7 +7,7 @@
 - use same layout group, category manager as already used in user manager
 - meta data of attachments can be edited
 - show number of reverse document links in folder/document list
-- documents can be transfered to another user
+- documents can be transfered to another user (Closes partly #368)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.4
