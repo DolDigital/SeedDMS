@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2493), dgrutsch (22)
+//    Translators: Admin (2497), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -390,6 +390,14 @@ Benutzer: [username]
 URL: [url]',
 'document_status_changed_email_subject' => '[sitename]: [name] - Dokumentenstatus geändert',
 'document_title' => 'Dokument \'[documentname]\'',
+'document_transfered_email_body' => 'Dokument an anderen Benutzer übertragen
+Dokument: [name]
+Version: [version]
+Neuer Besitzer: [newuser]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'document_transfered_email_subject' => '[sitename]: [name] - Dokument übertragen',
 'document_updated_email' => 'Dokument aktualisiert',
 'document_updated_email_body' => 'Dokument aktualisiert
 Dokument: [name]
@@ -474,6 +482,7 @@ Der Link ist bis zum [valid] gültig.
 'error_remove_folder' => 'Fehler beim Löschen des Ordners',
 'error_remove_permission' => 'Fehler beim Entfernen der Berechtigung',
 'error_toogle_permission' => 'Fehler beim Ändern der Berechtigung',
+'error_transfer_document' => 'Fehler beim Übertragen des Dokuments',
 'es_ES' => 'Spanisch',
 'event_details' => 'Ereignisdetails',
 'exclude_items' => 'Einträge auslassen',
@@ -1512,6 +1521,7 @@ Name: [username]
 'splash_substituted_user' => 'Benutzer gewechselt',
 'splash_switched_back_user' => 'Zum ursprünglichen Benutzer zurückgekehrt',
 'splash_toogle_group_manager' => 'Gruppenverwalter gewechselt',
+'splash_transfer_document' => 'Dokument übertragen',
 'splash_transfer_objects' => 'Objekte übertragen',
 'state_and_next_state' => 'Status/Nächster Status',
 'statistic' => 'Statistik',

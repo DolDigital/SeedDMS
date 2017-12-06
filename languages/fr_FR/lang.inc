@@ -390,6 +390,8 @@ Utilisateur: [username]
 URL: [url]',
 'document_status_changed_email_subject' => '[sitename]: [name] - Statut du document modifié',
 'document_title' => 'Document \'[documentname]\'',
+'document_transfered_email_body' => '',
+'document_transfered_email_subject' => '',
 'document_updated_email' => 'Document mis à jour',
 'document_updated_email_body' => 'Document mis à jour
 Document: [name]
@@ -475,6 +477,7 @@ Le lien est valide jusqu’au [valid].
 'error_remove_folder' => '',
 'error_remove_permission' => 'Erreur lors de la suppression de permission',
 'error_toogle_permission' => 'Erreur lors de la modification de permission',
+'error_transfer_document' => '',
 'es_ES' => 'Espagnol',
 'event_details' => 'Détails de l\'événement',
 'exclude_items' => 'Exclure des élements',
@@ -1479,6 +1482,7 @@ Nom : [username]
 'splash_substituted_user' => 'Utilisateur de substitution',
 'splash_switched_back_user' => 'Revenu à l\'utilisateur initial',
 'splash_toogle_group_manager' => 'Responsable de groupe changé',
+'splash_transfer_document' => '',
 'splash_transfer_objects' => 'Objets transférés',
 'state_and_next_state' => 'État initial/suivant',
 'statistic' => 'Statistiques',
