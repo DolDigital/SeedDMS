@@ -6,7 +6,7 @@ chzn_template_func =  function (state) {
 	if(subtitle)
 		html += '<br /><i>'+subtitle+'</i>';
 	if(warning)
-		html += '<br /><i class="icon-warning-sign"></i> '+warning+'';
+		html += '<br /><span class="label label-warning"><i class="icon-warning-sign"></i></span> '+warning+'';
 	html += '</span>';
 	var $newstate = $(html);
 	return $newstate;
