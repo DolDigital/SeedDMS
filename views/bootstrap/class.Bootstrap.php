@@ -535,6 +535,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
 			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
 		}
+		if ($this->params['user']->isAdmin()) {
+			$menuitems['transfer_document'] = array('link'=>"../out/out.TransferDocument". $docid, 'label'=>'transfer_document');
+		}
 
 		/* Check if hook exists because otherwise callHook() will override $menuitems */
 		if($this->hasHook('documentNavigationBar'))
