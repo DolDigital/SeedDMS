@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1151), tmichelfelder (106)
+//    Translators: Admin (1154), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '',
@@ -312,7 +312,7 @@ URL: [url]',
 'documentcontent' => '',
 'documents' => 'Dokument',
 'documents_checked_out_by_you' => '',
-'documents_expired' => '',
+'documents_expired' => 'Utgångna dokument',
 'documents_in_process' => 'Dokument i bearbetning',
 'documents_locked' => '',
 'documents_locked_by_you' => 'Dokument som du har låst',
@@ -575,7 +575,7 @@ URL: [url]',
 'include_content' => '',
 'include_documents' => 'Inkludera dokument',
 'include_subdirectories' => 'Inkludera under-kataloger',
-'indexing_tasks_in_queue' => '',
+'indexing_tasks_in_queue' => 'Indexeringsuppgifter i kö',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Index mapp',
@@ -802,7 +802,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Bara .jpg-bilder kan användas som användarbild',
 'order_by_sequence_off' => '',
 'original_filename' => 'Ursprungligt filnamn',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Total indexeringsprocess',
 'owner' => 'Ägare',
 'ownership_changed_email' => 'Ägare har ändrats',
 'ownership_changed_email_body' => 'Ägare har ändrats
@@ -1523,8 +1523,12 @@ URL: [url]',
 'toggle_manager' => 'Byt manager',
 'toggle_qrcode' => '',
 'to_before_from' => 'Slutdatum får inte vara innan startdatum',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Arbetsflödesövergång utlöstes',
 'transition_triggered_email_body' => 'Arbetsflödesövergång utlöstes
 Dokument: [name]

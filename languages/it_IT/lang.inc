@@ -1566,8 +1566,12 @@ URL: [url]',
 'toggle_manager' => 'Gestore',
 'toggle_qrcode' => 'Mostri / nascondi codice QR',
 'to_before_from' => 'La data di fine non può essere antecedente a quella di inizio',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Inizio transizione del flusso di lavoro',
 'transition_triggered_email_body' => 'Transizione del flusso di lavoro iniziata
 Documento: [name]

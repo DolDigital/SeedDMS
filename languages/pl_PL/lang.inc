@@ -1512,8 +1512,12 @@ URL: [url]',
 'toggle_manager' => 'Przełączanie zarządcy',
 'toggle_qrcode' => '',
 'to_before_from' => '',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Uruchomiono proces przepływu',
 'transition_triggered_email_body' => 'Uruchomiono proces przepływu 
 Dokument: [name]

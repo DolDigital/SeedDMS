@@ -1555,8 +1555,12 @@ URL: [url]',
 'toggle_manager' => 'Comută Manager',
 'toggle_qrcode' => '',
 'to_before_from' => 'Data de încheiere nu poate fi înainte de data de începere',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Tranziție Workflow declanșată',
 'transition_triggered_email_body' => 'Tranziție Workflow declanșată
 Document: [name]

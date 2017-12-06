@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (740), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (744), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -408,7 +408,7 @@ URL: [url]',
 'drag_icon_here' => 'Versleep icoon van de folder of bestand hier!',
 'dropfolderdir_missing' => '',
 'dropfolder_file' => 'Bestand van dropfolder',
-'dropfolder_folder' => '',
+'dropfolder_folder' => 'Map van de drop-map',
 'dropupload' => 'Snel toevoegen',
 'drop_files_here' => 'Sleep bestanden hierheen!',
 'dump_creation' => 'DB dump aanmaken',
@@ -576,7 +576,7 @@ URL: [url]',
 'import' => 'Importeer',
 'importfs' => '',
 'import_fs' => 'Importeer van bestandssysteem',
-'import_fs_warning' => '',
+'import_fs_warning' => 'Dit werkt alleen voor mappen in de drop-map. Alle mappen en bestanden worden recursief geimporteerd. Bestanden worden onmiddelijk vrijgegeven.',
 'include_content' => 'inclusief inhoud',
 'include_documents' => 'Inclusief documenten',
 'include_subdirectories' => 'Inclusief submappen',
@@ -913,7 +913,7 @@ Bovenliggende map: [folder_path]
 Gebruiker: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Workflow verwijderd van document versie',
-'removeFolderFromDropFolder' => '',
+'removeFolderFromDropFolder' => 'Verwijder de map na de import',
 'remove_marked_files' => 'Geselecteerde bestanden zijn verwijderd',
 'repaired' => 'Gerepareerd',
 'repairing_objects' => 'Documenten en mappen repareren.',
@@ -1560,8 +1560,12 @@ URL: [url]',
 'toggle_manager' => 'Wijzig Beheerder',
 'toggle_qrcode' => '',
 'to_before_from' => 'De einddatum mag niet voor de startdatum liggen',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Workflow-overgang geactiveerd',
 'transition_triggered_email_body' => 'Workflow Overgang
 Document: [name]

@@ -1533,8 +1533,12 @@ URL: [url]',
 'toggle_manager' => 'Intercambiar mánager',
 'toggle_qrcode' => '',
 'to_before_from' => 'La fecha de finalización no debe ser anterior a la de inicio',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered
 Documento: [name]
