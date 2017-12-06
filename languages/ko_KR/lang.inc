@@ -1548,8 +1548,12 @@ URL : [url]',
 'toggle_manager' => '전환 매니저',
 'toggle_qrcode' => 'QR code 보이기/숨기기',
 'to_before_from' => '종료일은 시작일 전이 될수 없습니다',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '새 소유자',
+'transfer_to_user' => '',
 'transition_triggered_email' => '워크플로우 전환 트리거',
 'transition_triggered_email_body' => '워크플로우 전환 트리거
 문서: [name]

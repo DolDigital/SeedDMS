@@ -1527,8 +1527,12 @@ URL: [url]',
 'toggle_manager' => 'Přepnout správce',
 'toggle_qrcode' => '',
 'to_before_from' => 'Datum ukončení nesmí být před datem zahájení',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Transformace pracovního postupu spuštěna',
 'transition_triggered_email_body' => 'Transformace pracovního postupu spuštěna
 Dokument: [jméno]

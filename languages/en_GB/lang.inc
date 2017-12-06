@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1617), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1621), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1583,8 +1583,12 @@ Name: [username]
 'toggle_manager' => 'Toggle manager',
 'toggle_qrcode' => 'Show/hide QR code',
 'to_before_from' => 'End date may not be before start date',
+'transfer_document' => 'Transfer document',
+'transfer_no_read_access' => 'The user does not have read access in the folder',
+'transfer_no_write_access' => 'The user does not have write access in the folder',
 'transfer_objects' => 'Transfer objects',
 'transfer_objects_to_user' => 'New owner',
+'transfer_to_user' => 'Transfer to user',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered
 Document: [name]

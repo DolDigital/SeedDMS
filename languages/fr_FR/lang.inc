@@ -1555,8 +1555,12 @@ Nom : [username]
 'toggle_manager' => 'Basculer \'Responsable\'',
 'toggle_qrcode' => 'Afficher/masquer le QR code',
 'to_before_from' => 'La date de fin ne peut pas être avant la date de début.',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => 'Transférer des objets',
 'transfer_objects_to_user' => 'Nouveau propriétaire',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Transition de workflow activé',
 'transition_triggered_email_body' => 'Transition de workflow déclenchée
 Document : [name]

@@ -1555,8 +1555,12 @@ URL: [url]',
 'toggle_manager' => 'Змінити ознаку менеджера',
 'toggle_qrcode' => '',
 'to_before_from' => 'Кінцева дата не може бути меншою початкової дати',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Змінено стан процесу',
 'transition_triggered_email_body' => 'Змінено стан процесу
 Документ: [name]

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2378)
+//    Translators: Admin (2380)
 
 $text = array(
 '2_factor_auth' => '',
@@ -818,7 +818,7 @@ URL: [url]',
 'review_deletion_email_subject' => '',
 'review_file' => '',
 'review_group' => '校對組',
-'review_log' => '',
+'review_log' => '檢閱紀錄',
 'review_request_email' => '校對請求',
 'review_request_email_body' => '',
 'review_request_email_subject' => '',
@@ -1358,7 +1358,7 @@ URL: [url]',
 'takeOverGrpApprover' => '',
 'takeOverGrpReviewer' => '',
 'takeOverIndApprover' => '',
-'takeOverIndReviewer' => '',
+'takeOverIndReviewer' => '從上個版本接管個別審稿人',
 'tasks' => '',
 'temp_jscode' => '',
 'testmail_body' => '',
@@ -1387,8 +1387,12 @@ URL: [url]',
 'toggle_manager' => '角色切換',
 'toggle_qrcode' => '',
 'to_before_from' => '',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => '',
 'transition_triggered_email_body' => '',
 'transition_triggered_email_subject' => '',

@@ -1532,8 +1532,12 @@ URL: [url]',
 'toggle_manager' => 'Kulcs kezelő',
 'toggle_qrcode' => '',
 'to_before_from' => 'A lejárati dátum nem előzheti meg a kezdési dátumot',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => 'Adatok átadása',
 'transfer_objects_to_user' => 'Új tulajdonos',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Munkamenet átmenet kiváltva',
 'transition_triggered_email_body' => 'Munkafolyamat átmenet kiváltva
 Dokumentum: [name]
