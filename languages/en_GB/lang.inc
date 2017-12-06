@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1621), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1625), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -390,6 +390,14 @@ User: [username]
 URL: [url]',
 'document_status_changed_email_subject' => '[sitename]: [name] - Document status changed',
 'document_title' => 'Document \'[documentname]\'',
+'document_transfered_email_body' => 'Document transfer to other user
+Document: [name]
+Version: [version]
+New owner: [newuser]
+Parent folder: [folder_path]
+User: [username]
+URL: [url]',
+'document_transfered_email_subject' => '[sitename]: [name] - Transfer Dokument',
 'document_updated_email' => 'Document updated',
 'document_updated_email_body' => 'Document updated
 Document: [name]
@@ -475,6 +483,7 @@ The link is valid until [valid].
 'error_remove_folder' => 'Error while deleting folder',
 'error_remove_permission' => 'Error while remove permission',
 'error_toogle_permission' => 'Error while changing permission',
+'error_transfer_document' => 'Error while transfering document',
 'es_ES' => 'Spanish',
 'event_details' => 'Event details',
 'exclude_items' => 'Exclude items',
@@ -1507,6 +1516,7 @@ Name: [username]
 'splash_substituted_user' => 'Substituted user',
 'splash_switched_back_user' => 'Switched back to original user',
 'splash_toogle_group_manager' => 'Group manager toogled',
+'splash_transfer_document' => 'Document transfered',
 'splash_transfer_objects' => 'Objects transfered',
 'state_and_next_state' => 'State/Next state',
 'statistic' => 'Statistic',
