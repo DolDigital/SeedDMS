@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1658)
+//    Translators: Admin (1659)
 
 $text = array(
 '2_factor_auth' => 'Двухфакторная аутентификация',
@@ -622,7 +622,7 @@ URL: [url]',
 'invalid_target_folder' => 'Неверный идентификатор целевого каталога',
 'invalid_user_id' => 'Неверный идентификатор пользователя',
 'invalid_version' => 'Неверная версия документа',
-'in_folder' => '',
+'in_folder' => 'В каталоге',
 'in_revision' => 'В рассмотрении',
 'in_workflow' => 'В процессе',
 'is_disabled' => 'Отключить учётную запись',
@@ -1562,8 +1562,12 @@ URL: [url]',
 'toggle_manager' => 'Изменить как менеджера',
 'toggle_qrcode' => '',
 'to_before_from' => 'Конечная дата не может быть меньше начальной даты',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Изменено состояние процесса',
 'transition_triggered_email_body' => 'Изменено состояние процесса
 Документ: [name]

@@ -1530,8 +1530,12 @@ URL: [url]',
 'toggle_manager' => 'Toggle manager',
 'toggle_qrcode' => '',
 'to_before_from' => 'A data de término não pode ser anterior a data de início',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Transição de fluxo de trabalho desencadeado',
 'transition_triggered_email_body' => 'Transição do fluxo de trabalho triggered
 Document: [name]

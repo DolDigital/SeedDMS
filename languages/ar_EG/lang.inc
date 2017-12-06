@@ -1518,8 +1518,12 @@ URL: [url]',
 'toggle_manager' => 'رجح مدير',
 'toggle_qrcode' => '',
 'to_before_from' => '',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'تم تحريك انتقال مسار العمل',
 'transition_triggered_email_body' => 'تم تحريك انتقال مسار العمل
 المستند: [name]

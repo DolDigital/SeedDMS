@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1053), aydin (83)
+//    Translators: Admin (1058), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -469,14 +469,14 @@ URL: [url]',
 'expired_at_date' => '',
 'expired_documents' => '',
 'expires' => 'Süresinin dolacağı zaman',
-'expire_by_date' => '',
+'expire_by_date' => 'Tarihe göre sil',
 'expire_in_1d' => '',
 'expire_in_1h' => '',
-'expire_in_1m' => '',
-'expire_in_1w' => '',
-'expire_in_1y' => '',
+'expire_in_1m' => '1 Ay içinde silinecek',
+'expire_in_1w' => '1 Hafta içinde silinecek',
+'expire_in_1y' => '1 Yıl içinde silinecek',
 'expire_in_2h' => '',
-'expire_in_2y' => '',
+'expire_in_2y' => '2 Yıl içinde silinecek',
 'expire_today' => '',
 'expire_tomorrow' => '',
 'expiry_changed_email' => 'Süresinin dolacağı tarihi değişti',
@@ -1534,8 +1534,12 @@ URL: [url]',
 'toggle_manager' => 'Değişim yönetimi',
 'toggle_qrcode' => '',
 'to_before_from' => 'Bitiş tarihi başlama tarihinden önce olamaz',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'İş Akış Geçişi Tetiklendi',
 'transition_triggered_email_body' => 'İş Akış Geçişi Tetiklendi
 Doküman: [name]

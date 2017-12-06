@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (838)
+//    Translators: Admin (839)
 
 $text = array(
 '2_factor_auth' => '',
@@ -541,7 +541,7 @@ $text = array(
 'invalid_target_folder' => 'Неправилен идентификатор на целевата папка',
 'invalid_user_id' => 'Неправилен идентификатор на потребителя',
 'invalid_version' => 'Неправилна версия на документа',
-'in_folder' => '',
+'in_folder' => 'В папка',
 'in_revision' => '',
 'in_workflow' => 'в процес',
 'is_disabled' => 'забранена сметка',
@@ -1383,8 +1383,12 @@ $text = array(
 'toggle_manager' => 'Превключи мениджър',
 'toggle_qrcode' => '',
 'to_before_from' => '',
+'transfer_document' => '',
+'transfer_no_read_access' => '',
+'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
+'transfer_to_user' => '',
 'transition_triggered_email' => 'Забелязана промяна на процес',
 'transition_triggered_email_body' => '',
 'transition_triggered_email_subject' => '',

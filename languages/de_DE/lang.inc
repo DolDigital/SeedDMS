@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2489), dgrutsch (22)
+//    Translators: Admin (2493), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1588,8 +1588,12 @@ Name: [username]
 'toggle_manager' => 'Managerstatus wechseln',
 'toggle_qrcode' => 'Zeige/verberge QR-Code',
 'to_before_from' => 'Endedatum darf nicht vor dem Startdatum liegen',
+'transfer_document' => 'Dokument übertragen',
+'transfer_no_read_access' => 'Der Benutzer hat in dem Ordner keine Schreibrechte',
+'transfer_no_write_access' => 'Der Benutzer hat in dem Ordner keine Schreibrechte',
 'transfer_objects' => 'Objekte übertragen',
 'transfer_objects_to_user' => 'Neuer Eigentümer',
+'transfer_to_user' => 'Auf Benutzer übertragen',
 'transition_triggered_email' => 'Workflow transition triggered',
 'transition_triggered_email_body' => 'Workflow transition triggered
 Document: [name]
