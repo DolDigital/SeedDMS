@@ -71,7 +71,7 @@ class SeedDMS_View_TransferDocument extends SeedDMS_Bootstrap_Style {
 
 <div class="control-group">
 	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("transfer_document");?></button>
+		<button type="submit" class="btn"><i class="icon-exchange"></i> <?php printMLText("transfer_document");?></button>
 	</div>
 </div>
 
