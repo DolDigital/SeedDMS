@@ -2068,7 +2068,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
 			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
 				$ret = call_user_func($callback[0], $callback[1], $this);
-				if(is_bool($ret))
+				if($ret === false)
 					return $ret;
 			}
 		}
