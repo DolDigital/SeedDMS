@@ -1351,7 +1351,6 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function exitError($pagetitle, $error, $noexit=false) { /* {{{ */
-	
 		$this->htmlStartPage($pagetitle);
 		$this->globalNavigation();
 		$this->contentStart();
