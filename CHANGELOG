@@ -4,7 +4,7 @@
 - converters for image previews and pdf previews can be configured in settings
 - show list of documents having the selected category on page for managing
   categories
-- use same layout group, category manager as already used in user manager
+- use same layout for group and category manager as already used in user manager
 - meta data of attachments can be edited
 - show number of reverse document links in folder/document list
 - documents can be transfered to another user (Closes partly #368)
