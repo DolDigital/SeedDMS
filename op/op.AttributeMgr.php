@@ -24,8 +24,11 @@ include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -33,13 +36,16 @@ if (!$user->isAdmin()) {
 if (isset($_POST["action"])) $action=$_POST["action"];
 else $action=NULL;
 
+if(!in_array($action, array('addattrdef', 'removeattrdef', 'editattrdef')))
+  UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
+
+/* Check if the form data comes from a trusted request */
+if(!checkFormKey($action)) {
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+}
+
 // add new attribute definition ---------------------------------------------
 if ($action == "addattrdef") {
-	
-	/* Check if the form data comes from a trusted request */
-	if(!checkFormKey('addattrdef')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
-	}
 
 	$name = trim($_POST["name"]);
 	$type = intval($_POST["type"]);
@@ -69,10 +75,18 @@ if ($action == "addattrdef") {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
 	}
 
-	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex);
-	if (!$newAttrdef) {
+	$controller->setParam('name', $name);
+	$controller->setParam('type', $type);
+	$controller->setParam('objtype', $objtype);
+	$controller->setParam('multiple', $multiple);
+	$controller->setParam('minvalues', $minvalues);
+	$controller->setParam('maxvalues', $maxvalues);
+	$controller->setParam('valueset', $valueset);
+	$controller->setParam('regex', $regex);
+	if (!($newAttrdef = $controller($_POST))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
+
 	$attrdefid=$newAttrdef->getID();
 
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_attribute')));
@@ -83,11 +97,6 @@ if ($action == "addattrdef") {
 // delete attribute definition -----------------------------------------------
 else if ($action == "removeattrdef") {
 
-	/* Check if the form data comes from a trusted request */
-	if(!checkFormKey('removeattrdef')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
-	}
-
 	if (!isset($_POST["attrdefid"]) || !is_numeric($_POST["attrdefid"]) || intval($_POST["attrdefid"])<1) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_attrdef"));
 	}
@@ -97,9 +106,11 @@ else if ($action == "removeattrdef") {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_attrdef"));
 	}
 
-	if (!$attrdef->remove()) {
+	$controller->setParam('attrdef', $attrdef);
+	if (!$controller($_POST)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
+
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_attribute')));
 
 	add_log_line("&action=removeattrdef&attrdefid=".$attrdefid);
@@ -109,11 +120,6 @@ else if ($action == "removeattrdef") {
 
 // edit attribute definition -----------------------------------------------
 else if ($action == "editattrdef") {
-
-	/* Check if the form data comes from a trusted request */
-	if(!checkFormKey('editattrdef')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
-	}
 
 	if (!isset($_POST["attrdefid"]) || !is_numeric($_POST["attrdefid"]) || intval($_POST["attrdefid"])<1) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_attrdef"));
@@ -146,28 +152,16 @@ else if ($action == "editattrdef") {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_multiple_needs_valueset"));
 	}
 
-	if (!$attrdef->setName($name)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setType($type)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setObjType($objtype)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setMultipleValues($multiple)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setMinValues($minvalues)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setMaxValues($maxvalues)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setValueSet($valueset)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	if (!$attrdef->setRegex($regex)) {
+	$controller->setParam('name', $name);
+	$controller->setParam('type', $type);
+	$controller->setParam('objtype', $objtype);
+	$controller->setParam('multiple', $multiple);
+	$controller->setParam('minvalues', $minvalues);
+	$controller->setParam('maxvalues', $maxvalues);
+	$controller->setParam('valueset', $valueset);
+	$controller->setParam('regex', $regex);
+	$controller->setParam('attrdef', $attrdef);
+	if (!$controller($_POST)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 
