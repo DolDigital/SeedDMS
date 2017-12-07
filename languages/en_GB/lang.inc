@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1625), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1626), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -392,7 +392,6 @@ URL: [url]',
 'document_title' => 'Document \'[documentname]\'',
 'document_transfered_email_body' => 'Document transfer to other user
 Document: [name]
-Version: [version]
 New owner: [newuser]
 Parent folder: [folder_path]
 User: [username]
