@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
 --------------------------------------------------------------------------------
+- add controller for AttributeMgr
 - converters for image previews and pdf previews can be configured in settings
 - show list of documents having the selected category on page for managing
   categories
