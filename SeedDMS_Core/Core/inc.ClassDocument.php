@@ -2020,7 +2020,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$err = SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $file->getPath());
 		if (!$err) return false;
 
-		return true;
+		return $file;
 	} /* }}} */
 
 	function removeDocumentFile($ID) { /* {{{ */
@@ -4793,6 +4793,31 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	} /* }}} */
 
 	function getDate() { return $this->_date; }
+
+	/**
+	 * Set creation date of the document file
+	 *
+	 * @param integer $date timestamp of creation date. If false then set it
+	 * to the current timestamp
+	 * @return boolean true on success
+	 */
+	function setDate($date) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$date)
+			$date = time();
+		else {
+			if(!is_numeric($date))
+				return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `date` = " . (int) $date . " WHERE `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+		$this->_date = $date;
+		return true;
+	} /* }}} */
+
 	function getDir() { return $this->_dir; }
 	function getFileType() { return $this->_fileType; }
 	function getMimeType() { return $this->_mimeType; }
