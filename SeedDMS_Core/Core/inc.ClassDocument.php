@@ -4802,7 +4802,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 * @return boolean true on success
 	 */
 	function setDate($date) { /* {{{ */
-		$db = $this->_dms->getDB();
+		$db = $this->_document->_dms->getDB();
 
 		if(!$date)
 			$date = time();
