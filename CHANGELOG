@@ -9,6 +9,8 @@
 - meta data of attachments can be edited
 - show number of reverse document links in folder/document list
 - documents can be transfered to another user (Closes partly #368)
+- list of folders/documents on ViewFolder page can be limited, more objects
+  will be loaded when user scrolls to the end of the page
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.4
