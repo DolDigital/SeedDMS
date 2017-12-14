@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1068), jeromerobert (50), lonnnew (9), Oudiceval (474)
+//    Translators: Admin (1068), jeromerobert (50), lonnnew (9), Oudiceval (475)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -286,7 +286,7 @@ URL: [url]',
 'confirm_rm_transmittalitem' => '',
 'confirm_rm_user' => 'Voulez-vous vraiment supprimer l\'utilisateur "[username]"?<br>Attention: Cette action ne peut pas être annulée.',
 'confirm_rm_user_from_processes' => 'Voulez-vous vraiment retirer l’utilisateur « [username] » de tous les processus ?<br>Attention : Cette action peut entrainer la publication des documents si l’utilisateur était le seul (ou dernier) approbateur.',
-'confirm_rm_version' => 'Voulez-vous réellement supprimer la [version] du document "[documentname]"?<br>Attention: Cette action ne peut pas être annulée.',
+'confirm_rm_version' => 'Voulez-vous réellement supprimer la version [version] du document « [documentname] » ?<br>Attention : Cette action est irréversible.',
 'confirm_transfer_objects' => 'Voulez-vous vraiment transférer les documents, dossiers, etc. de l’utilisateur « [username] » ?<br>Attention : Cette action est irréversible.',
 'confirm_update_transmittalitem' => '',
 'content' => 'Contenu',
@@ -1273,6 +1273,8 @@ Nom : [username]
 'settings_guestID_desc' => 'ID de l\'invité utilisé lorsque vous êtes connecté en tant qu\'invité (la plupart du temps pas besoin de changer)',
 'settings_httpRoot' => 'Http Root',
 'settings_httpRoot_desc' => 'Le chemin relatif dans l\'URL, après le nom de domaine. Ne pas inclure le préfixe http:// ou le nom d\'hôte Internet. Par exemple Si l\'URL complète est http://www.example.com/letodms/, mettez \'/letodms/\'. Si l\'URL est http://www.example.com/, mettez \'/\'',
+'settings_incItemsPerPage' => '',
+'settings_incItemsPerPage_desc' => '',
 'settings_initialDocumentStatus' => 'État initial d’un document',
 'settings_initialDocumentStatus_desc' => 'État du document défini lors de l’ajout',
 'settings_initialDocumentStatus_draft' => 'ébauche',
@@ -1303,6 +1305,8 @@ Nom : [username]
 'settings_maxDirID_desc' => 'Nombre maximum de sous-répertoires par le répertoire parent. Par défaut: 0.',
 'settings_maxExecutionTime' => 'Temps d\'exécution max (s)',
 'settings_maxExecutionTime_desc' => 'Ceci définit la durée maximale en secondes q\'un script est autorisé à exécuter avant de se terminer par l\'analyse syntaxique',
+'settings_maxItemsPerPage' => '',
+'settings_maxItemsPerPage_desc' => '',
 'settings_maxRecursiveCount' => 'Nombre maximal de document/dossier récursif',
 'settings_maxRecursiveCount_desc' => 'Nombre maximum de documents et répertoires dont l\'accès sera vérifié, lors d\'un décompte récursif. Si ce nombre est dépassé, le nombre de documents et répertoires affichés sera approximé.',
 'settings_maxSizeForFullText' => 'Taille maximum pour l\'indexation instantanée',
