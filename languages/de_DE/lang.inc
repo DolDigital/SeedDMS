@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2498), dgrutsch (22)
+//    Translators: Admin (2503), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1007,7 +1007,7 @@ URL: [url]',
 'review_submit_email_subject' => '[sitename]: [name] - Prüfung ausgeführt',
 'review_summary' => 'Übersicht Prüfungen',
 'review_update_failed' => 'Störung bei Aktualisierung des Prüfstatus. Aktualisierung gescheitert.',
-'revise_document' => 'Dokument überprüfen',
+'revise_document' => 'Wiederholungsprüfung',
 'revise_document_on' => 'Nächste Überprüfung des Dokuments am [date]',
 'revisions_accepted' => '[no_revisions] Wiederholungsprüfungen',
 'revisions_not_touched' => '[no_revisions] offene Wiederholungspüfungen',
@@ -1311,6 +1311,8 @@ Name: [username]
 'settings_guestID_desc' => 'Id des Gast-Benutzers, wenn man sich als \'guest\' anmeldet.',
 'settings_httpRoot' => 'HTTP Wurzelverzeichnis',
 'settings_httpRoot_desc' => 'Der relative Pfad in der URL nach der Domain, also ohne http:// und den hostnamen. z.B. wenn die komplette URL http://www.example.com/seeddms/ ist, dann setzen Sie diesen Wert auf \'/seeddms/\'. Wenn die URL http://www.example.com/ ist, tragen Sie \'/\' ein.',
+'settings_incItemsPerPage' => 'Zahl der Einträge, die nachgeladen werden',
+'settings_incItemsPerPage_desc' => 'Wenn die Anzahl der Ordner und Dokumente beschränkt wird, dann bestimmt dieser Wert die Anzahl der nachzuladenen Objekte, wenn man sich an das Ende der View-Folder Seite bewegt. Ein Wert 0, läd die gleiche Anzahl an Objekten nach, die anfänglich geladen wurden.',
 'settings_initialDocumentStatus' => 'Initialer Dokumentenstatus',
 'settings_initialDocumentStatus_desc' => 'Dieser STatus wird bei Dokumenten gesetzt, die neu hinzugefügt wurden.',
 'settings_initialDocumentStatus_draft' => 'Entwurf',
@@ -1341,6 +1343,8 @@ Name: [username]
 'settings_maxDirID_desc' => 'Maximale Anzahl der Unterverzeichnisse in einem Verzeichnis. Ändern Sie diesen Wert nur, wenn Sie genau wissen was Sie tun! Voreingestellt ist 0.',
 'settings_maxExecutionTime' => 'Max. Ausführungszeit (s)',
 'settings_maxExecutionTime_desc' => 'Maximale Zeit in Sekunden bis ein Skript beendet wird.',
+'settings_maxItemsPerPage' => 'Max. Anzahl der Einträge auf einer Seite',
+'settings_maxItemsPerPage_desc' => 'Begrenzt die Anzahl der Ordner und Dokumente auf der View-Folder Seite. Weitere Objekte werden geladen, wenn man an das Ende der Seite rollt. Setze diesen Wert auf 0, um immer alle Objekte anzuzeigen.',
 'settings_maxRecursiveCount' => 'Max. Anzahl Anzahl rekursiver Dokumente/Ordner.',
 'settings_maxRecursiveCount_desc' => 'Dies ist die maximale Anzahl der Dokumente und Ordner die auf Zugriffsrechte geprüft werden, wenn rekursiv gezählt wird. Wenn diese Anzahl überschritten wird, wird die Anzahl der Dokumente und Unterordner in der Ordner Ansicht geschätzt.',
 'settings_maxSizeForFullText' => 'Maximale Dateigröße für sofortige Indezierung',
