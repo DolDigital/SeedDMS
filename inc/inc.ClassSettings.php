@@ -229,6 +229,10 @@ class Settings { /* {{{ */
 	var $_showFullPreview = false;
 	// convert to pdf for preview on document details page
 	var $_convertToPdf = false;
+	// maximum number of documents/folders on ViewFolder page
+	var $_maxItemsPerPage = 0;
+	// number of documents/folders fetched when scrolling to bottom of ViewFolder page
+	var $_incItemsPerPage = 0;
 	// Show form to submit missing translations at end of page
 	var $_showMissingTranslations = false;
 	// Extra Path to additional software, will be added to include path
@@ -418,6 +422,10 @@ class Settings { /* {{{ */
 			$this->_previewWidthDropFolderList = intval($tab["previewWidthDropFolderList"]);
 		$this->_showFullPreview = Settings::boolVal($tab["showFullPreview"]);
 		$this->_convertToPdf = Settings::boolVal($tab["convertToPdf"]);
+		if(isset($tab["maxItemsPerPage"]))
+			$this->_maxItemsPerPage = intval($tab["maxItemsPerPage"]);
+		if(isset($tab["incItemsPerPage"]))
+			$this->_incItemsPerPage = intval($tab["incItemsPerPage"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
@@ -735,6 +743,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "previewWidthDropFolderList", $this->_previewWidthDropFolderList);
     $this->setXMLAttributValue($node, "showFullPreview", $this->_showFullPreview);
     $this->setXMLAttributValue($node, "convertToPdf", $this->_convertToPdf);
+    $this->setXMLAttributValue($node, "maxItemsPerPage", $this->_maxItemsPerPage);
+    $this->setXMLAttributValue($node, "incItemsPerPage", $this->_incItemsPerPage);
 
     // XML Path: /configuration/site/edition
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');

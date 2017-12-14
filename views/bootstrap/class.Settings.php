@@ -207,6 +207,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_convertToPdf");?>:</td>
         <td><input name="convertToPdf" type="checkbox" <?php if ($settings->_convertToPdf) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_maxItemsPerPage_desc");?>">
+        <td><?php printMLText("settings_maxItemsPerPage");?>:</td>
+				<td><?php $this->showTextField("maxItemsPerPage", $settings->_maxItemsPerPage); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_incItemsPerPage_desc");?>">
+        <td><?php printMLText("settings_incItemsPerPage");?>:</td>
+				<td><?php $this->showTextField("incItemsPerPage", $settings->_incItemsPerPage); ?></td>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - EDITION

@@ -70,6 +70,8 @@ if ($action == "saveSettings")
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
   $settings->_showFullPreview = getBoolValue("showFullPreview");
   $settings->_convertToPdf = getBoolValue("convertToPdf");
+  $settings->_maxItemsPerPage = $_POST["maxItemsPerPage"];
+  $settings->_incItemsPerPage = $_POST["incItemsPerPage"];
 
   // SETTINGS - SITE - EDITION
   $settings->_strictFormCheck = getBoolValue("strictFormCheck");
