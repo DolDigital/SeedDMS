@@ -48,6 +48,14 @@ if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 	$orderby=$_GET["orderby"];
 } else $orderby=$settings->_sortFoldersDefault;
 
+if (!empty($_GET["offset"])) {
+	$offset=(int) $_GET["offset"];
+} else $offset = 0;
+
+if (!empty($_GET["limit"])) {
+	$limit=(int) $_GET["limit"];
+} else $limit = 10;
+
 if ($folder->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
@@ -66,6 +74,10 @@ if($view) {
 	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
+	$view->setParam('maxItemsPerPage', $settings->_maxItemsPerPage);
+	$view->setParam('incItemsPerPage', $settings->_incItemsPerPage != 0 ? $settings->_incItemsPerPage : $settings->_maxItemsPerPage);
+	$view->setParam('offset', $offset);
+	$view->setParam('limit', $limit);
 	$view($_GET);
 	exit;
 }

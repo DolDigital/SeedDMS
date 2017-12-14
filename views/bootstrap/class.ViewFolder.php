@@ -96,6 +96,37 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 function folderSelected(id, name) {
 	window.location = '../out/out.ViewFolder.php?folderid=' + id;
 }
+function loadMoreObjects(element, limit) {
+	if(!$(element).is(":visible"))
+		return;
+	var folder = element.data('folder')
+	var offset = element.data('offset')
+//	var limit = element.data('limit')
+	url = seeddms_webroot+"out/out.ViewFolder.php?action=entries&folderid="+folder+"&offset="+offset+"&limit="+limit;
+	$.ajax({
+		type: 'GET',
+		url: url,
+		dataType: 'json',
+		success: function(data){
+			$('#viewfolder-table').append(data.html);
+console.log(data.count);
+			if(data.count <= 0) {
+				element.hide();
+			} else {
+				element.text(data.count+" more objects");
+				element.data('offset', offset+limit);
+			}
+		}
+	});
+}
+$(window).scroll(function() {
+	if($(window).scrollTop() + $(window).height() == $(document).height()) {
+		loadMoreObjects($('#loadmore'), $('#loadmore').data('limit'));
+	}
+});
+$('#loadmore').click(function(e) {
+	loadMoreObjects($(this), $(this).data('all'));
+});
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
@@ -109,6 +140,71 @@ function folderSelected(id, name) {
 
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
+	} /* }}} */
+
+	function entries() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$folder = $this->params['folder'];
+		$orderby = $this->params['orderby'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
+		$offset = $this->params['offset'];
+		$limit = $this->params['limit'];
+
+		header('Content-Type: application/json');
+
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+
+		$subFolders = $folder->getSubFolders($orderby);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$documents = $folder->getDocuments($orderby);
+		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+
+		$content = '';
+		if ((count($subFolders) > 0)||(count($documents) > 0)){
+			$i = 0; // counts all entries
+			$j = 0; // counts only returned entries
+			foreach($subFolders as $subFolder) {
+				if($i >= $offset && $j < $limit) {
+					$txt = $this->callHook('folderListItem', $subFolder, 'viewfolder');
+					if(is_string($txt))
+						$content .= $txt;
+					else {
+						$content .= $this->folderListRow($subFolder);
+					}
+					$j++;
+				}
+				$i++;
+			}
+
+			if($subFolders && $documents) {
+				if(($j && $j < $limit) || ($offset + $limit == $i)) {
+					$txt = $this->callHook('folderListSeparator', $folder);
+					if(is_string($txt))
+						$content .= $txt;
+					else $content .= "<tr><td colspan=\"4\">kkkkk</td></tr>";
+				}
+			}
+
+			foreach($documents as $document) {
+				if($i >= $offset && $j < $limit) {
+					$document->verifyLastestContentExpriry();
+					$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+					if(is_string($txt))
+						$content .= $txt;
+					else {
+						$content .= $this->documentListRow($document, $previewer);
+					}
+					$j++;
+				}
+				$i++;
+			}
+
+			echo json_encode(array('error'=>0, 'count'=>$i-($offset+$limit), 'html'=>$content));
+		}
+
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -125,6 +221,8 @@ function folderSelected(id, name) {
 		$workflowmode = $this->params['workflowmode'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
+		$maxItemsPerPage = $this->params['maxItemsPerPage'];
+		$incItemsPerPage = $this->params['incItemsPerPage'];
 		$previewwidth = $this->params['previewWidthList'];
 		$timeout = $this->params['timeout'];
 
@@ -289,6 +387,7 @@ function folderSelected(id, name) {
 		$documents = $folder->getDocuments($orderby);
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
+		$i = 0;
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
 			$txt = $this->callHook('folderListHeader', $folder, $orderby);
 			if(is_string($txt))
@@ -306,28 +405,36 @@ function folderSelected(id, name) {
 			}
 
 			foreach($subFolders as $subFolder) {
-				$txt = $this->callHook('folderListItem', $subFolder, 'viewfolder');
-				if(is_string($txt))
-					echo $txt;
-				else {
-					echo $this->folderListRow($subFolder);
+				if(!$maxItemsPerPage || $i < $maxItemsPerPage) {
+					$txt = $this->callHook('folderListItem', $subFolder, 'viewfolder');
+					if(is_string($txt))
+						echo $txt;
+					else {
+						echo $this->folderListRow($subFolder);
+					}
 				}
+				$i++;
 			}
 
 			if($subFolders && $documents) {
-				$txt = $this->callHook('folderListSeparator', $folder);
-				if(is_string($txt))
-					echo $txt;
+				if(!$maxItemsPerPage || $maxItemsPerPage > count($subFolders)) {
+					$txt = $this->callHook('folderListSeparator', $folder);
+					if(is_string($txt))
+						echo $txt;
+				}
 			}
 
 			foreach($documents as $document) {
-				$document->verifyLastestContentExpriry();
-				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
-				if(is_string($txt))
-					echo $txt;
-				else {
-					echo $this->documentListRow($document, $previewer);
+				if(!$maxItemsPerPage || $i < $maxItemsPerPage) {
+					$document->verifyLastestContentExpriry();
+					$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+					if(is_string($txt))
+						echo $txt;
+					else {
+						echo $this->documentListRow($document, $previewer);
+					}
 				}
+				$i++;
 			}
 
 			$txt = $this->callHook('folderListFooter', $folder);
@@ -336,6 +443,8 @@ function folderSelected(id, name) {
 			else
 				echo "</tbody>\n</table>\n";
 
+			if($maxItemsPerPage && $i > $maxItemsPerPage)
+				echo "<button id=\"loadmore\" style=\"width: 100%; margin-bottom: 20px;\" class=\"btn btn-default\" data-folder=\"".$folder->getId()."\"data-offset=\"".$maxItemsPerPage."\" data-limit=\"".$incItemsPerPage."\" data-all=\"".($i-$maxItemsPerPage)."\">".($i-$maxItemsPerPage)." more objects</button>";
 		}
 		else printMLText("empty_folder_list");
 
