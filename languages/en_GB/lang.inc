@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1626), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1630), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1306,6 +1306,8 @@ Name: [username]
 'settings_guestID_desc' => 'ID of guest-user used when logged in as guest (mostly no need to change)',
 'settings_httpRoot' => 'Http Root',
 'settings_httpRoot_desc' => 'The relative path in the URL, after the domain part. Do not include the http:// prefix or the web host name. e.g. If the full URL is http://www.example.com/seeddms/, set \'/seeddms/\'. If the URL is http://www.example.com/, set \'/\'',
+'settings_incItemsPerPage' => 'Number of entries loaded at end of page',
+'settings_incItemsPerPage_desc' => 'If the number of folders and documents is limited, this will set the number of additionally loaded objects, when scrolling down to the bottom of the view folder page. Setting this to 0, will load the same number of objects as has been loaded initially.',
 'settings_initialDocumentStatus' => 'Initial document status',
 'settings_initialDocumentStatus_desc' => 'This status will be set when a document is added.',
 'settings_initialDocumentStatus_draft' => 'Draft',
@@ -1336,6 +1338,8 @@ Name: [username]
 'settings_maxDirID_desc' => 'Maximum number of sub-directories per parent directory. Do not change this value unless you know what you do! Default: 0.',
 'settings_maxExecutionTime' => 'Max Execution Time (s)',
 'settings_maxExecutionTime_desc' => 'This sets the maximum time in seconds a script is allowed to run before it is terminated by the parse',
+'settings_maxItemsPerPage' => 'Max. number of entries on a page',
+'settings_maxItemsPerPage_desc' => 'Restricts the number of folders and documents shown on the view folder page. Further objects will be loaded when scrolling to the end of the page. Set to 0 to always show all objects.',
 'settings_maxRecursiveCount' => 'Max. number of recursive document/folder count',
 'settings_maxRecursiveCount_desc' => 'This is the maximum number of documents or folders that will be checked for access rights, when recursively counting objects. If this number is exceeded, the number of documents and folders in the folder view will be estimated.',
 'settings_maxSizeForFullText' => 'Maximum filesize for instant indexing',
