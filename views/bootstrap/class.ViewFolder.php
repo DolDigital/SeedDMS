@@ -444,7 +444,7 @@ $('#loadmore').click(function(e) {
 				echo "</tbody>\n</table>\n";
 
 			if($maxItemsPerPage && $i > $maxItemsPerPage)
-				echo "<button id=\"loadmore\" style=\"width: 100%; margin-bottom: 20px;\" class=\"btn btn-default\" data-folder=\"".$folder->getId()."\"data-offset=\"".$maxItemsPerPage."\" data-limit=\"".$incItemsPerPage."\" data-all=\"".($i-$maxItemsPerPage)."\">".($i-$maxItemsPerPage)." more objects</button>";
+				echo "<button id=\"loadmore\" style=\"width: 100%; margin-bottom: 20px;\" class=\"btn btn-default\" data-folder=\"".$folder->getId()."\"data-offset=\"".$maxItemsPerPage."\" data-limit=\"".$incItemsPerPage."\" data-all=\"".($i-$maxItemsPerPage)."\">".getMLText('x_more_objects', array('number', ($i-$maxItemsPerPage)))."</button>";
 		}
 		else printMLText("empty_folder_list");
 
