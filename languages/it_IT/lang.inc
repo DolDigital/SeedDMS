@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1571), rickr (144), s.pnt (26)
+//    Translators: Admin (1572), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -1574,7 +1574,7 @@ URL: [url]',
 'toggle_manager' => 'Gestore',
 'toggle_qrcode' => 'Mostri / nascondi codice QR',
 'to_before_from' => 'La data di fine non può essere antecedente a quella di inizio',
-'transfer_document' => '',
+'transfer_document' => 'Trasferisci Documento',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',
@@ -1702,6 +1702,7 @@ URL: [url]',
 'workflow_summary' => 'Riepilogo flusso di lavoro',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => 'Riepilogo utenti',
+'x_more_objects' => '',
 'year_view' => 'Vista anno',
 'yes' => 'Sì',
 'zh_CN' => 'Cinese (CN)',
