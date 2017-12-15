@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1630), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1631), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1724,6 +1724,7 @@ URL: [url]',
 'workflow_summary' => 'Workflow summary',
 'workflow_transition_without_user_group' => 'At least one of the transitions has neither a user nor a group!',
 'workflow_user_summary' => 'User summary',
+'x_more_objects' => '[number] more objects',
 'year_view' => 'Year View',
 'yes' => 'Yes',
 'zh_CN' => 'Chinese (CN)',
