@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (744), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (745), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1568,7 +1568,7 @@ URL: [url]',
 'toggle_manager' => 'Wijzig Beheerder',
 'toggle_qrcode' => '',
 'to_before_from' => 'De einddatum mag niet voor de startdatum liggen',
-'transfer_document' => '',
+'transfer_document' => 'Document overdragen',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',
@@ -1696,6 +1696,7 @@ URL: [url]',
 'workflow_summary' => 'Workflow samenvatting',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => 'Gebruiker samenvatting',
+'x_more_objects' => '',
 'year_view' => 'Jaar Overzicht',
 'yes' => 'Ja',
 'zh_CN' => 'Chinees (CN)',

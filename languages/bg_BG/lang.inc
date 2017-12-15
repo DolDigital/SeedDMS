@@ -1505,6 +1505,7 @@ $text = array(
 'workflow_summary' => 'Резюме за процес',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => 'Резюме за потребител',
+'x_more_objects' => '',
 'year_view' => 'годишен изглед',
 'yes' => 'Да',
 'zh_CN' => 'Китайски (Китай)',

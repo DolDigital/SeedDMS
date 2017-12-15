@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1042), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1043), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -286,7 +286,7 @@ URL: [url]',
 'confirm_update_transmittalitem' => '',
 'content' => 'Contenido',
 'continue' => 'Continuar',
-'converter_new_cmd' => '',
+'converter_new_cmd' => 'Comando',
 'converter_new_mimetype' => '',
 'copied_to_checkout_as' => '',
 'create_download_link' => '',
@@ -1669,6 +1669,7 @@ URL: [url]',
 'workflow_summary' => 'Resumen Flujo de Trabajo',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => 'Resumen Usuario',
+'x_more_objects' => '',
 'year_view' => 'Vista del año',
 'yes' => 'Sí',
 'zh_CN' => 'Chino (CN)',
