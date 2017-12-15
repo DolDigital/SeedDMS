@@ -52,6 +52,7 @@ if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['docume
 if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
+	$view->setParam('showtree', showtree());
 	$view->setParam('fromdate', isset($_GET['fromdate']) ? $_GET['fromdate'] : '');
 	$view->setParam('todate', isset($_GET['todate']) ? $_GET['todate'] : '');
 	$view->setParam('skip', $skip);
