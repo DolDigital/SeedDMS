@@ -19,15 +19,15 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (745), gijsbertush (329), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (745), gijsbertush (333), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
-'2_factor_auth' => '',
-'2_factor_auth_info' => '',
-'2_fact_auth_secret' => '',
+'2_factor_auth' => 'Twee-factor-authorisatie',
+'2_factor_auth_info' => 'Info 2-factor-authorisatie',
+'2_fact_auth_secret' => 'Toegangscode 2-factor-authorisatie',
 'accept' => 'Accept',
 'access_control' => 'Toegangscontrole',
-'access_control_is_off' => '',
+'access_control_is_off' => 'Toegansgscontrole staat uit',
 'access_denied' => 'Geen toegang.',
 'access_inheritance' => 'Toegang overgeërfd',
 'access_mode' => 'Toegang modus',
@@ -327,6 +327,7 @@ URL: [url]',
 'documents_to_receipt' => 'documenten te ontvangen',
 'documents_to_review' => 'Documenten die wachten op uw controle',
 'documents_to_revise' => 'Te reviseren documenten',
+'documents_user_expiration' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => 'documenten niet geaccepteerd door gebruiker',
 'documents_user_requiring_attention' => 'Eigen documenten die (nog) aandacht behoeven',
