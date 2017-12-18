@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1631), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1632), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -334,6 +334,7 @@ URL: [url]',
 'documents_to_receipt' => 'Documents awaiting to confirm the receipt',
 'documents_to_review' => 'Documents awaiting your review',
 'documents_to_revise' => 'Documents awaiting your revision',
+'documents_user_expiration' => 'Expired documents',
 'documents_user_reception' => 'Documents awaiting reception',
 'documents_user_rejected' => 'Rejected documents',
 'documents_user_requiring_attention' => 'Documents owned by you that require attention',

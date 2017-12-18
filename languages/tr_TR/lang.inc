@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1058), aydin (83)
+//    Translators: Admin (1059), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -328,6 +328,7 @@ URL: [url]',
 'documents_to_receipt' => '',
 'documents_to_review' => 'Kontrol etmenizi bekleyen dokümanlar',
 'documents_to_revise' => '',
+'documents_user_expiration' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => '',
 'documents_user_requiring_attention' => 'Dikkatinizi gerektiren size ait dokümanlar',
@@ -850,7 +851,7 @@ Giriş yaparken halen sorun yaşıyorsanız lütfen sistem yöneticinizle görü
 'password_strength' => 'Parola güvenlik düzeyi',
 'password_strength_insuffient' => 'Parola güvenlik düzeyi yetersiz',
 'password_wrong' => 'Yanlış parola',
-'pdf_converters' => '',
+'pdf_converters' => 'PDF Dönüştürücü',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
