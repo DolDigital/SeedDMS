@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2505), dgrutsch (22)
+//    Translators: Admin (2506), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1117,6 +1117,7 @@ URL: [url]',
 'select_grp_ind_notification' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_ind_recipients' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_ind_reviewers' => 'Klicken zur Auswahl einer Gruppe',
+'select_grp_ind_revisors' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_notification' => 'Klicken zur Auswahl einer Beobachtergruppe',
 'select_grp_recipients' => 'Klicken zur Auswahl einer Empfängergruppe',
 'select_grp_reviewers' => 'Klicken zur Auswahl einer Prüfgruppe',
