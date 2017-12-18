@@ -912,6 +912,7 @@ $text = array(
 'select_grp_ind_notification' => '',
 'select_grp_ind_recipients' => '',
 'select_grp_ind_reviewers' => '',
+'select_grp_ind_revisors' => '',
 'select_grp_notification' => 'Избор на групова нотификация',
 'select_grp_recipients' => '',
 'select_grp_reviewers' => 'Кликни да избереш група рецензенти',

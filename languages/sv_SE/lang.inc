@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1154), MagnusI (335), tmichelfelder (106)
+//    Translators: Admin (1154), MagnusI (358), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '2-faktors autentisering',
@@ -900,7 +900,7 @@ Om du fortfarande har problem med inloggningen, kontakta administratören.',
 'receipt_log' => '',
 'receipt_request_email_body' => '',
 'receipt_request_email_subject' => '',
-'receipt_status' => '',
+'receipt_status' => 'Status',
 'receipt_summary' => '',
 'receipt_update_failed' => '',
 'reception' => '',
@@ -919,7 +919,7 @@ Dokument: [document]
 Användare: [username]
 URL: [url]',
 'removed_file_email_subject' => '[sitename]: [document] - Borttagen bilaga',
-'removed_recipient' => '',
+'removed_recipient' => 'har tagits bort från meddelandelistan.',
 'removed_reviewer' => 'har tagits bort från listan med personer som ska granska dokumentet.',
 'removed_revisor' => '',
 'removed_workflow_email_body' => 'Arbetsflöde borttaget från dokument version
@@ -930,7 +930,7 @@ Arbetsflöde: [workflow]
 Användare: [username]
 URL: [url]',
 'removed_workflow_email_subject' => '[sitename]: [name] - Arbetsflöde borttaget från dokumentversion',
-'removeFolderFromDropFolder' => '',
+'removeFolderFromDropFolder' => 'Radera katalog efter import',
 'remove_marked_files' => 'Ta bort markerade filer',
 'repaired' => 'reparerat',
 'repairing_objects' => 'Reparerar dokument och kataloger.',
@@ -942,9 +942,9 @@ Status: [current_state]
 Överordnad katalog: [folder_path]
 Användare: [username]
 URL: [url]',
-'request_workflow_action_email_subject' => '',
-'reset_checkout' => '',
-'restrict_access' => '',
+'request_workflow_action_email_subject' => '[sitename]: [name] - Åtgärd krävs i arbetsflödet',
+'reset_checkout' => 'Slutför utcheckning',
+'restrict_access' => 'Ingen åtkomst till',
 'results_page' => 'Resultatsida',
 'return_from_subworkflow' => 'Tillbaka från underordnat arbetsflöde',
 'return_from_subworkflow_email_body' => 'Tillbaka från underliggande arbetsflöde
@@ -958,22 +958,32 @@ URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - Tillbaka from underliggande arbetsflöde',
 'reverse_links' => 'Dokument som är länkat till aktuell dokument.',
 'reviewers' => 'Granska',
-'reviewer_already_assigned' => 'ska redan granska dokumentet',
+'reviewer_already_assigned' => 'Användaren har redan tilldelats rollen som granskare',
 'reviewer_already_removed' => 'har redan tagits bort från granskningen eller har redan skickat en granskning',
 'reviews_accepted' => '',
 'reviews_not_touched' => '',
 'reviews_rejected' => '',
 'reviews_without_group' => '',
-'reviews_without_user' => '',
+'reviews_without_user' => 'Granskningar som saknar användare',
 'review_deletion_email' => 'Förfrågan om granskning borttagen',
-'review_deletion_email_body' => '',
-'review_deletion_email_subject' => '',
-'review_file' => '',
+'review_deletion_email_body' => 'Begäran om granskning har tagits bort
+Dokument: [name]
+Version: [version]
+Överordnad katalog: [folder_path]
+Användare: [username]
+URL: [url]',
+'review_deletion_email_subject' => '[sitename]: [name] - Begäran om granskning har tagits bort',
+'review_file' => 'Fil',
 'review_group' => 'Grupp som granskar',
-'review_log' => '',
+'review_log' => 'Granska logg',
 'review_request_email' => 'Förfrågan om granskning',
-'review_request_email_body' => '',
-'review_request_email_subject' => '',
+'review_request_email_body' => 'Begäran om granskning
+Dokument: [name]
+Version: [version]
+Överordnad katalog: [folder_path]
+Användare: [username]
+URL: [url]',
+'review_request_email_subject' => '[sitename]: [name] - Begäran om granskning',
 'review_status' => 'Status för granskningen',
 'review_submit_email' => 'Skickat granskning',
 'review_submit_email_body' => 'Skickat granskning
@@ -987,19 +997,24 @@ URL: [url]',
 'review_submit_email_subject' => '[sitename]: [name] - Skickat granskning',
 'review_summary' => 'Sammanfattning av granskningen',
 'review_update_failed' => 'Fel vid uppdatering av granskningsstatus. Kunde inte uppdatera.',
-'revise_document' => '',
-'revise_document_on' => '',
+'revise_document' => 'Revidera dokument',
+'revise_document_on' => 'Nästa revidering av dokumentversion [date]',
 'revisions_accepted' => '',
 'revisions_not_touched' => '',
 'revisions_pending' => '',
 'revisions_rejected' => '',
-'revisions_without_group' => '',
-'revisions_without_user' => '',
-'revision_date' => '',
-'revision_log' => '',
-'revision_request_email_body' => '',
-'revision_request_email_subject' => '',
-'revision_status' => '',
+'revisions_without_group' => 'Revisioner som saknar grupp',
+'revisions_without_user' => 'Revisioner som saknar användare',
+'revision_date' => 'Datum för revision',
+'revision_log' => 'Revisionslogg',
+'revision_request_email_body' => 'Begäran om revision
+Dokument: [name]
+Version: [version]
+Överordnad katalog: [folder_path]
+Användare: [username]
+URL: [url]',
+'revision_request_email_subject' => '[sitename]: [name] - Begäran om revision',
+'revision_status' => 'Status',
 'revision_submit_email_body' => '',
 'revision_submit_email_subject' => '',
 'revisors' => '',
@@ -1084,6 +1099,7 @@ URL: [url]',
 'select_grp_ind_notification' => '',
 'select_grp_ind_recipients' => '',
 'select_grp_ind_reviewers' => '',
+'select_grp_ind_revisors' => '',
 'select_grp_notification' => 'Klicka för att välja gruppnotifiering',
 'select_grp_recipients' => '',
 'select_grp_reviewers' => 'Välj en grupp som ska granska',
