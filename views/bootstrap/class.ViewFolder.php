@@ -109,11 +109,11 @@ function loadMoreObjects(element, limit) {
 		dataType: 'json',
 		success: function(data){
 			$('#viewfolder-table').append(data.html);
-console.log(data.count);
 			if(data.count <= 0) {
 				element.hide();
 			} else {
-				element.text(data.count+" more objects");
+				var str = '<?= getMLText('x_more_objects') ?>';
+				element.text(str.replace('[number]', data.count));
 				element.data('offset', offset+limit);
 			}
 		}
@@ -452,7 +452,7 @@ $('#loadmore').click(function(e) {
 				echo "</tbody>\n</table>\n";
 
 			if($maxItemsPerPage && $i > $maxItemsPerPage)
-				echo "<button id=\"loadmore\" style=\"width: 100%; margin-bottom: 20px;\" class=\"btn btn-default\" data-folder=\"".$folder->getId()."\"data-offset=\"".$maxItemsPerPage."\" data-limit=\"".$incItemsPerPage."\" data-all=\"".($i-$maxItemsPerPage)."\">".getMLText('x_more_objects', array('number', ($i-$maxItemsPerPage)))."</button>";
+				echo "<button id=\"loadmore\" style=\"width: 100%; margin-bottom: 20px;\" class=\"btn btn-default\" data-folder=\"".$folder->getId()."\"data-offset=\"".$maxItemsPerPage."\" data-limit=\"".$incItemsPerPage."\" data-all=\"".($i-$maxItemsPerPage)."\">".getMLText('x_more_objects', array('number'=>($i-$maxItemsPerPage)))."</button>";
 		}
 		else printMLText("empty_folder_list");
 
