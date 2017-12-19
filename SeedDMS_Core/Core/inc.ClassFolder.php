@@ -656,9 +656,11 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param string $orderby if set to 'n' the list is ordered by name, otherwise
 	 *        it will be ordered by sequence
 	 * @param string $dir direction of sorting (asc or desc)
+	 * @param integer $limit limit number of documents
+	 * @param integer $offset offset in retrieved list of documents
 	 * @return array list of documents or false in case of an error
 	 */
-	function getDocuments($orderby="", $dir="asc") { /* {{{ */
+	function getDocuments($orderby="", $dir="asc", $limit=0, $offset=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_documents)) {
@@ -668,6 +670,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			elseif($orderby=="d") $queryStr .= " ORDER BY `date`";
 			if($dir == 'desc')
 				$queryStr .= " DESC";
+			if(is_int($limit) && $limit > 0)
+				$queryStr .= " LIMIT ".$limit;
+			if(is_int($offset) && $offset > 0)
+				$queryStr .= " OFFSET ".$offset;
 
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)

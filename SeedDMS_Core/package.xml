@@ -31,6 +31,7 @@
 - SeedDMS_Core_Document::addDocumentFile() returns object of file
 - add SeedDMS_Core_DocumentFile::setDate()
 - remove SeedDMS_Core_DocumentCategory::addCategory() and getCategories()
+- add optional parameters $limit and $offset to SeedDMS_Core_Folder::getDocuments()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
