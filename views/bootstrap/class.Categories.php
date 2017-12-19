@@ -46,6 +46,8 @@ $(document).ready( function() {
 	});
 });
 <?php
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
@@ -135,6 +137,8 @@ $(document).ready( function() {
 		$user = $this->params['user'];
 		$categories = $this->params['categories'];
 		$selcat = $this->params['selcategory'];
+
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
