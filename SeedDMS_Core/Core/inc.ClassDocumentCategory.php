@@ -74,20 +74,6 @@ class SeedDMS_Core_DocumentCategory {
 		return true;
 	} /* }}} */
 
-	function getCategories() { /* {{{ */
-		$db = $this->_dms->getDB();
-
-		$queryStr = "SELECT * FROM `tblCategory`";
-		return $db->getResultArray($queryStr);
-	} /* }}} */
-
-	function addCategory($keywords) { /* {{{ */
-		$db = $this->_dms->getDB();
-
-		$queryStr = "INSERT INTO `tblCategory` (`category`) VALUES (".$db->qstr($keywords).")";
-		return $db->getResult($queryStr);
-	} /* }}} */
-
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 

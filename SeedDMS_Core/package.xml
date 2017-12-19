@@ -30,6 +30,7 @@
 - add method SeedDMS_Core_Document::transferToUser()
 - SeedDMS_Core_Document::addDocumentFile() returns object of file
 - add SeedDMS_Core_DocumentFile::setDate()
+- remove SeedDMS_Core_DocumentCategory::addCategory() and getCategories()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
