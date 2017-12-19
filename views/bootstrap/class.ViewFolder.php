@@ -157,9 +157,13 @@ $('#loadmore').click(function(e) {
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
 
-		$subFolders = $folder->getSubFolders($orderby);
+		$subFolders = $this->callHook('folderGetSubFolders', $folder, $orderby);
+		if($subFolders === null)
+			$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
-		$documents = $folder->getDocuments($orderby);
+		$documents = $this->callHook('folderGetDocuments', $folder, $orderby);
+		if($documents === null)
+			$documents = $folder->getDocuments($orderby);
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		$content = '';
@@ -382,9 +386,13 @@ $('#loadmore').click(function(e) {
 		else
 			$this->contentHeading(getMLText("folder_contents"));
 
-		$subFolders = $folder->getSubFolders($orderby);
+		$subFolders = $this->callHook('folderGetSubFolders', $folder, $orderby);
+		if($subFolders === null)
+			$subFolders = $folder->getSubFolders($orderby);
 		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
-		$documents = $folder->getDocuments($orderby);
+		$documents = $this->callHook('folderGetDocuments', $folder, $orderby);
+		if($documents === null)
+			$documents = $folder->getDocuments($orderby);
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		$i = 0;
