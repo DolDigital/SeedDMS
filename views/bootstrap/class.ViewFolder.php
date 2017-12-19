@@ -102,7 +102,7 @@ function loadMoreObjects(element, limit) {
 	var folder = element.data('folder')
 	var offset = element.data('offset')
 //	var limit = element.data('limit')
-	url = seeddms_webroot+"out/out.ViewFolder.php?action=entries&folderid="+folder+"&offset="+offset+"&limit="+limit;
+	url = seeddms_webroot+"out/out.ViewFolder.php?action=entries&folderid="+folder+"&offset="+offset+"&limit="+limit<?= $orderby ? '+"&orderby='.$orderby.'"' : "" ?>;
 	$.ajax({
 		type: 'GET',
 		url: url,
@@ -188,7 +188,6 @@ $('#loadmore').click(function(e) {
 					$txt = $this->callHook('folderListSeparator', $folder);
 					if(is_string($txt))
 						$content .= $txt;
-					else $content .= "<tr><td colspan=\"4\">kkkkk</td></tr>";
 				}
 			}
 
