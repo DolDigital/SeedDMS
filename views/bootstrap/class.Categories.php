@@ -63,18 +63,20 @@ $(document).ready( function() {
 			echo "</table>";
 
 			$documents = $selcat->getDocumentsByCategory(10);
-			print "<table id=\"viewfolder-table\" class=\"table\">";
-			print "<thead>\n<tr>\n";
-			print "<th></th>\n";	
-			print "<th>".getMLText("name")."</th>\n";
-			print "<th>".getMLText("status")."</th>\n";
-			print "<th>".getMLText("action")."</th>\n";
-			print "</tr>\n</thead>\n<tbody>\n";
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
-			foreach($documents as $doc) {
-				echo $this->documentListRow($doc, $previewer);
+			if($documents) {
+				print "<table id=\"viewfolder-table\" class=\"table\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+				foreach($documents as $doc) {
+					echo $this->documentListRow($doc, $previewer);
+				}
+				print "</tbody></table>";
 			}
-			print "</tbody></table>";
 		}
 	} /* }}} */
 
