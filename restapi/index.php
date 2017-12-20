@@ -314,10 +314,12 @@ function createFolder($id) { /* {{{ */
 			$comment = $app->request()->post('comment');
 			$attributes = $app->request()->post('attributes');
 			$newattrs = array();
-			foreach($attributes as $attrname=>$attrvalue) {
-				$attrdef = $dms->getAttributeDefinitionByName($attrname);
-				if($attrdef) {
-					$newattrs[$attrdef->getID()] = $attrvalue;
+			if($attributes) {
+				foreach($attributes as $attrname=>$attrvalue) {
+					$attrdef = $dms->getAttributeDefinitionByName($attrname);
+					if($attrdef) {
+						$newattrs[$attrdef->getID()] = $attrvalue;
+					}
 				}
 			}
 			if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
@@ -469,7 +471,7 @@ function getDocument($id) { /* {{{ */
 				'version'=>$lc->getVersion(),
 				'orig_filename'=>$lc->getOriginalFileName(),
 				'size'=>$lc->getFileSize(),
-				'keywords'=>htmlspecialchars($document->getKeywords()),
+				'keywords'=>$document->getKeywords(),
 			);
 			$app->response()->header('Content-Type', 'application/json');
 			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
