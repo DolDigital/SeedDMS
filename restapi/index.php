@@ -182,10 +182,13 @@ function getLockedDocuments() { /* {{{ */
     }
 } /* }}} */
 
-function getFolder($id) { /* {{{ */
-    global $app, $dms, $userobj;
+function getFolder($id = null) { /* {{{ */
+    global $app, $dms, $userobj, $settings;
     $forcebyname = $app->request()->get('forcebyname');
-    if(is_numeric($id) && empty($forcebyname))
+
+    if ($id === null)
+        $folder = $dms->getFolder($settings->_rootFolderID);
+    else if(is_numeric($id) && empty($forcebyname))
         $folder = $dms->getFolder($id);
     else {
         $parentid = $app->request()->get('parentid');
@@ -1414,6 +1417,7 @@ $app->get('/logout', 'doLogout');
 $app->get('/account', 'getAccount');
 $app->get('/search', 'doSearch');
 $app->get('/searchbyattr', 'doSearchByAttr');
+$app->get('/folder/', 'getFolder');
 $app->get('/folder/:id', 'getFolder');
 $app->post('/folder/:id/move', 'moveFolder');
 $app->delete('/folder/:id', 'deleteFolder');
