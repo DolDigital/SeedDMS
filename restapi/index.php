@@ -60,6 +60,21 @@ if(USE_PHP_SESSION) {
 require "vendor/autoload.php";
 #\Slim\Slim::registerAutoloader();
 
+function __getLatestVersionData($lc) { /* {{{ */
+    $document = $lc->getDocument();
+    return array(
+        'type'=>'document',
+        'id'=>$document->getId(),
+        'date'=>$document->getDate(),
+        'name'=>$document->getName(),
+        'mimetype'=>$lc->getMimeType(),
+        'version'=>$lc->getVersion(),
+        'size'=>$lc->getFileSize(),
+        'comment'=>$document->getComment(),
+        'keywords'=>$document->getKeywords(),
+    );
+} /* }}} */
+
 function doLogin() { /* {{{ */
     global $app, $dms, $userobj, $session, $settings;
 
@@ -136,19 +151,12 @@ function getLockedDocuments() { /* {{{ */
 
     if(false !== ($documents = $dms->getDocumentsLockedByUser($userobj))) {
         $documents = SeedDMS_Core_DMS::filterAccess($documents, $userobj, M_READ);
+        $recs = array();
         foreach($documents as $document) {
             $lc = $document->getLatestContent();
-            $recs[] = array(
-                'type'=>'document',
-                'id'=>$document->getId(),
-                'date'=>$document->getDate(),
-                'name'=>$document->getName(),
-                'mimetype'=>$lc->getMimeType(),
-                'version'=>$lc->getVersion(),
-                'size'=>$lc->getFileSize(),
-                'comment'=>$document->getComment(),
-                'keywords'=>$document->getKeywords(),
-            );
+            if($lc) {
+                $recs[] = __getLatestVersionData($lc);
+            }
         }
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
@@ -271,17 +279,7 @@ function getFolderChildren($id) { /* {{{ */
                 foreach($documents as $document) {
                     $lc = $document->getLatestContent();
                     if($lc) {
-                        $recs[] = array(
-                            'type'=>'document',
-                            'id'=>$document->getId(),
-                            'date'=>$document->getDate(),
-                            'name'=>$document->getName(),
-                            'mimetype'=>$lc->getMimeType(),
-                            'version'=>$lc->getVersion(),
-                            'size'=>$lc->getFileSize(),
-                            'comment'=>$document->getComment(),
-                            'keywords'=>$document->getKeywords(),
-                        );
+                        $recs[] = __getLatestVersionData($lc);
                     }
                 }
                 $app->response()->header('Content-Type', 'application/json');
@@ -461,20 +459,14 @@ function getDocument($id) { /* {{{ */
     if($document) {
         if ($document->getAccessMode($userobj) >= M_READ) {
             $lc = $document->getLatestContent();
-            $app->response()->header('Content-Type', 'application/json');
-            $data = array(
-                'id'=>$id,
-                'name'=>$document->getName(),
-                'comment'=>$document->getComment(),
-                'date'=>$document->getDate(),
-                'mimetype'=>$lc->getMimeType(),
-                'version'=>$lc->getVersion(),
-                'orig_filename'=>$lc->getOriginalFileName(),
-                'size'=>$lc->getFileSize(),
-                'keywords'=>$document->getKeywords(),
-            );
-            $app->response()->header('Content-Type', 'application/json');
-            echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+            if($lc) {
+                $data = __getLatestVersionData($lc);
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+            } else {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+            }
         } else {
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
@@ -838,17 +830,9 @@ function doSearch() { /* {{{ */
                 if(get_class($entry) == 'SeedDMS_Core_Document') {
                     $document = $entry;
                     $lc = $document->getLatestContent();
-                    $recs[] = array(
-                        'type'=>'document',
-                        'id'=>$document->getId(),
-                        'date'=>$document->getDate(),
-                        'name'=>$document->getName(),
-                        'mimetype'=>$lc->getMimeType(),
-                        'version'=>$lc->getVersion(),
-                        'size'=>$lc->getFileSize(),
-                        'comment'=>$document->getComment(),
-                        'keywords'=>$document->getKeywords(),
-                    );
+                    if($lc) {
+                        $recs[] = __getLatestVersionData($lc);
+                    }
                 } elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
                     $folder = $entry;
                     $recs[] = array(
@@ -901,17 +885,9 @@ function doSearchByAttr() { /* {{{ */
         if(get_class($entry) == 'SeedDMS_Core_Document') {
             $document = $entry;
             $lc = $document->getLatestContent();
-            $recs[] = array(
-                'type'=>'document',
-                'id'=>$document->getId(),
-                'date'=>$document->getDate(),
-                'name'=>$document->getName(),
-                'mimetype'=>$lc->getMimeType(),
-                'version'=>$lc->getVersion(),
-                'size'=>$lc->getFileSize(),
-                'comment'=>$document->getComment(),
-                'keywords'=>$document->getKeywords(),
-            );
+            if($lc) {
+                $recs[] = __getLatestVersionData($lc);
+            }
         } elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
             $folder = $entry;
             $recs[] = array(
