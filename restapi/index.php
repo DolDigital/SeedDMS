@@ -431,6 +431,7 @@ function uploadDocument($id) { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
 
     if($id == 0) {
