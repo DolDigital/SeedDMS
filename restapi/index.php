@@ -146,7 +146,9 @@ function setFullName() { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
+
     $userobj->setFullName($app->request()->put('fullname'));
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userobj->getFullName()));
 } /* }}} */
@@ -157,7 +159,9 @@ function setEmail($id) { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
+
     $userobj->setEmail($app->request()->put('fullname'));
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userid));
 } /* }}} */
@@ -319,6 +323,7 @@ function createFolder($id) { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
 
     if($id == 0) {
@@ -360,6 +365,7 @@ function moveFolder($id) { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
 
     $mfolder = $dms->getFolder($id);
@@ -399,6 +405,7 @@ function deleteFolder($id) { /* {{{ */
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
     }
 
     if($id == 0) {
@@ -931,6 +938,7 @@ function doSearchByAttr() { /* {{{ */
 
 function checkIfAdmin() { /* {{{ */
     global $app, $dms, $userobj;
+
     if(!$userobj) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
