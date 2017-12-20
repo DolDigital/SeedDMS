@@ -359,7 +359,7 @@ function createFolder($id) { /* {{{ */
     }
 } /* }}} */
 
-function moveFolder($id) { /* {{{ */
+function moveFolder($id, $folderid) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
@@ -371,7 +371,6 @@ function moveFolder($id) { /* {{{ */
     $mfolder = $dms->getFolder($id);
     if($mfolder) {
         if ($mfolder->getAccessMode($userobj) >= M_READ) {
-            $folderid = $app->request()->post('dest');
             if($folder = $dms->getFolder($folderid)) {
                 if($folder->getAccessMode($userobj) >= M_READWRITE) {
                     if($mfolder->setParent($folder)) {
@@ -433,6 +432,70 @@ function deleteFolder($id) { /* {{{ */
 } /* }}} */
 
 function uploadDocument($id) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    if(!$userobj) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
+    }
+
+    if($id == 0) {
+        echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
+        return;
+    }
+    $mfolder = $dms->getFolder($id);
+    if($mfolder) {
+        if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
+            $docname = $app->request()->params('name');
+            $keywords = $app->request()->params('keywords');
+//            $categories = $app->request()->params('categories') ? $app->request()->params('categories') : [];
+//            $attributes = $app->request()->params('attributes') ? $app->request()->params('attributes') : [];
+            $origfilename = $app->request()->params('origfilename');
+            if (count($_FILES) == 0)
+            {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>false, 'message'=>'No file detected', 'data'=>''));
+                return;
+            }
+            $file_info = reset($_FILES);
+            if ($origfilename == null)
+                $origfilename = $file_info['name'];
+            if (trim($docname) == '')
+                $docname = $origfilename;
+            $temp = $file_info['tmp_name'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $userfiletype = finfo_file($finfo, $temp);
+            $fileType = ".".pathinfo($origfilename, PATHINFO_EXTENSION);
+            finfo_close($finfo);
+            $res = $mfolder->addDocument($docname, '', 0, $userobj, $keywords, array(), $temp, $origfilename ? $origfilename : basename($temp), $fileType, $userfiletype, 0);
+//            addDocumentCategories($res, $categories);
+//            setDocumentAttributes($res, $attributes);
+
+            unlink($temp);
+            if($res) {
+                $doc = $res[0];
+                $rec = array('id'=>$doc->getId(), 'name'=>$doc->getName());
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$rec));
+            } else {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
+            }
+        } else {
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+        }
+    } else {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+    }
+} /* }}} */
+
+/**
+ * Old upload method which uses put instead of post
+ */
+function uploadDocumentPut($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
@@ -1443,7 +1506,7 @@ function getCategories() { /* {{{ */
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
-}
+} /* }}} */
 
 function addCategory() { /* {{{ */
     global $app, $dms, $userobj;
@@ -1460,10 +1523,9 @@ function addCategory() { /* {{{ */
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
-}
+} /* }}} */
 
-function deleteCategory($id)
-{
+function deleteCategory($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
@@ -1473,7 +1535,50 @@ function deleteCategory($id)
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>$data));
-}
+} /* }}} */
+
+/**
+ * Updates the name of an existing category
+ *
+ * @param      <type>  $id     The user name or numerical identifier
+ */
+function changeCategoryName($id) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    checkIfAdmin();
+
+    if ($app->request()->put('name') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new name', 'data'=>''));
+        return;
+    }
+
+    $newname = $app->request()->put('name');
+
+		$category = null;
+    if(is_numeric($id))
+        $category = $dms->getDocumentCategory($id);
+
+    /**
+     * Category not found
+     */
+    if (!$category) {
+        $app->response()->status(404);
+        return;
+    }
+
+    if (!$category->setName($newname)) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'', 'data'=>'Could not change name.'));
+        return;
+    }
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+
+    return;
+} /* }}} */
 
 function clearFolderAccessList($id) { /* {{{ */
     global $app, $dms, $userobj;
@@ -1484,19 +1589,15 @@ function clearFolderAccessList($id) { /* {{{ */
     else {
         $folder = $dms->getFolderByName($id);
     }
-    if (!$folder)
-    {
+    if (!$folder) {
         $app->response()->status(404);
         return;
     }
-    $operationResult = $folder->clearAccessList();
-    $data = array();
     $app->response()->header('Content-Type', 'application/json');
-    if (!$operationResult)
-    {
-        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));
+    if (!$folder->clearAccessList()) {
+        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>''));
     }
-    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 } /* }}} */
 
 //$app = new Slim(array('mode'=>'development', '_session.handler'=>null));
@@ -1528,14 +1629,15 @@ $app->get('/search', 'doSearch');
 $app->get('/searchbyattr', 'doSearchByAttr');
 $app->get('/folder/', 'getFolder');
 $app->get('/folder/:id', 'getFolder');
-$app->post('/folder/:id/move', 'moveFolder');
+$app->post('/folder/:id/move/:folderid', 'moveFolder');
 $app->delete('/folder/:id', 'deleteFolder');
 $app->get('/folder/:id/children', 'getFolderChildren');
 $app->get('/folder/:id/parent', 'getFolderParent');
 $app->get('/folder/:id/path', 'getFolderPath');
 $app->get('/folder/:id/attributes', 'getFolderAttributes');
 $app->post('/folder/:id/createfolder', 'createFolder');
-$app->put('/folder/:id/document', 'uploadDocument');
+$app->put('/folder/:id/document', 'uploadDocumentPut');
+$app->post('/folder/:id/document', 'uploadDocument');
 $app->get('/document/:id', 'getDocument');
 $app->post('/document/:id/attachment', 'uploadDocumentFile');
 $app->delete('/document/:id', 'deleteDocument');
@@ -1568,6 +1670,7 @@ $app->put('/folder/:id/access/clear', 'clearFolderAccessList');
 $app->get('/categories', 'getCategories');
 $app->delete('/categories/:id', 'deleteCategory');
 $app->post('/categories', 'addCategory');
+$app->put('/categories/:id/name', 'changeCategoryName');
 $app->run();
 
 ?>
