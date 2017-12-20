@@ -284,7 +284,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 */
 	function getDir() { /* {{{ */
 		if($this->_dms->maxDirID) {
-			$dirid = (int) (($this->_id-1) / $this->_dms->maxDirID) + 1; 
+			$dirid = (int) (($this->_id-1) / $this->_dms->maxDirID) + 1;
 			return $dirid."/".$this->_id."/";
 		} else {
 			return $this->_id."/";
@@ -756,7 +756,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * has no access list the returned array contains the two elements
 	 * 'users' and 'groups' which are than empty. The methode returns false
 	 * if the function fails.
-	 * 
+	 *
 	 * @param integer $mode access mode (defaults to M_ANY)
 	 * @param integer $op operation (defaults to O_EQ)
 	 * @return array multi dimensional array or false in case of an error
@@ -1821,7 +1821,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$link = new SeedDMS_Core_DocumentLink($resArr["id"], $document, $target, $resArr["userID"], $resArr["public"]);
 		$user = $this->_dms->getLoggedInUser();
 		if($link->getAccessMode($user, $document, $target) >= M_READ)
-			return $file;
+			return $link;
 		return null;
 	} /* }}} */
 
@@ -1973,7 +1973,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$queryStr = "SELECT * FROM `tblDocumentFiles` WHERE `document` = " . $this->_id;
 			if($version) {
 				$queryStr .= " AND (`version`=0 OR `version`=".(int) $version.")";
-			}	
+			}
 			$queryStr .= " ORDER BY ";
 			if($version) {
 				$queryStr .= "`version` DESC,";
@@ -2348,7 +2348,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Calculate the disk space including all versions of the document
-	 * 
+	 *
 	 * This is done by using the internal database field storing the
 	 * filesize of a document version.
 	 *
@@ -2367,7 +2367,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Returns a list of events happend during the life of the document
-	 * 
+	 *
 	 * This includes the creation of new versions, approval and reviews, etc.
 	 *
 	 * @return array list of events
@@ -2815,7 +2815,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Rewrites the complete status log
-	 * 
+	 *
 	 * Attention: this function is highly dangerous.
 	 * It removes an existing status log and rewrites it.
 	 * This method was added for importing an xml dump.
@@ -2866,7 +2866,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * Returns the access mode similar to a document
 	 *
 	 * There is no real access mode for document content, so this is more
-	 * like a virtual access mode, derived from the status of the document 
+	 * like a virtual access mode, derived from the status of the document
 	 * content. The function checks if {@link SeedDMS_Core_DMS::noReadForStatus}
 	 * contains the status of the version and returns M_NONE if it exists and
 	 * the user is not involved in a workflow or review/approval/revision.
@@ -2876,7 +2876,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * prevent access on the whole document if there is no accessible version.
 	 *
 	 * FIXME: This function only works propperly if $u is the currently logged in
-	 * user, because noReadForStatus will be set for this user. 
+	 * user, because noReadForStatus will be set for this user.
 	 * FIXED: instead of using $dms->noReadForStatus it is take from the user's role
 	 *
 	 * @param object $u user
@@ -3044,7 +3044,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Rewrites the complete review log
-	 * 
+	 *
 	 * Attention: this function is highly dangerous.
 	 * It removes an existing review log and rewrites it.
 	 * This method was added for importing an xml dump.
@@ -3172,7 +3172,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Rewrites the complete approval log
-	 * 
+	 *
 	 * Attention: this function is highly dangerous.
 	 * It removes an existing review log and rewrites it.
 	 * This method was added for importing an xml dump.
@@ -3840,7 +3840,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
-			$this->_workflowState = new SeedDMS_Core_Workflow_State($recs[0]['id'], $recs[0]['name'], $recs[0]['maxtime'], $recs[0]['precondfunc'], $recs[0]['documentstatus']); 
+			$this->_workflowState = new SeedDMS_Core_Workflow_State($recs[0]['id'], $recs[0]['name'], $recs[0]['maxtime'], $recs[0]['precondfunc'], $recs[0]['documentstatus']);
 			$this->_workflowState->setDMS($this->_document->_dms);
 		}
 		return $this->_workflowState;
@@ -3863,7 +3863,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				$db->rollbackTransaction();
 				return false;
 			}
-			$this->_workflow = $workflow;	
+			$this->_workflow = $workflow;
 			if(!$this->setStatus(S_IN_WORKFLOW, "Added workflow '".$workflow->getName()."'", $user)) {
 				$db->rollbackTransaction();
 				return false;
@@ -3897,7 +3897,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 			if(!$recs)
 				return false;
-			$this->_workflow = new SeedDMS_Core_Workflow($recs[0]['id'], $recs[0]['name'], $this->_document->_dms->getWorkflowState($recs[0]['initstate'])); 
+			$this->_workflow = new SeedDMS_Core_Workflow($recs[0]['id'], $recs[0]['name'], $this->_document->_dms->getWorkflowState($recs[0]['initstate']));
 			$this->_workflow->setDMS($this->_document->_dms);
 		}
 		return $this->_workflow;
@@ -3905,7 +3905,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Rewrites the complete workflow log
-	 * 
+	 *
 	 * Attention: this function is highly dangerous.
 	 * It removes an existing workflow log and rewrites it.
 	 * This method was added for importing an xml dump.
@@ -4057,7 +4057,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if($recs[0]['parentworkflow'])
 			return $this->_document->_dms->getWorkflow($recs[0]['parentworkflow']);
-		
+
 		return false;
 	} /* }}} */
 
@@ -4084,7 +4084,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
-			$this->_workflow = $subworkflow;	
+			$this->_workflow = $subworkflow;
 			return true;
 		}
 		return true;
@@ -4131,7 +4131,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				return false;
 			}
 
-			$this->_workflow = $this->_document->_dms->getWorkflow($recs[0]['parentworkflow']); 
+			$this->_workflow = $this->_document->_dms->getWorkflow($recs[0]['parentworkflow']);
 			$this->_workflow->setDMS($this->_document->_dms);
 
 			if($transition) {
@@ -4340,7 +4340,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return $nextstate;
 		}
 		return true;
-		
+
 	} /* }}} */
 
 	/**
