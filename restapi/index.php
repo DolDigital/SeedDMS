@@ -632,7 +632,7 @@ function getDocumentContent($id) { /* {{{ */
                 $filename = $document->getName().$lc->getFileType();
 
             $app->response()->header('Content-Type', $lc->getMimeType());
-            $app->response()->header("Content-Disposition: filename=\"" . $filename . "\"");
+            $app->response()->header("Content-Disposition", "filename=\"" . $filename . "\"");
             $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
             $app->response()->header("Expires", "0");
             $app->response()->header("Cache-Control", "no-cache, must-revalidate");
@@ -800,7 +800,7 @@ function getDocumentPreview($id, $version=0, $width=0) { /* {{{ */
                 $object = $document->getLatestContent();
             if(!$object)
                 exit;
-            
+
             if(!empty($width))
                 $previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $width);
             else
@@ -1453,7 +1453,7 @@ function clearFolderAccessList($id) { /* {{{ */
     $app->response()->header('Content-Type', 'application/json');
     if (!$operationResult)
     {
-        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));    
+        echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>$data));
     }
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
