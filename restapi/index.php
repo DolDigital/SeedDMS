@@ -585,12 +585,11 @@ function deleteDocument($id) { /* {{{ */
     }
 } /* }}} */
 
-function moveDocument($id) { /* {{{ */
+function moveDocument($id, $folderid) { /* {{{ */
     global $app, $dms, $userobj;
     $document = $dms->getDocument($id);
     if($document) {
         if ($document->getAccessMode($userobj) >= M_READ) {
-            $folderid = $app->request()->post('dest');
             if($folder = $dms->getFolder($folderid)) {
                 if($folder->getAccessMode($userobj) >= M_READWRITE) {
                     if($document->setFolder($folder)) {
@@ -1498,7 +1497,7 @@ $app->put('/folder/:id/document', 'uploadDocument');
 $app->get('/document/:id', 'getDocument');
 $app->post('/document/:id/attachment', 'uploadDocumentFile');
 $app->delete('/document/:id', 'deleteDocument');
-$app->post('/document/:id/move', 'moveDocument');
+$app->post('/document/:id/move/:folderid', 'moveDocument');
 $app->get('/document/:id/content', 'getDocumentContent');
 $app->get('/document/:id/versions', 'getDocumentVersions');
 $app->get('/document/:id/version/:version', 'getDocumentVersion');
