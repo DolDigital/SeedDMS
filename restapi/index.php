@@ -539,8 +539,14 @@ function getDocumentContent($id) { /* {{{ */
     if($document) {
         if ($document->getAccessMode($userobj) >= M_READ) {
             $lc = $document->getLatestContent();
+
+            if (pathinfo($document->getName(), PATHINFO_EXTENSION) == $lc->getFileType())
+                $filename = $document->getName();
+            else
+                $filename = $document->getName().$lc->getFileType();
+
             $app->response()->header('Content-Type', $lc->getMimeType());
-            $app->response()->header("Content-Disposition: filename=\"" . $document->getName().$lc->getFileType() . "\"");
+            $app->response()->header("Content-Disposition: filename=\"" . $filename . "\"");
             $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
             $app->response()->header("Expires", "0");
             $app->response()->header("Cache-Control", "no-cache, must-revalidate");
