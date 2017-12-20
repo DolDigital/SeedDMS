@@ -1433,6 +1433,48 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
+
+function getCategories() { /* {{{ */
+    global $app, $dms, $userobj;
+
+    $categories = $dms->getDocumentCategories();
+    foreach($categories as $category)
+        $data[] = ['id' => $category->getId(), 'name' => $category->getName()];
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+}
+
+function addCategory() { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+
+    $category = $app->request()->params("category");
+    if ($category == null)
+    {
+        echo json_encode(array('success'=>false, 'message'=>'Need a category.', 'data'=>''));
+        return;
+    }
+
+    $data = $dms->addDocumentCategory($category);
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+}
+
+function deleteCategory($id)
+{
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+
+    $categories = new SeedDMS_Core_DocumentCategory($id, null);
+    $result = $categories->remove();
+    $data = null;
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>$data));
+}
+
 function clearFolderAccessList($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
@@ -1523,6 +1565,9 @@ $app->put('/folder/:id/access/user/add', 'addUserAccessToFolder'); //
 $app->put('/folder/:id/access/group/remove', 'removeGroupAccessFromFolder');
 $app->put('/folder/:id/access/user/remove', 'removeUserAccessFromFolder');
 $app->put('/folder/:id/access/clear', 'clearFolderAccessList');
+$app->get('/categories', 'getCategories');
+$app->delete('/categories/:id', 'deleteCategory');
+$app->post('/categories', 'addCategory');
 $app->run();
 
 ?>
