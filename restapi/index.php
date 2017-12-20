@@ -480,6 +480,65 @@ function uploadDocument($id) { /* {{{ */
     }
 } /* }}} */
 
+function uploadDocumentFile($documentId) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    if(!$userobj) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
+    }
+
+    if($documentId == 0) {
+        echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
+        return;
+    }
+    $document = $dms->getDocument($documentId);
+    if($document) {
+        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+            $docname = $app->request()->params('name');
+            $keywords = $app->request()->params('keywords');
+            $origfilename = $app->request()->params('origfilename');
+            $comment = $app->request()->params('comment');
+            $version = $app->request()->params('version') == '' ? 0 : $app->request()->params('version');
+            $public = $app->request()->params('public') == '' ? 'false' : $app->request()->params('public');
+            if (count($_FILES) == 0)
+            {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>false, 'message'=>'No file detected', 'data'=>''));
+                return;
+            }
+            $file_info = reset($_FILES);
+            if ($origfilename == null)
+                $origfilename = $file_info['name'];
+            if (trim($docname) == '')
+                $docname = $origfilename;
+            $temp = $file_info['tmp_name'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $userfiletype = finfo_file($finfo, $temp);
+            $fileType = ".".pathinfo($origfilename, PATHINFO_EXTENSION);
+            finfo_close($finfo);
+            $res = $document->addDocumentFile($docname, $comment, $userobj, $temp,
+                        $origfilename ? $origfilename : utf8_basename($temp),
+                        $fileType, $userfiletype, $version, $public);
+            unlink($temp);
+            if($res) {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$res));
+            } else {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
+            }
+        } else {
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+        }
+    } else {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
+    }
+} /* }}} */
+
 function getDocument($id) { /* {{{ */
     global $app, $dms, $userobj;
     $document = $dms->getDocument($id);
@@ -1437,6 +1496,7 @@ $app->get('/folder/:id/attributes', 'getFolderAttributes');
 $app->post('/folder/:id/createfolder', 'createFolder');
 $app->put('/folder/:id/document', 'uploadDocument');
 $app->get('/document/:id', 'getDocument');
+$app->post('/document/:id/attachment', 'uploadDocumentFile');
 $app->delete('/document/:id', 'deleteDocument');
 $app->post('/document/:id/move', 'moveDocument');
 $app->get('/document/:id/content', 'getDocumentContent');
