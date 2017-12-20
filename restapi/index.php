@@ -215,7 +215,7 @@ function getFolderPath($id) { /* {{{ */
     $path = $folder->getPath();
     $data = array();
     foreach($path as $element) {
-        $data[] = array('id'=>$element->getId(), 'name'=>htmlspecialchars($element->getName()));
+        $data[] = array('id'=>$element->getId(), 'name'=>$element->getName());
     }
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
@@ -261,7 +261,7 @@ function getFolderChildren($id) { /* {{{ */
                     $recs[] = array(
                         'type'=>'folder',
                         'id'=>$subfolder->getId(),
-                        'name'=>htmlspecialchars($subfolder->getName()),
+                        'name'=>$subfolder->getName(),
                         'comment'=>$subfolder->getComment(),
                         'date'=>$subfolder->getDate(),
                     );
@@ -275,7 +275,7 @@ function getFolderChildren($id) { /* {{{ */
                             'type'=>'document',
                             'id'=>$document->getId(),
                             'date'=>$document->getDate(),
-                            'name'=>htmlspecialchars($document->getName()),
+                            'name'=>$document->getName(),
                             'mimetype'=>$lc->getMimeType(),
                             'version'=>$lc->getVersion(),
                             'size'=>$lc->getFileSize(),
@@ -464,8 +464,8 @@ function getDocument($id) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             $data = array(
                 'id'=>$id,
-                'name'=>htmlspecialchars($document->getName()),
-                'comment'=>htmlspecialchars($document->getComment()),
+                'name'=>$document->getName(),
+                'comment'=>$document->getComment(),
                 'date'=>$document->getDate(),
                 'mimetype'=>$lc->getMimeType(),
                 'version'=>$lc->getVersion(),
@@ -576,7 +576,7 @@ function getDocumentVersions($id) { /* {{{ */
                     'date'=>$lc->getDate(),
                     'mimetype'=>$lc->getMimeType(),
                     'size'=>$lc->getFileSize(),
-                    'comment'=>htmlspecialchars($lc->getComment()),
+                    'comment'=>$lc->getComment(),
                 );
             }
             $app->response()->header('Content-Type', 'application/json');
