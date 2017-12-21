@@ -5,12 +5,6 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.Extension.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.DBInit.php");
-//require_once "SeedDMS/Core.php";
-require_once "SeedDMS/Preview.php";
-
-//$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-//$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-//$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
 if(USE_PHP_SESSION) {
     session_start();
@@ -55,24 +49,62 @@ if(USE_PHP_SESSION) {
     }
 }
 
-
-#require 'Slim/Slim.php';
 require "vendor/autoload.php";
-#\Slim\Slim::registerAutoloader();
 
 function __getLatestVersionData($lc) { /* {{{ */
     $document = $lc->getDocument();
-    return array(
+    $data = array(
         'type'=>'document',
-        'id'=>$document->getId(),
-        'date'=>$document->getDate(),
+        'id'=>(int)$document->getId(),
+        'date'=>date('Y-m-d H:i:s', $document->getDate()),
         'name'=>$document->getName(),
+        'comment'=>$document->getComment(),
+        'keywords'=>$document->getKeywords(),
         'mimetype'=>$lc->getMimeType(),
         'version'=>$lc->getVersion(),
         'size'=>$lc->getFileSize(),
-        'comment'=>$document->getComment(),
-        'keywords'=>$document->getKeywords(),
     );
+    $cats = $document->getCategories();
+    if($cats) {
+        $c = array();
+        foreach($cats as $cat) {
+            $c[] = array('id'=>(int)$cat->getID(), 'name'=>$cat->getName());
+        }
+        $data['categories'] = $c;
+    }
+    $attributes = $document->getAttributes();
+    if($attributes) {
+        $attrvalues = array();
+        foreach($attributes as $attrdefid=>$attribute)
+            $attrvalues[] = array('id'=>(int)$attrdefid, 'value'=>$attribute->getValue());
+        $data['attributes'] = $attrvalues;
+    }
+    $attributes = $lc->getAttributes();
+    if($attributes) {
+        $attrvalues = array();
+        foreach($attributes as $attrdefid=>$attribute)
+            $attrvalues[] = array('id'=>(int)$attrdefid, 'value'=>$attribute->getValue());
+        $data['version-attributes'] = $attrvalues;
+    }
+    return $data;
+} /* }}} */
+
+function __getFolderData($folder) { /* {{{ */
+    $data = array(
+        'type'=>'folder',
+        'id'=>$folder->getID(),
+        'name'=>$folder->getName(),
+        'comment'=>$folder->getComment(),
+        'date'=>date('Y-m-d H:i:s', $folder->getDate()),
+    );
+    $attributes = $folder->getAttributes();
+    if($attributes) {
+        $attrvalues = array();
+        foreach($attributes as $attrdefid=>$attribute)
+            $attrvalues[] = array('id'=>(int)$attrdefid, 'value'=>$attribute->getValue());
+        $data['attributes'] = $attrvalues;
+    }
+    return $data;
 } /* }}} */
 
 function doLogin() { /* {{{ */
@@ -150,6 +182,7 @@ function setFullName() { /* {{{ */
     }
 
     $userobj->setFullName($app->request()->put('fullname'));
+    $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userobj->getFullName()));
 } /* }}} */
 
@@ -163,6 +196,7 @@ function setEmail($id) { /* {{{ */
     }
 
     $userobj->setEmail($app->request()->put('fullname'));
+    $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userid));
 } /* }}} */
 
@@ -200,11 +234,8 @@ function getFolder($id = null) { /* {{{ */
     }
     if($folder) {
         if($folder->getAccessMode($userobj) >= M_READ) {
+            $data = __getFolderData($folder);
             $app->response()->header('Content-Type', 'application/json');
-            $data = array(
-                'id'=>$folder->getID(),
-                'name'=>$folder->getName()
-            );
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
         } else {
             $app->response()->status(404);
@@ -217,20 +248,24 @@ function getFolder($id = null) { /* {{{ */
 function getFolderParent($id) { /* {{{ */
     global $app, $dms, $userobj;
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
     $root = $dms->getRootFolder();
     if($root->getId() == $id) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is root folder', 'data'=>''));
         return;
     }
     $folder = $dms->getFolder($id);
     $parent = $folder->getParent();
     if($parent) {
-        $rec = array('type'=>'folder', 'id'=>$parent->getId(), 'name'=>$parent->getName());
+        $rec = __getFolderData($parent);
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
     } else {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
     }
 } /* }}} */
@@ -238,6 +273,7 @@ function getFolderParent($id) { /* {{{ */
 function getFolderPath($id) { /* {{{ */
     global $app, $dms, $userobj;
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -248,6 +284,7 @@ function getFolderPath($id) { /* {{{ */
     foreach($path as $element) {
         $data[] = array('id'=>$element->getId(), 'name'=>$element->getName());
     }
+    $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
@@ -278,7 +315,7 @@ function getFolderChildren($id) { /* {{{ */
     global $app, $dms, $userobj;
     if($id == 0) {
         $folder = $dms->getRootFolder();
-        $recs = array(array('type'=>'folder', 'id'=>$folder->getId(), 'name'=>$folder->getName()));
+        $recs = array(__getFolderData($folder));
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
     } else {
@@ -289,13 +326,7 @@ function getFolderChildren($id) { /* {{{ */
                 $subfolders = $folder->getSubFolders();
                 $subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $userobj, M_READ);
                 foreach($subfolders as $subfolder) {
-                    $recs[] = array(
-                        'type'=>'folder',
-                        'id'=>$subfolder->getId(),
-                        'name'=>$subfolder->getName(),
-                        'comment'=>$subfolder->getComment(),
-                        'date'=>$subfolder->getDate(),
-                    );
+                    $recs[] = __getFolderData($subfolder);
                 }
                 $documents = $folder->getDocuments();
                 $documents = SeedDMS_Core_DMS::filterAccess($documents, $userobj, M_READ);
@@ -327,6 +358,7 @@ function createFolder($id) { /* {{{ */
     }
 
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -347,14 +379,18 @@ function createFolder($id) { /* {{{ */
             if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
                 $rec = array('id'=>$folder->getId(), 'name'=>$folder->getName(), 'comment'=>$folder->getComment());
+                $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
             } else {
+                $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
             }
         } else {
+            $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
         }
     } else {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
     }
 } /* }}} */
@@ -408,6 +444,7 @@ function deleteFolder($id) { /* {{{ */
     }
 
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -441,6 +478,7 @@ function uploadDocument($id) { /* {{{ */
     }
 
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -505,6 +543,7 @@ function uploadDocumentPut($id) { /* {{{ */
     }
 
     if($id == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -553,6 +592,7 @@ function uploadDocumentFile($documentId) { /* {{{ */
     }
 
     if($documentId == 0) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
     }
@@ -852,6 +892,7 @@ function getDocumentAttributes($id) { /* {{{ */
 
 function getDocumentPreview($id, $version=0, $width=0) { /* {{{ */
     global $app, $dms, $userobj, $settings;
+    require_once "SeedDMS/Preview.php";
     $document = $dms->getDocument($id);
 
     if($document) {
@@ -989,13 +1030,7 @@ function doSearch() { /* {{{ */
                     }
                 } elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
                     $folder = $entry;
-                    $recs[] = array(
-                        'type'=>'folder',
-                        'id'=>$folder->getId(),
-                        'name'=>$folder->getName(),
-                        'comment'=>$folder->getComment(),
-                        'date'=>$folder->getDate(),
-                    );
+                    $recs[] = __getFolderData($folder);
                 }
             }
             $app->response()->header('Content-Type', 'application/json');
@@ -1044,13 +1079,7 @@ function doSearchByAttr() { /* {{{ */
             }
         } elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
             $folder = $entry;
-            $recs[] = array(
-                'type'=>'folder',
-                'id'=>$folder->getId(),
-                'name'=>$folder->getName(),
-                'comment'=>$folder->getComment(),
-                'date'=>$folder->getDate(),
-            );
+            $recs[] = __getFolderData($folder);
         }
     }
     $app->response()->header('Content-Type', 'application/json');
@@ -1310,6 +1339,7 @@ function changeGroupMembership($id, $operationType) { /* {{{ */
         {
             $message = 'Could not remove user from group.';
         }
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Something went wrong. ' . $message, 'data'=>''));
         return;
     }
@@ -1487,6 +1517,7 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
         {
             $message = 'Could not remove user/group access from this folder.';
         }
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Something went wrong. ' . $message, 'data'=>''));
         return;
     }
@@ -1496,11 +1527,11 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
-
 function getCategories() { /* {{{ */
     global $app, $dms, $userobj;
 
     $categories = $dms->getDocumentCategories();
+    $data = [];
     foreach($categories as $category)
         $data[] = ['id' => $category->getId(), 'name' => $category->getName()];
 
@@ -1513,16 +1544,22 @@ function addCategory() { /* {{{ */
     checkIfAdmin();
 
     $category = $app->request()->params("category");
-    if ($category == null)
-    {
+    if ($category == null) {
+        $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Need a category.', 'data'=>''));
         return;
     }
 
-    $data = $dms->addDocumentCategory($category);
+    $catobj = $dms->getDocumentCategoryByName($category);
+    if($catobj) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Category already exists', 'data'=>''));
+    } else {
+        $data = $dms->addDocumentCategory($category);
 
-    $app->response()->header('Content-Type', 'application/json');
-    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    }
 } /* }}} */
 
 function deleteCategory($id) { /* {{{ */
@@ -1556,7 +1593,7 @@ function changeCategoryName($id) { /* {{{ */
 
     $newname = $app->request()->put('name');
 
-		$category = null;
+    $category = null;
     if(is_numeric($id))
         $category = $dms->getDocumentCategory($id);
 
@@ -1569,6 +1606,61 @@ function changeCategoryName($id) { /* {{{ */
     }
 
     if (!$category->setName($newname)) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'', 'data'=>'Could not change name.'));
+        return;
+    }
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+
+    return;
+} /* }}} */
+
+function getAttributeDefinitions() { /* {{{ */
+    global $app, $dms, $userobj;
+
+    $attrdefs = $dms->getAllAttributeDefinitions();
+    $data = [];
+    foreach($attrdefs as $attrdef)
+        $data[] = ['id' => (int)$attrdef->getId(), 'name' => $attrdef->getName(), 'type'=>(int)$attrdef->getType(), 'objtype'=>(int)$attrdef->getObjType(), 'min'=>(int)$attrdef->getMinValues(), 'max'=>(int)$attrdef->getMaxValues(), 'multiple'=>$attrdef->getMultipleValues()?true:false, 'valueset'=>$attrdef->getValueSetAsArray()];
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
+/**
+ * Updates the name of an existing attribute definition
+ *
+ * @param      <type>  $id     The user name or numerical identifier
+ */
+function changeAttributeDefinitionName($id) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    checkIfAdmin();
+
+    if ($app->request()->put('name') == null)
+    {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new name', 'data'=>''));
+        return;
+    }
+
+    $newname = $app->request()->put('name');
+
+    $attrdef = null;
+    if(is_numeric($id))
+        $attrdef = $dms->getAttributeDefinition($id);
+
+    /**
+     * Category not found
+     */
+    if (!$attrdef) {
+        $app->response()->status(404);
+        return;
+    }
+
+    if (!$attrdef->setName($newname)) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>'Could not change name.'));
         return;
@@ -1601,19 +1693,18 @@ function clearFolderAccessList($id) { /* {{{ */
 } /* }}} */
 
 //$app = new Slim(array('mode'=>'development', '_session.handler'=>null));
-$app = new \Slim\Slim(array('mode'=>'development', '_session.handler'=>null));
+$app = new \Slim\Slim(array('mode'=>'production', '_session.handler'=>null));
 
 $app->configureMode('production', function () use ($app) {
     $app->config(array(
-        'log.enable' => true,
-        'log.path' => '/tmp/',
+        'log.enable' => false,
         'debug' => false
     ));
 });
 
 $app->configureMode('development', function () use ($app) {
     $app->config(array(
-        'log.enable' => false,
+        'log.enable' => true,
         'debug' => true
     ));
 });
@@ -1671,6 +1762,8 @@ $app->get('/categories', 'getCategories');
 $app->delete('/categories/:id', 'deleteCategory');
 $app->post('/categories', 'addCategory');
 $app->put('/categories/:id/name', 'changeCategoryName');
+$app->get('/attributedefinitions', 'getAttributeDefinitions');
+$app->put('/attributedefinitions/:id/name', 'changeAttributeDefinitionName');
 $app->run();
 
 ?>
