@@ -427,6 +427,7 @@ function createFolder($id) { /* {{{ */
                 if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
                     $rec = __getFolderData($folder);
+										$app->response()->status(201);
                     $app->response()->header('Content-Type', 'application/json');
                     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
                 } else {
@@ -582,8 +583,8 @@ function uploadDocument($id) { /* {{{ */
 //            $categories = $app->request()->params('categories') ? $app->request()->params('categories') : [];
 //            $attributes = $app->request()->params('attributes') ? $app->request()->params('attributes') : [];
             $origfilename = $app->request()->params('origfilename');
-            if (count($_FILES) == 0)
-            {
+            if (count($_FILES) == 0) {
+                $app->response()->status(400);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No file detected', 'data'=>''));
                 return;
@@ -712,8 +713,8 @@ function uploadDocumentFile($documentId) { /* {{{ */
             $comment = $app->request()->params('comment');
             $version = $app->request()->params('version') == '' ? 0 : $app->request()->params('version');
             $public = $app->request()->params('public') == '' ? 'false' : $app->request()->params('public');
-            if (count($_FILES) == 0)
-            {
+            if (count($_FILES) == 0) {
+                $app->response()->status(400);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No file detected', 'data'=>''));
                 return;
@@ -733,17 +734,24 @@ function uploadDocumentFile($documentId) { /* {{{ */
                         $fileType, $userfiletype, $version, $public);
             unlink($temp);
             if($res) {
+                $app->response()->status(201);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$res));
             } else {
+                $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
-    } else {
+		} else {
+			  if($document === null)
+            $app->response()->status(400);
+				else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
     }
@@ -1392,12 +1400,14 @@ function createUser() { /* {{{ */
 
     $newAccount = $dms->addUser($userName, $password, $fullname, $email, $language, $theme, $comment, $roleid);
     if ($newAccount === false) {
+        $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Account could not be created, maybe it already exists', 'data'=>''));
         return;
     }
 
     $result = __getUserData($newAccount);
+    $app->response()->status(201);
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
     return;
@@ -1518,12 +1528,14 @@ function createGroup() { /* {{{ */
 
     $newGroup = $dms->addGroup($groupName, $comment);
     if ($newGroup === false) {
+        $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Group could not be created, maybe it already exists', 'data'=>''));
         return;
     }
 
     $result = array('id'=>(int)$newGroup->getID());
+    $app->response()->status(201);
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
     return;
@@ -1799,6 +1811,7 @@ function createCategory() { /* {{{ */
 
     $category = $app->request()->params("category");
     if ($category == null) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Need a category.', 'data'=>''));
         return;
@@ -1806,13 +1819,16 @@ function createCategory() { /* {{{ */
 
     $catobj = $dms->getDocumentCategoryByName($category);
     if($catobj) {
+        $app->response()->status(409);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Category already exists', 'data'=>''));
     } else {
         if($data = $dms->addDocumentCategory($category)) {
+            $app->response()->status(201);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>array('id'=>(int)$data->getID())));
         } else {
+            $app->response()->status(500);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'Could not add category', 'data'=>''));
         }
