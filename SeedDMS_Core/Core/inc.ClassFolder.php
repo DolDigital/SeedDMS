@@ -125,6 +125,13 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return $sql;
 	} /* }}} */
 
+	/**
+	 * Return a folder by its id
+	 *
+	 * @param integer $id id of folder
+	 * @return object/boolean instance of SeedDMS_Core_Folder if document exists, null
+	 * if document does not exist, false in case of error
+	 */
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -133,7 +140,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		else if (count($resArr) != 1)
-			return false;
+			return null;
 
 		$resArr = $resArr[0];
 		$classname = $dms->getClassname('folder');
