@@ -2,9 +2,9 @@
 define('USE_PHP_SESSION', 0);
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.Extension.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Extension.php");
 
 if(USE_PHP_SESSION) {
     session_start();
@@ -92,7 +92,7 @@ function __getLatestVersionData($lc) { /* {{{ */
 function __getFolderData($folder) { /* {{{ */
     $data = array(
         'type'=>'folder',
-        'id'=>$folder->getID(),
+        'id'=>(int)$folder->getID(),
         'name'=>$folder->getName(),
         'comment'=>$folder->getComment(),
         'date'=>date('Y-m-d H:i:s', $folder->getDate()),
@@ -103,6 +103,45 @@ function __getFolderData($folder) { /* {{{ */
         foreach($attributes as $attrdefid=>$attribute)
             $attrvalues[] = array('id'=>(int)$attrdefid, 'value'=>$attribute->getValue());
         $data['attributes'] = $attrvalues;
+    }
+    return $data;
+} /* }}} */
+
+function __getGroupData($u) { /* {{{ */
+    $data = array(
+        'type'=>'group',
+        'id'=>(int)$u->getID(),
+        'name'=>$u->getName(),
+        'comment'=>$u->getComment(),
+    );
+    return $data;
+} /* }}} */
+
+function __getUserData($u) { /* {{{ */
+    $data = array(
+        'type'=>'user',
+        'id'=>(int)$u->getID(),
+        'name'=>$u->getFullName(),
+        'comment'=>$u->getComment(),
+        'login'=>$u->getLogin(),
+        'email'=>$u->getEmail(),
+        'language' => $u->getLanguage(),
+        'theme' => $u->getTheme(),
+        'role' => $u->getRole() == SeedDMS_Core_User::role_admin ? 'admin' : ($u->getRole() == SeedDMS_Core_User::role_guest ? 'guest' : 'user'),
+        'hidden'=>$u->isHidden() ? true : false,
+        'disabled'=>$u->isDisabled() ? true : false,
+        'isguest' => $u->isGuest() ? true : false,
+        'isadmin' => $u->isAdmin() ? true : false,
+    );
+    if($u->getHomeFolder())
+        $data['homefolder'] = (int)$u->getHomeFolder();
+
+    $groups = $u->getGroups();
+    if($groups) {
+        $tmp = [];
+        foreach($groups as $group)
+            $tmp[] = __getGroupData($group);
+        $data['groups'] = $tmp;
     }
     return $data;
 } /* }}} */
@@ -136,6 +175,7 @@ function doLogin() { /* {{{ */
         } else {
             setcookie("mydms_session", $session->getId(), time()-3600, $settings->_httpRoot);
         }
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Login failed', 'data'=>''));
     } else {
@@ -155,7 +195,7 @@ function doLogin() { /* {{{ */
             $dms->setUser($userobj);
         }
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userobj->getId()));
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>__getUserData($userobj)));
     }
 } /* }}} */
 
@@ -176,6 +216,7 @@ function setFullName() { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
@@ -190,6 +231,7 @@ function setEmail($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
@@ -215,6 +257,7 @@ function getLockedDocuments() { /* {{{ */
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
     } else {
+        $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
     }
@@ -226,7 +269,7 @@ function getFolder($id = null) { /* {{{ */
 
     if ($id === null)
         $folder = $dms->getFolder($settings->_rootFolderID);
-    else if(is_numeric($id) && empty($forcebyname))
+    else if(ctype_digit($id) && empty($forcebyname))
         $folder = $dms->getFolder($id);
     else {
         $parentid = $app->request()->get('parentid');
@@ -265,6 +308,7 @@ function getFolderParent($id) { /* {{{ */
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
     } else {
+        $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
     }
@@ -298,7 +342,7 @@ function getFolderAttributes($id) { /* {{{ */
             $attributes = $folder->getAttributes();
             foreach($attributes as $attribute) {
                 $recs[] = array(
-                    'id'=>$attribute->getId(),
+                    'id'=>(int)$attribute->getId(),
                     'value'=>$attribute->getValue(),
                     'name'=>$attribute->getAttributeDefinition()->getName(),
                 );
@@ -339,6 +383,7 @@ function getFolderChildren($id) { /* {{{ */
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
             } else {
+                $app->response()->status(403);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
             }
@@ -352,44 +397,55 @@ function createFolder($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
     }
 
-    if($id == 0) {
+    if(!ctype_digit($id) || $id == 0) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
+        echo json_encode(array('success'=>true, 'message'=>'No parent folder given', 'data'=>''));
         return;
     }
     $parent = $dms->getFolder($id);
     if($parent) {
-        if($name = $app->request()->post('name')) {
-            $comment = $app->request()->post('comment');
-            $attributes = $app->request()->post('attributes');
-            $newattrs = array();
-            if($attributes) {
-                foreach($attributes as $attrname=>$attrvalue) {
-                    $attrdef = $dms->getAttributeDefinitionByName($attrname);
-                    if($attrdef) {
-                        $newattrs[$attrdef->getID()] = $attrvalue;
+        if($parent->getAccessMode($userobj) >= M_READWRITE) {
+            if($name = $app->request()->post('name')) {
+                $comment = $app->request()->post('comment');
+                $attributes = $app->request()->post('attributes');
+                $newattrs = array();
+                if($attributes) {
+                    foreach($attributes as $attrname=>$attrvalue) {
+                        $attrdef = $dms->getAttributeDefinitionByName($attrname);
+                        if($attrdef) {
+                            $newattrs[$attrdef->getID()] = $attrvalue;
+                        }
                     }
                 }
-            }
-            if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
+                if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
-                $rec = array('id'=>$folder->getId(), 'name'=>$folder->getName(), 'comment'=>$folder->getComment());
-                $app->response()->header('Content-Type', 'application/json');
-                echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+                    $rec = __getFolderData($folder);
+                    $app->response()->header('Content-Type', 'application/json');
+                    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+                } else {
+                    $app->response()->status(500);
+                    $app->response()->header('Content-Type', 'application/json');
+                    echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
+                }
             } else {
+                $app->response()->status(400);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
-            echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
+            echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
         }
     } else {
+        $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
     }
@@ -399,8 +455,23 @@ function moveFolder($id, $folderid) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+        return;
+    }
+
+    if(!ctype_digit($id) || $id == 0) {
+        $app->response()->status(400);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'No source folder given', 'data'=>''));
+        return;
+    }
+
+    if(!ctype_digit($folderid) || $folderid == 0) {
+        $app->response()->status(400);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'No destination folder given', 'data'=>''));
         return;
     }
 
@@ -413,22 +484,33 @@ function moveFolder($id, $folderid) { /* {{{ */
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
                     } else {
+                        $app->response()->status(500);
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
                     }
                 } else {
+                    $app->response()->status(403);
                     $app->response()->header('Content-Type', 'application/json');
                     echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
                 }
             } else {
+                if($folder === null)
+                    $app->response()->status(400);
+                else
+                    $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($mfolder === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
     }
@@ -438,12 +520,14 @@ function deleteFolder($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
     }
 
-    if($id == 0) {
+    if(!ctype_digit($id) || $id == 0) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
@@ -455,14 +539,20 @@ function deleteFolder($id) { /* {{{ */
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
             } else {
+                $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'Error deleting folder', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($mfolder === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
     }
@@ -472,12 +562,14 @@ function uploadDocument($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
     }
 
-    if($id == 0) {
+    if(!ctype_digit($id) || $id == 0) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
@@ -513,18 +605,24 @@ function uploadDocument($id) { /* {{{ */
             unlink($temp);
             if($res) {
                 $doc = $res[0];
-                $rec = array('id'=>$doc->getId(), 'name'=>$doc->getName());
+                $rec = array('id'=>(int)$doc->getId(), 'name'=>$doc->getName());
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$rec));
             } else {
+                $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($mfolder === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
     }
@@ -537,12 +635,14 @@ function uploadDocumentPut($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
     }
 
-    if($id == 0) {
+    if(!ctype_digit($id) || $id == 0) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
@@ -565,18 +665,24 @@ function uploadDocumentPut($id) { /* {{{ */
             unlink($temp);
             if($res) {
                 $doc = $res[0];
-                $rec = array('id'=>$doc->getId(), 'name'=>$doc->getName());
+                $rec = array('id'=>(int)$doc->getId(), 'name'=>$doc->getName());
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$rec));
             } else {
+                $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($mfolder === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
     }
@@ -586,12 +692,13 @@ function uploadDocumentFile($documentId) { /* {{{ */
     global $app, $dms, $userobj;
 
     if(!$userobj) {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
         return;
     }
 
-    if($documentId == 0) {
+    if(!ctype_digit($document) || $documentId == 0) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
@@ -653,14 +760,20 @@ function getDocument($id) { /* {{{ */
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
             } else {
+                $app->response()->status(403);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
@@ -675,14 +788,20 @@ function deleteDocument($id) { /* {{{ */
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
             } else {
+                $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
@@ -699,22 +818,33 @@ function moveDocument($id, $folderid) { /* {{{ */
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
                     } else {
+                        $app->response()->status(500);
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>false, 'message'=>'Error moving document', 'data'=>''));
                     }
                 } else {
+                    $app->response()->status(403);
                     $app->response()->header('Content-Type', 'application/json');
                     echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
                 }
             } else {
+              if($folder === null)
+                  $app->response()->status(400);
+              else
+                  $app->response()->status(500);
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
             }
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
@@ -727,23 +857,37 @@ function getDocumentContent($id) { /* {{{ */
     if($document) {
         if ($document->getAccessMode($userobj) >= M_READ) {
             $lc = $document->getLatestContent();
+            if($lc) {
+              if (pathinfo($document->getName(), PATHINFO_EXTENSION) == $lc->getFileType())
+                  $filename = $document->getName();
+              else
+                  $filename = $document->getName().$lc->getFileType();
 
-            if (pathinfo($document->getName(), PATHINFO_EXTENSION) == $lc->getFileType())
-                $filename = $document->getName();
-            else
-                $filename = $document->getName().$lc->getFileType();
+              $app->response()->header('Content-Type', $lc->getMimeType());
+              $app->response()->header("Content-Disposition", "filename=\"" . $filename . "\"");
+              $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
+              $app->response()->header("Expires", "0");
+              $app->response()->header("Cache-Control", "no-cache, must-revalidate");
+              $app->response()->header("Pragma", "no-cache");
 
-            $app->response()->header('Content-Type', $lc->getMimeType());
-            $app->response()->header("Content-Disposition", "filename=\"" . $filename . "\"");
-            $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
-            $app->response()->header("Expires", "0");
-            $app->response()->header("Cache-Control", "no-cache, must-revalidate");
-            $app->response()->header("Pragma", "no-cache");
-
-            readfile($dms->contentDir . $lc->getPath());
+              readfile($dms->contentDir . $lc->getPath());
+            } else {
+              $app->response()->status(403);
+              $app->response()->header('Content-Type', 'application/json');
+              echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+            }
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 
 } /* }}} */
@@ -768,12 +912,17 @@ function getDocumentVersions($id) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
         } else {
+            $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
     } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -784,17 +933,36 @@ function getDocumentVersion($id, $version) { /* {{{ */
     if($document) {
         if ($document->getAccessMode($userobj) >= M_READ) {
             $lc = $document->getContentByVersion($version);
-            $app->response()->header('Content-Type', $lc->getMimeType());
-            $app->response()->header("Content-Disposition", "filename=\"" . $document->getName().$lc->getFileType() . "\"");
-            $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
-            $app->response()->header("Expires", "0");
-            $app->response()->header("Cache-Control", "no-cache, must-revalidate");
-            $app->response()->header("Pragma", "no-cache");
+            if($lc) {
+              if (pathinfo($document->getName(), PATHINFO_EXTENSION) == $lc->getFileType())
+                  $filename = $document->getName();
+              else
+                  $filename = $document->getName().$lc->getFileType();
+              $app->response()->header('Content-Type', $lc->getMimeType());
+              $app->response()->header("Content-Disposition", "filename=\"" . $filename . "\"");
+              $app->response()->header("Content-Length", filesize($dms->contentDir . $lc->getPath()));
+              $app->response()->header("Expires", "0");
+              $app->response()->header("Cache-Control", "no-cache, must-revalidate");
+              $app->response()->header("Pragma", "no-cache");
 
-            readfile($dms->contentDir . $lc->getPath());
+              readfile($dms->contentDir . $lc->getPath());
+            } else {
+              $app->response()->status(403);
+              $app->response()->header('Content-Type', 'application/json');
+              echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+            }
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -808,7 +976,7 @@ function getDocumentFiles($id) { /* {{{ */
             $files = $document->getDocumentFiles();
             foreach($files as $file) {
                 $recs[] = array(
-                    'id'=>$file->getId(),
+                    'id'=>(int)$file->getId(),
                     'name'=>$file->getName(),
                     'date'=>$file->getDate(),
                     'mimetype'=>$file->getMimeType(),
@@ -818,8 +986,17 @@ function getDocumentFiles($id) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -839,8 +1016,17 @@ function getDocumentFile($id, $fileid) { /* {{{ */
 
             readfile($dms->contentDir . $file->getPath());
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -854,7 +1040,7 @@ function getDocumentLinks($id) { /* {{{ */
             $links = $document->getDocumentLinks();
             foreach($links as $link) {
                 $recs[] = array(
-                    'id'=>$link->getId(),
+                    'id'=>(int)$link->getId(),
                     'target'=>$link->getTarget(),
                     'public'=>$link->isPublic(),
                 );
@@ -862,8 +1048,17 @@ function getDocumentLinks($id) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -877,7 +1072,7 @@ function getDocumentAttributes($id) { /* {{{ */
             $attributes = $document->getAttributes();
             foreach($attributes as $attribute) {
                 $recs[] = array(
-                    'id'=>$attribute->getId(),
+                    'id'=>(int)$attribute->getId(),
                     'value'=>$attribute->getValue(),
                     'name'=>$attribute->getAttributeDefinition()->getName(),
                 );
@@ -885,8 +1080,17 @@ function getDocumentAttributes($id) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
     }
 } /* }}} */
 
@@ -919,28 +1123,82 @@ function getDocumentPreview($id, $version=0, $width=0) { /* {{{ */
 
             $previewer->getPreview($object);
         } else {
-            $app->response()->status(404);
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
+    }
+} /* }}} */
+
+function removeDocumentCategory($id, $categoryId) { /* {{{ */
+    global $app, $dms, $userobj;
+    $document = $dms->getDocument($id);
+    $category = $dms->getDocumentCategory($categoryId);
+
+    if($document && $category) {
+        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+            $ret = $document->removeCategories(array($category));
+
+            $app->response()->header('Content-Type', 'application/json');
+            if ($ret)
+                echo json_encode(array('success'=>true, 'message'=>'Deleted category successfully.', 'data'=>''));
+            else
+                echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+        } else {
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+        }
+    } else {
+        if($document === null || $category === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
+    }
+} /* }}} */
+
+function removeDocumentCategories($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    $document = $dms->getDocument($id);
+
+    if($document) {
+        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+            $app->response()->header('Content-Type', 'application/json');
+            if($document->setCategories(array()))
+                echo json_encode(array('success'=>true, 'message'=>'Deleted categories successfully.', 'data'=>''));
+            else
+                echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
+        } else {
+            $app->response()->status(403);
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+        }
+    } else {
+        if($document === null)
+            $app->response()->status(400);
+        else
+            $app->response()->status(500);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
     }
 } /* }}} */
 
 function getAccount() { /* {{{ */
     global $app, $dms, $userobj;
     if($userobj) {
-        $account = array();
-        $account['id'] = $userobj->getId();
-        $account['login'] = $userobj->getLogin();
-        $account['fullname'] = $userobj->getFullName();
-        $account['email'] = $userobj->getEmail();
-        $account['language'] = $userobj->getLanguage();
-        $account['theme'] = $userobj->getTheme();
-        $account['role'] = $userobj->getRole();
-        $account['comment'] = $userobj->getComment();
-        $account['isguest'] = $userobj->isGuest();
-        $account['isadmin'] = $userobj->isAdmin();
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$account));
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>__getUserData($userobj)));
     } else {
+        $app->response()->status(403);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
     }
@@ -1103,7 +1361,21 @@ function checkIfAdmin() { /* {{{ */
     return true;
 } /* }}} */
 
-function createAccount() { /* {{{ */
+function getUsers() { /* {{{ */
+    global $app, $dms, $userobj;
+
+    checkIfAdmin();
+
+    $users = $dms->getAllUsers();
+    $data = [];
+    foreach($users as $u)
+	    $data[] = __getUserData($u);
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
+function createUser() { /* {{{ */
     global $app, $dms, $userobj;
 
     checkIfAdmin();
@@ -1115,18 +1387,17 @@ function createAccount() { /* {{{ */
     $language = $app->request()->post('language');
     $theme = $app->request()->post('theme');
     $comment = $app->request()->post('comment');
+    $role = $app->request()->post('role');
+    $roleid = $role == 'admin' ? SeedDMS_Core_User::role_admin : ($role == 'guest' ? SeedDMS_Core_User::role_guest : SeedDMS_Core_User::role_user);
 
-    $newAccount = $dms->addUser($userName, $password, $fullname, $email, $language, $theme, $comment);
-    if ($newAccount === false)
-    {
+    $newAccount = $dms->addUser($userName, $password, $fullname, $email, $language, $theme, $comment, $roleid);
+    if ($newAccount === false) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Account could not be created, maybe it already exists', 'data'=>''));
         return;
     }
 
-    $result = array(
-                'id'=>$newAccount->getID()
-                );
+    $result = __getUserData($newAccount);
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
     return;
@@ -1137,7 +1408,7 @@ function createAccount() { /* {{{ */
  *
  * @param      <type>  $id     The user name or numerical identifier
  */
-function changeAccountPassword($id) { /* {{{ */
+function changeUserPassword($id) { /* {{{ */
     global $app, $dms, $userobj;
 
     checkIfAdmin();
@@ -1145,13 +1416,13 @@ function changeAccountPassword($id) { /* {{{ */
     if ($app->request()->put('password') == null)
     {
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new password', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'You must supply a new password', 'data'=>''));
         return;
     }
 
     $newPassword = $app->request()->put('password');
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $account = $dms->getUser($id);
     else {
         $account = $dms->getUserByLogin($id);
@@ -1179,17 +1450,17 @@ function changeAccountPassword($id) { /* {{{ */
     return;
 } /* }}} */
 
-function getAccountById($id) { /* {{{ */
+function getUserById($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $account = $dms->getUser($id);
     else {
         $account = $dms->getUserByLogin($id);
     }
     if($account) {
         $data = array();
-        $data['id'] = $account->getId();
+        $data['id'] = (int)$account->getId();
         $data['login'] = $account->getLogin();
         $data['fullname'] = $account->getFullName();
         $data['email'] = $account->getEmail();
@@ -1197,10 +1468,9 @@ function getAccountById($id) { /* {{{ */
         $data['theme'] = $account->getTheme();
         $data['role'] = $account->getRole();
         $data['comment'] = $account->getComment();
-        $outputDisabled = ($account->isDisabled() === true || $account->isDisabled() === '1');
-        $data['isdisabled'] = $outputDisabled;
-        $data['isguest'] = $account->isGuest();
-        $data['isadmin'] = $account->isAdmin();
+        $data['isdisabled'] = $account->isDisabled() ? true : false;
+        $data['isguest'] = $account->isGuest() ? true : false;
+        $data['isadmin'] = $account->isAdmin() ? true : false;
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
     } else {
@@ -1208,24 +1478,23 @@ function getAccountById($id) { /* {{{ */
     }
 } /* }}} */
 
-function setDisabledAccount($id) { /* {{{ */
+function setDisabledUser($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
-    if ($app->request()->put('disable') == null)
-    {
+    if ($app->request()->put('disable') == null) {
+        $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'You must PUT a disabled state', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'You must supply a disabled state', 'data'=>''));
         return;
     }
 
     $isDisabled = false;
     $status = $app->request()->put('disable');
-    if ($status == 'true' || $status == '1')
-    {
+    if ($status == 'true' || $status == '1') {
         $isDisabled = true;
     }
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $account = $dms->getUser($id);
     else {
         $account = $dms->getUserByLogin($id);
@@ -1233,13 +1502,7 @@ function setDisabledAccount($id) { /* {{{ */
 
     if($account) {
         $account->setDisabled($isDisabled);
-        $data = array();
-        $data['id'] = $account->getId();
-        $data['login'] = $account->getLogin();
-        $data['fullname'] = $account->getFullName();
-        $data['email'] = $account->getEmail();
-        $outputDisabled = ($account->isDisabled() === true || $account->isDisabled() === '1');
-        $data['isdisabled'] = $outputDisabled;
+        $data = __getUserData($account);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
     } else {
@@ -1254,16 +1517,13 @@ function createGroup() { /* {{{ */
     $comment = $app->request()->post('comment');
 
     $newGroup = $dms->addGroup($groupName, $comment);
-    if ($newGroup === false)
-    {
+    if ($newGroup === false) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Group could not be created, maybe it already exists', 'data'=>''));
         return;
     }
 
-    $result = array(
-                'id'=>$newGroup->getID()
-                );
+    $result = array('id'=>(int)$newGroup->getID());
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$result));
     return;
@@ -1272,19 +1532,16 @@ function createGroup() { /* {{{ */
 function getGroup($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $group = $dms->getGroup($id);
     else {
         $group = $dms->getGroupByName($id);
     }
     if($group) {
-        $data = array();
-        $data['id'] = $group->getId();
-        $data['name'] = $group->getName();
-        $data['comment'] = $group->getComment();
+        $data = __getGroupData($group);
         $data['users'] = array();
         foreach ($group->getUsers() as $user) {
-            $data['users'][] =  array('id' => $user->getID(), 'login' => $user->getLogin());
+            $data['users'][] =  array('id' => (int)$user->getID(), 'login' => $user->getLogin());
         }
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
@@ -1297,7 +1554,7 @@ function changeGroupMembership($id, $operationType) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $group = $dms->getGroup($id);
     else {
         $group = $dms->getGroupByName($id);
@@ -1310,7 +1567,7 @@ function changeGroupMembership($id, $operationType) { /* {{{ */
         return;
     }
     $userId = $app->request()->put('userid');
-    if(is_numeric($userId))
+    if(ctype_digit($userId))
         $user = $dms->getUser($userId);
     else {
         $user = $dms->getUserByLogin($userId);
@@ -1344,13 +1601,10 @@ function changeGroupMembership($id, $operationType) { /* {{{ */
         return;
     }
 
-    $data = array();
-    $data['id'] = $group->getId();
-    $data['name'] = $group->getName();
-    $data['comment'] = $group->getComment();
+    $data = __getGroupData($group);
     $data['users'] = array();
     foreach ($group->getUsers() as $userObj) {
-        $data['users'][] =  array('id' => $userObj->getID(), 'login' => $userObj->getLogin());
+        $data['users'][] =  array('id' => (int)$userObj->getID(), 'login' => $userObj->getLogin());
     }
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
@@ -1370,7 +1624,7 @@ function setFolderInheritsAccess($id) { /* {{{ */
     if ($app->request()->put('enable') == null)
     {
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'You must PUT an "enable" value', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'You must supply an "enable" value', 'data'=>''));
         return;
     }
 
@@ -1381,7 +1635,7 @@ function setFolderInheritsAccess($id) { /* {{{ */
         $inherit = true;
     }
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $folder = $dms->getFolder($id);
     else {
         $folder = $dms->getFolderByName($id);
@@ -1421,7 +1675,7 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $folder = $dms->getfolder($id);
     else {
         $folder = $dms->getfolderByName($id);
@@ -1467,19 +1721,19 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
 
 
     $userOrGroupId = $userOrGroupIdInput;
-    if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
+    if(!ctype_digit($userOrGroupIdInput) && $userOrGroup == 'user')
     {
         $userOrGroupObj = $dms->getUserByLogin($userOrGroupIdInput);
     }
-    if(!is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
+    if(!ctype_digit($userOrGroupIdInput) && $userOrGroup == 'group')
     {
         $userOrGroupObj = $dms->getGroupByName($userOrGroupIdInput);
     }
-    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'user')
+    if(ctype_digit($userOrGroupIdInput) && $userOrGroup == 'user')
     {
         $userOrGroupObj = $dms->getUser($userOrGroupIdInput);
     }
-    if(is_numeric($userOrGroupIdInput) && $userOrGroup == 'group')
+    if(ctype_digit($userOrGroupIdInput) && $userOrGroup == 'group')
     {
         $userOrGroupObj = $dms->getGroup($userOrGroupIdInput);
     }
@@ -1533,13 +1787,13 @@ function getCategories() { /* {{{ */
     $categories = $dms->getDocumentCategories();
     $data = [];
     foreach($categories as $category)
-        $data[] = ['id' => $category->getId(), 'name' => $category->getName()];
+        $data[] = ['id' => (int)$category->getId(), 'name' => $category->getName()];
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 } /* }}} */
 
-function addCategory() { /* {{{ */
+function createCategory() { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
@@ -1555,10 +1809,13 @@ function addCategory() { /* {{{ */
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'Category already exists', 'data'=>''));
     } else {
-        $data = $dms->addDocumentCategory($category);
-
-        $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+        if($data = $dms->addDocumentCategory($category)) {
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>true, 'message'=>'', 'data'=>array('id'=>(int)$data->getID())));
+        } else {
+            $app->response()->header('Content-Type', 'application/json');
+            echo json_encode(array('success'=>false, 'message'=>'Could not add category', 'data'=>''));
+        }
     }
 } /* }}} */
 
@@ -1566,12 +1823,15 @@ function deleteCategory($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
-    $categories = new SeedDMS_Core_DocumentCategory($id, null);
-    $result = $categories->remove();
-    $data = null;
-
     $app->response()->header('Content-Type', 'application/json');
-    echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>$data));
+    if($category = $dms->getDocumentCategory($id)) {
+        if($result = $category->remove())
+            echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>''));
+        else
+            echo json_encode(array('success'=>$result, 'message'=>'Could not delete category', 'data'=>''));
+    } else {
+        echo json_encode(array('success'=>false, 'message'=>'No such category', 'data'=>''));
+    }
 } /* }}} */
 
 /**
@@ -1587,14 +1847,14 @@ function changeCategoryName($id) { /* {{{ */
     if ($app->request()->put('name') == null)
     {
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new name', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'You must supply a new name', 'data'=>''));
         return;
     }
 
     $newname = $app->request()->put('name');
 
     $category = null;
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $category = $dms->getDocumentCategory($id);
 
     /**
@@ -1642,14 +1902,14 @@ function changeAttributeDefinitionName($id) { /* {{{ */
     if ($app->request()->put('name') == null)
     {
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>false, 'message'=>'You must PUT a new name', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'You must supply a new name', 'data'=>''));
         return;
     }
 
     $newname = $app->request()->put('name');
 
     $attrdef = null;
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $attrdef = $dms->getAttributeDefinition($id);
 
     /**
@@ -1676,7 +1936,7 @@ function clearFolderAccessList($id) { /* {{{ */
     global $app, $dms, $userobj;
     checkIfAdmin();
 
-    if(is_numeric($id))
+    if(ctype_digit($id))
         $folder = $dms->getFolder($id);
     else {
         $folder = $dms->getFolderByName($id);
@@ -1690,6 +1950,13 @@ function clearFolderAccessList($id) { /* {{{ */
         echo json_encode(array('success'=>false, 'message'=>'Something went wrong. Could not clear access list for this folder.', 'data'=>''));
     }
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+} /* }}} */
+
+function echoData() { /* {{{ */
+    global $app;
+
+    print_r($app->request->put());
+    echo $app->request->getBody();
 } /* }}} */
 
 //$app = new Slim(array('mode'=>'development', '_session.handler'=>null));
@@ -1741,13 +2008,16 @@ $app->get('/document/:id/file/:fileid', 'getDocumentFile');
 $app->get('/document/:id/links', 'getDocumentLinks');
 $app->get('/document/:id/attributes', 'getDocumentAttributes');
 $app->get('/document/:id/preview/:version/:width', 'getDocumentPreview');
+$app->delete('/document/:id/categories', 'removeDocumentCategories');
+$app->delete('/document/:id/category/:categoryId', 'removeDocumentCategory');
 $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
-$app->get('/account/locked', 'getLockedDocuments');
-$app->post('/accounts', 'createAccount');
-$app->get('/accounts/:id', 'getAccountById');
-$app->put('/accounts/:id/disable', 'setDisabledAccount');
-$app->put('/accounts/:id/password', 'changeAccountPassword');
+$app->get('/account/documents/locked', 'getLockedDocuments');
+$app->get('/users', 'getUsers');
+$app->post('/users', 'createUser');
+$app->get('/users/:id', 'getUserById');
+$app->put('/users/:id/disable', 'setDisabledUser');
+$app->put('/users/:id/password', 'changeUserPassword');
 $app->post('/groups', 'createGroup');
 $app->get('/groups/:id', 'getGroup');
 $app->put('/groups/:id/addUser', 'addUserToGroup');
@@ -1760,10 +2030,11 @@ $app->put('/folder/:id/access/user/remove', 'removeUserAccessFromFolder');
 $app->put('/folder/:id/access/clear', 'clearFolderAccessList');
 $app->get('/categories', 'getCategories');
 $app->delete('/categories/:id', 'deleteCategory');
-$app->post('/categories', 'addCategory');
+$app->post('/categories', 'createCategory');
 $app->put('/categories/:id/name', 'changeCategoryName');
 $app->get('/attributedefinitions', 'getAttributeDefinitions');
 $app->put('/attributedefinitions/:id/name', 'changeAttributeDefinitionName');
+$app->any('/echo', 'echoData');
 $app->run();
 
 ?>
