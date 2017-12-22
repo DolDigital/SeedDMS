@@ -33,6 +33,9 @@
 - remove SeedDMS_Core_DocumentCategory::addCategory() and getCategories()
 - add optional parameters $limit and $offset to SeedDMS_Core_Folder::getDocuments()
   and SeedDMS_Core_Folder::getSubFolders()
+- getInstance() returns now null instead of false if the object was not found in the db
+- add new methods SeedDMS_Core_Document::addCategories() and
+  SeedDMS_Core_Document::removeCategories()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
