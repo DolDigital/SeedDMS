@@ -58,14 +58,15 @@ class SeedDMS_Core_Group { /* {{{ */
 	} /* }}} */
 
 	/**
-	 * Create an instance of a group object
+	 * Return an instance of a group object
 	 *
 	 * @param string|integer $id Id, name of group, depending
 	 * on the 3rd parameter.
 	 * @param object $dms instance of dms
 	 * @param string $by search by group name if set to 'name'. 
 	 * Search by Id of group if left empty.
-	 * @return object instance of class SeedDMS_Core_Group
+	 * @return object instance of class SeedDMS_Core_Group if group was found, null
+	 * if group was not found, false in case of error
 	 */
 	public static function getInstance($id, $dms, $by='') { /* {{{ */
 		$db = $dms->getDB();
@@ -82,7 +83,7 @@ class SeedDMS_Core_Group { /* {{{ */
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		else if (count($resArr) != 1) //wenn, dann wohl eher 0 als > 1 ;-)
-			return false;
+			return null;
 
 		$resArr = $resArr[0];
 

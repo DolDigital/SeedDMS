@@ -163,7 +163,8 @@ class SeedDMS_Core_User { /* {{{ */
 	 * will check for the 4th paramater and also filter by email. If this
 	 * parameter is left empty, the user will be search by its Id.
 	 * @param string $email optional email address if searching for name
-	 * @return object instance of class SeedDMS_Core_User
+     * @return object instance of class SeedDMS_Core_User if user was found, null
+     * if user was not found, false in case of error
 	 */
 	public static function getInstance($id, $dms, $by='', $email='') { /* {{{ */
 		$db = $dms->getDB();
@@ -183,7 +184,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$resArr = $db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
-		if (count($resArr) != 1) return false;
+		if (count($resArr) != 1) return null;
 
 		$resArr = $resArr[0];
 
