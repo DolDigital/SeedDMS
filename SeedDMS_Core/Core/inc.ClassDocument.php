@@ -247,6 +247,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $searchFields;
 	} /* }}} */
 
+	/**
+	 * Return an document by its id
+	 *
+	 * @param integer $id id of document
+	 * @return object/boolean instance of SeedDMS_Core_Document if document exists, null
+	 * if document does not exist, false in case of error
+	 */
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -255,7 +262,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr) != 1)
-			return false;
+			return null;
 		$resArr = $resArr[0];
 
 		// New Locking mechanism uses a separate table to track the lock.
@@ -400,6 +407,61 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$db->commitTransaction();
 		$this->_categories = $newCategories;
+		return true;
+	} /* }}} */
+
+	/**
+	 * Add a list of categories to the document
+	 * This function will add a list of new categories to the document.
+	 *
+	 * @param array $newCategories list of category objects
+	 */
+	function addCategories($newCategories) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$this->_categories)
+			self::getCategories();
+
+		$catids = array();
+		foreach($this->_categories as $cat)
+			$catids[] = $cat->getID();
+
+		$db->startTransaction();
+		$ncat = array(); // Array containing actually added new categories
+		foreach($newCategories as $cat) {
+			if(!in_array($cat->getID(), $catids)) {
+				$queryStr = "INSERT INTO `tblDocumentCategory` (`categoryID`, `documentID`) VALUES (". $cat->getId() .", ". $this->_id .")";
+				if (!$db->getResult($queryStr)) {
+					$db->rollbackTransaction();
+					return false;
+				}
+				$ncat[] = $cat;
+			}
+		}
+		$db->commitTransaction();
+		$this->_categories = array_merge($this->_categories, $ncat);
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove a list of categories from the document
+	 * This function will remove a list of assigned categories to the document.
+	 *
+	 * @param array $newCategories list of category objects
+	 */
+	function removeCategories($categories) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$catids = array();
+		foreach($categories as $cat)
+			$catids[] = $cat->getID();
+
+		$queryStr = "DELETE from `tblDocumentCategory` WHERE `documentID` = ". $this->_id ." AND `categoryID` IN (".implode(',', $catids).")";
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$this->_categories = null;
 		return true;
 	} /* }}} */
 
