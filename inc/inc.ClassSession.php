@@ -94,7 +94,7 @@ class SeedDMS_Session {
 	 * @return string/boolean id of session of false in case of an error
 	 */
 	function create($data) { /* {{{ */
-		$id = "" . rand() . time() . rand() . "";
+		$id = "" . rand() . '-'.microtime() . '-'.rand() . "";
 		$id = md5($id);
 		$lastaccess = time();
 		$queryStr = "INSERT INTO `tblSessions` (`id`, `userID`, `lastAccess`, `theme`, `language`, `su`) ".
