@@ -152,24 +152,24 @@ function doLogin() { /* {{{ */
     $username = $app->request()->post('user');
     $password = $app->request()->post('pass');
 
-    $userobj = $dms->getUserByLogin($username);
-    $user = null;
+//    $userobj = $dms->getUserByLogin($username);
+    $userobj = null;
 
     /* Authenticate against LDAP server {{{ */
-    if (!$user && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+    if (!$userobj && isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
         require_once("../inc/inc.ClassLdapAuthentication.php");
         $authobj = new SeedDMS_LdapAuthentication($dms, $settings);
-        $user = $authobj->authenticate($username, $password);
+        $userobj = $authobj->authenticate($username, $password);
     } /* }}} */
 
     /* Authenticate against SeedDMS database {{{ */
-    if(!$user) {
+    if(!$userobj) {
         require_once("../inc/inc.ClassDbAuthentication.php");
         $authobj = new SeedDMS_DbAuthentication($dms, $settings);
-        $user = $authobj->authenticate($username, $password);
+        $userobj = $authobj->authenticate($username, $password);
     } /* }}} */
 
-    if(!$user) {
+    if(!$userobj) {
         if(USE_PHP_SESSION) {
             unset($_SESSION['userid']);
         } else {
