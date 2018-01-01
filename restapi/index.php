@@ -1971,7 +1971,6 @@ function clearFolderAccessList($id) { /* {{{ */
 function echoData() { /* {{{ */
     global $app;
 
-    print_r($app->request->put());
     echo $app->request->getBody();
 } /* }}} */
 
