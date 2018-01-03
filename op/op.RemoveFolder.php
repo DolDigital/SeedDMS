@@ -56,6 +56,7 @@ if ($folder->getAccessMode($user) < M_ALL) {
 
 if($settings->_enableFullSearch) {
 	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
 } else {
 	$index = null;
 }

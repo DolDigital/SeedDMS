@@ -331,6 +331,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$timeout = $this->params['timeout'];
 		$showfullpreview = $this->params['showFullPreview'];
 		$converttopdf = $this->params['convertToPdf'];
+		$pdfconverters = $this->params['pdfConverters'];
 		$cachedir = $this->params['cachedir'];
 		if(!$showfullpreview)
 			return;
@@ -353,6 +354,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			<audio controls style="width: 100%;">
 			<source  src="../op/op.ViewOnline.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="audio/mpeg">
 			</audio>
+	<?php
+				break;
+			case 'video/mp4':
+				$this->contentHeading(getMLText("preview"));
+	?>
+			<video controls style="width: 100%;">
+			<source  src="../op/op.ViewOnline.php?documentid=<?php echo $document->getID(); ?>&version=<?php echo $latestContent->getVersion(); ?>" type="video/mp4">
+			</video>
 	<?php
 				break;
 			case 'application/pdf':
@@ -380,8 +389,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		if($converttopdf) {
 			$pdfpreviewer = new SeedDMS_Preview_PdfPreviewer($cachedir, $timeout);
+			$pdfpreviewer->setConverters($pdfconverters);
 			if($pdfpreviewer->hasConverter($latestContent->getMimeType())) {
-				$this->contentHeading(getMLText("preview"));
+				$this->contentHeading(getMLText("preview_pdf"));
 ?>
 				<iframe src="../pdfviewer/web/viewer.html?file=<?php echo urlencode('../../op/op.PdfPreview.php?documentid='.$document->getID().'&version='.$latestContent->getVersion()); ?>" width="100%" height="700px"></iframe>
 <?php
@@ -402,6 +412,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 		$previewwidthlist = $this->params['previewWidthList'];
 		$previewwidthdetail = $this->params['previewWidthDetail'];
+		$previewconverters = $this->params['previewConverters'];
+		$pdfconverters = $this->params['pdfConverters'];
 		$documentid = $document->getId();
 		$currenttab = $this->params['currenttab'];
 		$timeout = $this->params['timeout'];
@@ -534,6 +546,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		print "</ul>";
 		*/
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail, $timeout);
+		$previewer->setConverters($previewconverters);
 		$previewer->createPreview($latestContent);
 		if ($file_exists) {
 			if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes)) {
@@ -1286,8 +1299,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
 				}
 				echo "</ul><ul class=\"unstyled actions\">";
-				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
+				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID())) {
 					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
+					print "<li><a href=\"out.EditDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-edit\"></i>".getMLText("edit")."</a></li>";
+				}
 				print "</ul></td>";		
 				
 				print "</tr>";

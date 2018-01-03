@@ -89,6 +89,8 @@ class Settings { /* {{{ */
 	var $_luceneDir = null;
 	// Where the drop folders are located
 	var $_dropFolderDir = null;
+	// Where the backup directory is located
+	var $_backupDir = null;
 	// enable removal of file from dropfolder after success import
 	var $_removeFromDropFolder = false;
 	// Where the stop word file is located
@@ -227,6 +229,10 @@ class Settings { /* {{{ */
 	var $_showFullPreview = false;
 	// convert to pdf for preview on document details page
 	var $_convertToPdf = false;
+	// maximum number of documents/folders on ViewFolder page
+	var $_maxItemsPerPage = 0;
+	// number of documents/folders fetched when scrolling to bottom of ViewFolder page
+	var $_incItemsPerPage = 0;
 	// Show form to submit missing translations at end of page
 	var $_showMissingTranslations = false;
 	// Extra Path to additional software, will be added to include path
@@ -416,6 +422,10 @@ class Settings { /* {{{ */
 			$this->_previewWidthDropFolderList = intval($tab["previewWidthDropFolderList"]);
 		$this->_showFullPreview = Settings::boolVal($tab["showFullPreview"]);
 		$this->_convertToPdf = Settings::boolVal($tab["convertToPdf"]);
+		if(isset($tab["maxItemsPerPage"]))
+			$this->_maxItemsPerPage = intval($tab["maxItemsPerPage"]);
+		if(isset($tab["incItemsPerPage"]))
+			$this->_incItemsPerPage = intval($tab["incItemsPerPage"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
@@ -467,6 +477,7 @@ class Settings { /* {{{ */
 		$this->_stagingDir = strval($tab["stagingDir"]);
 		$this->_luceneDir = strval($tab["luceneDir"]);
 		$this->_dropFolderDir = strval($tab["dropFolderDir"]);
+		$this->_backupDir = strval($tab["backupDir"]);
 		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
 		$this->_logFileRotation = strval($tab["logFileRotation"]);
 		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
@@ -732,6 +743,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "previewWidthDropFolderList", $this->_previewWidthDropFolderList);
     $this->setXMLAttributValue($node, "showFullPreview", $this->_showFullPreview);
     $this->setXMLAttributValue($node, "convertToPdf", $this->_convertToPdf);
+    $this->setXMLAttributValue($node, "maxItemsPerPage", $this->_maxItemsPerPage);
+    $this->setXMLAttributValue($node, "incItemsPerPage", $this->_incItemsPerPage);
 
     // XML Path: /configuration/site/edition
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');
@@ -779,6 +792,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "stagingDir", $this->_stagingDir);
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
     $this->setXMLAttributValue($node, "dropFolderDir", $this->_dropFolderDir);
+    $this->setXMLAttributValue($node, "backupDir", $this->_backupDir);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
     $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);

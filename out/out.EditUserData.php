@@ -28,6 +28,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
 }
@@ -37,9 +40,12 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 }
 
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'enablelanguageselector'=>$settings->_enableLanguageSelector, 'enablethemeselector'=>$settings->_enableThemeSelector, 'passwordstrength'=>$settings->_passwordStrength, 'httproot'=>$settings->_httpRoot));
 if($view) {
+	$view->setParam('enableuserimage', $settings->_enableUserImage);
+	$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
+	$view->setParam('enablethemeselector', $settings->_enableThemeSelector);
+	$view->setParam('passwordstrength', $settings->_passwordStrength);
+	$view->setParam('httproot', $settings->_httpRoot);
 	$view($_GET);
 	exit;
 }

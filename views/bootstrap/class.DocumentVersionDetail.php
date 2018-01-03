@@ -439,8 +439,10 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 					}
 				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
 				echo "</ul><ul class=\"unstyled actions\">";
-				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
+				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID())) {
 					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
+					print "<li><a href=\"out.EditDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-edit\"></i>".getMLText("edit")."</a></li>";
+				}
 				print "</ul></td>";		
 				
 				print "</tr>";

@@ -207,6 +207,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_convertToPdf");?>:</td>
         <td><input name="convertToPdf" type="checkbox" <?php if ($settings->_convertToPdf) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_maxItemsPerPage_desc");?>">
+        <td><?php printMLText("settings_maxItemsPerPage");?>:</td>
+				<td><?php $this->showTextField("maxItemsPerPage", $settings->_maxItemsPerPage); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_incItemsPerPage_desc");?>">
+        <td><?php printMLText("settings_incItemsPerPage");?>:</td>
+				<td><?php $this->showTextField("incItemsPerPage", $settings->_incItemsPerPage); ?></td>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - EDITION
@@ -397,6 +405,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_contentDir_desc");?>">
         <td><?php printMLText("settings_contentDir");?>:</td>
         <td><?php $this->showTextField("contentDir", $settings->_contentDir); ?></td>
+      </tr>
+      <tr title="<?php printMLText("settings_backupDir_desc");?>">
+        <td><?php printMLText("settings_backupDir");?>:</td>
+        <td><?php $this->showTextField("backupDir", $settings->_backupDir); ?></td>
       </tr>
       <tr title="<?php printMLText("settings_cacheDir_desc");?>">
         <td><?php printMLText("settings_cacheDir");?>:</td>
@@ -730,26 +742,32 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php $this->showTextField("cmdTimeout", $settings->_cmdTimeout); ?></td>
       </tr>
 
-      <tr ><td><b> <?php printMLText("index_converters");?></b></td> </tr>
 <?php
-	foreach($settings->_converters['fulltext'] as $mimetype=>$cmd) {
+  foreach(array('fulltext', 'preview', 'pdf') as $target) {
+?>
+      <tr><td><b><?php printMLText($target."_converters");?></b></td></tr>
+<?php
+	foreach($settings->_converters[$target] as $mimetype=>$cmd) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><?php $this->showTextField("converters[".$mimetype."]", htmlspecialchars($cmd)); ?></td>
+        <td><?php $this->showTextField("converters[".$target."][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
       </tr>
 <?php
 	}
 ?>
       <tr title="">
-        <td><?php $this->showTextField("converters_newmimetype", "", '', getMLText('mimetype')); ?></td>
-        <td><?php $this->showTextField("converters_newcmd", "", '', getMLText('command')); ?></td>
+        <td><?php $this->showTextField("converters[".$target."][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
+        <td><?php $this->showTextField("converters[".$target."][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
       </tr>
+<?php
+	}
+?>
     </table>
 <?php		$this->contentContainerEnd(); ?>
   </div>
 
-	  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
+  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
 <?php		$this->contentContainerStart(); ?>
     <table class="table-condensed">
       <!--
@@ -758,7 +776,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 ?>
-			<tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
+      <tr><td><a name="<?php echo $extname;?>"></a><b><?php echo $extconf['title'];?></b></td></tr>
 <?php
 					foreach($extconf['config'] as $confkey=>$conf) {
 ?>

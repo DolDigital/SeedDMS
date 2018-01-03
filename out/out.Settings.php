@@ -26,6 +26,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -34,9 +36,14 @@ if (!$user->isAdmin()) {
 if(!trim($settings->_encryptionKey))
 	$settings->_encryptionKey = md5(uniqid());
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'settings'=>$settings, 'currenttab'=>(isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : '')));
+$users = $dms->getAllUsers($settings->_sortUsersInList);
+$groups = $dms->getAllGroups();
+
 if($view) {
+	$view->setParam('settings', $settings);
+	$view->setParam('currenttab', (isset($_REQUEST['currenttab']) ? $_REQUEST['currenttab'] : ''));
+	$view->setParam('allusers', $users);
+	$view->setParam('allgroups', $groups);
 	$view($_GET);
 	exit;
 }

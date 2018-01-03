@@ -28,10 +28,7 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1]);
-if(!$view) {
-}
-
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	$view->exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -55,6 +52,7 @@ if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['docume
 if($view) {
 	$view->setParam('dms', $dms);
 	$view->setParam('user', $user);
+	$view->setParam('showtree', showtree());
 	$view->setParam('fromdate', isset($_GET['fromdate']) ? $_GET['fromdate'] : '');
 	$view->setParam('todate', isset($_GET['todate']) ? $_GET['todate'] : '');
 	$view->setParam('skip', $skip);

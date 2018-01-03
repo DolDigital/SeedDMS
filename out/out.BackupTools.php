@@ -27,13 +27,20 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'contentdir'=>$settings->_contentDir));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'contentdir'=>$settings->_contentDir));
 if($view) {
+	if($settings->_backupDir && file_exists($settings->_backupDir)) {
+		$view->setParam('backupdir', $settings->_backupDir);
+		$view->setParam('hasbackupdir', true);
+	} else {
+		$view->setParam('backupdir', $settings->_contentDir);
+		$view->setParam('hasbackupdir', false);
+	}
 	$view($_GET);
 	exit;
 }

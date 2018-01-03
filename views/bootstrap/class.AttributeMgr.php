@@ -145,17 +145,24 @@ $(document).ready( function() {
 		}
 	} /* }}} */
 
-	function showAttributeForm($attrdef) { /* {{{ */
-		if($attrdef && !$attrdef->isUsed()) {
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selattrdef = $this->params['selattrdef'];
+
+		if($selattrdef && !$selattrdef->isUsed()) {
 ?>
 			<form style="display: inline-block;" method="post" action="../op/op.AttributeMgr.php" >
 				<?php echo createHiddenFieldWithKey('removeattrdef'); ?>
-				<input type="hidden" name="attrdefid" value="<?php echo $attrdef->getID()?>">
+				<input type="hidden" name="attrdefid" value="<?php echo $selattrdef->getID()?>">
 				<input type="hidden" name="action" value="removeattrdef">
 				<button type="submit" class="btn"><i class="icon-remove"></i> <?php echo getMLText("rm_attrdef")?></button>
 			</form>
 <?php
 		}
+	} /* }}} */
+
+	function showAttributeForm($attrdef) { /* {{{ */
 ?>
 			<form class="form-horizontal" action="../op/op.AttributeMgr.php" method="post">
 <?php
@@ -282,11 +289,7 @@ $(document).ready( function() {
 
 <div class="row-fluid">
 <div class="span6">
-<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
 	<select class="chzn-select" id="selector" class="input-xlarge">
 		<option value="-1"><?php echo getMLText("choose_attrdef")?></option>
 		<option value="0"><?php echo getMLText("new_attrdef")?></option>
@@ -329,10 +332,8 @@ $(document).ready( function() {
 		}
 ?>
 	</select>
-		</div>
-	</div>
 </form>
-</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="AttributeMgr" data-action="actionmenu" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="AttributeMgr" data-action="info" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
 </div>
 

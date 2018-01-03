@@ -74,20 +74,6 @@ class SeedDMS_Core_DocumentCategory {
 		return true;
 	} /* }}} */
 
-	function getCategories() { /* {{{ */
-		$db = $this->_dms->getDB();
-
-		$queryStr = "SELECT * FROM `tblCategory`";
-		return $db->getResultArray($queryStr);
-	} /* }}} */
-
-	function addCategory($keywords) { /* {{{ */
-		$db = $this->_dms->getDB();
-
-		$queryStr = "INSERT INTO `tblCategory` (`category`) VALUES (".$db->qstr($keywords).")";
-		return $db->getResult($queryStr);
-	} /* }}} */
-
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -98,19 +84,35 @@ class SeedDMS_Core_DocumentCategory {
 		return true;
 	} /* }}} */
 
-	function getDocumentsByCategory() { /* {{{ */
+	function getDocumentsByCategory($limit=0, $offset=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "SELECT * FROM `tblDocumentCategory` where `categoryID`=".$this->_id;
+		if($limit && is_numeric($limit))
+			$queryStr .= " LIMIT ".(int) $limit;
+		if($offset && is_numeric($offset))
+			$queryStr .= " OFFSET ".(int) $offset;
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
 
 		$documents = array();
 		foreach ($resArr as $row) {
-			array_push($documents, $this->_dms->getDocument($row["documentID"]));
+			if($doc = $this->_dms->getDocument($row["documentID"]))
+				array_push($documents, $doc);
 		}
 		return $documents;
+	} /* }}} */
+
+	function countDocumentsByCategory() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT COUNT(*) as `c` FROM `tblDocumentCategory` where `categoryID`=".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return $resArr[0]['c'];
 	} /* }}} */
 
 }

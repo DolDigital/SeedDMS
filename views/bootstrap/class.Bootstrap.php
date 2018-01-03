@@ -535,6 +535,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
 			$menuitems['edit_existing_notify'] = array('link'=>"../out/out.DocumentNotify". $docid, 'label'=>'edit_existing_notify');
 		}
+		if ($this->params['user']->isAdmin()) {
+			$menuitems['transfer_document'] = array('link'=>"../out/out.TransferDocument". $docid, 'label'=>'transfer_document');
+		}
 
 		/* Check if hook exists because otherwise callHook() will override $menuitems */
 		if($this->hasHook('documentNavigationBar'))
@@ -1348,7 +1351,6 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function exitError($pagetitle, $error, $noexit=false) { /* {{{ */
-	
 		$this->htmlStartPage($pagetitle);
 		$this->globalNavigation();
 		$this->contentStart();
@@ -1887,6 +1889,10 @@ $(document).ready( function() {
 			$links = $document->getDocumentLinks();
 			$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+			/* Retrieve reverse linked documents */
+			$revlinks = $document->getReverseDocumentLinks();
+			$revlinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $revlinks);
+
 			$content .= "<td>";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
 				$content .= "<a draggable=\"false\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
@@ -1921,8 +1927,8 @@ $(document).ready( function() {
 			$content .= "<small>";
 			if(count($files))
 				$content .= count($files)." ".getMLText("linked_files")."<br />";
-			if(count($links))
-				$content .= count($links)." ".getMLText("linked_documents")."<br />";
+			if(count($links) || count($revlinks))
+				$content .= count($links)."/".count($revlinks)." ".getMLText("linked_documents")."<br />";
 			if($status["status"] == S_IN_WORKFLOW && $workflowmode == 'advanced') {
 				$workflowstate = $latestContent->getWorkflowState();
 				$content .= '<span title="'.getOverallStatusText($status["status"]).': '.$workflow->getName().'">'.$workflowstate->getName().'</span>';

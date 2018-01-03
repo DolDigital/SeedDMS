@@ -27,14 +27,15 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_default_keywords"),getMLText("access_denied"));
 }
 
 $categories = $dms->getAllUserKeywordCategories($user->getID());
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('categories', $categories);
 	$view($_GET);

@@ -33,7 +33,7 @@ include("../inc/inc.Authentication.php");
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
 
-if (isset($_GET["version"])) {
+if (isset($_GET["version"])) { /* {{{ */
 
 	// document download
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
@@ -68,7 +68,8 @@ if (isset($_GET["version"])) {
 	$controller->setParam('type', 'version');
 	$controller->run();
 
-} elseif (isset($_GET["file"])) {
+} /* }}} */
+elseif (isset($_GET["file"])) { /* {{{ */
 
 	// file download
 	

@@ -28,6 +28,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if ($user->isGuest()) {
 	UI::exitError(getMLText("expired_documents"),getMLText("access_denied"));
 }
@@ -37,8 +39,6 @@ if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 	$orderby=$_GET["orderby"];
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('orderby', $orderby);
 	$view->setParam('cachedir', $settings->_cacheDir);

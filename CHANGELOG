@@ -1,4 +1,19 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.5
+--------------------------------------------------------------------------------
+- add controller for AttributeMgr
+- converters for image previews and pdf previews can be configured in settings
+- show list of documents having the selected category on page for managing
+  categories
+- use same layout for group and category manager as already used in user manager
+- meta data of attachments can be edited
+- show number of reverse document links in folder/document list
+- documents can be transfered to another user (Closes partly #368)
+- list of folders/documents on ViewFolder page can be limited, more objects
+  will be loaded when user scrolls to the end of the page
+- add more hooks in ViewFolder
+
+--------------------------------------------------------------------------------
                      Changes in version 5.1.4
 --------------------------------------------------------------------------------
 - fix javascript error when indexing document, because the indexer was also

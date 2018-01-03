@@ -70,6 +70,8 @@ if ($action == "saveSettings")
   $settings->_previewWidthDetail = $_POST["previewWidthDetail"];
   $settings->_showFullPreview = getBoolValue("showFullPreview");
   $settings->_convertToPdf = getBoolValue("convertToPdf");
+  $settings->_maxItemsPerPage = $_POST["maxItemsPerPage"];
+  $settings->_incItemsPerPage = $_POST["incItemsPerPage"];
 
   // SETTINGS - SITE - EDITION
   $settings->_strictFormCheck = getBoolValue("strictFormCheck");
@@ -106,14 +108,15 @@ if ($action == "saveSettings")
   $settings->_firstDayOfWeek = intval($_POST["firstDayOfWeek"]);
 
   // SETTINGS - SYSTEM - SERVER
-  $settings->_rootDir = $_POST["rootDir"];
+  $settings->_rootDir = addDirSep($_POST["rootDir"]);
   $settings->_httpRoot = $_POST["httpRoot"];
-  $settings->_contentDir = $_POST["contentDir"];
-  $settings->_cacheDir = $_POST["cacheDir"];
-  $settings->_stagingDir = $_POST["stagingDir"];
-  $settings->_luceneDir = $_POST["luceneDir"];
-  $settings->_extraPath = $_POST["extraPath"];
-  $settings->_dropFolderDir = $_POST["dropFolderDir"];
+  $settings->_contentDir = addDirSep($_POST["contentDir"]);
+  $settings->_cacheDir = addDirSep($_POST["cacheDir"]);
+  $settings->_stagingDir = addDirSep($_POST["stagingDir"]);
+  $settings->_luceneDir = addDirSep($_POST["luceneDir"]);
+  $settings->_extraPath = addDirSep($_POST["extraPath"]);
+  $settings->_dropFolderDir = addDirSep($_POST["dropFolderDir"]);
+  $settings->_backupDir = addDirSep($_POST["backupDir"]);
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
@@ -193,12 +196,27 @@ if ($action == "saveSettings")
   $settings->_maxExecutionTime = intval($_POST["maxExecutionTime"]);
   $settings->_cmdTimeout = (intval($_POST["cmdTimeout"]) > 0) ?intval($_POST["cmdTimeout"]) : 1;
 
-  // SETTINGS - ADVANCED - INDEX CMD
-	$settings->_converters['fulltext'] = $_POST["converters"];
-	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $_POST["converters_newmimetype"]);
-  if($newmimetype && trim($_POST["converters_newcmd"])) {
-    $settings->_converters['fulltext'][$newmimetype] = trim($_POST["converters_newcmd"]);
-  }
+	// SETTINGS - ADVANCED - INDEX CMD
+	if(isset($_POST["converters"]["fulltext"]))
+		$settings->_converters['fulltext'] = $_POST["converters"]["fulltext"];
+	else
+		$settings->_converters['fulltext'] = $_POST["converters"];
+	$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $settings->_converters["fulltext"]["newmimetype"]);
+	if($newmimetype && trim($settings->_converters['fulltext']['newcmd']))
+		$settings->_converters['fulltext'][$newmimetype] = trim($settings->_converters['fulltext']['newcmd']);
+	unset($settings->_converters['fulltext']['newmimetype']);
+	unset($settings->_converters['fulltext']['newcmd']);
+
+	foreach(array('preview', 'pdf') as $target) {
+		if(isset($_POST["converters"][$target])) {
+			$settings->_converters[$target] = $_POST["converters"][$target];
+			$newmimetype = preg_replace('#[^A-Za-z0-9_/+.*-]+#', '', $settings->_converters[$target]["newmimetype"]);
+			if($newmimetype && trim($settings->_converters[$target]['newcmd']))
+				$settings->_converters[$target][$newmimetype] = trim($settings->_converters[$target]['newcmd']);
+			unset($settings->_converters[$target]['newmimetype']);
+			unset($settings->_converters[$target]['newcmd']);
+		}
+	}
 
   // SETTINGS - EXTENSIONS
   $settings->_extensions = isset($_POST["extensions"]) ? $_POST["extensions"] : array();

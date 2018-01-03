@@ -764,7 +764,7 @@ function insert_document($document) { /* {{{ */
 					$filename = tempnam('/tmp', 'FOO');
 					file_put_contents($filename, $filecontents);
 				}
-				$newDocument->addDocumentFile(
+				$newfile = $newDocument->addDocumentFile(
 					$file['attributes']['name'],
 					$file['attributes']['comment'],
 					$owner,
@@ -775,6 +775,7 @@ function insert_document($document) { /* {{{ */
 					$file['attributes']['version'],
 					$file['attributes']['public']
 				);
+				$newfile->setDate(dateToTimestamp($file['attributes']['date']));
 				unlink($filename);
 			}
 		}

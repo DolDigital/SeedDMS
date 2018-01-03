@@ -27,6 +27,8 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Calendar.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!isset($_GET["id"])){
 	UI::exitError(getMLText("event_details"),getMLText("error_occured"));
 }
@@ -36,8 +38,6 @@ if (is_bool($event)&&!$event){
 	UI::exitError(getMLText("event_details"),getMLText("error_occured"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('event', $event);
 	$view($_GET);

@@ -103,6 +103,11 @@ class SeedDMS_Core_DatabaseAccess {
 	private $_logfp;
 
 	/**
+	 * @var boolean set to true if views instead of temp. tables shall be used
+	 */
+	private $_useviews;
+
+	/**
 	 * Return list of all database tables
 	 *
 	 * This function is used to retrieve a list of database tables for backup
@@ -119,6 +124,34 @@ class SeedDMS_Core_DatabaseAccess {
 				break;
 			case 'pgsql':
 				$sql = "select tablename as name from pg_catalog.pg_tables where schemaname='public'";
+				break;
+			default:
+				return false;
+		}
+		$arr = $this->getResultArray($sql);
+		$res = array();
+		foreach($arr as $tmp)
+			$res[] = $tmp['name'];
+		return $res;
+	}	/* }}} */
+
+	/**
+	 * Return list of all database views
+	 *
+	 * This function is used to retrieve a list of database views
+	 *
+	 * @return array list of view names
+	 */
+	public function ViewList() { /* {{{ */
+		switch($this->_driver) {
+			case 'mysql':
+				$sql = "select TABLE_NAME as name from information_schema.views where TABLE_SCHEMA='".$this->_database."'";
+				break;
+			case 'sqlite':
+				$sql = "select tbl_name as name from sqlite_master where type='view'";
+				break;
+			case 'pgsql':
+				$sql = "select viewname as name from pg_catalog.pg_views where schemaname='public'";
 				break;
 			default:
 				return false;
@@ -171,6 +204,7 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_ttapproveid = false;
 		$this->_ttstatid = false;
 		$this->_ttcontentid = false;
+		$this->_useviews = true;
 		$this->_debug = false;
 	} /* }}} */
 
@@ -221,11 +255,22 @@ class SeedDMS_Core_DatabaseAccess {
 				$this->_conn->exec('SET NAMES utf8');
 				/* Turn this on if you want strict checking of default values, etc. */
 //				$this->_conn->exec("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
+				/* The following is the default on Ubuntu 16.04 */
+//				$this->_conn->exec("SET SESSION sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'");
 				break;
 			case 'sqlite':
 				$this->_conn->exec('PRAGMA foreign_keys = ON');
 				break;
 		}
+		if($this->_useviews) {
+			$tmp = $this->ViewList();
+			foreach(array('ttreviewid', 'ttapproveid', 'ttstatid', 'ttcontentid') as $viewname) {
+				if(in_array($viewname, $tmp)) {
+					$this->{"_".$viewname} = true;
+				}
+			}
+		}
+
 		$this->_connected = true;
 		return true;
 	} /* }}} */
@@ -365,7 +410,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Create various temporary tables to speed up and simplify sql queries
 	 */
-	function createTemporaryTable($tableName, $override=false) { /* {{{ */
+	private function __createTemporaryTable($tableName, $override=false) { /* {{{ */
 		if (!strcasecmp($tableName, "ttreviewid")) {
 			switch($this->_driver) {
 				case 'sqlite':
@@ -407,7 +452,7 @@ class SeedDMS_Core_DatabaseAccess {
 			}
 			return $this->_ttreviewid;
 		}
-		else if (!strcasecmp($tableName, "ttapproveid")) {
+		elseif (!strcasecmp($tableName, "ttapproveid")) {
 			switch($this->_driver) {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttapproveid` AS ".
@@ -448,7 +493,7 @@ class SeedDMS_Core_DatabaseAccess {
 			}
 			return $this->_ttapproveid;
 		}
-		else if (!strcasecmp($tableName, "ttstatid")) {
+		elseif (!strcasecmp($tableName, "ttstatid")) {
 			switch($this->_driver) {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttstatid` AS ".
@@ -489,7 +534,7 @@ class SeedDMS_Core_DatabaseAccess {
 			}
 			return $this->_ttstatid;
 		}
-		else if (!strcasecmp($tableName, "ttcontentid")) {
+		elseif (!strcasecmp($tableName, "ttcontentid")) {
 			switch($this->_driver) {
 				case 'sqlite':
 					$queryStr = "CREATE TEMPORARY TABLE IF NOT EXISTS `ttcontentid` AS ".
@@ -531,6 +576,178 @@ class SeedDMS_Core_DatabaseAccess {
 			return $this->_ttcontentid;
 		}
 		return false;
+	} /* }}} */
+
+	/**
+	 * Create various temporary tables to speed up and simplify sql queries
+	 */
+	private function __createView($tableName, $override=false) { /* {{{ */
+		if (!strcasecmp($tableName, "ttreviewid")) {
+			switch($this->_driver) {
+				case 'sqlite':
+					$queryStr = "CREATE VIEW `ttreviewid` AS ".
+						"SELECT `tblDocumentReviewLog`.`reviewID` AS `reviewID`, ".
+						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentReviewLog` ".
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` "; //.
+				break;
+				case 'pgsql':
+					$queryStr = "CREATE VIEW `ttreviewid` AS ".
+						"SELECT `tblDocumentReviewLog`.`reviewID` AS `reviewID`, ".
+						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentReviewLog` ".
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` ";
+				break;
+				default:
+					$queryStr = "CREATE".($override ? " OR REPLACE" : "")." VIEW `ttreviewid` AS ".
+						"SELECT `tblDocumentReviewLog`.`reviewID` AS `reviewID`, ".
+						"MAX(`tblDocumentReviewLog`.`reviewLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentReviewLog` ".
+						"GROUP BY `tblDocumentReviewLog`.`reviewID` ";
+			}
+			if (!$this->_ttreviewid) {
+				if (!$this->getResult($queryStr))
+					return false;
+				$this->_ttreviewid=true;
+			}
+			else {
+				if (is_bool($override) && $override) {
+					if (!$this->getResult("DROP VIEW `ttreviewid`"))
+						return false;
+					if (!$this->getResult($queryStr))
+						return false;
+				}
+			}
+			return $this->_ttreviewid;
+		}
+		elseif (!strcasecmp($tableName, "ttapproveid")) {
+			switch($this->_driver) {
+				case 'sqlite':
+					$queryStr = "CREATE VIEW `ttapproveid` AS ".
+						"SELECT `tblDocumentApproveLog`.`approveID` AS `approveID`, ".
+						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentApproveLog` ".
+						"GROUP BY `tblDocumentApproveLog`.`approveID` "; //.
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE VIEW `ttapproveid` AS ".
+						"SELECT `tblDocumentApproveLog`.`approveID` AS `approveID`, ".
+						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentApproveLog` ".
+						"GROUP BY `tblDocumentApproveLog`.`approveID` ";
+					break;
+				default:
+					$queryStr = "CREATE".($override ? " OR REPLACE" : "")." VIEW `ttapproveid` AS ".
+						"SELECT `tblDocumentApproveLog`.`approveID`, ".
+						"MAX(`tblDocumentApproveLog`.`approveLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentApproveLog` ".
+						"GROUP BY `tblDocumentApproveLog`.`approveID` ";
+			}
+			if (!$this->_ttapproveid) {
+				if (!$this->getResult($queryStr))
+					return false;
+				$this->_ttapproveid=true;
+			}
+			else {
+				if (is_bool($override) && $override) {
+					if (!$this->getResult("DROP VIEW `ttapproveid`"))
+						return false;
+					if (!$this->getResult($queryStr))
+						return false;
+				}
+			}
+			return $this->_ttapproveid;
+		}
+		elseif (!strcasecmp($tableName, "ttstatid")) {
+			switch($this->_driver) {
+				case 'sqlite':
+					$queryStr = "CREATE VIEW `ttstatid` AS ".
+						"SELECT `tblDocumentStatusLog`.`statusID` AS `statusID`, ".
+						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentStatusLog` ".
+						"GROUP BY `tblDocumentStatusLog`.`statusID` ";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE VIEW `ttstatid` AS ".
+						"SELECT `tblDocumentStatusLog`.`statusID` AS `statusID`, ".
+						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentStatusLog` ".
+						"GROUP BY `tblDocumentStatusLog`.`statusID` ";
+					break;
+				default:
+					$queryStr = "CREATE".($override ? " OR REPLACE" : "")." VIEW `ttstatid` AS ".
+						"SELECT `tblDocumentStatusLog`.`statusID`, ".
+						"MAX(`tblDocumentStatusLog`.`statusLogID`) AS `maxLogID` ".
+						"FROM `tblDocumentStatusLog` ".
+						"GROUP BY `tblDocumentStatusLog`.`statusID` ";
+			}
+			if (!$this->_ttstatid) {
+				if (!$this->getResult($queryStr))
+					return false;
+				$this->_ttstatid=true;
+			}
+			else {
+				if (is_bool($override) && $override) {
+					if (!$this->getResult("DROP VIEW `ttstatid`"))
+						return false;
+					if (!$this->getResult($queryStr))
+						return false;
+				}
+			}
+			return $this->_ttstatid;
+		}
+		elseif (!strcasecmp($tableName, "ttcontentid")) {
+			switch($this->_driver) {
+				case 'sqlite':
+					$queryStr = "CREATE VIEW `ttcontentid` AS ".
+						"SELECT `tblDocumentContent`.`document` AS `document`, ".
+						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
+						"FROM `tblDocumentContent` ".
+						"GROUP BY `tblDocumentContent`.`document` ".
+						"ORDER BY `tblDocumentContent`.`document`";
+					break;
+				case 'pgsql':
+					$queryStr = "CREATE VIEW `ttcontentid` AS ".
+						"SELECT `tblDocumentContent`.`document` AS `document`, ".
+						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
+						"FROM `tblDocumentContent` ".
+						"GROUP BY `tblDocumentContent`.`document` ".
+						"ORDER BY `tblDocumentContent`.`document`";
+					break;
+				default:
+					$queryStr = "CREATE".($override ? " OR REPLACE" : "")." VIEW `ttcontentid` AS ".
+						"SELECT `tblDocumentContent`.`document`, ".
+						"MAX(`tblDocumentContent`.`version`) AS `maxVersion` ".
+						"FROM `tblDocumentContent` ".
+						"GROUP BY `tblDocumentContent`.`document` ".
+						"ORDER BY `tblDocumentContent`.`document`";
+			}
+			if (!$this->_ttcontentid) {
+				if (!$this->getResult($queryStr))
+					return false;
+				$this->_ttcontentid=true;
+			}
+			else {
+				if (is_bool($override) && $override) {
+					if (!$this->getResult("DROP VIEW `ttcontentid`"))
+						return false;
+					if (!$this->getResult($queryStr))
+						return false;
+				}
+			}
+			return $this->_ttcontentid;
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Create various temporary tables to speed up and simplify sql queries
+	 */
+	public function createTemporaryTable($tableName, $override=false) { /* {{{ */
+		if($this->_useviews)
+			return $this->__createView($tableName, $override);
+		else
+			return $this->__createTemporaryTable($tableName, $override);
 	} /* }}} */
 
 	/**

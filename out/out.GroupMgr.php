@@ -28,6 +28,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -48,10 +50,14 @@ if(isset($_GET['groupid']) && $_GET['groupid']) {
 	$selgroup = null;
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selgroup'=>$selgroup, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck, 'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList, 'workflowmode'=>$settings->_workflowMode, 'timeout'=>$settings->_cmdTimeout));
 if($view) {
+	$view->setParam('selgroup', $selgroup);
+	$view->setParam('allgroups', $allGroups);
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);
 }
-
-?>

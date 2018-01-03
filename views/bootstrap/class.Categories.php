@@ -19,6 +19,11 @@
 require_once("class.Bootstrap.php");
 
 /**
+ * Include class to preview documents
+ */
+require_once("SeedDMS/Preview.php");
+
+/**
  * Class which outputs the html page for Categories view
  *
  * @category   DMS
@@ -41,49 +46,61 @@ $(document).ready( function() {
 	});
 });
 <?php
+		$this->printDeleteFolderButtonJs();
+		$this->printDeleteDocumentButtonJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
 		$dms = $this->params['dms'];
 		$selcat = $this->params['selcategory'];
+		$cachedir = $this->params['cachedir'];
+		$previewwidth = $this->params['previewWidthList'];
+		$timeout = $this->params['timeout'];
 
 		if($selcat) {
 			$this->contentHeading(getMLText("category_info"));
-			$documents = $selcat->getDocumentsByCategory();
+			$c = $selcat->countDocumentsByCategory();
 			echo "<table class=\"table table-condensed\">\n";
-			echo "<tr><td>".getMLText('document_count')."</td><td>".(count($documents))."</td></tr>\n";
+			echo "<tr><td>".getMLText('document_count')."</td><td>".($c)."</td></tr>\n";
 			echo "</table>";
+
+			$documents = $selcat->getDocumentsByCategory(10);
+			if($documents) {
+				print "<table id=\"viewfolder-table\" class=\"table\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th>".getMLText("name")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth, $timeout);
+				foreach($documents as $doc) {
+					echo $this->documentListRow($doc, $previewer);
+				}
+				print "</tbody></table>";
+			}
+		}
+	} /* }}} */
+
+	function actionmenu() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$selcat = $this->params['selcategory'];
+
+		if($selcat && !$selcat->isUsed()) {
+?>
+						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
+						<?php echo createHiddenFieldWithKey('removecategory'); ?>
+						<input type="hidden" name="categoryid" value="<?php echo $selcat->getID()?>">
+						<input type="hidden" name="action" value="removecategory">
+						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
+						</form>
+<?php
 		}
 	} /* }}} */
 
 	function showCategoryForm($category) { /* {{{ */
 ?>
-				<div class="control-group">
-					<label class="control-label"></label>
-
-					<div class="controls">
-<?php
-		if($category) {
-			if($category->isUsed()) {
-?>
-						<p><?php echo getMLText('category_in_use') ?></p>
-<?php
-			} else {
-?>
-						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
-						<?php echo createHiddenFieldWithKey('removecategory'); ?>
-						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input type="hidden" name="action" value="removecategory">
-						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
-						</form>
-<?php
-			}
-		}
-?>
-					</div>
-				</div>
-
-
 				<form class="form-horizontal" style="margin-bottom: 0px;" action="../op/op.Categories.php" method="post">
 				<?php if(!$category) { ?>
 					<?php echo createHiddenFieldWithKey('addcategory'); ?>
@@ -121,6 +138,8 @@ $(document).ready( function() {
 		$categories = $this->params['categories'];
 		$selcat = $this->params['selcategory'];
 
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
+
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -130,12 +149,8 @@ $(document).ready( function() {
 ?>
 <div class="row-fluid">
 	<div class="span4">
-		<div class="well">
 <form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
-			<select id="selector" class="input-xlarge">
+			<select class="chzn-select" id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
 				<option value="0"><?php echo getMLText("new_document_category")?>
 <?php
@@ -144,10 +159,8 @@ $(document).ready( function() {
 				}
 ?>
 			</select>
-		</div>
-	</div>
 </form>
-		</div>
+	<div class="ajax" style="margin-bottom: 15px;" data-view="Categories" data-action="actionmenu" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 

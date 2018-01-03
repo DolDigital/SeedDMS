@@ -27,17 +27,19 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 include("../inc/inc.ClassPasswordStrength.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot, 'quota'=>$settings->_quota, 'pwdexpiration'=>$settings->_passwordExpiration));
 if($view) {
+	$view->setParam('allusers', $allUsers);
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('quota', $settings->_quota);
+	$view->setParam('pwdexpiration', $settings->_passwordExpiration);
 	$view($_GET);
 	exit;
 }
-
-?>

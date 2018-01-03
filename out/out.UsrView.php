@@ -26,6 +26,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("my_account"),getMLText("access_denied"));
 }
@@ -39,8 +42,6 @@ if (is_bool($users)) {
 	UI::exitError(getMLText("my_account"),getMLText("internal_error"));
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('allusers', $users);
 	$view->setParam('enableuserimage', $settings->_enableUserImage);

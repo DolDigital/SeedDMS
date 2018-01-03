@@ -1,3 +1,16 @@
+/* Template function which outputs an option in a chzn-select */
+chzn_template_func =  function (state) {
+	var subtitle = $(state.element).data('subtitle');
+	var warning = $(state.element).data('warning');
+	var html = '<span>'+state.text+'';
+	if(subtitle)
+		html += '<br /><i>'+subtitle+'</i>';
+	if(warning)
+		html += '<br /><span class="label label-warning"><i class="icon-warning-sign"></i></span> '+warning+'';
+	html += '</span>';
+	var $newstate = $(html);
+	return $newstate;
+};
 $(document).ready( function() {
 	/* close popovers when clicking somewhere except in the popover or the
 	 * remove icon
@@ -27,28 +40,12 @@ $(document).ready( function() {
 
 	$(".chzn-select").select2({
 		width: '100%',
-		templateResult: function (state) {
-			var subtitle = $(state.element).data('subtitle');
-			var html = '<span>'+state.text+'';
-			if(subtitle)
-				html += '<br /><i>'+subtitle+'</i>';
-			html += '</span>';
-			var $newstate = $(html);
-			return $newstate;
-		}
+		templateResult: chzn_template_func
 	});
 	$(".chzn-select-deselect").select2({
 		allowClear:true,
 		width: '100%',
-		templateResult: function (state) {
-			var subtitle = $(state.element).data('subtitle');
-			var html = '<span>'+state.text+'';
-			if(subtitle)
-				html += '<br /><i>'+subtitle+'</i>';
-			html += '</span>';
-			var $newstate = $(html);
-			return $newstate;
-		}
+		templateResult: chzn_template_func
 	});
 
 	/* change the color and length of the bar graph showing the password
@@ -382,15 +379,7 @@ $(document).ready( function() {
 //			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
-				templateResult: function (state) {
-					var subtitle = $(state.element).data('subtitle');
-					var html = '<span>'+state.text+'';
-					if(subtitle)
-						html += '<br /><i>'+subtitle+'</i>';
-					html += '</span>';
-					var $newstate = $(html);
-					return $newstate;
-				}
+				templateResult: chzn_template_func
 			});
 		});
 	}); /* }}} */
@@ -424,15 +413,7 @@ $(document).ready( function() {
 //			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
-				templateResult: function (state) {
-					var subtitle = $(state.element).data('subtitle');
-					var html = '<span>'+state.text+'';
-					if(subtitle)
-						html += '<br /><i>'+subtitle+'</i>';
-					html += '</span>';
-					var $newstate = $(html);
-					return $newstate;
-				}
+				templateResult: chzn_template_func
 			});
 			$(".pwd").passStrength({ /* {{{ */
 				url: "../op/op.Ajax.php",

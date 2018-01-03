@@ -247,6 +247,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $searchFields;
 	} /* }}} */
 
+	/**
+	 * Return an document by its id
+	 *
+	 * @param integer $id id of document
+	 * @return object/boolean instance of SeedDMS_Core_Document if document exists, null
+	 * if document does not exist, false in case of error
+	 */
 	public static function getInstance($id, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -255,7 +262,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr) != 1)
-			return false;
+			return null;
 		$resArr = $resArr[0];
 
 		// New Locking mechanism uses a separate table to track the lock.
@@ -404,6 +411,61 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Add a list of categories to the document
+	 * This function will add a list of new categories to the document.
+	 *
+	 * @param array $newCategories list of category objects
+	 */
+	function addCategories($newCategories) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(!$this->_categories)
+			self::getCategories();
+
+		$catids = array();
+		foreach($this->_categories as $cat)
+			$catids[] = $cat->getID();
+
+		$db->startTransaction();
+		$ncat = array(); // Array containing actually added new categories
+		foreach($newCategories as $cat) {
+			if(!in_array($cat->getID(), $catids)) {
+				$queryStr = "INSERT INTO `tblDocumentCategory` (`categoryID`, `documentID`) VALUES (". $cat->getId() .", ". $this->_id .")";
+				if (!$db->getResult($queryStr)) {
+					$db->rollbackTransaction();
+					return false;
+				}
+				$ncat[] = $cat;
+			}
+		}
+		$db->commitTransaction();
+		$this->_categories = array_merge($this->_categories, $ncat);
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove a list of categories from the document
+	 * This function will remove a list of assigned categories to the document.
+	 *
+	 * @param array $newCategories list of category objects
+	 */
+	function removeCategories($categories) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$catids = array();
+		foreach($categories as $cat)
+			$catids[] = $cat->getID();
+
+		$queryStr = "DELETE from `tblDocumentCategory` WHERE `documentID` = ". $this->_id ." AND `categoryID` IN (".implode(',', $catids).")";
+		if (!$db->getResult($queryStr)) {
+			return false;
+		}
+
+		$this->_categories = null;
+		return true;
+	} /* }}} */
+
+	/**
 	 * Return creation date of the document
 	 *
 	 * @return integer unix timestamp of creation date
@@ -441,6 +503,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 *
 	 * @return object parent folder
 	 */
+	function getParent() { /* {{{ */
+		return self::getFolder();
+	} /* }}} */
+
 	function getFolder() { /* {{{ */
 		if (!isset($this->_folder))
 			$this->_folder = $this->_dms->getFolder($this->_folderID);
@@ -2016,7 +2082,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$err = SeedDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $file->getPath());
 		if (!$err) return false;
 
-		return true;
+		return $file;
 	} /* }}} */
 
 	function removeDocumentFile($ID) { /* {{{ */
@@ -2064,7 +2130,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
 			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
 				$ret = call_user_func($callback[0], $callback[1], $this);
-				if(is_bool($ret))
+				if($ret === false)
 					return $ret;
 			}
 		}
@@ -2423,6 +2489,52 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			}
 		}
 		return $timeline;
+	} /* }}} */
+
+	/**
+	 * Transfers the document to a new user
+	 * 
+	 * This method not just sets a new owner of the document but also
+	 * transfers the document links, attachments and locks to the new user.
+	 *
+	 * @return boolean true if successful, otherwise false
+	 */
+	function transferToUser($newuser) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if($newuser->getId() == $this->_ownerID)
+			return true;
+
+		$db->startTransaction();
+		$queryStr = "UPDATE `tblDocuments` SET `owner` = ".$newuser->getId()." WHERE `id` = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentLocks` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentLinks` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `userID` = ".$newuser->getId()." WHERE `document` = " . $this->_id . " AND `userID` = ".$this->_ownerID;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$this->_ownerID = $newuser->getID();
+		$this->_owner = $newuser;
+
+		$db->commitTransaction();
+		return true;
 	} /* }}} */
 
 } /* }}} */
@@ -4725,12 +4837,70 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	function getDocument() { return $this->_document; }
 	function getUserID() { return $this->_userID; }
 	function getComment() { return $this->_comment; }
+
+	/*
+	 * Set the comment of the document file
+	 *
+	 * @param $newComment string new comment of document
+	 */
+	function setComment($newComment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `comment` = ".$db->qstr($newComment)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_comment = $newComment;
+		return true;
+	} /* }}} */
+
 	function getDate() { return $this->_date; }
+
+	/**
+	 * Set creation date of the document file
+	 *
+	 * @param integer $date timestamp of creation date. If false then set it
+	 * to the current timestamp
+	 * @return boolean true on success
+	 */
+	function setDate($date) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$date)
+			$date = time();
+		else {
+			if(!is_numeric($date))
+				return false;
+		}
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `date` = " . (int) $date . " WHERE `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+		$this->_date = $date;
+		return true;
+	} /* }}} */
+
 	function getDir() { return $this->_dir; }
 	function getFileType() { return $this->_fileType; }
 	function getMimeType() { return $this->_mimeType; }
 	function getOriginalFileName() { return $this->_orgFileName; }
 	function getName() { return $this->_name; }
+
+	/*
+	 * Set the name of the document file
+	 *
+	 * @param $newComment string new name of document
+	 */
+	function setName($newName) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `name` = ".$db->qstr($newName)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_name = $newName;
+		return true;
+	} /* }}} */
 
 	function getUser() {
 		if (!isset($this->_user))
@@ -4744,7 +4914,42 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 
 	function getVersion() { return $this->_version; }
 
+	/*
+	 * Set the version of the document file
+	 *
+	 * @param $newComment string new version of document
+	 */
+	function setVersion($newVersion) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!is_numeric($newVersion) && $newVersion != '')
+			return false;
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `version` = ".(int) $newVersion." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_version = (int) $newVersion;
+		return true;
+	} /* }}} */
+
 	function isPublic() { return $this->_public; }
+
+	/*
+	 * Set the public flag of the document file
+	 *
+	 * @param $newComment string new comment of document
+	 */
+	function setPublic($newPublic) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$queryStr = "UPDATE `tblDocumentFiles` SET `public` = ".($newPublic ? 1 : 0)." WHERE `document` = ".$this->_document->getId()." AND `id` = ". $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_public = $newPublic ? 1 : 0;
+		return true;
+	} /* }}} */
 
 	/**
 	 * Returns the access mode similar to a document

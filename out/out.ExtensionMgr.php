@@ -26,16 +26,18 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
 $v = new SeedDMS_Version;
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'httproot'=>$settings->_httpRoot, 'version'=>$v));
 if($view) {
-	$view->show();
+	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('version', $v);
+	$view($_GET);
 	exit;
 }
 

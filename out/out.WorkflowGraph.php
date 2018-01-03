@@ -28,6 +28,9 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 $workflow = $dms->getWorkflow($_GET['workflow']);
 if (is_bool($workflow)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
@@ -51,8 +54,6 @@ if(isset($_GET['transitions']) && $_GET['transitions']) {
 	}
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('workflow', $workflow);
 	$view->setParam('transitions', $transitions);

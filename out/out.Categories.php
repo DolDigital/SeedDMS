@@ -28,6 +28,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
@@ -40,10 +42,12 @@ if(isset($_GET['categoryid']) && $_GET['categoryid']) {
 	$selcat = null;
 }
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'categories'=>$categories, 'selcategory'=>$selcat));
 if($view) {
+	$view->setParam('categories', $categories);
+	$view->setParam('selcategory', $selcat);
+	$view->setParam('showtree', showtree());
+	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view($_GET);
 }
-
-?>
