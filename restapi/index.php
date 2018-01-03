@@ -406,7 +406,7 @@ function createFolder($id) { /* {{{ */
     if(!ctype_digit($id) || $id == 0) {
         $app->response()->status(400);
         $app->response()->header('Content-Type', 'application/json');
-        echo json_encode(array('success'=>true, 'message'=>'No parent folder given', 'data'=>''));
+        echo json_encode(array('success'=>false, 'message'=>'No parent folder given', 'data'=>''));
         return;
     }
     $parent = $dms->getFolder($id);
@@ -1413,6 +1413,24 @@ function createUser() { /* {{{ */
     return;
 } /* }}} */
 
+function deleteUser($id) { /* {{{ */
+    global $app, $dms, $userobj;
+    checkIfAdmin();
+
+    $app->response()->header('Content-Type', 'application/json');
+    if($user = $dms->getUser($id)) {
+        if($result = $user->remove($userobj, $userobj)) {
+            echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>''));
+        } else {
+            $app->response()->status(500);
+            echo json_encode(array('success'=>$result, 'message'=>'Could not delete user', 'data'=>''));
+        }
+    } else {
+        $app->response()->status(404);
+        echo json_encode(array('success'=>false, 'message'=>'No such user', 'data'=>''));
+    }
+} /* }}} */
+
 /**
  * Updates the password of an existing Account, the password must be PUT as a md5 string
  *
@@ -1469,18 +1487,7 @@ function getUserById($id) { /* {{{ */
         $account = $dms->getUserByLogin($id);
     }
     if($account) {
-        $data = array();
-        $data['id'] = (int)$account->getId();
-        $data['login'] = $account->getLogin();
-        $data['fullname'] = $account->getFullName();
-        $data['email'] = $account->getEmail();
-        $data['language'] = $account->getLanguage();
-        $data['theme'] = $account->getTheme();
-        $data['role'] = $account->getRole();
-        $data['comment'] = $account->getComment();
-        $data['isdisabled'] = $account->isDisabled() ? true : false;
-        $data['isguest'] = $account->isGuest() ? true : false;
-        $data['isadmin'] = $account->isAdmin() ? true : false;
+        $data = __getUserData($account);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
     } else {
@@ -1796,13 +1803,40 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
 function getCategories() { /* {{{ */
     global $app, $dms, $userobj;
 
-    $categories = $dms->getDocumentCategories();
+		if(false === ($categories = $dms->getDocumentCategories())) {
+        $app->response()->status(500);
+	  		$app->response()->header('Content-Type', 'application/json');
+		  	echo json_encode(array('success'=>false, 'message'=>'Could not get categories', 'data'=>null));
+        return;
+		}
     $data = [];
     foreach($categories as $category)
         $data[] = ['id' => (int)$category->getId(), 'name' => $category->getName()];
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+} /* }}} */
+
+function getCategory($id) { /* {{{ */
+    global $app, $dms, $userobj;
+
+    if(!ctype_digit($id)) {
+        $app->response()->status(400);
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'No such category', 'data'=>''));
+        return;
+    }
+
+    $category = $dms->getDocumentCategory($id);
+    if($category) {
+        $data = array();
+        $data['id'] = (int)$category->getId();
+        $data['name'] = $category->getName();
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
+    } else {
+        $app->response()->status(404);
+    }
 } /* }}} */
 
 function createCategory() { /* {{{ */
@@ -1841,11 +1875,14 @@ function deleteCategory($id) { /* {{{ */
 
     $app->response()->header('Content-Type', 'application/json');
     if($category = $dms->getDocumentCategory($id)) {
-        if($result = $category->remove())
+        if($result = $category->remove()) {
             echo json_encode(array('success'=>$result, 'message'=>'', 'data'=>''));
-        else
+        } else {
+            $app->response()->status(500);
             echo json_encode(array('success'=>$result, 'message'=>'Could not delete category', 'data'=>''));
+        }
     } else {
+        $app->response()->status(404);
         echo json_encode(array('success'=>false, 'message'=>'No such category', 'data'=>''));
     }
 } /* }}} */
@@ -2029,6 +2066,7 @@ $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
 $app->get('/account/documents/locked', 'getLockedDocuments');
 $app->get('/users', 'getUsers');
+$app->delete('/users/:id', 'deleteUser');
 $app->post('/users', 'createUser');
 $app->get('/users/:id', 'getUserById');
 $app->put('/users/:id/disable', 'setDisabledUser');
@@ -2044,6 +2082,7 @@ $app->put('/folder/:id/access/group/remove', 'removeGroupAccessFromFolder');
 $app->put('/folder/:id/access/user/remove', 'removeUserAccessFromFolder');
 $app->put('/folder/:id/access/clear', 'clearFolderAccessList');
 $app->get('/categories', 'getCategories');
+$app->get('/categories/:id', 'getCategory');
 $app->delete('/categories/:id', 'deleteCategory');
 $app->post('/categories', 'createCategory');
 $app->put('/categories/:id/name', 'changeCategoryName');
