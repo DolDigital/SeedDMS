@@ -236,15 +236,15 @@ class SeedDMS_AccessOperation {
 	/**
 	 * Check if document content may be reviewed
 	 *
-	 * Reviewing a document content is only allowed if the document was not
-	 * obsoleted. There are other requirements which are not taken into
+	 * Reviewing a document content is only allowed if the document is in
+	 * review. There are other requirements which are not taken into
 	 * account here.
 	 */
 	function mayReview() { /* {{{ */
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE) {
+			if ($status["status"]==S_DRAFT_REV) {
 				return true;
 			}
 		}
@@ -269,8 +269,9 @@ class SeedDMS_AccessOperation {
 	/**
 	 * Check if document content may be approved
 	 *
-	 * Approving a document content is only allowed if the document was not
-	 * obsoleted and the document is not in review status.
+	 * Approving a document content is only allowed if the document is either
+	 * in approval status or released. In the second case the approval can be
+	 * edited.
 	 * There are other requirements which are not taken into
 	 * account here.
 	 */
@@ -278,7 +279,7 @@ class SeedDMS_AccessOperation {
 		if(get_class($this->obj) == $this->dms->getClassname('document')) {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ($status["status"]!=S_OBSOLETE && $status["status"]!=S_DRAFT_REV && $status["status"]!=S_REJECTED) {
+			if ($status["status"]==S_DRAFT_APP) {
 				return true;
 			}
 		}
