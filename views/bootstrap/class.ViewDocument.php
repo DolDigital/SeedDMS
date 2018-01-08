@@ -356,6 +356,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			</audio>
 	<?php
 				break;
+			case 'video/webm':
 			case 'video/mp4':
 				$this->contentHeading(getMLText("preview"));
 	?>
