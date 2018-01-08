@@ -699,7 +699,7 @@ function uploadDocumentFile($documentId) { /* {{{ */
         return;
     }
 
-    if(!ctype_digit($document) || $documentId == 0) {
+    if(!ctype_digit($documentId) || $documentId == 0) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
