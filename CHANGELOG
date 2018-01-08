@@ -1,6 +1,8 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
 --------------------------------------------------------------------------------
+- fix wrong check in restapi (part of #373)
+- mayApprove() and mayReview() require the status to be S_DRAFT_APP resp. S_DRAFT_REV
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
