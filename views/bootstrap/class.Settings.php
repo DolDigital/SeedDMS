@@ -747,14 +747,16 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
       <tr><td><b><?php printMLText($target."_converters");?></b></td></tr>
 <?php
-	foreach($settings->_converters[$target] as $mimetype=>$cmd) {
+		if(!empty($settings->_converters[$target])) {
+			foreach($settings->_converters[$target] as $mimetype=>$cmd) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
         <td><?php $this->showTextField("converters[".$target."][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
       </tr>
 <?php
-	}
+			}
+		}
 ?>
       <tr title="">
         <td><?php $this->showTextField("converters[".$target."][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
