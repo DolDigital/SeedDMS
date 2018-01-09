@@ -31,16 +31,16 @@ if (!$user->isAdmin()) {
 }
 
 if (!isset($_GET["userid"]) || !is_numeric($_GET["userid"]) || intval($_GET["userid"])<1) {
-	UI::exitError(getMLText("rm_user"),getMLText("invalid_user_id"));
+	UI::exitError(getMLText("transfer_objects"),getMLText("invalid_user_id"));
 }
 
 $rmuser = $dms->getUser(intval($_GET["userid"]));
 if (!is_object($rmuser)) {
-	UI::exitError(getMLText("rm_user"),getMLText("invalid_user_id"));
+	UI::exitError(getMLText("transfer_objects"),getMLText("invalid_user_id"));
 }
 
 if ($rmuser->getID()==$user->getID()) {
-	UI::exitError(getMLText("rm_user"),getMLText("cannot_delete_yourself"));
+	UI::exitError(getMLText("transfer_objects"),getMLText("cannot_delete_yourself"));
 }
 
 $allusers = $dms->getAllUsers($settings->_sortUsersInList);
