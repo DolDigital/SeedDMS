@@ -12,14 +12,14 @@ is installed and configured, SeedDMS will hand over the download to the web
 server which does a much better job than the PHP script. In order to make it
 work, mod_xsendfile must be installed, turned on and the path to the download
 files must be set to the directory containing the document files. If your document
-root ist /var/www and you extracted the quickstart archive into that directory,
+root is /var/www and you extracted the quickstart archive into that directory,
 then the document content directory will be at
-/var/www/seeddms51x/data/1048576/ . Add the following to your apache configuration,
+/var/www/seeddms51x/data/ . Add the following to your apache configuration,
 either globally or within a virtual host configuration. Setting the path in
 an .htaccess file will not work.
 
 XSendFile on
-XSendFilePath /var/www/seeddms51x/data/1048576/
+XSendFilePath /var/www/seeddms51x/data/
 
 If the XSendFilePath is not set propperly, you will notice an error message
 in your apache log file, probably telling you that the download file could not
