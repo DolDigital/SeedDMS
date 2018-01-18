@@ -247,7 +247,7 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 
 		$target = $this->previewDir.$dir.md5($infile).'-'.$width;
 		if($target && file_exists($target.'.png')) {
-			readfile($target.'.png');
+			$this->sendFile($target.'.png');
 		}
 	} /* }}} */
 
@@ -271,7 +271,7 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 
 		$target = $this->getFileName($object, $width);
 		if($target && file_exists($target.'.png')) {
-			readfile($target.'.png');
+			$this->sendFile($target.'.png');
 		}
 	} /* }}} */
 

@@ -129,5 +129,24 @@ class SeedDMS_Preview_Base {
 		return array_key_exists($mimetype, $this->converters) && $this->converters[$mimetype];
 	} /* }}} */
 
+/**
+ * Send a file from disk to the browser
+ *
+ * This function uses either readfile() or the xѕendfile apache module if
+ * it is installed.
+ *
+ * @param string $filename
+ */
+	protected function sendFile($filename) { /* {{{ */
+		if(function_exists('apache_get_modules') && in_array('mod_xsendfile',apache_get_modules())) {
+			header("X-Sendfile: ".$filename);
+		} else {
+			/* Make sure output buffering is off */
+			if (ob_get_level()) {
+				ob_end_clean();
+			}
+			readfile($filename);
+		}
+	} /* }}} */
 }
 
