@@ -39,7 +39,7 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 						header("Content-Type: " . $content->getMimeType());
 						header("Cache-Control: must-revalidate");
 
-						readfile($dms->contentDir . $content->getPath());
+						sendFile($dms->contentDir.$content->getPath());
 					}
 				}
 				break;

@@ -40,12 +40,9 @@ class SeedDMS_Controller_ViewOnline extends SeedDMS_Controller_Common {
 						header("Content-Disposition: filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
 					}
 					header("Content-Length: " . filesize($dms->contentDir . $content->getPath()));
-					header("Expires: 0");
-					header("Cache-Control: no-cache, must-revalidate");
-					header("Pragma: no-cache");
+					header("Cache-Control:  must-revalidate");
 
-					ob_clean();
-					readfile($dms->contentDir . $content->getPath());
+					sendFile($dms->contentDir.$content->getPath());
 				}
 				break;
 		}
