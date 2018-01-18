@@ -105,19 +105,14 @@ elseif (isset($_GET["file"])) { /* {{{ */
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("missing_file"));
 	}
 
-	header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
 	$efilename = rawurlencode($file->getOriginalFileName());
 	header("Content-Disposition: attachment; filename=\"" . $efilename . "\"; filename*=UTF-8''".$efilename);
-	//header("Expires: 0");
 	header("Content-Type: " . $file->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
 	header("Cache-Control: must-revalidate");
-	//header("Pragma: no-cache");
 
-	ob_clean();
-	readfile($dms->contentDir . $file->getPath());
+	sendFile($dms->contentDir . $file->getPath());
 
 } elseif (isset($_GET["arkname"])) {
 	$filename = basename($_GET["arkname"]);
@@ -137,22 +132,14 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	}
 
 	header('Content-Description: File Transfer');
-	//header("Content-Type: application/force-download; name=\"" . $filename . "\"");
-	//header("Content-Type: application/octet-stream");
 	header("Content-Type: application/zip");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
 	$efilename = rawurlencode($filename);
 	header("Content-Disposition: attachment; filename=\"" .$efilename . "\"; filename*=UTF-8''".$efilename);
-//	header("Expires: 0");
-	//header("Content-Type: " . $content->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
-//	header("Cache-Control: must-revalidate");
-	header("Cache-Control: public");
-	//header("Pragma: no-cache");	
+	header("Cache-Control: must-revalidate");
 	
-	ob_clean();
-	readfile($settings->_contentDir .$filename );
+	sendFile($settings->_contentDir .$filename );
 	
 } elseif (isset($_GET["logname"])) {
 	$filename = basename($_GET["logname"]);
@@ -171,15 +158,14 @@ elseif (isset($_GET["file"])) { /* {{{ */
 		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
 
-	header("Content-Type: text/plain; name=\"" . $filename . "\"");
+	header("Content-Type: text/plain");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
 	$efilename = rawurlencode($filename);
 	header("Content-Disposition: attachment; filename=\"" .$efilename . "\"; filename*=UTF-8''".$efilename);
 	header("Cache-Control: must-revalidate");
 
-	ob_clean();
-	readfile($settings->_contentDir .$filename );
+	sendFile($settings->_contentDir .$filename );
 	
 } elseif (isset($_GET["vfile"])) {
 
@@ -196,20 +182,14 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	// update infos
 	createVersionigFile($document);
 	
-	header("Content-Type: text/plain; name=\"" . $settings->_versioningFileName . "\"");
-	//header("Content-Type: application/force-download; name=\"" . $settings->_versioningFileName . "\"");
+	header("Content-Type: text/plain");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir.$document->getDir().$settings->_versioningFileName )."\"");
 	$efilename = rawurlencode($settings->_versioningFileName);
 	header("Content-Disposition: attachment; filename=\"". $efilename . "\"");
-	//header("Expires: 0");
-	//header("Content-Type: " . $content->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
 	header("Cache-Control: must-revalidate");
-	//header("Pragma: no-cache");	
 	
-	ob_clean();
-	readfile($dms->contentDir . $document->getDir() .$settings->_versioningFileName);
+	sendFile($dms->contentDir . $document->getDir() .$settings->_versioningFileName);
 	
 } elseif (isset($_GET["dumpname"])) {
 	$filename = basename($_GET["dumpname"]);
@@ -228,20 +208,14 @@ elseif (isset($_GET["file"])) { /* {{{ */
 		UI::exitError(getMLText("admin_tools"),getMLText("missing_file"));
 	}
 
-	header("Content-Type: application/zip; name=\"" . $filename . "\"");
-	//header("Content-Type: application/force-download; name=\"" . $filename . "\"");
+	header("Content-Type: application/zip");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
 	$efilename = rawurlencode($filename);
 	header("Content-Disposition: attachment; filename=\"" .$efilename . "\"; filename*=UTF-8''".$efilename);
-	//header("Expires: 0");
-	//header("Content-Type: " . $content->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
 	header("Cache-Control: must-revalidate");
-	//header("Pragma: no-cache");	
 	
-	ob_clean();
-	readfile($settings->_contentDir .$filename );
+	sendFile($settings->_contentDir .$filename );
 } elseif (isset($_GET["reviewlogid"])) {
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 		UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -269,12 +243,13 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	$finfo = finfo_open(FILEINFO_MIME_TYPE);
 	$mimetype = finfo_file($finfo, $filename);
 
-	header("Content-Type: ".$mimetype."; name=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
+	header("Content-Type: ".$mimetype);
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($filename ));
 	header("Content-Disposition: attachment; filename=\"review-" . $document->getID()."-".(int) $_GET['reviewlogid'] . get_extension($mimetype) . "\"");
 	header("Cache-Control: must-revalidate");
-	readfile($filename);
+
+	sendFile($filename);
 
 } elseif (isset($_GET["approvelogid"])) {
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
@@ -303,12 +278,13 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	$finfo = finfo_open(FILEINFO_MIME_TYPE);
 	$mimetype = finfo_file($finfo, $filename);
 
-	header("Content-Type: ".$mimetype."; name=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
+	header("Content-Type: ".$mimetype);
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($filename ));
 	header("Content-Disposition: attachment; filename=\"approval-" . $document->getID()."-".(int) $_GET['approvelogid'] . get_extension($mimetype) . "\"");
 	header("Cache-Control: must-revalidate");
-	readfile($filename);
+
+	sendFile($filename);
 }
 
 add_log_line();
