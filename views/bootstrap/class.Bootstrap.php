@@ -1227,7 +1227,7 @@ $(document).ready(function() {
 				} else {
 					echo "\"";
 				}
-				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">";
+				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select\">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
