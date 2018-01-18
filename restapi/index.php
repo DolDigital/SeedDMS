@@ -878,7 +878,7 @@ function getDocumentContent($id) { /* {{{ */
               $app->response()->header("Cache-Control", "no-cache, must-revalidate");
               $app->response()->header("Pragma", "no-cache");
 
-              readfile($dms->contentDir . $lc->getPath());
+              sendFile($dms->contentDir . $lc->getPath());
             } else {
               $app->response()->status(403);
               $app->response()->header('Content-Type', 'application/json');
@@ -953,7 +953,7 @@ function getDocumentVersion($id, $version) { /* {{{ */
               $app->response()->header("Cache-Control", "no-cache, must-revalidate");
               $app->response()->header("Pragma", "no-cache");
 
-              readfile($dms->contentDir . $lc->getPath());
+              sendFile($dms->contentDir . $lc->getPath());
             } else {
               $app->response()->status(403);
               $app->response()->header('Content-Type', 'application/json');
@@ -1022,7 +1022,7 @@ function getDocumentFile($id, $fileid) { /* {{{ */
             $app->response()->header("Cache-Control", "no-cache, must-revalidate");
             $app->response()->header("Pragma", "no-cache");
 
-            readfile($dms->contentDir . $file->getPath());
+            sendFile($dms->contentDir . $file->getPath());
         } else {
             $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
