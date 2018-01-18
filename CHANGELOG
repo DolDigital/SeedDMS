@@ -2,8 +2,10 @@
                      Changes in version 5.1.6
 --------------------------------------------------------------------------------
 - fix wrong check in restapi (part of #373)
-- mayApprove() and mayReview() require the status to be S_DRAFT_APP resp. S_DRAFT_REV
+- mayApprove() and mayReview() require the status of the document to be
+  S_DRAFT_APP resp. S_DRAFT_REV
 - add preview for webm videos (Closes #374)
+- add support for apache mod_xsendfile, minor optimization of file download
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
