@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-12-04</date>
+ <date>2018-01-18</date>
  <time>10:59:39</time>
  <version>
-  <release>1.2.6</release>
+  <release>1.2.7</release>
   <api>1.2.0</api>
  </version>
  <stability>
@@ -23,8 +23,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-SeedDMS_Preview_Base::setConverters() overrides existing converters.
-New method SeedDMS_Preview_Base::addConverters() merges new converters with old ones.
+add SeedDMS_Preview_Base::sendFile() as a replacement for readfile() which uses
+mod_xsendfile if available
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -334,6 +334,23 @@ fix typo in converter for tar.gz files
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 SeedDMS_Preview_Base::hasConverter() returns only try if command is set
+   </notes>
+  </release>
+  <release>
+   <date>2017-12-04</date>
+   <time>10:59:39</time>
+   <version>
+    <release>1.2.6</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+SeedDMS_Preview_Base::setConverters() overrides existing converters.
+New method SeedDMS_Preview_Base::addConverters() merges new converters with old ones.
    </notes>
   </release>
  </changelog>
