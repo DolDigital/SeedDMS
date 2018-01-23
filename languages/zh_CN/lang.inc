@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (736), archonwang (469), fengjohn (5)
+//    Translators: Admin (737), archonwang (469), fengjohn (5)
 
 $text = array(
 '2_factor_auth' => '双重认证',
@@ -719,6 +719,7 @@ URL: [url]',
 'monday_abbr' => '',
 'monthly' => '月',
 'month_view' => '月视图',
+'more_objects_loading' => '',
 'move' => '移动',
 'move_clipboard' => '移动剪切板',
 'move_document' => '移动文档',
@@ -1677,7 +1678,7 @@ URL: [url]',
 'workflow_summary' => '工作流概述',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => '用户概述',
-'x_more_objects' => '',
+'x_more_objects' => '浏览更多',
 'year_view' => '年视图',
 'yes' => '是',
 'zh_CN' => '中文简体',

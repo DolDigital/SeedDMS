@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1069), jeromerobert (50), lonnnew (9), Oudiceval (477)
+//    Translators: Admin (1070), jeromerobert (50), lonnnew (9), Oudiceval (477)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -728,6 +728,7 @@ URL: [url]',
 'monday_abbr' => 'Lun.',
 'monthly' => 'Mensuel',
 'month_view' => 'Vue par mois',
+'more_objects_loading' => '',
 'move' => 'Déplacer',
 'move_clipboard' => 'Déplacer le contenu du presse-papier',
 'move_document' => 'Déplacer le document',
@@ -1703,7 +1704,7 @@ URL: [url]',
 'workflow_summary' => 'Vue d’ensemble du workflow',
 'workflow_transition_without_user_group' => 'Au moins une transition a ni utilisateur, ni groupe !',
 'workflow_user_summary' => 'Vue d’ensemble de l’utilisateur',
-'x_more_objects' => 'éléments supplémentaires',
+'x_more_objects' => '[number] objets supplémentaires',
 'year_view' => 'Vue annuelle',
 'yes' => 'Oui',
 'zh_CN' => 'Chinois (CN)',

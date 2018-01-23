@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2518), dgrutsch (22)
+//    Translators: Admin (2519), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -732,6 +732,7 @@ URL: [url]',
 'monday_abbr' => 'Mo',
 'monthly' => 'monatlich',
 'month_view' => 'Monatsansicht',
+'more_objects_loading' => 'Weitere Objekte werden geladen ...',
 'move' => 'Verschieben',
 'move_clipboard' => 'Zwischenablage in Ordner verschieben',
 'move_document' => 'Verschieben',

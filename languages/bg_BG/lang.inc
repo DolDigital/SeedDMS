@@ -640,6 +640,7 @@ $text = array(
 'monday_abbr' => '',
 'monthly' => 'Ежемесечно',
 'month_view' => 'Месечен изглед',
+'more_objects_loading' => '',
 'move' => 'Премести',
 'move_clipboard' => '',
 'move_document' => 'Премести документ',

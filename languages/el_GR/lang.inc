@@ -640,6 +640,7 @@ $text = array(
 'monday_abbr' => 'Δε',
 'monthly' => 'Μηνιαία',
 'month_view' => '',
+'more_objects_loading' => '',
 'move' => 'Μετακίνηση',
 'move_clipboard' => '',
 'move_document' => 'Μετακίνηση εγγράφου',
