@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (735), kreml (455)
+//    Translators: Admin (737), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -716,6 +716,7 @@ URL: [url]',
 'monday_abbr' => 'Po',
 'monthly' => 'Měsíčně',
 'month_view' => 'Zobrazení měsíce',
+'more_objects_loading' => '',
 'move' => 'Přesunout',
 'move_clipboard' => 'Přesun schránky',
 'move_document' => 'Přesunout dokument',
@@ -867,7 +868,7 @@ Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Adm
 'preview_plain' => '',
 'previous_state' => 'Předchozí stav',
 'previous_versions' => 'Předešlé verze',
-'process' => '',
+'process' => 'Proces',
 'process_without_user_group' => '',
 'pt_BR' => 'Portugalština (BR)',
 'quota' => 'Kvóta',
@@ -1611,7 +1612,7 @@ URL: [url]',
 'uploading_zerosize' => 'Nahrávání prázdného souboru. Nahrání zrušeno.',
 'used_discspace' => 'Použité místo na disku',
 'user' => 'Uživatel',
-'userid_groupid' => '',
+'userid_groupid' => 'ID uživatel/ID skupiny',
 'users' => 'Uživatel',
 'users_and_groups' => 'Uživatelé/Skupiny',
 'users_done_work' => 'Uživatel ukončil práci',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1643), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1644), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -733,6 +733,7 @@ URL: [url]',
 'monday_abbr' => 'Mo',
 'monthly' => 'Monthly',
 'month_view' => 'Month view',
+'more_objects_loading' => 'More objects loading ...',
 'move' => 'Move',
 'move_clipboard' => 'Move clipboard',
 'move_document' => 'Move document',
