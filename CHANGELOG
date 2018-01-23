@@ -6,6 +6,7 @@
   S_DRAFT_APP resp. S_DRAFT_REV
 - add preview for webm videos (Closes #374)
 - add support for apache mod_xsendfile, minor optimization of file download
+- animate button to download more objects in folder list which loading is active
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
