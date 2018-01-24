@@ -125,11 +125,15 @@ class SeedDMS_LdapAuthentication extends SeedDMS_Authentication {
 			/* No do the actual authentication of the user */
 			$bind = @ldap_bind($ds, $dn, $password);
 			$user = $dms->getUserByLogin($username);
+			if($user === false) {
+				ldap_close($ds);
+				return false;
+			}
 			if ($bind) {
 				// Successfully authenticated. Now check to see if the user exists within
 				// the database. If not, add them in if _restricted is not set,
 				// but do not add their password.
-				if (is_bool($user) && !$settings->_restricted) {
+				if (is_null($user) && !$settings->_restricted) {
 					// Retrieve the user's LDAP information.
 					if (isset($settings->_ldapFilter) && strlen($settings->_ldapFilter) > 0) {
 						$search = ldap_search($ds, $settings->_ldapBaseDN, "(&(".$ldapSearchAttribut.$username.")".$settings->_ldapFilter.")");
