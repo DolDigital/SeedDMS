@@ -7,6 +7,7 @@
 - add preview for webm videos (Closes #374)
 - add support for apache mod_xsendfile, minor optimization of file download
 - animate button to download more objects in folder list which loading is active
+- use converters for creating preview images as configured in settings (Closes #389)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
