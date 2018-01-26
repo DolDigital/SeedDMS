@@ -189,6 +189,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->printTimelineJs('out.ViewDocument.php?action=timelinedata&documentid='.$document->getID(), 300, '', date('Y-m-d'));
 		}
 		$this->printDocumentChooserJs("form1");
+		$this->printDeleteDocumentButtonJs();
 	} /* }}} */
 
 	function documentInfos() { /* {{{ */
@@ -422,6 +423,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$versions = $document->getContent();
 
+		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/bootbox/bootbox.min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<link href="../styles/'.$this->theme.'/timeline/timeline.css" rel="stylesheet">'."\n", 'css');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-min.js"></script>'."\n", 'js');
 		$this->htmlAddHeader('<script type="text/javascript" src="../styles/'.$this->theme.'/timeline/timeline-locales.js"></script>'."\n", 'js');
@@ -1322,39 +1324,33 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  </div>
 		  <div class="tab-pane <?php if($currenttab == 'links') echo 'active'; ?>" id="links">
 <?php
-		$this->contentContainerStart();
 		if (count($links) > 0) {
 
-			print "<table class=\"table table-condensed\">";
+			print "<table id=\"viewfolder-table\" class=\"table table-condensed table-hover\">";
 			print "<thead>\n<tr>\n";
-			print "<th></th>\n";
-			print "<th></th>\n";
-			print "<th>".getMLText("comment")."</th>\n";
-			print "<th></th>\n";
+			print "<th></th>\n";	
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			foreach($links as $link) {
 				$responsibleUser = $link->getUser();
 				$targetDoc = $link->getTarget();
-				$targetlc = $targetDoc->getLatestContent();
 
-				$previewer->createPreview($targetlc, $previewwidthlist);
-				print "<tr>";
-				print "<td><a href=\"../op/op.Download.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."\">";
-				if($previewer->hasPreview($targetlc)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"../op/op.Preview.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
-				} else {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"".$this->getMimeIcon($targetlc->getFileType())."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
+				echo "<tr id=\"table-row-document-".$targetDoc->getId()."\" class=\"table-row-document\" rel=\"document_".$targetDoc->getId()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
+				$targetDoc->verifyLastestContentExpriry();
+				$txt = $this->callHook('documentListItem', $targetDoc, $previewer, 'reverselinks');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->documentListRow($targetDoc, $previewer, true);
 				}
-				print "</td>";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$targetDoc->getID()."\" class=\"linklist\">".htmlspecialchars($targetDoc->getName())."</a></td>";
-				print "<td>".htmlspecialchars($targetDoc->getComment())."</td>";
-				print "<td>".getMLText("document_link_by")." ".htmlspecialchars($responsibleUser->getFullName());
+				print "<td><span class=\"actions\">";
+				print getMLText("document_link_by")." ".htmlspecialchars($responsibleUser->getFullName());
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
 					print "<br />".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
-				print "</td>";
-				print "<td><span class=\"actions\">";
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
 					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
 				print "</span></td>";
@@ -1365,74 +1361,63 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		else printMLText("no_linked_files");
 
 		if (!$user->isGuest()){
+			$this->contentContainerStart();
 ?>
 			<br>
-			<form action="../op/op.AddDocumentLink.php" name="form1">
+			<form action="../op/op.AddDocumentLink.php" name="form1" class="form-inline">
 			<input type="hidden" name="documentid" value="<?php print $documentid;?>">
-			<table class="table-condensed">
-			<tr>
-			<td><?php printMLText("add_document_link");?>:</td>
-			<td><?php $this->printDocumentChooserHtml("form1");?></td>
-			</tr>
+			<?php printMLText("add_document_link");?>:
+			<?php $this->printDocumentChooserHtml("form1");?>
 			<?php
 			if ($document->getAccessMode($user) >= M_READWRITE) {
-				print "<tr><td>".getMLText("document_link_public")."</td>";
-				print "<td>";
+				print "<label class=\"checkbox\">";
 				print "<input type=\"checkbox\" name=\"public\" value=\"true\" checked />";
-				print "</td></tr>";
+				print getMLText("document_link_public");
+				print "</label>";
 			}
 ?>
-			<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-			</tr>
-			</table>
+			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 			</form>
 <?php
+			$this->contentContainerEnd();
 		}
-		$this->contentContainerEnd();
 
 		if (count($reverselinks) > 0) {
 			$this->contentHeading(getMLText("reverse_links"));
-			$this->contentContainerStart();
+//			$this->contentContainerStart();
 
-			print "<table class=\"table table-condensed\">";
+			print "<table id=\"viewfolder-table\" class=\"table table-condensed table-hover\">";
 			print "<thead>\n<tr>\n";
-			print "<th></th>\n";
-			print "<th></th>\n";
-			print "<th>".getMLText("comment")."</th>\n";
-			print "<th></th>\n";
+			print "<th></th>\n";	
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			foreach($reverselinks as $link) {
 				$responsibleUser = $link->getUser();
 				$sourceDoc = $link->getDocument();
-				$sourcelc = $sourceDoc->getLatestContent();
 
-				$previewer->createPreview($sourcelc, $previewwidthlist);
-				print "<tr>";
-				print "<td><a href=\"../op/op.Download.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."\">";
-				if($previewer->hasPreview($sourcelc)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"../op/op.Preview.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."&width=".$previewwidthlist."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
-				} else {
-					print "<img class=\"mimeicon\" width=\"".$previewwidthlist."\" src=\"".$this->getMimeIcon($sourcelc->getFileType())."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
+				echo "<tr id=\"table-row-document-".$sourceDoc->getId()."\" class=\"table-row-document\" rel=\"document_".$sourceDoc->getId()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
+				$sourceDoc->verifyLastestContentExpriry();
+				$txt = $this->callHook('documentListItem', $sourceDoc, $previewer, 'reverselinks');
+				if(is_string($txt))
+					echo $txt;
+				else {
+					echo $this->documentListRow($sourceDoc, $previewer, true);
 				}
-				print "</td>";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$sourceDoc->getID()."\" class=\"linklist\">".htmlspecialchars($sourceDoc->getName())."</a></td>";
-				print "<td>".htmlspecialchars($sourceDoc->getComment())."</td>";
-				print "<td>".getMLText("document_link_by")." ".htmlspecialchars($responsibleUser->getFullName());
-				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
-					print "<br />".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
-				print "</td>";
 				print "<td><span class=\"actions\">";
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
-					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
+				print getMLText("document_link_by")." ".htmlspecialchars($responsibleUser->getFullName());
+				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
+					print "<br />".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
+					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$sourceDoc->getId()."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
 				print "</span></td>";
 				print "</tr>";
 			}
 			print "</tbody>\n</table>\n";
-			$this->contentContainerEnd();
+//			$this->contentContainerEnd();
 		}
 ?>
 			</div>
