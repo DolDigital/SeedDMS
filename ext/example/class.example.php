@@ -38,7 +38,7 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	 * Use this method to do some initialization like setting up the hooks
 	 * You have access to the following global variables:
 	 * $GLOBALS['settings'] : current global configuration
-	 * $GLOBALS['settings']['_extensions']['example'] : configuration of this extension
+	 * $GLOBALS['settings']->_extensions['example'] : configuration of this extension
 	 * $GLOBALS['LANG'] : the language array with translations for all languages
 	 * $GLOBALS['SEEDDMS_HOOKS'] : all hooks added so far
 	 */
