@@ -788,16 +788,22 @@ switch($command) {
 						if($index) {
 							$indexconf['Indexer']::init($settings->_stopWordsFile);
 							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout);
-							if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
-								foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
-									if (method_exists($hookObj, 'preIndexDocument')) {
-										$hookObj->preIndexDocument(null, $document, $idoc);
+							$error = $idoc->getErrorMsg();
+							if(!$error) {
+								if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
+									foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
+										if (method_exists($hookObj, 'preIndexDocument')) {
+											$hookObj->preIndexDocument(null, $document, $idoc);
+										}
 									}
 								}
+								$index->addDocument($idoc);
+								header('Content-Type: application/json');
+								echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID()));
+							} else {
+								header('Content-Type: application/json');
+								echo json_encode(array('success'=>false, 'message'=>$error, 'data'=>$document->getID()));
 							}
-							$index->addDocument($idoc);
-							header('Content-Type: application/json');
-							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID()));
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>$document->getID()));
