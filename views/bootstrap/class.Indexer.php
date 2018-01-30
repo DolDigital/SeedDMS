@@ -71,7 +71,7 @@ function check_queue() {
 					dismissQueue: true,
 					layout: 'topRight',
 					theme: 'defaultTheme',
-					timeout: 1500,
+					timeout: 5000,
 				});
 			},
 			success: function(data) {
