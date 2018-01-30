@@ -115,27 +115,6 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 				$cmd = str_replace(array('%w', '%f', '%o', '%m'), array($width, $infile, $target.'.png', $mimetype), $this->converters['*']);
 			}
 
-			/*
-			switch($mimetype) {
-				case "image/png":
-				case "image/gif":
-				case "image/jpeg":
-				case "image/jpg":
-				case "image/svg+xml":
-					$cmd = 'convert -resize '.$width.'x '.$infile.' '.$target.'.png';
-					break;
-				case "application/pdf":
-				case "application/postscript":
-					$cmd = 'convert -density 100 -resize '.$width.'x '.$infile.'[0] '.$target.'.png';
-					break;
-				case "text/plain":
-					$cmd = 'convert -resize '.$width.'x '.$infile.'[0] '.$target.'.png';
-					break;
-				case "application/x-compressed-tar":
-					$cmd = 'tar tzvf '.$infile.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target.'.png';
-					break;
-			}
-			 */
 			if($cmd) {
 				try {
 					self::execWithTimeout($cmd, $this->timeout);

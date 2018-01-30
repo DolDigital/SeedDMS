@@ -25,6 +25,7 @@
  <notes>
 add SeedDMS_Preview_Base::sendFile() as a replacement for readfile() which uses
 mod_xsendfile if available
+execWithTimeout() reads data from stderr and returns it together with stdout in array
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
