@@ -124,7 +124,7 @@ $(document).ready(function() {
 				print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
 				$indUser = $dms->getUser($reviewStatus["userID"]);
 				print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-				print "</tr></tbody></table><br>";
+				print "</tr></tbody></table><br>\n";
 			}
 ?>
 	<form method="post" action="../op/op.ReviewDocument.php" id="form1" name="form1" enctype="multipart/form-data">
@@ -143,7 +143,7 @@ $(document).ready(function() {
 			</td>
 		</tr>
 		<tr>
-			<td><?php printMLText("review_status")?></td>
+			<td><?php printMLText("review_status")?>:</td>
 			<td>
 				<select name="reviewStatus">
 <?php if($reviewStatus['status'] != 1) { ?>
@@ -165,9 +165,7 @@ $(document).ready(function() {
 	<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
 	</form>
 <?php
-		}
-		else if ($reviewStatus['type'] == 1) {
-
+		} elseif ($reviewStatus['type'] == 1) {
 			if($reviewStatus["status"]!=0) {
 
 				print "<table class=\"folderView\"><thead><tr>";
@@ -183,7 +181,6 @@ $(document).ready(function() {
 				print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 				print "</tr></tbody></table><br>\n";
 			}
-
 ?>
 	<form method="post" action="../op/op.ReviewDocument.php" id="form2" name="form2" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
