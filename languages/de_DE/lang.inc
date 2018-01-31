@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2519), dgrutsch (22)
+//    Translators: Admin (2527), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -335,8 +335,10 @@ URL: [url]',
 'documents_to_receipt' => 'Empfangsbestätigung erforderlich',
 'documents_to_review' => 'Prüfung erforderlich',
 'documents_to_revise' => 'Erneute Prüfung erforderlich',
+'documents_user_draft' => 'Entwürfe',
 'documents_user_expiration' => 'Abgelaufende Dokumente',
 'documents_user_no_reception' => 'Dokumente ohne Empfangsbestätigung',
+'documents_user_obsolete' => 'Veraltete Dokumente',
 'documents_user_reception' => 'Dokumente mit Empfangsbestätigung',
 'documents_user_rejected' => 'Abgelehnte Dokumente',
 'documents_user_requiring_attention' => 'Diese Dokumente sollte ich mal nachsehen',
@@ -999,7 +1001,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'review_request_email_subject' => '[sitename]: [name] - Aufforderung zur Prüfung',
-'review_status' => 'Status:',
+'review_status' => 'Status',
 'review_submit_email' => 'Prüfung ausgeführt',
 'review_submit_email_body' => 'Prüfung ausgeführt
 Dokument: [name]
@@ -1391,12 +1393,12 @@ Name: [username]
 'settings_presetExpirationDate_desc' => 'Alle neu hochgeladenen Dokumente bekommen das eingegebene Datum als Ablaufdatum. Das Datum muss der Form entsprechen, wie es von der PHP-Funktion strtotime() verstanden wird, z.B. +5 weeks.',
 'settings_previewWidthDetail' => 'Breite der Vorschaubilder (Detail)',
 'settings_previewWidthDetail_desc' => 'Breite des Vorschaubildes, das auf der Detailseite angezeigt wird',
-'settings_previewWidthDropFolderList' => '',
-'settings_previewWidthDropFolderList_desc' => '',
+'settings_previewWidthDropFolderList' => 'Breite der Vorschaubilder (Ablageordner)',
+'settings_previewWidthDropFolderList_desc' => 'Setzt die Breite der Vorschaubilder in der Auswahlliste für die Dateien des Ablageordners.',
 'settings_previewWidthList' => 'Breite der Vorschaubilder (Liste)',
 'settings_previewWidthList_desc' => 'Breite der Vorschaubilder, die in Listen angezeigt werden',
-'settings_previewWidthMenuList' => '',
-'settings_previewWidthMenuList_desc' => '',
+'settings_previewWidthMenuList' => 'Breite der Vorschaubilder (Menu)',
+'settings_previewWidthMenuList_desc' => 'Setzt die Breite der Bilder im Menu der Dateien im Ablageordner.',
 'settings_printDisclaimer' => 'Rechtliche Hinweise',
 'settings_printDisclaimer_desc' => 'Anwählen, um die rechtlichen Hinweise am Ende jeder Seite anzuzeigen.',
 'settings_quota' => 'User\'s quota',
@@ -1542,6 +1544,7 @@ Name: [username]
 'status_approval_rejected' => 'Entwurf abgelehnt',
 'status_approved' => 'freigegeben',
 'status_approver_removed' => 'Freigebender wurde vom Prozess ausgeschlossen',
+'status_needs_correction' => 'Korrektur erforderlich',
 'status_not_approved' => 'keine Freigabe',
 'status_not_receipted' => 'Empfang noch nicht bestätigt',
 'status_not_reviewed' => 'nicht geprüft',

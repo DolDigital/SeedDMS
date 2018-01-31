@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1587), rickr (144), s.pnt (26)
+//    Translators: Admin (1588), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -336,8 +336,10 @@ URL: [url]',
 'documents_to_receipt' => 'Documenti in attesa di conferma ricezione',
 'documents_to_review' => 'Documenti in attesa della tua revisione',
 'documents_to_revise' => 'Documenti da revisionare.',
+'documents_user_draft' => '',
 'documents_user_expiration' => '',
 'documents_user_no_reception' => '',
+'documents_user_obsolete' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => 'Documenti rifiutati',
 'documents_user_requiring_attention' => 'Tuoi documenti in attesa di revisione o approvazione',
@@ -984,7 +986,7 @@ Cartella: [folder_path]
 Utente: [username]
 URL: [url]',
 'review_request_email_subject' => '[sitename]: [name] - Richiesta di revisione',
-'review_status' => 'Stato revisioni:',
+'review_status' => 'Stato revisioni',
 'review_submit_email' => 'Sottoposta revisione',
 'review_submit_email_body' => 'Sottoposta revisione
 Documento: [name]
@@ -1515,6 +1517,7 @@ URL: [url]',
 'status_approval_rejected' => 'Bozza rifiutata',
 'status_approved' => 'Approvato',
 'status_approver_removed' => 'Approvatore rimosso dal processo',
+'status_needs_correction' => '',
 'status_not_approved' => 'Non ancora approvato',
 'status_not_receipted' => 'Non ancora ricevuto',
 'status_not_reviewed' => 'Non ancora revisionato',

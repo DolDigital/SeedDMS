@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1067), balan (87)
+//    Translators: Admin (1068), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -335,8 +335,10 @@ URL: [url]',
 'documents_to_receipt' => 'Documente in asteptare pentru confirmarea primirii',
 'documents_to_review' => 'Documente care așteaptă revizuirea dumneavoastră',
 'documents_to_revise' => 'Documente de revizut',
+'documents_user_draft' => '',
 'documents_user_expiration' => '',
 'documents_user_no_reception' => '',
+'documents_user_obsolete' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => '',
 'documents_user_requiring_attention' => 'Documente deținute de tine care necesită atenție',
@@ -978,7 +980,7 @@ Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
 'review_request_email_subject' => '[sitename]: [name] - Cerere de revizuire',
-'review_status' => 'Status revizuire:',
+'review_status' => 'Status revizuire',
 'review_submit_email' => 'Revizuire trimisă',
 'review_submit_email_body' => 'Revizuire trimisă
 Document: [name]
@@ -1504,6 +1506,7 @@ URL: [url]',
 'status_approval_rejected' => 'Proiect respins',
 'status_approved' => 'Aprobat',
 'status_approver_removed' => 'Aprobator eliminat din proces',
+'status_needs_correction' => '',
 'status_not_approved' => 'Neaprobat',
 'status_not_receipted' => 'Neprimit inca',
 'status_not_reviewed' => 'Nerevizuit',
