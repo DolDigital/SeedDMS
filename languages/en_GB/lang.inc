@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1644), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1649), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -67,7 +67,7 @@ URL: [url]',
 'add_multiple_files' => 'Add multiple files (will use filename as document name)',
 'add_receipt' => 'Acknowledge reception',
 'add_review' => 'Add review',
-'add_revision' => 'Add approval',
+'add_revision' => 'Add revision',
 'add_role' => 'Add new role',
 'add_subfolder' => 'Add subfolder',
 'add_to_clipboard' => 'Add to clipboard',
@@ -335,8 +335,10 @@ URL: [url]',
 'documents_to_receipt' => 'Documents awaiting to confirm the receipt',
 'documents_to_review' => 'Documents awaiting your review',
 'documents_to_revise' => 'Documents awaiting your revision',
+'documents_user_draft' => 'Drafts',
 'documents_user_expiration' => 'Expired documents',
 'documents_user_no_reception' => 'Documents without reception',
+'documents_user_obsolete' => 'Obsolete documents',
 'documents_user_reception' => 'Documents awaiting reception',
 'documents_user_rejected' => 'Rejected documents',
 'documents_user_requiring_attention' => 'Documents owned by you that require attention',
@@ -1001,7 +1003,7 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'review_request_email_subject' => '[sitename]: [name] - Review request',
-'review_status' => 'Review status:',
+'review_status' => 'Review status',
 'review_submit_email' => 'Submitted review',
 'review_submit_email_body' => 'Submitted review
 Document: [name]
@@ -1537,6 +1539,7 @@ Name: [username]
 'status_approval_rejected' => 'Draft rejected',
 'status_approved' => 'Approved',
 'status_approver_removed' => 'Approver removed from process',
+'status_needs_correction' => 'Needs correction',
 'status_not_approved' => 'Not approved',
 'status_not_receipted' => 'Not receipted yet',
 'status_not_reviewed' => 'Not reviewed',
