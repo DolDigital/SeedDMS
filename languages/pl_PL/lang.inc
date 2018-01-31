@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (785), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (786), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -323,8 +323,10 @@ URL: [url]',
 'documents_to_receipt' => '',
 'documents_to_review' => 'Dokumenty oczekujące na Twoją recenzję',
 'documents_to_revise' => '',
+'documents_user_draft' => '',
 'documents_user_expiration' => '',
 'documents_user_no_reception' => '',
+'documents_user_obsolete' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => '',
 'documents_user_requiring_attention' => 'Dokumenty należące do Ciebie, które wymagają uwagi',
@@ -1461,6 +1463,7 @@ URL: [url]',
 'status_approval_rejected' => 'Szkic odrzucony',
 'status_approved' => 'Zatwierdzone',
 'status_approver_removed' => 'Osoba zatwierdzająca usunięta z procesu',
+'status_needs_correction' => '',
 'status_not_approved' => 'Nie zatwierdzone',
 'status_not_receipted' => '',
 'status_not_reviewed' => 'Nie zrecenzowane',
@@ -1533,7 +1536,7 @@ URL: [url]',
 'toggle_manager' => 'Przełączanie zarządcy',
 'toggle_qrcode' => '',
 'to_before_from' => '',
-'transfer_document' => '',
+'transfer_document' => 'Transfer dokumentu',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',

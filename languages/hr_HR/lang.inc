@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1196), marbanas (16)
+//    Translators: Admin (1197), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -335,8 +335,10 @@ Internet poveznica: [url]',
 'documents_to_receipt' => 'Dokumenti koji čekaju potvrdu primitka',
 'documents_to_review' => 'Dokumenti koji čekaju vaš pregled',
 'documents_to_revise' => 'Dokumenti za reviziju',
+'documents_user_draft' => '',
 'documents_user_expiration' => '',
 'documents_user_no_reception' => '',
+'documents_user_obsolete' => '',
 'documents_user_reception' => '',
 'documents_user_rejected' => 'Odbijeni dokumenti',
 'documents_user_requiring_attention' => 'Dokumenti u vašem vlasništvu koji zahtjevaju pažnju',
@@ -977,7 +979,7 @@ Glavna mapa: [folder_path]
 Korisnik: [username]
 URL: [url]',
 'review_request_email_subject' => '[sitename]: [name] - Zahtjev za pregled',
-'review_status' => 'Status pregleda:',
+'review_status' => 'Status pregleda',
 'review_submit_email' => 'Predani pregled',
 'review_submit_email_body' => 'Postavljen pregled
 Dokument: [name]
@@ -1503,6 +1505,7 @@ Internet poveznica: [url]',
 'status_approval_rejected' => 'Skica odbijena',
 'status_approved' => 'Odobreno',
 'status_approver_removed' => 'Validator uklonjen iz postupka',
+'status_needs_correction' => '',
 'status_not_approved' => 'Nije odobreno',
 'status_not_receipted' => 'Još nije primljeno',
 'status_not_reviewed' => 'Nije pregledano',
