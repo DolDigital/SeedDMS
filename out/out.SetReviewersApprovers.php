@@ -30,6 +30,9 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -39,8 +42,9 @@ if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-if ($document->getAccessMode($user) < M_ALL) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
+if(!$accessop->maySetReviewersApprovers()) {
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
 }
 
 if (!isset($_GET["version"]) || !is_numeric($_GET["version"]) || intval($_GET["version"]<1)) {
@@ -54,14 +58,6 @@ if (!is_object($content)) {
 
 $folder = $document->getFolder();
 
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
-if(!$accessop->maySetReviewersApprovers()) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_version_modification"));
-}
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('document', $document);

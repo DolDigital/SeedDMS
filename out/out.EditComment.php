@@ -30,12 +30,20 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 $document = $dms->getDocument($_GET["documentid"]);
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+}
+
+$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
+if(!$accessop->mayEditComment()) {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
 if($document->isLocked()) {
@@ -52,14 +60,6 @@ if (!is_object($version)) {
 
 $folder = $document->getFolder();
 
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
-if(!$accessop->mayEditComment()) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-}
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('document', $document);
