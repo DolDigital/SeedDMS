@@ -651,6 +651,7 @@ $text = array(
 'my_documents' => 'Моите документи',
 'my_transmittals' => '',
 'name' => 'Име',
+'needs_correction' => '',
 'needs_workflow_action' => '',
 'network_drive' => '',
 'never' => '',

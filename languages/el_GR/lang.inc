@@ -651,6 +651,7 @@ $text = array(
 'my_documents' => 'Τα έγγραφα μου',
 'my_transmittals' => '',
 'name' => 'Όνομα',
+'needs_correction' => '',
 'needs_workflow_action' => '',
 'network_drive' => '',
 'never' => '',

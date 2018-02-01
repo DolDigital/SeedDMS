@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1649), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1650), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -744,6 +744,7 @@ URL: [url]',
 'my_documents' => 'My Documents',
 'my_transmittals' => 'My Transmittals',
 'name' => 'Name',
+'needs_correction' => 'Needs correction',
 'needs_workflow_action' => 'This document requires your attention. Please check the workflow tab.',
 'network_drive' => 'Network drive',
 'never' => 'never',
