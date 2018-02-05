@@ -493,7 +493,7 @@ switch($command) {
 	case 'submittranslation': /* {{{ */
 		if($settings->_showMissingTranslations) {
 			if($user && !empty($_POST['phrase'])) {
-				if($fp = fopen('/tmp/newtranslations.txt', 'a+')) {
+				if($fp = fopen($settings->_cacheDir.'/newtranslations.txt', 'a+')) {
 					fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
 					fclose($fp);
 				}
