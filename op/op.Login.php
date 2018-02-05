@@ -130,6 +130,17 @@ if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $
 	exit;
 }
 
+if($settings->_enable2FactorAuthentication) {
+	if($secret = $user->getSecret()) {
+		require "vendor/autoload.php";
+		$tfa = new \RobThree\Auth\TwoFactorAuth('SeedDMS');
+		if($tfa->verifyCode($secret, $_POST['twofactauth']) !== true) {
+			_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
+			exit;
+		}
+	}
+}
+
 /* Clear login failures if login was successful */
 $user->clearLoginFailures();
 
