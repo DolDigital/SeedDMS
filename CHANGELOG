@@ -10,6 +10,7 @@
 - use converters for creating preview images as configured in settings (Closes #389)
 - propperly check if user is already in database when doing ldap auth (Closes #388)
 - list linked documents on the ViewDocument page in the way as in other document lists
+- fix 2-factor authentification
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
