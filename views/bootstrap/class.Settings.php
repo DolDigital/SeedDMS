@@ -804,11 +804,14 @@ if(!is_writeable($settings->_configFilePath)) {
 									echo "</select>";
 								} elseif(!empty($conf['internal'])) {
 									$selections = empty($settings->_extensions[$extname][$confkey]) ? array() : explode(",", $settings->_extensions[$extname][$confkey]);
+									$allowempty = empty($conf['allow_empty']) ? false : $conf['allow_empty'];
 									switch($conf['internal']) {
 									case "categories":
 										$categories = $dms->getDocumentCategories();
 										if($categories) {
-											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_category")."\">";
+											if($allowempty)
+												echo "<option value=\"\"></option>";
 											foreach($categories as $category) {
 												echo "<option value=\"".$category->getID()."\"";
 												if(in_array($category->getID(), $selections))
@@ -821,7 +824,9 @@ if(!is_writeable($settings->_configFilePath)) {
 									case "users":
 										$users = $dms->getAllUsers();
 										if($users) {
-											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_user")."\">";
+											if($allowempty)
+												echo "<option value=\"\"></option>";
 											foreach($users as $curuser) {
 												echo "<option value=\"".$curuser->getID()."\"";
 												if(in_array($curuser->getID(), $selections))
@@ -834,7 +839,9 @@ if(!is_writeable($settings->_configFilePath)) {
 									case "groups":
 										$recs = $dms->getAllGroups();
 										if($recs) {
-											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_group")."\">";
+											if($allowempty)
+												echo "<option value=\"\"></option>";
 											foreach($recs as $rec) {
 												echo "<option value=\"".$rec->getID()."\"";
 												if(in_array($rec->getID(), $selections))
@@ -847,7 +854,9 @@ if(!is_writeable($settings->_configFilePath)) {
 									case "attributedefinitions":
 										$recs = $dms->getAllAttributeDefinitions();
 										if($recs) {
-											echo "<select class=\"chzn-select\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "").">";
+											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_attribute_value")."\">";
+											if($allowempty)
+												echo "<option value=\"\"></option>";
 											foreach($recs as $rec) {
 												echo "<option value=\"".$rec->getID()."\"";
 												if(in_array($rec->getID(), $selections))
