@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2528), dgrutsch (22)
+//    Translators: Admin (2533), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1136,6 +1136,7 @@ URL: [url]',
 'select_ind_revisors' => 'Klicken zur Auswahl eines Wiederholungsprüfers',
 'select_one' => 'Bitte wählen',
 'select_users' => 'Klicken zur Auswahl eines Benutzers',
+'select_value' => 'Wert auswählen',
 'select_workflow' => 'Workflow auswählen',
 'send_email' => 'E-Mail verschicken',
 'send_login_data' => 'Sende Login-Daten',
@@ -1209,6 +1210,10 @@ Name: [username]
 'settings_dbVersion' => 'Datenbankschema zu alt',
 'settings_defaultAccessDocs' => 'Standardberechtigung für neue Dokumente',
 'settings_defaultAccessDocs_desc' => 'Beim Erstellen eines neuen Dokuments wird dies als Standardberechtigung gesetzt.',
+'settings_defaultDocPosition' => 'Position eines Dokuments beim Anlegen',
+'settings_defaultDocPosition_desc' => 'Dies ist die voreingestellte Position eines Dokuments innerhalb eines Ordners, wenn dieses angelegt wird.',
+'settings_defaultDocPosition_val_end' => 'Ende',
+'settings_defaultDocPosition_val_start' => 'Anfang',
 'settings_defaultSearchMethod' => 'Voreingestellte Suchmethode',
 'settings_defaultSearchMethod_desc' => 'Voreingestellte Suchmethode, wenn über das Suchfeld in der Menüleiste gesucht wird.',
 'settings_defaultSearchMethod_valdatabase' => 'Datenbank',

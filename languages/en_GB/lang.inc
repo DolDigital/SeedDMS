@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1650), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1655), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1131,6 +1131,7 @@ URL: [url]',
 'select_ind_revisors' => 'Click to select individual revisors',
 'select_one' => 'Select one',
 'select_users' => 'Click to select users',
+'select_value' => 'Select value',
 'select_workflow' => 'Select workflow',
 'send_email' => 'Send email',
 'send_login_data' => 'Send login data',
@@ -1204,6 +1205,10 @@ Name: [username]
 'settings_dbVersion' => 'Database schema too old',
 'settings_defaultAccessDocs' => 'Default access for new documents',
 'settings_defaultAccessDocs_desc' => 'When a new document is created, this will be the default access right.',
+'settings_defaultDocPosition' => 'Position of document when created',
+'settings_defaultDocPosition_desc' => 'This is the default position within a folder when a document is created.',
+'settings_defaultDocPosition_val_end' => 'end',
+'settings_defaultDocPosition_val_start' => 'start',
 'settings_defaultSearchMethod' => 'Default search method',
 'settings_defaultSearchMethod_desc' => 'Default search method, when a search is started by the search form in the main menu.',
 'settings_defaultSearchMethod_valdatabase' => 'database',
