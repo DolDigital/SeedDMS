@@ -654,7 +654,11 @@ switch($command) {
 				$controller->setParam('userfilename', $userfilename);
 				$controller->setParam('filetype', $fileType);
 				$controller->setParam('userfiletype', $userfiletype);
-				$controller->setParam('sequence', 0);
+				$minmax = $folder->getDocumentsMinMax();
+				if($settings->_defaultDocPosition == 'start')
+					$controller->setParam('sequence', $minmax['min'] - 1);
+				else
+					$controller->setParam('sequence', $minmax['max'] + 1);
 				$controller->setParam('reviewers', $reviewers);
 				$controller->setParam('approvers', $approvers);
 				$controller->setParam('reqversion', 1);
