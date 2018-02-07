@@ -1692,6 +1692,22 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get the min and max sequence value for documents
+	 *
+	 * @return boolean/array array with keys 'min' and 'max', false in case of an error
+	 */
+	function getDocumentsMinMax() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT min(`sequence`) AS `min`, max(`sequence`) AS `max` FROM `tblDocuments` WHERE `folder` = " . (int) $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		return $resArr[0];
+	} /* }}} */
+
 }
 
 ?>
