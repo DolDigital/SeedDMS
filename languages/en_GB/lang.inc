@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1655), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1658), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1112,7 +1112,9 @@ URL: [url]',
 'seconds' => 'seconds',
 'selection' => 'Selection',
 'select_attrdefgrp_show' => 'Choose when to show',
+'select_attribute_value' => 'Select attribute value',
 'select_category' => 'Click to select category',
+'select_group' => 'Select group',
 'select_groups' => 'Click to select groups',
 'select_grp_approvers' => 'Click to select group approver',
 'select_grp_ind_approvers' => 'Click to select group',
@@ -1130,6 +1132,7 @@ URL: [url]',
 'select_ind_reviewers' => 'Click to select individual reviewer',
 'select_ind_revisors' => 'Click to select individual revisors',
 'select_one' => 'Select one',
+'select_user' => 'Select user',
 'select_users' => 'Click to select users',
 'select_value' => 'Select value',
 'select_workflow' => 'Select workflow',
