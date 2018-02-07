@@ -52,6 +52,7 @@ if($view) {
 	$view->setParam('strictformcheck', $settings->_strictFormCheck);
 	$view->setParam('rootfolderid', $settings->_rootFolderID);
 	$view->setParam('orderby', $settings->_sortFoldersDefault);
+	$view->setParam('defaultposition', $settings->_defaultDocPosition);
 	$view($_GET);
 	exit;
 }

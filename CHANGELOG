@@ -12,6 +12,7 @@
 - list linked documents on the ViewDocument page in the way as in other document lists
 - fix 2-factor authentification
 - configuration variables in extension of type 'select' may have an empty option
+- default position of documents/folders can be set in configuration (Closes #381)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5

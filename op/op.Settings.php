@@ -101,6 +101,7 @@ if ($action == "saveSettings")
   $settings->_stopWordsFile = $_POST["stopWordsFile"];
   $settings->_sortUsersInList = $_POST["sortUsersInList"];
   $settings->_sortFoldersDefault = $_POST["sortFoldersDefault"];
+  $settings->_defaultDocPosition = $_POST["defaultDocPosition"];
 
   // SETTINGS - SITE - CALENDAR
   $settings->_enableCalendar = getBoolValue("enableCalendar");

@@ -210,6 +210,8 @@ class Settings { /* {{{ */
 	var $_sortUsersInList = '';
 	// Sort method for forders and documents ('n' (name) or '')
 	var $_sortFoldersDefault = '';
+	// Where to insert new documents ('start' or 'end')
+	var $_defaultDocPosition = 'end';
 	// Set valid IP for admin logins
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
@@ -457,6 +459,7 @@ class Settings { /* {{{ */
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
+		$this->_defaultDocPosition = strval($tab["defaultDocPosition"]);
 
 		// XML Path: /configuration/site/calendar
 		$node = $xml->xpath('/configuration/site/calendar');
@@ -775,6 +778,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
     $this->setXMLAttributValue($node, "sortFoldersDefault", $this->_sortFoldersDefault);
+    $this->setXMLAttributValue($node, "defaultDocPosition", $this->_defaultDocPosition);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');

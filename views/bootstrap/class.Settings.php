@@ -338,19 +338,27 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_sortUsersInList_desc");?>">
         <td><?php printMLText("settings_sortUsersInList");?>:</td>
         <td>
-          <SELECT name="sortUsersInList">
-            <OPTION VALUE="" <?php if ($settings->_sortUsersInList=='') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_login");?></OPTION>
-            <OPTION VALUE="fullname" <?php if ($settings->_sortUsersInList=='fullname') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_fullname");?></OPTION>
-          </SELECT>
+          <select name="sortUsersInList">
+            <option value="" <?php if ($settings->_sortUsersInList=='') echo "selected" ?> ><?php printMLText("settings_sortUsersInList_val_login");?></option>
+            <option value="fullname" <?php if ($settings->_sortUsersInList=='fullname') echo "selected" ?> ><?php printMLText("settings_sortUsersInList_val_fullname");?></option>
+          </select>
       </tr>
       <tr title="<?php printMLText("settings_sortFoldersDefault_desc");?>">
         <td><?php printMLText("settings_sortFoldersDefault");?>:</td>
         <td>
-          <SELECT name="sortFoldersDefault">
-            <OPTION VALUE="u" <?php if ($settings->_sortFoldersDefault=='') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_unsorted");?></OPTION>
-            <OPTION VALUE="s" <?php if ($settings->_sortFoldersDefault=='s') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_sequence");?></OPTION>
-            <OPTION VALUE="n" <?php if ($settings->_sortFoldersDefault=='n') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_name");?></OPTION>
-          </SELECT>
+          <select name="sortFoldersDefault">
+            <option value="u" <?php if ($settings->_sortFoldersDefault=='') echo "selected" ?> ><?php printMLText("settings_sortFoldersDefault_val_unsorted");?></option>
+            <option value="s" <?php if ($settings->_sortFoldersDefault=='s') echo "selected" ?> ><?php printMLText("settings_sortFoldersDefault_val_sequence");?></option>
+            <option value="n" <?php if ($settings->_sortFoldersDefault=='n') echo "selected" ?> ><?php printMLText("settings_sortFoldersDefault_val_name");?></option>
+          </select>
+      </tr>
+      <tr title="<?php printMLText("settings_defaultDocPosition_desc");?>">
+        <td><?php printMLText("settings_defaultDocPosition");?>:</td>
+        <td>
+          <select name="defaultDocPosition">
+            <option value="end" <?php if ($settings->_defaultDocPosition=='end') echo "selected" ?> ><?php printMLText("settings_defaultDocPosition_val_end");?></option>
+            <option value="start" <?php if ($settings->_defaultDocPosition=='start') echo "selected" ?> ><?php printMLText("settings_defaultDocPosition_val_start");?></option>
+          </select>
       </tr>
 
       <!--

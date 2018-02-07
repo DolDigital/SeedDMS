@@ -988,10 +988,13 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if ($keepID != -1) {
 			print "  <option value=\"keep\">" . getMLText("seq_keep");
 		}
-		print "  <option value=\"".$max."\">" . getMLText("seq_end");
+		if($this->params['defaultposition'] != 'start')
+			print "  <option value=\"".$max."\">" . getMLText("seq_end");
 		if (count($objArr) > 0) {
 			print "  <option value=\"".$min."\">" . getMLText("seq_start");
 		}
+		if($this->params['defaultposition'] == 'start')
+			print "  <option value=\"".$max."\">" . getMLText("seq_end");
 		for ($i = 0; $i < count($objArr) - 1; $i++) {
 			if (($objArr[$i]->getID() == $keepID) || (($i + 1 < count($objArr)) && ($objArr[$i+1]->getID() == $keepID))) {
 				continue;
