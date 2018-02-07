@@ -1223,14 +1223,14 @@ $(document).ready(function() {
 			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
-				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
+				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\"/>";
 				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
 					echo "[]\" multiple";
 				} else {
 					echo "\"";
 				}
-				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select\">";
+				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select-deselect\" data-placeholder=\"".getMLText("select_value")."\">";
 				if(!$attrdef->getMultipleValues()) {
 					echo "<option value=\"\"></option>";
 				}
