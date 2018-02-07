@@ -76,7 +76,7 @@ function getLanguages() { /* {{{ */
  * @param string $defaulttext text used if no translation can be found
  * @param string $lang use this language instead of the currently set lang
  */
-function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {{{ */
+function getMLText($key, $replace = array(), $defaulttext = null, $lang="") { /* {{{ */
 	GLOBAL $settings, $LANG, $session, $MISSING_LANG;
 
 	$trantext = '';
@@ -92,7 +92,7 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 	}
 
 	if(!isset($LANG[$lang][$key]) || !$LANG[$lang][$key]) {
-		if (!$defaulttext) {
+		if ($defaulttext === null) {
 			$MISSING_LANG[$key] = $lang; //$_SERVER['SCRIPT_NAME'];
 			if(!empty($LANG[$settings->_language][$key])) {
 				$tmpText = $LANG[$settings->_language][$key];
