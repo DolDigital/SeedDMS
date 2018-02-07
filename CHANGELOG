@@ -6,10 +6,10 @@
   S_DRAFT_APP resp. S_DRAFT_REV
 - add preview for webm videos (Closes #374)
 - add support for apache mod_xsendfile, minor optimization of file download
-- animate button to download more objects in folder list which loading is active
+- animate button to download more objects in folder list when loading is active
 - use converters for creating preview images as configured in settings (Closes #389)
 - propperly check if user is already in database when doing ldap auth (Closes #388)
-- list linked documents on the ViewDocument page in the way as in other document lists
+- list linked documents on the ViewDocument page in the same way as in other document lists
 - fix 2-factor authentification
 - configuration variables in extension of type 'select' may have an empty option
 - default position of documents/folders can be set in configuration (Closes #381)
