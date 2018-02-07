@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (967), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (968), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1078,6 +1078,7 @@ URL: [url]',
 'select_ind_revisors' => '',
 'select_one' => 'Selecione um',
 'select_users' => 'Clique para selecionar os usuários',
+'select_value' => '',
 'select_workflow' => 'Selecione o fluxo de trabalho',
 'send_email' => '',
 'send_login_data' => '',
@@ -1146,6 +1147,10 @@ URL: [url]',
 'settings_dbVersion' => 'Esquema de banco de dados muito antigo',
 'settings_defaultAccessDocs' => '',
 'settings_defaultAccessDocs_desc' => '',
+'settings_defaultDocPosition' => '',
+'settings_defaultDocPosition_desc' => '',
+'settings_defaultDocPosition_val_end' => '',
+'settings_defaultDocPosition_val_start' => '',
 'settings_defaultSearchMethod' => 'Forma padrão para buscas',
 'settings_defaultSearchMethod_desc' => '',
 'settings_defaultSearchMethod_valdatabase' => 'Banco de Dados',
@@ -1521,7 +1526,7 @@ URL: [url]',
 'switched_to' => 'Comutado para',
 'takeOverAttributeValue' => '',
 'takeOverGrpApprover' => '',
-'takeOverGrpReviewer' => '',
+'takeOverGrpReviewer' => 'Assuma o grupo de revisores da última versão.',
 'takeOverIndApprover' => '',
 'takeOverIndReviewer' => '',
 'tasks' => '',
