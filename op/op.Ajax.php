@@ -63,7 +63,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
 			if(method_exists($notificationObj, 'preAddService')) {
-				$notificationObj->preAddService($notifier);
+				$notificationObj->preAddService($dms, $notifier);
 			}
 		}
 	}
@@ -75,7 +75,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
 			if(method_exists($notificationObj, 'postAddService')) {
-				$notificationObj->postAddService($notifier);
+				$notificationObj->postAddService($dms, $notifier);
 			}
 		}
 	}
