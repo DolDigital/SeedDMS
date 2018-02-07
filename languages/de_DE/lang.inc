@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2533), dgrutsch (22)
+//    Translators: Admin (2536), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1117,7 +1117,9 @@ URL: [url]',
 'seconds' => 'Sekunden',
 'selection' => 'Auswahl',
 'select_attrdefgrp_show' => 'Anzeigeort auswählen',
+'select_attribute_value' => 'Attributwert auswählen',
 'select_category' => 'Klicken zur Auswahl einer Kategorie',
+'select_group' => 'Gruppe auswählen',
 'select_groups' => 'Klicken zur Auswahl einer Gruppe',
 'select_grp_approvers' => 'Klicken zur Auswahl einer Freigabegruppe',
 'select_grp_ind_approvers' => 'Klicken zur Auswahl einer Gruppe',
@@ -1135,6 +1137,7 @@ URL: [url]',
 'select_ind_reviewers' => 'Klicken zur Auswahl eines Prüfers',
 'select_ind_revisors' => 'Klicken zur Auswahl eines Wiederholungsprüfers',
 'select_one' => 'Bitte wählen',
+'select_user' => 'Benutzer auswählen',
 'select_users' => 'Klicken zur Auswahl eines Benutzers',
 'select_value' => 'Wert auswählen',
 'select_workflow' => 'Workflow auswählen',
