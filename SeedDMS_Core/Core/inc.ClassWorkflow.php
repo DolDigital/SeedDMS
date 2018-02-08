@@ -56,12 +56,12 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow constructor.
-     * @param int $id
-     * @param string $name
-     * @param SeedDMS_Core_Workflow_State $initstate
-     */
+	/**
+	 * SeedDMS_Core_Workflow constructor.
+	 * @param int $id
+	 * @param string $name
+	 * @param SeedDMS_Core_Workflow_State $initstate
+	 */
 	function __construct($id, $name, $initstate) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
@@ -70,28 +70,28 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		$this->_dms = null;
 	} /* }}} */
 
-    /**
-     * @param SeedDMS_Core_DMS $dms
-     */
-    function setDMS($dms) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_DMS $dms
+	 */
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
-    /**
-     * @return int
-     */
-    function getID() { return $this->_id; }
+	/**
+	 * @return int
+	 */
+	function getID() { return $this->_id; }
 
-    /**
-     * @return string
-     */
-    function getName() { return $this->_name; }
+	/**
+	 * @return string
+	 */
+	function getName() { return $this->_name; }
 
-    /**
-     * @param $newName
-     * @return bool
-     */
-    function setName($newName) { /* {{{ */
+	/**
+	 * @param $newName
+	 * @return bool
+	 */
+	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflows` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
@@ -103,16 +103,16 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return SeedDMS_Core_Workflow_State
-     */
-    function getInitState() { return $this->_initstate; }
+	/**
+	 * @return SeedDMS_Core_Workflow_State
+	 */
+	function getInitState() { return $this->_initstate; }
 
-    /**
-     * @param SeedDMS_Core_Workflow_State $state
-     * @return bool
-     */
-    function setInitState($state) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_Workflow_State $state
+	 * @return bool
+	 */
+	function setInitState($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflows` SET `initstate` = ".$state->getID()." WHERE `id` = " . $this->_id;
@@ -124,10 +124,10 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return SeedDMS_Core_Workflow_Transition[]|bool
-     */
-    function getTransitions() { /* {{{ */
+	/**
+	 * @return SeedDMS_Core_Workflow_Transition[]|bool
+	 */
+	function getTransitions() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if($this->_transitions)
@@ -150,12 +150,12 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return $this->_transitions;
 	} /* }}} */
 
-    /**
-     * @return array
-     */
-    function getStates() { /* {{{ */
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $db = $this->_dms->getDB();
+	/**
+	 * @return array
+	 */
+	function getStates() { /* {{{ */
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$db = $this->_dms->getDB();
 
 		if(!$this->_transitions)
 			$this->getTransitions();
@@ -171,15 +171,15 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return $states;
 	} /* }}} */
 
-    /**
-     * Get the transition by its id
-     *
-     * @param integer $id id of transition
-     * @return bool|SeedDMS_Core_Workflow_Transition
-     */
+	/**
+	 * Get the transition by its id
+	 *
+	 * @param integer $id id of transition
+	 * @return bool|SeedDMS_Core_Workflow_Transition
+	 */
 	function getTransition($id) { /* {{{ */
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $db = $this->_dms->getDB();
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$db = $this->_dms->getDB();
 
 		if(!$this->_transitions)
 			$this->getTransitions();
@@ -190,12 +190,12 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return false;
 	} /* }}} */
 
-    /**
-     * Get the transitions that can be triggered while being in the given state
-     *
-     * @param SeedDMS_Core_Workflow_State $state current workflow state
-     * @return SeedDMS_Core_Workflow_Transition[]|bool
-     */
+	/**
+	 * Get the transitions that can be triggered while being in the given state
+	 *
+	 * @param SeedDMS_Core_Workflow_State $state current workflow state
+	 * @return SeedDMS_Core_Workflow_Transition[]|bool
+	 */
 	function getNextTransitions($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -214,12 +214,12 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return $wkftransitions;
 	} /* }}} */
 
-    /**
-     * Get the transitions that lead to the given state
-     *
-     * @param SeedDMS_Core_Workflow_State $state current workflow state
-     * @return SeedDMS_Core_Workflow_Transition[]|bool
-     */
+	/**
+	 * Get the transitions that lead to the given state
+	 *
+	 * @param SeedDMS_Core_Workflow_State $state current workflow state
+	 * @return SeedDMS_Core_Workflow_Transition[]|bool
+	 */
 	function getPreviousTransitions($state) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -238,13 +238,13 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return $wkftransitions;
 	} /* }}} */
 
-    /**
-     * Get all transitions from one state into another state
-     *
-     * @param SeedDMS_Core_Workflow_State $state state to start from
-     * @param SeedDMS_Core_Workflow_State $nextstate state after transition
-     * @return SeedDMS_Core_Workflow_Transition[]|bool
-     */
+	/**
+	 * Get all transitions from one state into another state
+	 *
+	 * @param SeedDMS_Core_Workflow_State $state state to start from
+	 * @param SeedDMS_Core_Workflow_State $nextstate state after transition
+	 * @return SeedDMS_Core_Workflow_Transition[]|bool
+	 */
 	function getTransitionsByStates($state, $nextstate) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -335,11 +335,11 @@ class SeedDMS_Core_Workflow { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @param SeedDMS_Core_Workflow_State[] $laststates
-     * @return SeedDMS_Core_Workflow_State[]|bool
-     */
-    private function penetrate($laststates) {
+	/**
+	 * @param SeedDMS_Core_Workflow_State[] $laststates
+	 * @return SeedDMS_Core_Workflow_State[]|bool
+	 */
+	private function penetrate($laststates) {
 		$state = end($laststates);
 		$transitions = $this->getNextTransitions($state);
 		foreach($transitions as $transition) {
@@ -361,8 +361,8 @@ class SeedDMS_Core_Workflow { /* {{{ */
 	 * @return boolean list of states if workflow contains cycles, otherwise false
 	 */
 	function checkForCycles() { /* {{{ */
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $db = $this->_dms->getDB();
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$db = $this->_dms->getDB();
 		
 		$initstate = $this->getInitState();
 
@@ -462,15 +462,15 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_State constructor.
-     * @param $id
-     * @param $name
-     * @param $maxtime
-     * @param $precondfunc
-     * @param $documentstatus
-     */
-    function __construct($id, $name, $maxtime, $precondfunc, $documentstatus) {
+	/**
+	 * SeedDMS_Core_Workflow_State constructor.
+	 * @param $id
+	 * @param $name
+	 * @param $maxtime
+	 * @param $precondfunc
+	 * @param $documentstatus
+	 */
+	function __construct($id, $name, $maxtime, $precondfunc, $documentstatus) {
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_maxtime = $maxtime;
@@ -479,28 +479,28 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 		$this->_dms = null;
 	}
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) {
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) {
 		$this->_dms = $dms;
 	}
 
-    /**
-     * @return int
-     */
-    function getID() { return $this->_id; }
+	/**
+	 * @return int
+	 */
+	function getID() { return $this->_id; }
 
-    /**
-     * @return string
-     */
-    function getName() { return $this->_name; }
+	/**
+	 * @return string
+	 */
+	function getName() { return $this->_name; }
 
-    /**
-     * @param string $newName
-     * @return bool
-     */
-    function setName($newName) { /* {{{ */
+	/**
+	 * @param string $newName
+	 * @return bool
+	 */
+	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowStates` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
@@ -512,16 +512,16 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return int maximum
-     */
-    function getMaxTime() { return $this->_maxtime; }
+	/**
+	 * @return int maximum
+	 */
+	function getMaxTime() { return $this->_maxtime; }
 
-    /**
-     * @param $maxtime
-     * @return bool
-     */
-    function setMaxTime($maxtime) { /* {{{ */
+	/**
+	 * @param $maxtime
+	 * @return bool
+	 */
+	function setMaxTime($maxtime) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowStates` SET `maxtime` = ".intval($maxtime)." WHERE `id` = " . $this->_id;
@@ -533,16 +533,16 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return int maximum
-     */
-    function getPreCondFunc() { return $this->_precondfunc; }
+	/**
+	 * @return int maximum
+	 */
+	function getPreCondFunc() { return $this->_precondfunc; }
 
-    /**
-     * @param $precondfunc
-     * @return bool
-     */
-    function setPreCondFunc($precondfunc) { /* {{{ */
+	/**
+	 * @param $precondfunc
+	 * @return bool
+	 */
+	function setPreCondFunc($precondfunc) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowStates` SET `precondfunc` = ".$db->qstr($precondfunc)." WHERE id = " . $this->_id;
@@ -550,8 +550,8 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 		if (!$res)
 			return false;
 
-        /** @noinspection PhpUndefinedVariableInspection */
-        $this->_maxtime = $maxtime; /* @todo fix me */
+		/** @noinspection PhpUndefinedVariableInspection */
+		$this->_maxtime = $maxtime; /* @todo fix me */
 		return true;
 	} /* }}} */
 
@@ -565,11 +565,11 @@ class SeedDMS_Core_Workflow_State { /* {{{ */
 	 */
 	function getDocumentStatus() { return $this->_documentstatus; }
 
-    /**
-     * @param $docstatus
-     * @return bool
-     */
-    function setDocumentStatus($docstatus) { /* {{{ */
+	/**
+	 * @param $docstatus
+	 * @return bool
+	 */
+	function setDocumentStatus($docstatus) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowStates` SET `documentstatus` = ".intval($docstatus)." WHERE id = " . $this->_id;
@@ -678,39 +678,39 @@ class SeedDMS_Core_Workflow_Action { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_Action constructor.
-     * @param $id
-     * @param $name
-     */
-    function __construct($id, $name) {
+	/**
+	 * SeedDMS_Core_Workflow_Action constructor.
+	 * @param $id
+	 * @param $name
+	 */
+	function __construct($id, $name) {
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_dms = null;
 	}
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) {
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) {
 		$this->_dms = $dms;
 	}
 
-    /**
-     * @return int
-     */
-    function getID() { return $this->_id; }
+	/**
+	 * @return int
+	 */
+	function getID() { return $this->_id; }
 
-    /**
-     * @return string name
-     */
-    function getName() { return $this->_name; }
+	/**
+	 * @return string name
+	 */
+	function getName() { return $this->_name; }
 
-    /**
-     * @param $newName
-     * @return bool
-     */
-    function setName($newName) { /* {{{ */
+	/**
+	 * @param $newName
+	 * @return bool
+	 */
+	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowActions` SET `name` = ".$db->qstr($newName)." WHERE `id` = " . $this->_id;
@@ -861,16 +861,16 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_Transition constructor.
-     * @param $id
-     * @param $workflow
-     * @param $state
-     * @param $action
-     * @param $nextstate
-     * @param $maxtime
-     */
-    function __construct($id, $workflow, $state, $action, $nextstate, $maxtime) {
+	/**
+	 * SeedDMS_Core_Workflow_Transition constructor.
+	 * @param $id
+	 * @param $workflow
+	 * @param $state
+	 * @param $action
+	 * @param $nextstate
+	 * @param $maxtime
+	 */
+	function __construct($id, $workflow, $state, $action, $nextstate, $maxtime) {
 		$this->_id = $id;
 		$this->_workflow = $workflow;
 		$this->_state = $state;
@@ -880,28 +880,28 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		$this->_dms = null;
 	}
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) {
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) {
 		$this->_dms = $dms;
 	}
 
-    /**
-     * @return int
-     */
-    function getID() { return $this->_id; }
+	/**
+	 * @return int
+	 */
+	function getID() { return $this->_id; }
 
-    /**
-     * @return SeedDMS_Core_Workflow
-     */
-    function getWorkflow() { return $this->_workflow; }
+	/**
+	 * @return SeedDMS_Core_Workflow
+	 */
+	function getWorkflow() { return $this->_workflow; }
 
-    /**
-     * @param SeedDMS_Core_Workflow $newWorkflow
-     * @return bool
-     */
-    function setWorkflow($newWorkflow) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_Workflow $newWorkflow
+	 * @return bool
+	 */
+	function setWorkflow($newWorkflow) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowTransitions` SET `workflow` = ".$newWorkflow->getID()." WHERE `id` = " . $this->_id;
@@ -914,16 +914,16 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 	} /* }}} */
 
 
-    /**
-     * @return SeedDMS_Core_Workflow_State
-     */
-    function getState() { return $this->_state; }
+	/**
+	 * @return SeedDMS_Core_Workflow_State
+	 */
+	function getState() { return $this->_state; }
 
-    /**
-     * @param SeedDMS_Core_Workflow_State $newState
-     * @return bool
-     */
-    function setState($newState) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_Workflow_State $newState
+	 * @return bool
+	 */
+	function setState($newState) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowTransitions` SET `state` = ".$newState->getID()." WHERE `id` = " . $this->_id;
@@ -935,16 +935,16 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return SeedDMS_Core_Workflow_State
-     */
-    function getNextState() { return $this->_nextstate; }
+	/**
+	 * @return SeedDMS_Core_Workflow_State
+	 */
+	function getNextState() { return $this->_nextstate; }
 
-    /**
-     * @param SeedDMS_Core_Workflow_State $newNextState
-     * @return bool
-     */
-    function setNextState($newNextState) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_Workflow_State $newNextState
+	 * @return bool
+	 */
+	function setNextState($newNextState) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowTransitions` SET `nextstate` = ".$newNextState->getID()." WHERE `id` = " . $this->_id;
@@ -956,16 +956,16 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return SeedDMS_Core_Workflow_Action
-     */
-    function getAction() { return $this->_action; }
+	/**
+	 * @return SeedDMS_Core_Workflow_Action
+	 */
+	function getAction() { return $this->_action; }
 
-    /**
-     * @param SeedDMS_Core_Workflow_Action $newAction
-     * @return bool
-     */
-    function setAction($newAction) { /* {{{ */
+	/**
+	 * @param SeedDMS_Core_Workflow_Action $newAction
+	 * @return bool
+	 */
+	function setAction($newAction) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowTransitions` SET `action` = ".$newAction->getID()." WHERE `id` = " . $this->_id;
@@ -977,16 +977,16 @@ class SeedDMS_Core_Workflow_Transition { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * @return int
-     */
-    function getMaxTime() { return $this->_maxtime; }
+	/**
+	 * @return int
+	 */
+	function getMaxTime() { return $this->_maxtime; }
 
-    /**
-     * @param $maxtime
-     * @return bool
-     */
-    function setMaxTime($maxtime) { /* {{{ */
+	/**
+	 * @param $maxtime
+	 * @return bool
+	 */
+	function setMaxTime($maxtime) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblWorkflowTransitions` SET `maxtime` = ".intval($maxtime)." WHERE `id` = " . $this->_id;
@@ -1117,22 +1117,22 @@ class SeedDMS_Core_Workflow_Transition_User { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_Transition_User constructor.
-     * @param $id
-     * @param $transition
-     * @param $user
-     */
-    function __construct($id, $transition, $user) {
+	/**
+	 * SeedDMS_Core_Workflow_Transition_User constructor.
+	 * @param $id
+	 * @param $transition
+	 * @param $user
+	 */
+	function __construct($id, $transition, $user) {
 		$this->_id = $id;
 		$this->_transition = $transition;
 		$this->_user = $user;
 	}
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) { /* {{{ */
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
@@ -1200,24 +1200,24 @@ class SeedDMS_Core_Workflow_Transition_Group { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_Transition_Group constructor.
-     * @param $id
-     * @param $transition
-     * @param $group
-     * @param $numOfUsers
-     */
-    function __construct($id, $transition, $group, $numOfUsers) { /* {{{ */
+	/**
+	 * SeedDMS_Core_Workflow_Transition_Group constructor.
+	 * @param $id
+	 * @param $transition
+	 * @param $group
+	 * @param $numOfUsers
+	 */
+	function __construct($id, $transition, $group, $numOfUsers) { /* {{{ */
 		$this->_id = $id;
 		$this->_transition = $transition;
 		$this->_group = $group;
 		$this->_numOfUsers = $numOfUsers;
 	} /* }}} */
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) { /* {{{ */
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
@@ -1323,18 +1323,18 @@ class SeedDMS_Core_Workflow_Log { /* {{{ */
 	 */
 	var $_dms;
 
-    /**
-     * SeedDMS_Core_Workflow_Log constructor.
-     * @param $id
-     * @param $document
-     * @param $version
-     * @param $workflow
-     * @param $user
-     * @param $transition
-     * @param $date
-     * @param $comment
-     */
-    function __construct($id, $document, $version, $workflow, $user, $transition, $date, $comment) {
+	/**
+	 * SeedDMS_Core_Workflow_Log constructor.
+	 * @param $id
+	 * @param $document
+	 * @param $version
+	 * @param $workflow
+	 * @param $user
+	 * @param $transition
+	 * @param $date
+	 * @param $comment
+	 */
+	function __construct($id, $document, $version, $workflow, $user, $transition, $date, $comment) {
 		$this->_id = $id;
 		$this->_document = $document;
 		$this->_version = $version;
@@ -1346,45 +1346,45 @@ class SeedDMS_Core_Workflow_Log { /* {{{ */
 		$this->_dms = null;
 	}
 
-    /**
-     * @param $dms
-     */
-    function setDMS($dms) { /* {{{ */
+	/**
+	 * @param $dms
+	 */
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
-    /**
-     * @return object
-     */
-    function getTransition() { /* {{{ */
+	/**
+	 * @return object
+	 */
+	function getTransition() { /* {{{ */
 		return $this->_transition;
 	} /* }}} */
 
-    /**
-     * @return object
-     */
-    function getWorkflow() { /* {{{ */
+	/**
+	 * @return object
+	 */
+	function getWorkflow() { /* {{{ */
 		return $this->_workflow;
 	} /* }}} */
 
-    /**
-     * @return object
-     */
-    function getUser() { /* {{{ */
+	/**
+	 * @return object
+	 */
+	function getUser() { /* {{{ */
 		return $this->_user;
 	} /* }}} */
 
-    /**
-     * @return string
-     */
-    function getComment() { /* {{{ */
+	/**
+	 * @return string
+	 */
+	function getComment() { /* {{{ */
 		return $this->_comment;
 	} /* }}} */
 
-    /**
-     * @return string
-     */
-    function getDate() { /* {{{ */
+	/**
+	 * @return string
+	 */
+	function getDate() { /* {{{ */
 		return $this->_date;
 	} /* }}} */
 
