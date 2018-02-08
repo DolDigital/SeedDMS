@@ -10,6 +10,7 @@
  * @copyright  Copyright (C) 2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
+/** @noinspection PhpUndefinedClassInspection */
 
 /**
  * Class to represent the database access for the document management
@@ -112,7 +113,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 *
 	 * This function is used to retrieve a list of database tables for backup
 	 *
-	 * @return array list of table names
+	 * @return string[]|bool list of table names
 	 */
 	function TableList() { /* {{{ */
 		switch($this->_driver) {
@@ -172,7 +173,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @param string $hostname host of database server
 	 * @param string $user name of user having access to database
 	 * @param string $passw password of user
-	 * @param string $database name of database
+	 * @param bool|string $database name of database
 	 */
 	function __construct($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
 		$this->_driver = $driver;
@@ -246,6 +247,7 @@ class SeedDMS_Core_DatabaseAccess {
 				$dsn = $this->_driver.":".$this->_database;
 				break;
 		}
+		/** @noinspection PhpUndefinedVariableInspection */
 		$this->_conn = new PDO($dsn, $this->_user, $this->_passw);
 		if (!$this->_conn)
 			return false;
@@ -291,7 +293,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Sanitize String used in database operations
 	 *
-	 * @param string text
+	 * @param string $text
 	 * @return string sanitized string
 	 */
 	function qstr($text) { /* {{{ */
@@ -301,7 +303,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Replace back ticks by '"'
 	 *
-	 * @param string text
+	 * @param string $text
 	 * @return string sanitized string
 	 */
 	function rbt($text) { /* {{{ */
@@ -314,7 +316,8 @@ class SeedDMS_Core_DatabaseAccess {
 	 * Call this function only with sql query which return data records.
 	 *
 	 * @param string $queryStr sql query
-	 * @return array/boolean data if query could be executed otherwise false
+	 * @param bool $retick
+	 * @return array|bool data if query could be executed otherwise false
 	 */
 	function getResultArray($queryStr, $retick=true) { /* {{{ */
 		$resArr = array();
@@ -389,7 +392,9 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Return the id of the last instert record
 	 *
-	 * @return integer id used in last autoincrement
+	 * @param string $tablename
+	 * @param string $fieldname
+	 * @return int id used in last autoincrement
 	 */
 	function getInsertID($tablename='', $fieldname='id') { /* {{{ */
 		if($this->_driver == 'pgsql')
@@ -409,6 +414,10 @@ class SeedDMS_Core_DatabaseAccess {
 
 	/**
 	 * Create various temporary tables to speed up and simplify sql queries
+	 *
+	 * @param string $tableName
+	 * @param bool $override
+	 * @return bool
 	 */
 	private function __createTemporaryTable($tableName, $override=false) { /* {{{ */
 		if (!strcasecmp($tableName, "ttreviewid")) {
@@ -579,7 +588,11 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
-	 * Create various temporary tables to speed up and simplify sql queries
+	 * Create various views to speed up and simplify sql queries
+	 *
+	 * @param string $tableName
+	 * @param bool $override
+	 * @return bool
 	 */
 	private function __createView($tableName, $override=false) { /* {{{ */
 		if (!strcasecmp($tableName, "ttreviewid")) {
@@ -741,7 +754,11 @@ class SeedDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
-	 * Create various temporary tables to speed up and simplify sql queries
+	 * Create various temporary tables or view to speed up and simplify sql queries
+	 *
+	 * @param string $tableName
+	 * @param bool $override
+	 * @return bool
 	 */
 	public function createTemporaryTable($tableName, $override=false) { /* {{{ */
 		if($this->_useviews)
@@ -755,6 +772,7 @@ class SeedDMS_Core_DatabaseAccess {
 	 * containing a unix timestamp
 	 *
 	 * @param string $fieldname name of field containing the timestamp
+	 * @param string $format
 	 * @return string sql code
 	 */
 	function getDateExtract($fieldname, $format='%Y-%m-%d') { /* {{{ */
@@ -823,6 +841,7 @@ class SeedDMS_Core_DatabaseAccess {
 	/**
 	 * Return sql statement for returning the current timestamp
 	 *
+	 * @param $field
 	 * @return string sql code
 	 */
 	function castToText($field) { /* {{{ */
@@ -834,5 +853,3 @@ class SeedDMS_Core_DatabaseAccess {
 		return $field;
 	} /* }}} */
 }
-
-?>

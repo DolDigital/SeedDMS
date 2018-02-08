@@ -117,23 +117,51 @@ class SeedDMS_Core_User { /* {{{ */
 	var $_loginFailures;
 
 	/**
-	 * @var object home folder
+	 * @var SeedDMS_Core_Folder home folder
 	 *
 	 * @access protected
 	 */
 	var $_homeFolder;
 
 	/**
-	 * @var object reference to the dms instance this user belongs to
+	 * @var SeedDMS_Core_DMS reference to the dms instance this user belongs to
 	 *
 	 * @access protected
 	 */
 	var $_dms;
 
+	/**
+	 * @var int
+	 */
+	private $_quota;
+
+	/**
+	 * @var bool
+	 */
+	private $_hasImage;
+
 	const role_user = '0';
 	const role_admin = '1';
 	const role_guest = '2';
 
+	/**
+	 * SeedDMS_Core_User constructor.
+	 * @param $id
+	 * @param $login
+	 * @param $pwd
+	 * @param $fullName
+	 * @param $email
+	 * @param $language
+	 * @param $theme
+	 * @param $comment
+	 * @param $role
+	 * @param int $isHidden
+	 * @param int $isDisabled
+	 * @param string $pwdExpiration
+	 * @param int $loginFailures
+	 * @param int $quota
+	 * @param null $homeFolder
+	 */
 	function __construct($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0, $quota=0, $homeFolder=null) {
 		$this->_id = $id;
 		$this->_login = $login;
@@ -158,13 +186,13 @@ class SeedDMS_Core_User { /* {{{ */
 	 *
 	 * @param string|integer $id Id, login name, or email of user, depending
 	 * on the 3rd parameter.
-	 * @param object $dms instance of dms
+	 * @param SeedDMS_Core_DMS $dms instance of dms
 	 * @param string $by search by [name|email]. If 'name' is passed, the method
 	 * will check for the 4th paramater and also filter by email. If this
 	 * parameter is left empty, the user will be search by its Id.
 	 * @param string $email optional email address if searching for name
-     * @return object instance of class SeedDMS_Core_User if user was found, null
-     * if user was not found, false in case of error
+	 * @return SeedDMS_Core_User|bool instance of class SeedDMS_Core_User if user was
+	 * found, null if user was not found, false in case of error
 	 */
 	public static function getInstance($id, $dms, $by='', $email='') { /* {{{ */
 		$db = $dms->getDB();
@@ -193,6 +221,11 @@ class SeedDMS_Core_User { /* {{{ */
 		return $user;
 	} /* }}} */
 
+	/**
+	 * @param $orderby
+	 * @param SeedDMS_Core_DMS $dms
+	 * @return SeedDMS_Core_User[]|bool
+	 */
 	public static function getAllInstances($orderby, $dms) { /* {{{ */
 		$db = $dms->getDB();
 
@@ -208,6 +241,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$users = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
+		    /** @var SeedDMS_Core_User $user */
 			$user = new self($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr[$i]["language"])?$resArr[$i]["language"]:NULL), (isset($resArr[$i]["theme"])?$resArr[$i]["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr[$i]["quota"], $resArr[$i]["homefolder"]);
 			$user->setDMS($dms);
 			$users[$i] = $user;
@@ -216,14 +250,27 @@ class SeedDMS_Core_User { /* {{{ */
 		return $users;
 } /* }}} */
 
+	/**
+	 * @param SeedDMS_Core_DMS $dms
+	 */
 	function setDMS($dms) {
 		$this->_dms = $dms;
 	}
 
+	/**
+	 * @return int
+	 */
 	function getID() { return $this->_id; }
 
+	/**
+	 * @return string
+	 */
 	function getLogin() { return $this->_login; }
 
+	/**
+	 * @param $newLogin
+	 * @return bool
+	 */
 	function setLogin($newLogin) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -236,8 +283,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getFullName() { return $this->_fullName; }
 
+	/**
+	 * @param $newFullName
+	 * @return bool
+	 */
 	function setFullName($newFullName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -250,8 +304,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getPwd() { return $this->_pwd; }
 
+	/**
+	 * @param $newPwd
+	 * @return bool
+	 */
 	function setPwd($newPwd) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -264,8 +325,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getPwdExpiration() { return $this->_pwdExpiration; }
 
+	/**
+	 * @param $newPwdExpiration
+	 * @return bool
+	 */
 	function setPwdExpiration($newPwdExpiration) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -284,8 +352,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getEmail() { return $this->_email; }
 
+	/**
+	 * @param $newEmail
+	 * @return bool
+	 */
 	function setEmail($newEmail) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -298,8 +373,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getLanguage() { return $this->_language; }
 
+	/**
+	 * @param $newLanguage
+	 * @return bool
+	 */
 	function setLanguage($newLanguage) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -312,8 +394,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getTheme() { return $this->_theme; }
 
+	/**
+	 * @param string $newTheme
+	 * @return bool
+	 */
 	function setTheme($newTheme) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -326,8 +415,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getComment() { return $this->_comment; }
 
+	/**
+	 * @param $newComment
+	 * @return bool
+	 */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -340,8 +436,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getRole() { return $this->_role; }
 
+	/**
+	 * @param $newrole
+	 * @return bool
+	 */
 	function setRole($newrole) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -353,9 +456,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool
+	 */
 	function isAdmin() { return ($this->_role == SeedDMS_Core_User::role_admin); }
 
-	function setAdmin($isAdmin) { /* {{{ */
+	/**
+	 * @return bool
+	 */
+	function setAdmin() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblUsers` SET `role` = " . SeedDMS_Core_User::role_admin . " WHERE `id` = " . $this->_id;
@@ -366,9 +475,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool
+	 */
 	function isGuest() { return ($this->_role == SeedDMS_Core_User::role_guest); }
 
-	function setGuest($isGuest) { /* {{{ */
+	/**
+	 * @return bool
+	 */
+	function setGuest() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE `tblUsers` SET `role` = " . SeedDMS_Core_User::role_guest . " WHERE `id` = " . $this->_id;
@@ -379,8 +494,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool|int
+	 */
 	function isHidden() { return $this->_isHidden; }
 
+	/**
+	 * @param $isHidden
+	 * @return bool
+	 */
 	function setHidden($isHidden) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -393,8 +515,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	}	 /* }}} */
 
+	/**
+	 * @return bool|int
+	 */
 	function isDisabled() { return $this->_isDisabled; }
 
+	/**
+	 * @param $isDisabled
+	 * @return bool
+	 */
 	function setDisabled($isDisabled) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -407,6 +536,9 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	}	 /* }}} */
 
+	/**
+	 * @return bool|int
+	 */
 	function addLoginFailure() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -418,6 +550,9 @@ class SeedDMS_Core_User { /* {{{ */
 		return $this->_loginFailures;
 	} /* }}} */
 
+	/**
+	 * @return bool
+	 */
 	function clearLoginFailures() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -448,8 +583,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return $resArr[0]['sum'];
 	} /* }}} */
 
+	/**
+	 * @return int
+	 */
 	function getQuota() { return $this->_quota; }
 
+	/**
+	 * @param $quota
+	 * @return bool
+	 */
 	function setQuota($quota) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -462,8 +604,15 @@ class SeedDMS_Core_User { /* {{{ */
 		return true;
 	}	 /* }}} */
 
+	/**
+	 * @return null|SeedDMS_Core_Folder
+	 */
 	function getHomeFolder() { return $this->_homeFolder; }
 
+	/**
+	 * @param $homefolder
+	 * @return bool
+	 */
 	function setHomeFolder($homefolder) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -656,9 +805,9 @@ class SeedDMS_Core_User { /* {{{ */
 	 * Do not remove folders and documents of the user, but assign them
 	 * to a different user.
 	 *
-	 * @param object $user the user doing the removal (needed for entry in
+	 * @param SeedDMS_Core_User $user the user doing the removal (needed for entry in
 	 *        review and approve log).
-	 * @param object $assignToUser the user who is new owner of folders and
+	 * @param SeedDMS_Core_User $assignToUser the user who is new owner of folders and
 	 *        documents which previously were owned by the delete user.
 	 * @return boolean true on success or false in case of an error
 	 */
@@ -671,8 +820,9 @@ class SeedDMS_Core_User { /* {{{ */
 		 * anymore.
 		 */
 		if(!$assignToUser)
-			return;
-		$assignTo = $assignToUser->getID();
+			return false;
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$assignTo = $assignToUser->getID();
 
 		$db->startTransaction();
 
@@ -828,7 +978,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * This function uses {@link SeedDMS_Group::addUser} but checks before if
 	 * the user is already a member of the group.
 	 *
-	 * @param object $group group to be the member of
+	 * @param SeedDMS_Core_Group $group group to be the member of
 	 * @return boolean true on success or false in case of an error or the user
 	 *        is already a member of the group
 	 */
@@ -848,7 +998,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * This function uses {@link SeedDMS_Group::removeUser} but checks before if
 	 * the user is a member of the group at all.
 	 *
-	 * @param object $group group to leave
+	 * @param SeedDMS_Core_Group $group group to leave
 	 * @return boolean true on success or false in case of an error or the user
 	 *        is not a member of the group
 	 */
@@ -866,7 +1016,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Get all groups the user is a member of
 	 *
-	 * @return array list of groups
+	 * @return SeedDMS_Core_Group[]|bool list of groups
 	 */
 	function getGroups() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -883,6 +1033,7 @@ class SeedDMS_Core_User { /* {{{ */
 			$this->_groups = array();
 			$classname = $this->_dms->getClassname('group');
 			foreach ($resArr as $row) {
+				/** @var SeedDMS_Core_Group $group */
 				$group = new $classname($row["id"], $row["name"], $row["comment"]);
 				$group->setDMS($this->_dms);
 				array_push($this->_groups, $group);
@@ -894,7 +1045,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Checks if user is member of a given group
 	 *
-	 * @param object $group
+	 * @param SeedDMS_Core_Group $group
 	 * @return boolean true if user is member of the given group otherwise false
 	 */
 	function isMemberOfGroup($group) { /* {{{ */
@@ -925,7 +1076,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Get the image from the users profile
 	 *
-	 * @return array image data
+	 * @return array|bool image data
 	 */
 	function getImage() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -940,6 +1091,11 @@ class SeedDMS_Core_User { /* {{{ */
 		return $resArr;
 	} /* }}} */
 
+	/**
+	 * @param $tmpfile
+	 * @param $mimeType
+	 * @return bool
+	 */
 	function setImage($tmpfile, $mimeType) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -961,9 +1117,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 	/**
 	 * Returns all documents of a given user
-	 *
-	 * @param object $user
-	 * @return array list of documents
+	 * @return SeedDMS_Core_Document[]|bool list of documents
 	 */
 	function getDocuments() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -980,6 +1134,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$documents = array();
 		$classname = $this->_dms->getClassname('document');
 		foreach ($resArr as $row) {
+			/** @var SeedDMS_Core_Document $document */
 			$document = new $classname($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 			$document->setDMS($this->_dms);
 			$documents[] = $document;
@@ -990,8 +1145,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Returns all documents locked by a given user
 	 *
-	 * @param object $user
-	 * @return array list of documents
+	 * @return bool|SeedDMS_Core_Document[] list of documents
 	 */
 	function getDocumentsLocked() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1008,6 +1162,7 @@ class SeedDMS_Core_User { /* {{{ */
 		$documents = array();
 		$classname = $this->_dms->getClassname('document');
 		foreach ($resArr as $row) {
+			/** @var SeedDMS_Core_Document $document */
 			$document = new $classname($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 			$document->setDMS($this->_dms);
 			$documents[] = $document;
@@ -1033,7 +1188,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        reviews
 	 * @param int $version optional version of the document
-	 * @return array list of all reviews
+	 * @return array|bool list of all reviews
 	 */
 	function getReviewStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1126,14 +1281,14 @@ class SeedDMS_Core_User { /* {{{ */
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        approvals
 	 * @param int $version optional version of the document
-	 * @return array list of all approvals
+	 * @return array|bool list of all approvals
 	 */
 	function getApprovalStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
 		$queryStr =
-   "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+			"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 			"`tblDocumentApproveLog`.`userID` ".
 			"FROM `tblDocumentApprovers` ".
@@ -1196,7 +1351,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        reviews
 	 * @param int $version optional version of the document
-	 * @return array list of all workflows
+	 * @return array|bool list of all workflows
 	 */
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1238,7 +1393,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Get a list of workflows this user is involved as in individual
 	 *
-	 * @return array list of all workflows
+	 * @return array|bool list of all workflows
 	 */
 	function getWorkflowsInvolved() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1298,7 +1453,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * This method is the reverse function of getMandatoryReviewers(). It returns
 	 * those user where the current user is a mandatory reviewer.
 	 *
-	 * @return array list of users where this user is a mandatory reviewer.
+	 * @return SeedDMS_Core_User[]|bool list of users where this user is a mandatory reviewer.
 	 */
 	function isMandatoryReviewerOf() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1321,7 +1476,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * This method is the reverse function of getMandatoryApprovers(). It returns
 	 * those user where the current user is a mandatory approver.
 	 *
-	 * @return array list of users where this user is a mandatory approver.
+	 * @return SeedDMS_Core_User[]|bool list of users where this user is a mandatory approver.
 	 */
 	function isMandatoryApproverOf() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1345,7 +1500,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * Whenever the user inserts a new document the mandatory workflow is
 	 * filled in as the workflow.
 	 *
-	 * @return object workflow
+	 * @return SeedDMS_Core_Workflow|bool workflow
 	 */
 	function getMandatoryWorkflow() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1368,7 +1523,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * Whenever the user inserts a new document the mandatory workflow is
 	 * filled in as the workflow.
 	 *
-	 * @return object workflow
+	 * @return SeedDMS_Core_Workflow[]|bool workflow
 	 */
 	function getMandatoryWorkflows() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1419,6 +1574,7 @@ class SeedDMS_Core_User { /* {{{ */
 			if (is_bool($resArr) && !$resArr) return false;
 		}
 
+		return false;
 	} /* }}} */
 
 	/**
@@ -1436,7 +1592,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverGroupID` = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (count($resArr)!=0) return;
+			if (count($resArr)!=0) return true;
 
 			$queryStr = "INSERT INTO `tblMandatoryApprovers` (`userID`, `approverGroupID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
@@ -1446,12 +1602,14 @@ class SeedDMS_Core_User { /* {{{ */
 
 			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverUserID` = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (count($resArr)!=0) return;
+			if (count($resArr)!=0) return true;
 
 			$queryStr = "INSERT INTO `tblMandatoryApprovers` (`userID`, `approverUserID`) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
 			if (is_bool($resArr) && !$resArr) return false;
 		}
+
+		return false;
 	} /* }}} */
 
 	/**
@@ -1466,18 +1624,20 @@ class SeedDMS_Core_User { /* {{{ */
 
 		$queryStr = "SELECT * FROM `tblWorkflowMandatoryWorkflow` WHERE `userid` = " . $this->_id . " AND `workflow` = " . (int) $workflow->getID();
 		$resArr = $db->getResultArray($queryStr);
-		if (count($resArr)!=0) return;
+		if (count($resArr)!=0) return true;
 
 		$queryStr = "INSERT INTO `tblWorkflowMandatoryWorkflow` (`userid`, `workflow`) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
 		$resArr = $db->getResult($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
+
+		return false;
 	} /* }}} */
 
 	/**
 	 * Set a mandatory workflows
 	 * This function sets a list of mandatory workflows.
 	 *
-	 * @param array $workflows list of workflow objects
+	 * @param SeedDMS_Core_Workflow[] $workflows list of workflow objects
 	 * @return boolean true on success, otherwise false
 	 */
 	function setMandatoryWorkflows($workflows) { /* {{{ */
@@ -1544,7 +1704,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 * Get all notifications of user
 	 *
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
-	 * @return array array of notifications
+	 * @return SeedDMS_Core_Notification[]|bool array of notifications
 	 */
 	function getNotifications($type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1571,7 +1731,7 @@ class SeedDMS_Core_User { /* {{{ */
 	/**
 	 * Return list of personal keyword categories
 	 *
-	 * @return array/boolean list of categories or false in case of an error
+	 * @return SeedDMS_Core_KeywordCategory[]|bool list of categories or false in case of an error
 	 */
 	function getKeywordCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1593,4 +1753,3 @@ class SeedDMS_Core_User { /* {{{ */
 	} /* }}} */
 
 } /* }}} */
-?>

@@ -25,6 +25,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 add SeedDMS_Core_Folder::getDocumentsMinMax()
+add lots of DocBlocks from merge request #8
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

@@ -74,7 +74,7 @@ require_once("inc.ClassAttribute.php");
  */
 class SeedDMS_Core_DMS {
 	/**
-	 * @var object $db reference to database object. This must be an instance
+	 * @var SeedDMS_Core_DatabaseAccess $db reference to database object. This must be an instance
 	 *      of {@link SeedDMS_Core_DatabaseAccess}.
 	 * @access protected
 	 */
@@ -88,7 +88,7 @@ class SeedDMS_Core_DMS {
 	protected $classnames;
 
 	/**
-	 * @var object $user reference to currently logged in user. This must be
+	 * @var SeedDMS_Core_User $user reference to currently logged in user. This must be
 	 *      an instance of {@link SeedDMS_Core_User}. This variable is currently not
 	 *      used. It is set by {@link setUser}.
 	 * @access private
@@ -181,6 +181,11 @@ class SeedDMS_Core_DMS {
 	 */
 	public $callbacks;
 
+	/**
+	 * @var SeedDMS_Core_DMS
+	 */
+	public $_dms;
+
 
 	/**
 	 * Checks if two objects are equal by comparing their IDs
@@ -214,7 +219,7 @@ class SeedDMS_Core_DMS {
 	 * The result of the function can be 0 which happens if the first element
 	 * of an indexed array matches.
 	 *
-	 * @param object $object1 object to look for (needle)
+	 * @param object $object object to look for (needle)
 	 * @param array $list list of objects (haystack)
 	 * @return boolean/integer index in array if object was found, otherwise false
 	 */
@@ -294,7 +299,7 @@ class SeedDMS_Core_DMS {
 	 * given user. A link is only accessible, if it is publically visible,
 	 * owned by the user, or the accessing user is an administrator.
 	 *
-	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
+	 * @param SeedDMS_Core_DocumentLink[] $links list of objects of type SeedDMS_Core_DocumentLink
 	 * @param object $user user for which access is being checked
 	 * @param string $access set if source or target of link shall be checked
 	 * for sufficient access rights. Set to 'source' if the source document
@@ -341,14 +346,14 @@ class SeedDMS_Core_DMS {
 		return $tmp;
 	} /* }}} */
 
+	/** @noinspection PhpUndefinedClassInspection */
 	/**
 	 * Create a new instance of the dms
 	 *
-	 * @param object $db object of class {@link SeedDMS_Core_DatabaseAccess}
+	 * @param SeedDMS_Core_DatabaseAccess $db object of class {@link SeedDMS_Core_DatabaseAccess}
 	 *        to access the underlying database
 	 * @param string $contentDir path in filesystem containing the data store
 	 *        all document contents is stored
-	 * @return object instance of {@link SeedDMS_Core_DMS}
 	 */
 	function __construct($db, $contentDir) { /* {{{ */
 		$this->db = $db;
@@ -377,11 +382,11 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return class name of instantiated objects
 	 *
-	 * This method returns the class name of those objects being instatiated
+	 * This method returns the class name of those objects being instantiated
 	 * by the dms. Each class has an internal place holder, which must be
 	 * passed to function.
 	 *
-	 * @param string placeholder (can be one of 'folder', 'document',
+	 * @param string $objectname placeholder (can be one of 'folder', 'document',
 	 * 'documentcontent', 'user', 'group'
 	 *
 	 * @return string/boolean name of class or false if placeholder is invalid
@@ -401,9 +406,9 @@ class SeedDMS_Core_DMS {
 	 * inherited from one of the available classes) implementing new
 	 * features. The method should be called in the postInitDMS hook.
 	 *
-	 * @param string placeholder (can be one of 'folder', 'document',
+	 * @param string $objectname placeholder (can be one of 'folder', 'document',
 	 * 'documentcontent', 'user', 'group'
-	 * @param string name of class
+	 * @param string $classname name of class
 	 *
 	 * @return string/boolean name of old class or false if not set
 	 */
@@ -422,7 +427,7 @@ class SeedDMS_Core_DMS {
 	 * This method returns the database object as it was set by the first
 	 * parameter of the constructor.
 	 *
-	 * @return object database
+	 * @return SeedDMS_Core_DatabaseAccess database
 	 */
 	function getDB() { /* {{{ */
 		return $this->db;
@@ -431,7 +436,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return the database version
 	 *
-	 * @return array array with elements major, minor, subminor, date
+	 * @return array|bool
 	 */
 	function getDBVersion() { /* {{{ */
 		$tbllist = $this->db->TableList();
@@ -478,7 +483,7 @@ class SeedDMS_Core_DMS {
 	 * This function must be called right after creating an instance of
 	 * {@link SeedDMS_Core_DMS}
 	 *
-	 * @param interger $id id of root folder
+	 * @param integer $id id of root folder
 	 */
 	function setRootFolderID($id) { /* {{{ */
 		$this->rootFolderID = $id;
@@ -504,7 +509,7 @@ class SeedDMS_Core_DMS {
 	 * This function must be called right after creating an instance of
 	 * {@link SeedDMS_Core_DMS}
 	 *
-	 * @param interger $id id of root folder
+	 * @param integer $id id of root folder
 	 */
 	function setMaxDirID($id) { /* {{{ */
 		$this->maxDirID = $id;
@@ -513,7 +518,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Get root folder
 	 *
-	 * @return object/boolean return the object of the root folder or false if
+	 * @return SeedDMS_Core_Folder|boolean return the object of the root folder or false if
 	 *        the root folder id was not set before with {@link setRootFolderID}.
 	 */
 	function getRootFolder() { /* {{{ */
@@ -556,7 +561,7 @@ class SeedDMS_Core_DMS {
 	 * If user authentication was done externally, this function can
 	 * be used to tell the dms who is currently logged in.
 	 *
-	 * @return object $user
+	 * @return SeedDMS_Core_User $user
 	 *
 	 */
 	function getLoggedInUser() { /* {{{ */
@@ -569,7 +574,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a document from the database by its id.
 	 *
 	 * @param integer $id internal id of document
-	 * @return object instance of {@link SeedDMS_Core_Document} or false
+	 * @return SeedDMS_Core_Document instance of {@link SeedDMS_Core_Document} or false
 	 */
 	function getDocument($id) { /* {{{ */
 		$classname = $this->classnames['document'];
@@ -601,7 +606,8 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $date date in format YYYY-MM-DD or an integer with the number
 	 *   of days. A negative value will cover the days in the past.
-	 * @return array list of documents
+	 * @param SeedDMS_Core_User $user
+	 * @return bool|SeedDMS_Core_Document[]
 	 */
 	function getDocumentsExpired($date, $user=null) { /* {{{ */
 		$db = $this->getDB();
@@ -649,8 +655,8 @@ class SeedDMS_Core_DMS {
 		if (is_bool($resArr) && !$resArr)
 			return false;
 
+		/** @var SeedDMS_Core_Document[] $documents */
 		$documents = array();
-		$ts = mktime(0, 0, 0) + 86400;
 		foreach ($resArr as $row) {
 			$document = $this->getDocument($row["id"]);
 			if($updatestatus)
@@ -668,7 +674,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $name
 	 * @param object $folder
-	 * @return object/boolean found document or false
+	 * @return SeedDMS_Core_Document|boolean found document or false
 	 */
 	function getDocumentByName($name, $folder=null) { /* {{{ */
 		if (!$name) return false;
@@ -689,6 +695,7 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		$row = $resArr[0];
+		/** @var SeedDMS_Core_Document $document */
 		$document = new $this->classnames['document']($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 		$document->setDMS($this);
 		return $document;
@@ -703,7 +710,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $name
 	 * @param object $folder
-	 * @return object/boolean found document or false
+	 * @return SeedDMS_Core_Document|boolean found document or false
 	 */
 	function getDocumentByOriginalFilename($name, $folder=null) { /* {{{ */
 		if (!$name) return false;
@@ -726,6 +733,7 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		$row = $resArr[0];
+		/** @var SeedDMS_Core_Document $document */
 		$document = new $this->classnames['document']($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
 		$document->setDMS($this);
 		return $document;
@@ -737,7 +745,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a document content from the database by its id.
 	 *
 	 * @param integer $id internal id of document content
-	 * @return object instance of {@link SeedDMS_Core_DocumentContent} or false
+	 * @return bool|SeedDMS_Core_Document or false
 	 */
 	function getDocumentContent($id) { /* {{{ */
 		if (!is_numeric($id)) return false;
@@ -793,14 +801,13 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $listtype type of document list, can be 'AppRevByMe',
 	 * 'AppRevOwner', 'ReceiptByMe', 'ReviseByMe', 'LockedByMe', 'MyDocs'
-	 * @param object $param1 user
-	 * @param string $param2 set to true
+	 * @param SeedDMS_Core_User $param1 user
+	 * @param bool $param2 set to true
 	 * if 'AppRevByMe', 'ReviseByMe', 'ReceiptByMe' shall return even documents
 	 * І have already taken care of.
-	 * if 'ExpiredOwner' contains the date in days or as 'yyyy-mm-dd'
 	 * @param string $param3 sort list by this field
 	 * @param string $param4 order direction
-	 * @return array list of documents records
+	 * @return array|bool
 	 */
 	function getDocumentList($listtype, $param1=null, $param2=false, $param3='', $param4='') { /* {{{ */
 		/* The following query will get all documents and lots of additional
@@ -1091,8 +1098,9 @@ class SeedDMS_Core_DMS {
 				$orderdir = 'DESC';
 			else
 				$orderdir = 'ASC';
+			/** @noinspection PhpUndefinedConstantInspection */
 			$queryStr .=	"AND `tblDocuments`.`owner` = '".$user->getID()."' ".
-				"AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.", ".S_IN_REVISION.") ";
+				"AND `tblDocumentStatusLog`.`status` IN (".S_DRAFT_REV.", ".S_DRAFT_APP.", ".S_IN_REVISION.") "; /** @todo S_IN_REVISION is not defined */
 			if ($orderby=='e') $queryStr .= "ORDER BY `expires`";
 			else if ($orderby=='u') $queryStr .= "ORDER BY `statusDate`";
 			else if ($orderby=='s') $queryStr .= "ORDER BY `status`";
@@ -1263,7 +1271,7 @@ class SeedDMS_Core_DMS {
 		return mktime($hour, $min, $sec, $month, $day, $year);
 	} /* }}} */
 
-	/*
+	/**
 	 * Search the database for documents
 	 *
 	 * Note: the creation date will be used to check againts the
@@ -1273,30 +1281,30 @@ class SeedDMS_Core_DMS {
 	 * meanѕ that updateѕ of a document will only result in a searchable
 	 * modification if a new version is uploaded.
 	 *
-	 * @param query string seach query with space separated words
-	 * @param limit integer number of items in result set
-	 * @param offset integer index of first item in result set
-	 * @param logicalmode string either AND or OR
-	 * @param searchin array() list of fields to search in
+	 * @param string $query seach query with space separated words
+	 * @param integer $limit number of items in result set
+	 * @param integer $offset index of first item in result set
+	 * @param string $logicalmode either AND or OR
+	 * @param array $searchin list of fields to search in
 	 *        1 = keywords, 2=name, 3=comment, 4=attributes
-	 * @param startFolder object search in the folder only (null for root folder)
-	 * @param owner object search for documents owned by this user
-	 * @param status array list of status
-	 * @param creationstartdate array search for documents created after this date
-	 * @param creationenddate array search for documents created before this date
-	 * @param modificationstartdate array search for documents modified after this date
-	 * @param modificationenddate array search for documents modified before this date
-	 * @param categories array list of categories the documents must have assigned
-	 * @param attributes array list of attributes. The key of this array is the
+	 * @param SeedDMS_Core_Folder|null $startFolder search in the folder only (null for root folder)
+	 * @param SeedDMS_Core_User $owner search for documents owned by this user
+	 * @param array $status list of status
+	 * @param array $creationstartdate search for documents created after this date
+	 * @param array $creationenddate search for documents created before this date
+	 * @param array $modificationstartdate search for documents modified after this date
+	 * @param array $modificationenddate search for documents modified before this date
+	 * @param array $categories list of categories the documents must have assigned
+	 * @param array $attributes list of attributes. The key of this array is the
 	 * attribute definition id. The value of the array is the value of the
 	 * attribute. If the attribute may have multiple values it must be an array.
-	 * @param mode int decide whether to search for documents/folders
+	 * @param integer $mode decide whether to search for documents/folders
 	 *        0x1 = documents only
 	 *        0x2 = folders only
 	 *        0x3 = both
-	 * @param expirationstartdate array search for documents expiring after this date
-	 * @param expirationenddate array search for documents expiring before this date
-	 * @return array containing the elements total and docs
+	 * @param array $expirationstartdate search for documents expiring after this date
+	 * @param array $expirationenddate search for documents expiring before this date
+	 * @return array|bool
 	 */
 	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x3, $expirationstartdate=array(), $expirationenddate=array()) { /* {{{ */
 		// Split the search string into constituent keywords.
@@ -1379,6 +1387,7 @@ class SeedDMS_Core_DMS {
 			if ($creationenddate) {
 				$stopdate = SeedDMS_Core_DMS::makeTimeStamp($creationenddate['hour'], $creationstartdate['minute'], $creationstartdate['second'], $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
 				if ($stopdate) {
+					/** @noinspection PhpUndefinedVariableInspection */
 					if($startdate)
 						$searchCreateDate .= " AND ";
 					$searchCreateDate .= "`tblFolders`.`date` <= ".$stopdate;
@@ -1440,6 +1449,7 @@ class SeedDMS_Core_DMS {
 					foreach ($resArr as $folderArr) {
 						$folders[] = $this->getFolder($folderArr['id']);
 					}
+					/** @noinspection PhpUndefinedVariableInspection */
 					$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>$folders);
 				}
 			} else {
@@ -1517,6 +1527,7 @@ class SeedDMS_Core_DMS {
 						} elseif($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
 							if($attrdef->getValueSet()) {
 								if($attrdef->getMultipleValues()) {
+									/** @noinspection PhpUndefinedVariableInspection */
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentContentAttributes` WHERE `tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND (`tblDocumentContentAttributes`.`value` like '%".$valueset[0].implode("%' OR `tblDocumentContentAttributes`.`value` like '%".$valueset[0], $attribute)."%') AND `tblDocumentContentAttributes`.`document` = `tblDocumentContent`.`id`)";
 								} else {
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentContentAttributes` WHERE `tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentContentAttributes`.`value`='".$attribute."' AND `tblDocumentContentAttributes`.content = `tblDocumentContent`.id)";
@@ -1675,6 +1686,7 @@ class SeedDMS_Core_DMS {
 					foreach ($resArr as $docArr) {
 						$docs[] = $this->getDocument($docArr['id']);
 					}
+					/** @noinspection PhpUndefinedVariableInspection */
 					$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 				}
 			} else {
@@ -1702,7 +1714,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a folder from the database by its id.
 	 *
 	 * @param integer $id internal id of folder
-	 * @return object instance of SeedDMS_Core_Folder or false
+	 * @return SeedDMS_Core_Folder instance of SeedDMS_Core_Folder or false
 	 */
 	function getFolder($id) { /* {{{ */
 		$classname = $this->classnames['folder'];
@@ -1718,8 +1730,8 @@ class SeedDMS_Core_DMS {
 	 * only within this parent folder. It will not be done recursively.
 	 *
 	 * @param string $name name of the folder
-	 * @param object $folder parent folder
-	 * @return object/boolean found folder or false
+	 * @param SeedDMS_Core_Folder $folder parent folder
+	 * @return SeedDMS_Core_Folder|boolean found folder or false
 	 */
 	function getFolderByName($name, $folder=null) { /* {{{ */
 		if (!$name) return false;
@@ -1737,6 +1749,7 @@ class SeedDMS_Core_DMS {
 			return false;
 
 		$resArr = $resArr[0];
+		/** @var SeedDMS_Core_Folder $folder */
 		$folder = new $this->classnames['folder']($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
 		$folder->setDMS($this);
 		return $folder;
@@ -1747,7 +1760,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * This function checks all folders in the database.
 	 *
-	 * @return array list of errors
+	 * @return array|bool
 	 */
 	function checkFolders() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblFolders`";
@@ -1781,7 +1794,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * This function checks all documents in the database.
 	 *
-	 * @return array list of errors
+	 * @return array|bool
 	 */
 	function checkDocuments() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblFolders`";
@@ -1827,7 +1840,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a user from the database by its id.
 	 *
 	 * @param integer $id internal id of user
-	 * @return object instance of {@link SeedDMS_Core_User} or false
+	 * @return SeedDMS_Core_User|boolean instance of {@link SeedDMS_Core_User} or false
 	 */
 	function getUser($id) { /* {{{ */
 		$classname = $this->classnames['user'];
@@ -1867,7 +1880,9 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return list of all users
 	 *
-	 * @return array of instances of {@link SeedDMS_Core_User} or false
+	 * @param string $orderby
+	 * @return array of instances of <a href='psi_element://SeedDMS_Core_User'>SeedDMS_Core_User</a> or false
+	 * or false
 	 */
 	function getAllUsers($orderby = '') { /* {{{ */
 		$classname = $this->classnames['user'];
@@ -1879,14 +1894,19 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $login login name
 	 * @param string $pwd password of new user
+	 * @param $fullName
 	 * @param string $email Email of new user
 	 * @param string $language language of new user
+	 * @param $theme
 	 * @param string $comment comment of new user
-	 * @param integer $role role of new user (can be 0=normal, 1=admin, 2=guest)
+	 * @param int|string $role role of new user (can be 0=normal, 1=admin, 2=guest)
 	 * @param integer $isHidden hide user in all lists, if this is set login
 	 *        is still allowed
 	 * @param integer $isDisabled disable user and prevent login
-	 * @return object of {@link SeedDMS_Core_User}
+	 * @param string $pwdexpiration
+	 * @param int $quota
+	 * @param null $homefolder
+	 * @return bool|SeedDMS_Core_User
 	 */
 	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='', $quota=0, $homefolder=null) { /* {{{ */
 		$db = $this->db;
@@ -1912,6 +1932,7 @@ class SeedDMS_Core_DMS {
 		/* Check if 'onPostAddUser' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddUser'])) {
 			foreach($this->_dms->callbacks['onPostUser'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
 				if(!call_user_func($callback[0], $callback[1], $user)) {
 				}
 			}
@@ -1924,7 +1945,7 @@ class SeedDMS_Core_DMS {
 	 * Get a group by its id
 	 *
 	 * @param integer $id id of group
-	 * @return object/boolean group or false if no group was found
+	 * @return SeedDMS_Core_Group|boolean group or false if no group was found
 	 */
 	function getGroup($id) { /* {{{ */
 		$classname = $this->classnames['group'];
@@ -1935,7 +1956,7 @@ class SeedDMS_Core_DMS {
 	 * Get a group by its name
 	 *
 	 * @param string $name name of group
-	 * @return object/boolean group or false if no group was found
+	 * @return SeedDMS_Core_Group|boolean group or false if no group was found
 	 */
 	function getGroupByName($name) { /* {{{ */
 		$classname = $this->classnames['group'];
@@ -1945,7 +1966,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Get a list of all groups
 	 *
-	 * @return array array of instances of {@link SeedDMS_Core_Group}
+	 * @return SeedDMS_Core_Group[] array of instances of {@link SeedDMS_Core_Group}
 	 */
 	function getAllGroups() { /* {{{ */
 		$classname = $this->classnames['group'];
@@ -1957,7 +1978,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $name name of group
 	 * @param string $comment comment of group
-	 * @return object/boolean instance of {@link SeedDMS_Core_Group} or false in
+	 * @return SeedDMS_Core_Group|boolean instance of {@link SeedDMS_Core_Group} or false in
 	 *         case of an error.
 	 */
 	function addGroup($name, $comment) { /* {{{ */
@@ -1974,6 +1995,7 @@ class SeedDMS_Core_DMS {
 		/* Check if 'onPostAddGroup' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddGroup'])) {
 			foreach($this->_dms->callbacks['onPostAddGroup'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
 				if(!call_user_func($callback[0], $callback[1], $group)) {
 				}
 			}
@@ -2030,6 +2052,8 @@ class SeedDMS_Core_DMS {
 
 	/**
 	 * This function should be replaced by getAllKeywordCategories()
+	 * @param $userID
+	 * @return SeedDMS_Core_KeywordCategory[]|bool
 	 */
 	function getAllUserKeywordCategories($userID) { /* {{{ */
 		$queryStr = "SELECT * FROM `tblKeywordCategories`";
@@ -2063,6 +2087,7 @@ class SeedDMS_Core_DMS {
 		/* Check if 'onPostAddKeywordCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddKeywordCategory'])) {
 			foreach($this->_dms->callbacks['onPostAddKeywordCategory'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
 				if(!call_user_func($callback[0], $callback[1], $category)) {
 				}
 			}
@@ -2109,7 +2134,7 @@ class SeedDMS_Core_DMS {
 	 * The name of a category is by default unique.
 	 *
 	 * @param string $name human readable name of category
-	 * @return object instance of {@link SeedDMS_Core_DocumentCategory}
+	 * @return SeedDMS_Core_DocumentCategory|boolean instance of {@link SeedDMS_Core_DocumentCategory}
 	 */
 	function getDocumentCategoryByName($name) { /* {{{ */
 		if (!$name) return false;
@@ -2139,6 +2164,7 @@ class SeedDMS_Core_DMS {
 		/* Check if 'onPostAddDocumentCategory' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddDocumentCategory'])) {
 			foreach($this->_dms->callbacks['onPostAddDocumentCategory'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
 				if(!call_user_func($callback[0], $callback[1], $category)) {
 				}
 			}
@@ -2178,7 +2204,8 @@ class SeedDMS_Core_DMS {
 	 * This function will not delete the password but just creates an entry
 	 * in tblUserRequestPassword indicating a password request.
 	 *
-	 * @return string hash value of false in case of an error
+	 * @param SeedDMS_Core_User $user
+	 * @return string|boolean hash value of false in case of an error
 	 */
 	function createPasswordRequest($user) { /* {{{ */
 		$hash = md5(uniqid(time()));
@@ -2195,6 +2222,7 @@ class SeedDMS_Core_DMS {
 	 * returns the user.
 	 *
 	 * @param string $hash
+	 * @return bool|SeedDMS_Core_User
 	 */
 	function checkPasswordRequest($hash) { /* {{{ */
 		/* Get the password request from the database */
@@ -2215,6 +2243,7 @@ class SeedDMS_Core_DMS {
 	 * Delete a password request
 	 *
 	 * @param string $hash
+	 * @return bool
 	 */
 	function deletePasswordRequest($hash) { /* {{{ */
 		/* Delete the request, so nobody can use it a second time */
@@ -2231,7 +2260,7 @@ class SeedDMS_Core_DMS {
 	 * its id.
 	 *
 	 * @param integer $id internal id of attribute defintion
-	 * @return object instance of {@link SeedDMS_Core_AttributeDefinition} or false
+	 * @return bool|SeedDMS_Core_AttributeDefinition or false
 	 */
 	function getAttributeDefinition($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -2256,7 +2285,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves an attribute def. from the database by its name.
 	 *
 	 * @param string $name internal name of attribute def.
-	 * @return object instance of {@link SeedDMS_Core_AttributeDefinition} or false
+	 * @return SeedDMS_Core_AttributeDefinition|boolean instance of {@link SeedDMS_Core_AttributeDefinition} or false
 	 */
 	function getAttributeDefinitionByName($name) { /* {{{ */
 		if (!$name) return false;
@@ -2278,7 +2307,8 @@ class SeedDMS_Core_DMS {
 	 * Return list of all attributes definitions
 	 *
 	 * @param integer $objtype select those attributes defined for an object type
-	 * @return array of instances of {@link SeedDMS_Core_AttributeDefinition} or false
+	 * @return bool|SeedDMS_Core_AttributeDefinition[] of instances of <a href='psi_element://SeedDMS_Core_AttributeDefinition'>SeedDMS_Core_AttributeDefinition</a> or false
+	 * or false
 	 */
 	function getAllAttributeDefinitions($objtype=0) { /* {{{ */
 		$queryStr = "SELECT * FROM `tblAttributeDefinitions`";
@@ -2294,6 +2324,7 @@ class SeedDMS_Core_DMS {
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 
+		/** @var SeedDMS_Core_AttributeDefinition[] $attrdefs */
 		$attrdefs = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
@@ -2309,12 +2340,14 @@ class SeedDMS_Core_DMS {
 	 * Add a new attribute definition
 	 *
 	 * @param string $name name of attribute
+	 * @param $objtype
 	 * @param string $type type of attribute
-	 * @param boolean $multiple set to 1 if attribute has multiple attributes
+	 * @param bool|int $multiple set to 1 if attribute has multiple attributes
 	 * @param integer $minvalues minimum number of values
 	 * @param integer $maxvalues maximum number of values if multiple is set
 	 * @param string $valueset list of allowed values (csv format)
-	 * @return object of {@link SeedDMS_Core_User}
+	 * @param string $regex
+	 * @return bool|SeedDMS_Core_User
 	 */
 	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='', $regex='') { /* {{{ */
 		if (is_object($this->getAttributeDefinitionByName($name))) {
@@ -2339,7 +2372,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return list of all workflows
 	 *
-	 * @return array of instances of {@link SeedDMS_Core_Workflow} or false
+	 * @return SeedDMS_Core_Workflow[]|bool of instances of {@link SeedDMS_Core_Workflow} or false
 	 */
 	function getAllWorkflows() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblWorkflows` ORDER BY `name`";
@@ -2358,8 +2391,10 @@ class SeedDMS_Core_DMS {
 			$wkfstates[$ressArr[$i]["id"]] = new SeedDMS_Core_Workflow_State($ressArr[$i]["id"], $ressArr[$i]["name"], $ressArr[$i]["maxtime"], $ressArr[$i]["precondfunc"], $ressArr[$i]["documentstatus"]);
 		}
 
+		/** @var SeedDMS_Core_Workflow[] $workflows */
 		$workflows = array();
 		for ($i = 0; $i < count($resArr); $i++) {
+			/** @noinspection PhpUndefinedVariableInspection */
 			$workflow = new SeedDMS_Core_Workflow($resArr[$i]["id"], $resArr[$i]["name"], $wkfstates[$resArr[$i]["initstate"]]);
 			$workflow->setDMS($this);
 			$workflows[$i] = $workflow;
@@ -2372,7 +2407,7 @@ class SeedDMS_Core_DMS {
 	 * Return workflow by its Id
 	 *
 	 * @param integer $id internal id of workflow
-	 * @return object of instances of {@link SeedDMS_Core_Workflow} or false
+	 * @return SeedDMS_Core_Workflow|bool of instances of {@link SeedDMS_Core_Workflow} or false
 	 */
 	function getWorkflow($id) { /* {{{ */
 		$queryStr = "SELECT * FROM `tblWorkflows` WHERE `id`=".intval($id);
@@ -2396,7 +2431,7 @@ class SeedDMS_Core_DMS {
 	 * Return workflow by its name
 	 *
 	 * @param string $name name of workflow
-	 * @return object of instances of {@link SeedDMS_Core_Workflow} or false
+	 * @return SeedDMS_Core_Workflow|bool of instances of {@link SeedDMS_Core_Workflow} or false
 	 */
 	function getWorkflowByName($name) { /* {{{ */
 		if (!$name) return false;
@@ -2422,7 +2457,8 @@ class SeedDMS_Core_DMS {
 	 * Add a new workflow
 	 *
 	 * @param string $name name of workflow
-	 * @param string $initstate initial state of workflow
+	 * @param SeedDMS_Core_Workflow_State $initstate initial state of workflow
+	 * @return bool|SeedDMS_Core_Workflow
 	 */
 	function addWorkflow($name, $initstate) { /* {{{ */
 		$db = $this->db;
@@ -2443,7 +2479,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a workflow state from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow state
-	 * @return object instance of {@link SeedDMS_Core_Workflow_State} or false
+	 * @return bool|SeedDMS_Core_Workflow_State or false
 	 */
 	function getWorkflowState($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -2466,7 +2502,7 @@ class SeedDMS_Core_DMS {
 	 * Return workflow state by its name
 	 *
 	 * @param string $name name of workflow state
-	 * @return object of instances of {@link SeedDMS_Core_Workflow_State} or false
+	 * @return bool|SeedDMS_Core_Workflow_State or false
 	 */
 	function getWorkflowStateByName($name) { /* {{{ */
 		if (!$name) return false;
@@ -2491,7 +2527,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return list of all workflow states
 	 *
-	 * @return array of instances of {@link SeedDMS_Core_Workflow_State} or false
+	 * @return SeedDMS_Core_Workflow_State[]|bool of instances of {@link SeedDMS_Core_Workflow_State} or false
 	 */
 	function getAllWorkflowStates() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblWorkflowStates` ORDER BY `name`";
@@ -2515,7 +2551,7 @@ class SeedDMS_Core_DMS {
 	 *
 	 * @param string $name name of workflow state
 	 * @param integer $docstatus document status when this state is reached
-	 * @return object instance of new workflow state
+	 * @return bool|SeedDMS_Core_Workflow_State
 	 */
 	function addWorkflowState($name, $docstatus) { /* {{{ */
 		$db = $this->db;
@@ -2536,7 +2572,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a workflow action from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow action
-	 * @return object instance of {@link SeedDMS_Core_Workflow_Action} or false
+	 * @return SeedDMS_Core_Workflow_Action|bool instance of {@link SeedDMS_Core_Workflow_Action} or false
 	 */
 	function getWorkflowAction($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -2561,7 +2597,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a workflow action from the database by its name.
 	 *
 	 * @param string $name name of workflow action
-	 * @return object instance of {@link SeedDMS_Core_Workflow_Action} or false
+	 * @return SeedDMS_Core_Workflow_Action|bool instance of {@link SeedDMS_Core_Workflow_Action} or false
 	 */
 	function getWorkflowActionByName($name) { /* {{{ */
 		if (!$name) return false;
@@ -2582,7 +2618,7 @@ class SeedDMS_Core_DMS {
 	/**
 	 * Return list of workflow action
 	 *
-	 * @return array list of instances of {@link SeedDMS_Core_Workflow_Action} or false
+	 * @return SeedDMS_Core_Workflow_Action[]|bool list of instances of {@link SeedDMS_Core_Workflow_Action} or false
 	 */
 	function getAllWorkflowActions() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblWorkflowActions`";
@@ -2591,6 +2627,7 @@ class SeedDMS_Core_DMS {
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 
+		/** @var SeedDMS_Core_Workflow_Action[] $wkfactions */
 		$wkfactions = array();
 		for ($i = 0; $i < count($resArr); $i++) {
 			$action = new SeedDMS_Core_Workflow_Action($resArr[$i]["id"], $resArr[$i]["name"]);
@@ -2605,7 +2642,7 @@ class SeedDMS_Core_DMS {
 	 * Add new workflow action
 	 *
 	 * @param string $name name of workflow action
-	 * @return object instance new workflow action
+	 * @return SeedDMS_Core_Workflow_Action|bool
 	 */
 	function addWorkflowAction($name) { /* {{{ */
 		$db = $this->db;
@@ -2626,7 +2663,7 @@ class SeedDMS_Core_DMS {
 	 * This function retrieves a workflow transition from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow transition
-	 * @return object instance of {@link SeedDMS_Core_Workflow_Transition} or false
+	 * @return SeedDMS_Core_Workflow_Transition|bool instance of {@link SeedDMS_Core_Workflow_Transition} or false
 	 */
 	function getWorkflowTransition($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -2653,6 +2690,8 @@ class SeedDMS_Core_DMS {
 	 * but little checks for database consistency and possible errors
 	 * in the application may have left over document content though
 	 * the document is gone already.
+	 *
+	 * @return array|bool
 	 */
 	function getUnlinkedDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` NOT IN (SELECT id FROM `tblDocuments`)";
@@ -2662,6 +2701,7 @@ class SeedDMS_Core_DMS {
 
 		$versions = array();
 		foreach($resArr as $row) {
+			/** @var SeedDMS_Core_Document $document */
 			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
 			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
@@ -2677,6 +2717,8 @@ class SeedDMS_Core_DMS {
 	 * This method is for finding document content without a file size
 	 * set in the database. The file size of a document content was introduced
 	 * in version 4.0.0 of SeedDMS for implementation of user quotas.
+	 *
+	 * @return SeedDMS_Core_Document[]|bool
 	 */
 	function getNoFileSizeDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `fileSize` = 0 OR `fileSize` is null";
@@ -2684,8 +2726,10 @@ class SeedDMS_Core_DMS {
 		if ($resArr === false)
 			return false;
 
+		/** @var SeedDMS_Core_Document[] $versions */
 		$versions = array();
 		foreach($resArr as $row) {
+			/** @var SeedDMS_Core_Document $document */
 			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
 			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum'], $row['fileSize'], $row['checksum']);
@@ -2701,6 +2745,7 @@ class SeedDMS_Core_DMS {
 	 * This method is for finding document content without a checksum
 	 * set in the database. The checksum of a document content was introduced
 	 * in version 4.0.0 of SeedDMS for finding duplicates.
+	 * @return bool|SeedDMS_Core_Document[]
 	 */
 	function getNoChecksumDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `checksum` = '' OR `checksum` is null";
@@ -2708,8 +2753,10 @@ class SeedDMS_Core_DMS {
 		if ($resArr === false)
 			return false;
 
+		/** @var SeedDMS_Core_Document[] $versions */
 		$versions = array();
 		foreach($resArr as $row) {
+			/** @var SeedDMS_Core_Document $document */
 			$document = new $this->classnames['document']($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
 			$version = new $this->classnames['documentcontent']($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
@@ -2725,6 +2772,7 @@ class SeedDMS_Core_DMS {
 	 * This method is for finding document content which is available twice
 	 * in the database. The checksum of a document content was introduced
 	 * in version 4.0.0 of SeedDMS for finding duplicates.
+	 * @return array|bool
 	 */
 	function getDuplicateDocumentContent() { /* {{{ */
 		$queryStr = "SELECT a.*, b.`id` as dupid FROM `tblDocumentContent` a LEFT JOIN `tblDocumentContent` b ON a.`checksum`=b.`checksum` where a.`id`!=b.`id` ORDER by a.`id` LIMIT 1000";
@@ -2732,6 +2780,7 @@ class SeedDMS_Core_DMS {
 		if (!$resArr)
 			return false;
 
+		/** @var SeedDMS_Core_Document[] $versions */
 		$versions = array();
 		foreach($resArr as $row) {
 			$document = $this->getDocument($row['document']);
@@ -2752,6 +2801,10 @@ class SeedDMS_Core_DMS {
 	 *
 	 * This method is for finding reviews or approvals whose user
 	 * or group  was deleted and not just removed from the process.
+	 *
+	 * @param string $process
+	 * @param string $usergroup
+	 * @return array
 	 */
 	function getProcessWithoutUserGroup($process, $usergroup) { /* {{{ */
 		switch($process) {
@@ -2762,6 +2815,7 @@ class SeedDMS_Core_DMS {
 			$queryStr = "SELECT a.*, b.`name` FROM `tblDocumentApprovers`";
 			break;
 		}
+		/** @noinspection PhpUndefinedVariableInspection */
 		$queryStr .= " a LEFT JOIN `tblDocuments` b ON a.`documentID`=b.`id` where";
 		switch($usergroup) {
 		case 'user':
@@ -2781,6 +2835,10 @@ class SeedDMS_Core_DMS {
 	 * This method is for removing all reviews or approvals whose user
 	 * or group  was deleted and not just removed from the process.
 	 * If the optional parameter $id is set, only this user/group id is removed.
+	 * @param string $process
+	 * @param string $usergroup
+	 * @param int $id
+	 * @return array
 	 */
 	function removeProcessWithoutUserGroup($process, $usergroup, $id=0) { /* {{{ */
 		/* Entries of tblDocumentReviewLog or tblDocumentApproveLog are deleted
@@ -2794,6 +2852,7 @@ class SeedDMS_Core_DMS {
 			$queryStr = "DELETE FROM tblDocumentApprovers";
 			break;
 		}
+		/** @noinspection PhpUndefinedVariableInspection */
 		$queryStr .= " WHERE";
 		switch($usergroup) {
 		case 'user':
@@ -2819,7 +2878,7 @@ class SeedDMS_Core_DMS {
 	 * documents or used space per user, recent activity, etc.
 	 *
 	 * @param string $type type of statistic
-	 * @return array statistical data
+	 * @return array|bool
 	 */
 	function getStatisticalData($type='') { /* {{{ */
 		switch($type) {
@@ -2845,6 +2904,7 @@ class SeedDMS_Core_DMS {
 
 				return $resArr;
 			case 'docsperstatus':
+				/** @noinspection PhpUnusedLocalVariableInspection */
 				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.id, max(b.version), max(c.`statusLogID`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentID` left join `tblDocumentStatusLog` c on b.`statusID`=c.`statusID` group by a.`id`, b.`version` order by a.`id`, b.`statusID`) a left join `tblDocumentStatusLog` b on a.`maxlog`=b.`statusLogID` group by b.`status`";
 				$queryStr = "select b.`status` as `key`, count(b.`status`) as total from (select a.`id`, max(c.`statusLogID`) as maxlog from `tblDocuments` a left join `tblDocumentStatus` b on a.id=b.`documentID` left join `tblDocumentStatusLog` c on b.`statusID`=c.`statusID` group by a.`id`  order by a.id) a left join `tblDocumentStatusLog` b on a.maxlog=b.`statusLogID` group by b.`status`";
 				$resArr = $this->db->getResultArray($queryStr);
@@ -2895,15 +2955,19 @@ class SeedDMS_Core_DMS {
 	 * entries in the database tables tblDocumentContent, tblDocumentFiles,
 	 * and tblDocumentStatusLog
 	 *
-	 * @param string $start start date, defaults to start of current day
-	 * @param string $end end date, defaults to end of start day
-	 * @return array list of changes
+	 * @param string $startts
+	 * @param string $endts
+	 * @return array|bool
+	 * @internal param string $start start date, defaults to start of current day
+	 * @internal param string $end end date, defaults to end of start day
 	 */
 	function getTimeline($startts='', $endts='') { /* {{{ */
 		if(!$startts)
 			$startts = mktime(0, 0, 0);
 		if(!$endts)
 			$endts = $startts+86400;
+
+		/** @var SeedDMS_Core_Document[] $timeline */
 		$timeline = array();
 
 		$queryStr = "SELECT DISTINCT document FROM `tblDocumentContent` WHERE `date` > ".$startts." AND `date` < ".$endts." UNION SELECT DISTINCT document FROM `tblDocumentFiles` WHERE `date` > ".$startts." AND `date` < ".$endts;
@@ -2948,6 +3012,7 @@ class SeedDMS_Core_DMS {
 	 * Create an sql dump of the complete database
 	 *
 	 * @param string $filename name of dump file
+	 * @return bool
 	 */
 	function createDump($filename) { /* {{{ */
 		$h = fopen($filename, "w");
@@ -2979,4 +3044,3 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 }
-?>

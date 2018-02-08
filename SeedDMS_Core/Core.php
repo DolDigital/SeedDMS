@@ -90,5 +90,3 @@ require_once('Core/inc.AccessUtils.php');
  * @uses SeedDMS_File
  */
 require_once('Core/inc.FileUtils.php');
-
-?>

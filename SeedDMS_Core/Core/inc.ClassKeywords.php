@@ -42,11 +42,17 @@ class SeedDMS_Core_KeywordCategory {
 	protected $_name;
 
 	/**
-	 * @var object $_dms reference to dms this category belongs to
+	 * @var SeedDMS_Core_DMS $_dms reference to dms this category belongs to
 	 * @access protected
 	 */
 	protected $_dms;
 
+    /**
+     * SeedDMS_Core_KeywordCategory constructor.
+     * @param $id
+     * @param $ownerID
+     * @param $name
+     */
 	function __construct($id, $ownerID, $name) {
 		$this->_id = $id;
 		$this->_name = $name;
@@ -54,20 +60,36 @@ class SeedDMS_Core_KeywordCategory {
 		$this->_dms = null;
 	}
 
+    /**
+     * @param SeedDMS_Core_DMS $dms
+     */
 	function setDMS($dms) {
 		$this->_dms = $dms;
 	}
 
+    /**
+     * @return int
+     */
 	function getID() { return $this->_id; }
 
+    /**
+     * @return string
+     */
 	function getName() { return $this->_name; }
 
+    /**
+     * @return bool|SeedDMS_Core_User
+     */
 	function getOwner() {
 		if (!isset($this->_owner))
 			$this->_owner = $this->_dms->getUser($this->_ownerID);
 		return $this->_owner;
 	}
 
+    /**
+     * @param $newName
+     * @return bool
+     */
 	function setName($newName) {
 		$db = $this->_dms->getDB();
 
@@ -79,6 +101,10 @@ class SeedDMS_Core_KeywordCategory {
 		return true;
 	}
 
+    /**
+     * @param SeedDMS_Core_User $user
+     * @return bool
+     */
 	function setOwner($user) {
 		$db = $this->_dms->getDB();
 
@@ -91,6 +117,9 @@ class SeedDMS_Core_KeywordCategory {
 		return true;
 	}
 
+    /**
+     * @return array
+     */
 	function getKeywordLists() {
 		$db = $this->_dms->getDB();
 
@@ -98,6 +127,11 @@ class SeedDMS_Core_KeywordCategory {
 		return $db->getResultArray($queryStr);
 	}
 
+    /**
+     * @param $listID
+     * @param $keywords
+     * @return bool
+     */
 	function editKeywordList($listID, $keywords) {
 		$db = $this->_dms->getDB();
 
@@ -105,6 +139,10 @@ class SeedDMS_Core_KeywordCategory {
 		return $db->getResult($queryStr);
 	}
 
+    /**
+     * @param $keywords
+     * @return bool
+     */
 	function addKeywordList($keywords) {
 		$db = $this->_dms->getDB();
 
@@ -112,6 +150,10 @@ class SeedDMS_Core_KeywordCategory {
 		return $db->getResult($queryStr);
 	}
 
+    /**
+     * @param $listID
+     * @return bool
+     */
 	function removeKeywordList($listID) {
 		$db = $this->_dms->getDB();
 
@@ -119,6 +161,9 @@ class SeedDMS_Core_KeywordCategory {
 		return $db->getResult($queryStr);
 	}
 
+    /**
+     * @return bool
+     */
 	function remove() {
 		$db = $this->_dms->getDB();
 
@@ -139,5 +184,3 @@ class SeedDMS_Core_KeywordCategory {
 		return true;
 	}
 }
-
-?>
