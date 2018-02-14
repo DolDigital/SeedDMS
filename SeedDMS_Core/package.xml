@@ -12,8 +12,8 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2017-09-05</date>
- <time>07:35:24</time>
+ <date>2018-02-14</date>
+ <time>06:38:12</time>
  <version>
   <release>5.0.14</release>
   <api>5.0.14</api>
@@ -1215,7 +1215,7 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </notes>
   </release>
   <release>
-   <date>2017-09-05</date>
+   <date>2018-02-14</date>
    <time>06:38:12</time>
    <version>
     <release>4.3.37</release>
@@ -1227,6 +1227,7 @@ do not sort some temporary tables anymore, because it causes an error in mysql i
    </stability>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
+- SeedDMS_Core_DMS::search() finds documents without a status log
    </notes>
   </release>
   <release>

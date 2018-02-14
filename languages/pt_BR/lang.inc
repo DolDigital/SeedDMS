@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (968), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (969), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1081,7 +1081,7 @@ URL: [url]',
 'select_one' => 'Selecione um',
 'select_user' => '',
 'select_users' => 'Clique para selecionar os usuários',
-'select_value' => '',
+'select_value' => 'Selecionar opção',
 'select_workflow' => 'Selecione o fluxo de trabalho',
 'send_email' => '',
 'send_login_data' => '',
