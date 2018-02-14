@@ -950,8 +950,9 @@ class SeedDMS_Core_DMS {
 				"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
 				"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
 				"LEFT JOIN `tblDocumentCategory` ON `tblDocuments`.`id`=`tblDocumentCategory`.`documentID` ".
-				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-				"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version`";
+				"WHERE ".
+				// "`ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` AND ".
+				"`ttcontentid`.`maxVersion` = `tblDocumentContent`.`version`";
 
 			if (strlen($searchKey)>0) {
 				$searchQuery .= " AND (".$searchKey.")";
