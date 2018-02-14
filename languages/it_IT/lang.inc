@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1588), rickr (144), s.pnt (26)
+//    Translators: Admin (1590), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -1188,8 +1188,8 @@ URL: [url]',
 'settings_defaultAccessDocs_desc' => 'Quando si crea un nuovo documento, questo sarà il diritto di accesso predefinito',
 'settings_defaultDocPosition' => '',
 'settings_defaultDocPosition_desc' => '',
-'settings_defaultDocPosition_val_end' => '',
-'settings_defaultDocPosition_val_start' => '',
+'settings_defaultDocPosition_val_end' => 'fine',
+'settings_defaultDocPosition_val_start' => 'inizio',
 'settings_defaultSearchMethod' => 'Metodo di ricerca predefinito',
 'settings_defaultSearchMethod_desc' => 'Metodo di ricerca predefinito, quando la ricerca viene avviata dal modulo di ricerca nel menu principale.',
 'settings_defaultSearchMethod_valdatabase' => 'database',
