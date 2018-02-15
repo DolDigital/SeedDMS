@@ -166,6 +166,7 @@ if ($action == "setowner") {
 			}
 //			$notifier->toIndividual($user, $oldowner, $subject, $message, $params);
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_setowner')));
 	}
 }
 
@@ -190,6 +191,7 @@ else if ($action == "notinherit") {
 			}
 
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_notinherit_access')));
 }
 
 // Change to inherit-----------------------------------------------------
@@ -211,6 +213,7 @@ else if ($action == "inherit") {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_inherit_access')));
 }
 
 // Set default permissions ----------------------------------------------
@@ -232,6 +235,13 @@ else if ($action == "setdefault") {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_set_default_access')));
+} elseif($action == "delaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_delete_access')));
+} elseif($action == "addaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_access')));
+} elseif($action == "editaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_access')));
 }
 
 add_log_line("");
