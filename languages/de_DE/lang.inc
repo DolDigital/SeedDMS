@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2536), dgrutsch (22)
+//    Translators: Admin (2543), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1495,6 +1495,7 @@ Name: [username]
 'sk_SK' => 'Slovakisch',
 'space_used_on_data_folder' => 'Benutzter Plattenplatz',
 'splash_added_to_clipboard' => 'Der Zwischenablage hinzugefügt',
+'splash_add_access' => 'Zugriffsrecht hinzugefügt',
 'splash_add_attribute' => 'Neues Attribut hinzugefügt',
 'splash_add_group' => 'Neue Gruppe hinzugefügt',
 'splash_add_group_member' => 'Neues Gruppenmitglied hinzugefügt',
@@ -1504,12 +1505,14 @@ Name: [username]
 'splash_add_user' => 'Neuen Benutzer hinzugefügt',
 'splash_cleared_cache' => 'Cache geleert',
 'splash_cleared_clipboard' => 'Zwischenablage geleert',
+'splash_delete_access' => 'Zugriffsrecht gelöscht',
 'splash_document_added' => 'Dokument hinzugefügt',
 'splash_document_checkedout' => 'Dokument ausgecheckt',
 'splash_document_edited' => 'Dokument gespeichert',
 'splash_document_indexed' => 'Dokument \'[name]\' indiziert.',
 'splash_document_locked' => 'Dokument gesperrt',
 'splash_document_unlocked' => 'Dokumentensperre aufgehoben',
+'splash_edit_access' => 'Zugriffsrecht verändert',
 'splash_edit_attribute' => 'Attribut gespeichert',
 'splash_edit_event' => 'Ereignis gespeichert',
 'splash_edit_group' => 'Gruppe gespeichert',
@@ -1520,11 +1523,13 @@ Name: [username]
 'splash_error_send_download_link' => 'Fehler beim Verschicken des Download-Links',
 'splash_folder_edited' => 'Änderungen am Ordner gespeichert',
 'splash_importfs' => '[docs] Dokumente und [folders] Ordner importiert',
+'splash_inherit_access' => 'Zugriffsrechte werden geerbt',
 'splash_invalid_folder_id' => 'Ungültige Ordner-ID',
 'splash_invalid_searchterm' => 'Ungültiger Suchbegriff',
 'splash_moved_clipboard' => 'Inhalt der Zwischenablage in aktuellen Ordner verschoben',
 'splash_move_document' => 'Dokument verschoben',
 'splash_move_folder' => 'Ordner verschoben',
+'splash_notinherit_access' => 'Zugriffsrechte werden nicht mehr geerbt',
 'splash_receipt_update_success' => 'Empfangsbestätigung hinzugefügt',
 'splash_removed_from_clipboard' => 'Aus der Zwischenablage entfernt',
 'splash_rm_attribute' => 'Attribut gelöscht',
@@ -1541,7 +1546,9 @@ Name: [username]
 'splash_save_user_data' => 'Benutzerdaten gespeichert',
 'splash_send_download_link' => 'Download-Link per E-Mail verschickt.',
 'splash_send_login_data' => 'Login-Daten verschickt',
+'splash_setowner' => 'Neuen Besitzer gesetzt',
 'splash_settings_saved' => 'Einstellungen gesichert',
+'splash_set_default_access' => 'Default-Zugriffsrecht gesetzt',
 'splash_substituted_user' => 'Benutzer gewechselt',
 'splash_switched_back_user' => 'Zum ursprünglichen Benutzer zurückgekehrt',
 'splash_toogle_group_manager' => 'Gruppenverwalter gewechselt',

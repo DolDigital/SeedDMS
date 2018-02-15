@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1658), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1665), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1490,6 +1490,7 @@ Name: [username]
 'sk_SK' => 'Slovak',
 'space_used_on_data_folder' => 'Space used on data folder',
 'splash_added_to_clipboard' => 'Added to clipboard',
+'splash_add_access' => 'Access right added',
 'splash_add_attribute' => 'New attribute added',
 'splash_add_group' => 'New group added',
 'splash_add_group_member' => 'New group member added',
@@ -1499,12 +1500,14 @@ Name: [username]
 'splash_add_user' => 'New user added',
 'splash_cleared_cache' => 'Cache cleared',
 'splash_cleared_clipboard' => 'Clipboard cleared',
+'splash_delete_access' => 'Access right deleted',
 'splash_document_added' => 'Document added',
 'splash_document_checkedout' => 'Document checked out',
 'splash_document_edited' => 'Document saved',
 'splash_document_indexed' => 'Document \'[name]\' indexed.',
 'splash_document_locked' => 'Document locked',
 'splash_document_unlocked' => 'Document unlocked',
+'splash_edit_access' => 'Access right changed',
 'splash_edit_attribute' => 'Attribute saved',
 'splash_edit_event' => 'Event saved',
 'splash_edit_group' => 'Group saved',
@@ -1515,11 +1518,13 @@ Name: [username]
 'splash_error_send_download_link' => 'Error while sending download link',
 'splash_folder_edited' => 'Save folder changes',
 'splash_importfs' => 'Imported [docs] documents and [folders] folders',
+'splash_inherit_access' => 'Access right will be inherited',
 'splash_invalid_folder_id' => 'Invalid folder ID',
 'splash_invalid_searchterm' => 'Invalid search term',
 'splash_moved_clipboard' => 'Clipboard moved into current folder',
 'splash_move_document' => 'Document moved',
 'splash_move_folder' => 'Folder moved',
+'splash_notinherit_access' => 'Access rights no longer inherited',
 'splash_receipt_update_success' => 'Reception added successfully',
 'splash_removed_from_clipboard' => 'Removed from clipboard',
 'splash_rm_attribute' => 'Attribute removed',
@@ -1536,7 +1541,9 @@ Name: [username]
 'splash_save_user_data' => 'User data saved',
 'splash_send_download_link' => 'Download link sent by email.',
 'splash_send_login_data' => 'Login data sent',
+'splash_setowner' => 'Set new owner',
 'splash_settings_saved' => 'Settings saved',
+'splash_set_default_access' => 'Default access right set',
 'splash_substituted_user' => 'Substituted user',
 'splash_switched_back_user' => 'Switched back to original user',
 'splash_toogle_group_manager' => 'Group manager toogled',
