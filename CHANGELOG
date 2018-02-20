@@ -4,6 +4,7 @@
 - fix label in password forgotten form (Closes #346)
 - translation updates
 - search result contains documents without a status log
+- fix setting categories in utils/adddoc.php
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36
