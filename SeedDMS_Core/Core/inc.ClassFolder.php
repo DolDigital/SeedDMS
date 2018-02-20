@@ -781,7 +781,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *        expiration date
 	 * @param object $owner owner of the new document
 	 * @param string $keywords keywords of new document
-	 * @param array $categories list of category ids
+	 * @param array $categories list of category objects
 	 * @param string $tmpFile the path of the file containing the content
 	 * @param string $orgFileName the original file name
 	 * @param string $fileType usually the extension of the filename

@@ -84,19 +84,6 @@ if(isset($options['k'])) {
 	$keywords = $options['k'];
 }
 
-$categories = array();
-if(isset($options['K'])) {
-	$categorynames = explode(',', $options['K']);
-	foreach($categorynames as $categoryname) {
-		$cat = $dms->getDocumentCategoryByName($categoryname);
-		if($cat) {
-			$categories[] = $cat->getID();
-		} else {
-			echo "Category '".$categoryname."' not found\n";
-		}
-	}
-}
-
 $sequence = 0;
 if(isset($options['s'])) {
 	$sequence = $options['s'];
@@ -141,6 +128,20 @@ $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffse
 if(!$dms->checkVersion()) {
 	echo "Database update needed.";
 	exit;
+}
+
+/* Parse categories */
+$categories = array();
+if(isset($options['K'])) {
+	$categorynames = explode(',', $options['K']);
+	foreach($categorynames as $categoryname) {
+		$cat = $dms->getDocumentCategoryByName($categoryname);
+		if($cat) {
+			$categories[] = $cat;
+		} else {
+			echo "Category '".$categoryname."' not found\n";
+		}
+	}
 }
 
 /* Parse document attributes.  */
