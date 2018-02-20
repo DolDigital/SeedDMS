@@ -137,7 +137,7 @@ if(isset($options['K'])) {
 	foreach($categorynames as $categoryname) {
 		$cat = $dms->getDocumentCategoryByName($categoryname);
 		if($cat) {
-			$categories[] = $cat->getID();
+			$categories[] = $cat;
 		} else {
 			echo "Category '".$categoryname."' not found\n";
 		}
