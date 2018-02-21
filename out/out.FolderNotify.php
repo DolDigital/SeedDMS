@@ -51,7 +51,6 @@ if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('allusers', $allUsers);
 	$view->setParam('allgroups', $allGroups);
-	$view->setParam('strictformcheck', $settings->_strictFormCheck);
 	$view($_GET);
 	exit;
 }

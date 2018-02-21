@@ -69,7 +69,6 @@ $(document).ready(function() {
 		$folder = $this->params['folder'];
 		$allUsers = $this->params['allusers'];
 		$allGroups = $this->params['allgroups'];
-		$strictformcheck = $this->params['strictformcheck'];
 
 		$notifyList = $folder->getNotifyList();
 
