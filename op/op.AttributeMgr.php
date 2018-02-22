@@ -36,7 +36,7 @@ if (!$user->isAdmin()) {
 if (isset($_POST["action"])) $action=$_POST["action"];
 else $action=NULL;
 
-if(!in_array($action, array('addattrdef', 'removeattrdef', 'editattrdef')))
+if(!in_array($action, array('addattrdef', 'removeattrdef', 'editattrdef', 'removeattrvalue')))
   UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
 
 /* Check if the form data comes from a trusted request */
@@ -168,6 +168,35 @@ else if ($action == "editattrdef") {
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_attribute')));
 
 	add_log_line("&action=editattrdef&attrdefid=".$attrdefid);
+}
+
+// remove attribute value -----------------------------------------------
+else if ($action == "removeattrvalue") {
+
+	if (!isset($_POST["attrdefid"]) || !is_numeric($_POST["attrdefid"]) || intval($_POST["attrdefid"])<1) {
+		UI::exitError(getMLText("admin_tools"),getMLText("unknown_attrdef"));
+	}
+	$attrdefid = $_POST["attrdefid"];
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if (!is_object($attrdef)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("unknown_attrdef"));
+	}
+
+	$attrval = $_POST["attrvalue"];
+
+	$controller->setParam('attrval', $attrval);
+	$controller->setParam('attrdef', $attrdef);
+	if (!$controller($_POST)) {
+		header('Content-Type: application/json');
+		echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured')));
+	} else {
+		header('Content-Type: application/json');
+		echo json_encode(array('success'=>true, 'message'=>getMLText('splash_rm_attr_value')));
+	}
+
+	add_log_line("&action=removeattrvalue&attrdefid=".$attrdefid);
+	exit;
+
 } else {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
 }
