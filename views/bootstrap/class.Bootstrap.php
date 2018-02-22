@@ -1843,6 +1843,86 @@ $(document).ready( function() {
 	} /* }}} */
 
 	/**
+	 * Print button with link for deleting an attribute value
+	 *
+	 * This button is used in document listings (e.g. on the ViewFolder page)
+	 * for deleting a document. In seeddms version < 4.3.9 this was just a
+	 * link to the out/out.RemoveDocument.php page which asks for confirmation
+	 * an than calls op/op.RemoveDocument.php. Starting with version 4.3.9
+	 * the button just opens a small popup asking for confirmation and than
+	 * calls the ajax command 'deletedocument'. The ajax call is called
+	 * in the click function of 'button.removedocument'. That button needs
+	 * to have two attributes: 'rel' for the id of the document, and 'msg'
+	 * for the message shown by notify if the document could be deleted.
+	 *
+	 * @param object $document document to be deleted
+	 * @param string $msg message shown in case of successful deletion
+	 * @param boolean $return return html instead of printing it
+	 * @return string html content if $return is true, otherwise an empty string
+	 */
+	function printDeleteAttributeValueButton($attrdef, $value, $msg, $return=false){ /* {{{ */
+		$content = '';
+    $content .= '<a class="delete-attribute-value-btn" rel="'.$attrdef->getID().'" msg="'.getMLText($msg).'" attrvalue="'.htmlspecialchars($value, ENT_QUOTES).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_attr_value", array ("attrdefname" => $attrdef->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
+		if($return)
+			return $content;
+		else
+			echo $content;
+		return '';
+	} /* }}} */
+
+	function printDeleteAttributeValueButtonJs(){ /* {{{ */
+		echo "
+		$(document).ready(function () {
+//			$('.delete-attribute-value-btn').click(function(ev) {
+			$('body').on('click', 'a.delete-attribute-value-btn', function(ev){
+				id = $(ev.currentTarget).attr('rel');
+				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+				attrvalue = $(ev.currentTarget).attr('attrvalue');
+				msg = $(ev.currentTarget).attr('msg');
+				formtoken = '".createFormKey('removeattrvalue')."';
+				bootbox.dialog(confirmmsg, [{
+					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_attr_value")."\",
+					\"class\" : \"btn-danger\",
+					\"callback\": function() {
+						$.post('../op/op.AttributeMgr.php',
+							{ action: 'removeattrvalue', attrdefid: id, attrvalue: attrvalue, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-attrvalue-'+id).hide('slow');
+									noty({
+										text: msg,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					\"label\" : \"".getMLText("cancel")."\",
+					\"class\" : \"btn-cancel\",
+					\"callback\": function() {
+					}
+				}]);
+			});
+		});
+		";
+	} /* }}} */
+
+	/**
 	 * Return HTML of a single row in the document list table
 	 *
 	 * @param object $document

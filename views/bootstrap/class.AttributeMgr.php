@@ -53,6 +53,7 @@ $(document).ready( function() {
 <?php
 		$this->printDeleteFolderButtonJs();
 		$this->printDeleteDocumentButtonJs();
+		$this->printDeleteAttributeValueButtonJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
@@ -79,11 +80,12 @@ $(document).ready( function() {
 						$content .= "<th>".getMLText("attribute_count")."</th>\n";
 						$content .= "<th></th>\n";
 						$content .= "</tr></thead>\n<tbody>\n";
+						$separator = $selattrdef->getValueSetSeparator();
 						foreach($res['frequencies'][$type] as $entry) {
 							$value = $selattrdef->parseValue($entry['value']);
 							$content .= "<tr>";
-							$content .= "<td>".implode(';', $value)."</td>";
-							$content .= "<td><a href=\"../out/out.Search.php?resultmode=".($type == 'folder' ? 2 : ($type == 'document' ? 1 : 3))."&attributes[".$selattrdef->getID()."]=".$entry['value']."\">".urlencode($entry['c'])."</a></td>";
+							$content .= "<td>".htmlspecialchars(implode('<span style="color: #aaa;">'.($separator ? ' '.$separator.' ' : ' ; ').'</span>', $value))."</td>";
+							$content .= "<td><a href=\"../out/out.Search.php?resultmode=".($type == 'folder' ? 2 : ($type == 'document' ? 1 : 3))."&attributes[".$selattrdef->getID()."]=".urlencode($entry['value'])."\">".urlencode($entry['c'])."</a></td>";
 							$content .= "<td>";
 							/* various checks, if the value is valid */
 							if(!$selattrdef->validate($entry['value'])) {
@@ -98,6 +100,15 @@ $(document).ready( function() {
 								}
 							}
 							 */
+							$content .= "</td>";
+							$content .= "<td>";
+							$content .= "<div class=\"list-action\">";
+							if($user->isAdmin()) {
+								$content .= $this->printDeleteAttributeValueButton($selattrdef, implode(';', $value), 'splash_rm_attr_value', true);
+							} else {
+								$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
+							}
+							$content .= "</div>";
 							$content .= "</td>";
 							$content .= "</tr>";
 						}
