@@ -71,13 +71,13 @@ class SeedDMS_Core_Attribute { /* {{{ */
 	 */
 	protected $_dms;
 
-    /**
-     * SeedDMS_Core_Attribute constructor.
-     * @param $id
-     * @param $obj
-     * @param $attrdef
-     * @param $value
-     */
+	/**
+	 * SeedDMS_Core_Attribute constructor.
+	 * @param $id
+	 * @param $obj
+	 * @param $attrdef
+	 * @param $value
+	 */
 	function __construct($id, $obj, $attrdef, $value) { /* {{{ */
 		$this->_id = $id;
 		$this->_obj = $obj;
@@ -379,10 +379,10 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	protected $_dms;
 
-    /**
-     * @var string
-     */
-    protected $_separator;
+	/**
+	 * @var string
+	 */
+	protected $_separator;
 
 	/*
 	 * Possible skalar data types of an attribute
@@ -403,21 +403,21 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	const objtype_document = '2';
 	const objtype_documentcontent = '3';
 
-    /**
-     * Constructor
-     *
-     * @param integer $id internal id of attribute definition
-     * @param string $name name of attribute
-     * @param integer $objtype type of object for which this attribute definition
-     *        may be used.
-     * @param integer $type skalar type of attribute
-     * @param boolean $multiple set to true if multiple values are allowed
-     * @param integer $minvalues minimum number of values
-     * @param integer $maxvalues maximum number of values
-     * @param string $valueset separated list of allowed values, the first char
-     *        is taken as the separator
-     * @param $regex
-     */
+	/**
+	 * Constructor
+	 *
+	 * @param integer $id internal id of attribute definition
+	 * @param string $name name of attribute
+	 * @param integer $objtype type of object for which this attribute definition
+	 *        may be used.
+	 * @param integer $type skalar type of attribute
+	 * @param boolean $multiple set to true if multiple values are allowed
+	 * @param integer $minvalues minimum number of values
+	 * @param integer $maxvalues maximum number of values
+	 * @param string $valueset separated list of allowed values, the first char
+	 *        is taken as the separator
+	 * @param $regex
+	 */
 	function __construct($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
@@ -478,15 +478,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getObjType() { return $this->_objtype; }
 
-    /**
-     * Set object type of attribute definition
-     *
-     * This can be one of objtype_all,
-     * objtype_folder, objtype_document, or objtype_documentcontent.
-     *
-     * @param integer $objtype type
-     * @return bool
-     */
+	/**
+	 * Set object type of attribute definition
+	 *
+	 * This can be one of objtype_all,
+	 * objtype_folder, objtype_document, or objtype_documentcontent.
+	 *
+	 * @param integer $objtype type
+	 * @return bool
+	 */
 	function setObjType($objtype) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -509,15 +509,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getType() { return $this->_type; }
 
-    /**
-     * Set type of attribute definition
-     *
-     * This can be one of type_int, type_float, type_string, type_boolean,
-     * type_url, type_email.
-     *
-     * @param integer $type type
-     * @return bool
-     */
+	/**
+	 * Set type of attribute definition
+	 *
+	 * This can be one of type_int, type_float, type_string, type_boolean,
+	 * type_url, type_email.
+	 *
+	 * @param integer $type type
+	 * @return bool
+	 */
 	function setType($type) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -537,13 +537,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 */
 	function getMultipleValues() { return $this->_multiple; }
 
-    /**
-     * Set if attribute definition allows multi values for attribute
-     *
-     * @param boolean $mv true if attribute may have multiple values, otherwise
-     * false
-     * @return bool
-     */
+	/**
+	 * Set if attribute definition allows multi values for attribute
+	 *
+	 * @param boolean $mv true if attribute may have multiple values, otherwise
+	 * false
+	 * @return bool
+	 */
 	function setMultipleValues($mv) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -642,14 +642,14 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			return array();
 	} /* }}} */
 
-    /**
-     * Get the n'th value of a value set
-     *
-     * @param $ind
-     * @return string n'th value of value set or false if the index is
-     *         out of range or the value set has less than 2 chars
-     * @internal param int $index
-     */
+	/**
+	 * Get the n'th value of a value set
+	 *
+	 * @param $ind
+	 * @return string n'th value of value set or false if the index is
+	 *         out of range or the value set has less than 2 chars
+	 * @internal param int $index
+	 */
 	function getValueSetValue($ind) { /* {{{ */
 		if(strlen($this->_valueset) > 1) {
 			$tmp = explode($this->_valueset[0], substr($this->_valueset, 1));
@@ -755,15 +755,15 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		return true;
 	} /* }}} */
 
-    /**
-     * Parse a given value according to attribute definition
-     *
-     * The return value is always an array, even if the attribute is single
-     * value attribute.
-     *
-     * @param $value
-     * @return array|bool
-     */
+	/**
+	 * Parse a given value according to attribute definition
+	 *
+	 * The return value is always an array, even if the attribute is single
+	 * value attribute.
+	 *
+	 * @param $value
+	 * @return array|bool
+	 */
 	function parseValue($value) { /* {{{ */
 		if($this->getMultipleValues()) {
 			/* If the value doesn't start with the separator used in the value set,
@@ -788,7 +788,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 *
 	 * @param integer $limit return not more the n objects of each type
 	 * @return array|bool
-     */
+	 */
 	function getStatistics($limit=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -809,7 +809,17 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			$queryStr = "SELECT count(*) c, `value` FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
-				$result['frequencies']['document'] = $resArr;
+				foreach($resArr as $row) {
+					$tmpattr = new SeedDMS_Core_Attribute(0, null, $this, $row['value']);
+					foreach($tmpattr->getValueAsArray() as $value) {
+						if(isset($possiblevalues[md5($value)])) {
+							$possiblevalues[md5($value)]['c'] += $row['c'];
+						} else {
+							$possiblevalues[md5($value)] = array('value'=>$value, 'c'=>$row['c']);
+						}
+					}
+				}
+				$result['frequencies']['document'] = $possiblevalues;
 			}
 		}
 
@@ -826,10 +836,25 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
+			$valueset = $this->getValueSetAsArray();
+			$possiblevalues = array();
+			foreach($valueset as $value) {
+				$possiblevalues[md5($value)] = array('value'=>$value, 'c'=>0);
+			}
 			$queryStr = "SELECT count(*) c, `value` FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
-				$result['frequencies']['folder'] = $resArr;
+				foreach($resArr as $row) {
+					$tmpattr = new SeedDMS_Core_Attribute(0, null, $this, $row['value']);
+					foreach($tmpattr->getValueAsArray() as $value) {
+						if(isset($possiblevalues[md5($value)])) {
+							$possiblevalues[md5($value)]['c'] += $row['c'];
+						} else {
+							$possiblevalues[md5($value)] = array('value'=>$value, 'c'=>$row['c']);
+						}
+					}
+				}
+				$result['frequencies']['folder'] = $possiblevalues;
 			}
 		}
 
@@ -846,10 +871,25 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 					}
 				}
 			}
+			$valueset = $this->getValueSetAsArray();
+			$possiblevalues = array();
+			foreach($valueset as $value) {
+				$possiblevalues[md5($value)] = array('value'=>$value, 'c'=>0);
+			}
 			$queryStr = "SELECT count(*) c, `value` FROM `tblDocumentContentAttributes` WHERE `attrdef`=".$this->_id." GROUP BY `value` ORDER BY c DESC";
 			$resArr = $db->getResultArray($queryStr);
 			if($resArr) {
-				$result['frequencies']['content'] = $resArr;
+				foreach($resArr as $row) {
+					$tmpattr = new SeedDMS_Core_Attribute(0, null, $this, $row['value']);
+					foreach($tmpattr->getValueAsArray() as $value) {
+						if(isset($possiblevalues[md5($value)])) {
+							$possiblevalues[md5($value)]['c'] += $row['c'];
+						} else {
+							$possiblevalues[md5($value)] = array('value'=>$value, 'c'=>$row['c']);
+						}
+					}
+				}
+				$result['frequencies']['content'] = $possiblevalues;
 			}
 		}
 
@@ -876,19 +916,25 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	} /* }}} */
 
 	/**
-	 * Get all documents and folder by a given attribute value
+	 * Get all documents and folders by a given attribute value
 	 *
 	 * @param string $attrvalue value of attribute
 	 * @param integer $limit limit number of documents/folders
 	 * @return array array containing list of documents and folders
 	 */
-	public function getObjects($attrvalue, $limit) { /* {{{ */
+	public function getObjects($attrvalue, $limit='') { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
-			$queryStr = "SELECT * FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id." AND `value`=".$db->qstr($attrvalue);
+			$queryStr = "SELECT * FROM `tblDocumentAttributes` WHERE `attrdef`=".$this->_id." AND ";
+			if($this->getMultipleValues()) {
+				$sep = $this->getValueSetSeparator();
+				$queryStr .= "(`value` like ".$db->qstr($sep.$attrvalue.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue.$sep.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue).")";
+			} else {
+				$queryStr .= "`value`=".$db->qstr($attrvalue);
+			}
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -903,7 +949,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
 		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
-			$queryStr = "SELECT * FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id." AND `value`=".$db->qstr($attrvalue);
+			$queryStr = "SELECT * FROM `tblFolderAttributes` WHERE `attrdef`=".$this->_id." AND ";
+			if($this->getMultipleValues()) {
+				$sep = $this->getValueSetSeparator();
+				$queryStr .= "(`value` like ".$db->qstr($sep.$attrvalue.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue.$sep.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue).")";
+			} else {
+				$queryStr .= "`value`=".$db->qstr($attrvalue);
+			}
 			if($limit)
 				$queryStr .= " limit ".(int) $limit;
 			$resArr = $db->getResultArray($queryStr);
@@ -917,6 +969,72 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		}
 
 		return $result;
+	} /* }}} */
+
+	/**
+	 * Remove a given attribute value from all documents, versions and folders
+	 *
+	 * @param string $attrvalue value of attribute
+	 * @return array array containing list of documents and folders
+	 */
+	public function removeValue($attrvalue) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		foreach(array('document', 'documentcontent', 'folder') as $type) {
+			if($type == 'document') {
+				$tablename = "tblDocumentAttributes";
+				$objtype = SeedDMS_Core_AttributeDefinition::objtype_document;
+			} elseif($type == 'documentcontent') {
+				$tablename = "tblDocumentContentAttributes";
+				$objtype = SeedDMS_Core_AttributeDefinition::objtype_documentcontent;
+			} elseif($type == 'folder') {
+				$tablename = "tblFolderAttributes";
+				$objtype = SeedDMS_Core_AttributeDefinition::objtype_folder;
+			}
+			if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all || $objtype) {
+				$queryStr = "SELECT * FROM `".$tablename."` WHERE `attrdef`=".$this->_id." AND ";
+				if($this->getMultipleValues()) {
+					$sep = $this->getValueSetSeparator();
+					$queryStr .= "(`value` like ".$db->qstr($sep.$attrvalue.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue.$sep.'%')." OR `value` like ".$db->qstr('%'.$sep.$attrvalue).")";
+				} else {
+					$queryStr .= "`value`=".$db->qstr($attrvalue);
+				}
+
+				$resArr = $db->getResultArray($queryStr);
+				if($resArr) {
+					$db->startTransaction();
+					foreach($resArr as $rec) {
+						if($rec['value'] == $attrvalue) {
+							$queryStr = "DELETE FROM `".$tablename."` WHERE `id`=".$rec['id'];
+						} else {
+							if($this->getMultipleValues()) {
+								$sep = substr($rec['value'], 0, 1);
+								$vsep = $this->getValueSetSeparator();
+								if($sep == $vsep)
+									$values = explode($sep, substr($rec['value'], 1));
+								else
+									$values = array($rec['value']);
+								if (($key = array_search($attrvalue, $values)) !== false) {
+									unset($values[$key]);
+								}
+								if($values) {
+									$queryStr = "UPDATE `".$tablename."` SET `value`=".$db->qstr($sep.implode($sep, $values))." WHERE `id`=".$rec['id'];
+								} else {
+									$queryStr = "DELETE FROM `".$tablename."` WHERE `id`=".$rec['id'];
+								}
+							} else {
+							}
+						}
+						if (!$db->getResult($queryStr)) {
+							$db->rollbackTransaction();
+							return false;
+						}
+					}
+					$db->commitTransaction();
+				}
+			}
+		}
+		return true;
 	} /* }}} */
 
 	/**
@@ -1006,7 +1124,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 				$this->_validation_error = 3;
 			break;
 		case self::type_boolean: /** @todo: Same case in LINE 966 */
-            foreach($values as $value) {
+			foreach($values as $value) {
 				$success &= preg_match('/^[01]$/', $value);
 			}
 			break;
