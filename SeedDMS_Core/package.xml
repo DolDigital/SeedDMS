@@ -26,6 +26,7 @@
  <notes>
 add SeedDMS_Core_Folder::getDocumentsMinMax()
 add lots of DocBlocks from merge request #8
+add SeedDMS_Core_AttributeDefinition::removeValue()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
