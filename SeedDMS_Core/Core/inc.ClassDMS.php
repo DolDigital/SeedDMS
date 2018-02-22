@@ -1366,6 +1366,8 @@ class SeedDMS_Core_DMS {
 						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_all) {
 							if($valueset = $attrdef->getValueSet()) {
 								if($attrdef->getMultipleValues()) {
+									if(is_string($attribute))
+										$attribute = array($attribute);
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblFolderAttributes` WHERE `tblFolderAttributes`.`attrdef`=".$attrdefid." AND (`tblFolderAttributes`.`value` like '%".$valueset[0].implode("%' OR `tblFolderAttributes`.`value` like '%".$valueset[0], $attribute)."%') AND `tblFolderAttributes`.`folder`=`tblFolders`.`id`)";
 								} else
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblFolderAttributes` WHERE `tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."' AND `tblFolderAttributes`.`folder`=`tblFolders`.`id`)";
@@ -1519,6 +1521,8 @@ class SeedDMS_Core_DMS {
 						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_all) {
 							if($valueset = $attrdef->getValueSet()) {
 								if($attrdef->getMultipleValues()) {
+									if(is_string($attribute))
+										$attribute = array($attribute);
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentAttributes` WHERE `tblDocumentAttributes`.`attrdef`=".$attrdefid." AND (`tblDocumentAttributes`.`value` like '%".$valueset[0].implode("%' OR `tblDocumentAttributes`.`value` like '%".$valueset[0], $attribute)."%') AND `tblDocumentAttributes`.`document` = `tblDocuments`.`id`)";
 								} else
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentAttributes` WHERE `tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value`='".$attribute."' AND `tblDocumentAttributes`.`document` = `tblDocuments`.`id`)";
@@ -1528,6 +1532,8 @@ class SeedDMS_Core_DMS {
 							if($attrdef->getValueSet()) {
 								if($attrdef->getMultipleValues()) {
 									/** @noinspection PhpUndefinedVariableInspection */
+									if(is_string($attribute))
+										$attribute = array($attribute);
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentContentAttributes` WHERE `tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND (`tblDocumentContentAttributes`.`value` like '%".$valueset[0].implode("%' OR `tblDocumentContentAttributes`.`value` like '%".$valueset[0], $attribute)."%') AND `tblDocumentContentAttributes`.`document` = `tblDocumentContent`.`id`)";
 								} else {
 									$searchAttributes[] = "EXISTS (SELECT NULL FROM `tblDocumentContentAttributes` WHERE `tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentContentAttributes`.`value`='".$attribute."' AND `tblDocumentContentAttributes`.content = `tblDocumentContent`.id)";
