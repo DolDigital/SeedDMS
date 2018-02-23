@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (229)
+//    Translators: Admin (230)
 
 $text = array(
 '2_factor_auth' => '',
@@ -247,6 +247,7 @@ $text = array(
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
 'confirm_pwd' => 'Επιβεβαίωση κωδικού',
+'confirm_rm_attr_value' => '',
 'confirm_rm_backup' => '',
 'confirm_rm_document' => '',
 'confirm_rm_dump' => '',
@@ -870,6 +871,7 @@ URL: [url]',
 'rewind_workflow_warning' => '',
 'rm_attrdef' => '',
 'rm_attrdefgroup' => '',
+'rm_attr_value' => 'Wert entfernen',
 'rm_default_keyword_category' => '',
 'rm_document' => 'Διαγραφή εγγράφου',
 'rm_document_category' => 'Διαγραφή κατηγορίας',
@@ -1334,6 +1336,7 @@ URL: [url]',
 'splash_receipt_update_success' => '',
 'splash_removed_from_clipboard' => '',
 'splash_rm_attribute' => '',
+'splash_rm_attr_value' => '',
 'splash_rm_document' => 'Το έγγραφο αφαιρέθηκε',
 'splash_rm_download_link' => '',
 'splash_rm_folder' => '',

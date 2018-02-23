@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1591), rickr (144), s.pnt (26)
+//    Translators: Admin (1592), rickr (144), s.pnt (26)
 
 $text = array(
 '2_factor_auth' => 'Autorizzazione a due fattori',
@@ -275,6 +275,7 @@ URL: [url]',
 'confirm_move_document' => 'Conferma lo spostamento del documento.',
 'confirm_move_folder' => 'Si prega di confermare lo spostamento della cartella.',
 'confirm_pwd' => 'Conferma la password',
+'confirm_rm_attr_value' => '',
 'confirm_rm_backup' => 'Vuoi davvero rimuovere il file "[arkname]"? Attenzione: questa operazione non può essere annullata.',
 'confirm_rm_document' => 'Vuoi veramente eliminare il documento "[documentname]"? Attenzione: questa operazione non può essere annullata.',
 'confirm_rm_dump' => 'Vuoi davvero rimuovere il file "[dumpname]"? Attenzione: questa operazione non può essere annullata.',
@@ -601,7 +602,7 @@ URL: [url]',
 'index_error' => '',
 'index_folder' => 'Indicizza cartella',
 'index_pending' => '',
-'index_waiting' => '',
+'index_waiting' => 'Attendi',
 'individuals' => 'Singoli',
 'indivіduals_in_groups' => 'I membri de la gruppo',
 'info_recipients_tab_not_released' => '',
@@ -1035,6 +1036,7 @@ URL: [url]',
 'rewind_workflow_warning' => 'Se si inverte un flusso di lavoro al suo stato iniziale ogni traccia del flusso di lavoro originale per questo documento sarà cancellata permanentemente.',
 'rm_attrdef' => 'Rimuovi attributo',
 'rm_attrdefgroup' => 'Rimuovere questo gruppo di attributi',
+'rm_attr_value' => '',
 'rm_default_keyword_category' => 'Rimuovi categoria',
 'rm_document' => 'Rimuovi documento',
 'rm_document_category' => 'Rimuovi categoria',
@@ -1506,6 +1508,7 @@ URL: [url]',
 'splash_receipt_update_success' => '',
 'splash_removed_from_clipboard' => 'Rimosso dagli appunti',
 'splash_rm_attribute' => 'Attributo rimosso',
+'splash_rm_attr_value' => '',
 'splash_rm_document' => 'Documento rimosso',
 'splash_rm_download_link' => '',
 'splash_rm_folder' => 'Cartella eliminata',

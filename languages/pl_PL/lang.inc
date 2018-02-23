@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (786), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (787), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -262,6 +262,7 @@ URL: [url]',
 'confirm_move_document' => '',
 'confirm_move_folder' => '',
 'confirm_pwd' => 'Potwierdź hasło',
+'confirm_rm_attr_value' => '',
 'confirm_rm_backup' => 'Czy rzeczywiście chcesz usunąć plik "[arkname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_document' => 'Czy rzeczywiście chcesz usunąć dokument \'[documentname]\'?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_dump' => 'Czy rzeczywiście chcesz usunąć plik "[dumpname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
@@ -981,6 +982,7 @@ URL: [url]',
 'rewind_workflow_warning' => 'Jeżeli przewiniesz proces do stanu początkowego, to cały log dla tego dokumentu zostanie usunięty bezpowrotnie.',
 'rm_attrdef' => 'Usuń definicję atrybutu',
 'rm_attrdefgroup' => '',
+'rm_attr_value' => '',
 'rm_default_keyword_category' => 'Usuń kategorię',
 'rm_document' => 'Usuń dokument',
 'rm_document_category' => 'Usuń kategorię',
@@ -1063,7 +1065,7 @@ URL: [url]',
 'select_one' => 'Wybierz',
 'select_user' => '',
 'select_users' => 'Kliknij by wybrać użytkowników',
-'select_value' => '',
+'select_value' => 'Wybrać wartość',
 'select_workflow' => 'Wybierz proces',
 'send_email' => '',
 'send_login_data' => '',
@@ -1452,6 +1454,7 @@ URL: [url]',
 'splash_receipt_update_success' => '',
 'splash_removed_from_clipboard' => 'Usunięto ze schowka',
 'splash_rm_attribute' => 'Usunięto atrybut',
+'splash_rm_attr_value' => '',
 'splash_rm_document' => 'Dokument usunięto',
 'splash_rm_download_link' => '',
 'splash_rm_folder' => 'Folder usunięty',

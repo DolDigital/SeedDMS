@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1665), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1668), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -274,6 +274,7 @@ URL: [url]',
 'confirm_move_document' => 'Please confirm moving the document.',
 'confirm_move_folder' => 'Please confirm moving the folder.',
 'confirm_pwd' => 'Confirm Password',
+'confirm_rm_attr_value' => 'Do you really want to delete the attribute value?',
 'confirm_rm_backup' => 'Do you really want to remove the file "[arkname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_document' => 'Do you really want to remove the document \'[documentname]\'?<br>Be careful: This action cannot be undone.',
 'confirm_rm_dump' => 'Do you really want to remove the file "[dumpname]"?<br>Be careful: This action cannot be undone.',
@@ -1052,6 +1053,7 @@ URL: [url]',
 'rewind_workflow_warning' => 'If you rewind a workflow to its initial state, then the whole workflow log for this document will be deleted and cannot be recovered.',
 'rm_attrdef' => 'Remove attribute definition',
 'rm_attrdefgroup' => 'Remove this attribute group',
+'rm_attr_value' => 'Remove value',
 'rm_default_keyword_category' => 'Remove category',
 'rm_document' => 'Remove document',
 'rm_document_category' => 'Remove category',
@@ -1528,6 +1530,7 @@ Name: [username]
 'splash_receipt_update_success' => 'Reception added successfully',
 'splash_removed_from_clipboard' => 'Removed from clipboard',
 'splash_rm_attribute' => 'Attribute removed',
+'splash_rm_attr_value' => 'Attribute value removed',
 'splash_rm_document' => 'Document removed',
 'splash_rm_download_link' => 'Removed download link',
 'splash_rm_folder' => 'Folder deleted',
