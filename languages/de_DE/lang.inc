@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2543), dgrutsch (22)
+//    Translators: Admin (2545), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -274,6 +274,7 @@ URL: [url]',
 'confirm_move_document' => 'Dokument wirklich verschieben?',
 'confirm_move_folder' => 'Ordner wirklich verschieben?',
 'confirm_pwd' => 'Passwort-Bestätigung',
+'confirm_rm_attr_value' => 'Möchten Sie wirklich den Attributwert löschen?',
 'confirm_rm_backup' => 'Möchten Sie wirklich das Backup "[arkname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_document' => 'Wollen Sie das Dokument \'[documentname]\' wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
 'confirm_rm_dump' => 'Möchten Sie wirklich den DB dump "[dumpname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
@@ -1057,6 +1058,7 @@ URL: [url]',
 'rewind_workflow_warning' => 'Wenn Sie einen Workflow in den Anfangszustand zurückversetzen, dann werden alle bisherigen Aktionen und Kommentare unwiederbringlich gelöscht.',
 'rm_attrdef' => 'Attributdefinition löschen',
 'rm_attrdefgroup' => 'Diese Attributgruppe löschen',
+'rm_attr_value' => '',
 'rm_default_keyword_category' => 'Kategorie löschen',
 'rm_document' => 'Löschen',
 'rm_document_category' => 'Lösche Kategorie',
@@ -1533,6 +1535,7 @@ Name: [username]
 'splash_receipt_update_success' => 'Empfangsbestätigung hinzugefügt',
 'splash_removed_from_clipboard' => 'Aus der Zwischenablage entfernt',
 'splash_rm_attribute' => 'Attribut gelöscht',
+'splash_rm_attr_value' => 'Attributwert entfernt',
 'splash_rm_document' => 'Dokument gelöscht',
 'splash_rm_download_link' => 'Download-Link gelöscht',
 'splash_rm_folder' => 'Ordner gelöscht',
