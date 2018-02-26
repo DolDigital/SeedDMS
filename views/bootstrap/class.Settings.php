@@ -659,6 +659,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_presetExpirationDate");?>:</td>
         <td><?php $this->showTextField("presetExpirationDate", $settings->_presetExpirationDate); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_allowReviewerOnly_desc");?>">
+        <td><?php printMLText("settings_allowReviewerOnly");?>:</td>
+        <td><input name="allowReviewerOnly" type="checkbox" <?php if ($settings->_allowReviewerOnly) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableAdminRevApp_desc");?>">
         <td><?php printMLText("settings_enableAdminRevApp");?>:</td>
         <td><input name="enableAdminRevApp" type="checkbox" <?php if ($settings->_enableAdminRevApp) echo "checked" ?> /></td>

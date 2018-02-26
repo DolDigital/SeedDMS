@@ -173,6 +173,7 @@ if ($action == "saveSettings")
   $settings->_versioningFileName = $_POST["versioningFileName"];
   $settings->_presetExpirationDate = $_POST["presetExpirationDate"];
   $settings->_workflowMode = $_POST["workflowMode"];
+  $settings->_allowReviewerOnly = getBoolValue("allowReviewerOnly");
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
   $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");
