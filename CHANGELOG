@@ -14,6 +14,8 @@
 - configuration variables in extension of type 'select' may have an empty option
 - default position of documents/folders can be set in configuration (Closes #381)
 - attribute values can be deleted from all folders, documents
+- new settings to disallow upload of documents with just a reviewer in traditional
+  workflow mode
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
