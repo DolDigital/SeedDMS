@@ -231,6 +231,12 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 				}
 		}
 	}
+	if($settings->_workflowMode == 'traditional' && !$settings->_allowReviewerOnly) {
+		/* Check if reviewers are send but no approvers */
+		if(($reviewers["i"] || $reviewers["g"]) && !$approvers["i"] && !$approvers["g"]) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_uploading_reviewer_only"));
+		}
+	}
 } elseif($settings->_workflowMode == 'advanced') {
 	if(!$workflows = $user->getMandatoryWorkflows()) {
 		if(isset($_POST["workflow"]))
