@@ -160,6 +160,8 @@ class Settings { /* {{{ */
 	var $_versioningFileName = "versioning_info.txt";
 	// the mode of workflow
 	var $_workflowMode = "traditional";
+	// Allow to set just a reviewer in tradional workflow
+	var $_allowReviewerOnly = true;
 	// enable/disable log system
 	var $_logFileEnable = true;
 	// the log file rotation
@@ -609,6 +611,7 @@ class Settings { /* {{{ */
 		$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
 		$this->_workflowMode = strval($tab["workflowMode"]);
+		$this->_allowReviewerOnly = Settings::boolval($tab["allowReviewerOnly"]);
 		$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
 		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
 		$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
@@ -912,6 +915,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
     $this->setXMLAttributValue($node, "workflowMode", $this->_workflowMode);
+    $this->setXMLAttributValue($node, "allowReviewerOnly", $this->_allowReviewerOnly);
     $this->setXMLAttributValue($node, "enableVersionDeletion", $this->_enableVersionDeletion);
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
     $this->setXMLAttributValue($node, "enableDuplicateDocNames", $this->_enableDuplicateDocNames);
