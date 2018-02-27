@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (564), destinqo (19), pS2017 (508)
+//    Translators: Admin (565), destinqo (19), pS2017 (508)
 
 $text = array(
 '2_factor_auth' => '2-faktorové overovanie',
@@ -424,6 +424,7 @@ URL: [url]',
 'error_remove_permission' => 'Chyba pri odstránení povolenia',
 'error_toogle_permission' => 'Chyba pri zmene povolenia',
 'error_transfer_document' => '',
+'error_uploading_reviewer_only' => '',
 'es_ES' => 'Španielčina',
 'event_details' => 'Detail udalosti',
 'exclude_items' => 'Vylúčiť položky',
@@ -962,6 +963,8 @@ URL: [url]',
 'settings_Advanced' => 'Rozšírené',
 'settings_advancedAcl' => '',
 'settings_advancedAcl_desc' => '',
+'settings_allowReviewerOnly' => '',
+'settings_allowReviewerOnly_desc' => '',
 'settings_apache_mod_rewrite' => 'Apache - Modul Rewrite',
 'settings_Authentication' => '',
 'settings_autoLoginUser' => 'Automatické prihlásenie',
@@ -1544,7 +1547,7 @@ URL: [url]',
 'workflow_summary' => '',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => '',
-'x_more_objects' => '',
+'x_more_objects' => 'viac objektov',
 'year_view' => 'Rok',
 'yes' => 'Áno',
 'zh_CN' => 'Čínština (CN)',

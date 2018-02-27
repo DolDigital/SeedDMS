@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2545), dgrutsch (22)
+//    Translators: Admin (2551), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -488,6 +488,7 @@ Der Link ist bis zum [valid] gültig.
 'error_remove_permission' => 'Fehler beim Entfernen der Berechtigung',
 'error_toogle_permission' => 'Fehler beim Ändern der Berechtigung',
 'error_transfer_document' => 'Fehler beim Übertragen des Dokuments',
+'error_uploading_reviewer_only' => 'Fehler beim Anlegen des Dokuments. Das Dokument besitzt einen Prufer, aber keinen Freigeber.',
 'es_ES' => 'Spanisch',
 'event_details' => 'Ereignisdetails',
 'exclude_items' => 'Einträge auslassen',
@@ -621,7 +622,7 @@ URL: [url]',
 'inherits_access_empty_msg' => 'Leere Zugriffsliste',
 'inherits_access_msg' => 'Zur Zeit werden die Rechte geerbt',
 'internal_error' => 'Interner Fehler',
-'internal_error_exit' => 'Interner Fehler: nicht imstande, Anfrage auszuführen.',
+'internal_error_exit' => 'Interner Fehler: Anfrage kann nicht ausgeführt werden.',
 'invalid_access_mode' => 'Unzulässige Zugangsart',
 'invalid_action' => 'Unzulässige Aktion',
 'invalid_approval_status' => 'Unzulässiger Freigabestatus',
@@ -1058,7 +1059,7 @@ URL: [url]',
 'rewind_workflow_warning' => 'Wenn Sie einen Workflow in den Anfangszustand zurückversetzen, dann werden alle bisherigen Aktionen und Kommentare unwiederbringlich gelöscht.',
 'rm_attrdef' => 'Attributdefinition löschen',
 'rm_attrdefgroup' => 'Diese Attributgruppe löschen',
-'rm_attr_value' => '',
+'rm_attr_value' => 'Wert entfernen',
 'rm_default_keyword_category' => 'Kategorie löschen',
 'rm_document' => 'Löschen',
 'rm_document_category' => 'Lösche Kategorie',
@@ -1168,6 +1169,8 @@ Name: [username]
 'settings_Advanced' => 'Erweitert',
 'settings_advancedAcl' => 'Erweiterte Zugriffsrechte',
 'settings_advancedAcl_desc' => 'Erweiterte Zugriffsrechte erlauben bestimmte Module der Software ein- und auszuschalten. Sie können nicht den Zugriff auf Dokumente und Ordner einschränken.',
+'settings_allowReviewerOnly' => 'Erlaube nur Prüfer zu setzen',
+'settings_allowReviewerOnly_desc' => 'Anwählen, um zu erlauben, dass nur ein Prüfer aber kein Freigeber beim traditionellen Workflow gesetzt werden darf.',
 'settings_apache_mod_rewrite' => 'Apache - Module Rewrite',
 'settings_Authentication' => 'Authentifikations-Einstellungen',
 'settings_autoLoginUser' => 'Automatisches Login',

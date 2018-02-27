@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (230)
+//    Translators: Admin (231)
 
 $text = array(
 '2_factor_auth' => '',
@@ -420,6 +420,7 @@ $text = array(
 'error_remove_permission' => '',
 'error_toogle_permission' => '',
 'error_transfer_document' => '',
+'error_uploading_reviewer_only' => '',
 'es_ES' => 'Spanish/Ισπανικά',
 'event_details' => '',
 'exclude_items' => '',
@@ -871,7 +872,7 @@ URL: [url]',
 'rewind_workflow_warning' => '',
 'rm_attrdef' => '',
 'rm_attrdefgroup' => '',
-'rm_attr_value' => 'Wert entfernen',
+'rm_attr_value' => '',
 'rm_default_keyword_category' => '',
 'rm_document' => 'Διαγραφή εγγράφου',
 'rm_document_category' => 'Διαγραφή κατηγορίας',
@@ -969,6 +970,8 @@ URL: [url]',
 'settings_Advanced' => '',
 'settings_advancedAcl' => '',
 'settings_advancedAcl_desc' => '',
+'settings_allowReviewerOnly' => '',
+'settings_allowReviewerOnly_desc' => '',
 'settings_apache_mod_rewrite' => '',
 'settings_Authentication' => '',
 'settings_autoLoginUser' => '',
