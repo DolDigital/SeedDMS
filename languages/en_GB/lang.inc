@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1668), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1672), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -489,6 +489,7 @@ The link is valid until [valid].
 'error_remove_permission' => 'Error while remove permission',
 'error_toogle_permission' => 'Error while changing permission',
 'error_transfer_document' => 'Error while transfering document',
+'error_uploading_reviewer_only' => 'Error when creating the document. The document has a reviewer, but no approver.',
 'es_ES' => 'Spanish',
 'event_details' => 'Event details',
 'exclude_items' => 'Exclude items',
@@ -1163,6 +1164,8 @@ Name: [username]
 'settings_Advanced' => 'Advanced',
 'settings_advancedAcl' => 'Advanced Access control',
 'settings_advancedAcl_desc' => 'Advanced access controll will allow to turn on/off certain modules of the software. It can not be used for access rights on documents and folders.',
+'settings_allowReviewerOnly' => 'Allow to set reviewer only',
+'settings_allowReviewerOnly_desc' => 'Enable this, if it shall be allow to set just a reviewer but no approver in traditional workflow mode.',
 'settings_apache_mod_rewrite' => 'Apache - Module Rewrite',
 'settings_Authentication' => 'Authentication settings',
 'settings_autoLoginUser' => 'Automatic login',

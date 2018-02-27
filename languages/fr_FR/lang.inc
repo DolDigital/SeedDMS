@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1079), jeromerobert (50), lonnnew (9), Oudiceval (508)
+//    Translators: Admin (1079), jeromerobert (50), lonnnew (9), Oudiceval (509)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -489,6 +489,7 @@ Le lien est valide jusqu’au [valid].
 'error_remove_permission' => 'Erreur lors de la suppression de permission',
 'error_toogle_permission' => 'Erreur lors de la modification de permission',
 'error_transfer_document' => 'Erreur lors du transfert du document',
+'error_uploading_reviewer_only' => '',
 'es_ES' => 'Espagnol',
 'event_details' => 'Détails de l\'événement',
 'exclude_items' => 'Exclure des élements',
@@ -1091,7 +1092,7 @@ URL : [url]',
 'seconds' => 'secondes',
 'selection' => 'Sélection',
 'select_attrdefgrp_show' => '',
-'select_attribute_value' => '',
+'select_attribute_value' => 'Sélectionnez la valeur de l’attribut',
 'select_category' => 'Cliquer pour choisir une catégorie',
 'select_group' => '',
 'select_groups' => 'Cliquer pour choisir un groupe',
@@ -1140,6 +1141,8 @@ Nom : [username]
 'settings_Advanced' => 'Avancé',
 'settings_advancedAcl' => '',
 'settings_advancedAcl_desc' => '',
+'settings_allowReviewerOnly' => '',
+'settings_allowReviewerOnly_desc' => '',
 'settings_apache_mod_rewrite' => 'Apache - Module Rewrite',
 'settings_Authentication' => 'Paramètres d\'authentification',
 'settings_autoLoginUser' => 'Connexion automatique',
