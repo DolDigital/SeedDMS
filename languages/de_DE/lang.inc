@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2551), dgrutsch (22)
+//    Translators: Admin (2553), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -338,6 +338,7 @@ URL: [url]',
 'documents_to_revise' => 'Erneute Prüfung erforderlich',
 'documents_user_draft' => 'Entwürfe',
 'documents_user_expiration' => 'Abgelaufende Dokumente',
+'documents_user_needs_correction' => 'Dokumente, die korrigiert werden müssen',
 'documents_user_no_reception' => 'Dokumente ohne Empfangsbestätigung',
 'documents_user_obsolete' => 'Veraltete Dokumente',
 'documents_user_reception' => 'Dokumente mit Empfangsbestätigung',
@@ -807,6 +808,7 @@ URL: [url]',
 'no_default_keywords' => 'Keine Vorlagen vorhanden',
 'no_docs_checked_out' => 'Keine Dokumente ausgecheckt',
 'no_docs_locked' => 'Keine Dokumente gesperrt.',
+'no_docs_needs_correction' => 'Keine Dokumente, die korrigiert werden müssen',
 'no_docs_rejected' => 'Keine Dokumente abgelehnt.',
 'no_docs_to_approve' => 'Es gibt zur Zeit keine Dokumente, die eine Freigabe erfordern.',
 'no_docs_to_look_at' => 'Keine Dokumente, nach denen geschaut werden müsste.',
