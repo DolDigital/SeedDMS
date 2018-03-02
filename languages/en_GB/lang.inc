@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1672), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1674), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -338,6 +338,7 @@ URL: [url]',
 'documents_to_revise' => 'Documents awaiting your revision',
 'documents_user_draft' => 'Drafts',
 'documents_user_expiration' => 'Expired documents',
+'documents_user_needs_correction' => 'Documents that need to be corrected',
 'documents_user_no_reception' => 'Documents without reception',
 'documents_user_obsolete' => 'Obsolete documents',
 'documents_user_reception' => 'Documents awaiting reception',
@@ -809,6 +810,7 @@ URL: [url]',
 'no_default_keywords' => 'No keywords available',
 'no_docs_checked_out' => 'No documents checked out',
 'no_docs_locked' => 'No documents locked.',
+'no_docs_needs_correction' => 'No documents, that need to be corrected',
 'no_docs_rejected' => 'No documents rejected.',
 'no_docs_to_approve' => 'There are currently no documents that require approval.',
 'no_docs_to_look_at' => 'No documents that need attention.',
