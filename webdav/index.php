@@ -1,13 +1,12 @@
 <?php
 include("../inc/inc.Settings.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.ClassNotificationService.php");
+include("../inc/inc.ClassEmailNotify.php");
+include("../inc/inc.ClassController.php");
 include("Log.php");
-include("webdav.php");
-
-$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-$db->getResult("set names 'utf8'");
-
-$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
 if($settings->_logFileEnable) {
 	if ($settings->_logFileRotation=="h") $logname=date("YmdH", time());
@@ -19,6 +18,7 @@ if($settings->_logFileEnable) {
 	$log = null;
 }
 
+include("webdav.php");
 $server = new HTTP_WebDAV_Server_SeedDMS();
 $server->ServeRequest($dms, $log);
 //$files = array();

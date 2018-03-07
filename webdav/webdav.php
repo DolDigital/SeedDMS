@@ -1,10 +1,6 @@
 <?php
 
 require_once "HTTP/WebDAV/Server.php";
-if(!empty($settings->_coreDir))
-	require_once($settings->_coreDir.'/Core.php');
-else
-	require_once('SeedDMS/Core.php');
 
 /**
  * SeedDMS access using WebDAV
@@ -270,7 +266,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		$files["files"][] = $this->fileinfo($obj);
 
 		// information for contained resources requested?
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 
 			$subfolders = $obj->getSubFolders();
 			$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
@@ -320,7 +316,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		$info["props"] = array();
 
 		// type and size (caller already made sure that path exists)
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			// modification time
 			/* folders do not have a modification time */
 			$info["props"][] = $this->mkprop("getlastmodified", time());
@@ -421,7 +417,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (!$obj) return false;
 
 		// is this a collection?
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			return $this->GetDir($obj, $options);
 		}
 
@@ -502,7 +498,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		foreach ($objs as $obj) {
 			$filename = $obj->getName();
 			$fullpath = $_fullpath.$filename;
-			if(get_class($obj) == 'SeedDMS_Core_Folder') {
+			if(get_class($obj) == $this->dms->getClassname('folder')) {
 				$fullpath .= '/';
 				$filename .= '/';
 				$filesize = 0;
@@ -553,7 +549,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$parent = '';
 		$folder = $this->reverseLookup($parent.'/');
 
-		if (!$folder || get_class($folder) != "SeedDMS_Core_Folder") {
+		if (!$folder || get_class($folder) != $this->dms->getClassname('folder')) {
 			return "409 Conflict";
 		}
 
@@ -658,7 +654,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 
 		/* Check if parent of new folder is a folder */
-		if (get_class($folder) != 'SeedDMS_Core_Folder') {
+		if (get_class($folder) != $this->dms->getClassname('folder')) {
 			return "403 Forbidden";
 		}
 
@@ -696,6 +692,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function DELETE($options) /* {{{ */
 	{
+		global $settings, $indexconf;
+
 		$this->log_options('DELETE', $options);
 
 		// get folder or document from path
@@ -712,7 +710,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			if($obj->hasDocuments() || $obj->hasSubFolders()) {
 				return "409 Conflict";
 			}
@@ -720,15 +718,20 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 				return "409 Conflict";
 			}
 		} else {
-			// check if user is admin
-			// only admins may delete documents
-			/* There is not reason to allow only admins to remove a document
-			if(!$this->user->isAdmin()) {
-				return "403 Forbidden";				 
+			if($settings->_enableFullSearch) {
+				$index = $indexconf['Indexer']::open($settings->_luceneDir);
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+			} else {
+				$index = null;
+				$indexconf = null;
 			}
-			 */
 
-			if(!$obj->remove()) {
+			$controller = Controller::factory('RemoveDocument');
+			$controller->setParam('document', $obj);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			if(!$controller->run()) {
+//			if(!$obj->remove()) {
 				return "409 Conflict";
 			}
 		}
@@ -782,12 +785,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if(get_class($objdest) == 'SeedDMS_Core_Document') {
+		if(get_class($objdest) == $this->dms->getClassname('document')) {
 			/* If destination object is a document it must be overwritten */
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				return "400 Bad request";
 			}
 
@@ -808,11 +811,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$objsource->remove();
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
+		} elseif(get_class($objdest) == $this->dms->getClassname('folder')) {
 			/* Set the new Folder of the source object */
-			if(get_class($objsource) == 'SeedDMS_Core_Document')
+			if(get_class($objsource) == $this->dms->getClassname('document'))
 				$objsource->setFolder($objdest);
-			elseif(get_class($objsource) == 'SeedDMS_Core_Folder')
+			elseif(get_class($objsource) == $this->dms->getClassname('folder'))
 				$objsource->setParent($objdest);
 			else
 				return "500 Internal server error";
@@ -830,6 +833,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function COPY($options, $del=false) /* {{{ */
 	{
+		global $settings, $indexconf;
+
 		if(!$del)
 			$this->log_options('COPY', $options);
 
@@ -852,7 +857,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (!$objsource)
 			return "404 Not found";
 
-		if (get_class($objsource) == 'SeedDMS_Core_Folder' && ($options["depth"] != "infinity")) {
+		if (get_class($objsource) == $this->dms->getClassname('folder') && ($options["depth"] != "infinity")) {
 			// RFC 2518 Section 9.2, last paragraph
 			return "400 Bad request";
 		}
@@ -880,12 +885,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 
 		/* If destination object is a document it must be overwritten */
-		if(get_class($objdest) == 'SeedDMS_Core_Document') {
+		if(get_class($objdest) == $this->dms->getClassname('document')) {
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
 			/* Copying a folder into a document makes no sense */
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				return "400 Bad request";
 			}
 
@@ -902,12 +907,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$objdest->setName($objsource->getName());
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
+		} elseif(get_class($objdest) == $this->dms->getClassname('folder')) {
 			if($this->logger)
 				$this->logger->log('COPY: copy \''.$objdest->getName().'\' to folder '.$objdest->getName().'', PEAR_LOG_INFO);
 
 			/* Currently no support for copying folders */
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				if($this->logger)
 					$this->logger->log('COPY: source is a folder '.$objsource->getName().'', PEAR_LOG_INFO);
 
@@ -921,7 +926,49 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$content = $objsource->getLatestContent();
 			$fspath = $this->dms->contentDir.'/'.$content->getPath();
 
-			if(!$newdoc = $objdest->addDocument($newdocname, '', 0, $this->user, '', array(), $fspath, $content->getOriginalFileName(), $content->getFileType(), $content->getMimeType(), 0, array(), array(), 0, "")) {
+			if($settings->_enableFullSearch) {
+				$index = $indexconf['Indexer']::open($settings->_luceneDir);
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+			} else {
+				$index = null;
+				$indexconf = null;
+			}
+
+			$controller = Controller::factory('AddDocument');
+			$controller->setParam('documentsource', 'webdav');
+			$controller->setParam('folder', $objdest);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			$controller->setParam('name', $newdocname);
+			$controller->setParam('comment', '');
+			$controller->setParam('expires', 0);
+			$controller->setParam('keywords', '');
+			$controller->setParam('categories', array());
+			$controller->setParam('owner', $this->user);
+			$controller->setParam('userfiletmp', $fspath);
+			$controller->setParam('userfilename', $content->getOriginalFileName());
+			$controller->setParam('filetype', $content->getFileType());
+			$controller->setParam('userfiletype', $content->getMimeType());
+			$minmax = $objdest->getDocumentsMinMax();
+			if($settings->_defaultDocPosition == 'start')
+				$controller->setParam('sequence', $minmax['min'] - 1);
+			else
+				$controller->setParam('sequence', $minmax['max'] + 1);
+			$controller->setParam('reviewers', array());
+			$controller->setParam('approvers', array());
+			$controller->setParam('reqversion', 0);
+			$controller->setParam('versioncomment', '');
+			$controller->setParam('attributes', array());
+			$controller->setParam('attributesversion', array());
+			$controller->setParam('workflow', null);
+			$controller->setParam('notificationgroups', array());
+			$controller->setParam('notificationusers', array());
+			$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+			$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
+
+			if(!$document = $controller->run()) {
+
+//			if(!$newdoc = $objdest->addDocument($newdocname, '', 0, $this->user, '', array(), $fspath, $content->getOriginalFileName(), $content->getFileType(), $content->getMimeType(), 0, array(), array(), 0, "")) {
 				if($this->logger)
 					$this->logger->log('COPY: error copying object', PEAR_LOG_INFO);
 				return "409 Conflict";
@@ -1016,7 +1063,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "200 OK";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
@@ -1054,7 +1101,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "204 No Content";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
@@ -1091,7 +1138,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 
 		// Folders cannot be locked
-		if(get_class($obj) == 'SeedDMS_Core_Folder') {
+		if(get_class($obj) == $this->dms->getClassname('folder')) {
 			if($this->logger)
 				$this->logger->log('checkLock: object is a folder', PEAR_LOG_INFO);
 			return false;
