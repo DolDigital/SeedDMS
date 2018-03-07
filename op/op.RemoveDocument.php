@@ -62,6 +62,7 @@ if($settings->_enableFullSearch) {
 	$indexconf['Indexer']::init($settings->_stopWordsFile);
 } else {
 	$index = null;
+	$indexconf = null;
 }
 
 $folder = $document->getFolder();
