@@ -1,5 +1,9 @@
 <?php
-include("../inc/inc.ClassSettings.php");
+if(isset($_SERVER['SEEDDMS_HOME'])) {
+	ini_set('include_path', $_SERVER['SEEDDMS_HOME'].'/utils'. PATH_SEPARATOR .ini_get('include_path'));
+} else {
+	ini_set('include_path', dirname($argv[0]). PATH_SEPARATOR .ini_get('include_path'));
+}
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
@@ -51,15 +55,16 @@ if(isset($options['v']) || isset($options['verѕion'])) {
 
 /* Set alternative config file */
 if(isset($options['config'])) {
-	$settings = new Settings($options['config']);
+	define('SEEDDMS_CONFIG_FILE', $options['config']);
+//	$settings = new Settings($options['config']);
 } else {
-	$settings = new Settings();
+//	$settings = new Settings();
 }
 
-if(isset($settings->_extraPath))
-	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
+//if(isset($settings->_extraPath))
+//	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
-require_once("SeedDMS/Core.php");
+//require_once("SeedDMS/Core.php");
 
 if(isset($options['F'])) {
 	$folderid = (int) $options['F'];
@@ -119,18 +124,26 @@ if(isset($options['V'])) {
 if($reqversion<1)
 	$reqversion=1;
 
-$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
+include("../inc/inc.Settings.php");
+include("../inc/inc.Init.php");
+include("../inc/inc.Extension.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.ClassNotificationService.php");
+include("../inc/inc.ClassEmailNotify.php");
+include("../inc/inc.ClassController.php");
+
+//$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+//$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 //$db->_conn->debug = 1;
 
 
-$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
-if(!$dms->checkVersion()) {
-	echo "Database update needed.";
-	exit;
-}
+//$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+//if(!$dms->checkVersion()) {
+//	echo "Database update needed.";
+//	exit;
+//}
 
-/* Parse categories */
+/* Parse categories {{{ */
 $categories = array();
 if(isset($options['K'])) {
 	$categorynames = explode(',', $options['K']);
@@ -142,9 +155,9 @@ if(isset($options['K'])) {
 			echo "Category '".$categoryname."' not found\n";
 		}
 	}
-}
+} /* }}} */
 
-/* Parse document attributes.  */
+/* Parse document attributes. {{{ */
 $document_attributes = array();
 if (isset($options['a'])) {
 	$docattr = array();
@@ -168,9 +181,9 @@ if (isset($options['a'])) {
 		}
 		$document_attributes[$attrdef->getID()] = $attrVal;
 	}
-}
+} /* }}} */
 
-/* Parse version attributes.  */
+/* Parse version attributes. {{{ */
 $version_attributes = array();
 if (isset($options['A'])) {
 	$verattr = array();
@@ -194,15 +207,9 @@ if (isset($options['A'])) {
 		}
 		$version_attributes[$attrdef->getID()] = $attrVal;
 	}
-}
+} /* }}} */
 
-
-$dms->setRootFolderID($settings->_rootFolderID);
-$dms->setMaxDirID($settings->_maxDirID);
-$dms->setEnableConverting($settings->_enableConverting);
-$dms->setViewOnlineFileTypes($settings->_viewOnlineFileTypes);
-
-/* Create a global user object */
+/* Create a global user object {{{ */
 if($username) {
 	if(!($user = $dms->getUserByLogin($username))) {
 		echo "No such user '".$username."'.";
@@ -211,6 +218,34 @@ if($username) {
 } else
 	$user = $dms->getUser(1);
 
+$dms->setUser($user);
+/* }}} */
+
+/* Create a global notifier object {{{ */
+$notifier = new SeedDMS_NotificationService();
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
+		if(method_exists($notificationObj, 'preAddService')) {
+			$notificationObj->preAddService($dms, $notifier);
+		}
+	}
+}
+
+if($settings->_enableEmail) {
+	$notifier->addService(new SeedDMS_EmailNotify($dms, $settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword));
+}
+
+if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
+		if(method_exists($notificationObj, 'postAddService')) {
+			$notificationObj->postAddService($dms, $notifier);
+		}
+	}
+}
+/* }}} */
+
+/* Check if file is readable {{{ */
 if(is_readable($filename)) {
 	if(filesize($filename)) {
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -226,6 +261,7 @@ if(is_readable($filename)) {
 	echo "File is not readable\n";
 	exit(1);
 }
+/* }}} */
 
 $folder = $dms->getFolder($folderid);
 
@@ -244,7 +280,6 @@ if (!is_numeric($sequence)) {
 	exit(1);
 }
 
-//$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, sanitizeString($_POST["expmonth"]), sanitizeString($_POST["expday"]), sanitizeString($_POST["expyear"])) : false;
 $expires = false;
 
 if(!$name)
@@ -254,13 +289,47 @@ $filetmp = $filename;
 $reviewers = array();
 $approvers = array();
 
-$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
-                            $categories, $filetmp, basename($filename),
-                            $filetype, $mimetype, $sequence, $reviewers,
-                            $approvers, $reqversion, $version_comment,
-                            $document_attributes, $version_attributes);
+if($settings->_enableFullSearch) {
+	$index = $indexconf['Indexer']::open($settings->_luceneDir);
+	$indexconf['Indexer']::init($settings->_stopWordsFile);
+} else {
+	$index = null;
+	$indexconf = null;
+}
 
-if (is_bool($res) && !$res) {
+$controller = Controller::factory('AddDocument');
+$controller->setParam('documentsource', 'script');
+$controller->setParam('folder', $folder);
+$controller->setParam('index', $index);
+$controller->setParam('indexconf', $indexconf);
+$controller->setParam('name', $name);
+$controller->setParam('comment', $comment);
+$controller->setParam('expires', $expires);
+$controller->setParam('keywords', $keywords);
+$controller->setParam('categories', $categories);
+$controller->setParam('owner', $user);
+$controller->setParam('userfiletmp', $filetmp);
+$controller->setParam('userfilename', basename($filename));
+$controller->setParam('filetype', $filetype);
+$controller->setParam('userfiletype', $mimetype);
+$minmax = $folder->getDocumentsMinMax();
+if($settings->_defaultDocPosition == 'start')
+	$controller->setParam('sequence', $minmax['min'] - 1);
+else
+	$controller->setParam('sequence', $minmax['max'] + 1);
+$controller->setParam('reviewers', $reviewers);
+$controller->setParam('approvers', $approvers);
+$controller->setParam('reqversion', $reqversion);
+$controller->setParam('versioncomment', $version_comment);
+$controller->setParam('attributes', $document_attributes);
+$controller->setParam('attributesversion', $version_attributes);
+$controller->setParam('workflow', null);
+$controller->setParam('notificationgroups', array());
+$controller->setParam('notificationusers', array());
+$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
+
+if(!$document = $controller->run()) {
 	echo "Could not add document to folder\n";
 	exit(1);
 }
