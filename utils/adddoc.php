@@ -56,16 +56,9 @@ if(isset($options['v']) || isset($options['verѕion'])) {
 /* Set alternative config file */
 if(isset($options['config'])) {
 	define('SEEDDMS_CONFIG_FILE', $options['config']);
-//	$settings = new Settings($options['config']);
-} else {
-//	$settings = new Settings();
 }
 
-//if(isset($settings->_extraPath))
-//	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
-
-//require_once("SeedDMS/Core.php");
-
+/* Set parent folder */
 if(isset($options['F'])) {
 	$folderid = (int) $options['F'];
 } else {
@@ -74,16 +67,19 @@ if(isset($options['F'])) {
 	exit(1);
 }
 
+/* Set comment of document */
 $comment = '';
 if(isset($options['c'])) {
 	$comment = $options['c'];
 }
 
+/* Set comment of version */
 $version_comment = '';
 if(isset($options['C'])) {
 	$version_comment = $options['C'];
 }
 
+/* Set keywords */
 $keywords = '';
 if(isset($options['k'])) {
 	$keywords = $options['k'];
@@ -131,17 +127,6 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassNotificationService.php");
 include("../inc/inc.ClassEmailNotify.php");
 include("../inc/inc.ClassController.php");
-
-//$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-//$db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
-//$db->_conn->debug = 1;
-
-
-//$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
-//if(!$dms->checkVersion()) {
-//	echo "Database update needed.";
-//	exit;
-//}
 
 /* Parse categories {{{ */
 $categories = array();
