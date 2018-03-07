@@ -967,8 +967,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		/* Check if 'onPreRemoveFolder' callback is set */
-		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
-			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
+		if(isset($this->_dms->callbacks['onPreRemoveFromDatabaseFolder'])) {
+			foreach($this->_dms->callbacks['onPreRemoveFromDatabaseFolder'] as $callback) {
 				$ret = call_user_func($callback[0], $callback[1], $this);
 				if(is_bool($ret))
 					return $ret;
@@ -1008,10 +1008,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db->commitTransaction();
 
 		/* Check if 'onPostRemoveFolder' callback is set */
-		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
-			foreach($this->_dms->callbacks['onPostRemoveFolder'] as $callback) {
-					/** @noinspection PhpStatementHasEmptyBodyInspection */
-					if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+		if(isset($this->_dms->callbacks['onPostRemoveFromDatabaseFolder'])) {
+			foreach($this->_dms->callbacks['onPostRemoveFromDatabaseFolder'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
+				if(!call_user_func($callback[0], $callback[1], $this->_id)) {
 				}
 			}
 		}
@@ -1035,6 +1035,15 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			return false;
 		}
 
+		/* Check if 'onPreRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
+			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
+			}
+		}
+
 		//Entfernen der Unterordner und Dateien
 		$res = $this->getSubFolders();
 		if (is_bool($res) && !$res) return false;
@@ -1055,7 +1064,18 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			}
 		}
 
-		return $this->removeFromDatabase();
+		$ret = $this->removeFromDatabase();
+		if(!$ret)
+			return $ret;
+
+		/* Check if 'onPostRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
+			foreach($this->_dms->callbacks['onPostRemoveFolder'] as $callback) {
+				call_user_func($callback[0], $callback[1], $this);
+			}
+		}
+
+		return $ret;
 	} /* }}} */
 
 	/**
