@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (972), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (973), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1706,7 +1706,7 @@ URL: [url]',
 'workflow_summary' => 'Sumário de fluxo de trabalho',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => 'Sumário de usuário',
-'x_more_objects' => '',
+'x_more_objects' => 'mais itens',
 'year_view' => 'Visualização Anual',
 'yes' => 'Sim',
 'zh_CN' => 'Chinês (CN)',
