@@ -57,9 +57,10 @@ class SeedDMS_Preview_Previewer extends SeedDMS_Preview_Base {
 			return false;
 
 		$document = $object->getDocument();
+		$dms = $document->_dms;
 		$dir = $this->previewDir.'/'.$document->getDir();
 		switch(get_class($object)) {
-			case "SeedDMS_Core_DocumentContent":
+			case $dms->getClassname('documentcontent'):
 				$target = $dir.'p'.$object->getVersion().'-'.$width;
 				break;
 			case "SeedDMS_Core_DocumentFile":
