@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (738), kreml (455)
+//    Translators: Admin (739), kreml (455)
 
 $text = array(
 '2_factor_auth' => '',
@@ -1575,7 +1575,7 @@ URL: [url]',
 'toggle_manager' => 'Přepnout správce',
 'toggle_qrcode' => '',
 'to_before_from' => 'Datum ukončení nesmí být před datem zahájení',
-'transfer_document' => '',
+'transfer_document' => 'Přenést dokument',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',

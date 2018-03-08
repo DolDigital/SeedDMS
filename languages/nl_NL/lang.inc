@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (745), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (746), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '2-factor-authenticatie',
@@ -1125,7 +1125,7 @@ URL: [url]',
 'select_one' => 'Selecteer een',
 'select_user' => '',
 'select_users' => 'Klik om gebruikers te selecteren',
-'select_value' => '',
+'select_value' => 'selecteer waarde',
 'select_workflow' => 'Selecteer workflow',
 'send_email' => 'Verstuur email',
 'send_login_data' => 'Verstuur Login-data',

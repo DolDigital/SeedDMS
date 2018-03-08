@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1079), jeromerobert (50), lonnnew (9), Oudiceval (650)
+//    Translators: Admin (1079), jeromerobert (50), lonnnew (9), Oudiceval (657)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -338,7 +338,7 @@ URL: [url]',
 'documents_to_revise' => 'Documents en attente de votre révision',
 'documents_user_draft' => 'Ébauches',
 'documents_user_expiration' => 'Documents expirés',
-'documents_user_needs_correction' => '',
+'documents_user_needs_correction' => 'Documents nécessitant une correction',
 'documents_user_no_reception' => 'Documents sans réception',
 'documents_user_obsolete' => 'Documents obsolètes',
 'documents_user_reception' => 'Documents en attente de réception',
@@ -450,7 +450,7 @@ Le lien est valide jusqu’au [valid].
 'edit_comment' => 'Modifier le commentaire',
 'edit_default_keywords' => 'Modifier les mots-clés',
 'edit_document_access' => 'Modifier les droits d\'accès',
-'edit_document_notify' => 'Notifications de documents',
+'edit_document_notify' => 'Notification de document',
 'edit_document_props' => 'Modifier le document',
 'edit_event' => 'Modifier l\'événement',
 'edit_existing_access' => 'Modifier la liste des droits d\'accès',
@@ -458,7 +458,7 @@ Le lien est valide jusqu’au [valid].
 'edit_existing_notify' => 'Modifier les notifications',
 'edit_folder_access' => 'Modifier les droits d\'accès',
 'edit_folder_attrdefgrp' => 'Modifier les groupes d’attributs',
-'edit_folder_notify' => 'Liste de notification de dossiers',
+'edit_folder_notify' => 'Notification de dossier',
 'edit_folder_props' => 'Modifier le dossier',
 'edit_group' => 'Modifier un groupe',
 'edit_online' => 'Modification en ligne',
@@ -587,7 +587,7 @@ URL: [url]',
 'group_exists' => 'Ce groupe existe déjà.',
 'group_info' => 'Informations du groupe',
 'group_management' => 'Gestion des groupes',
-'group_members' => 'Membres de groupes',
+'group_members' => 'Membres du groupe',
 'group_receipt_summary' => 'Vue d’ensemble groupe réception',
 'group_review_summary' => 'Vue d’ensemble groupe vérification',
 'guest_login' => 'Se connecter comme invité',
@@ -810,7 +810,7 @@ URL: [url]',
 'no_default_keywords' => 'Aucun mot-clé disponible',
 'no_docs_checked_out' => '',
 'no_docs_locked' => 'Aucun document verrouillé',
-'no_docs_needs_correction' => '',
+'no_docs_needs_correction' => 'Aucun document ne nécessite de correction',
 'no_docs_rejected' => 'Aucun document rejeté.',
 'no_docs_to_approve' => 'Aucun document ne nécessite actuellement une approbation',
 'no_docs_to_look_at' => 'Aucun document à surveiller',
