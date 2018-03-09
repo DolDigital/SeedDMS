@@ -676,7 +676,18 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if (!$folder->addSubFolder($name, '', $this->user, 0)) {
+		$controller = Controller::factory('AddSubFolder');
+		$controller->setParam('dms', $this->dms);
+		$controller->setParam('user', $this->user);
+		$controller->setParam('folder', $folder);
+		$controller->setParam('name', $name);
+		$controller->setParam('comment', '');
+		$controller->setParam('sequence', 0);
+		$controller->setParam('attributes', array());
+		$controller->setParam('notificationgroups', array());
+		$controller->setParam('notificationusers', array());
+		if(!$subFolder = $controller->run()) {
+//		if (!$folder->addSubFolder($name, '', $this->user, 0)) {
 			return "403 Forbidden";				 
 		}
 
@@ -710,23 +721,32 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
+		if($settings->_enableFullSearch) {
+			$index = $indexconf['Indexer']::open($settings->_luceneDir);
+			$indexconf['Indexer']::init($settings->_stopWordsFile);
+		} else {
+			$index = null;
+			$indexconf = null;
+		}
+
 		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			if($obj->hasDocuments() || $obj->hasSubFolders()) {
 				return "409 Conflict";
 			}
-			if(!$obj->remove()) {
+			$controller = Controller::factory('RemoveFolder');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
+			$controller->setParam('folder', $obj);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			if(!$controller->run()) {
+//			if(!$obj->remove()) {
 				return "409 Conflict";
 			}
 		} else {
-			if($settings->_enableFullSearch) {
-				$index = $indexconf['Indexer']::open($settings->_luceneDir);
-				$indexconf['Indexer']::init($settings->_stopWordsFile);
-			} else {
-				$index = null;
-				$indexconf = null;
-			}
-
 			$controller = Controller::factory('RemoveDocument');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
 			$controller->setParam('document', $obj);
 			$controller->setParam('index', $index);
 			$controller->setParam('indexconf', $indexconf);
