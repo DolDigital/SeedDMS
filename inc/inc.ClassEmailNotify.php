@@ -118,9 +118,13 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			}
 			if($this->smtp_user) {
 				$mail_params['auth'] = true;
+				// $mail_params['debug'] = true;
 				$mail_params['username'] = $this->smtp_user;
 				$mail_params['password'] = $this->smtp_password;
 			}
+			/* See ticket #384 */
+			$mail_params['socket_options'] = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false));
+
 			$mail = Mail::factory('smtp', $mail_params);
 		} else {
 			$mail = Mail::factory('mail', $mail_params);
