@@ -16,6 +16,8 @@
 - attribute values can be deleted from all folders, documents
 - new settings to disallow upload of documents with just a reviewer in traditional
   workflow mode
+- webdav and various script use the controller framework instead of calling
+  SeedDMS_Core methods
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.5
