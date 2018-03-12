@@ -28,7 +28,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 // Delete session from database
 if(isset($_COOKIE['mydms_session'])) {

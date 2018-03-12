@@ -282,7 +282,7 @@ if($settings->_enableFullSearch) {
 	$indexconf = null;
 }
 
-$controller = Controller::factory('AddDocument');
+$controller = Controller::factory('AddDocument', array('dms'=>$dms, 'user'=>$user));
 $controller->setParam('documentsource', 'script');
 $controller->setParam('folder', $folder);
 $controller->setParam('index', $index);

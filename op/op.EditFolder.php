@@ -30,7 +30,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));

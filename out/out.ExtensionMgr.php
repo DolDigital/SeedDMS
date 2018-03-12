@@ -37,6 +37,8 @@ $v = new SeedDMS_Version;
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
 	$view->setParam('version', $v);
+	$view->setParam('partitionsize', 200000);
+	$view->setParam('maxuploadsize', 2000000);
 	$view($_GET);
 	exit;
 }

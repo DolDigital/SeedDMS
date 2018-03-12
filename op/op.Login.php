@@ -39,7 +39,7 @@ function _printMessage($heading, $message) { /* {{{ */
 } /* }}} */
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
 	$theme = $_REQUEST["sesstheme"];

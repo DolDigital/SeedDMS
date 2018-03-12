@@ -31,7 +31,7 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassController.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('adddocument')) {

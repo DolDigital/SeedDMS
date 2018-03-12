@@ -30,7 +30,7 @@ class Controller {
 	 * @return object an object of a class implementing the view
 	 */
 	static function factory($class, $params=array()) { /* {{{ */
-		global $settings, $session, $dms, $user, $EXT_CONF;
+		global $settings, $session, $EXT_CONF;
 		if(!$class) {
 			return null;
 		}
@@ -52,8 +52,6 @@ class Controller {
 			require($filename);
 			$controller = new $classname($params);
 			/* Set some configuration parameters */
-			$controller->setParam('dms', $dms);
-			$controller->setParam('user', $user);
 			$controller->setParam('postVars', $_POST);
 			$controller->setParam('getVars', $_GET);
 			$controller->setParam('requestVars', $_REQUEST);

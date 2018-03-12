@@ -30,7 +30,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));

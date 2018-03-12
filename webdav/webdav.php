@@ -955,6 +955,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			}
 
 			$controller = Controller::factory('AddDocument');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
 			$controller->setParam('documentsource', 'webdav');
 			$controller->setParam('folder', $objdest);
 			$controller->setParam('index', $index);

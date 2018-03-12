@@ -638,7 +638,7 @@ switch($command) {
 					$indexconf = null;
 				}
 
-				$controller = Controller::factory('AddDocument');
+				$controller = Controller::factory('AddDocument', array('dms'=>$dms, 'user'=>$user));
 				$controller->setParam('documentsource', 'upload');
 				$controller->setParam('folder', $folder);
 				$controller->setParam('index', $index);

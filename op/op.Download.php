@@ -31,7 +31,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (isset($_GET["version"])) { /* {{{ */
 
@@ -114,7 +114,8 @@ elseif (isset($_GET["file"])) { /* {{{ */
 
 	sendFile($dms->contentDir . $file->getPath());
 
-} elseif (isset($_GET["arkname"])) {
+} /* }}} */
+elseif (isset($_GET["arkname"])) { /* {{{ */
 	$filename = basename($_GET["arkname"]);
 
 	// backup download
@@ -141,7 +142,8 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	
 	sendFile($settings->_contentDir .$filename );
 	
-} elseif (isset($_GET["logname"])) {
+} /* }}} */
+elseif (isset($_GET["logname"])) { /* {{{ */
 	$filename = basename($_GET["logname"]);
 
 	// log download
@@ -167,7 +169,8 @@ elseif (isset($_GET["file"])) { /* {{{ */
 
 	sendFile($settings->_contentDir .$filename );
 	
-} elseif (isset($_GET["vfile"])) {
+} /* }}} */
+elseif (isset($_GET["vfile"])) { /* {{{ */
 
 	// versioning info download
 	
@@ -191,7 +194,8 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	
 	sendFile($dms->contentDir . $document->getDir() .$settings->_versioningFileName);
 	
-} elseif (isset($_GET["dumpname"])) {
+} /* }}} */
+elseif (isset($_GET["dumpname"])) { /* {{{ */
 	$filename = basename($_GET["dumpname"]);
 
 	// dump file download
@@ -251,7 +255,8 @@ elseif (isset($_GET["file"])) { /* {{{ */
 
 	sendFile($filename);
 
-} elseif (isset($_GET["approvelogid"])) {
+} /* }}} */
+elseif (isset($_GET["approvelogid"])) { /* {{{ */
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 		UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 	}
@@ -285,7 +290,7 @@ elseif (isset($_GET["file"])) { /* {{{ */
 	header("Cache-Control: must-revalidate");
 
 	sendFile($filename);
-}
+} /* }}} */
 
 add_log_line();
 exit();
