@@ -25,11 +25,10 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 	public function run() {
 		$dms = $this->params['dms'];
 		$type = $this->params['type'];
-		$content = $this->params['content'];
 
 		switch($type) {
 			case "version":
-
+				$content = $this->params['content'];
 				if(null === $this->callHook('version')) {
 					if(file_exists($dms->contentDir . $content->getPath())) {
 						header("Content-Transfer-Encoding: binary");
