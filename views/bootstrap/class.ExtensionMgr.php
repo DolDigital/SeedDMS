@@ -27,6 +27,40 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 
+	function js() { /* {{{ */
+		$partitionsize = $this->params['partitionsize'];
+		$maxuploadsize = $this->params['maxuploadsize'];
+
+		header('Content-Type: application/javascript');
+?>
+		$(document).ready( function() {
+			$('a.download').click(function(ev){
+				var element = $(this);
+				$('#'+element.data('extname')+'-download').submit();
+/*
+				var element = $(this);
+				ev.preventDefault();
+				$.ajax({url: '../op/op.ExtensionMgr.php',
+					type: 'POST',
+					dataType: "json",
+					data: {action: 'download', 'formtoken': '<?= createFormKey('extensionmgr') ?>', 'extname': element.data('extname')},
+					success: function(data) {
+						noty({
+							text: data.msg,
+							type: (data.error) ? 'error' : 'success',
+							dismissQueue: true,
+							layout: 'topRight',
+							theme: 'defaultTheme',
+							timeout: 1500,
+						});
+					}
+				});
+*/
+			});
+		});
+<?php
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -37,8 +71,31 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-		$this->contentContainerStart();
-		echo "<table class=\"table table-condensed\">\n";
+		$this->contentHeading(getMLText("extension_manager"));
+?>
+<div class="row-fluid">
+	<div class="span4">
+		<form class="form-horizontal" method="post" enctype="multipart/form-data" action="../op/op.ExtensionMgr.php">
+			<?= createHiddenFieldWithKey('extensionmgr') ?>
+			<input type="hidden" name="action" value="upload" />
+			<div class="control-group">
+				<label class="control-label" for="upload"><?= getMLText('extension_archive'); ?></label>
+				<div class="controls">
+					<?php $this->printFileChooser('userfile', false); ?>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="enddate"></label>
+				<div class="controls">
+					<button id="upload" type="_submit" class="btn"><i class="icon-upload"></i> <?= getMLText("upload_extension"); ?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="span8">
+<?php
+//		$this->contentContainerStart();
+		echo "<table class=\"table _table-condensed\">\n";
 		print "<thead>\n<tr>\n";
 		print "<th></th>\n";	
 		print "<th>".getMLText('name')."</th>\n";	
@@ -95,21 +152,29 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			if($errmsgs)
 				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $errmsgs)."</div>";
 			echo "</td>";
-			echo "<td>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small>";
+			echo "<td nowrap>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small>";
+			echo "<div class=\"list-action\">";
 			if($extconf['config'])
-				echo "<div class=\"list-action\"><a href=\"../out/out.Settings.php?currenttab=extensions#".$extname."\"><i class=\"icon-cogs\"></i></a></div>";
+				echo "<a href=\"../out/out.Settings.php?currenttab=extensions#".$extname."\" title=\"".getMLText('configure_extension')."\"><i class=\"icon-cogs\"></i></a>";
+			echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$extname."-download\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"download\" /><input type=\"hidden\" name=\"extname\" value=\"".$extname."\" /><a class=\"download\" data-extname=\"".$extname."\" title=\"".getMLText('download_extension')."\"><i class=\"icon-download\"></i></a></form>";
+			echo "</div>";
 			echo "</td>";
-			echo "<td><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
+			echo "<td nowrap><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "</tr>\n";
 		}
 		echo "</table>\n";
 ?>
 <form action="../op/op.ExtensionMgr.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('extensionmgr'); ?>
+	<input type="hidden" name="action" value="refresh" />
 	<p><button type="submit" class="btn"><i class="icon-refresh"></i> <?php printMLText("refresh");?></button></p>
 </form>
 <?php
-		$this->contentContainerEnd();
+//		$this->contentContainerEnd();
+?>
+  </div>
+ </div>
+<?php
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */

@@ -90,4 +90,67 @@ class SeedDMS_Extension_Mgr {
 		}
 		return $extensions;
 	} /* }}} */
+
+	public function createArchive($extname, $version) { /* {{{ */
+		if(!is_dir($this->extdir ."/". $extname))
+			return false;
+
+		$tmpfile = $this->cachedir."/".$extname."-".$version.".zip";
+
+		$cmd = "cd ".$this->extdir."/".$extname."; zip -r ".$tmpfile." .";
+		exec($cmd);
+
+		return $tmpfile;
+	} /* }}} */
+
+	static protected function rrmdir($dir) { /* {{{ */
+		if (is_dir($dir)) { 
+			$objects = scandir($dir); 
+			foreach ($objects as $object) { 
+				if ($object != "." && $object != "..") { 
+					if (filetype($dir."/".$object) == "dir") self::rrmdir($dir."/".$object); else unlink($dir."/".$object); 
+				} 
+			} 
+			reset($objects); 
+			rmdir($dir); 
+		} 
+	} /* }}} */
+
+	public function updateExtension($file) { /* {{{ */
+		$newdir = $this->cachedir ."/ext.new";
+		if(!mkdir($newdir, 0755)) {
+			return false;
+		}
+		$cmd = "cd ".$newdir."; unzip ".$file;
+		exec($cmd);
+
+		if(!file_exists($newdir."/conf.php")) {
+			self::rrmdir($newdir);
+			return false;
+		}
+
+		include($newdir."/conf.php");
+		if(!isset($EXT_CONF)) {
+			self::rrmdir($newdir);
+			return false;
+		}
+		$extname = key($EXT_CONF);
+		if(!$extname || !preg_match('/[a-zA-Z_]*/', $extname)) {
+			self::rrmdir($newdir);
+			return false;
+		}
+
+		if(!is_dir($this->extdir)) {
+			if(!mkdir($this->extdir, 0755)) {
+				self::rrmdir($newdir);
+				return false;
+			}
+		} elseif(is_dir($this->extdir ."/". $extname)) {
+			$this->rrmdir($this->extdir ."/". $extname);
+		}
+		rename($newdir, $this->extdir ."/". $extname);
+
+		return true;
+	} /* }}} */
+
 }
