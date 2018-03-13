@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1674), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1681), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -269,6 +269,7 @@ URL: [url]',
 'comment' => 'Comment',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Version comment',
+'configure_extension' => 'Configure extension',
 'confirm_clear_cache' => 'Would you really like to clear the cache? This will remove all precalculated preview images.',
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
 'confirm_move_document' => 'Please confirm moving the document.',
@@ -416,6 +417,7 @@ URL: [url]',
 'does_not_expire' => 'Does not expire',
 'does_not_inherit_access_msg' => 'Inherit access',
 'download' => 'Download',
+'download_extension' => 'Download extension as zip file',
 'download_links' => 'Download links',
 'download_link_email_body' => 'Click on the link below to download the version [version] of document
 \'[docname]\'.
@@ -516,6 +518,7 @@ User: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Expiry date changed',
 'export' => 'Export',
+'extension_archive' => 'Extension',
 'extension_manager' => 'Manage extensions',
 'february' => 'February',
 'file' => 'File',
@@ -605,6 +608,7 @@ URL: [url]',
 'identical_version' => 'New version is identical to current version.',
 'import' => 'Import',
 'importfs' => 'Import from Filesystem',
+'import_extension' => 'Import extension',
 'import_fs' => 'Import from filesystem',
 'import_fs_warning' => 'This will only work for folders in the drop folder. The operation recursively imports all folders and files. Files will be released immediately.',
 'include_content' => 'Include content',
@@ -1523,6 +1527,8 @@ Name: [username]
 'splash_error_add_to_transmittal' => 'Error while adding document to transmittal',
 'splash_error_rm_download_link' => 'Error when removing download link',
 'splash_error_send_download_link' => 'Error while sending download link',
+'splash_extension_import' => 'Extensition installed',
+'splash_extension_refresh' => 'Refreshed list of extensions',
 'splash_folder_edited' => 'Save folder changes',
 'splash_importfs' => 'Imported [docs] documents and [folders] folders',
 'splash_inherit_access' => 'Access right will be inherited',

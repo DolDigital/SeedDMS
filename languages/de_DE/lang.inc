@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2553), dgrutsch (22)
+//    Translators: Admin (2560), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -269,6 +269,7 @@ URL: [url]',
 'comment' => 'Kommentar',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Kommentar zur aktuellen Version',
+'configure_extension' => 'Erweiterung konfigurieren',
 'confirm_clear_cache' => 'Wollen Sie wirklich den Cache löschen? Dies entfernt alle vorberechneten Vorschaubilder.',
 'confirm_create_fulltext_index' => 'Ja, Ich möchte den Volltextindex neu erzeugen!.',
 'confirm_move_document' => 'Dokument wirklich verschieben?',
@@ -416,6 +417,7 @@ URL: [url]',
 'does_not_expire' => 'Kein Ablaufdatum',
 'does_not_inherit_access_msg' => 'Berechtigungen wieder erben',
 'download' => 'Download',
+'download_extension' => 'Erweiterung als zip-Datei herunterladen',
 'download_links' => 'Download Links',
 'download_link_email_body' => 'Klicken Sie bitte auf den untenstehenden Link, um Version [version] des Dokuments \'[docname]\' herunter zu laden.
 
@@ -515,6 +517,7 @@ Benutzer: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Ablaufdatum geändert',
 'export' => 'Export',
+'extension_archive' => 'Erweiterung',
 'extension_manager' => 'Erweiterungen verwalten',
 'february' => 'Februar',
 'file' => 'Datei',
@@ -604,6 +607,7 @@ URL: [url]',
 'identical_version' => 'Neue Version ist identisch zu aktueller Version.',
 'import' => 'Importiere',
 'importfs' => 'Importiere aus Dateisystem',
+'import_extension' => 'Erweiterung importieren',
 'import_fs' => 'Aus Dateisystem importieren',
 'import_fs_warning' => 'Der Import kann nur für Ordner im Ablageordner erfolgen. Alle Ordner und Dateien werden rekursiv importiert. Dateien werden sofort freigegeben.',
 'include_content' => 'Inhalte mit exportieren',
@@ -1528,6 +1532,8 @@ Name: [username]
 'splash_error_add_to_transmittal' => 'Fehler beim Hinzufügen zur Dokumentenliste',
 'splash_error_rm_download_link' => 'Fehler beim Löschen des Download-Links',
 'splash_error_send_download_link' => 'Fehler beim Verschicken des Download-Links',
+'splash_extension_import' => 'Erweiterung installiert',
+'splash_extension_refresh' => 'Liste der Erweiterungen neu geladen',
 'splash_folder_edited' => 'Änderungen am Ordner gespeichert',
 'splash_importfs' => '[docs] Dokumente und [folders] Ordner importiert',
 'splash_inherit_access' => 'Zugriffsrechte werden geerbt',
