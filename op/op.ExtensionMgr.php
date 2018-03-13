@@ -57,17 +57,18 @@ if ($action == "download") {
 	}
 	add_log_line();
 } /* }}} */
-elseif ($action == "refresh") {
+elseif ($action == "refresh") { /* {{{ */
 	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 	$extMgr->createExtensionConf();
 	$controller->setParam('extmgr', $extMgr);
 	if (!$controller($_POST)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_refresh')));
 	add_log_line();
 	header("Location:../out/out.ExtensionMgr.php");
-}
-elseif ($action == "upload") {
+} /* }}} */
+elseif ($action == "upload") { /* {{{ */
 	if($_FILES['userfile']['error']) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
@@ -80,9 +81,32 @@ elseif ($action == "upload") {
 	if (!$controller($_POST)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_import')));
 	add_log_line();
 	header("Location:../out/out.ExtensionMgr.php");
-}
+} /* }}} */
+elseif ($action == "import") { /* {{{ */
+	if(!$_POST['url']) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+	$reposurl = 'http://seeddms.steinmann.cx/repository';
+	$content = file_get_contents($reposurl."/".$_POST['url']);
+	$file = tempnam(sys_get_temp_dir(), '');
+	file_put_contents($file, $content);
+
+	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+	$controller->setParam('extmgr', $extMgr);
+	$controller->setParam('file', $file);
+	$_POST['action'] = 'upload';
+	if (!$controller($_POST)) {
+		unlink($file);
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+	unlink($file);
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_upload')));
+	add_log_line();
+	header("Location:../out/out.ExtensionMgr.php");
+} /* }}} */
 
 
 ?>

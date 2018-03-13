@@ -17,12 +17,7 @@ require_once "inc.Version.php";
 require_once "inc.Utils.php";
 
 $extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
-$extconffile = $extMgr->getExtensionsConfFile();
-if(!file_exists($extconffile)) {
-	$extMgr->createExtensionConf();
-}
-$EXT_CONF = array();
-include($extconffile);
+$EXT_CONF = $extMgr->getExtensionConfiguration();
 
 $version = new SeedDMS_Version;
 
@@ -31,7 +26,7 @@ foreach($EXT_CONF as $extname=>$extconf) {
 		/* check for requirements */
 		if(!empty($extconf['constraints']['depends']['seeddms'])) {
 			$t = explode('-', $extconf['constraints']['depends']['seeddms'], 2);
-			if(cmpVersion($t[0], $version->version()) > 0 || ($t[1] && cmpVersion($t[1], $version->version()) < 0))
+			if(SeedDMS_Extension_Mgr::cmpVersion($t[0], $version->version()) > 0 || ($t[1] && SeedDMS_Extension_Mgr::cmpVersion($t[1], $version->version()) < 0))
 				$extconf['disable'] = true;
 		}
 	}
@@ -48,7 +43,7 @@ foreach($EXT_CONF as $extname=>$extconf) {
 			if(file_exists($langfile)) {
 				unset($__lang);
 				include($langfile);
-				if($__lang) {
+				if(isset($__lang) && $__lang) {
 					foreach($__lang as $lang=>&$data) {
 						if(isset($GLOBALS['LANG'][$lang]))
 							$GLOBALS['LANG'][$lang] = array_merge($GLOBALS['LANG'][$lang], $data);

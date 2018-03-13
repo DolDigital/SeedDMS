@@ -33,12 +33,14 @@ if (!$user->isAdmin()) {
 }
 
 $v = new SeedDMS_Version;
+$extmgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+$currenttab = 'installed';
 
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
 	$view->setParam('version', $v);
-	$view->setParam('partitionsize', 200000);
-	$view->setParam('maxuploadsize', 2000000);
+	$view->setParam('extmgr', $extmgr);
+	$view->setParam('currenttab', $currenttab);
 	$view($_GET);
 	exit;
 }
