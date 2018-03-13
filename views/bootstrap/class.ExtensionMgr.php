@@ -93,15 +93,15 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			<div class="control-group">
 				<label class="control-label" for="enddate"></label>
 				<div class="controls">
-					<button id="upload" type="_submit" class="btn"><i class="icon-upload"></i> <?= getMLText("impor_extension"); ?></button>
+					<button id="upload" type="_submit" class="btn"><i class="icon-upload"></i> <?= getMLText("import_extension"); ?></button>
 				</div>
 			</div>
 		</form>
 	</div>
 	<div class="span8">
 		<ul class="nav nav-tabs" id="extensionstab">
-			<li class="<?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>"><a data-target="#installed" data-toggle="tab"><?php printMLText('extensions_installed'); ?></a></li>
-			<li class="<?php if($currenttab == 'repository') echo 'active'; ?>"><a data-target="#repository" data-toggle="tab"><?php printMLText('extensions_repository'); ?></a></li>
+			<li class="<?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>"><a data-target="#installed" data-toggle="tab"><?= getMLText('extensions_installed'); ?></a></li>
+			<li class="<?php if($currenttab == 'repository') echo 'active'; ?>"><a data-target="#repository" data-toggle="tab"><?= getMLText('extensions_repository'); ?></a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane <?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>" id="installed">
