@@ -49,7 +49,7 @@ if ($action == "download") {
 	if (!file_exists($settings->_rootDir.'/ext/'.$extname) ) {
 		UI::exitError(getMLText("admin_tools"),getMLText("missing_extension"));
 	}
-	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+//	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 	$controller->setParam('extmgr', $extMgr);
 	$controller->setParam('extname', $extname);
 	if (!$controller($_POST)) {
@@ -58,7 +58,7 @@ if ($action == "download") {
 	add_log_line();
 } /* }}} */
 elseif ($action == "refresh") { /* {{{ */
-	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+//	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 	$extMgr->createExtensionConf();
 	$controller->setParam('extmgr', $extMgr);
 	if (!$controller($_POST)) {
@@ -75,7 +75,7 @@ elseif ($action == "upload") { /* {{{ */
 	if($_FILES['userfile']['type'] != 'application/zip') {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
-	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+//	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 	$controller->setParam('extmgr', $extMgr);
 	$controller->setParam('file', $_FILES['userfile']['tmp_name']);
 	if (!$controller($_POST)) {
@@ -94,7 +94,7 @@ elseif ($action == "import") { /* {{{ */
 	$file = tempnam(sys_get_temp_dir(), '');
 	file_put_contents($file, $content);
 
-	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+//	$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 	$controller->setParam('extmgr', $extMgr);
 	$controller->setParam('file', $file);
 	$_POST['action'] = 'upload';
