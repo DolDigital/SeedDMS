@@ -32,15 +32,26 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
+$reposurl = 'http://seeddms.steinmann.cx/repository';
+
 $v = new SeedDMS_Version;
-$extmgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
-$currenttab = 'installed';
+$extmgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir, $reposurl);
+if(isset($_GET['currenttab']))
+	$currenttab = $_GET['currenttab'];
+else
+	$currenttab = 'installed';
+
+if(isset($_GET['forceupdate']) && $_GET['forceupdate']==1)
+	$extmgr->updateExtensionList(true);
+else
+	$extmgr->updateExtensionList();
 
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
 	$view->setParam('version', $v);
 	$view->setParam('extmgr', $extmgr);
 	$view->setParam('currenttab', $currenttab);
+	$view->setParam('reposurl', $reposurl);
 	$view($_GET);
 	exit;
 }

@@ -70,9 +70,8 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$version = $this->params['version'];
 		$extmgr = $this->params['extmgr'];
 		$currenttab = $this->params['currenttab'];
-
-		$reposurl = 'http://seeddms.steinmann.cx/repository';
-
+		$reposurl = $this->params['reposurl'];
+	
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -177,7 +176,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		print "<th>".getMLText('author')."</th>\n";	
 		print "<th></th>\n";	
 		print "</tr></thead><tbody>\n";
-		$list = $extmgr->importExtensionList($reposurl);
+		$list = $extmgr->getExtensionList();
 		foreach($list as $e) {
 			if($e[0] != '#') {
 				$re = json_decode($e, true);
@@ -210,6 +209,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		}	
 		echo "</tbody></table>\n";
 ?>
+				<div><a href="?forceupdate=1&currenttab=repository" class="btn btn-delete"><?= getMLText('force_update')?></a></div>
 			</div>
 		</div>
   </div>

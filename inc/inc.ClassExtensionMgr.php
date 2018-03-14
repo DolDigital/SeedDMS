@@ -33,6 +33,12 @@ class SeedDMS_Extension_Mgr {
 	protected $extdir;
 
 	/**
+	 * @var string $reposurl url for fetching list of extensions in repository
+	 * @access protected
+	 */
+	protected $reposurl;
+
+	/**
 	 * @var array[] $extconf configuration of all extensions
 	 * @access protected
 	 */
@@ -91,9 +97,10 @@ class SeedDMS_Extension_Mgr {
 	 * configuration file if it does not exist and the extension dir
 	 * is given
 	 */
-	public function __construct($extdir = '', $cachedir = '') { /* {{{ */
+	public function __construct($extdir = '', $cachedir = '', $reposurl = '') { /* {{{ */
 		$this->cachedir = $cachedir;
 		$this->extdir = $extdir;
+		$this->reposurl = $reposurl;
 		$this->extconf = array();
 		if($extdir) {
 			if(!file_exists($this->getExtensionsConfFile())) {
@@ -262,6 +269,15 @@ class SeedDMS_Extension_Mgr {
 						if(self::cmpVersion($tmp[0], phpversion()) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], phpversion()) < 0))
 							$this->errmsgs[] = sprintf("Incorrect PHP version (needs version %s)", $extconf['constraints']['depends']['php']);
 						break;
+					case 'phpext':
+						if(is_array($dval) && $dval) {
+							$extlist = get_loaded_extensions();
+							foreach($dval as $d) {
+								if(!in_array($d, $extlist))
+									$this->errmsgs[] = sprintf("Missing php extension '%s'", $d);
+							}
+						}
+						break;
 					default:
 						$tmp = explode('-', $dval, 2);
 						if(isset($GLOBALS['EXT_CONF'][$dkey]['version'])) {
@@ -343,12 +359,29 @@ class SeedDMS_Extension_Mgr {
 	 *
 	 * @param boolean $force force download even if file already exists
 	 */
-	public function importExtensionList($url, $force=false) { /* {{{ */
-		if(!file_exists($this->cachedir."/repository.json") || $force) {
-			$file = file_get_contents($url."/repository.json");
-			file_put_contents($this->cachedir."/repository.json", $file);
+	public function getExtensionList() { /* {{{ */
+		if(file_exists($this->cachedir."/repository.json")) {
+			return file($this->cachedir."/repository.json");
+		} else {
+			return array();
 		}
-		return file($this->cachedir."/repository.json");
+	} /* }}} */
+
+	/**
+	 * Import list of extension from repository
+	 *
+	 * @param boolean $force force download even if file already exists
+	 */
+	public function updateExtensionList($force=false) { /* {{{ */
+		if($this->reposurl) {
+			if(!file_exists($this->cachedir."/repository.json") || $force) {
+				$file = file_get_contents($this->reposurl."/repository.json");
+				file_put_contents($this->cachedir."/repository.json", $file);
+			}
+			return true;
+		} else {
+			return false;
+		}
 	} /* }}} */
 
 	/**
