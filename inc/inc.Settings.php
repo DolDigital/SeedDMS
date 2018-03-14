@@ -18,34 +18,6 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
-if(is_link($_tmp)) {
-	$_arr = preg_split('/\//', $_tmp);
-	array_pop($_arr);
-
-	$_configDir = implode('/', $_arr).'/conf';
-//	include(implode('/', $_arr)."/conf/conf.Settings.php");
-} else {
-//	include("../conf/conf.Settings.php");
-}
-
-// ----------------------------
-// Update previous version <3.0
-// ----------------------------
-if (file_exists("../inc/inc.Settings.old.php")) {
-	// Change class name
-	$str = file_get_contents("../inc/inc.Settings.old.php");
-	$str = str_replace("class Settings" , "class OLDSettingsOLD", $str);
-	$str = str_replace("Settings()" , "OLDSettingsOLD()", $str);
-	file_put_contents("../inc/inc.Settings.old.php", $str);
-
-	include "inc.Settings.old.php";
-
-	$settingsOLD = $settings;
-} else {
-	$settingsOLD = null;
-}
-
 require_once('inc.ClassSettings.php');
 if(defined("SEEDDMS_CONFIG_FILE"))
 	$settings = new Settings(SEEDDMS_CONFIG_FILE);
@@ -53,21 +25,6 @@ else
 	$settings = new Settings();
 if(!defined("SEEDDMS_INSTALL") && file_exists(dirname($settings->_configFilePath)."/ENABLE_INSTALL_TOOL")) {
 	die("SeedDMS won't run unless your remove the file ENABLE_INSTALL_TOOL from your configuration directory.");
-}
-
-// ----------------------------
-// Update previous version <3.0
-// ----------------------------
-if (isset($settingsOLD)) {
-	$class_vars = get_class_vars(get_class($settingsOLD));
-	foreach ($class_vars as $name => $value) {
-		if (property_exists ("Settings", $name))
-			$settings->$name = $value;
-	}
-
-	$settings->save();
-	echo "Update finish, you must delete " . realpath("../inc/inc.Settings.old.php") . " file";
-	exit;
 }
 
 if(isset($settings->_extraPath))
