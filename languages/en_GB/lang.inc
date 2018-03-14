@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1681), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1689), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -520,6 +520,9 @@ URL: [url]',
 'export' => 'Export',
 'extension_archive' => 'Extension',
 'extension_manager' => 'Manage extensions',
+'extension_mgr_installed' => 'Installed',
+'extension_mgr_no_upload' => 'Uploading new extensions is not possible because the extentension directory is not writable.',
+'extension_mgr_repository' => 'Available',
 'february' => 'February',
 'file' => 'File',
 'files' => 'Files',
@@ -568,6 +571,7 @@ User: [username]
 URL: [url]',
 'folder_renamed_email_subject' => '[sitename]: [name] - Folder renamed',
 'folder_title' => 'Folder \'[foldername]\'',
+'force_update' => 'Update',
 'friday' => 'Friday',
 'friday_abbr' => 'Fr',
 'from' => 'From',
@@ -1293,6 +1297,8 @@ Name: [username]
 'settings_enablePasswordForgotten_desc' => 'If you want to allow user to set a new password and send it by mail, check this option.',
 'settings_enableRecursiveCount' => 'Enable recursive document/folder count',
 'settings_enableRecursiveCount_desc' => 'If turned on, the number of documents and folders in the folder view will be determined by counting all objects by recursively processing the folders and counting those documents and folders the user is allowed to access.',
+'settings_enableRevisionOnVoteReject' => 'Reject by one revisor',
+'settings_enableRevisionOnVoteReject_desc' => 'If set the document will be reject if one revisor rejects the document.',
 'settings_enableRevisionWorkflow' => 'Enable revision of documents',
 'settings_enableRevisionWorkflow_desc' => 'Enable, to be able to run the workflow for revising a document after a given period of time.',
 'settings_enableSelfReceipt' => 'Allow reception for logged in user',
@@ -1420,6 +1426,8 @@ Name: [username]
 'settings_quota_desc' => 'The maximum number of bytes a user may use on disk. Set this to 0 for unlimited disk space. This value can be overridden for each user in his profile.',
 'settings_removeFromDropFolder' => 'Remove file from drop folder after successful upload',
 'settings_removeFromDropFolder_desc' => 'Enable this, if a file taken from the drop folder shall be deleted after successful upload.',
+'settings_repositoryUrl' => 'URL of repository',
+'settings_repositoryUrl_desc' => 'URL of repository for extensions',
 'settings_restricted' => 'Restricted access',
 'settings_restricted_desc' => 'Only allow users to log in if they have an entry in the local database (irrespective of successful authentication with LDAP)',
 'settings_rootDir' => 'Root directory',
