@@ -14,7 +14,7 @@ PHPDOC=~/Downloads/phpDocumentor-2.8.1/bin/phpdoc
 dist:
 	mkdir -p tmp/seeddms-$(VERSION)
 	cp -a $(SRC) tmp/seeddms-$(VERSION)
-	(cd tmp/seeddms-$(VERSION); rm -rf $(NODISTFILES))
+	(cd tmp/seeddms-$(VERSION); rm -rf $(NODISTFILES); mv conf conf.template)
 	(cd tmp;  tar --exclude=.svn --exclude=.gitignore --exclude=views/blue --exclude=views/hc --exclude=views/clean --exclude=styles/blue --exclude=styles/hc --exclude=styles/clean -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
 	rm -rf tmp
 
