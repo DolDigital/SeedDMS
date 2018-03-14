@@ -40,6 +40,9 @@ if(!checkFormKey('extensionmgr')) {
 if (isset($_POST["action"])) $action=$_POST["action"];
 else $action=NULL;
 
+if (isset($_POST["currenttab"])) $currenttab=$_POST["currenttab"];
+else $currenttab=NULL;
+
 // add new attribute definition ---------------------------------------------
 if ($action == "download") {
 	if (!isset($_POST["extname"])) {
@@ -66,7 +69,7 @@ elseif ($action == "refresh") { /* {{{ */
 	}
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_refresh')));
 	add_log_line();
-	header("Location:../out/out.ExtensionMgr.php");
+	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
 } /* }}} */
 elseif ($action == "upload") { /* {{{ */
 	if(!$extmgr->isWritableExitDir()) {
@@ -86,7 +89,7 @@ elseif ($action == "upload") { /* {{{ */
 	}
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_import')));
 	add_log_line();
-	header("Location:../out/out.ExtensionMgr.php");
+	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
 } /* }}} */
 elseif ($action == "import") { /* {{{ */
 	if(!$_POST['url']) {
@@ -108,7 +111,7 @@ elseif ($action == "import") { /* {{{ */
 	unlink($file);
 	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_upload')));
 	add_log_line();
-	header("Location:../out/out.ExtensionMgr.php");
+	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
 } /* }}} */
 
 
