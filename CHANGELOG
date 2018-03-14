@@ -1,7 +1,11 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.7
 --------------------------------------------------------------------------------
-- support for upload/download of extensions
+- PLEASE READ doc/README.Dist-Layout WHEN UPGRADING!!!!
+- support for upload/import/download of extensions
+- remove ancient code to upgrade from old config file
+- place all log files in contentDir/log
+- add readme for new dist layout
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
