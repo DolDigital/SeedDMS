@@ -172,10 +172,12 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$list = $extmgr->importExtensionList($reposurl);
 		foreach($list as $e) {
 			if($e[0] != '#') {
-				$re = json_decode($e);
-				$needsupdate = !isset($GLOBALS['EXT_CONF'][$re->name]) || SeedDMS_Extension_Mgr::cmpVersion($re->version, $GLOBALS['EXT_CONF'][$re->name]['version']) > 0;
+				$re = json_decode($e, true);
+				$extmgr->checkExtension($re);
+				$checkmsgs = $extmgr->getErrorMsgs();
+				$needsupdate = !isset($GLOBALS['EXT_CONF'][$re['name']]) || SeedDMS_Extension_Mgr::cmpVersion($re['version'], $GLOBALS['EXT_CONF'][$re['name']]['version']) > 0;
 				echo "<tr";
-				if(isset($GLOBALS['EXT_CONF'][$re->name])) {
+				if(isset($GLOBALS['EXT_CONF'][$re['name']])) {
 					if($needsupdate)
 						echo " class=\"warning\"";
 					else
@@ -183,13 +185,16 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				}
 				echo ">";
 				echo "<td></td>";
-				echo "<td>".$re->title."<br /><small>".$re->description."</small></td>";
-				echo "<td nowrap>".$re->version."<br /><small>".$re->releasedate."</small></td>";
-				echo "<td nowrap>".$re->author->name."<br /><small>".$re->author->company."</small></td>";
+				echo "<td>".$re['title']."<br /><small>".$re['description']."</small>";
+				if($checkmsgs)
+					echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $checkmsgs)."</div>";
+				echo "</td>";
+				echo "<td nowrap>".$re['version']."<br /><small>".$re['releasedate']."</small></td>";
+				echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
 				echo "<td nowrap>";
 				echo "<div class=\"list-action\">";
-				if($needsupdate)
-					echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$extname."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"url\" value=\"".$re->filename."\" /><a class=\"import\" data-extname=\"".$extname."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
+				if($needsupdate && !$checkmsgs)
+					echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$extname."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$extname."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
 				echo "</div>";
 				echo "</td>";
 				echo "</tr>";
