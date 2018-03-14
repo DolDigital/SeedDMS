@@ -25,7 +25,12 @@ if ($settings->_logFileEnable) {
 	else if ($settings->_logFileRotation=="d") $logname=date("Ymd", time());
 	else $logname=date("Ym", time());
 
-	$logger = Log::factory('file', $settings->_contentDir.$logname.'.log');
+	if(!file_exists($settings->_contentDir.'log'))
+		@mkdir($settings->_contentDir.'log');
+	if(file_exists($settings->_contentDir.'log') && is_dir($settings->_contentDir.'log'))
+		$logger = Log::factory('file', $settings->_contentDir.'log/'.$logname.'.log');
+	else
+		$logger = null;
 } else {
 	$logger = null;
 }
