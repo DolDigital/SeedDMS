@@ -174,36 +174,46 @@ class SeedDMS_Extension_Mgr {
 	} /* }}} */
 
 	/**
-	 * Check content of extension directory
+	 * Check content of extension directory or configuration of extension
 	 *
-	 * @param string $dir full path to extension directory or extension name
+	 * @param string|array $dir full path to extension directory or extension name
+	 * or an array containing the configuration.
 	 * @param boolean $noconstraints set to true if constraints to local seeddms
 	 * installation shall not be checked.
 	 */
-	public function checkExtension($dir, $noconstraints=false) { /* {{{ */
+	public function checkExtension($dir, $options=array()) { /* {{{ */
 		$this->errmsgs = array();
 
-		if(!file_exists($dir)) {
-			if(!file_exists($this->extdir.'/'.$dir))
+		if(is_string($dir)) {
+			if(!file_exists($dir)) {
+				if(!file_exists($this->extdir.'/'.$dir))
+					return false;
+				else
+					$dir = $this->extdir.'/'.$dir;
+			}
+			if(!file_exists($dir."/conf.php")) {
+				$this->errmsgs[] = "Missing extension configuration";
 				return false;
-			else
-				$dir = $this->extdir.'/'.$dir;
-		}
-		if(!file_exists($dir."/conf.php")) {
-			$this->errmsgs[] = "Missing extension configuration";
-			return false;
-		}
-		include($dir."/conf.php");
-		if(!isset($EXT_CONF)) {
-			$this->errmsgs[] = "Missing \$EXT_CONF in configuration";
-			return false;
-		}
-		$extname = key($EXT_CONF);
-		if(!$extname || !preg_match('/[a-zA-Z_]*/', $extname)) {
-			return false;
+			}
+			include($dir."/conf.php");
+			if(!isset($EXT_CONF)) {
+				$this->errmsgs[] = "Missing \$EXT_CONF in configuration";
+				return false;
+			}
+			$extname = key($EXT_CONF);
+			if(!$extname || !preg_match('/[a-zA-Z_]*/', $extname)) {
+				return false;
+			}
+
+			$extconf = $EXT_CONF[$extname];
+		} elseif(is_array($dir)) {
+			$extconf = $dir;
+			/* If just the configuration is passed, then there is no way to check
+			 * for existence of files.
+			 */
+			$options['nofiles'] = true;
 		}
 
-		$extconf = $EXT_CONF[$extname];
 		if(!isset($extconf['constraints']['depends']['seeddms'])) {
 			$this->errmsgs[] = "Missing dependency on SeedDMS";
 		}
@@ -219,36 +229,40 @@ class SeedDMS_Extension_Mgr {
 		if(!isset($extconf['author'])) {
 			$this->errmsgs[] = "Missing author";
 		}
-		if(!empty($extconf['language']['file']) && !file_exists($dir."/".$extconf['language']['file'])) {
-			$this->errmsgs[] = "Missing language file";
-		}
-		if(!empty($extconf['class']['file']) && !file_exists($dir."/".$extconf['class']['file'])) {
-			$this->errmsgs[] = "Missing class file";
+		if(!isset($options['nofiles']) || $options['nofiles'] == false) {
+			if(!empty($extconf['language']['file']) && !file_exists($dir."/".$extconf['language']['file'])) {
+				$this->errmsgs[] = "Missing language file";
+			}
+			if(!empty($extconf['class']['file']) && !file_exists($dir."/".$extconf['class']['file'])) {
+				$this->errmsgs[] = "Missing class file";
+			}
 		}
 
-		if(!$noconstraints && isset($extconf['constraints']['depends'])) {
-			foreach($extconf['constraints']['depends'] as $dkey=>$dval) {
-				switch($dkey) {
-				case 'seeddms':
-					$version = new SeedDMS_Version;
-					$tmp = explode('-', $dval, 2);
-					if(self::cmpVersion($tmp[0], $version->version()) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], $version->version()) < 0))
-						$this->errmsgs[] = sprintf("Incorrect SeedDMS version (needs version %s)", $extconf['constraints']['depends']['seeddms']);
-					break;
-				case 'php':
-					$tmp = explode('-', $dval, 2);
-					if(self::cmpVersion($tmp[0], phpversion()) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], phpversion()) < 0))
-						$this->errmsgs[] = sprintf("Incorrect PHP version (needs version %s)", $extconf['constraints']['depends']['php']);
-					break;
-				default:
-					$tmp = explode('-', $dval, 2);
-					if(isset($GLOBALS['EXT_CONF'][$dkey]['version'])) {
-						if(self::cmpVersion($tmp[0], $GLOBALS['EXT_CONF'][$dkey]['version']) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], $GLOBALS['EXT_CONF'][$dkey]['version']) < 0))
-							$this->errmsgs[] = sprintf("Incorrect version of extension '%s' (needs version '%s' but provides '%s')", $dkey, $dval, $GLOBALS['EXT_CONF'][$dkey]['version']);
-					} else {
-						$this->errmsgs[] = sprintf("Missing extension or version for '%s'", $dkey);
+		if(!isset($options['noconstraints']) || $options['noconstraints'] == false) {
+			if(isset($extconf['constraints']['depends'])) {
+				foreach($extconf['constraints']['depends'] as $dkey=>$dval) {
+					switch($dkey) {
+					case 'seeddms':
+						$version = new SeedDMS_Version;
+						$tmp = explode('-', $dval, 2);
+						if(self::cmpVersion($tmp[0], $version->version()) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], $version->version()) < 0))
+							$this->errmsgs[] = sprintf("Incorrect SeedDMS version (needs version %s)", $extconf['constraints']['depends']['seeddms']);
+						break;
+					case 'php':
+						$tmp = explode('-', $dval, 2);
+						if(self::cmpVersion($tmp[0], phpversion()) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], phpversion()) < 0))
+							$this->errmsgs[] = sprintf("Incorrect PHP version (needs version %s)", $extconf['constraints']['depends']['php']);
+						break;
+					default:
+						$tmp = explode('-', $dval, 2);
+						if(isset($GLOBALS['EXT_CONF'][$dkey]['version'])) {
+							if(self::cmpVersion($tmp[0], $GLOBALS['EXT_CONF'][$dkey]['version']) > 0 || ($tmp[1] && self::cmpVersion($tmp[1], $GLOBALS['EXT_CONF'][$dkey]['version']) < 0))
+								$this->errmsgs[] = sprintf("Incorrect version of extension '%s' (needs version '%s' but provides '%s')", $dkey, $dval, $GLOBALS['EXT_CONF'][$dkey]['version']);
+						} else {
+							$this->errmsgs[] = sprintf("Missing extension or version for '%s'", $dkey);
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}
