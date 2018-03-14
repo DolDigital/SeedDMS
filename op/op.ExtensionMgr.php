@@ -69,6 +69,9 @@ elseif ($action == "refresh") { /* {{{ */
 	header("Location:../out/out.ExtensionMgr.php");
 } /* }}} */
 elseif ($action == "upload") { /* {{{ */
+	if(!$extmgr->isWritableExitDir()) {
+		UI::exitError(getMLText("admin_tools"),getMLText("extension_mgr_no_upload"));
+	}
 	if($_FILES['userfile']['error']) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}

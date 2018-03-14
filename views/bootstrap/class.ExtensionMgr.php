@@ -81,6 +81,9 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 ?>
 <div class="row-fluid">
 	<div class="span4">
+<?php
+		if($extmgr->isWritableExitDir()) {
+?>
 		<form class="form-horizontal" method="post" enctype="multipart/form-data" action="../op/op.ExtensionMgr.php">
 			<?= createHiddenFieldWithKey('extensionmgr') ?>
 			<input type="hidden" name="action" value="upload" />
@@ -97,11 +100,16 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				</div>
 			</div>
 		</form>
+<?php
+		} else {
+			echo "<div class=\"alert alert-warning\">".getMLText('extension_mgr_no_upload')."</div>";
+		}
+?>
 	</div>
 	<div class="span8">
 		<ul class="nav nav-tabs" id="extensionstab">
-			<li class="<?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>"><a data-target="#installed" data-toggle="tab"><?= getMLText('extensions_installed'); ?></a></li>
-			<li class="<?php if($currenttab == 'repository') echo 'active'; ?>"><a data-target="#repository" data-toggle="tab"><?= getMLText('extensions_repository'); ?></a></li>
+			<li class="<?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>"><a data-target="#installed" data-toggle="tab"><?= getMLText('extension_mgr_installed'); ?></a></li>
+			<li class="<?php if($currenttab == 'repository') echo 'active'; ?>"><a data-target="#repository" data-toggle="tab"><?= getMLText('extension_mgr_repository'); ?></a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane <?php if(!$currenttab || $currenttab == 'installed') echo 'active'; ?>" id="installed">
@@ -193,7 +201,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
 				echo "<td nowrap>";
 				echo "<div class=\"list-action\">";
-				if($needsupdate && !$checkmsgs)
+				if($needsupdate && !$checkmsgs && $extmgr->isWritableExitDir())
 					echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$extname."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$extname."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
 				echo "</div>";
 				echo "</td>";

@@ -91,7 +91,7 @@ class SeedDMS_Extension_Mgr {
 	 * configuration file if it does not exist and the extension dir
 	 * is given
 	 */
-	public function __construct($extdir = '', $cachedir = '') {
+	public function __construct($extdir = '', $cachedir = '') { /* {{{ */
 		$this->cachedir = $cachedir;
 		$this->extdir = $extdir;
 		$this->extconf = array();
@@ -104,7 +104,7 @@ class SeedDMS_Extension_Mgr {
 				$this->extconf = $EXT_CONF;
 			}
 		}
-	}
+	} /* }}} */
 
 	protected function getExtensionsConfFile() { /* {{{ */
 		return $this->cachedir."/extensions.php";
@@ -117,6 +117,15 @@ class SeedDMS_Extension_Mgr {
 	 */
 	public function getExtensionConfiguration() { /* {{{ */
 		return $this->extconf;
+	} /* }}} */
+
+	/**
+	 * Check if extension directory is writable
+	 *
+	 * @return boolean
+	 */
+	public function isWritableExitDir() { /* {{{ */
+		return is_writable($this->extdir);
 	} /* }}} */
 
 	/**
@@ -332,10 +341,13 @@ class SeedDMS_Extension_Mgr {
 	/**
 	 * Import list of extension from repository
 	 *
+	 * @param boolean $force force download even if file already exists
 	 */
-	public function importExtensionList($url) { /* {{{ */
-		$file = file_get_contents($url."/repository.json");
-		file_put_contents($this->cachedir."/repository.json", $file);
+	public function importExtensionList($url, $force=false) { /* {{{ */
+		if(!file_exists($this->cachedir."/repository.json") || $force) {
+			$file = file_get_contents($url."/repository.json");
+			file_put_contents($this->cachedir."/repository.json", $file);
+		}
 		return file($this->cachedir."/repository.json");
 	} /* }}} */
 
