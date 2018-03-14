@@ -175,6 +175,7 @@ if(!$settings->_contentDir) {
 	$settings->_luceneDir = $settings->_contentDir . 'lucene/';
 	$settings->_stagingDir = $settings->_contentDir . 'staging/';
 	$settings->_cacheDir = $settings->_contentDir . 'cache/';
+	$settings->_backupDir = $settings->_contentDir . 'backup/';
 } else {
 	if(!$settings->_cacheDir) {
 		$settings->_cacheDir = $settings->_contentDir . 'cache/';
