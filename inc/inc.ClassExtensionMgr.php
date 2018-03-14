@@ -375,7 +375,7 @@ class SeedDMS_Extension_Mgr {
 	public function updateExtensionList($force=false) { /* {{{ */
 		if($this->reposurl) {
 			if(!file_exists($this->cachedir."/repository.json") || $force) {
-				$file = file_get_contents($this->reposurl."/repository.json");
+				$file = file_get_contents($this->reposurl);
 				file_put_contents($this->cachedir."/repository.json", $file);
 			}
 			return true;

@@ -32,7 +32,7 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$reposurl = 'http://seeddms.steinmann.cx/repository';
+$reposurl = $settings->_repositoryUrl;
 
 $v = new SeedDMS_Version;
 $extmgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir, $reposurl);

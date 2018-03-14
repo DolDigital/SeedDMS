@@ -434,6 +434,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_dropFolderDir");?>:</td>
         <td><?php $this->showTextField("dropFolderDir", $settings->_dropFolderDir); ?></td>
       </tr>
+      <tr title="<?php printMLText("settings_repositoryUrl_desc");?>">
+        <td><?php printMLText("settings_repositoryUrl");?>:</td>
+        <td><?php $this->showTextField("repositoryUrl", $settings->_repositoryUrl); ?></td>
+      </tr>
       <tr title="<?php printMLText("settings_logFileEnable_desc");?>">
         <td><?php printMLText("settings_logFileEnable");?>:</td>
         <td><input name="logFileEnable" type="checkbox" <?php if ($settings->_logFileEnable) echo "checked" ?> /></td>

@@ -91,6 +91,8 @@ class Settings { /* {{{ */
 	var $_dropFolderDir = null;
 	// Where the backup directory is located
 	var $_backupDir = null;
+	// Where the repository for extensions is located
+	var $_repositoryUrl = null;
 	// enable removal of file from dropfolder after success import
 	var $_removeFromDropFolder = false;
 	// Where the stop word file is located
@@ -483,6 +485,7 @@ class Settings { /* {{{ */
 		$this->_luceneDir = strval($tab["luceneDir"]);
 		$this->_dropFolderDir = strval($tab["dropFolderDir"]);
 		$this->_backupDir = strval($tab["backupDir"]);
+		$this->_repositoryUrl = strval($tab["repositoryUrl"]);
 		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
 		$this->_logFileRotation = strval($tab["logFileRotation"]);
 		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
@@ -800,6 +803,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
     $this->setXMLAttributValue($node, "dropFolderDir", $this->_dropFolderDir);
     $this->setXMLAttributValue($node, "backupDir", $this->_backupDir);
+    $this->setXMLAttributValue($node, "repositoryUrl", $this->_repositoryUrl);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
     $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);
