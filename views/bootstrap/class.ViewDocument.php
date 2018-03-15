@@ -659,7 +659,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$items = $this->callHook('extraVersionActions', $latestContent);
 		if($items) {
 			foreach($items as $item) {
-				echo "<li>".$item."</li>";
+				if(is_string($item))
+					echo "<li>".$item."</li>";
+				elseif(is_array($item))
+					echo "<li><a href=\"".$item['link']."\">".(!empty($item['icon']) ? "<i class=\"icon-".$item['icon']."\"></i>" : "").getMLText($item['label'])."</a></li>";
 			}
 		}
 
@@ -1228,7 +1231,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$items = $this->callHook('extraVersionActions', $version);
 				if($items) {
 					foreach($items as $item) {
-						echo "<li>".$item."</li>";
+						if(is_string($item))
+							echo "<li>".$item."</li>";
+						elseif(is_array($item))
+							echo "<li><a href=\"".$item['link']."\">".(!empty($item['icon']) ? "<i class=\"icon-".$item['icon']."\"></i>" : "").getMLText($item['label'])."</a></li>";
 					}
 				}
 				print "</ul>";
