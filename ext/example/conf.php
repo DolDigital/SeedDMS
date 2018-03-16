@@ -52,6 +52,7 @@ $EXT_CONF['example'] = array(
 		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.3.0-'),
 	),
 	'icon' => 'icon.png',
+	'changelog' => 'changelog.md',
 	'class' => array(
 		'file' => 'class.example.php',
 		'name' => 'SeedDMS_ExtExample'
