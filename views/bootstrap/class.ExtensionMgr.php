@@ -67,6 +67,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$httproot = $this->params['httproot'];
+		$extdir = $this->params['extdir'];
 		$version = $this->params['version'];
 		$extmgr = $this->params['extmgr'];
 		$currenttab = $this->params['currenttab'];
@@ -138,11 +139,16 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			if($extconf['icon'])
 				echo "<img src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\" alt=\"".$extname."\" title=\"".$extname."\">";
 			echo "</td>";
-			echo "<td>".$extconf['title']."<br /><small>".$extconf['description']."</small>";
+			echo "<td>".$extconf['title'];
+			if($extconf['changelog'] && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
+				echo $this->printPopupBox("<i class=\"icon-reorder\"></i>", '<div style="white-space: pre-wrap; font-family: monospace; padding: 0px;">'.file_get_contents($extdir."/".$extname."/".$extconf['changelog'])."</div>", true);
+			}
+			echo "<br /><small>".$extconf['description']."</small>";
 			if($errmsgs)
 				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $errmsgs)."</div>";
 			echo "</td>";
-			echo "<td nowrap>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small>";
+			echo "<td nowrap>".$extconf['version'];
+			echo "<br /><small>".$extconf['releasedate']."</small>";
 			echo "</td>";
 			echo "<td nowrap><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "<td nowrap>";

@@ -48,6 +48,7 @@ else
 
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('extdir', $settings->_rootDir."/ext");
 	$view->setParam('version', $v);
 	$view->setParam('extmgr', $extmgr);
 	$view->setParam('currenttab', $currenttab);

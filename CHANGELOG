@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - PLEASE READ doc/README.Dist-Layout WHEN UPGRADING!!!!
 - support for upload/import/download of extensions
+- extension can have a changelog file
 - remove ancient code to upgrade from old config file
 - place all log files in contentDir/log
 - add readme for new dist layout
