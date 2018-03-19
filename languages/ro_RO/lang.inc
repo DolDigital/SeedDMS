@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1068), balan (87)
+//    Translators: Admin (1070), balan (87)
 
 $text = array(
 '2_factor_auth' => '',
@@ -172,7 +172,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Atribut schimbat
 Document: [name]
 Versiune: [version]
-Atribut: [attribute]
+Atribut: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Folder parinte: [folder_path]
 Utilizator: [username]
 URL: [url]',
@@ -1617,7 +1619,7 @@ URL: [url]',
 'toggle_manager' => 'Comută Manager',
 'toggle_qrcode' => '',
 'to_before_from' => 'Data de încheiere nu poate fi înainte de data de începere',
-'transfer_document' => '',
+'transfer_document' => 'Transfer document',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',

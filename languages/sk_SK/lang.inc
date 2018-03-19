@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (565), destinqo (19), pS2017 (508)
+//    Translators: Admin (566), destinqo (19), pS2017 (508)
 
 $text = array(
 '2_factor_auth' => '2-faktorové overovanie',
@@ -152,7 +152,15 @@ URL: [url]',
 'attrdef_type_url' => 'URL',
 'attrdef_valueset' => 'Nastaviť hodnoty',
 'attributes' => 'Atribúty',
-'attribute_changed_email_body' => 'Zmenené atribúty Dokumentu: [name] Vezia: [version] Atribút: [attribute] Nadradená zložka: [folder_path] Používateľ: [username] URL: [url]',
+'attribute_changed_email_body' => 'Zmenené atribúty
+Dokumentu: [name]
+Vezia: [version]
+Atribút: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
+Nadradená zložka: [folder_path]
+Používateľ: [username]
+URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Atribút sa zmenil',
 'attribute_count' => 'Počet použití',
 'attribute_value' => 'Hodnota atribútu',

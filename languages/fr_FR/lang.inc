@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1079), jeromerobert (50), lonnnew (9), Oudiceval (657)
+//    Translators: Admin (1080), jeromerobert (50), lonnnew (9), Oudiceval (660)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -172,7 +172,9 @@ URL : [url]',
 'attribute_changed_email_body' => 'Attribut changé
 Document: [name]
 Version: [version]
-Attribut: [attribute]
+Attribut: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Répertoire parent: [folder_path]
 Utilisateur: [username]
 URL: [url]',
@@ -571,7 +573,7 @@ Utilisateur: [username]
 URL: [url]',
 'folder_renamed_email_subject' => '[sitename]: [name] - Dossier renommé',
 'folder_title' => 'Dossier \'[foldername]\'',
-'force_update' => '',
+'force_update' => 'Mettre à jour',
 'friday' => 'Vendredi',
 'friday_abbr' => 'Ven.',
 'from' => 'Du',
@@ -1281,8 +1283,8 @@ Nom : [username]
 'settings_enablePasswordForgotten_desc' => 'Si vous voulez permettre à l\'utilisateur de définir un nouveau mot de passe et l\'envoyer par mail, cochez cette option.',
 'settings_enableRecursiveCount' => 'Décompte récursif des documents/dossiers',
 'settings_enableRecursiveCount_desc' => 'Si activé, le nombre de documents et répertoires dans un répertoire est calculé en comptant récursivement le contenu des sous-répertoires auxquels l\'utilisateur a accès.',
-'settings_enableRevisionOnVoteReject' => '',
-'settings_enableRevisionOnVoteReject_desc' => '',
+'settings_enableRevisionOnVoteReject' => 'Rejet par un réviseur',
+'settings_enableRevisionOnVoteReject_desc' => 'Si activé, le document sera rejeté si un réviseur rejette le document.',
 'settings_enableRevisionWorkflow' => 'Activer la révision des documents',
 'settings_enableRevisionWorkflow_desc' => 'Activer afin de pouvoir lancer un flux de travail pour réviser un document après une période donnée.',
 'settings_enableSelfReceipt' => '',
