@@ -7,6 +7,9 @@
 - remove ancient code to upgrade from old config file
 - place all log files in contentDir/log
 - add readme for new dist layout
+- do not list empty groups as reviewer/approver
+- fix sending notification when document attributes change
+- sending notification when folder attributes change
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
