@@ -212,6 +212,63 @@ if ($expires != $oldexpires) {
 if ($oldkeywords != $keywords) {
 }
 
+/* First check for changed attributes or old attributes that have been deleted */
+if($oldattributes) {
+	foreach($oldattributes as $attrdefid=>$attribute) {
+		if(!isset($attributes[$attrdefid]) || $attributes[$attrdefid] != $oldattributes[$attrdefid]->getValue()) {
+			if($notifier) {
+				$notifyList = $document->getNotifyList();
+				$subject = "attribute_changed_email_subject";
+				$message = "attribute_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['version'] = '';
+				$params['attribute_name'] = $attribute->getAttributeDefinition()->getName();
+				$params['attribute_old_value'] = $attribute->get->getValueAsString();
+				$params['attribute_new_value'] = $attributes[$attrdefid];
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+				foreach ($notifyList["groups"] as $grp) {
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
+				}
+			}
+		}
+	}
+}
+/* Check for new attributes which didn't have a value before */
+if($attributes) {
+	foreach($attributes as $attrdefid=>$attribute) {
+		if(!$oldattributes[$attrdefid]) {
+			if($notifier) {
+				$notifyList = $document->getNotifyList();
+				$subject = "attribute_changed_email_subject";
+				$message = "attribute_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['version'] = '';
+				$params['attribute_name'] = $dms->getAttributeDefinition($attrdefid)->getName();
+				$params['attribute_old_value'] = '';
+				$params['attribute_new_value'] = $attribute;
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+				foreach ($notifyList["groups"] as $grp) {
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
+				}
+			}
+		}
+	}
+}
+
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_document_edited')));
 
 add_log_line("?documentid=".$documentid);
