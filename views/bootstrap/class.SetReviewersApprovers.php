@@ -153,7 +153,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			$mandatory=false;
 			foreach ($res as $r) if ($r['reviewerGroupID']==$group->getID()) $mandatory=true;
 			
-			if ($mandatory){
+			if ($mandatory || !$group->getUsers()){
 
 				print "<option value=\"".$group->getID()."\" disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 //				print "<input id='revGrp".$group->getID()."' type='hidden' name='grpReviewers[]' value='". $group->getID() ."' />";
@@ -264,7 +264,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 			$mandatory=false;
 			foreach ($res as $r) if ($r['approverGroupID']==$group->getID()) $mandatory=true;
 
-			if ($mandatory){
+			if ($mandatory || !$group->getUsers()){
 
 				print "<option type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 //				print "<input id='appGrp".$group->getID()."' type='hidden' name='grpApprovers[]' value='". $group->getID() ."'>";

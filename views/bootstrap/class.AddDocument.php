@@ -494,7 +494,7 @@ $(document).ready(function() {
 				$mandatory=false;
 				foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $mandatory=true;	
 
-				if ($mandatory) print "<option value=\"".$grp->getID()."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
+				if ($mandatory || !$grp->getUsers()) print "<option value=\"".$grp->getID()."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
 				else print "<option value=\"".$grp->getID()."\">".htmlspecialchars($grp->getName())."</option>";
 			}
 ?>
@@ -604,7 +604,7 @@ $(document).ready(function() {
 				$mandatory=false;
 				foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $mandatory=true;	
 
-				if ($mandatory) print "<option value=\"". $grp->getID() ."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
+				if ($mandatory || !$grp->getUsers()) print "<option value=\"". $grp->getID() ."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
 				else print "<option value=\"". $grp->getID() ."\">".htmlspecialchars($grp->getName())."</option>";
 
 			}
