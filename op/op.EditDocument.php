@@ -224,11 +224,10 @@ if($oldattributes) {
 		if(!isset($newattributes[$attrdefid]) || $newattributes[$attrdefid]->getValueAsArray() !== $oldattributes[$attrdefid]->getValueAsArray()) {
 			if($notifier) {
 				$notifyList = $document->getNotifyList();
-				$subject = "attribute_changed_email_subject";
-				$message = "attribute_changed_email_body";
+				$subject = "document_attribute_changed_email_subject";
+				$message = "document_attribute_changed_email_body";
 				$params = array();
 				$params['name'] = $document->getName();
-				$params['version'] = '';
 				$params['attribute_name'] = $attribute->getAttributeDefinition()->getName();
 				$params['attribute_old_value'] = $oldattributes[$attrdefid]->getValue();
 				$params['attribute_new_value'] = isset($newattributes[$attrdefid]) ? $newattributes[$attrdefid]->getValue() : '';
@@ -252,11 +251,10 @@ if($newattributes) {
 		if(!isset($oldattributes[$attrdefid]) && $attribute) {
 			if($notifier) {
 				$notifyList = $document->getNotifyList();
-				$subject = "attribute_changed_email_subject";
-				$message = "attribute_changed_email_body";
+				$subject = "document_attribute_changed_email_subject";
+				$message = "document_attribute_changed_email_body";
 				$params = array();
 				$params['name'] = $document->getName();
-				$params['version'] = '';
 				$params['attribute_name'] = $dms->getAttributeDefinition($attrdefid)->getName();
 				$params['attribute_old_value'] = '';
 				$params['attribute_new_value'] = $attribute->getValue();
