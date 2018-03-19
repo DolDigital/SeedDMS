@@ -345,6 +345,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Tento dokument je už zamčený',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Změna komentáře',
 'document_comment_changed_email_body' => 'Změna komentáře
 Dokument: [name]
@@ -521,6 +523,8 @@ URL: [url]',
 'folders' => 'Složky',
 'folders_and_documents_statistic' => 'Přehled složek a dokumentů',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Změna komentáře',
 'folder_comment_changed_email_body' => 'Změna komentáře
 Složka: [name]

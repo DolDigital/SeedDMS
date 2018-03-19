@@ -350,6 +350,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => 'Этот документ уже проверен',
 'document_already_locked' => 'Документ уже заблокирован',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Изменён комментарий',
 'document_comment_changed_email_body' => 'Изменён комментарий
 Документ: [name]
@@ -526,6 +528,8 @@ URL: [url]',
 'folders' => 'кат.',
 'folders_and_documents_statistic' => 'Обзор содержимого',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Комментарий изменён',
 'folder_comment_changed_email_body' => 'Изменён комментарий каталога
 Каталог: [name]

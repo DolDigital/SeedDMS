@@ -345,6 +345,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Este documento ya está bloqueado',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Comentario modificado',
 'document_comment_changed_email_body' => 'Comentario modificado
 Documento: [name]
@@ -521,6 +523,8 @@ URL: [url]',
 'folders' => 'Carpetas',
 'folders_and_documents_statistic' => 'Vista general de contenidos',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Comentario modificado',
 'folder_comment_changed_email_body' => 'Comentario modificado
 Carpeta: [name]

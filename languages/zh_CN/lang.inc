@@ -344,6 +344,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '当前文档已签出',
 'document_already_locked' => '该文档已被锁定',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => '批注已更新',
 'document_comment_changed_email_body' => '批注已更新
 文档: [name]
@@ -522,6 +524,8 @@ URL: [url]',
 'folders' => '文件夹',
 'folders_and_documents_statistic' => '内容概要',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => '注释已更新',
 'folder_comment_changed_email_body' => '批注已更新
 文件夹: [name]
