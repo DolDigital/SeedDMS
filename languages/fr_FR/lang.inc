@@ -350,6 +350,8 @@ URL: [url]',
 'documents_with_notification' => 'Documents avec notification',
 'document_already_checkedout' => 'Ce document est déjà débloqué',
 'document_already_locked' => 'Ce document est déjà verrouillé',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Commentaire modifié',
 'document_comment_changed_email_body' => 'Commentaire modifié
 Document: [name]
@@ -538,6 +540,8 @@ URL : [url]',
 'folders' => 'Dossiers',
 'folders_and_documents_statistic' => 'Aperçu du contenu',
 'folders_with_notification' => 'Dossiers avec notification',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Commentaire changé',
 'folder_comment_changed_email_body' => 'Commentaire changé
 Dossier: [name]

@@ -345,6 +345,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Este documento já está travado',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Comentário modificado',
 'document_comment_changed_email_body' => 'Comentário modificado
 Documento: [name]
@@ -520,6 +522,8 @@ URL: [url]',
 'folders' => 'Pastas',
 'folders_and_documents_statistic' => 'Relatórios de pastas e documentos',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Comentário mudou',
 'folder_comment_changed_email_body' => 'Comentário mudou
 Pasta: [name]

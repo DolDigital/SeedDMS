@@ -338,6 +338,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'هذا المستند محمي ضد التعديل',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'تم تعديل التعليق',
 'document_comment_changed_email_body' => 'تم تعديل التعليق
 المستند: [name]
@@ -514,6 +516,8 @@ URL: [url]',
 'folders' => 'مجلدات',
 'folders_and_documents_statistic' => 'رؤية عامة للمحتوى',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'تم تعديل التعليق',
 'folder_comment_changed_email_body' => 'تم تعديل التعليق
 الملجلد: [name]

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1690), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1696), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -350,11 +350,20 @@ URL: [url]',
 'documents_with_notification' => 'Documents with notification',
 'document_already_checkedout' => 'This document is already checked out',
 'document_already_locked' => 'This document is already locked',
+'document_attribute_changed_email_body' => 'Attribute changed
+Document: [name]
+Attribute: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
+Parent folder: [folder_path]
+User: [username]
+URL: [url]',
+'document_attribute_changed_email_subject' => '[sitename]: [name] - Attribute changed',
 'document_comment_changed_email' => 'Comment changed',
 'document_comment_changed_email_body' => 'Comment changed
 Document: [name]
 Old comment: [old_comment]
-Comment: [new_comment]
+New Comment: [new_comment]
 Parent folder: [folder_path]
 User: [username]
 URL: [url]',
@@ -538,11 +547,20 @@ URL: [url]',
 'folders' => 'Folders',
 'folders_and_documents_statistic' => 'Contents overview',
 'folders_with_notification' => 'Folders with notification',
+'folder_attribute_changed_email_body' => 'Attribute changed
+Folder: [name]
+Attribute: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
+Parent folder: [folder_path]
+User: [username]
+URL: [url]',
+'folder_attribute_changed_email_subject' => '[sitename]: [name] - Attribute changed',
 'folder_comment_changed_email' => 'Comment changed',
 'folder_comment_changed_email_body' => 'Comment changed
 Folder: [name]
 Old comment: [old_comment]
-Comment: [new_comment]
+New Comment: [new_comment]
 Parent folder: [folder_path]
 User: [username]
 URL: [url]',

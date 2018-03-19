@@ -351,6 +351,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => 'Questo documento è già approvato',
 'document_already_locked' => 'Questo documento è già bloccato',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Commento modificato',
 'document_comment_changed_email_body' => 'Commento modificato
 Documento: [name]
@@ -527,6 +529,8 @@ URL: [url]',
 'folders' => 'Cartelle',
 'folders_and_documents_statistic' => 'Visualizzazione generale',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Commento modificato per la Cartella',
 'folder_comment_changed_email_body' => 'Commento modificato per la Cartella
 Cartella: [name]
