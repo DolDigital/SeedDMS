@@ -344,6 +344,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '',
 'document_already_locked' => 'Bu doküman zaten kilitli',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Açıklama değişti',
 'document_comment_changed_email_body' => 'Açıklama değişti
 Doküman: [name]
@@ -520,6 +522,8 @@ URL: [url]',
 'folders' => 'Klasör',
 'folders_and_documents_statistic' => 'İçeriğe Bakış',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Açıklama değişti',
 'folder_comment_changed_email_body' => 'Açıklama değişti
 Klasör: [name]

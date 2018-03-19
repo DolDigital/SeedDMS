@@ -350,6 +350,8 @@ Internet poveznica: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => 'Ovaj dokument je već odjavljen',
 'document_already_locked' => 'Ovaj dokument je već zaključan',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Promijenjen komentar',
 'document_comment_changed_email_body' => 'Promijenjen komentar
 Dokument: [name]
@@ -526,6 +528,8 @@ Internet poveznica: [url]',
 'folders' => 'Mape',
 'folders_and_documents_statistic' => 'Pregled sadržaja',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Promijenjen komentar',
 'folder_comment_changed_email_body' => 'Promijenjen komentar
 Mapa: <b>[name]</b>

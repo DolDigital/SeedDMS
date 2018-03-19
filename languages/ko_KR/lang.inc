@@ -353,6 +353,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => '이문서는 이미 체크아웃 되었습니다',
 'document_already_locked' => '이미 잠겨진 문서',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => '주석 변경됨',
 'document_comment_changed_email_body' => '변경된 코멘트
 문서: [name]
@@ -527,6 +529,8 @@ URL: [url]',
 'folders' => '폴더',
 'folders_and_documents_statistic' => '개요 내용',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => '주석 변경됨',
 'folder_comment_changed_email_body' => '코멘트 변경
 폴더: [name]

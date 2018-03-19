@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2574), dgrutsch (22)
+//    Translators: Admin (2582), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -350,11 +350,20 @@ URL: [url]',
 'documents_with_notification' => 'Dokumente unter Beobachtung',
 'document_already_checkedout' => 'Dieses Dokument ist bereits ausgecheckt',
 'document_already_locked' => 'Dieses Dokument ist bereits gesperrt',
+'document_attribute_changed_email_body' => 'Attribut geändert
+Dokument: [name]
+Attribut: [attribute_name]
+Alter Wert: [attribute_old_value]
+Neuer Wert: [attribute_new_value]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'document_attribute_changed_email_subject' => '[sitename]: [name] - Attribut geändert',
 'document_comment_changed_email' => 'Kommentar geändert',
 'document_comment_changed_email_body' => 'Kommentar geändert
 Dokument: [name]
 Alter Kommentar: [old_comment]
-Kommentar: [new_comment]
+Neuer Kommentar: [new_comment]
 Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
@@ -537,11 +546,20 @@ URL: [url]',
 'folders' => 'Verzeichnisse',
 'folders_and_documents_statistic' => 'Ordner- und Dokumentenübersicht',
 'folders_with_notification' => 'Ordner unter Beobachtung',
+'folder_attribute_changed_email_body' => 'Attribut geändert
+Ordner: [name]
+Attribut: [attribute_name]
+Alter Wert: [attribute_old_value]
+Neuer Wert: [attribute_new_value]
+Elternordner: [folder_path]
+Benutzer: [username]
+URL: [url]',
+'folder_attribute_changed_email_subject' => '[sitename]: [name] - Attribut geändert',
 'folder_comment_changed_email' => 'Kommentar geändert',
 'folder_comment_changed_email_body' => 'Kommentar geändert
 Ordner: [name]
-Vorheriger Kommentar: [old_comment]
-Kommentar: [new_comment]
+Alter Kommentar: [old_comment]
+Neuer Kommentar: [new_comment]
 Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',

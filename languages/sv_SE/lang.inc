@@ -351,6 +351,8 @@ URL: [url]',
 'documents_with_notification' => 'Dokument med meddelande',
 'document_already_checkedout' => 'Dokumentet är redan utcheckat',
 'document_already_locked' => 'Detta dokument är redan låst',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Kommentar ändrad',
 'document_comment_changed_email_body' => 'Kommentar ändrat
 Document: [name]
@@ -539,6 +541,8 @@ URL: [url]',
 'folders' => 'Kataloger',
 'folders_and_documents_statistic' => 'Innehållsöversikt',
 'folders_with_notification' => 'Kataloger med meddelandefunktion',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Kommentar har ändrats',
 'folder_comment_changed_email_body' => 'Kommentar har ändrats
 Katalog: [name]

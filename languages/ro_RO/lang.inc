@@ -350,6 +350,8 @@ URL: [url]',
 'documents_with_notification' => '',
 'document_already_checkedout' => 'Acest document este deja verificat',
 'document_already_locked' => 'Acest document este deja blocat',
+'document_attribute_changed_email_body' => '',
+'document_attribute_changed_email_subject' => '',
 'document_comment_changed_email' => 'Comentariu schimbat',
 'document_comment_changed_email_body' => 'Comentariu schimbat
 Document: [name]
@@ -526,6 +528,8 @@ URL: [url]',
 'folders' => 'Foldere',
 'folders_and_documents_statistic' => 'Privire de ansamblu asupra continutului',
 'folders_with_notification' => '',
+'folder_attribute_changed_email_body' => '',
+'folder_attribute_changed_email_subject' => '',
 'folder_comment_changed_email' => 'Comentariu schimbat',
 'folder_comment_changed_email_body' => 'Comentariu schimbat
 Folder: [name]
