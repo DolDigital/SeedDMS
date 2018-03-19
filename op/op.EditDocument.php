@@ -109,7 +109,13 @@ $oldcomment = $document->getComment();
 $oldcategories = $document->getCategories();
 $oldkeywords = $document->getKeywords();
 $oldexpires = $document->getExpires();
-$oldattributes = $document->getAttributes();
+/* Make a real copy of each attribute because setting a new attribute value
+ * will just update the old attribute object in array attributes[] and hence
+ * also update the old value
+ */
+foreach($document->getAttributes() as $ai=>$aa)
+	$oldattributes[$ai] = clone $aa;
+//$oldattributes = $document->getAttributes();
 
 $controller->setParam('document', $document);
 $controller->setParam('name', $name);
@@ -212,10 +218,10 @@ if ($expires != $oldexpires) {
 if ($oldkeywords != $keywords) {
 }
 
-/* First check for changed attributes or old attributes that have been deleted */
+$newattributes = $document->getAttributes();
 if($oldattributes) {
 	foreach($oldattributes as $attrdefid=>$attribute) {
-		if(!isset($attributes[$attrdefid]) || $attributes[$attrdefid] != $oldattributes[$attrdefid]->getValue()) {
+		if(!isset($newattributes[$attrdefid]) || $newattributes[$attrdefid]->getValueAsArray() !== $oldattributes[$attrdefid]->getValueAsArray()) {
 			if($notifier) {
 				$notifyList = $document->getNotifyList();
 				$subject = "attribute_changed_email_subject";
@@ -224,8 +230,8 @@ if($oldattributes) {
 				$params['name'] = $document->getName();
 				$params['version'] = '';
 				$params['attribute_name'] = $attribute->getAttributeDefinition()->getName();
-				$params['attribute_old_value'] = $attribute->get->getValueAsString();
-				$params['attribute_new_value'] = $attributes[$attrdefid];
+				$params['attribute_old_value'] = $oldattributes[$attrdefid]->getValue();
+				$params['attribute_new_value'] = isset($newattributes[$attrdefid]) ? $newattributes[$attrdefid]->getValue() : '';
 				$params['folder_path'] = $folder->getFolderPathPlain();
 				$params['username'] = $user->getFullName();
 				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
@@ -241,9 +247,9 @@ if($oldattributes) {
 	}
 }
 /* Check for new attributes which didn't have a value before */
-if($attributes) {
-	foreach($attributes as $attrdefid=>$attribute) {
-		if(!$oldattributes[$attrdefid]) {
+if($newattributes) {
+	foreach($newattributes as $attrdefid=>$attribute) {
+		if(!isset($oldattributes[$attrdefid]) && $attribute) {
 			if($notifier) {
 				$notifyList = $document->getNotifyList();
 				$subject = "attribute_changed_email_subject";
@@ -253,7 +259,7 @@ if($attributes) {
 				$params['version'] = '';
 				$params['attribute_name'] = $dms->getAttributeDefinition($attrdefid)->getName();
 				$params['attribute_old_value'] = '';
-				$params['attribute_new_value'] = $attribute;
+				$params['attribute_new_value'] = $attribute->getValue();
 				$params['folder_path'] = $folder->getFolderPathPlain();
 				$params['username'] = $user->getFullName();
 				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
