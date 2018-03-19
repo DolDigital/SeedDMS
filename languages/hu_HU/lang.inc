@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (621), ribaz (1023)
+//    Translators: Admin (622), ribaz (1023)
 
 $text = array(
 '2_factor_auth' => '',
@@ -167,7 +167,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Jellemző módosult
 Dokumentum: [name]
 Verzió: [version]
-Jellemző: [attribute]
+Jellemző: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Szülő mappa: [folder_path]
 Felhasználó: [username]
 URL: [url]',

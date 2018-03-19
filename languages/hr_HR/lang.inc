@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1197), marbanas (16)
+//    Translators: Admin (1198), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -172,7 +172,9 @@ Internet poveznica: [url]',
 'attribute_changed_email_body' => 'Promijenjen atribut
 Dokument: [name]
 Verzija: [version]
-Atribut: [attribute]
+Atribut: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Glavna mapa: [folder_path]
 Korisnik: [username]
 Internet poveznica: [url]',

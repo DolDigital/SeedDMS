@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: acabello (20), Admin (1057), angel (123), francisco (2), jaimem (14)
+//    Translators: acabello (20), Admin (1058), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 '2_factor_auth' => '',
@@ -167,7 +167,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Atributo modificado
 Documento: [name]
 Versión: [version]
-Atributo: [attribute]
+Atributo: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Carpeta principal: [folder_path]
 Usario: [username]
 URL: [url]',

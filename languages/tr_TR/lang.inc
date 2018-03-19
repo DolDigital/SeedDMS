@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1064), aydin (83)
+//    Translators: Admin (1065), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -166,7 +166,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Değer değişti
 Doküman: [name]
 Versiyon: [version]
-Nitelik: [attribute]
+Nitelik: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Üst klasör: [folder_path]
 Kullanıcı: [username]
 URL: [url]',

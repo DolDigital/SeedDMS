@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1329)
+//    Translators: Admin (1330)
 
 $text = array(
 '2_factor_auth' => '',
@@ -172,7 +172,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Змінено атрибут
 Документ: [name]
 Версія: [version]
-Атрибут: [attribute]
+Атрибут: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Батьківський каталог: [folder_path]
 Користувач: [username]
 URL: [url]',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (741)
+//    Translators: Admin (745)
 
 $text = array(
 '2_factor_auth' => '',
@@ -53,7 +53,7 @@ $text = array(
 'add_attrdefgroup' => '',
 'add_document' => 'Afegir document',
 'add_document_link' => 'Afegir vincle',
-'add_document_notify' => '',
+'add_document_notify' => 'Assigna la notificació',
 'add_doc_reviewer_approver_warning' => 'Els documents N.B. es marquen automàticament com a publicats si no hi ha revisors o aprovadors assignats',
 'add_doc_workflow_warning' => '',
 'add_event' => 'Afegir esdeveniment',
@@ -181,7 +181,7 @@ URL: [url]',
 'backup_tools' => 'Eines de còpia de seguretat',
 'between' => 'entre',
 'bg_BG' => 'Búlgar',
-'browse' => '',
+'browse' => 'Navega',
 'calendar' => 'Calendari',
 'calendar_week' => '',
 'cancel' => 'Cancel.lar',
@@ -231,7 +231,7 @@ URL: [url]',
 'choose_role' => '',
 'choose_target_category' => '',
 'choose_target_document' => 'Escollir document',
-'choose_target_file' => '',
+'choose_target_file' => 'Selecciona el fitxer',
 'choose_target_folder' => 'Escollir directori de destinació',
 'choose_user' => 'Seleccionar usuari',
 'choose_workflow' => '',
@@ -952,7 +952,7 @@ URL: [url]',
 'select_one' => 'Seleccionar un',
 'select_user' => '',
 'select_users' => 'Prem per seleccionar els usuaris',
-'select_value' => '',
+'select_value' => 'Selecciona un valor',
 'select_workflow' => '',
 'send_email' => '',
 'send_login_data' => '',
