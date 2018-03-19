@@ -81,7 +81,9 @@ if($attributes) {
 						$params = array();
 						$params['name'] = $document->getName();
 						$params['version'] = $version->getVersion();
-						$params['attribute'] = $attribute;
+						$params['attribute_name'] = $dms->getAttributeDefinition($attrdefid)->getName();
+						$params['attribute_old_value'] = $oldattributes[$attrdefid]->getValue();
+						$params['attribute_new_value'] = $attribute;
 						$params['folder_path'] = $folder->getFolderPathPlain();
 						$params['username'] = $user->getFullName();
 						$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
