@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1154), MagnusI (649), tmichelfelder (106)
+//    Translators: Admin (1155), MagnusI (649), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '2-faktors autentisering',
@@ -173,7 +173,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Ändrat attribut
 Dokument: [name]
 Version: [version]
-Attribut: [attribute]
+Attribut: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Överordnad katalog: [folder_path]
 Användare: [username]
 URL: [url]',

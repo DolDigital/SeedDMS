@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (746), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (747), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '2-factor-authenticatie',
@@ -165,7 +165,9 @@ URL: [url]',
 'attribute_changed_email_body' => 'Attribuut gewijzigd
 Document: [name]
 Versie: [version]
-Attribuut: [attribute]
+Attribuut: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 Bovenliggende map: [folder_path]
 Gebruiker: [username]
 URL: [url]',

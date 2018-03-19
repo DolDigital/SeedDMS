@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (944), daivoc (421), fofwisdom (166)
+//    Translators: Admin (945), daivoc (421), fofwisdom (166)
 
 $text = array(
 '2_factor_auth' => '이중 인증',
@@ -172,7 +172,9 @@ URL: [url]',
 'attribute_changed_email_body' => '속성 변경
 문서: [name]
 버전: [version]
-속성: [attribute]
+속성: [attribute_name]
+Old value: [attribute_old_value]
+New value: [attribute_new_value]
 상위폴더: [folder_path]
 사용자: [username]
 URL: [url]',
