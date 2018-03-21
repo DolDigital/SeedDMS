@@ -123,7 +123,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
-			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
+			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\"".(!empty($flashmsg['timeout']) ? ' data-timeout="'.$flashmsg['timeout'].'"': '').">".$flashmsg['msg']."</div>\n";
 		}
 		foreach($hookObjs as $hookObj) {
 			if (method_exists($hookObj, 'startBody')) {
