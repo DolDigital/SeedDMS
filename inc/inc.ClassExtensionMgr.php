@@ -60,7 +60,8 @@ class SeedDMS_Extension_Mgr {
 	/**
 	 * Compare two version
 	 *
-	 * This functions compares two version in the format x.x.x
+	 * This functions compares two version in the format x.x.x with x being
+	 * an integer
 	 *
 	 * @param string $ver1
 	 * @param string $ver2
@@ -372,10 +373,18 @@ class SeedDMS_Extension_Mgr {
 	 *
 	 * @param boolean $force force download even if file already exists
 	 */
-	public function updateExtensionList($force=false) { /* {{{ */
+	public function updateExtensionList($version='', $force=false) { /* {{{ */
 		if($this->reposurl) {
 			if(!file_exists($this->cachedir."/repository.json") || $force) {
-				$file = file_get_contents($this->reposurl);
+				$file = @file_get_contents($this->reposurl.($version ? '?seeddms_version='.$version : ''));
+				if(is_array($http_response_header)) {
+					$parts=explode(' ',$http_response_header[0]);
+					if(count($parts)>1) //HTTP/1.0 <code> <text>
+						if(intval($parts[1]) != 200) {
+							$this->errmsgs[] = 'Getting extension list returned http code ('.$parts[1].')';
+							return false;
+						}
+				}
 				file_put_contents($this->cachedir."/repository.json", $file);
 			}
 			return true;
