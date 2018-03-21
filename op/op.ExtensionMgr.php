@@ -95,7 +95,7 @@ elseif ($action == "import") { /* {{{ */
 	if(!$_POST['url']) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
-	$reposurl = 'http://seeddms.steinmann.cx/repository';
+	$reposurl = $settings->_repositoryUrl;
 	$content = file_get_contents($reposurl."/".$_POST['url']);
 	$file = tempnam(sys_get_temp_dir(), '');
 	file_put_contents($file, $content);
