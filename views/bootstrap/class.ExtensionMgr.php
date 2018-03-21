@@ -140,7 +140,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				echo "<img src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\" alt=\"".$extname."\" title=\"".$extname."\">";
 			echo "</td>";
 			echo "<td>".$extconf['title'];
-			if($extconf['changelog'] && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
+			if(!empty($extconf['changelog']) && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
 				echo $this->printPopupBox("<i class=\"icon-reorder\"></i>", '<div style="white-space: pre-wrap; font-family: monospace; padding: 0px;">'.file_get_contents($extdir."/".$extname."/".$extconf['changelog'])."</div>", true);
 			}
 			echo "<br /><small>".$extconf['description']."</small>";
@@ -215,7 +215,15 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		}	
 		echo "</tbody></table>\n";
 ?>
-				<div><a href="?forceupdate=1&currenttab=repository" class="btn btn-delete"><?= getMLText('force_update')?></a></div>
+				<div>
+					<form method="post" action="../op/op.ExtensionMgr.php">
+					<?= createHiddenFieldWithKey('extensionmgr'); ?>
+					<input type="hidden" name="action" value="getlist" />
+					<input type="hidden" name="currenttab" value="repository" />
+					<input type="hidden" name="forceupdate" value="1" />
+          <button type="submit" class="btn btn-delete"><?= getMLText('force_update')?></button>
+					</form>
+</div>
 			</div>
 		</div>
   </div>
