@@ -16,7 +16,7 @@ require_once "inc.ClassExtBase.php";
 require_once "inc.Version.php";
 require_once "inc.Utils.php";
 
-$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir, $settings->_repositoryUrl);
 $EXT_CONF = $extMgr->getExtensionConfiguration();
 
 $version = new SeedDMS_Version;
