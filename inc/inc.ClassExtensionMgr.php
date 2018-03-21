@@ -108,7 +108,7 @@ class SeedDMS_Extension_Mgr {
 				$this->createExtensionConf();
 			}
 			include($this->getExtensionsConfFile());
-			if($EXT_CONF) {
+			if(!empty($EXT_CONF)) {
 				$this->extconf = $EXT_CONF;
 			}
 		}
