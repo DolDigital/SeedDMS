@@ -221,7 +221,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 					<input type="hidden" name="action" value="getlist" />
 					<input type="hidden" name="currenttab" value="repository" />
 					<input type="hidden" name="forceupdate" value="1" />
-          <button type="submit" class="btn btn-delete"><?= getMLText('force_update')?></button>
+          <button type="submit" class="btn btn-delete"><i class="icon-refresh"></i> <?= getMLText('force_update')?></button>
 					</form>
 </div>
 			</div>
