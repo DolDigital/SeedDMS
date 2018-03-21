@@ -113,6 +113,19 @@ elseif ($action == "import") { /* {{{ */
 	add_log_line();
 	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
 } /* }}} */
+elseif ($action == "getlist") { /* {{{ */
+	$v = new SeedDMS_Version();
+	$controller->setParam('extmgr', $extMgr);
+	$controller->setParam('forceupdate', (isset($_POST['forceupdate']) && $_POST['forceupdate']) ? true : false);
+	$controller->setParam('version', $v->version());
+	if (!$controller($_POST)) {
+		$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_extension_getlist').$controller->getErrorMsg(), 'timeout'=>5000));
+	} else {
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_extension_getlist')));
+	}
+	add_log_line();
+	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
+} /* }}} */
 
 
 ?>

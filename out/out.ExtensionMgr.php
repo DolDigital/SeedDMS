@@ -41,11 +41,6 @@ if(isset($_GET['currenttab']))
 else
 	$currenttab = 'installed';
 
-if(isset($_GET['forceupdate']) && $_GET['forceupdate']==1)
-	$extmgr->updateExtensionList(true);
-else
-	$extmgr->updateExtensionList();
-
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
 	$view->setParam('extdir', $settings->_rootDir."/ext");
