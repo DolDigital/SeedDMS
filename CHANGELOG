@@ -10,6 +10,7 @@
 - do not list empty groups as reviewer/approver
 - fix sending notification when document attributes change
 - sending notification when folder attributes change
+- check if converters are set in out/out.ViewDocument.php at all (Closes #394)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
