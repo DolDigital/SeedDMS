@@ -831,7 +831,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$controller->setParam('indexconf', $indexconf);
 			if(!$controller->run()) {
 //			if(!$obj->remove()) {
-				return "409 Conflict".$controller->getErrorMsg();
+				return "409 Conflict ".$controller->getErrorMsg();
 			}
 		}
 
