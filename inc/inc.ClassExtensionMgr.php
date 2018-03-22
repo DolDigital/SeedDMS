@@ -57,6 +57,11 @@ class SeedDMS_Extension_Mgr {
 	 */
 	protected $errmsgs;
 
+	/*
+	 * Name of json file containg available extension from repository
+	 */
+	const repos_list_file = 'repository.json';
+
 	/**
 	 * Compare two version
 	 *
@@ -219,6 +224,7 @@ class SeedDMS_Extension_Mgr {
 			}
 			$extname = key($EXT_CONF);
 			if(!$extname || !preg_match('/[a-zA-Z_]*/', $extname)) {
+				$this->errmsgs[] = "Extension has invalid or no name";
 				return false;
 			}
 
@@ -252,6 +258,9 @@ class SeedDMS_Extension_Mgr {
 			}
 			if(!empty($extconf['class']['file']) && !file_exists($dir."/".$extconf['class']['file'])) {
 				$this->errmsgs[] = "Missing class file";
+			}
+			if(!empty($extconf['icon']) && !file_exists($dir."/".$extconf['icon'])) {
+				$this->errmsgs[] = "Missing icon file";
 			}
 		}
 
@@ -356,16 +365,54 @@ class SeedDMS_Extension_Mgr {
 	} /* }}} */
 
 	/**
-	 * Import list of extension from repository
+	 * Get list of extensions from cached repository index
 	 *
-	 * @param boolean $force force download even if file already exists
+	 * This function returns the whole repository index file separated in
+	 * single lines. Each line is either a comment if it starts with an '#'
+	 * or a json encoded array containing the extension configuration.
+	 *
+	 * Run SeedDMS_Extension_Mgr::updateExtensionList() to ensure the
+	 * currently cached extension list file is up to date.
+	 *
+	 * @return string[] list of json strings or comments
 	 */
-	public function getExtensionList() { /* {{{ */
-		if(file_exists($this->cachedir."/repository.json")) {
-			return file($this->cachedir."/repository.json");
+	public function getRawExtensionList() { /* {{{ */
+		if(file_exists($this->cachedir."/".self::repos_list_file)) {
+			return file($this->cachedir."/".self::repos_list_file);
 		} else {
 			return array();
 		}
+	} /* }}} */
+
+	/**
+	 * Get list of extensions from cached repository index
+	 *
+	 * This function reads the cache respository index and returns
+	 * a list of extension configurations. Only the most recent version
+	 * of an extension will be included.
+	 *
+	 * Run SeedDMS_Extension_Mgr::updateExtensionList() to ensure the
+	 * currently cached extension list file is up to date.
+	 *
+	 * @return array[] list of extension configurations
+	 */
+	public function getExtensionList() { /* {{{ */
+		$list = self::getRawExtensionList();
+		$result = array();
+		$vcache = array(); // keep highest version of extension
+		foreach($list as $e) {
+			if($e[0] != '#') {
+				$re = json_decode($e, true);
+				if(!isset($result[$re['name']])) {
+					$result[$re['name']] = $re;
+					$vcache[$re['name']] = $re['version'];
+				} elseif(self::cmpVersion($re['version'], $vcache[$re['name']]) > 0) {
+					$result[$re['name']] = $re;
+					$vcache[$re['name']] = $re['version'];
+				}
+			}
+		}
+		return $result;
 	} /* }}} */
 
 	/**
@@ -375,7 +422,7 @@ class SeedDMS_Extension_Mgr {
 	 */
 	public function updateExtensionList($version='', $force=false) { /* {{{ */
 		if($this->reposurl) {
-			if(!file_exists($this->cachedir."/repository.json") || $force) {
+			if(!file_exists($this->cachedir."/".self::repos_list_file) || $force) {
 				$file = @file_get_contents($this->reposurl.($version ? '?seeddms_version='.$version : ''));
 				if(is_array($http_response_header)) {
 					$parts=explode(' ',$http_response_header[0]);
@@ -385,7 +432,7 @@ class SeedDMS_Extension_Mgr {
 							return false;
 						}
 				}
-				file_put_contents($this->cachedir."/repository.json", $file);
+				file_put_contents($this->cachedir."/".self::repos_list_file, $file);
 			}
 			return true;
 		} else {
