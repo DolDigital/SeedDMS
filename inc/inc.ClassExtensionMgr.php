@@ -132,7 +132,7 @@ class SeedDMS_Extension_Mgr {
 	 *
 	 * @return boolean
 	 */
-	public function isWritableExitDir() { /* {{{ */
+	public function isWritableExtDir() { /* {{{ */
 		return is_writable($this->extdir);
 	} /* }}} */
 
