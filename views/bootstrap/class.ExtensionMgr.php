@@ -82,7 +82,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 <div class="row-fluid">
 	<div class="span4">
 <?php
-		if($extmgr->isWritableExitDir()) {
+		if($extmgr->isWritableExtDir()) {
 ?>
 		<form class="form-horizontal" method="post" enctype="multipart/form-data" action="../op/op.ExtensionMgr.php">
 			<?= createHiddenFieldWithKey('extensionmgr') ?>
@@ -135,9 +135,9 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 					echo "<tr class=\"success\">";
 			} else
 				echo "<tr class=\"warning\">";
-			echo "<td>";
+			echo "<td width=\"32\">";
 			if($extconf['icon'])
-				echo "<img src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\" alt=\"".$extname."\" title=\"".$extname."\">";
+				echo "<img width=\"32\" height=\"32\" src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\" alt=\"".$extname."\" title=\"".$extname."\">";
 			echo "</td>";
 			echo "<td>".$extconf['title'];
 			if(!empty($extconf['changelog']) && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
@@ -183,35 +183,32 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		print "<th></th>\n";	
 		print "</tr></thead><tbody>\n";
 		$list = $extmgr->getExtensionList();
-		foreach($list as $e) {
-			if($e[0] != '#') {
-				$re = json_decode($e, true);
-				$extmgr->checkExtension($re);
-				$checkmsgs = $extmgr->getErrorMsgs();
-				$needsupdate = !isset($GLOBALS['EXT_CONF'][$re['name']]) || SeedDMS_Extension_Mgr::cmpVersion($re['version'], $GLOBALS['EXT_CONF'][$re['name']]['version']) > 0;
-				echo "<tr";
-				if(isset($GLOBALS['EXT_CONF'][$re['name']])) {
-					if($needsupdate)
-						echo " class=\"warning\"";
-					else
-						echo " class=\"success\"";
-				}
-				echo ">";
-				echo "<td></td>";
-				echo "<td>".$re['title']."<br /><small>".$re['description']."</small>";
-				if($checkmsgs)
-					echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $checkmsgs)."</div>";
-				echo "</td>";
-				echo "<td nowrap>".$re['version']."<br /><small>".$re['releasedate']."</small></td>";
-				echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
-				echo "<td nowrap>";
-				echo "<div class=\"list-action\">";
-				if(!$checkmsgs && $extmgr->isWritableExtDir())
-					echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$re['name']."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"currenttab\" value=\"repository\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$re['name']."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
-				echo "</div>";
-				echo "</td>";
-				echo "</tr>";
+		foreach($list as $re) {
+			$extmgr->checkExtension($re);
+			$checkmsgs = $extmgr->getErrorMsgs();
+			$needsupdate = !isset($GLOBALS['EXT_CONF'][$re['name']]) || SeedDMS_Extension_Mgr::cmpVersion($re['version'], $GLOBALS['EXT_CONF'][$re['name']]['version']) > 0;
+			echo "<tr";
+			if(isset($GLOBALS['EXT_CONF'][$re['name']])) {
+				if($needsupdate)
+					echo " class=\"warning\"";
+				else
+					echo " class=\"success\"";
 			}
+			echo ">";
+			echo "<td width=\"32\">".($re['icon-data'] ? '<img width="32" height="32" alt="'.$re['name'].'" title="'.$re['name'].'" src="'.$re['icon-data'].'">' : '')."</td>";
+			echo "<td>".$re['title']."<br /><small>".$re['description']."</small>";
+			if($checkmsgs)
+				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $checkmsgs)."</div>";
+			echo "</td>";
+			echo "<td nowrap>".$re['version']."<br /><small>".$re['releasedate']."</small></td>";
+			echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
+			echo "<td nowrap>";
+			echo "<div class=\"list-action\">";
+			if(!$checkmsgs && $extmgr->isWritableExtDir())
+				echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$re['name']."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"currenttab\" value=\"repository\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$re['name']."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
+			echo "</div>";
+			echo "</td>";
+			echo "</tr>";
 		}	
 		echo "</tbody></table>\n";
 ?>
