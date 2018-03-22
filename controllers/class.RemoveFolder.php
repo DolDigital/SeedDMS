@@ -59,6 +59,7 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 				$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', array($index, $indexconf));
 
 			if (!$folder->remove()) {
+				$this->errormsg = 'error_occured';
 				return false;
 			} else {
 

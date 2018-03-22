@@ -45,6 +45,7 @@ class SeedDMS_Controller_RemoveDocument extends SeedDMS_Controller_Common {
 		$result = $this->callHook('removeDocument', $document);
 		if($result === null) {
 			if (!$document->remove()) {
+				$this->errormsg = "error_occured";
 				return false;
 			} else {
 
