@@ -15,9 +15,10 @@ if($settings->_logFileEnable) {
 	$logname = $settings->_contentDir."log/webdav-".$logname.".log";
 	if(!file_exists($settings->_contentDir.'log'))
 		@mkdir($settings->_contentDir.'log');
-	if(file_exists($settings->_contentDir.'log') && is_dir($settings->_contentDir.'log'))
+	if(file_exists($settings->_contentDir.'log') && is_dir($settings->_contentDir.'log')) {
 		$log = Log::factory('file', $logname);
-	else
+		$log->setMask(Log::MAX(PEAR_LOG_INFO));
+	} else
 		$log = null;
 } else {
 	$log = null;
