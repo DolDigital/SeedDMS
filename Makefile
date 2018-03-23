@@ -36,6 +36,16 @@ webapp:
 	(cd tmp; tar --exclude=.svn -czvf ../seeddms-webapp-$(VERSION).tar.gz seeddms-webapp-$(VERSION))
 	rm -rf tmp
 
+repository:
+	mkdir -p tmp/seeddms-repository-$(VERSION)
+	cp -a repository/www repository/utils repository/doc tmp/seeddms-repository-$(VERSION)
+	mkdir -p tmp/seeddms-repository-$(VERSION)/files
+	mkdir -p tmp/seeddms-repository-$(VERSION)/accounts
+	cp -a repository/files/.htaccess tmp/seeddms-repository-$(VERSION)/files
+	cp -a repository/accounts/.htaccess tmp/seeddms-repository-$(VERSION)/accounts
+	(cd tmp; tar --exclude=.svn -czvf ../seeddms-repository-$(VERSION).tar.gz seeddms-repository-$(VERSION))
+	rm -rf tmp
+
 dynamic_content.tar.gz: ext/dynamic_content
 	tar czvf dynamic_content.tar.gz ext/dynamic_content
 
@@ -53,4 +63,4 @@ doc:
 apidoc:
 	apigen  generate -s SeedDMS_Core --exclude tests -d html
 
-.PHONY: webdav webapp
+.PHONY: webdav webapp repository
