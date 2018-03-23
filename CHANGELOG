@@ -11,6 +11,7 @@
 - fix sending notification when document attributes change
 - sending notification when folder attributes change
 - check if converters are set in out/out.ViewDocument.php at all (Closes #394)
+- do not remove user when transfering objects
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
