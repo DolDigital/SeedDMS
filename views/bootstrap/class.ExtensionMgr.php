@@ -63,6 +63,66 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 <?php
 	} /* }}} */
 
+	function info() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$extmgr = $this->params['extmgr'];
+		$extname = $this->params['extname'];
+
+		echo "<table class=\"table _table-condensed\">\n";
+		print "<thead>\n<tr>\n";
+		print "<th></th>\n";	
+		print "<th>".getMLText('name')."</th>\n";	
+		print "<th>".getMLText('version')."</th>\n";	
+		print "<th>".getMLText('author')."</th>\n";	
+		print "<th></th>\n";	
+		print "</tr></thead><tbody>\n";
+		$list = $extmgr->getExtensionListByName($extname);
+		foreach($list as $re) {
+			$extmgr->checkExtension($re);
+			$checkmsgs = $extmgr->getErrorMsgs();
+			$needsupdate = !isset($GLOBALS['EXT_CONF'][$re['name']]) || SeedDMS_Extension_Mgr::cmpVersion($re['version'], $GLOBALS['EXT_CONF'][$re['name']]['version']) > 0;
+			echo "<tr";
+			if(isset($GLOBALS['EXT_CONF'][$re['name']])) {
+				if($needsupdate)
+					echo " class=\"warning\"";
+				else
+					echo " class=\"success\"";
+			}
+			echo ">";
+			echo "<td width=\"32\">".($re['icon-data'] ? '<img width="32" height="32" alt="'.$re['name'].'" title="'.$re['name'].'" src="'.$re['icon-data'].'">' : '')."</td>";
+			echo "<td>".$re['title']."<br /><small>".$re['description']."</small>";
+			if($checkmsgs)
+				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $checkmsgs)."</div>";
+			echo "</td>";
+			echo "<td nowrap>".$re['version']."<br /><small>".$re['releasedate']."</small></td>";
+			echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
+			echo "<td nowrap>";
+			echo "<div class=\"list-action\">";
+			if(!$checkmsgs && $extmgr->isWritableExtDir())
+				echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$re['name']."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"currenttab\" value=\"repository\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$re['name']."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
+			echo "</div>";
+			echo "</td>";
+			echo "</tr>";
+		}	
+		echo "</tbody></table>\n";
+	} /* }}} */
+
+	function changelog() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$extdir = $this->params['extdir'];
+		$extmgr = $this->params['extmgr'];
+		$extname = $this->params['extname'];
+
+		if(isset($GLOBALS['EXT_CONF'][$extname])) {
+			$extconf = $GLOBALS['EXT_CONF'][$extname];
+			if(!empty($extconf['changelog']) && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
+				echo '<div style="white-space: pre-wrap; font-family: monospace; padding: 0px;">'.file_get_contents($extdir."/".$extname."/".$extconf['changelog'])."</div>";
+			}
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -140,9 +200,6 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				echo "<img width=\"32\" height=\"32\" src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\" alt=\"".$extname."\" title=\"".$extname."\">";
 			echo "</td>";
 			echo "<td>".$extconf['title'];
-			if(!empty($extconf['changelog']) && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
-				echo $this->printPopupBox("<i class=\"icon-reorder\"></i>", '<div style="white-space: pre-wrap; font-family: monospace; padding: 0px;">'.file_get_contents($extdir."/".$extname."/".$extconf['changelog'])."</div>", true);
-			}
 			echo "<br /><small>".$extconf['description']."</small>";
 			if($errmsgs)
 				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $errmsgs)."</div>";
@@ -153,6 +210,9 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			echo "<td nowrap><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "<td nowrap>";
 			echo "<div class=\"list-action\">";
+			if(!empty($extconf['changelog']) && file_exists($extdir."/".$extname."/".$extconf['changelog'])) {
+				echo "<a data-target=\"#extensionChangelog\" href=\"../out/out.ExtensionMgr.php?action=changelog&extensionname=".$extname."\" data-toggle=\"modal\" title=\"".getMLText('show_extension_changelog')."\"><i class=\"icon-reorder\"></i></a>\n";
+			}
 			if($extconf['config'])
 				echo "<a href=\"../out/out.Settings.php?currenttab=extensions#".$extname."\" title=\"".getMLText('configure_extension')."\"><i class=\"icon-cogs\"></i></a>";
 			echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$extname."-download\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"download\" /><input type=\"hidden\" name=\"extname\" value=\"".$extname."\" /><a class=\"download\" data-extname=\"".$extname."\" title=\"".getMLText('download_extension')."\"><i class=\"icon-download\"></i></a></form>";
@@ -196,7 +256,8 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			}
 			echo ">";
 			echo "<td width=\"32\">".($re['icon-data'] ? '<img width="32" height="32" alt="'.$re['name'].'" title="'.$re['name'].'" src="'.$re['icon-data'].'">' : '')."</td>";
-			echo "<td>".$re['title']."<br /><small>".$re['description']."</small>";
+			echo "<td>".$re['title'];
+			echo "<br /><small>".$re['description']."</small>";
 			if($checkmsgs)
 				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br /><img src="'.$this->getImgPath("attention.gif").'"> ', $checkmsgs)."</div>";
 			echo "</td>";
@@ -204,6 +265,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			echo "<td nowrap>".$re['author']['name']."<br /><small>".$re['author']['company']."</small></td>";
 			echo "<td nowrap>";
 			echo "<div class=\"list-action\">";
+			echo "<a data-target=\"#extensionInfo\" href=\"../out/out.ExtensionMgr.php?action=info&extensionname=".$re['name']."\" data-toggle=\"modal\" title=\"".getMLText('show_extension_version_list')."\"><i class=\"icon-list-ol\"></i></a>\n";
 			if(!$checkmsgs && $extmgr->isWritableExtDir())
 				echo "<form style=\"display: inline-block; margin: 0px;\" method=\"post\" action=\"../op/op.ExtensionMgr.php\" id=\"".$re['name']."-import\">".createHiddenFieldWithKey('extensionmgr')."<input type=\"hidden\" name=\"action\" value=\"import\" /><input type=\"hidden\" name=\"currenttab\" value=\"repository\" /><input type=\"hidden\" name=\"url\" value=\"".$re['filename']."\" /><a class=\"import\" data-extname=\"".$re['name']."\" title=\"".getMLText('import_extension')."\"><i class=\"icon-download\"></i></a></form>";
 			echo "</div>";
@@ -224,7 +286,32 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			</div>
 		</div>
   </div>
- </div>
+</div>
+<div class="modal modal-wide hide" id="extensionInfo" tabindex="-1" role="dialog" aria-labelledby="extensionInfoLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="extensionInfoLabel"><?= getMLText("extension_version_list") ?></h3>
+  </div>
+  <div class="modal-body">
+		<p><?php printMLText('extension_loading') ?></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+  </div>
+</div>
+<div class="modal modal-wide hide" id="extensionChangelog" tabindex="-1" role="dialog" aria-labelledby="extensionChangelogLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="extensionChangelogLabel"><?= getMLText("extension_changelog") ?></h3>
+  </div>
+  <div class="modal-body">
+		<p><?php printMLText('extension_loading') ?></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+  </div>
+</div>
+
 <?php
 		$this->contentEnd();
 		$this->htmlEndPage();
