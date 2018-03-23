@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1080), jeromerobert (50), lonnnew (9), Oudiceval (660)
+//    Translators: Admin (1080), jeromerobert (50), lonnnew (9), Oudiceval (674)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -271,7 +271,7 @@ URL: [url]',
 'comment' => 'Commentaire',
 'comment_changed_email' => '',
 'comment_for_current_version' => 'Commentaires pour la version actuelle',
-'configure_extension' => '',
+'configure_extension' => 'Configurer l’extension',
 'confirm_clear_cache' => 'Confirmer l\'effacement du cache',
 'confirm_create_fulltext_index' => 'Oui, je souhaite recréer l\'index de recherche plein texte !',
 'confirm_move_document' => 'Veuillez confirmer le déplacement du document.',
@@ -350,8 +350,15 @@ URL: [url]',
 'documents_with_notification' => 'Documents avec notification',
 'document_already_checkedout' => 'Ce document est déjà débloqué',
 'document_already_locked' => 'Ce document est déjà verrouillé',
-'document_attribute_changed_email_body' => '',
-'document_attribute_changed_email_subject' => '',
+'document_attribute_changed_email_body' => 'Attribut modifié
+Document : [name]
+Attribut : [attribute_name]
+Ancienne valeur : [attribute_old_value]
+Nouvelle valeur : [attribute_new_value]
+Dossier parent : [folder_path]
+Utilisateur : [username]
+URL : [url]',
+'document_attribute_changed_email_subject' => '[sitename] : [name] - Attribut modifié',
 'document_comment_changed_email' => 'Commentaire modifié',
 'document_comment_changed_email_body' => 'Commentaire modifié
 Document: [name]
@@ -421,7 +428,7 @@ URL: [url]',
 'does_not_expire' => 'N\'expire jamais',
 'does_not_inherit_access_msg' => 'Accès hérité',
 'download' => 'Téléchargement',
-'download_extension' => '',
+'download_extension' => 'Télécharger l’extension en tant que fichier zip',
 'download_links' => 'Liens de téléchargement',
 'download_link_email_body' => 'Cliquez sur le lien suivant pour télécharger la version [version] du document
 « [docname] ».
@@ -522,11 +529,14 @@ Utilisateur : [username]
 URL : [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Date d\'expiration modifiée',
 'export' => '',
-'extension_archive' => '',
+'extension_archive' => 'Extension',
+'extension_changelog' => '',
+'extension_loading' => '',
 'extension_manager' => 'Gestionnaire d\'extensions',
-'extension_mgr_installed' => '',
-'extension_mgr_no_upload' => '',
-'extension_mgr_repository' => '',
+'extension_mgr_installed' => 'Installées',
+'extension_mgr_no_upload' => 'L’ajout de nouvelles extensions n’est pas possible car le répertoire des extensions n’est pas accessible en écriture.',
+'extension_mgr_repository' => 'Disponibles',
+'extension_version_list' => '',
 'february' => 'Février',
 'file' => 'Fichier',
 'files' => 'Fichiers',
@@ -540,8 +550,15 @@ URL : [url]',
 'folders' => 'Dossiers',
 'folders_and_documents_statistic' => 'Aperçu du contenu',
 'folders_with_notification' => 'Dossiers avec notification',
-'folder_attribute_changed_email_body' => '',
-'folder_attribute_changed_email_subject' => '',
+'folder_attribute_changed_email_body' => 'Attribut modifié
+Dossier : [name]
+Attribut : [attribute_name]
+Ancienne valeur : [attribute_old_value]
+Nouvelle valeur : [attribute_new_value]
+Dossier parent : [folder_path]
+Utilisateur : [username]
+URL : [url]',
+'folder_attribute_changed_email_subject' => '[sitename] : [name] - Attribut modifié',
 'folder_comment_changed_email' => 'Commentaire changé',
 'folder_comment_changed_email_body' => 'Commentaire changé
 Dossier: [name]
@@ -618,7 +635,7 @@ URL: [url]',
 'identical_version' => 'Nouvelle version identique à l\'actuelle.',
 'import' => 'Importer',
 'importfs' => 'Importer depuis le système de fichiers',
-'import_extension' => '',
+'import_extension' => 'Importer l’extension',
 'import_fs' => 'Importer depuis le système de fichiers',
 'import_fs_warning' => 'L’importation peut se faire à partir du dossier de dépôt personnel uniquement. Tous les sous-dossiers et fichiers seront importés. Les fichiers seront immédiatement publiés.',
 'include_content' => 'Inclure le contenu',
@@ -714,7 +731,7 @@ URL: [url]',
 'local_file' => 'Fichier local',
 'locked_by' => 'Verrouillé par',
 'lock_document' => 'Verrouiller',
-'lock_message' => 'Ce document a été verrouillé par [username]. Seuls les utilisateurs autorisés peuvent déverrouiller ce document (voir fin de page).',
+'lock_message' => 'Ce document a été verrouillé par [username]. Seuls les utilisateurs autorisés peuvent déverrouiller ce document.',
 'lock_status' => 'Statut',
 'login' => 'Identification',
 'login_disabled_text' => 'Votre compte est désactivé, sans doute à cause de trop nombreuses connexions qui ont échoué.',
@@ -1492,6 +1509,8 @@ Nom : [username]
 'set_owner_error' => 'Erreur lors de la définition du propriétaire',
 'set_password' => 'Définir mot de passe',
 'set_workflow' => 'Définir le Workflow',
+'show_extension_changelog' => '',
+'show_extension_version_list' => '',
 'signed_in_as' => 'Connecté en tant que',
 'sign_in' => 'Connexion',
 'sign_out' => 'Déconnexion',
@@ -1525,8 +1544,8 @@ Nom : [username]
 'splash_error_add_to_transmittal' => 'Erreur lors de l’ajout du document à la transmission',
 'splash_error_rm_download_link' => 'Erreur lors de la suppression du lien de téléchargement',
 'splash_error_send_download_link' => 'Erreur lors de l’envoi du lien de téléchargement',
-'splash_extension_import' => '',
-'splash_extension_refresh' => '',
+'splash_extension_import' => 'Extension installée',
+'splash_extension_refresh' => 'Liste des extensions actualisée',
 'splash_folder_edited' => 'Dossier modifié',
 'splash_importfs' => '[docs] documents et [folders] dossiers importés',
 'splash_inherit_access' => 'Droits d’accès hérités',
