@@ -40,6 +40,10 @@ if(isset($_GET['currenttab']))
 	$currenttab = $_GET['currenttab'];
 else
 	$currenttab = 'installed';
+if(isset($_GET['extensionname']))
+	$extname = $_GET['extensionname'];
+else
+	$extname = '';
 
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
@@ -47,6 +51,7 @@ if($view) {
 	$view->setParam('version', $v);
 	$view->setParam('extmgr', $extmgr);
 	$view->setParam('currenttab', $currenttab);
+	$view->setParam('extname', $extname);
 	$view->setParam('reposurl', $reposurl);
 	$view($_GET);
 	exit;
