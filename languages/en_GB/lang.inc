@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1696), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1701), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -530,10 +530,13 @@ URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Expiry date changed',
 'export' => 'Export',
 'extension_archive' => 'Extension',
+'extension_changelog' => 'Changelog',
+'extension_loading' => 'Loading extensions ...',
 'extension_manager' => 'Manage extensions',
 'extension_mgr_installed' => 'Installed',
 'extension_mgr_no_upload' => 'Uploading new extensions is not possible because the extentension directory is not writable.',
 'extension_mgr_repository' => 'Available',
+'extension_version_list' => 'Versions',
 'february' => 'February',
 'file' => 'File',
 'files' => 'Files',
@@ -1522,6 +1525,8 @@ Name: [username]
 'set_owner_error' => 'Error setting owner',
 'set_password' => 'Set Password',
 'set_workflow' => 'Set Workflow',
+'show_extension_changelog' => 'Show Changelog',
+'show_extension_version_list' => 'Show list of versions',
 'signed_in_as' => 'Signed in as',
 'sign_in' => 'Sign in',
 'sign_out' => 'Sign out',

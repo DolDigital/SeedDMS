@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2582), dgrutsch (22)
+//    Translators: Admin (2588), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -529,10 +529,13 @@ URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Ablaufdatum geändert',
 'export' => 'Export',
 'extension_archive' => 'Erweiterung',
+'extension_changelog' => 'Versionshistorie',
+'extension_loading' => 'Lade Erweiterungen ...',
 'extension_manager' => 'Erweiterungen verwalten',
 'extension_mgr_installed' => 'Installiert',
 'extension_mgr_no_upload' => 'Der Upload neuer Erweiterungen ist nicht möglich, weil das Verzeichnis für Erweiterungen nicht beschreibbar ist.',
 'extension_mgr_repository' => 'Verfügbar',
+'extension_version_list' => 'Versionen',
 'february' => 'Februar',
 'file' => 'Datei',
 'files' => 'Dateien',
@@ -1527,6 +1530,8 @@ Name: [username]
 'set_owner_error' => 'Fehler beim Setzen des Besitzers',
 'set_password' => 'Passwort setzen',
 'set_workflow' => 'Workflow zuweisen',
+'show_extension_changelog' => 'Zeige Versionshistorie',
+'show_extension_version_list' => 'Zeige Liste der Versionen',
 'signed_in_as' => 'Angemeldet als',
 'sign_in' => 'Anmelden',
 'sign_out' => 'Abmelden',
