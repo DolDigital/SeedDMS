@@ -146,6 +146,8 @@ class SeedDMS_Extension_Mgr {
 	 *
 	 * This function will always create a file, even if no extensions
 	 * are installed.
+	 *
+	 * @return boolean true on success, false on error
 	 */
 	public function createExtensionConf() { /* {{{ */
 		$extensions = self::getExtensions();
@@ -166,6 +168,11 @@ class SeedDMS_Extension_Mgr {
 		}
 	} /* }}} */
 
+	/**
+	 * Get names of locally installed extensions by scanning the extension dir
+	 *
+	 * @return string[] list of extension names
+	 */
 	protected function getExtensions() { /* {{{ */
 		$extensions = array();
 		if(file_exists($this->extdir)) {
@@ -183,6 +190,13 @@ class SeedDMS_Extension_Mgr {
 		return $extensions;
 	} /* }}} */
 
+	/**
+	 * Create zip archive of an extension
+	 *
+	 * @param string $extname name of extension
+	 * @param string $version version of extension (x.y.z)
+	 * @return string name of temporary file with archive
+	 */
 	public function createArchive($extname, $version) { /* {{{ */
 		if(!is_dir($this->extdir ."/". $extname))
 			return false;
@@ -332,6 +346,7 @@ class SeedDMS_Extension_Mgr {
 	 * @return boolean true on success, othewise false
 	 */
 	public function updateExtension($file) { /* {{{ */
+		/* unzip the extension in a temporary directory */
 		$newdir = $this->cachedir ."/ext.new";
 		if(!mkdir($newdir, 0755)) {
 			$this->errmsgs[] = "Cannot create temp. extension directory";
@@ -340,6 +355,7 @@ class SeedDMS_Extension_Mgr {
 		$cmd = "cd ".$newdir."; unzip ".$file;
 		exec($cmd);
 
+		/* Check if extension is complete and fullfills the constraints */
 		if(!self::checkExtension($newdir)) {
 			self::rrmdir($newdir);
 			return false;
@@ -409,6 +425,32 @@ class SeedDMS_Extension_Mgr {
 				} elseif(self::cmpVersion($re['version'], $vcache[$re['name']]) > 0) {
 					$result[$re['name']] = $re;
 					$vcache[$re['name']] = $re['version'];
+				}
+			}
+		}
+		return $result;
+	} /* }}} */
+
+	/**
+	 * Get list of version of an extension from cached repository index
+	 *
+	 * This function reads the cache respository index and returns
+	 * a list of extension configurations. Only those extensions will
+	 * be included which maches the given name.
+	 *
+	 * Run SeedDMS_Extension_Mgr::updateExtensionList() to ensure the
+	 * currently cached extension list file is up to date.
+	 *
+	 * @return array[] list of extension configurations
+	 */
+	public function getExtensionListByName($extname) { /* {{{ */
+		$list = self::getRawExtensionList();
+		$result = array();
+		foreach($list as $e) {
+			if($e[0] != '#') {
+				$re = json_decode($e, true);
+				if($re['name'] == $extname) {
+					$result[$re['version']] = $re;
 				}
 			}
 		}
