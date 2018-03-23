@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (974), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (976), flaviove (627), lfcristofoli (352)
 
 $text = array(
 '2_factor_auth' => '',
@@ -291,8 +291,8 @@ URL: [url]',
 'confirm_update_transmittalitem' => '',
 'content' => 'Conteúdo',
 'continue' => 'Continue',
-'converter_new_cmd' => '',
-'converter_new_mimetype' => '',
+'converter_new_cmd' => 'Comando',
+'converter_new_mimetype' => 'Novo mimetype',
 'copied_to_checkout_as' => '',
 'create_download_link' => '',
 'create_fulltext_index' => 'Criar índice de texto completo',
@@ -505,10 +505,13 @@ URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Data de validade mudou',
 'export' => '',
 'extension_archive' => '',
+'extension_changelog' => '',
+'extension_loading' => '',
 'extension_manager' => 'Gerenciar extensões',
 'extension_mgr_installed' => '',
 'extension_mgr_no_upload' => '',
 'extension_mgr_repository' => '',
+'extension_version_list' => '',
 'february' => 'February',
 'file' => 'Arquivo',
 'files' => 'Arquivos',
@@ -1450,6 +1453,8 @@ URL: [url]',
 'set_owner_error' => 'Proprietário configuração de erro',
 'set_password' => 'Definir Senha',
 'set_workflow' => 'Definir fluxo de trabalho',
+'show_extension_changelog' => '',
+'show_extension_version_list' => '',
 'signed_in_as' => 'Logado como',
 'sign_in' => 'Entrar',
 'sign_out' => 'Sair',
