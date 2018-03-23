@@ -245,9 +245,6 @@ else if ($action == "transferobjects") {
 	}
 
 	$userToAssign = $dms->getUser($_POST["assignTo"]);
-	if (!$userToRemove->remove($user, $userToAssign)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
 		
 //	if(isset($_POST["status"]) && is_array($_POST["status"]) && $_POST["status"]) {
 		if (!$userToRemove->transferDocumentsFolders($userToAssign)) {
