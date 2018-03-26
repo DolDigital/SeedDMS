@@ -104,7 +104,9 @@ class SeedDMS_View_Tasks extends SeedDMS_Bootstrap_Style {
 		$content = '';
 //		$content .= "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
 //		$content .= "    <li class=\"dropdown\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).")";
+		if($tasks['review'] || $tasks['approval']) {
+		$content .= " <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		if($tasks['review']) {
 		$content .= "      <li class=\"dropdown-submenu\">\n";
@@ -131,6 +133,7 @@ class SeedDMS_View_Tasks extends SeedDMS_Bootstrap_Style {
 		$content .= "    <li class=\"divider\"></li>\n";
 		$content .= "    <li><a href=\"../out/out.MyDocuments.php\">".getMLText("my_documents")."</a></li>\n";
 		$content .= "     </ul>\n";
+		}
 //		$content .= "    </li>\n";
 //		$content .= "   </ul>\n";
 		echo $content;
