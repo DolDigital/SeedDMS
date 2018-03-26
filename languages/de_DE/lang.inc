@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2588), dgrutsch (22)
+//    Translators: Admin (2596), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -132,6 +132,7 @@ URL: [url]',
 'approver_already_assigned' => 'Freigeber bereits zugewiesen',
 'approver_already_removed' => 'Freigeber wurde bereits aus dem Freigabevorgang         entfernt oder hat die Freigabe bereits abgeschlossen',
 'april' => 'April',
+'archive' => 'Archiv',
 'archive_creation' => 'Archiv erzeugen',
 'archive_creation_warning' => 'Mit dieser Operation können Sie ein Archiv mit allen Dokumenten des DMS erzeugen. Nach der Erstellung wird das Archiv im Datenordner Ihres Servers gespeichert.<br />Warnung: ein menschenlesbares Archiv ist als Server-Backup unbrauchbar.',
 'ar_EG' => 'Arabisch',
@@ -335,6 +336,7 @@ URL: [url]',
 'documents_locked_by_you' => 'Von mir gesperrte Dokumente',
 'documents_only' => 'Nur Dokumente',
 'documents_to_approve' => 'Freigabe erforderlich',
+'documents_to_correct' => 'Korrektur erforderlich',
 'documents_to_process' => 'Dokumente, die bearbeitet werden müssen',
 'documents_to_receipt' => 'Empfangsbestätigung erforderlich',
 'documents_to_review' => 'Prüfung erforderlich',
@@ -1504,6 +1506,12 @@ Name: [username]
 'settings_strictFormCheck_desc' => 'Genaue Formularprüfung. Wenn dies eingeschaltet wird, dann werden alle Felder einiger Formulare auf einen Wert überprüft, anderenfalls sind einige Eingabefelder optional. Ein Kommentar ist beim Prüfen oder Freigeben eines Dokuments oder einer Statusänderung immer notwendig.',
 'settings_suggestionvalue' => 'Vorgeschlagener Wert',
 'settings_System' => 'System',
+'settings_tasksInMenu' => 'Ausgewähtlte Aufgaben',
+'settings_tasksInMenu_approval' => 'Freigaben',
+'settings_tasksInMenu_desc' => 'Setzt die Aufgaben, die gezählt werden sollen. Wenn keine Aufgaben ausgewählt werden, werden alle gezählt.',
+'settings_tasksInMenu_receipt' => 'Prüfungen',
+'settings_tasksInMenu_review' => 'Empfangsbestätigungen',
+'settings_tasksInMenu_revision' => 'Wiederholungsprüfungen',
 'settings_theme' => 'Aussehen',
 'settings_theme_desc' => 'Voreingestelltes Aussehen (Name des Unterordners \'styles\')',
 'settings_titleDisplayHack' => 'Title Display Hack',
