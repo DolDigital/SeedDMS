@@ -153,7 +153,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$tmp['action'] = 'webrootjs';
 		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
-		if(isset($this->params['user']) && $this->params['user']) {
+		if($this->params['enablemenutasks'] && isset($this->params['user']) && $this->params['user']) {
 			$this->addFooterJS('checkTasks();');
 		}
 		if($this->footerjs) {
