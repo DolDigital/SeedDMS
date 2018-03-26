@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1701), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1710), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -132,6 +132,7 @@ URL: [url]',
 'approver_already_assigned' => 'User is already assigned as an approver.',
 'approver_already_removed' => 'Approver has already been removed from approval process or has already submitted an approval.',
 'april' => 'April',
+'archive' => 'Archive',
 'archive_creation' => 'Archive creation',
 'archive_creation_warning' => 'With this operation you can create archive containing the files of entire DMS folders. After the creation the archive will be saved in the data folder of your server.<br>WARNING: an archive created as human readable will be unusable as server backup.',
 'ar_EG' => 'Arabic',
@@ -335,6 +336,7 @@ URL: [url]',
 'documents_locked_by_you' => 'Documents locked by you',
 'documents_only' => 'Documents only',
 'documents_to_approve' => 'Documents awaiting your approval',
+'documents_to_correct' => 'Documents that need correction',
 'documents_to_process' => 'Documents that need processing',
 'documents_to_receipt' => 'Documents awaiting to confirm the receipt',
 'documents_to_review' => 'Documents awaiting your review',
@@ -1499,6 +1501,12 @@ Name: [username]
 'settings_strictFormCheck_desc' => 'Strict form checking. If set to true, then all fields in the form will be checked for a value. If set to false, then (most) comments and keyword fields become optional. Comments are always required when submitting a review or overriding document status',
 'settings_suggestionvalue' => 'Suggestion value',
 'settings_System' => 'System',
+'settings_tasksInMenu' => 'Selected tasks',
+'settings_tasksInMenu_approval' => 'Approvals',
+'settings_tasksInMenu_desc' => 'Select those tasks which are to be counted. If none is selected, then all tasks will be counted.',
+'settings_tasksInMenu_receipt' => 'Reviews',
+'settings_tasksInMenu_review' => 'Receipts',
+'settings_tasksInMenu_revision' => 'Revisions',
 'settings_theme' => 'Default theme',
 'settings_theme_desc' => 'Default style (name of a subfolder in folder "styles")',
 'settings_titleDisplayHack' => 'Title Display Hack',
