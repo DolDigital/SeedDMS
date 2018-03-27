@@ -39,25 +39,42 @@ class SeedDMS_View_Tasks extends SeedDMS_Bootstrap_Style {
 	private function __myTasks() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$tasks['review'] = array();
-		$tasks['approval'] = array();
-		$tasks['receipt'] = array();
-		$tasks['revision'] = array();
-		$resArr = $dms->getDocumentList('ApproveByMe', $user);
-		if($resArr) {
-			foreach ($resArr as $res) {
-				$document = $dms->getDocument($res["id"]);
-				if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
-					$tasks['approval'][] = array('id'=>$res['id'], 'name'=>$res['name']);
+		$workflowmode = $this->params['workflowmode'];
+		if($workflowmode == 'traditional')
+			$tasks['review'] = array();
+		elseif($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval')
+			$tasks['approval'] = array();
+		elseif($workflowmode == 'advanced')
+			$tasks['workflow'] = array();
+
+		if($workflowmode == 'traditional' || $workflowmode == 'traditional_only_approval') {
+			$resArr = $dms->getDocumentList('ApproveByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["id"]);
+					if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+						$tasks['approval'][] = array('id'=>$res['id'], 'name'=>$res['name']);
+					}
 				}
 			}
-		}
-		$resArr = $dms->getDocumentList('ReviewByMe', $user);
-		if($resArr) {
-			foreach ($resArr as $res) {
-				$document = $dms->getDocument($res["id"]);
-				if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
-					$tasks['review'][] = array('id'=>$res['id'], 'name'=>$res['name']);
+		} elseif($workflowmode == 'traditional') {
+			$resArr = $dms->getDocumentList('ReviewByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["id"]);
+					if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+						$tasks['review'][] = array('id'=>$res['id'], 'name'=>$res['name']);
+					}
+				}
+			}
+		} elseif($workflowmode == 'advanced') {
+			$resArr = $dms->getDocumentList('WorkflowByMe', $user);
+			if($resArr) {
+				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["id"]);
+					if($document->getAccessMode($user) >= M_READ && $document->getLatestContent()) {
+						$tasks['workflow'][] = array('id'=>$res['id'], 'name'=>$res['name']);
+					}
 				}
 			}
 		}
@@ -104,11 +121,20 @@ class SeedDMS_View_Tasks extends SeedDMS_Bootstrap_Style {
 		$content = '';
 //		$content .= "   <ul id=\"main-menu-tasks\" class=\"nav pull-right\">\n";
 //		$content .= "    <li class=\"dropdown\">\n";
-		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (".count($tasks['review'])."/".count($tasks['approval']).")";
-		if($tasks['review'] || $tasks['approval']) {
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('tasks')." (";
+		$ct = array();
+		if(isset($tasks['review']))
+			$ct[] = count($tasks['review']);
+		if(isset($tasks['approval']))
+			$ct[] = count($tasks['approval']);
+		if(isset($tasks['workflow']))
+			$ct[] = count($tasks['workflow']);
+		$content .= implode('/', $ct);
+		$content .= ")";
+		if(!empty($tasks['review']) || !empty($tasks['approval']) || !empty($tasks['workflow'])) {
 		$content .= " <i class=\"icon-caret-down\"></i></a>\n";
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		if($tasks['review']) {
+		if(!empty($tasks['review'])) {
 		$content .= "      <li class=\"dropdown-submenu\">\n";
 		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_review")."</a>\n";
 		$content .= "       <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -119,13 +145,24 @@ class SeedDMS_View_Tasks extends SeedDMS_Bootstrap_Style {
 		$content .= "       </ul>\n";
 		$content .= "      </li>\n";
 		}
-		if($tasks['approval']) {
+		if(!empty($tasks['approval'])) {
 		$content .= "      <li class=\"dropdown-submenu\">\n";
 		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_approve")."</a>\n";
 		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($tasks['approval'] as $t) {
 			$doc = $dms->getDocument($t['id']);
 			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=revapp\">".$doc->getName()."</a></li>";
+		}
+		$content .= "       </ul>\n";
+		$content .= "      </li>\n";
+		}
+		if(!empty($tasks['workflow'])) {
+		$content .= "      <li class=\"dropdown-submenu\">\n";
+		$content .=	"       <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("documents_to_trigger_workflow")."</a>\n";
+		$content .= "         <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($tasks['workflow'] as $t) {
+			$doc = $dms->getDocument($t['id']);
+			$content .= "       <li><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."&currenttab=workflow\">".$doc->getName()."</a></li>";
 		}
 		$content .= "       </ul>\n";
 		$content .= "      </li>\n";

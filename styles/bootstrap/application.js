@@ -1003,7 +1003,7 @@ $(document).ready(function() { /* {{{ */
 	});
 }); /* }}} */
 
-	var approval_count, review_count, receipt_count, revision_count;
+	var approval_count, review_count, workflow_count;
 	var checkTasks = function() {
 		$.ajax({url: '../out/out.Tasks.php',
 			type: 'GET',
@@ -1011,11 +1011,13 @@ $(document).ready(function() { /* {{{ */
 			data: {action: 'mytasks'},
 			success: function(data) {
 				if(data) {
-					if(approval_count != data.data.approval.length ||
-						 review_count != data.data.review.length) {
+					if((typeof data.data.approval != 'undefined' && approval_count != data.data.approval.length) ||
+						 (typeof data.data.review != 'undefined' && review_count != data.data.review.length) ||
+						 (typeof data.data.workflow != 'undefined' && workflow_count != data.data.workflow.length)) {
 						$("#menu-tasks > ul > li").html('Loading').hide().load('../out/out.Tasks.php?action=menutasks').fadeIn('500')
-						approval_count = data.data.approval.length;
-						review_count = data.data.review.length;
+						approval_count = typeof data.data.approval != 'undefined' ? data.data.approval.length : 0;
+						review_count = typeof data.data.review != 'undefined' ? data.data.review.length : 0;
+						workflow_count = typeof data.data.workflow != 'undefined' ? data.data.workflow.length : 0;
 					}
 				}
 			},
