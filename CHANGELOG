@@ -13,6 +13,7 @@
 - check if converters are set in out/out.ViewDocument.php at all (Closes #394)
 - do not remove user when transfering objects
 - do not periodically count tasks if task list in menu is turned off
+- use utf8_basename() in op.ImportFS.php
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
