@@ -86,7 +86,7 @@ function import_folder($dirname, $folder) { /* {{{ */
 				}
 				set_time_limit(30);
 			} elseif(is_dir($path)) {
-				$name = basename($path);
+				$name = utf8_basename($path);
 				if($newfolder = $folder->addSubFolder($name, '', $user, $sequence)) {
 					$foldercount++;
 					if(!import_folder($path, $newfolder))
