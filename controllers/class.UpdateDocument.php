@@ -59,7 +59,7 @@ class SeedDMS_Controller_UpdateDocument extends SeedDMS_Controller_Common {
 		$result = $this->callHook('updateDocument');
 		if($result === null) {
 			$filesize = SeedDMS_Core_File::fileSize($userfiletmp);
-			$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $filetype, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
+			$contentResult=$document->addContent($comment, $user, $userfiletmp, utf8_basename($userfilename), $filetype, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
 
 			if ($this->hasParam('expires')) {
 				if($document->setExpires($this->getParam('expires'))) {
