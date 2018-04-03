@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (839)
+//    Translators: Admin (841)
 
 $text = array(
 '2_factor_auth' => '',
@@ -312,6 +312,7 @@ $text = array(
 'documents_to_receipt' => '',
 'documents_to_review' => 'Документы, чакащи Вашата рецензия',
 'documents_to_revise' => '',
+'documents_to_trigger_workflow' => '',
 'documents_user_draft' => '',
 'documents_user_expiration' => '',
 'documents_user_needs_correction' => '',
@@ -418,6 +419,7 @@ $text = array(
 'error_add_aro' => '',
 'error_add_permission' => '',
 'error_cleared_cache' => '',
+'error_extension_getlist' => '',
 'error_importfs' => '',
 'error_no_document_selected' => 'Няма избрани документи',
 'error_no_folder_selected' => 'Няма избрани папки',
@@ -1047,8 +1049,6 @@ $text = array(
 'settings_editOnlineFileTypes_desc' => '',
 'settings_enable2FactorAuthentication' => '',
 'settings_enable2FactorAuthentication_desc' => '',
-'settings_enableAcknowledgeWorkflow' => '',
-'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminReceipt' => '',
 'settings_enableAdminReceipt_desc' => '',
 'settings_enableAdminRevApp' => 'Разреши Admin Rev App',
@@ -1099,6 +1099,8 @@ $text = array(
 'settings_enableOwnerRevApp_desc' => '',
 'settings_enablePasswordForgotten' => 'Включи възстанавяване на парола',
 'settings_enablePasswordForgotten_desc' => 'Ако е включено, разрешава на потребителите да си възстанавяват паролата на email.',
+'settings_enableReceiptWorkflow' => '',
+'settings_enableReceiptWorkflow_desc' => '',
 'settings_enableRecursiveCount' => '',
 'settings_enableRecursiveCount_desc' => '',
 'settings_enableRevisionOnVoteReject' => '',
@@ -1283,9 +1285,11 @@ $text = array(
 'settings_tasksInMenu' => '',
 'settings_tasksInMenu_approval' => '',
 'settings_tasksInMenu_desc' => '',
+'settings_tasksInMenu_needscorrection' => '',
 'settings_tasksInMenu_receipt' => '',
 'settings_tasksInMenu_review' => '',
 'settings_tasksInMenu_revision' => '',
+'settings_tasksInMenu_workflow' => '',
 'settings_theme' => 'Тема по подразбиране',
 'settings_theme_desc' => 'Стил по подразбиране (подпапка в папка "styles")',
 'settings_titleDisplayHack' => 'Подпирачка за заглавия',
@@ -1347,6 +1351,7 @@ $text = array(
 'splash_error_add_to_transmittal' => '',
 'splash_error_rm_download_link' => '',
 'splash_error_send_download_link' => '',
+'splash_extension_getlist' => '',
 'splash_extension_import' => '',
 'splash_extension_refresh' => '',
 'splash_folder_edited' => '',
@@ -1457,12 +1462,12 @@ $text = array(
 'timeline_skip_status_change_3' => '',
 'timeline_skip_status_change_4' => '',
 'timeline_skip_status_change_5' => '',
-'timeline_status_change' => '',
+'timeline_status_change' => 'Версия [version]: [status]',
 'to' => 'към',
 'toggle_manager' => 'Превключи мениджър',
 'toggle_qrcode' => '',
 'to_before_from' => '',
-'transfer_document' => '',
+'transfer_document' => 'Прехвърли документ',
 'transfer_no_read_access' => '',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',
