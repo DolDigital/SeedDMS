@@ -41,15 +41,15 @@ if (!isset($_POST["lognames"]) || !is_array($_POST["lognames"])) {
 
 $lognames = $_POST["lognames"];
 foreach($lognames as $file) {
-	if(!file_exists($settings->_contentDir.$file)) {
+	if(!file_exists($settings->_contentDir.'log/'.$file)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 
-	if (@readlink($settings->_contentDir."current.log")==$settings->_contentDir.$file){
+	if (@readlink($settings->_contentDir."current.log")==$settings->_contentDir.'log/'.$file){
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$file)) {
+	if (!SeedDMS_Core_File::removeFile($settings->_contentDir.'log/'.$file)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 }

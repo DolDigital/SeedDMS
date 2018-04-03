@@ -47,7 +47,7 @@ if(!is_array($_GET["logname"]))
 else
 	$lognames = $_GET["logname"];
 foreach($lognames as $file) {
-	if(!file_exists($settings->_contentDir.$file)) {
+	if(!file_exists($settings->_contentDir.'log/'.$file)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 }

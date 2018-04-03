@@ -42,7 +42,7 @@ else $mode='web';
 if($view) {
 	$view->setParam('logname', $logname);
 	$view->setParam('mode', $mode);
-	$view->setParam('contentdir', $settings->_contentDir);
+	$view->setParam('logdir', $settings->_contentDir.'log/');
 	$view($_GET);
 	exit;
 }
