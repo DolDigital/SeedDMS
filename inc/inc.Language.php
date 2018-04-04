@@ -118,7 +118,7 @@ function getMLText($key, $replace = array(), $defaulttext = null, $lang="") { /*
 	return $tmpText;
 } /* }}} */
 
-function printMLText($key, $replace = array(), $defaulttext = "", $lang="") /* {{{ */
+function printMLText($key, $replace = array(), $defaulttext = null, $lang="") /* {{{ */
 {
 	print getMLText($key, $replace, $defaulttext, $lang);
 }
