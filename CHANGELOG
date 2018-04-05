@@ -220,6 +220,8 @@
 - translation updates
 - search result contains documents without a status log
 - fix setting categories in utils/adddoc.php
+- fetch all records from tblVersion in install/update.php. If not, the database
+  will be locked and e.g. a drop table in the update script will not work 
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36
