@@ -64,7 +64,9 @@ if (!$db) {
 
 $errorMsg = '';
 $res = $db->query('select * from tblVersion');
-if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
+$recs = $res->fetchAll(PDO::FETCH_ASSOC);
+if(!empty($recs)) {
+	$rec = $recs[0];
 	if($_GET['version'] > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 
 		if(file_exists('update-'.$_GET['version'].'/'.$sqlfile)) {
