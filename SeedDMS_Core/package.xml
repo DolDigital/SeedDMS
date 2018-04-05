@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2018-02-14</date>
+ <date>2018-04-05</date>
  <time>09:19:24</time>
  <version>
-  <release>5.1.6</release>
-  <api>5.1.6</api>
+  <release>5.1.7</release>
+  <api>5.1.7</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,9 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add SeedDMS_Core_Folder::getDocumentsMinMax()
-add lots of DocBlocks from merge request #8
-add SeedDMS_Core_AttributeDefinition::removeValue()
+just bump version
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1562,6 +1560,24 @@ returns just users which are not disabled
 - getInstance() returns now null instead of false if the object was not found in the db
 - add new methods SeedDMS_Core_Document::addCategories() and
   SeedDMS_Core_Document::removeCategories()
+   </notes>
+  </release>
+  <release>
+   <date>2018-02-14</date>
+   <time>09:19:24</time>
+   <version>
+    <release>5.1.6</release>
+    <api>5.1.6</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add SeedDMS_Core_Folder::getDocumentsMinMax()
+add lots of DocBlocks from merge request #8
+add SeedDMS_Core_AttributeDefinition::removeValue()
    </notes>
   </release>
  </changelog>
