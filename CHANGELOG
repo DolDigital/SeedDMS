@@ -14,6 +14,7 @@
 - do not remove user when transfering objects
 - do not periodically count tasks if task list in menu is turned off
 - use utf8_basename() in op.ImportFS.php
+- update font-awesome from 3.1.0 to 3.2.1
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.6
