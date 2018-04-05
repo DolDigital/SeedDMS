@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - use cmd timeout when indexing documents (Closes #344)
 - add change password function to rest api (merge from sebbuku)
+- merged changes from 4.3.37
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.13
