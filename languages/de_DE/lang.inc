@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2618), dgrutsch (22)
+//    Translators: Admin (2620), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1145,6 +1145,7 @@ URL: [url]',
 'scheduler_class' => 'Klasse',
 'scheduler_class_description' => 'Beschrebung',
 'scheduler_class_parameter' => 'Parameter',
+'scheduler_class_tasks' => 'Tasks der Klasse',
 'scheduler_task_mgr' => 'Planer',
 'search' => 'Suchen',
 'search_fulltext' => 'Suche im Volltext',
@@ -1673,6 +1674,7 @@ Name: [username]
 'takeOverIndReviewer' => 'Übernehme die Einzelprüfer von der letzten Version.',
 'tasks' => 'Aufgaben',
 'task_description' => 'Beschreibung',
+'task_disabled' => 'Deaktiviert',
 'task_frequency' => 'Häufigkeit',
 'task_last_run' => 'Letzte Ausführung',
 'task_name' => 'Name',

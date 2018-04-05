@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1736), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1738), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1140,6 +1140,7 @@ URL: [url]',
 'scheduler_class' => 'Class',
 'scheduler_class_description' => 'Description',
 'scheduler_class_parameter' => 'Parameter',
+'scheduler_class_tasks' => 'Tasks of class',
 'scheduler_task_mgr' => 'Scheduler',
 'search' => 'Search',
 'search_fulltext' => 'Search in fulltext',
@@ -1668,6 +1669,7 @@ Name: [username]
 'takeOverIndReviewer' => 'Take over individual reviewer from last version.',
 'tasks' => 'Tasks',
 'task_description' => 'Description',
+'task_disabled' => 'Disabled',
 'task_frequency' => 'Frequency',
 'task_last_run' => 'Last run',
 'task_name' => 'Name',
