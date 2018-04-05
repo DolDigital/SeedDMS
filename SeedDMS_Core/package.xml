@@ -15,8 +15,8 @@
  <date>2018-04-05</date>
  <time>09:19:24</time>
  <version>
-  <release>5.1.7</release>
-  <api>5.1.7</api>
+  <release>5.1.8</release>
+  <api>5.1.8</api>
  </version>
  <stability>
   <release>stable</release>
@@ -1578,6 +1578,22 @@ returns just users which are not disabled
 add SeedDMS_Core_Folder::getDocumentsMinMax()
 add lots of DocBlocks from merge request #8
 add SeedDMS_Core_AttributeDefinition::removeValue()
+   </notes>
+  </release>
+  <release>
+   <date>2018-04-05</date>
+   <time>09:19:24</time>
+   <version>
+    <release>5.1.7</release>
+    <api>5.1.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+just bump version
    </notes>
   </release>
  </changelog>
