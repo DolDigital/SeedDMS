@@ -1359,7 +1359,7 @@ $(document).ready(function() {
 		 * $view() after setting the action to 'error'. This would also allow to
 		 * set separate error pages for each view.
 		 */
-		if(!$noexit) {
+		if(!$noexit && isset($_REQUEST['action'])) {
 			if(in_array($_REQUEST['action'], array('js', 'footerjs'))) {
 				exit;
 			}
