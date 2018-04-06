@@ -31,12 +31,18 @@ class SeedDMS_View_Common {
 
 	protected $params;
 
-	function __construct($params, $theme='blue') {
+	protected $baseurl;
+
+	protected $imgpath;
+
+	public function __construct($params, $theme='bootstrap') {
 		$this->theme = $theme;
 		$this->params = $params;
+		$this->baseurl = '';
+		$this->imgpath = '../views/'.$theme.'/images/';
 	}
 
-	function __invoke($get=array()) {
+	public function __invoke($get=array()) {
 		if(isset($get['action']) && $get['action']) {
 			if(method_exists($this, $get['action'])) {
 				$this->{$get['action']}();
@@ -47,26 +53,30 @@ class SeedDMS_View_Common {
 			$this->show();
 	}
 
-	function setParams($params) {
+	public function setParams($params) {
 		$this->params = $params;
 	}
 
-	function setParam($name, $value) {
+	public function setParam($name, $value) {
 		$this->params[$name] = $value;
 	}
 
-	function getParam($name) {
+	public function getParam($name) {
 		if(isset($this->params[$name]))
 			return $this->params[$name];
 		return null;
 	}
 
-	function unsetParam($name) {
+	public function unsetParam($name) {
 		if(isset($this->params[$name]))
 			unset($this->params[$name]);
 	}
 
-	function show() {
+	public function setBaseUrl($baseurl) {
+		$this->baseurl = $baseurl;
+	}
+
+	public function show() {
 	}
 
 	/**
@@ -86,7 +96,7 @@ class SeedDMS_View_Common {
 	 * @return string concatenated string, merged arrays or whatever the hook
 	 * function returns
 	 */
-	function callHook($hook) { /* {{{ */
+	public function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		$ret = null;
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
@@ -142,7 +152,7 @@ class SeedDMS_View_Common {
 	 * @params string $classname name of class (current class if left empty)
 	 * @return array list of hook objects registered for the class
 	 */
-	function getHookObjects($classname='') { /* {{{ */
+	public function getHookObjects($classname='') { /* {{{ */
 		if($classname)
 			$tmp = explode('_', $classname);
 		else
@@ -161,7 +171,7 @@ class SeedDMS_View_Common {
 	 *               true if all hooks succedded,
 	 *               null if no hook was called
 	 */
-	function hasHook($hook) { /* {{{ */
+	public function hasHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
@@ -173,7 +183,7 @@ class SeedDMS_View_Common {
 		return false;
 	} /* }}} */
 
-	function jsTranslations($keys) {
+	public function jsTranslations($keys) {
 		echo "var trans = {\n";
 		foreach($keys as $key) {
 			echo "	'".$key."': '".str_replace("'", "\\\'", getMLText($key))."',\n";

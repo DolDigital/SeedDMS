@@ -21,8 +21,6 @@
 
 
 class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
-	var $imgpath;
-
 	/**
 	 * @var string $extraheader extra html code inserted in the html header
 	 * of the page
@@ -32,9 +30,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	protected $extraheader;
 
 	function __construct($params, $theme='bootstrap') {
-		$this->theme = $theme;
-		$this->params = $params;
-		$this->imgpath = '../views/'.$theme.'/images/';
+		parent::__construct($params, $theme);
 		$this->extraheader = array('js'=>'', 'css'=>'');
 		$this->footerjs = array();
 	}
@@ -80,7 +76,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
 		if($base)
-			echo '<base href="../../">'."\n";
+			echo '<base href="'.$base.'">'."\n";
+		elseif($this->baseurl)
+			echo '<base href="'.$this->baseurl.'">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
