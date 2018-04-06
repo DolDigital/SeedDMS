@@ -32,7 +32,30 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_ErrorDlg extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$pagetitle = $this->params['pagetitle'];
+		$errormsg = $this->params['errormsg'];
+		$plain = $this->params['plain'];
 
+		if(!$plain) {	
+			$this->htmlStartPage($pagetitle);
+			$this->globalNavigation();
+			$this->contentStart();
+		}
+
+		print "<div class=\"alert alert-error\">";
+		print "<h4>".getMLText('error')."!</h4>";
+		print htmlspecialchars($errormsg);
+		print "</div>";
+		print "<div><button class=\"btn history-back\">".getMLText('back')."</button></div>";
+		
+		$this->contentEnd();
+		$this->htmlEndPage();
+		
+		add_log_line(" UI::exitError error=".$errormsg." pagetitle=".$pagetitle, PEAR_LOG_ERR);
+
+		return;
 	} /* }}} */
 }
 ?>

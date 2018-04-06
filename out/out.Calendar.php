@@ -38,7 +38,7 @@ else $end = '';
 if(isset($_GET['documentid']) && $_GET['documentid'] && is_numeric($_GET['documentid'])) {
 	$document = $dms->getDocument($_GET["documentid"]);
 	if (!is_object($document)) {
-		$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+		UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 	}
 } else
 	$document = null;

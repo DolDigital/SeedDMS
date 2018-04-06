@@ -1351,7 +1351,7 @@ $(document).ready(function() {
 		echo "</div>\n";
 	} /* }}} */
 
-	function exitError($pagetitle, $error, $noexit=false, $plain=false) { /* {{{ */
+	function ___exitError($pagetitle, $error, $noexit=false, $plain=false) { /* {{{ */
 
 		/* This is just a hack to prevent creation of js files in an error
 		 * case, because they will contain this error page again. It would be much
@@ -2443,6 +2443,38 @@ mayscript>
 
 	function show(){ /* {{{ */
 		parent::show();
+	} /* }}} */
+
+	function error(){ /* {{{ */
+		parent::error();
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$pagetitle = $this->params['pagetitle'];
+		$errormsg = $this->params['errormsg'];
+		$plain = $this->params['plain'];
+		$noexit = $this->params['noexit'];
+
+		if(!$plain) {	
+			$this->htmlStartPage($pagetitle);
+			$this->globalNavigation();
+			$this->contentStart();
+		}
+
+		print "<div class=\"alert alert-error\">";
+		print "<h4>".getMLText('error')."!</h4>";
+		print htmlspecialchars($errormsg);
+		print "</div>";
+		print "<div><button class=\"btn history-back\">".getMLText('back')."</button></div>";
+		
+		$this->contentEnd();
+		$this->htmlEndPage();
+		
+		add_log_line(" UI::exitError error=".$errormsg." pagetitle=".$pagetitle, PEAR_LOG_ERR);
+
+		if($noexit)
+			return;
+
+		exit;	
 	} /* }}} */
 
 	/**

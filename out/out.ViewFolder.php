@@ -41,7 +41,7 @@ else {
 
 $folder = $dms->getFolder($folderid);
 if (!is_object($folder)) {
-	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))), getMLText("invalid_folder_id"));
 }
 
 if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
