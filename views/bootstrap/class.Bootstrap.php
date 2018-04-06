@@ -1351,10 +1351,30 @@ $(document).ready(function() {
 		echo "</div>\n";
 	} /* }}} */
 
-	function exitError($pagetitle, $error, $noexit=false) { /* {{{ */
-		$this->htmlStartPage($pagetitle);
-		$this->globalNavigation();
-		$this->contentStart();
+	function exitError($pagetitle, $error, $noexit=false, $plain=false) { /* {{{ */
+
+		/* This is just a hack to prevent creation of js files in an error
+		 * case, because they will contain this error page again. It would be much
+		 * better, if there was extra error() function similar to show() and calling
+		 * $view() after setting the action to 'error'. This would also allow to
+		 * set separate error pages for each view.
+		 */
+		if(!$noexit) {
+			if(in_array($_REQUEST['action'], array('js', 'footerjs'))) {
+				exit;
+			}
+
+			if($_REQUEST['action'] == 'webrootjs') {
+				$this->webrootjs();
+				exit;
+			}
+		}
+
+		if(!$plain) {	
+			$this->htmlStartPage($pagetitle);
+			$this->globalNavigation();
+			$this->contentStart();
+		}
 
 		print "<div class=\"alert alert-error\">";
 		print "<h4>".getMLText('error')."!</h4>";
