@@ -82,11 +82,11 @@ function check_queue() {
 					$('#status_'+data.data).html('<?php printMLText('index_error'); ?>');
 					noty({
 						text: data.message,
-						type: (data.success) ? 'success' : 'error',
+						type: 'error',
 						dismissQueue: true,
 						layout: 'topRight',
 						theme: 'defaultTheme',
-						timeout: 1500,
+						timeout: 25000,
 					});
 				}
 			},
