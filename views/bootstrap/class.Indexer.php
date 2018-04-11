@@ -81,7 +81,7 @@ function check_queue() {
 				} else {
 					$('#status_'+data.data).html('<?php printMLText('index_error'); ?>');
 					noty({
-						text: data.message,
+						text: '<p><strong>Docid: ' + data.data + ' (' + data.mimetype + ')</strong></p>' + '<p>Cmd: ' + data.cmd + '</p>' + data.message,
 						type: 'error',
 						dismissQueue: true,
 						layout: 'topRight',

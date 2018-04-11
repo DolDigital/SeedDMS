@@ -30,6 +30,16 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	protected $errormsg;
 
 	/**
+	 * @var string
+	 */
+	protected $mimetype;
+
+	/**
+	 * @var string
+	 */
+	protected $cmd;
+
+	/**
 	 * @param $cmd
 	 * @param int $timeout
 	 * @return string
@@ -88,6 +98,8 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	 */
 	public function __construct($dms, $document, $convcmd=null, $nocontent=false, $timeout=5) { /* {{{ */
 		$this->errormsg = '';
+		$this->cmd = '';
+		$this->mimetype = '';
 		$_convcmd = array(
 			'application/pdf' => 'pdftotext -enc UTF-8 -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
 			'application/postscript' => 'ps2pdf14 %s - | pdftotext -enc UTF-8 -nopgbrk - - | sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
@@ -148,6 +160,7 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 			$path = $dms->contentDir . $version->getPath();
 			$content = '';
 			$mimetype = $version->getMimeType();
+			$this->mimetype = $mimetype;
 			$cmd = '';
 			$mimeparts = explode('/', $mimetype, 2);
 			if(isset($_convcmd[$mimetype])) {
@@ -158,6 +171,7 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 				$cmd = sprintf($_convcmd[$mimetype], $path);
 			}
 			if($cmd) {
+				$this->cmd = $cmd;
 				try {
 					$content = self::execWithTimeout($cmd, $timeout);
 					if($content['stdout']) {
@@ -174,6 +188,14 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 
 	public function getErrorMsg() { /* {{{ */
 		return $this->errormsg;
+	} /* }}} */
+
+	public function getMimeType() { /* {{{ */
+		return $this->mimetype;
+	} /* }}} */
+
+	public function getCmd() { /* {{{ */
+		return $this->cmd;
 	} /* }}} */
 }
 ?>
