@@ -43,7 +43,7 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 		$result = $this->callHook('removeFolder', $folder);
 		if($result === null) {
 			/* Register a callback which removes each document from the fulltext index
-			 * The callback must return true other the removal will be canceled.
+			 * The callback must return null other the removal will be canceled.
 			 */
 			function removeFromIndex($arr, $document) {
 				$index = $arr[0];
@@ -53,7 +53,7 @@ class SeedDMS_Controller_RemoveFolder extends SeedDMS_Controller_Common {
 					$index->delete($hit->id);
 					$index->commit();
 				}
-				return true;
+				return null;
 			}
 			if($index)
 				$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', array($index, $indexconf));
