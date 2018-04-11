@@ -77,7 +77,10 @@ function check_queue() {
 			success: function(data) {
 				// console.log('success ' + data.data);
 				if(data.success) {
-					$('#status_'+data.data).html('<?php printMLText('index_done'); ?>');
+					if(data.cmd)
+						$('#status_'+data.data).html('<?php printMLText('index_done'); ?>');
+					else
+						$('#status_'+data.data).html('<?= getMLText('index_done').' ('.getMLText('index_no_content').')'; ?>');
 				} else {
 					$('#status_'+data.data).html('<?php printMLText('index_error'); ?>');
 					noty({

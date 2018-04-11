@@ -800,9 +800,12 @@ switch($command) {
 										}
 									}
 								}
-								$index->addDocument($idoc);
 								header('Content-Type: application/json');
-								echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID()));
+								if(false === $index->addDocument($idoc)) {
+									echo json_encode(array('success'=>false, 'message'=>getMLText('error_document_indexed'), 'data'=>$document->getID()));
+								} else {
+									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID(), 'cmd'=>$idoc->getCmd()));
+								}
 							} else {
 								header('Content-Type: application/json');
 								echo json_encode(array('success'=>false, 'message'=>$error, 'data'=>$document->getID(), 'mimetype'=>$idoc->getMimeType(), 'cmd'=>$idoc->getCmd()));
