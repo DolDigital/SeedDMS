@@ -543,6 +543,7 @@ $text = array(
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Индекс на директорията',
+'index_no_content' => '',
 'index_pending' => '',
 'index_waiting' => '',
 'individuals' => 'Личности',

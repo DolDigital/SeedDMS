@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1330)
+//    Translators: Admin (1332)
 
 $text = array(
 '2_factor_auth' => '',
@@ -626,6 +626,7 @@ URL: [url]',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Каталог індексу',
+'index_no_content' => '',
 'index_pending' => '',
 'index_waiting' => '',
 'individuals' => 'Користувачі',
@@ -706,7 +707,7 @@ URL: [url]',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Для завантаження файлів, які перевищують обмеження розміру, використовуйте <a href="%s">інший метод</a>.',
 'link_to_version' => '',
-'list_access_rights' => '',
+'list_access_rights' => 'Повний список прав...',
 'list_contains_no_access_docs' => '',
 'list_hooks' => '',
 'list_tasks' => '',
@@ -1662,7 +1663,7 @@ URL: [url]',
 'transfer_no_write_access' => '',
 'transfer_objects' => '',
 'transfer_objects_to_user' => '',
-'transfer_to_user' => '',
+'transfer_to_user' => 'Передати користувачу',
 'transition_triggered_email' => 'Змінено стан процесу',
 'transition_triggered_email_body' => 'Змінено стан процесу
 Документ: [name]
