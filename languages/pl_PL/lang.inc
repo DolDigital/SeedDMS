@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (791), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (796), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -614,8 +614,9 @@ URL: [url]',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Indeksuj folder',
+'index_no_content' => '',
 'index_pending' => '',
-'index_waiting' => '',
+'index_waiting' => 'Oczekiwanie',
 'individuals' => 'Indywidualni',
 'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
@@ -879,7 +880,7 @@ Jeśli nadal będą problemy z zalogowaniem, prosimy o kontakt z administratorem
 'password_strength' => 'Siła hasła',
 'password_strength_insuffient' => 'Niewystarczająca siła hasła',
 'password_wrong' => 'Złe hasło',
-'pdf_converters' => '',
+'pdf_converters' => 'Konwertery PDF',
 'pending_approvals' => '',
 'pending_receipt' => '',
 'pending_reviews' => '',
@@ -1171,9 +1172,9 @@ URL: [url]',
 'settings_defaultAccessDocs_desc' => '',
 'settings_defaultDocPosition' => '',
 'settings_defaultDocPosition_desc' => '',
-'settings_defaultDocPosition_val_end' => '',
-'settings_defaultDocPosition_val_start' => '',
-'settings_defaultSearchMethod' => '',
+'settings_defaultDocPosition_val_end' => 'koniec',
+'settings_defaultDocPosition_val_start' => 'początek',
+'settings_defaultSearchMethod' => 'Domyślna metoda wyszukiwania',
 'settings_defaultSearchMethod_desc' => '',
 'settings_defaultSearchMethod_valdatabase' => 'baza danych',
 'settings_defaultSearchMethod_valfulltext' => 'pewłnotekstowe',
