@@ -91,7 +91,14 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function log_options($methode, $options) { /* {{{ */
 		if($this->logger) {
-			$this->logger->log($methode.': '.$options['path'], PEAR_LOG_INFO);
+			switch($methode) {
+			case 'MOVE':
+				$msg = $methode.': '.$options['path'].' -> '.$options['dest'];
+				break;
+			default:
+				$msg = $methode.': '.$options['path'];
+			}
+			$this->logger->log($msg, PEAR_LOG_INFO);
 			foreach($options as $key=>$option) {
 				if(is_array($option)) {
 					$this->logger->log($methode.': '.$key.'='.var_export($option, true), PEAR_LOG_DEBUG);
@@ -613,7 +620,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 					if($this->user->getID() == $lc->getUser()->getID() &&
 						 $name == $lc->getOriginalFileName() &&
 						 $fileType == $lc->getFileType() &&
-						 $mimetype == $lc->getMimeType()) {
+						 $mimetype == $lc->getMimeType() &&
+						 $settings->_enableWebdavReplaceDoc) {
 						if($this->logger)
 							$this->logger->log('PUT: replacing latest version', PEAR_LOG_INFO);
 						if(!$document->replaceContent($lc->getVersion(), $this->user, $tmpFile, $name, $fileType, $mimetype)) {
