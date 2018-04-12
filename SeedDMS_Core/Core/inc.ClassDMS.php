@@ -1677,13 +1677,17 @@ class SeedDMS_Core_DMS {
 
 						// Send the complete search query to the database.
 						$resArr = $this->db->getResultArray($searchQuery);
+						if($resArr === false)
+							return false;
 					} else {
 						$resArr = array();
 					}
 				} else {
 					// Send the complete search query to the database.
 					$resArr = $this->db->getResultArray($searchQuery);
-				}
+					if($resArr === false)
+						return false;
+					}
 
 				// ------------------- Ausgabe der Ergebnisse ----------------------------
 				$numResults = count($resArr);
