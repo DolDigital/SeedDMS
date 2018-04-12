@@ -30,6 +30,20 @@ class SeedDMS_Version {
 		return $this->_number;
 	}
 
+	function majorVersion() {
+		$tmp = explode('.', $this->_number, 3);
+		return (int) $tmp[0];
+	}
+
+	function minorVersion() {
+		$tmp = explode('.', $this->_number, 3);
+		return (int) $tmp[1];
+	}
+
+	function subminorVersion() {
+		$tmp = explode('.', $this->_number, 3);
+		return (int) $tmp[2];
+	}
 	function banner() {
 		return $this->_string .", ". $this->_number;
 	}
