@@ -103,6 +103,9 @@ if ($action == "saveSettings")
   $settings->_sortFoldersDefault = $_POST["sortFoldersDefault"];
   $settings->_defaultDocPosition = $_POST["defaultDocPosition"];
 
+  // SETTINGS - SITE - WEBDAV
+	$settings->_enableWebdavReplaceDoc = getBoolValue("enableWebdavReplaceDoc");
+
   // SETTINGS - SITE - CALENDAR
   $settings->_enableCalendar = getBoolValue("enableCalendar");
   $settings->_calendarDefaultView = $_POST["calendarDefaultView"];

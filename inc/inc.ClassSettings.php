@@ -176,6 +176,8 @@ class Settings { /* {{{ */
 	var $_maxUploadSize = 0;
 	// enable/disable users images
 	var $_enableUserImage = false;
+	// enable/disable replacing documents by webdav
+	var $_enableWebdavReplaceDoc = true;
 	// enable/disable calendar
 	var $_enableCalendar = true;
 	// calendar default view ("w" for week,"m" for month,"y" for year)
@@ -464,6 +466,13 @@ class Settings { /* {{{ */
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
 		$this->_defaultDocPosition = strval($tab["defaultDocPosition"]);
+
+		// XML Path: /configuration/site/calendar
+		$node = $xml->xpath('/configuration/site/webdav');
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableWebdavReplaceDoc = Settings::boolVal($tab["enableWebdavReplaceDoc"]);
+		}
 
 		// XML Path: /configuration/site/calendar
 		$node = $xml->xpath('/configuration/site/calendar');
@@ -785,6 +794,10 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
     $this->setXMLAttributValue($node, "sortFoldersDefault", $this->_sortFoldersDefault);
     $this->setXMLAttributValue($node, "defaultDocPosition", $this->_defaultDocPosition);
+
+    // XML Path: /configuration/site/calendar
+    $node = $this->getXMLNode($xml, '/configuration/site', 'webdav');
+		$this->setXMLAttributValue($node, "enableWebdavReplaceDoc", $this->_enableWebdavReplaceDoc);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');

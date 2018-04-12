@@ -71,6 +71,9 @@
       calendarDefaultView = "y"
       firstDayOfWeek = "0"
     />
+    <webdav
+      enableWebdavReplaceDoc="true"
+    />
   </site>
   <system>
     <!--

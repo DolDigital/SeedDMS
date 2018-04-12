@@ -362,6 +362,15 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
 
       <!--
+        -- SETTINGS - SITE - WEBDAV
+      -->
+		 <tr><td></td></tr><tr ><td><b> <?php printMLText("settings_webdav");?></b></td> </tr>
+      <tr title="<?php printMLText("settings_enableWebdavReplaceDoc_desc");?>">
+        <td><?php printMLText("settings_enableWebdavReplaceDoc");?>:</td>
+        <td><input name="enableWebdavReplaceDoc" type="checkbox" <?php if ($settings->_enableWebdavReplaceDoc) echo "checked" ?> /></td>
+      </tr>
+
+      <!--
         -- SETTINGS - SITE - CALENDAR
       -->
      <tr><td></td></tr><tr ><td><b> <?php printMLText("settings_Calendar");?></b></td> </tr>
