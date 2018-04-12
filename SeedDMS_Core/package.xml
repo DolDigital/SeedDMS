@@ -24,7 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-just bump version
+SeedDMS_Core_DMS::search() returns false in case of an error
+do not use views in DBAccessPDO by default anymore, use temp. tables
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
