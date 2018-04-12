@@ -205,7 +205,7 @@ class SeedDMS_Core_DatabaseAccess {
 		$this->_ttapproveid = false;
 		$this->_ttstatid = false;
 		$this->_ttcontentid = false;
-		$this->_useviews = true;
+		$this->_useviews = false;
 		$this->_debug = false;
 	} /* }}} */
 
