@@ -2,6 +2,7 @@
                      Changes in version 5.1.8
 --------------------------------------------------------------------------------
 - fix javascript errors when an error page was shown
+- add new extraTabs in ViewDocument for adding more tabs
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.7
