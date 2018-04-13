@@ -513,6 +513,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		  <li class="<?php if($currenttab == 'attachments') echo 'active'; ?>"><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
 			<li class="<?php if($currenttab == 'links') echo 'active'; ?>"><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links) || count($reverselinks)) ? " (".count($links)."/".count($reverselinks).")" : ""; ?></a></li>
+<?php
+			$tabs = $this->callHook('extraTabs', $document);
+			if($tabs) {
+				foreach($tabs as $tabid=>$tab) {
+					echo '<li class="'.($currenttab == $tabid ? 'active' : '').'"><a data-target="#'.$tabid.'" data-toggle="tab">'.$tab['title'].'</a></li>';
+				}
+			}
+?>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'docinfo') echo 'active'; ?>" id="docinfo">
@@ -1429,6 +1437,15 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 			</div>
+<?php
+			if($tabs) {
+				foreach($tabs as $tabid=>$tab) {
+					echo '<div class="tab-pane '.($currenttab == $tabid ? 'active' : '').'" id="'.$tabid.'">';
+					echo $tab['content'];
+					echo "</div>\n";
+				}
+			}
+?>
 		</div>
 <?php
 		if($user->isAdmin()) {
