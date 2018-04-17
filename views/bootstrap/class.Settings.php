@@ -331,8 +331,9 @@ if(!is_writeable($settings->_configFilePath)) {
 
      <!--
         -- SETTINGS - SYSTEM - SMTP
-      -->
-<?php $this->showConfigHeadline('settings_SMTP'); ?>
+			-->
+<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
+<?php //$this->showConfigHeadline('settings_SMTP'); ?>
 <?php $this->showConfigText('settings_smtpServer', 'smtpServer'); ?>
 <?php $this->showConfigText('settings_smtpPort', 'smtpPort'); ?>
 <?php $this->showConfigText('settings_smtpSendFrom', 'smtpSendFrom'); ?>
