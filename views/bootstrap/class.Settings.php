@@ -31,9 +31,26 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 
-	protected function showTextField($name, $value, $type='', $placeholder='') { /* {{{ */
+	protected function showPaneHeader($name, $title, $isactive) { /* {{{ */
+		echo '<li class="'.($isactive ? 'active' : '').'"><a data-target="#'.$name.'" data-toggle="tab">'.$title.'</a></li>'."\n";
+	} /* }}} */
+
+	protected function showStartPaneContent($name, $isactive) { /* {{{ */
+		echo '<div class="tab-pane'.($isactive ? ' active' : '').'" id="'.$name.'">';
+		$this->contentContainerStart();
+		echo '<table class="table-condensed">';
+	} /* }}} */
+
+	protected function showEndPaneContent($name, $currentab) { /* {{{ */
+    echo '</table>';
+		$this->contentContainerEnd();
+		echo '</div>';
+	} /* }}} */
+
+	protected function getTextField($name, $value, $type='', $placeholder='') { /* {{{ */
+		$html = '';
 		if($type != 'password' && strlen($value) > 80)
-			echo '<textarea class="input-xxlarge" name="'.$name.'">'.$value.'</textarea>';
+			$html .= '<textarea class="input-xxlarge" name="'.$name.'">'.$value.'</textarea>';
 		else {
 			if(strlen($value) > 40)
 				$class = 'input-xxlarge';
@@ -45,8 +62,13 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 				$class = 'input-medium';
 			else
 				$class = 'input-small';
-			echo '<input '.($type=='password' ? 'type="password"' : 'type="text"').'" class="'.$class.'" name="'.$name.'" value="'.$value.'" placeholder="'.$placeholder.'"/>';
+			$html .= '<input '.($type=='password' ? 'type="password"' : 'type="text"').'" class="'.$class.'" name="'.$name.'" value="'.$value.'" placeholder="'.$placeholder.'"/>';
 		}
+		return $html;
+	} /* }}} */
+
+	protected function showTextField($name, $value, $type='', $placeholder='') { /* {{{ */
+		echo $this->getTextField($name, $value, $type, $placeholder);
 	} /* }}} */
 
 	/**
@@ -74,13 +96,37 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 	 *
 	 * @param string $title title of the option
 	 * @param string $name name of html input field
+	 * @param string $type can be 'password', 'array'
+	 * @param string $placeholder placeholder for input field
 	 */
-	protected function showConfigText($title, $name) { /* {{{ */
+	protected function showConfigText($title, $name, $type='', $placeholder='') { /* {{{ */
 		$settings = $this->params['settings'];
 ?>
       <tr title="<?= getMLText($title."_desc") ?>">
-        <td><?= getMLText($title) ?>:</td>
-				<td><?php $this->showTextField($name, $settings->{"_".$name}); ?></td>
+				<td><?= getMLText($title) ?>:</td>
+<?php
+		if($type == 'array')
+			$value = $settings->arrayToString($settings->{"_".$name});
+		else
+			$value = $settings->{"_".$name};
+?>
+				<td><?php $this->showTextField($name, $value, ($type=='password' ? 'password' : ''), $placeholder); ?></td>
+			</tr>
+<?php
+	} /* }}} */
+
+	/**
+	 * Show a configuration option with arbitrary html content
+	 *
+	 * @param string $title title of the option
+	 * @param string $rawdata html data
+	 */
+	protected function showConfigPlain($title, $title_desc, $rawdata) { /* {{{ */
+		$settings = $this->params['settings'];
+?>
+      <tr title="<?= $title_desc ?>">
+				<td><?= $title ?>:</td>
+				<td><?= $rawdata ?></td>
 			</tr>
 <?php
 	} /* }}} */
@@ -186,16 +232,16 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
 
   <ul class="nav nav-tabs" id="settingstab">
-		<li class="<?php if(!$currenttab || $currenttab == 'site') echo 'active'; ?>"><a data-target="#site" data-toggle="tab"><?php printMLText('settings_Site'); ?></a></li>
-	  <li class="<?php if($currenttab == 'system') echo 'active'; ?>"><a data-target="#system" data-toggle="tab"><?php printMLText('settings_System'); ?></a></li>
-	  <li class="<?php if($currenttab == 'advanced') echo 'active'; ?>"><a data-target="#advanced" data-toggle="tab"><?php printMLText('settings_Advanced'); ?></a></li>
-	  <li class="<?php if($currenttab == 'extensions') echo 'active'; ?>"><a data-target="#extensions" data-toggle="tab"><?php printMLText('settings_Extensions'); ?></a></li>
+<?php $this->showPaneHeader('site', getMLText('settings_Site'), (!$currenttab || $currenttab == 'site')); ?>
+<?php $this->showPaneHeader('system', getMLText('settings_System'), ($currenttab == 'system')); ?>
+<?php $this->showPaneHeader('advanced', getMLText('settings_Advanced'), ($currenttab == 'advanced')); ?>
+<?php $this->showPaneHeader('extensions', getMLText('settings_Extensions'), ($currenttab == 'extensions')); ?>
 	</ul>
 
 	<div class="tab-content">
-	  <div class="tab-pane <?php if(!$currenttab || $currenttab == 'site') echo 'active'; ?>" id="site">
-<?php		$this->contentContainerStart(); ?>
-    <table class="table-condensed">
+<?php
+$this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
+?>
       <!--
         -- SETTINGS - SITE - DISPLAY
 			-->
@@ -220,14 +266,8 @@ if(!is_writeable($settings->_configFilePath)) {
       -->
 <?php $this->showConfigHeadline('settings_Edition'); ?>
 <?php $this->showConfigCheckbox('settings_strictFormCheck', 'strictFormCheck'); ?>
-      <tr title="<?php printMLText("settings_viewOnlineFileTypes_desc");?>">
-        <td><?php printMLText("settings_viewOnlineFileTypes");?>:</td>
-				<td><?php $this->showTextField("viewOnlineFileTypes", $settings->getViewOnlineFileTypesToString()); ?></td>
-      </tr>
-      <tr title="<?php printMLText("settings_editOnlineFileTypes_desc");?>">
-        <td><?php printMLText("settings_editOnlineFileTypes");?>:</td>
-				<td><?php $this->showTextField("editOnlineFileTypes", $settings->getEditOnlineFileTypesToString()); ?></td>
-      </tr>
+<?php $this->showConfigText('settings_viewOnlineFileTypes', 'viewOnlineFileTypes', 'array'); ?>
+<?php $this->showConfigText('settings_editOnlineFileTypes', 'editOnlineFileTypes', 'array'); ?>
 <?php $this->showConfigCheckbox('settings_enableConverting', 'enableConverting'); ?>
 <?php $this->showConfigCheckbox('settings_enableEmail', 'enableEmail'); ?>
 <?php $this->showConfigCheckbox('settings_enableUsersView', 'enableUsersView'); ?>
@@ -267,13 +307,11 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php $this->showConfigCheckbox('settings_enableCalendar', 'enableCalendar'); ?>
 <?php $this->showConfigOption('settings_calendarDefaultView', 'calendarDefaultView', array('w'=>'week_view', 'm'=>'month_view', 'y'=>'year_view'), false, true); ?>
 <?php $this->showConfigOption('settings_firstDayOfWeek', 'firstDayOfWeek', array(' 0'=>'sunday', ' 1'=>'monday', ' 2'=>'tuesday', ' 3'=>'wednesday', ' 4'=>'thursday', ' 5'=>'friday', ' 6'=>'saturday'), false, true); ?>
-    </table>
-<?php		$this->contentContainerEnd(); ?>
-  </div>
+<?php
+	$this->showEndPaneContent('site', $currenttab);
 
-	  <div class="tab-pane <?php if($currenttab == 'system') echo 'active'; ?>" id="system">
-<?php		$this->contentContainerStart(); ?>
-    <table class="table-condensed">
+	$this->showStartPaneContent('system', $currenttab == 'system');
+?>
      <!--
         -- SETTINGS - SYSTEM - SERVER
       -->
@@ -324,32 +362,23 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php $this->showConfigText('settings_dbHostname', 'dbHostname'); ?>
 <?php $this->showConfigText('settings_dbDatabase', 'dbDatabase'); ?>
 <?php $this->showConfigText('settings_dbUser', 'dbUser'); ?>
-      <tr title="<?php printMLText("settings_dbPass_desc");?>">
-        <td><?php printMLText("settings_dbPass");?>:</td>
-        <td><?php $this->showTextField("dbPass", $settings->_dbPass, 'password'); ?></td>
-      </tr>
+<?php $this->showConfigText('settings_dbPass', 'dbPass', 'password'); ?>
 
      <!--
         -- SETTINGS - SYSTEM - SMTP
 			-->
-<tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail"><?php printMLText('send_test_mail'); ?></a></td> </tr>
-<?php //$this->showConfigHeadline('settings_SMTP'); ?>
+<?php $this->showConfigHeadline('settings_SMTP'); ?>
 <?php $this->showConfigText('settings_smtpServer', 'smtpServer'); ?>
 <?php $this->showConfigText('settings_smtpPort', 'smtpPort'); ?>
 <?php $this->showConfigText('settings_smtpSendFrom', 'smtpSendFrom'); ?>
 <?php $this->showConfigText('settings_smtpUser', 'smtpUser'); ?>
-      <tr title="<?php printMLText("settings_smtpPassword_desc");?>">
-        <td><?php printMLText("settings_smtpPassword");?>:</td>
-        <td><input type="password" name="smtpPassword" value="<?php echo $settings->_smtpPassword ?>" /></td>
-      </tr>
+<?php $this->showConfigText('settings_smtpPassword', 'smtpPassword', 'password'); ?>
+<?php $this->showConfigPlain(htmlspecialchars(getMLText('settings_smtpSendTestMail')), htmlspecialchars(getMLText('settings_smtpSendTestMail_desc')), '<a class="btn sendtestmail">'.getMLText('send_test_mail').'</a>'); ?>
+<?php
+	$this->showEndPaneContent('system', $currenttab);
 
-    </table>
-<?php		$this->contentContainerEnd(); ?>
-  </div>
-
-	  <div class="tab-pane <?php if($currenttab == 'advanced') echo 'active'; ?>" id="advanced">
-<?php		$this->contentContainerStart(); ?>
-    <table class="table-condensed">
+	$this->showStartPaneContent('advanced', $currenttab == 'advanced');
+?>
       <!--
         -- SETTINGS - ADVANCED - DISPLAY
       -->
@@ -410,29 +439,15 @@ if(!is_writeable($settings->_configFilePath)) {
 		$this->showConfigHeadline($target."_converters");
 		if(!empty($settings->_converters[$target])) {
 			foreach($settings->_converters[$target] as $mimetype=>$cmd) {
-?>
-      <tr title="<?php echo $mimetype;?>">
-        <td><?php echo $mimetype;?>:</td>
-        <td><?php $this->showTextField("converters[".$target."][".$mimetype."]", htmlspecialchars($cmd)); ?></td>
-      </tr>
-<?php
+				$this->showConfigPlain(htmlspecialchars($mimetype), htmlspecialchars($mimetype), $this->getTextField("converters[".$target."][".$mimetype."]", htmlspecialchars($cmd)));
 			}
 		}
-?>
-      <tr title="">
-        <td><?php $this->showTextField("converters[".$target."][newmimetype]", "", '', getMLText('converter_new_mimetype')); ?>:</td>
-        <td><?php $this->showTextField("converters[".$target."][newcmd]", "", "", getMLText('converter_new_cmd')); ?></td>
-      </tr>
-<?php
+		$this->showConfigPlain($this->getTextField("converters[".$target."][newmimetype]", "", '', getMLText('converter_new_mimetype')), '', $this->getTextField("converters[".$target."][newcmd]", "", "", getMLText('converter_new_cmd')));
 	}
-?>
-    </table>
-<?php		$this->contentContainerEnd(); ?>
-  </div>
+	$this->showEndPaneContent('advanced', $currenttab);
 
-  <div class="tab-pane <?php if($currenttab == 'extensions') echo 'active'; ?>" id="extensions">
-<?php		$this->contentContainerStart(); ?>
-    <table class="table-condensed">
+	$this->showStartPaneContent('extensions', $currenttab == 'extensions');
+?>
       <!--
         -- SETTINGS - ADVANCED - DISPLAY
       -->
@@ -440,10 +455,7 @@ if(!is_writeable($settings->_configFilePath)) {
 	foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 		$this->showRawConfigHeadline("<a name=\"".$extname."\"></a>".$extconf['title']);
 		foreach($extconf['config'] as $confkey=>$conf) {
-?>
-      <tr title="<?php echo isset($conf['help']) ? $conf['help'] : '';?>">
-        <td><?php echo $conf['title'];?>:</td><td>
-<?php
+						ob_start();
 						switch($conf['type']) {
 							case 'checkbox':
 ?>
@@ -530,21 +542,13 @@ if(!is_writeable($settings->_configFilePath)) {
 								break;
 							default:
 								$this->showTextField("extensions[".$extname."][".$confkey."]", isset($settings->_extensions[$extname][$confkey]) ? $settings->_extensions[$extname][$confkey] : '', '', '');
-								/*
-?>
-        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" <?php echo isset($conf['size']) ? 'size="'.$conf['size'].'"' : ""; ?>" />
-<?php
-*/
 						}
-?>
-      </td></tr>
-<?php
+						$html = ob_get_clean();
+			$this->showConfigPlain($conf['title'], isset($conf['help']) ? $conf['help'] : '', $html);
 					}
 				}
+	$this->showEndPaneContent('extensions', $currenttab);
 ?>
-		</table>
-<?php		$this->contentContainerEnd(); ?>
-  </div>
   </div>
 <?php
 if(is_writeable($settings->_configFilePath)) {
