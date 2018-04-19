@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1739), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1744), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -1358,6 +1358,8 @@ Name: [username]
 'settings_enableVersionDeletion_desc' => 'Enable/disable deletion of previous document versions by regular users. Admin may always delete old versions.',
 'settings_enableVersionModification' => 'Enable modification of versions',
 'settings_enableVersionModification_desc' => 'Enable/disable modification of a document versions by regular users after a version was uploaded. Admin may always modify the version after upload.',
+'settings_enableWebdavReplaceDoc' => 'Replace document when saving',
+'settings_enableWebdavReplaceDoc_desc' => 'If enabled, saving a new version of a document will replace the old document instead of creating a new version. This will only apply if the user, mimetype and filename are equal to the last version. This can be usefull when applications are auto saving a document in fixed intervals.',
 'settings_encryptionKey' => 'Encryption key',
 'settings_encryptionKey_desc' => 'This string is used for creating a unique identifier being added as a hidden field to a form in order to prevent CSRF attacks.',
 'settings_error' => 'Error',
@@ -1491,6 +1493,8 @@ Name: [username]
 'settings_smtpPort_desc' => 'SMTP Server port, default 25',
 'settings_smtpSendFrom' => 'Send from',
 'settings_smtpSendFrom_desc' => 'Send from',
+'settings_smtpSendTestMail' => 'Send test mail',
+'settings_smtpSendTestMail_desc' => 'Sends a test mail, for checking the current email configuration.',
 'settings_smtpServer' => 'SMTP Server hostname',
 'settings_smtpServer_desc' => 'SMTP Server hostname',
 'settings_smtpUser' => 'SMTP Server user',
@@ -1536,6 +1540,7 @@ Name: [username]
 'settings_versiontolow' => 'Version to low',
 'settings_viewOnlineFileTypes' => 'View Online File Types',
 'settings_viewOnlineFileTypes_desc' => 'Files with one of the following endings can be viewed online (USE ONLY LOWER CASE CHARACTERS)',
+'settings_webdav' => 'WebDAV',
 'settings_workflowMode' => 'Workflow mode',
 'settings_workflowMode_desc' => 'The advanced workflow allows to specify your own release workflow for document versions.',
 'settings_workflowMode_valadvanced' => 'advanced',
