@@ -453,6 +453,7 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
       -->
 <?php
 	foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
+		if($extconf['config']) {
 		$this->showRawConfigHeadline("<a name=\"".$extname."\"></a>".$extconf['title']);
 		foreach($extconf['config'] as $confkey=>$conf) {
 						ob_start();
@@ -546,7 +547,8 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 						$html = ob_get_clean();
 			$this->showConfigPlain($conf['title'], isset($conf['help']) ? $conf['help'] : '', $html);
 					}
-				}
+		}
+	}
 	$this->showEndPaneContent('extensions', $currenttab);
 ?>
   </div>
