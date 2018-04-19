@@ -36,19 +36,19 @@ class SeedDMS_NotificationService {
 
 	public function toIndividual($sender, $recipient, $subject, $message, $params=array()) {
 		foreach($this->services as $service) {
-			$service->toIndividual($sender, $recipient, $subject, $message, $params);
+			return $service->toIndividual($sender, $recipient, $subject, $message, $params);
 		}
 	}
 
 	public function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) {
 		foreach($this->services as $service) {
-			$service->toGroup($sender, $groupRecipient, $subject, $message, $params);
+			return $service->toGroup($sender, $groupRecipient, $subject, $message, $params);
 		}
 	}
 
 	public function toList($sender, $recipients, $subject, $message, $params=array()) {
 		foreach($this->services as $service) {
-			$service->toList($sender, $recipients, $subject, $message, $params);
+			return $service->toList($sender, $recipients, $subject, $message, $params);
 		}
 	}
 
