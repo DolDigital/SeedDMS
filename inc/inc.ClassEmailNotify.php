@@ -141,7 +141,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
 				(!is_object($groupRecipient) || strcasecmp(get_class($groupRecipient), $this->_dms->getClassname('group')))) {
-			return -1;
+			return false;
 		}
 
 		foreach ($groupRecipient->getUsers() as $recipient) {
@@ -154,7 +154,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	function toList($sender, $recipients, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
 				(!is_array($recipients) && count($recipients)==0)) {
-			return -1;
+			return false;
 		}
 
 		foreach ($recipients as $recipient) {
