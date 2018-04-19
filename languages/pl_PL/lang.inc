@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (796), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (797), netixw (84), romi (93), uGn (112)
 
 $text = array(
 '2_factor_auth' => '',
@@ -843,7 +843,7 @@ URL: [url]',
 'only_jpg_user_images' => 'Wyłącznie pliki typu .jpg mogą być użyte jako obrazy użytkowników',
 'order_by_sequence_off' => '',
 'original_filename' => 'Oryginalna nazwa pliku',
-'overall_indexing_progress' => '',
+'overall_indexing_progress' => 'Całkowity postęp indeksowania',
 'owner' => 'Właściciel',
 'ownership_changed_email' => 'Właściciel zmieniony',
 'ownership_changed_email_body' => 'Zmiana właściciela
@@ -1268,6 +1268,8 @@ URL: [url]',
 'settings_enableVersionDeletion_desc' => 'Włącz/Wyłącz możliwość kasowania poprzednich wersji plików przez zwykłych użytkowników. Administrator może w każdej chwili usunąć stare wersjie.',
 'settings_enableVersionModification' => 'Zezwól na modyfikowanie wersji',
 'settings_enableVersionModification_desc' => 'Włącz/Wyłącz możliwość modyfikacji wersji dokumentów przez zwykłych użytkowników po wczytaniu pliku. Administrator może w każdej chwili zmienić wersję wczytanego pliku.',
+'settings_enableWebdavReplaceDoc' => '',
+'settings_enableWebdavReplaceDoc_desc' => '',
 'settings_encryptionKey' => 'Klucz szyfrujący',
 'settings_encryptionKey_desc' => 'Ten ciąg znaków jest używany do tworzenia unikatowego identyfikatora dodawanego jako ukryte pole do formularza aby zapobiec atakom CSRF.',
 'settings_error' => 'Błąd',
@@ -1401,6 +1403,8 @@ URL: [url]',
 'settings_smtpPort_desc' => 'Port serwera SMTP, domyślnie 25',
 'settings_smtpSendFrom' => 'Wyślij od',
 'settings_smtpSendFrom_desc' => 'Wyślij od',
+'settings_smtpSendTestMail' => '',
+'settings_smtpSendTestMail_desc' => '',
 'settings_smtpServer' => 'Nazwa serwera SMTP',
 'settings_smtpServer_desc' => 'Nazwa hosta serwera SMTP',
 'settings_smtpUser' => 'Użytkownik SMTP',
@@ -1446,6 +1450,7 @@ URL: [url]',
 'settings_versiontolow' => 'Za niska wersja',
 'settings_viewOnlineFileTypes' => 'Typy plików widoczne online',
 'settings_viewOnlineFileTypes_desc' => 'Pliki z jednym z następujących rozszerzeń mogą być widoczne online (UŻYWAJ WYŁĄCZNIE MAŁYCH LITER)',
+'settings_webdav' => '',
 'settings_workflowMode' => 'Tryb procesu',
 'settings_workflowMode_desc' => 'Zaawansowany proces pozwala określić własne release procesu zwalniający dla wersji dokumentu.',
 'settings_workflowMode_valadvanced' => 'zaawansowane',

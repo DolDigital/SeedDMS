@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1085), jeromerobert (50), lonnnew (9), Oudiceval (687)
+//    Translators: Admin (1086), jeromerobert (50), lonnnew (9), Oudiceval (687)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -538,7 +538,7 @@ URL : [url]',
 'export' => '',
 'extension_archive' => 'Extension',
 'extension_changelog' => 'Journal des modifications',
-'extension_loading' => '',
+'extension_loading' => 'Chargement des extensions',
 'extension_manager' => 'Gestionnaire d\'extensions',
 'extension_mgr_installed' => 'Installées',
 'extension_mgr_no_upload' => 'L’ajout de nouvelles extensions n’est pas possible car le répertoire des extensions n’est pas accessible en écriture.',
@@ -1342,6 +1342,8 @@ Nom : [username]
 'settings_enableVersionDeletion_desc' => 'Active/désactive la suppression des versions antérieures de documents par les utilisateurs normaux. L’administrateur peut toujours supprimer les anciennes versions.',
 'settings_enableVersionModification' => 'Modification des versions',
 'settings_enableVersionModification_desc' => 'Active/désactive la modification de version d’un document par les utilisateurs normaux après le dépôt. L’administrateur peut toujours modifier la version après le dépôt.',
+'settings_enableWebdavReplaceDoc' => '',
+'settings_enableWebdavReplaceDoc_desc' => '',
 'settings_encryptionKey' => 'Clé de cryptage',
 'settings_encryptionKey_desc' => 'Cette chaîne est utilisée pour créer un identifiant unique étant ajouté comme champ masqué à un formulaire afin de prévenir des attaques CSRF.',
 'settings_error' => 'Erreur',
@@ -1475,6 +1477,8 @@ Nom : [username]
 'settings_smtpPort_desc' => 'Port serveur SMTP, par défaut 25',
 'settings_smtpSendFrom' => 'Envoyé par',
 'settings_smtpSendFrom_desc' => 'Envoyé par',
+'settings_smtpSendTestMail' => '',
+'settings_smtpSendTestMail_desc' => '',
 'settings_smtpServer' => 'Nom du serveur SMTP',
 'settings_smtpServer_desc' => 'Nom du serveur SMTP',
 'settings_smtpUser' => 'Utilisateur pour le serveur SMTP',
@@ -1520,6 +1524,7 @@ Nom : [username]
 'settings_versiontolow' => '',
 'settings_viewOnlineFileTypes' => 'Aperçu en ligne des fichiers',
 'settings_viewOnlineFileTypes_desc' => 'Extensions des fichiers pouvant être visionnés en ligne (en lettres minuscules uniquement).',
+'settings_webdav' => '',
 'settings_workflowMode' => 'Mode workflow',
 'settings_workflowMode_desc' => 'Le workflow avancé permet de définir son propre workflow de parution pour les versions de documents.',
 'settings_workflowMode_valadvanced' => 'avancé',
