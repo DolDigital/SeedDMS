@@ -72,7 +72,7 @@ elseif ($action == "refresh") { /* {{{ */
 	header("Location:../out/out.ExtensionMgr.php?currenttab=".$currenttab);
 } /* }}} */
 elseif ($action == "upload") { /* {{{ */
-	if(!$extmgr->isWritableExtDir()) {
+	if(!$extMgr->isWritableExtDir()) {
 		UI::exitError(getMLText("admin_tools"),getMLText("extension_mgr_no_upload"));
 	}
 	if($_FILES['userfile']['error']) {
