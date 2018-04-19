@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2621), dgrutsch (22)
+//    Translators: Admin (2628), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1363,6 +1363,8 @@ Name: [username]
 'settings_enableVersionDeletion_desc' => 'Setzen Sie diese Option, wenn frühere Versionen eines Dokuments durch reguläre Benutzer gelöscht werden können. Administratoren dürfen dies immer.',
 'settings_enableVersionModification' => 'Erlaube Modifikation von Versionen',
 'settings_enableVersionModification_desc' => 'Setzen Sie diese Option, wenn Versionen eines Dokuments nach dem Hochladen noch durch reguläre Benutzer verändert werden dürfen. Administratoren dürfen dies immer.',
+'settings_enableWebdavReplaceDoc' => 'Dokument beim Speichern ersetzen',
+'settings_enableWebdavReplaceDoc_desc' => 'Wenn eingeschaltet, wird beim Speichern eine bestehende Dokumentenversion ersetzt und keine neue Version erzeugt. Dies erfolgt nur wenn der Benutzer, Mimetype und Dateiname unverändert zur letzten Version sind. Diese Einstellung kann hilfreich sein, wenn Programme das geöffnete Dokument in regelmäßigen Abständen speichern.',
 'settings_encryptionKey' => 'Verschlüsselungs-Sequenz',
 'settings_encryptionKey_desc' => 'Diese Zeichenkette wird verwendet um eine eindeutige Kennung zu erzeugen, die als verstecktes Feld in einem Formular untergebracht wird. Sie dient zur Verhinderung von CSRF-Attacken.',
 'settings_error' => 'Fehler',
@@ -1496,6 +1498,8 @@ Name: [username]
 'settings_smtpPort_desc' => 'SMTP Server Port, voreingestellt ist 25',
 'settings_smtpSendFrom' => 'Absenderadresse',
 'settings_smtpSendFrom_desc' => 'Absenderadresse für herausgehende Mails',
+'settings_smtpSendTestMail' => 'Sende Testmail',
+'settings_smtpSendTestMail_desc' => 'Verschickte eine Testmail, um die akuelle Konfiguration zu testen.',
 'settings_smtpServer' => 'SMTP Server-Hostname',
 'settings_smtpServer_desc' => 'SMTP Server-Hostname',
 'settings_smtpUser' => 'SMTP Server User',
@@ -1541,6 +1545,7 @@ Name: [username]
 'settings_versiontolow' => 'Version zu gering',
 'settings_viewOnlineFileTypes' => 'Dateitypen für Online-Ansicht',
 'settings_viewOnlineFileTypes_desc' => 'Dateien mit den angegebenen Endungen können Online angeschaut werden (benutzen Sie ausschließlich Kleinbuchstaben).',
+'settings_webdav' => 'WebDAV',
 'settings_workflowMode' => 'Workflow mode',
 'settings_workflowMode_desc' => 'Der erweiterte Workflow-Modes erlaubt es eigene Workflows zu erstellen.',
 'settings_workflowMode_valadvanced' => 'erweitert',
