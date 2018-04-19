@@ -354,6 +354,26 @@ class Settings { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Return ';' seperated string from array
+	 *
+	 * @param array $value
+	 *
+	 */
+	function arrayToString($value) { /* {{{ */
+    return implode(";", $value);
+  } /* }}} */
+
+	/**
+	 * Return array from ';' seperated string
+	 *
+	 * @param string $value
+	 *
+	 */
+	function stringToArray($value) { /* {{{ */
+    return explode(";", $Value);
+  } /* }}} */
+
+	/**
 	 * set $_viewOnlineFileTypes
 	 *
 	 * @param string $stringValue string value
