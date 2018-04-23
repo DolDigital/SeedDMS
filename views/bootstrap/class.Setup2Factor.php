@@ -91,9 +91,9 @@ $(document).ready( function() {
 		<div class="control-group"><label class="control-label"></label><div class="controls">
 		<img src="<?php echo $tfa->getQRCodeImageAsDataUri($sitename, $secret); ?>">
 		</div></div>
-		<div class="control-group"><label class="control-label"></label><div class="controls">
-		<input class="btn" type="submit" value="<?php printMLText("submit_2_fact_auth") ?>"><br />
-		</div></div>
+<?php
+		$this->formSubmit(getMLText('submit_2_fact_auth'));
+?>
 </form>
 <?php
 		if($oldsecret) {

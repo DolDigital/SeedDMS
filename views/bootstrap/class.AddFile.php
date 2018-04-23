@@ -152,50 +152,37 @@ $(document).ready( function() {
 
 <form class="form-horizontal" action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="form1">
 <input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
-<div class="control-group">
-	<label class="control-label"><?php printMLText("local_file");?>:</label>
-	<div class="controls">
 <?php
-		if($enablelargefileupload)
-			$this->printFineUploaderHtml();
-		else
-			$this->printFileChooser('userfile[]', false);
-?>
-	</div>
-</div>
-<div class="control-group">
-	<label class="control-label"><?php printMLText("version");?>:</label>
-	<div class="controls"><select name="version" id="version">
-		<option value=""><?= getMLText('document') ?></option>
-<?php
+		$this->formField(
+			getMLText("local_file"),
+			($enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile[]', false))
+		);
+		$html = '<select name="version" id="version">
+		<option value="">'.getMLText('document').'</option>';
 		$versions = $document->getContent();
 		foreach($versions as $version)
-			echo "<option value=\"".$version->getVersion()."\">".getMLText('version')." ".$version->getVersion()."</option>";
+			$html .= "<option value=\"".$version->getVersion()."\">".getMLText('version')." ".$version->getVersion()."</option>";
+		$html .= '</select>';
+		$this->formField(
+			getMLText("version"),
+			$html
+		);
+		$this->formField(
+			getMLText("name"),
+			'<input type="text" name="name" id="name" size="60">'
+		);
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" id="comment" rows="4" cols="80"'.($strictformcheck ?  ' required' : '').'></textarea>'
+		);
+		if ($document->getAccessMode($user) >= M_READWRITE) {
+			$this->formField(
+				getMLText("document_link_public"),
+				'<input type="checkbox" name="public" value="true" checked />'
+			);
+		}
+		$this->formSubmit(getMLText('add'));
 ?>
-	</select></div>
-</div>
-<div class="control-group">
-	<label class="control-label"><?php printMLText("name");?>:</label>
-	<div class="controls"><input type="text" name="name" id="name" size="60"></div>
-</div>
-<div class="control-group">
-	<label class="control-label"><?php printMLText("comment");?>:</label>
-	<div class="controls">
-		<textarea name="comment" id="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea>
-	</div>
-</div>
-<?php
-	if ($document->getAccessMode($user) >= M_READWRITE) {
-		print "<div class=\"control-group\"><label class=\"control-label\">".getMLText("document_link_public")."</label>";
-		print "<div class=\"controls\">";
-		print "<input type=\"checkbox\" name=\"public\" value=\"true\" checked />";
-		print "</div></div>";
-	}
-?>
-<div class="control-group">
-	<label class="control-label"></label>
-	<div class="controls"><input class="btn" type="submit" value="<?php printMLText("add");?>"></div>
-</div>
 </form>
 <?php
 		$this->contentContainerEnd();

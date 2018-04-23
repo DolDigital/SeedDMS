@@ -83,27 +83,18 @@ $(document).ready(function() {
 <form class="form-horizontal" action="../op/op.EditFolder.php" id="form1" name="form1" method="post">
 		<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60" required>
-			</div>
-		</div>	
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls">
-				<textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($folder->getComment());?></textarea>
-			</div>
-		</div>
 <?php
+		$this->formField(
+			getMLText("name"),
+			'<input type="text" name="name" value="'.htmlspecialchars($folder->getName()).'" size="60" required>'
+		);
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" rows="4" cols="80"'.($strictformcheck ? ' required' : '').'>'.htmlspecialchars($folder->getComment()).'</textarea>'
+		);
 		$parent = ($folder->getID() == $rootfolderid) ? false : $folder->getParent();
 		if ($parent && $parent->getAccessMode($user) > M_READ) {
-			print "<div class=\"control-group\">";
-			print "<label class=\"control-label\">" . getMLText("sequence") . ":</label>";
-			print "<div class=\"controls\">";
-			$this->printSequenceChooser($parent->getSubFolders('s'), $folder->getID());
-			if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); 
-			print "</div></div>\n";
+			$this->formField(getMLText("sequence"), $this->getSequenceChooser($parent->getSubFolders('s'), $folder->getID()).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
 		}
 
 		if($attrdefs) {
@@ -111,27 +102,15 @@ $(document).ready(function() {
 				$arr = $this->callHook('editFolderAttribute', $folder, $attrdef);
 				if(is_array($arr)) {
 					if($arr) {
-						echo "<div class=\"control-group\">";
-						echo "<label class=\"control-label\">".$arr[0]."</label>";
-						echo "<div class=\"controls\">".$arr[1]."</div>";
-						echo "</div>";
+						$this->formField($arr[0], $arr[1]);
 					}
 				} else {
-?>
-			<div class="control-group">
-				<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
-				<div class="controls">
-					<?php $this->printAttributeEditField($attrdef, $folder->getAttribute($attrdef)) ?>
-				</div>
-			</div>
-<?php
+					$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, $folder->getAttribute($attrdef)));
 				}
 			}
 		}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-			<div class="controls">
-				<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
-			</div>
 </form>
 <?php
 		$this->contentContainerEnd();

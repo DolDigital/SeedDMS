@@ -58,27 +58,15 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 					$arr = $this->callHook('editDocumentContentAttribute', $version, $attrdef);
 					if(is_array($arr)) {
 						if($arr) {
-							echo "<div class=\"control-group\">";
-							echo "<label class=\"control-label\">".$arr[0].":</label>";
-							echo "<div class=\"controls\">".$arr[1]."</div>";
-							echo "</div>";
+							$this->formField($arr[0], $arr[1]);
 						}
 					} else {
-?>
-    <div class="control-group">
-	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?></label>
-        <div class="controls">
-	        <?php $this->printAttributeEditField($attrdef, $version->getAttribute($attrdef)) ?>
-        </div>
-	</div>
-<?php
+						$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, $version->getAttribute($attrdef)));
 					}
 				}
 			}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button>
-		</div>
 </form>
 <?php
 		$this->contentContainerEnd();

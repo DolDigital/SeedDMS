@@ -129,35 +129,23 @@ $(document).ready(function() {
 			print "</tr></tbody></table><br>\n";
 		}
 ?>
-	<form method="POST" action="../op/op.ApproveDocument.php" id="form<?= $approvaltype ?>" name="form<?= $approvaltype ?>" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" action="../op/op.ApproveDocument.php" id="form<?= $approvaltype ?>" name="form<?= $approvaltype ?>" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
-	<table>
-		<tr>
-			<td><?php printMLText("comment")?>:</td>
-			<td><textarea name="comment" cols="80" rows="4"></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("approval_file")?>:</td>
-			<td>
 <?php
-	$this->printFileChooser('approvalfile', false);
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" cols="80" rows="4"></textarea>'
+		);
+		$this->formField(
+			getMLText("approval_file"),
+			$this->getFileChooser('approvalfile', false)
+		);
+		$this->formField(
+			getMLText("approval_status"),
+			'<select name="approvalStatus">'.($approvalStatus['status'] != 1 ? '<option value="1">'.getMLText("status_approved").'</option>' : '').($approvalStatus['status'] != -1 ? '<option value="-1">'.getMLText("rejected").'</option>' : '').'</select>'
+		);
+		$this->formSubmit(getMLText('submit_approval'), $approvaltype.'Approval');
 ?>
-			</td>
-		</tr>
-	<tr><td><?php printMLText("approval_status")?>:</td>
-	<td>
-	<select name="approvalStatus">
-<?php if($approvalStatus['status'] != 1) { ?>
-	<option value='1'><?php printMLText("status_approved")?></option>
-<?php } ?>
-<?php if($approvalStatus['status'] != -1) { ?>
-	<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-	</select>
-	</td></tr>
-	<tr><td></td><td>
-	<input type='submit' class="btn" name='<?= $approvaltype ?>Approval' value='<?php printMLText("submit_approval")?>'/></td></tr>
-	</table>
 	<input type='hidden' name='approvalType' value='<?= $approvaltype ?>'/>
 	<?php if($approvaltype == 'grp'): ?>
 	<input type='hidden' name='approvalGroup' value="<?php echo $approvalStatus['required']; ?>" />

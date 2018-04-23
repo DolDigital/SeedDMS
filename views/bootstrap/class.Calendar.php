@@ -67,46 +67,28 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 ?>
 
-<form class="form-horizontal" action="../op/op.EditEvent.php" id="form1" name="form1" method="POST">
+<form class="form-horizontal" action="../op/op.EditEvent.php" id="form1" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('editevent'); ?>
-
 	<input type="hidden" name="eventid" value="<?php echo (int) $event["id"]; ?>">
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("from");?>:</label>
-			<div class="controls">
-				<?php //$this->printDateChooser($event["start"], "from");?>
-	    		<span class="input-append date span12" id="fromdate" data-date="<?php echo date('Y-m-d', $event["start"]); ?>" data-date-format="yyyy-mm-dd">
-	      		<input class="span6" size="16" name="from" type="text" value="<?php echo date('Y-m-d', $event["start"]); ?>">
-	      		<span class="add-on"><i class="icon-calendar"></i>
-	    		</span>
-	    	</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("to");?>:</label>
-			<div class="controls">
-				<?php //$this->printDateChooser($event["stop"], "to");?>
-	    		<span class="input-append date span12" id="todate" data-date="<?php echo date('Y-m-d', $event["stop"]); ?>" data-date-format="yyyy-mm-dd">
-	      		<input class="span6" size="16" name="to" type="text" value="<?php echo date('Y-m-d', $event["stop"]); ?>">
-	      		<span class="add-on"><i class="icon-calendar"></i></span>
-	    		</span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input type="text" name="name" value="<?php echo htmlspecialchars($event["name"]);?>" size="60" required>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls">
-				<textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php echo htmlspecialchars($event["comment"])?></textarea>
-			</div>
-		</div>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-		</div>
+<?php
+			$this->formField(
+				getMLText("from"),
+				$this->getDateChooser(date('Y-m-d', $event["start"]), "from")
+			);
+			$this->formField(
+				getMLText("to"),
+				$this->getDateChooser(date('Y-m-d', $event["stop"]), "to")
+			);
+			$this->formField(
+				getMLText("name"),
+				'<input type="text" name="name" value="'.htmlspecialchars($event["name"]).'" size="60" required>'
+			);
+			$this->formField(
+				getMLText("comment"),
+				'<textarea name="comment" rows="4" cols="80"'.($strictformcheck ? ' required' : '').'>'.htmlspecialchars($event["comment"]).'</textarea>'
+			);
+			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
+?>
 </form>
 <?php
 			$this->contentContainerEnd();

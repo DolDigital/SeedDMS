@@ -107,19 +107,17 @@ $(document).ready(function() {
 	<div class="row-fluid">
 	<div class="span4">
 	<form class="form-horizontal" method="post" action="../op/op.TriggerWorkflow.php" id="form1" name="form1">
-	<?php echo createHiddenFieldWithKey('triggerworkflow'); ?>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText('comment'); ?>:</label>
-		<div class="controls">
-			<textarea name="comment" cols="80" rows="4"></textarea>
-		</div>
-	</div>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='transition' value='<?php echo $transition->getID(); ?>'/>
-	<div class="controls">
-		<input type='submit' class="btn" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
-	</div>
+	<?php echo createHiddenFieldWithKey('triggerworkflow'); ?>
+<?php
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" cols="80" rows="4"></textarea>'
+		);
+		$this->formSubmit(getMLText("action_".strtolower($action->getName()), array(), $action->getName()));
+?>
 	</form>
 	</div>
 	<div id="workflowgraph" class="span8">

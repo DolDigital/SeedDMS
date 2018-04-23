@@ -147,18 +147,13 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		<form class="form-horizontal" method="post" enctype="multipart/form-data" action="../op/op.ExtensionMgr.php">
 			<?= createHiddenFieldWithKey('extensionmgr') ?>
 			<input type="hidden" name="action" value="upload" />
-			<div class="control-group">
-				<label class="control-label" for="upload"><?= getMLText('extension_archive'); ?></label>
-				<div class="controls">
-					<?php $this->printFileChooser('userfile', false); ?>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="enddate"></label>
-				<div class="controls">
-					<button id="upload" type="_submit" class="btn"><i class="icon-upload"></i> <?= getMLText("import_extension"); ?></button>
-				</div>
-			</div>
+<?php
+			$this->formField(
+				getMLText("extension_archive"),
+				$this->getFileChooser('userfile', false)
+			);
+			$this->formSubmit("<i class=\"icon-upload\"></i> ".getMLText('import_extension'));
+?>
 		</form>
 <?php
 		} else {

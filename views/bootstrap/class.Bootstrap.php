@@ -820,6 +820,20 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
+	function formField($title, $value) { /* {{{ */
+		echo "<div class=\"control-group\">";
+		echo "	<label class=\"control-label\">".$title.":</label>";
+		echo "	<div class=\"controls\">".$value."</div>";
+		echo "</div>";
+		return;
+	} /* }}} */
+
+	function formSubmit($value, $name='') { /* {{{ */
+		echo "<div class=\"controls\">\n";
+		echo "<button type=\"submit\" class=\"btn\"".($name ? ' name="'.$name.'"' : '').">".$value."</button>\n";
+		echo "</div>\n";
+	} /* }}} */
+
 	function getMimeIcon($fileType) { /* {{{ */
 		// for extension use LOWER CASE only
 		$icons = array();
@@ -920,24 +934,23 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
-		echo $this->getFileChooser($varname, $multiple, $accept);
-		return;
-		$id = preg_replace('/[^A-Za-z]/', '', $varname);
-?>
-	<div id="<?php echo $id; ?>-upload-files">
-		<div id="<?php echo $id; ?>-upload-file" class="upload-file">
-			<div class="input-append">
-				<input type="text" class="form-control" readonly>
-				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input id="<?php echo $id; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
-				</span>
-			</div>
-		</div>
-	</div>
-<?php
+		echo self::getFileChooser($varname, $multiple, $accept);
 	} /* }}} */
 
-	function printDateChooser($defDate = -1, $varName) { /* {{{ */
+	function printDateChooser($defDate = '', $varName) { /* {{{ */
+		echo self::getDateChooser($defDate, $varName);
+	} /* }}} */
+
+	function getDateChooser($defDate = '', $varName, $lang='') { /* {{{ */
+		$content = '
+			<span class="input-append date span12 datepicker" id="'.$varName.'date" data-date="'.$defDate.'" data-date-format="yyyy-mm-dd"'.($lang ? 'data-date-language="'.str_replace('_', '-', $lang).'"' : '').'>
+				<input class="span6" size="16" name="'.$varName.'" type="text" value="'.$defDate.'">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+			</span>';
+		return $content;
+	} /* }}} */
+
+	function __printDateChooser($defDate = -1, $varName) { /* {{{ */
 	
 		if ($defDate == -1)
 			$defDate = mktime();
@@ -975,6 +988,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printSequenceChooser($objArr, $keepID = -1) { /* {{{ */
+		echo $this->getSequenceChooser($objArr, $keepID);
+	} /* }}} */
+
+	function getSequenceChooser($objArr, $keepID = -1) { /* {{{ */
 		if (count($objArr) > 0) {
 			$max = $objArr[count($objArr)-1]->getSequence() + 1;
 			$min = $objArr[0]->getSequence() - 1;
@@ -982,25 +999,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else {
 			$max = 1.0;
 		}
-		print "<select name=\"sequence\">\n";
+		$content = "<select name=\"sequence\">\n";
 		if ($keepID != -1) {
-			print "  <option value=\"keep\">" . getMLText("seq_keep");
+			$content .= "  <option value=\"keep\">" . getMLText("seq_keep");
 		}
 		if($this->params['defaultposition'] != 'start')
-			print "  <option value=\"".$max."\">" . getMLText("seq_end");
+			$content .= "  <option value=\"".$max."\">" . getMLText("seq_end");
 		if (count($objArr) > 0) {
-			print "  <option value=\"".$min."\">" . getMLText("seq_start");
+			$content .= "  <option value=\"".$min."\">" . getMLText("seq_start");
 		}
 		if($this->params['defaultposition'] == 'start')
-			print "  <option value=\"".$max."\">" . getMLText("seq_end");
+			$content .= "  <option value=\"".$max."\">" . getMLText("seq_end");
 		for ($i = 0; $i < count($objArr) - 1; $i++) {
 			if (($objArr[$i]->getID() == $keepID) || (($i + 1 < count($objArr)) && ($objArr[$i+1]->getID() == $keepID))) {
 				continue;
 			}
 			$index = ($objArr[$i]->getSequence() + $objArr[$i+1]->getSequence()) / 2;
-			print "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => htmlspecialchars($objArr[$i]->getName())));
+			$content .= "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => htmlspecialchars($objArr[$i]->getName())));
 		}
-		print "</select>";
+		$content .= "</select>";
+		return $content;
 	} /* }}} */
 
 	function printDocumentChooserHtml($formName) { /* {{{ */
@@ -1201,59 +1219,63 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
+		echo self::getAttributeEditField($attrdef, $attribute, $fieldname, $norequire);
+	} /* }}} */
+
+	function getAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
+		$content = '';
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
-			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
+			$content .= "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
+			$content .= "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
-?>
-        <span class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+        $content .= '<span class="input-append date datepicker" data-date="'.date('Y-m-d').'" data-date-format="yyyy-mm-dd" data-date-language="'.str_replace('_', '-', $this->params['session']->getLanguage()).'">
+					<input id="'.$fieldname.'_'.$attrdef->getId().'" class="span9" size="16" name="'.$fieldname.'['.$attrdef->getId().']" type="text" value="'.($objvalue ? $objvalue : '').'">
           <span class="add-on"><i class="icon-calendar"></i></span>
-				</span>
-<?php
+				</span>';
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_email:
 			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
-			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			$content .= "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
 			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
-				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\"/>";
-				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
+				$content .= "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\"/>";
+				$content .= "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
-					echo "[]\" multiple";
+					$content .= "[]\" multiple";
 				} else {
-					echo "\"";
+					$content .= "\"";
 				}
-				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select-deselect\" data-placeholder=\"".getMLText("select_value")."\">";
+				$content .= "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select-deselect\" data-placeholder=\"".getMLText("select_value")."\">";
 				if(!$attrdef->getMultipleValues()) {
-					echo "<option value=\"\"></option>";
+					$content .= "<option value=\"\"></option>";
 				}
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValueAsArray() : $attribute) : array();
 				foreach($valueset as $value) {
 					if($value) {
-						echo "<option value=\"".htmlspecialchars($value)."\"";
+						$content .= "<option value=\"".htmlspecialchars($value)."\"";
 						if(is_array($objvalue) && in_array($value, $objvalue))
-							echo " selected";
+							$content .= " selected";
 						elseif($value == $objvalue)
-							echo " selected";
-						echo ">".htmlspecialchars($value)."</option>";
+							$content .= " selected";
+						$content .= ">".htmlspecialchars($value)."</option>";
 					}
 				}
-				echo "</select>";
+				$content .= "</select>";
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					$content .= "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					$content .= "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
 		}
+		return $content;
 	} /* }}} */
 
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
@@ -2543,7 +2565,7 @@ mayscript>
 	} /* }}} */
 
 	/**
-	 * Output HTML Code for jumploader
+	 * Output HTML Code for Fine Uploader
 	 *
 	 * @param string $uploadurl URL where post data is send
 	 * @param integer $folderid id of folder where document is saved
@@ -2551,11 +2573,22 @@ mayscript>
 	 * @param array $fields list of post fields
 	 */
 	function printFineUploaderHtml($prefix='userfile') { /* {{{ */
-?>
-		<div id="<?php echo $prefix; ?>-fine-uploader"></div>
-		<input type="hidden" <?php echo ($prefix=='userfile' ? 'class="do_validate"' : ''); ?> id="<?php echo $prefix; ?>-fine-uploader-uuids" name="<?php echo $prefix; ?>-fine-uploader-uuids" value="" />
-		<input type="hidden" id="<?php echo $prefix; ?>-fine-uploader-names" name="<?php echo $prefix; ?>-fine-uploader-names" value="" />
-<?php
+		echo self::getFineUploaderHtml($prefix);
+	} /* }}} */
+
+	/**
+	 * Get HTML Code for Fine Uploader
+	 *
+	 * @param string $uploadurl URL where post data is send
+	 * @param integer $folderid id of folder where document is saved
+	 * @param integer $maxfiles maximum number of files allowed to upload
+	 * @param array $fields list of post fields
+	 */
+	function getFineUploaderHtml($prefix='userfile') { /* {{{ */
+		$html = '<div id="'.$prefix.'-fine-uploader"></div>
+		<input type="hidden" '.($prefix=='userfile' ? 'class="do_validate" ' : '').'id="'.$prefix.'-fine-uploader-uuids" name="'.$prefix.'-fine-uploader-uuids" value="" />
+		<input type="hidden" id="'.$prefix.'-fine-uploader-names" name="'.$prefix.'-fine-uploader-names" value="" />';
+		return $html;
 	} /* }}} */
 
 	/**

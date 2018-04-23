@@ -80,24 +80,17 @@ document.form1.email.focus();
 		}
 ?>
   <p><?php printMLText("password_forgotten_text"); ?></p>
-
-		<div class="control-group">
-		<label class="control-label"><?php printMLText("user_login");?>:</label>
-			<div class="controls">
-			<input type="text" name="login" id="login">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("email");?>:</label>
-			<div class="controls">
-				<input type="text" name="email" id="email">
-			</div>
-		</div>
-
-		<div class="controls">
-			<input class="btn" type="submit" value="<?php printMLText("submit_password_forgotten") ?>">
-		</div>
-
+<?php
+		$this->formField(
+			getMLText("user_login"),
+			'<input type="text" name="login" id="login">'
+		);
+		$this->formField(
+			getMLText("email"),
+			'<input type="text" name="email" id="email">'
+		);
+		$this->formSubmit(getMLText('submit_password_forgotten'));
+?>
 </form>
 <?php $this->contentContainerEnd(); ?>
 <p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>

@@ -85,30 +85,24 @@ $(document).ready(function() {
 // Display the Review form.
 ?>
 <form class="form-horizontal" method="post" action="../op/op.OverrideContentStatus.php" id="form1" name="form1">
-	<div class="control-group">
-		<label class="control-label"><?php echo(printMLText("comment"));?>:</label>
-		<div class="controls">
-			<textarea name="comment" cols="40" rows="4"></textarea>
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php echo(printMLText("status")); ?>:</label>
-		<div class="controls">
-			<select name="overrideStatus">
-				<option value=''></option>
-	<?php
-
-			if ($overallStatus["status"] == S_OBSOLETE) echo "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
-			if ($overallStatus["status"] == S_RELEASED) echo "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
-
-	?>
-	</select>
-	</div></div>
-	<div class="controls">
-		<input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
-		<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
-		<input type='submit' class="btn" name='overrideContentStatus' value='<?php echo(printMLText("update")); ?>'/>
-	</div>
+	<input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
+	<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
+<?php
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" rows="4" cols="40"></textarea>'
+		);
+		$html = '<select name="overrideStatus">
+				<option value=""></option>';
+		if ($overallStatus["status"] == S_OBSOLETE) $html .= "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
+		if ($overallStatus["status"] == S_RELEASED) $html .= "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
+		$html .= "</select>";
+		$this->formField(
+			getMLText("status"),
+			$html
+		);
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('update'));
+?>
 </form>
 <?php
 		$this->contentContainerEnd();

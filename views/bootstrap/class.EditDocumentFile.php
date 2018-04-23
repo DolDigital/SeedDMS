@@ -50,38 +50,33 @@ class SeedDMS_View_EditDocumentFile extends SeedDMS_Bootstrap_Style {
   <?php echo createHiddenFieldWithKey('editdocumentfile'); ?>
 	<input type="hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="hidden" name="fileid" value="<?php echo $file->getID()?>">
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("version");?>:</label>
-		<div class="controls"><select name="version" id="version">
-			<option value=""><?= getMLText('document') ?></option>
 <?php
+		$html = '<select name="version" id="version">
+			<option value="">'.getMLText('document').'</option>';
 		$versions = $document->getContent();
 		foreach($versions as $version)
-			echo "<option value=\"".$version->getVersion()."\"".($version->getVersion() == $file->getVersion() ? " selected" : "").">".getMLText('version')." ".$version->getVersion()."</option>";
+			$html .= "<option value=\"".$version->getVersion()."\"".($version->getVersion() == $file->getVersion() ? " selected" : "").">".getMLText('version')." ".$version->getVersion()."</option>";
+		$html .= "</select>";
+		$this->formField(
+			getMLText("version"),
+			$html
+		);
+		$this->formField(
+			getMLText("name"),
+			'<input name="name" type="text" value="'.htmlspecialchars($file->getName()).'"/>'
+		);
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" rows="4" cols="80">'.htmlspecialchars($file->getComment()).'</textarea>'
+		);
+		$this->formField(
+			getMLText("document_link_public"),
+			'<input name="public" type="checkbox" value="true"'.($file->isPublic() ? " checked" : "").' />'
+		);
 ?>
-		</select></div>
-	</div>
-	<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input name="name" type="text" value="<?php print htmlspecialchars($file->getName());?>" />
-			</div>
-	</div>
-	<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls">
-				<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($file->getComment());?></textarea>
-			</div>
-	</div>
-	<div class="control-group">
-			<label class="control-label"><?php printMLText("document_link_public");?>:</label>
-			<div class="controls">
-				<input type="checkbox" name="public" value="true"<?php echo ($file->isPublic() ? " checked" : "");?> />
-			</div>
-	</div>
-	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button>
-	</div>
+<?php
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
+?>
 </form>
 <?php
 		$this->contentContainerEnd();

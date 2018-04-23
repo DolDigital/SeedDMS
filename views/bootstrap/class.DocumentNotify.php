@@ -158,10 +158,9 @@ $(document).ready( function() {
 			</select>
 		</div>
 	</div>
-
-	<div class="controls">
-		<input type="submit" class="btn" value="<?php printMLText("add") ?>">
-	</div>
+<?php
+					$this->formSubmit(getMLText('add'));
+?>
 
 </form>
 

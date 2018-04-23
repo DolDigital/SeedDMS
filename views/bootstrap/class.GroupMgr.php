@@ -189,24 +189,16 @@ $(document).ready( function() {
 	<input type="hidden" name="action" value="addgroup">
 <?php
 		}
+		$this->formField(
+			getMLText("name"),
+			'<input type="text" name="name" id="name" value="'.($group ? htmlspecialchars($group->getName()) : '').'">'
+		);
+		$this->formField(
+			getMLText("comment"),
+			'<textarea name="comment" id="comment" rows="4" cols="50">'.($group ? htmlspecialchars($group->getComment()) : '').'</textarea>'
+		);
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls">
-				<textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea>
-			</div>
-		</div>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-		</div>
-
 	</form>
 <?php
 		if($group) {

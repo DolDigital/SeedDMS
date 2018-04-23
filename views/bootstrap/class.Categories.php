@@ -110,17 +110,13 @@ $(document).ready( function() {
 					<input type="hidden" name="action" value="editcategory">
 					<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 				<?php } ?>
-				<div class="control-group">
-					<label class="control-label"><?php echo getMLText("name")?>:</label>
-					<div class="controls">
-							<input name="name" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
-					</div>
-				</div>
+<?php
+			$this->formField(
+				getMLText("name"),
+				'<input type="text" name="name" value="'.($category ? htmlspecialchars($category->getName()) : '').'">'
+			);
+			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
+?>
 				</form>
 
 <?php

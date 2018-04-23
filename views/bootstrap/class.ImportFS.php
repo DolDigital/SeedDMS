@@ -67,14 +67,11 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 			$this->printDropFolderChooserHtml("form1", "", 1);
 			print "</div></div>";
 
-			print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('removeFolderFromDropFolder')."</label><div class=\"controls\">";
-			print "<input type='checkbox' name='remove' value='1'/>";
-			print "</div></div>";
-
-			print "<div class=\"control-group\"><label class=\"control-label\">";
-			print "</label><div class=\"controls\">";
-			print "<input type='submit' class='btn' name='' value='".getMLText("import")."'/>";
-			print "</div></div>";
+			$this->formField(
+				getMLText("removeFolderFromDropFolder"),
+				'<input type="checkbox" name="remove" value="1"/>'
+			);
+			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('import'));
 			print "</form>\n";
 			$this->contentContainerEnd();
 		} else {
