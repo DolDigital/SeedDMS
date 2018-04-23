@@ -67,6 +67,7 @@ if($view) {
 	$view->setParam('document', $document);
 	$view->setParam('version', $content);
 	$view->setParam('event', $event);
+	$view->setParam('showtree', showtree());
 	$view->setParam('strictformcheck', $settings->_strictFormCheck);
 	$view->setParam('eventtype', $eventtype);
 	$view->setParam('cachedir', $settings->_cacheDir);
