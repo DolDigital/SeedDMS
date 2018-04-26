@@ -447,6 +447,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
+	private function showNavigationBar($menuitems) { /* {{{ */
+		foreach($menuitems as $menuitem) {
+			if(!empty($menuitem['children'])) {
+				echo "    <li class=\"dropdown\">\n";
+				echo "     <a href=\"".$menuitem['link']."\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText($menuitem['label'])." <i class=\"icon-caret-down\"></i></a>\n";
+				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+				foreach($menuitem['children'] as $submenuitem) {
+					echo "      <li><a href=\"".$submenuitem['link']."\">".getMLText($submenuitem['label'])."</a></li>\n";
+				}
+				echo "     </ul>\n";
+			} else {
+				echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+			}
+		}
+	} /* }}} */
+
 	private function folderNavigationBar($folder) { /* {{{ */
 		$dms = $this->params['dms'];
 		if (!is_object($folder) || strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
@@ -490,9 +506,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if($this->hasHook('folderNavigationBar'))
 			$menuitems = $this->callHook('folderNavigationBar', $folder, $menuitems);
 
-		foreach($menuitems as $menuitem) {
-			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
-		}
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -553,9 +568,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		*/
 
-		foreach($menuitems as $menuitem) {
-			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
-		}
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -566,18 +580,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
+		$menuitems = array();
 		if ($this->params['user']->isAdmin() || !$this->params['disableselfedit'])
-			echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+			$menuitems['edit_user_details'] = array('link'=>"../out/out.EditUserData.php", 'label'=>'edit_user_details');
 		
 		if (!$this->params['user']->isAdmin()) 
-			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
+			$menuitems['edit_default_keywords'] = array('link'=>"../out/out.UserDefaultKeywords.php", 'label'=>'edit_default_keywords');
 
-		echo "<li><a href=\"../out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
+		$menuitems['edit_notify'] = array('link'=>"../out/out.ManageNotify.php", 'label'=>'edit_existing_notify');
 
 		if ($this->params['enableusersview']){
-			echo "<li><a href=\"../out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
-			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
+			$menuitems['users'] = array('link'=>"../out/out.UsrView.php", 'label'=>'users');
+			$menuitems['users'] = array('link'=>"../out/out.GroupView.php", 'label'=>'groups');
 		}		
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('accountNavigationBar'))
+			$menuitems = $this->callHook('accountNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -589,15 +611,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
-		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
+		$menuitems = array();
+		$menuitems['inprocess'] = array('link'=>"../out/out.MyDocuments.php?inProcess=1", 'label'=>'documents_in_process');
+		$menuitems['all_documents'] = array('link'=>"../out/out.MyDocuments.php", 'label'=>'all_documents');
 		if($this->params['workflowmode'] == 'traditional' || $this->params['workflowmode'] == 'traditional_only_approval') {
-			if($this->params['workflowmode'] == 'traditional')
-				echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
-			echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
+			$menuitems['review_summary'] = array('link'=>"../out/out.ReviewSummary.php", 'label'=>'review_summary');
+			$menuitems['approval_summary'] = array('link'=>"../out/out.ApprovalSummary.php", 'label'=>'approval_summary');
 		} else {
-			echo "<li><a href=\"../out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
+			$menuitems['workflow_summary'] = array('link'=>"../out/out.WorkflowSummary.php", 'label'=>'workflow_summary');
 		}
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('mydocumentsNavigationBar'))
+			$menuitems = $this->callHook('mydocumentsNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -608,73 +637,52 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
-
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
+		$menuitems = array();
+		$menuitems['user_group_management'] = array('link'=>"#", 'label'=>'user_group_management');
+		$menuitems['user_group_management']['children']['user_management'] = array('link'=>"../out/out.UsrMgr.php", 'label'=>'user_management');
+		$menuitems['user_group_management']['children']['group_management'] = array('link'=>"../out/out.GroupMgr.php", 'label'=>'group_management');
+		$menuitems['user_group_management']['children']['user_list'] = array('link'=>"../out/out.UserList.php", 'label'=>'user_list');
+		
+		$menuitems['definitions'] = array('link'=>"#", 'label'=>'definitions');
+		$menuitems['definitions']['children']['default_keywords'] = array('link'=>"../out/out.DefaultKeywords.php", 'label'=>'global_default_keywords');
+		$menuitems['definitions']['children']['document_categories'] = array('link'=>"../out/out.Categories.php", 'label'=>'global_document_categories');
+		$menuitems['definitions']['children']['attribute_definitions'] = array('link'=>"../out/out.AttributeMgr.php", 'label'=>'global_attributedefinitions');
 		if($this->params['workflowmode'] == 'advanced') {
-			echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
+			$menuitems['definitions']['children']['workflows'] = array('link'=>"../out/out.WorkflowMgr.php", 'label'=>'global_workflows');
+			$menuitems['definitions']['children']['workflow_states'] = array('link'=>"../out/out.WorkflowStatesMgr.php", 'label'=>'global_workflow_states');
+			$menuitems['definitions']['children']['workflow_actions'] = array('link'=>"../out/out.WorkflowActionsMgr.php", 'label'=>'global_workflow_actions');
 		}
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
 
 		if($this->params['enablefullsearch']) {
-			echo "   <ul class=\"nav\">\n";
-			echo "    <li class=\"dropdown\">\n";
-			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
-			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
-			echo "     </ul>\n";
-			echo "    </li>\n";
-			echo "   </ul>\n";
+			$menuitems['fulltext'] = array('link'=>"#", 'label'=>'fullsearch');
+			$menuitems['fulltext']['children']['update_fulltext_index'] = array('link'=>"../out/out.Indexer.php", 'label'=>'update_fulltext_index');
+			$menuitems['fulltext']['children']['create_fulltext_index'] = array('link'=>"../out/out.CreateIndex.php", 'label'=>'create_fulltext_index');
+			$menuitems['fulltext']['children']['fulltext_info'] = array('link'=>"../out/out.IndexInfo.php", 'label'=>'fulltext_info');
 		}
 
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
+		$menuitems['backup_log_management'] = array('link'=>"#", 'label'=>'backup_log_management');
+		$menuitems['backup_log_management']['children'][] = array('link'=>"../out/out.BackupTools.php", 'label'=>'backup_tools');
 		if ($this->params['logfileenable'])
-			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
+			$menuitems['backup_log_management']['children'][] = array('link'=>"../out/out.LogManagement.php", 'label'=>'log_management');
 
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ExpiredDocuments.php\">".getMLText("documents_expired")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
+		$menuitems['misc'] = array('link'=>"#", 'label'=>'misc');
+		$menuitems['misc']['children']['import_fs'] = array('link'=>"../out/out.ImportFS.php", 'label'=>'import_fs');
+		$menuitems['misc']['children']['folders_and_documents_statistic'] = array('link'=>"../out/out.Statistic.php", 'label'=>'folders_and_documents_statistic');
+		$menuitems['misc']['children']['charts'] = array('link'=>"../out/out.Charts.php", 'label'=>'charts');
+		$menuitems['misc']['children']['timeline'] = array('link'=>"../out/out.Timeline.php", 'label'=>'timeline');
+		$menuitems['misc']['children']['objectcheck'] = array('link'=>"../out/out.ObjectCheck.php", 'label'=>'objectcheck');
+		$menuitems['misc']['children']['documents_expired'] = array('link'=>"../out/out.ExpiredDocuments.php", 'label'=>'documents_expired');
+		$menuitems['misc']['children']['extension_manager'] = array('link'=>"../out/out.ExtensionMgr.php", 'label'=>'extension_manager');
+		$menuitems['misc']['children']['clear_cache'] = array('link'=>"../out/out.ClearCache.php", 'label'=>'clear_cache');
+		$menuitems['misc']['children']['version_info'] = array('link'=>"../out/out.Info.php", 'label'=>'version_info');
 
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('admintoolsNavigationBar'))
+			$menuitems = $this->callHook('admintoolsNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
+		echo "   </ul>\n";
 		echo "<ul class=\"nav\">\n";
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -702,7 +710,16 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		$menuitems = array();
+		if (!$this->params['user']->isGuest())
+			$menuitems['addevent'] = array('link'=>"../out/out.AddEvent.php", 'label'=>'add_event');
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('calendarNavigationBar'))
+			$menuitems = $this->callHook('calendarNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -793,8 +810,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
-	function contentContainerStart($class='') { /* {{{ */
-		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
+	function contentContainerStart($class='', $id='') { /* {{{ */
+		echo "<div class=\"well".($class ? " ".$class : "")."\"".($id ? " id=\"".$id."\"" : "").">\n";
 		return;
 	} /* }}} */
 
@@ -830,7 +847,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function formSubmit($value, $name='') { /* {{{ */
 		echo "<div class=\"controls\">\n";
-		echo "<button type=\"submit\" class=\"btn\"".($name ? ' name="'.$name.'"' : '').">".$value."</button>\n";
+		echo "<button type=\"submit\" class=\"btn\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').">".$value."</button>\n";
 		echo "</div>\n";
 	} /* }}} */
 
