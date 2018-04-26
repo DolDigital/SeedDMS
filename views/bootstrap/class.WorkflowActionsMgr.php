@@ -103,9 +103,7 @@ $(document).ready( function() {
 	function showWorkflowActionForm($action) { /* {{{ */
 		if($action) {
 			if($action->isUsed()) {
-?>
-				<p><?php echo getMLText('workflow_action_in_use') ?></p>
-<?php
+				$this->infoMsg(getMLText('workflow_action_in_use'));
 			} else {
 ?>
 <form class="form-inline" action="../op/op.RemoveWorkflowAction.php" method="post">
@@ -117,6 +115,7 @@ $(document).ready( function() {
 			}
 		}
 ?>
+	<?php	$this->contentContainerStart(); ?>
 <form action="../op/op.WorkflowActionsMgr.php" method="post" class="form-horizontal">
 <?php
 		if($action) {
@@ -131,20 +130,14 @@ $(document).ready( function() {
 			<input type="hidden" name="action" value="addworkflowaction">
 <?php
 		}
+		$this->formField(
+			getMLText("workflow_action_name"),
+			'<input type="text" id="name" name="name" value="'.($action ? htmlspecialchars($action->getName()) : '').'">'
+		);
+		$this->formSubmit('<i class="icon-save"></i> '.getMLText("save"));
 ?>
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("workflow_action_name");?>:</label>
-		<div class="controls">
-			<input type="text" id="name" name="name" value="<?php print $action ? htmlspecialchars($action->getName()) : '';?>">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="login"></label>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-		</div>
-	</div>
 	</form>
+	<?php	$this->contentContainerEnd(); ?>
 <?php
 	} /* }}} */
 
@@ -169,35 +162,32 @@ $(document).ready( function() {
 ?>
 
 <div class="row-fluid">
-<div class="span4">
-<div class="well">
-<form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
-<select id="selector" class="span9">
-<option value="-1"><?php echo getMLText("choose_workflow_action")?>
-<option value="0"><?php echo getMLText("add_workflow_action")?>
+	<div class="span4">
+		<?php	$this->contentContainerStart(); ?>
+			<form class="form-horizontal">
 <?php
+		$html = '<select id="selector" class="span9">
+<option value="-1">'.getMLText("choose_workflow_action").'</option>
+<option value="0">'.getMLText("add_workflow_action").'</option>';
 		foreach ($workflowactions as $currWorkflowAction) {
-			print "<option value=\"".$currWorkflowAction->getID()."\" ".($selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowAction->getName());
+			$html .= "<option value=\"".$currWorkflowAction->getID()."\" ".($selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowAction->getName());
 		}
+		$html .= '</select>';
+		$this->formField(
+			getMLText("selection"),
+			$html
+		);
 ?>
-</select>
-		</div>
+			</form>
+		<?php	$this->contentContainerEnd(); ?>
+		<div class="ajax" data-view="WorkflowActionsMgr" data-action="info" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
 	</div>
-</form>
-</div>
-<div class="ajax" data-view="WorkflowActionsMgr" data-action="info" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
-</div>
 
-<div class="span8">
-	<div class="well">
+	<div class="span8">
 		<div class="ajax" data-view="WorkflowActionsMgr" data-action="form" <?php echo ($selworkflowaction ? "data-query=\"workflowactionid=".$selworkflowaction->getID()."\"" : "") ?>></div>
 	</div>
 </div>
 
-</div>
 <?php
 		$this->contentEnd();
 		$this->htmlEndPage();

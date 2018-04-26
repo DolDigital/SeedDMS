@@ -528,10 +528,10 @@ $(document).ready( function() {
 </div>
 
 <div class="span8">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	</div>
-</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 <?php

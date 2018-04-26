@@ -300,9 +300,9 @@ $(document).ready( function() {
 </div>
 
 <div class="span8">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
-	</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 </div>

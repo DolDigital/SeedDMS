@@ -210,11 +210,11 @@ $(document).ready( function() {
 
 		echo "<div class=\"span3\">\n";
 		$this->contentHeading(getMLText("chart_selection"));
-		echo "<div class=\"well\">\n";
+		$this->contentContainerStart();
 		foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus', 'docspermonth', 'docsaccumulated') as $atype) {
 			echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
 		}
-		echo "</div>\n";
+		$this->contentContainerEnd();
 		echo "</div>\n";
 
 		if(in_array($type, array('docspermonth', 'docsaccumulated'))) {
@@ -223,18 +223,18 @@ $(document).ready( function() {
 			echo "<div class=\"span6\">\n";
 		}
 		$this->contentHeading(getMLText('chart_'.$type.'_title'));
-		echo "<div class=\"well\">\n";
+		$this->contentContainerStart();
 ?>
 <div id="chart" style="height: 400px;" class="chart"></div>
 <?php
-		echo "</div>\n";
+		$this->contentContainerEnd();
 		echo "</div>\n";
 
 		if(!in_array($type, array('docspermonth', 'docsaccumulated'))) {
 			echo "<div class=\"span3\">\n";
 			$this->contentHeading(getMLText('legend'));
-			echo "<div class=\"well\" id=\"legend\">\n";
-			echo "</div>\n";
+			$this->contentContainerStart('', 'legend');
+			$this->contentContainerEnd();
 			echo "</div>\n";
 		}
 

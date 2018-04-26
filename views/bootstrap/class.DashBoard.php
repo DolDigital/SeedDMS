@@ -50,15 +50,15 @@ class SeedDMS_View_DashBoard extends SeedDMS_Bootstrap_Style {
 		<div class="row-fluid">
 		<div class="span12">
 		  <?php $this->contentHeading('Gruppen'); ?>
-		  <div class="well">
+			<?php	$this->contentContainerStart(); ?>
 			  Hier eine Übersicht der Gruppen, auf die der Anwender zugreifen darf.
-			</div>
+			<?php	$this->contentContainerEnd(); ?>
 		</div>
 		<div>
 		<div class="row-fluid">
 		<div class="span4">
 		  <?php $this->contentHeading('Lesezeichen'); ?>
-		  <div class="well">
+			<?php	$this->contentContainerStart(); ?>
 			  <table class="table"><thead>
 				<tr>
 				<th></th>
@@ -73,20 +73,20 @@ class SeedDMS_View_DashBoard extends SeedDMS_Bootstrap_Style {
 				<td>Admin</td><td>freigegeben</td></tr>
 				</tbody>
 				</table>
-			</div>
+			<?php	$this->contentContainerEnd(); ?>
 		  <?php $this->contentHeading('Neue Dokumente'); ?>
-		  <div class="well">
-			</div>
+			<?php	$this->contentContainerStart(); ?>
+			<?php	$this->contentContainerEnd(); ?>
 		  <?php $this->contentHeading('Dokumente zur Prüfung'); ?>
-		  <div class="well">
-			</div>
+			<?php	$this->contentContainerStart(); ?>
+			<?php	$this->contentContainerEnd(); ?>
 		  <?php $this->contentHeading('Dokumente zur Genehmigung'); ?>
-		  <div class="well">
-			</div>
+			<?php	$this->contentContainerStart(); ?>
+			<?php	$this->contentContainerEnd(); ?>
 		</div>
 		<div class="span4">
 		  <?php $this->contentHeading('Neue Beiträge im Wiki'); ?>
-		  <div class="well">
+			<?php	$this->contentContainerStart(); ?>
 			  <table class="table"><thead>
 				<tr>
 				<th></th>
@@ -101,15 +101,15 @@ class SeedDMS_View_DashBoard extends SeedDMS_Bootstrap_Style {
 				<td>H. Huber</td><td>28.11.2013</td></tr>
 				</tbody>
 				</table>
-			</div>
+			<?php	$this->contentContainerEnd(); ?>
 		  <?php $this->contentHeading('Zuletzt bearbeitet'); ?>
-		  <div class="well">
-			</div>
+			<?php	$this->contentContainerStart(); ?>
+			<?php	$this->contentContainerEnd(); ?>
 		</div>
 		<div class="span4">
 		  <?php $this->contentHeading('Neue Beiträge im Diskussionsforum'); ?>
-		  <div class="well">
-			</div>
+			<?php	$this->contentContainerStart(); ?>
+			<?php	$this->contentContainerEnd(); ?>
 		</div>
 		</div>
 		

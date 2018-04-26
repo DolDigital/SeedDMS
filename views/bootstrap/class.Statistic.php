@@ -179,17 +179,17 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("folders_and_documents_statistic"));
 		echo "<div class=\"row-fluid\">\n";
 		echo "<div class=\"span8\">\n";
-		echo "<div class=\"well\">\n";
+		$this->contentContainerStart();
 
 		print "<ul>\n";
 		$this->printFolder($rootfolder);
 		print "</ul>\n";
 
-		echo "</div>\n";
+		$this->contentContainerEnd();
 		echo "</div>\n";
 
 		echo "<div class=\"span4\">\n";
-		echo "<div class=\"well\">\n";
+		$this->contentContainerStart();
 		print "<legend>".getMLText("legend")."</legend>\n";
 		print "<ul class=\"unstyled\">\n";
 		print "<li><span style=\"color:black\">".getMLText("access_inheritance")." </span></li>";
@@ -208,7 +208,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 
 		print "</ul>\n";
 
-		echo "</div>\n";
+		$this->contentContainerEnd();
 		echo "</div>\n";
 		echo "</div>\n";
 

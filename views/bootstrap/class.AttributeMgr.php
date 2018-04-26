@@ -310,9 +310,9 @@ $(document).ready( function() {
 </div>
 
 <div class="span6">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="AttributeMgr" data-action="form" <?php echo ($selattrdef ? "data-query=\"attrdefid=".$selattrdef->getID()."\"" : "") ?>></div>
-	</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 </div>

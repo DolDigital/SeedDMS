@@ -134,7 +134,7 @@ $(document).ready(function() {
 			}
 		}
 ?>
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 	<form class="form-horizontal" action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data">
 <?php
 	if($workflow) {
@@ -159,35 +159,27 @@ $(document).ready(function() {
 		</div>
 <?php
 		}
+		$this->formField(
+			getMLText("workflow_name"),
+			'<input type="text" id="name" name="name" value="'.($workflow ? htmlspecialchars($workflow->getName()) : '').'">'
+		);
+		$html = '
+				<select name="initstate">';
+		foreach($workflowstates as $workflowstate) {
+			$html .= "<option value=\"".$workflowstate->getID()."\"";
+			if($workflow && $workflow->getInitState()->getID() == $workflowstate->getID())
+				$html .= " selected=\"selected\"";
+			$html .= ">".htmlspecialchars($workflowstate->getName())."</option>\n";
+		}
+		$html .= '</select>';
+		$this->formField(
+			getMLText("workflow_initstate"),
+			$html
+		);
+		$this->formSubmit('<i class="icon-save"></i> '.getMLText("save"));
 ?>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("workflow_name");?>:</label>
-			<div class="controls">
-				<input type="text" name="name" value="<?php print ($workflow ? htmlspecialchars($workflow->getName()) : "");?>">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("workflow_initstate");?>:</label>
-			<div class="controls">
-				<select name="initstate">
-<?php
-			foreach($workflowstates as $workflowstate) {
-				echo "<option value=\"".$workflowstate->getID()."\"";
-				if($workflow && $workflow->getInitState()->getID() == $workflowstate->getID())
-					echo " selected=\"selected\"";
-				echo ">".htmlspecialchars($workflowstate->getName())."</option>\n";
-			}
-?>
-			</select>
-			</div>
-		</div>
-
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-		</div>
-
 	</form>
-	</div>
+	<?php	$this->contentContainerEnd(); ?>
 <?php
 		if($workflow) {
 		$actions = $dms->getAllWorkflowActions();
@@ -320,31 +312,30 @@ $(document).ready(function() {
 ?>
 
 <div class="row-fluid">
-<div class="span5">
-<div class="well">
-<form class="form-horizontal">
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-		<div class="controls">
-<select id="selector" class="span9">
-<option value="-1"><?php echo getMLText("choose_workflow")?>
-<option value="0"><?php echo getMLText("add_workflow")?>
+	<div class="span5">
+		<?php	$this->contentContainerStart(); ?>
+			<form class="form-horizontal">
 <?php
+		$html = '<select id="selector" class="span9">
+<option value="-1">'.getMLText("choose_workflow").'</option>
+<option value="0">'.getMLText("add_workflow").'</option>';
 		foreach ($workflows as $currWorkflow) {
-			print "<option value=\"".$currWorkflow->getID()."\" ".($selworkflow && $currWorkflow->getID()==$selworkflow->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflow->getName());
+			$html .= "<option value=\"".$currWorkflow->getID()."\" ".($selworkflow && $currWorkflow->getID()==$selworkflow->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflow->getName());
 		}
+		$html .= '</select>';
+		$this->formField(
+			getMLText("selection"),
+			$html
+		);
 ?>
-</select>
-		</div>
+			</form>
+		<?php	$this->contentContainerEnd(); ?>
+		<div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
 	</div>
-</form>
-</div>
-<div class="ajax" data-view="WorkflowMgr" data-action="info" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
-</div>
 
-<div class="span7">
+	<div class="span7">
 		<div class="ajax" data-view="WorkflowMgr" data-action="form" <?php echo ($selworkflow ? "data-query=\"workflowid=".$selworkflow->getID()."\"" : "") ?>></div>
-</div>
+	</div>
 </div>
 
 <?php

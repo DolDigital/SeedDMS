@@ -144,7 +144,7 @@ $(document).ready( function() {
 		$this->contentHeading(getMLText("global_document_categories"));
 ?>
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span6">
 <form class="form-horizontal">
 			<select class="chzn-select" id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
@@ -160,11 +160,10 @@ $(document).ready( function() {
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 
-	<div class="span8">
-		<div class="well">
+	<div class="span6">
+		<?php	$this->contentContainerStart(); ?>
 			<div class="ajax" data-view="Categories" data-action="form" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
-
-		</div>
+		<?php	$this->contentContainerEnd(); ?>
 	</div>
 </div>
 	
