@@ -66,6 +66,7 @@ if($view) {
 	$view->setParam('presetexpiration', $settings->_presetExpirationDate);
 	$view->setParam('sortusersinlist', $settings->_sortUsersInList);
 	$view->setParam('defaultposition', $settings->_defaultDocPosition);
+	$view->setParam('maxuploadsize', $settings->_maxUploadSize);
 	$view->setParam('orderby', $settings->_sortFoldersDefault);
 	$view($_GET);
 	exit;
