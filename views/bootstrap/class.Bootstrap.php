@@ -840,7 +840,24 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function formField($title, $value) { /* {{{ */
 		echo "<div class=\"control-group\">";
 		echo "	<label class=\"control-label\">".$title.":</label>";
-		echo "	<div class=\"controls\">".$value."</div>";
+		echo "	<div class=\"controls\">";
+		if(is_string($value)) {
+			echo $value;
+		} elseif(is_array($value)) {
+			switch($value['element']) {
+			case 'input':
+			default:
+			echo '<input'.
+				(!empty($value['type']) ? ' type="'.$value['type'].'"' : '').
+				(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+				(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+				(!empty($value['placeholder']) ? ' placeholder="'.$value['placeholder'].'"' : '').
+				(!empty($value['autocomplete']) ? ' autocomplete="'.$value['autocomplete'].'"' : '').
+				(!empty($value['required']) ? ' required' : '').">";
+				break;
+			}
+		}
+		echo "</div>";
 		echo "</div>";
 		return;
 	} /* }}} */
