@@ -123,11 +123,26 @@ $(document).ready( function() {
 		}
 		$this->formField(
 			getMLText("user_login"),
-			'<input type="text" id="login" name="login" placeholder="login" autocomplete="off" required>'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'login',
+				'name'=>'login',
+				'placeholder'=>'login',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("password"),
-			'<input type="Password" id="pwd" name="pwd" autocomplete="off" required>'
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'pwd',
+				'name'=>'pwd',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
 		);
 		if($enableLanguageSelector) {
 			$html = "<select id=\"languageselector\" name=\"lang\">";
