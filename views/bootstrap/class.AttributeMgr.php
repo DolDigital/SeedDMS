@@ -191,7 +191,12 @@ $(document).ready( function() {
 		}
 		$this->formField(
 			getMLText("attrdef_name"),
-			'<input type="text" name="name" value="'.($attrdef ? htmlspecialchars($attrdef->getName()) : '').'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+				'value'=>($attrdef ? htmlspecialchars($attrdef->getName()) : '')
+			)
 		);
 ?>
 					<div class="control-group">
@@ -213,24 +218,56 @@ $(document).ready( function() {
 <?php
 		$this->formField(
 			getMLText("attrdef_multiple"),
-			'<input type="checkbox" value="1" name="multiple"'.($attrdef && $attrdef->getMultipleValues() ? " checked" : "").'/>'
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'multiple',
+				'value'=>1,
+				'checked'=>($attrdef && $attrdef->getMultipleValues())
+			)
 		);
 		$this->formField(
 			getMLText("attrdef_minvalues"),
-			'<input type="text" value="'.($attrdef ? $attrdef->getMinValues() : '').'" name="minvalues" />'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'minvalues',
+				'value'=>($attrdef ? $attrdef->getMinValues() : ''),
+			)
 		);
 		$this->formField(
 			getMLText("attrdef_maxvalues"),
-			'<input type="text" value="'.($attrdef ? $attrdef->getMaxValues() : '').'" name="maxvalues" />'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'maxvalues',
+				'value'=>($attrdef ? $attrdef->getMaxValues() : ''),
+			)
 		);
 		$this->formField(
 			getMLText("attrdef_valueset"),
-			(($attrdef && strlen($attrdef->getValueSet()) > 30) ? '<textarea name="valueset" rows="5">'.(($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : '').'</textarea>
-' : '<input type="text" value="'.($attrdef ? $attrdef->getValueSet() : '').'" name="valueset" />')
+			(($attrdef && strlen($attrdef->getValueSet()) > 30)
+			? array(
+				'element'=>'textarea',
+				'name'=>'valueset',
+				'rows'=>5,
+				'value'=>(($attrdef && $attrdef->getValueSet()) ? $attrdef->getValueSetSeparator().implode("\n".$attrdef->getValueSetSeparator(), $attrdef->getValueSetAsArray()) : ''),
+			)
+			: array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'valueset',
+				'value'=>($attrdef ? $attrdef->getValueSet() : ''),
+			))
 		);
 		$this->formField(
 			getMLText("attrdef_regex"),
-			'<input type="text" value="'.($attrdef ? $attrdef->getRegex() : '').'" name="regex" />'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'regex',
+				'value'=>($attrdef ? $attrdef->getRegex() : ''),
+			)
 		);
 		$this->formSubmit('<i class="icon-save"></i> '.getMLText('save'));
 ?>

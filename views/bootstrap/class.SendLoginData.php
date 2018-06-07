@@ -49,7 +49,10 @@ class SeedDMS_View_SendLoginData extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment"></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+			)
 		);
 		$this->formSubmit("<i class=\"icon-envelope-alt\"></i> ".getMLText('send_email'));
 ?>

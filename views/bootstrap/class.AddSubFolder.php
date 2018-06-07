@@ -86,11 +86,23 @@ $(document).ready( function() {
 <?php	
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name" size="60" required>'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80"'.($strictformcheck ? ' required' : '').'></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'required'=>$strictformcheck
+			)
 		);
 		$this->formField(getMLText("sequence"), $this->getSequenceChooser($folder->getSubFolders('s')).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
 

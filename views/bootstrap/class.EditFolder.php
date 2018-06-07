@@ -86,11 +86,24 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name" value="'.htmlspecialchars($folder->getName()).'" size="60" required>'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+				'value'=>htmlspecialchars($folder->getName()),
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80"'.($strictformcheck ? ' required' : '').'>'.htmlspecialchars($folder->getComment()).'</textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'value'=>htmlspecialchars($folder->getComment()),
+				'required'=>$strictformcheck
+			)
 		);
 		$parent = ($folder->getID() == $rootfolderid) ? false : $folder->getParent();
 		if ($parent && $parent->getAccessMode($user) > M_READ) {

@@ -113,7 +113,12 @@ $(document).ready( function() {
 <?php
 			$this->formField(
 				getMLText("name"),
-				'<input type="text" name="name" value="'.($category ? htmlspecialchars($category->getName()) : '').'">'
+				array(
+					'element'=>'input',
+					'type'=>'text',
+					'name'=>'name',
+					'value'=>($category ? htmlspecialchars($category->getName()) : '')
+				)
 			);
 			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>

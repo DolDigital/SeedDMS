@@ -83,11 +83,27 @@ document.form1.email.focus();
 <?php
 		$this->formField(
 			getMLText("user_login"),
-			'<input type="text" name="login" id="login">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'login',
+				'name'=>'login',
+				'placeholder'=>'login',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("email"),
-			'<input type="text" name="email" id="email">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'email',
+				'name'=>'email',
+				'placeholder'=>'email',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
 		);
 		$this->formSubmit(getMLText('submit_password_forgotten'));
 ?>

@@ -91,7 +91,13 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80">'.htmlspecialchars($version->getComment()).'</textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'value'=>htmlspecialchars($version->getComment())
+			)
 		);
 		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>

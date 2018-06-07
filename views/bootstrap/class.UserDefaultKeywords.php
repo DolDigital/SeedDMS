@@ -80,25 +80,27 @@ $(document).ready(function() {
 		<?php	$this->contentContainerStart(); ?>
 			<form class="form-horizontal">
 <?php
-		$html = '<select id="selector">
-							<option value="-1">'.getMLText("choose_category").'
-							<option value="0">'.getMLText("new_default_keyword_category");
-
 		$selected=0;
 		$count=2;
+		$options = array();
+		$options[] = array('-1', getMLText("choose_category"));
+		$options[] = array('0', getMLText("new_default_keyword_category"));
 		foreach ($categories as $category) {
 
 			$owner = $category->getOwner();
 			if ($owner->getID() != $user->getID()) continue;
 
 			if (isset($_GET["categoryid"]) && $category->getID()==$_GET["categoryid"]) $selected=$count;
-			$html .= "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName())."</option>";
+			$options[] = array($category->getID(), htmlspecialchars($category->getName()));
 			$count++;
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("selection"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'options'=>$options,
+			)
 		);
 ?>
 			</form>
@@ -114,7 +116,11 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+			)
 		);
 		$this->formSubmit(getMLText("new_default_keyword_category"));
 ?>

@@ -845,15 +845,36 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo $value;
 		} elseif(is_array($value)) {
 			switch($value['element']) {
+			case 'select':
+				echo '<select'.
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['multiple']) ? ' multiple"' : '').">";
+				if(isset($value['options']) && is_array($value['options'])) {
+					foreach($value['options'] as $val)
+						echo '<option value="'.$val[0].'"'.(!empty($val[2]) ? ' selected' : '').'>'.$val[1].'</option>';
+				}
+				echo '</select>';
+				break;
+			case 'textarea':
+				echo '<textarea'.
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['rows']) ? ' rows="'.$value['rows'].'"' : '').
+					(!empty($value['cols']) ? ' rows="'.$value['cols'].'"' : '').
+					(!empty($value['required']) ? ' required' : '').">".(!empty($value['value']) ? $value['value'] : '')."</textarea>";
+				break;
 			case 'input':
 			default:
-			echo '<input'.
-				(!empty($value['type']) ? ' type="'.$value['type'].'"' : '').
-				(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
-				(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
-				(!empty($value['placeholder']) ? ' placeholder="'.$value['placeholder'].'"' : '').
-				(!empty($value['autocomplete']) ? ' autocomplete="'.$value['autocomplete'].'"' : '').
-				(!empty($value['required']) ? ' required' : '').">";
+				echo '<input'.
+					(!empty($value['type']) ? ' type="'.$value['type'].'"' : '').
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['value']) ? ' value="'.$value['value'].'"' : '').
+					(!empty($value['placeholder']) ? ' placeholder="'.$value['placeholder'].'"' : '').
+					(!empty($value['autocomplete']) ? ' autocomplete="'.$value['autocomplete'].'"' : '').
+					(!empty($value['checked']) ? ' checked' : '').
+					(!empty($value['required']) ? ' required' : '').">";
 				break;
 			}
 		}

@@ -74,7 +74,13 @@ document.form1.newpassword.focus();
 		}
 		$this->formField(
 			getMLText("confirm_pwd"),
-			'<input type="password" name="newpasswordrepeat" id="passwordrepeat">'
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'passwordrepeat',
+				'name'=>'newpasswordrepeat',
+				'autocomplete'=>'off',
+			)
 		);
 		$this->formSubmit(getMLText('submit_password'));
 ?>

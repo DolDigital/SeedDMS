@@ -133,17 +133,25 @@ $(document).ready(function() {
 		}
 		$this->formField(
 			getMLText("workflow_state_name"),
-			'<input type="text" id="name" name="name" value="'.($state ? htmlspecialchars($state->getName()) : '').'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($state ? htmlspecialchars($state->getName()) : '')
+			)
 		);
-		$html = '
-			<select name="docstatus">
-				<option value="">'.getMLText('keep_doc_status').'</option>
-				<option value="'.S_RELEASED.'" '.(($state && $state->getDocumentStatus() == S_RELEASED) ? "selected" : '').'>'.getMLText('released').'</option>
-				<option value="'.S_REJECTED.'" '.(($state && $state->getDocumentStatus() == S_REJECTED) ? "selected" : '').'>'.getMLText('rejected').'</option>';
-		$html .= '</select>';
+		$options = array();
+		$options[] = array("", getMLText("keep_doc_status"));
+		$options[] = array(S_RELEASED, getMLText("released"), ($state && $state->getDocumentStatus() == S_RELEASED));
+		$options[] = array(S_REJECTED, getMLText("rejected"), ($state && $state->getDocumentStatus() == S_REJECTED));
 		$this->formField(
 			getMLText("workflow_state_docstatus"),
-			$html
+			array(
+				'element'=>'select',
+				'name'=>'docstatus',
+				'options'=>$options
+			)
 		);
 		$this->formSubmit('<i class="icon-save"></i> '.getMLText("save"));
 ?>
@@ -177,16 +185,19 @@ $(document).ready(function() {
 		<?php	$this->contentContainerStart(); ?>
 			<form class="form-horizontal">
 <?php
-		$html = '<select id="selector" class="span9">
-<option value="-1">'.getMLText("choose_workflow_state").'</option>
-<option value="0">'.getMLText("add_workflow_state").'</option>';
+		$options = array();
+		$options[] = array("-1", getMLText("choose_workflow_state"));
+		$options[] = array("0", getMLText("add_workflow_state"));
 		foreach ($workflowstates as $currWorkflowState) {
-			$html .= "<option value=\"".$currWorkflowState->getID()."\" ".($selworkflowstate && $currWorkflowState->getID()==$selworkflowstate->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowState->getName());
+			$options[] = array($currWorkflowState->getID(), htmlspecialchars($currWorkflowState->getName()), $selworkflowstate && $currWorkflowState->getID()==$selworkflowstate->getID());
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("selection"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'options'=>$options
+			)
 		);
 ?>
 			</form>

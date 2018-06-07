@@ -81,11 +81,23 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 			);
 			$this->formField(
 				getMLText("name"),
-				'<input type="text" name="name" value="'.htmlspecialchars($event["name"]).'" size="60" required>'
+				array(
+					'element'=>'input',
+					'type'=>'text',
+					'name'=>'name',
+					'value'=>htmlspecialchars($event["name"])
+				)
 			);
 			$this->formField(
 				getMLText("comment"),
-				'<textarea name="comment" rows="4" cols="80"'.($strictformcheck ? ' required' : '').'>'.htmlspecialchars($event["comment"]).'</textarea>'
+				array(
+					'element'=>'textarea',
+					'name'=>'comment',
+					'rows'=>4,
+					'cols'=>80,
+					'value'=>htmlspecialchars($event["comment"]),
+					'required'=>$strictformcheck
+				)
 			);
 			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>

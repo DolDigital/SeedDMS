@@ -67,18 +67,21 @@ $(document).ready( function() {
 <form class="form-horizontal" action="../op/op.SetExpires.php" method="post">
 <input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 <?php
-		$html ='
-			<select name="presetexpdate" id="presetexpdate">
-				<option value="never">'.getMLText('does_not_expire').'</option>
-				<option value="date"'.($expdate != '' ? " selected" : "").'>'.getMLText('expire_by_date').'</option>
-				<option value="1w">'.getMLText('expire_in_1w').'</option>
-				<option value="1m">'.getMLText('expire_in_1m').'</option>
-				<option value="1y">'.getMLText('expire_in_1y').'</option>
-				<option value="2y">'.getMLText('expire_in_2y').'</option>
-			</select>';
+		$options = array();
+		$options[] = array('never', getMLText('does_not_expire'));
+		$options[] = array('date', getMLText('expire_by_date'), $expdate != '');
+		$options[] = array('1w', getMLText('expire_in_1w'));
+		$options[] = array('1m', getMLText('expire_in_1m'));
+		$options[] = array('1y', getMLText('expire_in_1y'));
+		$options[] = array('2y', getMLText('expire_in_2y'));
 		$this->formField(
 			getMLText("preset_expires"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'presetexpdate',
+				'name'=>'presetexpdate',
+				'options'=>$options
+			)
 		);
 		$this->formField(
 			getMLText("expires"),

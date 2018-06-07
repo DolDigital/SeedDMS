@@ -157,28 +157,52 @@ $(document).ready( function() {
 			getMLText("local_file"),
 			($enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile[]', false))
 		);
-		$html = '<select name="version" id="version">
-		<option value="">'.getMLText('document').'</option>';
+		$options = array();
+		$options[] = array("", getMLText('document'));
 		$versions = $document->getContent();
-		foreach($versions as $version)
-			$html .= "<option value=\"".$version->getVersion()."\">".getMLText('version')." ".$version->getVersion()."</option>";
-		$html .= '</select>';
+		foreach($versions as $version) {
+			$options[] = array($version->getVersion(), getMLText('version')." ".$version->getVersion());
+		}
 		$this->formField(
 			getMLText("version"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'version',
+				'name'=>'version',
+				'options'=>$options
+			)
 		);
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name" id="name" size="60">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" id="comment" rows="4" cols="80"'.($strictformcheck ?  ' required' : '').'></textarea>'
+			array(
+				'element'=>'textarea',
+				'id'=>'comment',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'required'=>$strictformcheck
+			)
 		);
 		if ($document->getAccessMode($user) >= M_READWRITE) {
 			$this->formField(
 				getMLText("document_link_public"),
-				'<input type="checkbox" name="public" value="true" checked />'
+				array(
+					'element'=>'input',
+					'type'=>'checkbox',
+					'id'=>'public',
+					'name'=>'public',
+					'value'=>'true',
+					'checked'=>true,
+				)
 			);
 		}
 		$this->formSubmit(getMLText('add'));

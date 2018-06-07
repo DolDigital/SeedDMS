@@ -51,27 +51,48 @@ class SeedDMS_View_EditDocumentFile extends SeedDMS_Bootstrap_Style {
 	<input type="hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="hidden" name="fileid" value="<?php echo $file->getID()?>">
 <?php
-		$html = '<select name="version" id="version">
-			<option value="">'.getMLText('document').'</option>';
+		$options = array();
+		$options[] = array("", getMLText('document'));
 		$versions = $document->getContent();
 		foreach($versions as $version)
-			$html .= "<option value=\"".$version->getVersion()."\"".($version->getVersion() == $file->getVersion() ? " selected" : "").">".getMLText('version')." ".$version->getVersion()."</option>";
-		$html .= "</select>";
+			$options[] = array($version->getVersion(), getMLText('version')." ".$version->getVersion(), $version->getVersion() == $file->getVersion());
 		$this->formField(
 			getMLText("version"),
-			$html
+			array(
+				'element'=>'select',
+				'name'=>'version',
+				'id'=>'version',
+				'options'=>$options,
+			)
 		);
 		$this->formField(
 			getMLText("name"),
-			'<input name="name" type="text" value="'.htmlspecialchars($file->getName()).'"/>'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+				'value'=>htmlspecialchars($file->getName()),
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80">'.htmlspecialchars($file->getComment()).'</textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'value'=>htmlspecialchars($file->getComment())
+			)
 		);
 		$this->formField(
 			getMLText("document_link_public"),
-			'<input name="public" type="checkbox" value="true"'.($file->isPublic() ? " checked" : "").' />'
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'public',
+				'value'=>'true',
+				'checked'=>$file->isPublic()
+			)
 		);
 ?>
 <?php

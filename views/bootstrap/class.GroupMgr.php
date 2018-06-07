@@ -191,11 +191,23 @@ $(document).ready( function() {
 		}
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name" id="name" value="'.($group ? htmlspecialchars($group->getName()) : '').'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($group ? htmlspecialchars($group->getName()) : '')
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" id="comment" rows="4" cols="50">'.($group ? htmlspecialchars($group->getComment()) : '').'</textarea>'
+			array(
+				'element'=>'textarea',
+				'id'=>'comment',
+				'name'=>'comment',
+				'rows'=>4,
+				'value'=>($group ? htmlspecialchars($group->getComment()) : '')
+			)
 		);
 		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>

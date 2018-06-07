@@ -69,7 +69,12 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 
 			$this->formField(
 				getMLText("removeFolderFromDropFolder"),
-				'<input type="checkbox" name="remove" value="1"/>'
+				array(
+					'element'=>'input',
+					'type'=>'checkbox',
+					'name'=>'remove',
+					'value'=>'1'
+				)
 			);
 			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('import'));
 			print "</form>\n";

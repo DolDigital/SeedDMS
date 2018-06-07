@@ -114,7 +114,11 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" cols="80" rows="4"></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4
+			)
 		);
 		$this->formSubmit(getMLText("action_".strtolower($action->getName()), array(), $action->getName()));
 ?>

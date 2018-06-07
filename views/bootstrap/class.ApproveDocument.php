@@ -134,15 +134,29 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" cols="80" rows="4"></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
 		);
 		$this->formField(
 			getMLText("approval_file"),
 			$this->getFileChooser('approvalfile', false)
 		);
+		$options = array();
+		if($approvalStatus['status'] != 1)
+			$options[] = array('1', getMLText("status_approved"));
+		if($approvalStatus['status'] != -1)
+			$options[] = array('-1', getMLText("rejected"));
 		$this->formField(
 			getMLText("approval_status"),
-			'<select name="approvalStatus">'.($approvalStatus['status'] != 1 ? '<option value="1">'.getMLText("status_approved").'</option>' : '').($approvalStatus['status'] != -1 ? '<option value="-1">'.getMLText("rejected").'</option>' : '').'</select>'
+			array(
+				'element'=>'select',
+				'name'=>'approvalStatus',
+				'options'=>$options,
+			)
 		);
 		$this->formSubmit(getMLText('submit_approval'), $approvaltype.'Approval');
 ?>

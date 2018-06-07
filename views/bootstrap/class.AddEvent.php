@@ -96,11 +96,22 @@ $(document).ready(function() {
 		);
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" name="name" size="60">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80"></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
 		);
 		$this->formSubmit(getMLText('add_event'));
 ?>

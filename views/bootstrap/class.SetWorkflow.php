@@ -83,19 +83,21 @@ $(document).ready( function() {
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
 
 <?php
-					$html = "<select id=\"selector\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
 					$workflows=$dms->getAllWorkflows();
+					$options = array();
 					foreach ($workflows as $workflow) {
-						$html .= "<option value=\"".$workflow->getID()."\"";
-						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-							$html .= " selected=\"selected\"";
-						$html .= ">". htmlspecialchars($workflow->getName())."</option>";
+						$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()), $mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID());
 					}
-					$html .= "</select>";
 					$this->formField(
 						getMLText("workflow"),
-						$html
+						array(
+							'element'=>'select',
+							'id'=>'selector',
+							'name'=>'workflow',
+							'data-placeholder'=>getMLText('select_workflow'),
+							'options'=>$options
+						)
 					);
 					$this->formSubmit(getMLText('set_workflow'));
 ?>

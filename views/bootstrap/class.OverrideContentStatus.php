@@ -90,16 +90,25 @@ $(document).ready(function() {
 <?php
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="40"></textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+			)
 		);
-		$html = '<select name="overrideStatus">
-				<option value=""></option>';
-		if ($overallStatus["status"] == S_OBSOLETE) $html .= "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
-		if ($overallStatus["status"] == S_RELEASED) $html .= "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
-		$html .= "</select>";
+		$options = array();
+		$options[] = array('', '');
+		if ($overallStatus["status"] == S_OBSOLETE)
+			$options[] = array(S_RELEASED, getOverallStatusText(S_RELEASED));
+		if ($overallStatus["status"] == S_RELEASED)
+			$options[] = array(S_OBSOLETE, getOverallStatusText(S_OBSOLETE));
 		$this->formField(
 			getMLText("status"),
-			$html
+			array(
+				'element'=>'select',
+				'name'=>'overrideStatus',
+				'options'=>$options,
+			)
 		);
 		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('update'));
 ?>

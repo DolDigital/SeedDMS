@@ -132,7 +132,13 @@ $(document).ready( function() {
 		}
 		$this->formField(
 			getMLText("workflow_action_name"),
-			'<input type="text" id="name" name="name" value="'.($action ? htmlspecialchars($action->getName()) : '').'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($action ? htmlspecialchars($action->getName()) : '')
+			)
 		);
 		$this->formSubmit('<i class="icon-save"></i> '.getMLText("save"));
 ?>
@@ -166,16 +172,19 @@ $(document).ready( function() {
 		<?php	$this->contentContainerStart(); ?>
 			<form class="form-horizontal">
 <?php
-		$html = '<select id="selector" class="span9">
-<option value="-1">'.getMLText("choose_workflow_action").'</option>
-<option value="0">'.getMLText("add_workflow_action").'</option>';
+		$options = array();
+		$options[] = array('-1', getMLText("choose_workflow_action"));
+		$options[] = array('0', getMLText("add_workflow_action"));
 		foreach ($workflowactions as $currWorkflowAction) {
-			$html .= "<option value=\"".$currWorkflowAction->getID()."\" ".($selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflowAction->getName());
+			$options[] = array($currWorkflowAction->getID(), htmlspecialchars($currWorkflowAction->getName()), $selworkflowaction && $currWorkflowAction->getID()==$selworkflowaction->getID());
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("selection"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'options'=>$options
+			)
 		);
 ?>
 			</form>

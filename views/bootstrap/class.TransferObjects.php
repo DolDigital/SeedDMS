@@ -51,18 +51,22 @@ class SeedDMS_View_TransferObjects extends SeedDMS_Bootstrap_Style {
 <input type="hidden" name="action" value="transferobjects">
 <?php echo createHiddenFieldWithKey('transferobjects'); ?>
 <?php
-		$html = '<select name="assignTo" class="chzn-select">';
+		$options = array();
 		foreach ($allusers as $currUser) {
 			if ($currUser->isGuest() || ($currUser->getID() == $rmuser->getID()) )
 				continue;
 
 			if ($rmuser && $currUser->getID()==$rmuser->getID()) $selected=$count;
-			$html .= "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName());
+			$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName()));
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("transfer_objects_to_user"),
-			$html
+			array(
+				'element'=>'select',
+				'name'=>'assignTo',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
 		);
 		$this->formSubmit("<i class=\"icon-share-alt\"></i> ".getMLText('transfer_objects'));
 ?>

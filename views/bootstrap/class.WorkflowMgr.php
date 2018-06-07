@@ -161,20 +161,25 @@ $(document).ready(function() {
 		}
 		$this->formField(
 			getMLText("workflow_name"),
-			'<input type="text" id="name" name="name" value="'.($workflow ? htmlspecialchars($workflow->getName()) : '').'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($workflow ? htmlspecialchars($workflow->getName()) : '')
+			)
 		);
-		$html = '
-				<select name="initstate">';
+		$options = array();
 		foreach($workflowstates as $workflowstate) {
-			$html .= "<option value=\"".$workflowstate->getID()."\"";
-			if($workflow && $workflow->getInitState()->getID() == $workflowstate->getID())
-				$html .= " selected=\"selected\"";
-			$html .= ">".htmlspecialchars($workflowstate->getName())."</option>\n";
+			$options[] = array($workflowstate->getID(), htmlspecialchars($workflowstate->getName()), $workflow && $workflow->getInitState()->getID() == $workflowstate->getID());
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("workflow_initstate"),
-			$html
+			array(
+				'element'=>'select',
+				'name'=>'initstate',
+				'options'=>$options
+			)
 		);
 		$this->formSubmit('<i class="icon-save"></i> '.getMLText("save"));
 ?>
@@ -316,16 +321,19 @@ $(document).ready(function() {
 		<?php	$this->contentContainerStart(); ?>
 			<form class="form-horizontal">
 <?php
-		$html = '<select id="selector" class="span9">
-<option value="-1">'.getMLText("choose_workflow").'</option>
-<option value="0">'.getMLText("add_workflow").'</option>';
+		$options = array();
+		$options[] = array("-1", getMLText("choose_workflow"));
+		$options[] = array("0", getMLText("add_workflow"));
 		foreach ($workflows as $currWorkflow) {
-			$html .= "<option value=\"".$currWorkflow->getID()."\" ".($selworkflow && $currWorkflow->getID()==$selworkflow->getID() ? 'selected' : '').">" . htmlspecialchars($currWorkflow->getName());
+			$options[] = array($currWorkflow->getID(), htmlspecialchars($currWorkflow->getName()),$selworkflow && $currWorkflow->getID()==$selworkflow->getID());
 		}
-		$html .= '</select>';
 		$this->formField(
 			getMLText("selection"),
-			$html
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'options'=>$options
+			)
 		);
 ?>
 			</form>

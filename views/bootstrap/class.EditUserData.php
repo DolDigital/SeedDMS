@@ -104,7 +104,14 @@ $(document).ready( function() {
 <?php
 		$this->formField(
 			getMLText("current_password"),
-			'<input id="currentpwd" type="password" name="currentpwd" size="30">'
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'currentpwd',
+				'name'=>'currentpwd',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
 		);
 		$this->formField(
 			getMLText("new_password"),
@@ -118,19 +125,42 @@ $(document).ready( function() {
 		}
 		$this->formField(
 			getMLText("confirm_pwd"),
-			'<input id="pwdconf" type="Password" id="pwdconf" name="pwdconf">'
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'pwdconf',
+				'name'=>'pwdconf',
+				'autocomplete'=>'off',
+			)
 		);
 		$this->formField(
 			getMLText("name"),
-			'<input type="text" id="fullname" name="fullname" value="'.htmlspecialchars($user->getFullName()).'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'fullname',
+				'name'=>'fullname',
+				'value'=>htmlspecialchars($user->getFullName()),
+			)
 		);
 		$this->formField(
 			getMLText("email"),
-			'<input type="text" id="email" name="email" value="'.htmlspecialchars($user->getEmail()).'">'
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'email',
+				'name'=>'email',
+				'value'=>htmlspecialchars($user->getEmail()),
+			)
 		);
 		$this->formField(
 			getMLText("comment"),
-			'<textarea name="comment" rows="4" cols="80">'.htmlspecialchars($user->getComment()).'</textarea>'
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'value'=>htmlspecialchars($user->getComment()),
+			)
 		);
 
 		if ($enableuserimage){	
@@ -144,27 +174,33 @@ $(document).ready( function() {
 			);
 		}
 		if ($enablelanguageselector){	
-			$html = '<select name="language">';
+			$options = array();
 			$languages = getLanguages();
 			foreach ($languages as $currLang) {
-				$html .= "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".getMLText($currLang)."</option>";
+				$options[] = array($currLang, getMLText($currLang), ($user->getLanguage()==$currLang));
 			}
-			$html .= '</select>';
 			$this->formField(
 				getMLText("language"),
-				$html
+				array(
+					'element'=>'select',
+					'name'=>'language',
+					'options'=>$options
+				)
 			);
 		}
 		if ($enablethemeselector){	
-			$html = '<select name="theme">';
+			$options = array();
 			$themes = UI::getStyles();
 			foreach ($themes as $currTheme) {
-				$html .= "<option value=\"".$currTheme."\" ".(($user->getTheme()==$currTheme) ? "selected" : "").">".$currTheme."</option>";
+				$options[] = array($currTheme, $currTheme,($user->getTheme()==$currTheme));
 			}
-			$html .= '</select>';
 			$this->formField(
 				getMLText("theme"),
-				$html
+				array(
+					'element'=>'select',
+					'name'=>'theme',
+					'options'=>$options
+				)
 			);
 		}
 		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
