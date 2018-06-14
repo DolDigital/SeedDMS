@@ -199,6 +199,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 					default:
 						$color = '#20a8a8';
 					}
+					if ($item['document']->getAccessMode($user) >= M_READ)
 					$arr[] = array(
 						'start'=>$item['date'],
 						'title'=>$item['document']->getName()."\n".$item['msg'],
