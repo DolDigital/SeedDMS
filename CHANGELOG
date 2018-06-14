@@ -4,6 +4,8 @@
 - fix javascript errors when an error page was shown
 - add new extraTabs in ViewDocument for adding more tabs
 - fix validation of maxuplodsize in fine uploader
+- do not leak information in calendar about documents the logged in user has
+  no read access on
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.7
