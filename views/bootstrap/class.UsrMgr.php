@@ -513,15 +513,23 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <form class="form-horizontal">
-<select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_user")?></option>
-<option value="0"><?php echo getMLText("add_user")?></option>
 <?php
+		$options = array();
+		$options[] = array("-1", getMLText("choose_user"));
+		$options[] = array("0", getMLText("add_user"));
 		foreach ($users as $currUser) {
-			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\">" . htmlspecialchars($currUser->getLogin()) . "</option>";
+			$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()), $seluser && $currUser->getID()==$seluser->getID(), array(array('data-subtitle', htmlspecialchars($currUser->getFullName()))));
 		}
+		$this->formField(
+			null, //getMLText("selection"),
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
 ?>
-</select>
 </form>
 	<div class="ajax" style="margin-bottom: 15px;" data-view="UsrMgr" data-action="actionmenu" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>

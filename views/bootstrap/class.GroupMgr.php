@@ -297,15 +297,23 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <form class="form-horizontal">
-<select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_group")?></option>
-<option value="0"><?php echo getMLText("add_group")?></option>
 <?php
+		$options = array();
+		$options[] = array("-1", getMLText("choose_group"));
+		$options[] = array("0", getMLText("add_group"));
 		foreach ($allGroups as $group) {
-			print "<option value=\"".$group->getID()."\" ".($selgroup && $group->getID()==$selgroup->getID() ? 'selected' : '').">" . htmlspecialchars($group->getName()) . "</option>";
+			$options[] = array($group->getID(), htmlspecialchars($group->getName()), $selgroup && $group->getID()==$selgroup->getID());
 		}
+		$this->formField(
+			null, //getMLText("selection"),
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
 ?>
-</select>
 </form>
 	<div class="ajax" style="margin-bottom: 15px;" data-view="GroupMgr" data-action="actionmenu" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
