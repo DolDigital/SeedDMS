@@ -838,9 +838,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function formField($title, $value) { /* {{{ */
-		echo "<div class=\"control-group\">";
-		echo "	<label class=\"control-label\">".$title.":</label>";
-		echo "	<div class=\"controls\">";
+		if($title !== null) {
+			echo "<div class=\"control-group\">";
+			echo "	<label class=\"control-label\">".$title.":</label>";
+			echo "	<div class=\"controls\">";
+		}
 		if(is_string($value)) {
 			echo $value;
 		} elseif(is_array($value)) {
@@ -849,10 +851,16 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo '<select'.
 					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
 					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['class']) ? ' class="'.$value['class'].'"' : '').
 					(!empty($value['multiple']) ? ' multiple"' : '').">";
 				if(isset($value['options']) && is_array($value['options'])) {
-					foreach($value['options'] as $val)
-						echo '<option value="'.$val[0].'"'.(!empty($val[2]) ? ' selected' : '').'>'.$val[1].'</option>';
+					foreach($value['options'] as $val) {
+						echo '<option value="'.$val[0].'"'.(!empty($val[2]) ? ' selected' : '');
+						if(!empty($val[3]) && is_array($val[3]))
+							foreach($val[3] as $a)
+								echo ' '.$a[0].'="'.$a[1].'"';
+						echo '>'.$val[1].'</option>';
+					}
 				}
 				echo '</select>';
 				break;
@@ -878,8 +886,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				break;
 			}
 		}
-		echo "</div>";
-		echo "</div>";
+		if($title !== null) {
+			echo "</div>";
+			echo "</div>";
+		}
 		return;
 	} /* }}} */
 
