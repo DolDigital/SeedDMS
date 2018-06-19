@@ -82,7 +82,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
+//		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/datepicker/css/bootstrap-datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
@@ -143,8 +144,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
-		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
-			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
+		foreach(array('de', 'es', 'ar', 'el', 'bg', 'ru', 'hr', 'hu', 'ko', 'pl', 'ro', 'sk', 'tr', 'uk', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
+			echo '<script src="../styles/'.$this->theme.'/datepicker/locales/bootstrap-datepicker.'.$lang.'.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		parse_str($_SERVER['QUERY_STRING'], $tmp);
