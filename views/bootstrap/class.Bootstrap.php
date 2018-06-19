@@ -882,7 +882,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 					(!empty($value['placeholder']) ? ' placeholder="'.$value['placeholder'].'"' : '').
 					(!empty($value['autocomplete']) ? ' autocomplete="'.$value['autocomplete'].'"' : '').
 					(!empty($value['checked']) ? ' checked' : '').
-					(!empty($value['required']) ? ' required' : '').">";
+					(!empty($value['required']) ? ' required' : '');
+				if(!empty($value['attributes']) && is_array($value['attributes']))
+					foreach($vauel['attributes'] as $a)
+						echo ' '.$a[0].'="'.$a[1].'"';
+				echo ">";
 				break;
 			}
 		}
