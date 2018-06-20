@@ -113,6 +113,7 @@ $oldexpires = $document->getExpires();
  * will just update the old attribute object in array attributes[] and hence
  * also update the old value
  */
+$oldattributes = array();
 foreach($document->getAttributes() as $ai=>$aa)
 	$oldattributes[$ai] = clone $aa;
 //$oldattributes = $document->getAttributes();
