@@ -853,7 +853,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
 					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
 					(!empty($value['class']) ? ' class="'.$value['class'].'"' : '').
-					(!empty($value['multiple']) ? ' multiple"' : '').">";
+					(!empty($value['multiple']) ? ' multiple' : '');
+				if(!empty($value['attributes']) && is_array($value['attributes']))
+					foreach($value['attributes'] as $a)
+						echo ' '.$a[0].'="'.$a[1].'"';
+				echo ">";
 				if(isset($value['options']) && is_array($value['options'])) {
 					foreach($value['options'] as $val) {
 						echo '<option value="'.$val[0].'"'.(!empty($val[2]) ? ' selected' : '');
@@ -885,7 +889,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 					(!empty($value['checked']) ? ' checked' : '').
 					(!empty($value['required']) ? ' required' : '');
 				if(!empty($value['attributes']) && is_array($value['attributes']))
-					foreach($vauel['attributes'] as $a)
+					foreach($value['attributes'] as $a)
 						echo ' '.$a[0].'="'.$a[1].'"';
 				echo ">";
 				break;
@@ -1245,26 +1249,31 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+		echo self::getKeywordChooserHtml($formName, $keywords, $fieldname); 
+	} /* }}} */
+
+	function getKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-?>
+		$content = '';
+		$content .= '
 		    <div class="input-append">
-				<input type="text" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>"<?php echo $strictformcheck ? ' required' : ''; ?> />
-				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="../out/out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+				<input type="text" name="'.$fieldname.'" id="'.$fieldname.'" value="'.htmlspecialchars($keywords).'"'.($strictformcheck ? ' required' : '').' />
+				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="../out/out.KeywordChooser.php?target='.$formName.'">'.getMLText("keywords").'…</a>
 		    </div>
 <div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="keywordChooserLabel"><?php printMLText("use_default_keywords") ?></h3>
+    <h3 id="keywordChooserLabel">'.getMLText("use_default_keywords").'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('keywords_loading') ?></p>
+		<p>'.getMLText('keywords_loading').'</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'. getMLText("close").'</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> '.getMLText("save").'</button>
   </div>
-</div>
-<?php
+</div>';
+		return $content;
 	} /* }}} */
 
 	function printKeywordChooserJs($formName) { /* {{{ */
