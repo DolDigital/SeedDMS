@@ -88,107 +88,93 @@ $(document).ready( function() {
 		else
 			$expdate = '';
 ?>
-<form action="../op/op.EditDocument.php" name="form1" id="form1" method="post">
+<form class="form-horizontal" action="../op/op.EditDocument.php" name="form1" id="form1" method="post">
 	<input type="hidden" name="documentid" value="<?php echo $document->getID() ?>">
-	<table cellpadding="3">
-		<tr>
-			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" id="name" value="<?php print htmlspecialchars($document->getName());?>" size="60" required></td>
-		</tr>
-		<tr>
-			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" id="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>><?php print htmlspecialchars($document->getComment());?></textarea></td>
-		</tr>
-		<tr>
-			<td valign="top" class="inputDescription"><?php printMLText("keywords");?>:</td>
-			<td class="standardText">
 <?php
-	$this->printKeywordChooserHtml('form1', $document->getKeywords());
-?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("categories")?>:</td>
-			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
-<?php
-			$categories = $dms->getDocumentCategories();
-			foreach($categories as $category) {
-				echo "<option value=\"".$category->getID()."\"";
-				if(in_array($category, $document->getCategories()))
-					echo " selected";
-				echo ">".$category->getName()."</option>";	
-			}
-?>
-				</select>
-      </td>
-		</tr>
-		<tr>
-			<td><?php printMLText("expires");?>:</td>
-			<td>
-				<select class="span3" name="presetexpdate" id="presetexpdate">
-					<option value="never"><?php printMLText('does_not_expire');?></option>
-					<option value="date"<?php echo ($expdate != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
-					<option value="1w"><?php printMLText('expire_in_1w');?></option>
-					<option value="1m"><?php printMLText('expire_in_1m');?></option>
-					<option value="1y"><?php printMLText('expire_in_1y');?></option>
-					<option value="2y"><?php printMLText('expire_in_2y');?></option>
-				</select>
-			</td>
-		</tr>
-		<tr id="control_expdate" <?php echo (!$expdate ? 'style="display: none;"' : ''); ?>>
-			<td><?php printMLText("expires");?>:</td>
-			<td>
-        <span class="input-append date span6" id="expirationdate" data-date="<?php echo ($expdate ? $expdate : ''); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo ($expdate ? $expdate : ''); ?>">
-          <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>
-			</td>
-		</tr>
-<?php
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+				'value'=>htmlspecialchars($document->getName()),
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'value'=>htmlspecialchars($document->getComment()),
+				'required'=>$strictformcheck
+			)
+		);
+		$this->formField(
+			getMLText("keywords"),
+			$this->getKeywordChooserHtml('form1', $document->getKeywords())
+		);
+		$options = array();
+		$categories = $dms->getDocumentCategories();
+		foreach($categories as $category) {
+			$options[] = array($category->getID(), $category->getName(), in_array($category, $document->getCategories()));
+		}
+		$this->formField(
+			getMLText("categories"),
+			array(
+				'element'=>'select',
+				'class'=>'chzn-select',
+				'name'=>'categories[]',
+				'multiple'=>true,
+				'attributes'=>array(array('data-placeholder', getMLText('select_category'), array('data-no_results_text', getMLText('unknown_document_category')))),
+				'options'=>$options
+			)
+		);
+		$options = array();
+		$options[] = array('never', getMLText('does_not_expire'));
+		$options[] = array('date', getMLText('expire_by_date'), $expdate != '');
+		$options[] = array('1w', getMLText('expire_in_1w'));
+		$options[] = array('1m', getMLText('expire_in_1m'));
+		$options[] = array('1y', getMLText('expire_in_1y'));
+		$options[] = array('2y', getMLText('expire_in_2y'));
+		$this->formField(
+			getMLText("preset_expires"),
+			array(
+				'element'=>'select',
+				'id'=>'presetexpdate',
+				'name'=>'presetexpdate',
+				'options'=>$options
+			)
+		);
+		$this->formField(
+			getMLText("expires"),
+			$this->getDateChooser($expdate, "expdate", $this->params['session']->getLanguage())
+		);
 		if ($folder->getAccessMode($user) > M_READ) {
-			print "<tr>";
-			print "<td class=\"inputDescription\">" . getMLText("sequence") . ":</td>";
-			print "<td>";
-			$this->printSequenceChooser($folder->getDocuments('s'), $document->getID());
-			if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); 
-			print "</td></tr>";
+			$this->formField(getMLText("sequence"), $this->getSequenceChooser($folder->getDocuments('s'), $document->getID()).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
 		}
 		if($attrdefs) {
 			foreach($attrdefs as $attrdef) {
 				$arr = $this->callHook('editDocumentAttribute', $document, $attrdef);
 				if(is_array($arr)) {
 					if($arr) {
-						echo "<tr>";
-						echo "<td>".$arr[0].":</td>";
-						echo "<td>".$arr[1]."</td>";
-						echo "</tr>";
+						$this->formField($arr[0], $arr[1]);
 					}
 				} else {
-?>
-		<tr>
-			<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-			<td><?php $this->printAttributeEditField($attrdef, $document->getAttribute($attrdef)) ?></td>
-		</tr>
-<?php
+					$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, $document->getAttribute($attrdef)));
 				}
 			}
 		}
 		$arrs = $this->callHook('addDocumentAttributes', $folder);
 		if(is_array($arrs)) {
 			foreach($arrs as $arr) {
-				echo "<tr>";
-				echo "<td>".$arr[0].":</td>";
-				echo "<td>".$arr[1]."</td>";
-				echo "</tr>";
+				$this->formField($arr[0], $arr[1]);
 			}
 		}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
-		</tr>
-	</table>
 </form>
 <?php
 		$this->contentContainerEnd();
