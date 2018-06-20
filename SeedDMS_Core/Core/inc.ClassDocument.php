@@ -1116,9 +1116,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * SeedDMS_Core_Group.
 	 *
 	 * @param integer $type type of notification (not yet used)
+	 * @param bool $incdisabled set to true if disabled user shall be included
 	 * @return array|bool
 	 */
-	function getNotifyList($type=0) { /* {{{ */
+	function getNotifyList($type=0, $incdisabled=false) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
@@ -1132,7 +1133,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			{
 				if ($row["userID"] != -1) {
 					$u = $this->_dms->getUser($row["userID"]);
-					if($u && !$u->isDisabled())
+					if($u && (!$u->isDisabled() || $incdisabled))
 						array_push($this->_notifyList["users"], $u);
 				} else { //if ($row["groupID"] != -1)
 					$g = $this->_dms->getGroup($row["groupID"]);
