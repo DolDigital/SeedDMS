@@ -71,7 +71,7 @@ $(document).ready( function() {
 		$document = $this->params['document'];
 		$sortusersinlist = $this->params['sortusersinlist'];
 
-		$notifyList = $document->getNotifyList();
+		$notifyList = $document->getNotifyList(0, true);
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -94,7 +94,15 @@ $(document).ready( function() {
 				print "<td><i class=\"icon-user\"></i></td>";
 				print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
 				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
-					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&userid=".$userNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";
+					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
+					echo createHiddenFieldWithKey('documentnotify')."\n";
+					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
+					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
+					print "<input type=\"hidden\" name=\"userid\" value=\"".$userNotify->getID()."\">\n";
+					print "<td>";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+					print "</td>";
+					print "</form>\n";
 				}else print "<td></td>";
 				print "</tr>";
 				$userNotifyIDs[] = $userNotify->getID();
@@ -104,7 +112,15 @@ $(document).ready( function() {
 				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
-					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&groupid=".$groupNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";
+					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
+					echo createHiddenFieldWithKey('documentnotify')."\n";
+					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
+					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
+					print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupNotify->getID()."\">\n";
+					print "<td>";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+					print "</form>\n";
+					print "</td>";
 				}else print "<td></td>";
 				print "</tr>";
 				$groupNotifyIDs[] = $groupNotify->getID();
@@ -115,51 +131,50 @@ $(document).ready( function() {
 ?>
 <br>
 
-<form class=form-horizontal" action="../op/op.DocumentNotify.php" name="form1" id="form1">
+<form class=form-horizontal" action="../op/op.DocumentNotify.php" method="post" name="form1" id="form1">
+<?php	echo createHiddenFieldWithKey('documentnotify'); ?>
 <input type="hidden" name="documentid" value="<?php print $document->getID()?>">
 <input type="hidden" name="action" value="addnotify">
-
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("user");?>:</label>
-		<div class="controls">
-			<select name="userid">
-				<option value="-1"><?php printMLText("select_one");?>
-				<?php
-					if ($user->isAdmin()) {
-						$allUsers = $dms->getAllUsers($sortusersinlist);
-						foreach ($allUsers as $userObj) {
-							if (!$userObj->isGuest() && ($document->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
-								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
-						}
-					}
-					elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
-						print "<option value=\"".$user->getID()."\">" . htmlspecialchars($user->getLogin() . " - " . $user->getFullName()) . "\n";
-					}
-				?>
-			</select>
-		</div>
-	</div>
-
-
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("group");?>:</label>
-
-		<div class="controls">
-			<select name="groupid">
-				<option value="-1"><?php printMLText("select_one");?>
-				<?php
-					$allGroups = $dms->getAllGroups();
-					foreach ($allGroups as $groupObj) {
-						if (($user->isAdmin() || $groupObj->isMember($user,true)) && $document->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
-							print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
-						}
-					}
-				?>
-			</select>
-		</div>
-	</div>
 <?php
-					$this->formSubmit(getMLText('add'));
+		$options = array();
+		$options[] = array('-1', getMLText("select_one"));
+		if ($user->isAdmin()) {
+			$allUsers = $dms->getAllUsers($sortusersinlist);
+			foreach ($allUsers as $userObj) {
+				if (!$userObj->isGuest() && !$userObj->isDisabled() && ($document->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
+					$options[] = array($userObj->getID(), htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()));
+			}
+		} elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
+			$options[] = array($user->getID(), htmlspecialchars($user->getLogin() . " - " .$user->getFullName()));
+		}
+		$this->formField(
+			getMLText("user"),
+			array(
+				'element'=>'select',
+				'id'=>'userid',
+				'name'=>'userid',
+				'options'=>$options
+			)
+		);
+
+		$options = array();
+		$options[] = array('-1', getMLText("select_one"));
+		$allGroups = $dms->getAllGroups();
+		foreach ($allGroups as $groupObj) {
+			if (($user->isAdmin() || $groupObj->isMember($user,true)) && $document->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
+				$options[] =  array($groupObj->getID(), htmlspecialchars($groupObj->getName()));
+			}
+		}
+		$this->formField(
+			getMLText("group"),
+			array(
+				'element'=>'select',
+				'id'=>'groupid',
+				'name'=>'groupid',
+				'options'=>$options
+			)
+		);
+		$this->formSubmit(getMLText('add'));
 ?>
 
 </form>
