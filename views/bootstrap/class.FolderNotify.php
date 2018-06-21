@@ -69,6 +69,7 @@ $(document).ready(function() {
 		$folder = $this->params['folder'];
 		$allUsers = $this->params['allusers'];
 		$allGroups = $this->params['allgroups'];
+		$sortusersinlist = $this->params['sortusersinlist'];
 
 		$notifyList = $folder->getNotifyList();
 

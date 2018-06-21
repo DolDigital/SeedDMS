@@ -51,6 +51,7 @@ if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('allusers', $allUsers);
 	$view->setParam('allgroups', $allGroups);
+	$view->setParam('sortusersinlist', $settings->_sortUsersInList);
 	$view($_GET);
 	exit;
 }
