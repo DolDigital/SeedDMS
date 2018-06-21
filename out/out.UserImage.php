@@ -35,7 +35,7 @@ if (!$myUser->hasImage())
 	UI::exitError(getMLText("user_image"),getMLText("no_user_image"));
 
 if($resArr = $myUser->getImage()) {
-	header("ContentType: " . $resArr["mimeType"]);
+	header("Content-Type: " . $resArr["mimeType"]);
 	print base64_decode($resArr["image"]);
 }
 exit;
