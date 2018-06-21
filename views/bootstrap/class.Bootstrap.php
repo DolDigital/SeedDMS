@@ -1095,26 +1095,32 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return $content;
 	} /* }}} */
 
-	function printDocumentChooserHtml($formName) { /* {{{ */
-		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
-		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
-		print "</div>\n";
-?>
-<div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+	function getDocumentChooserHtml($formName) { /* {{{ */
+		$content = '';
+		$content .= "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
+		$content .= "<div class=\"input-append\">\n";
+		$content .= "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		$content .= "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
+<div class="modal hide" id="docChooser'.$formName.'" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
+    <h3 id="docChooserLabel">'.getMLText("choose_target_document").'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
+		<p>'.getMLText('tree_loading').'</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
   </div>
 </div>
-<?php 
+';
+		return $content;
+	} /* }}} */
+
+	function printDocumentChooserHtml($formName) { /* {{{ */
+		echo self::getDocumentChooserHtml($formName);
 	} /* }}} */
 
 	function printDocumentChooserJs($formName) { /* {{{ */

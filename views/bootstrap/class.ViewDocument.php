@@ -1380,19 +1380,24 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 ?>
 			<br>
-			<form action="../op/op.AddDocumentLink.php" name="form1" class="form-inline">
+			<form action="../op/op.AddDocumentLink.php" name="form1" class="form-horizontal">
 			<input type="hidden" name="documentid" value="<?php print $documentid;?>">
-			<?php printMLText("add_document_link");?>:
-			<?php $this->printDocumentChooserHtml("form1");?>
+			<?php $this->formField(getMLText("add_document_link"), $this->getDocumentChooserHtml("form1")); ?>
 			<?php
 			if ($document->getAccessMode($user) >= M_READWRITE) {
-				print "<label class=\"checkbox\">";
-				print "<input type=\"checkbox\" name=\"public\" value=\"true\" checked />";
-				print getMLText("document_link_public");
-				print "</label>";
+				$this->formField(
+					getMLText("document_link_public"),
+					array(
+						'element'=>'input',
+						'type'=>'checkbox',
+						'name'=>'public',
+						'value'=>'true',
+						'checked'=>true
+					)
+				);
 			}
+			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 			</form>
 <?php
 			$this->contentContainerEnd();
