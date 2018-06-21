@@ -1358,25 +1358,30 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
-		print "<div class=\"input-append\">\n";
-		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".urlencode($dropfolderfile)."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
-		print "</div>\n";
-?>
+		echo self::getDropFolderChooserHtml($formName, $dropfolderfile, $showfolders);
+	} /* }}} */
+
+	function getDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
+		$content =  "<div class=\"input-append\">\n";
+		$content .= "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
+		$content .= "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
+		$content .= "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".urlencode($dropfolderfile)."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="dropfolderChooserLabel"><?php echo ($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file")) ?></h3>
+    <h3 id="dropfolderChooserLabel">'.($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file")).'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('files_loading') ?></p>
-  </div>
+		<p>'.getMLText('files_loading').'</p>
+		</div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
   </div>
 </div>
-<?php
+';
+		return $content;
 	} /* }}} */
 
 	function printDropFolderChooserJs($formName, $showfolders=0) { /* {{{ */
