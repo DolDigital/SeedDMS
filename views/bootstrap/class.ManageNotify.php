@@ -164,18 +164,27 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("edit_folder_notify"));
 		$this->contentContainerStart();
 
-		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=folder&action=add\" name=\"form1\">";
-		$this->contentSubHeading(getMLText("choose_target_folder"));
-		$this->printFolderChooserHtml("form1",M_READ);
-		print "<label class=\"checkbox\">";
-		print "<input type=\"checkbox\" name=\"recursefolder\" value=\"1\">";
-		print getMLText("include_subdirectories");
-		print "</label>";
-		print "<label class=\"checkbox\">";
-		print "<input type=\"checkbox\" name=\"recursedoc\" value=\"1\">";
-		print getMLText("include_documents");
-		print "</label>";
-		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
+		print "<form class=\"form-horizontal\" method=\"post\" action=\"../op/op.ManageNotify.php?type=folder&action=add\" name=\"form1\">";
+		$this->formField(getMLText("choose_target_folder"), $this->getFolderChooserHtml("form1", M_READ));
+		$this->formField(
+			getMLText("include_subdirectories"),
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'recursefolder',
+				'value'=>1
+			)
+		);
+		$this->formField(
+			getMLText("include_documents"),
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'recursedoc',
+				'value'=>1
+			)
+		);
+		$this->formSubmit("<i class=\"icon-plus\"></i> ".getMLText('add'));
 		print "</form>";
 		$this->contentContainerEnd();
 		echo "</div>";

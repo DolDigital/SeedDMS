@@ -51,22 +51,14 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("import_fs"));
 
 		if($dropfolderdir && file_exists($dropfolderdir.'/'.$user->getLogin())) {
-			echo "<div class=\"alert alert-warning\">";
-			printMLText("import_fs_warning");
-			echo "</div>\n";
+			$this->warningMsg(getMLText("import_fs_warning"));
 			$this->contentContainerStart();
 			print "<form class=\"form-horizontal\" action=\"../op/op.ImportFS.php\" name=\"form1\">";
-			print "<div class=\"control-group\"><label class=\"control-label\">".getMLText('choose_target_folder')."</label><div class=\"controls\">";
-			$this->printFolderChooserHtml("form1",M_READWRITE);
-			print "</div></div>";
-			print "<div class=\"control-group\"><label class=\"control-label\">";
-			printMLText("dropfolder_folder");
-			echo ": ";
-			print "</label><div class=\"controls\">";
-			/* Setting drop folder dir to "" will force to take the default from settings.xml */
-			$this->printDropFolderChooserHtml("form1", "", 1);
-			print "</div></div>";
-
+			$this->formField(getMLText("choose_target_folder"), $this->getFolderChooserHtml("form1", M_READWRITE));
+			$this->formField(
+				getMLText("dropfolder_folder"),
+				$this->getDropFolderChooserHtml("form1", "", 1)
+			);
 			$this->formField(
 				getMLText("removeFolderFromDropFolder"),
 				array(

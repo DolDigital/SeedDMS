@@ -1140,30 +1140,36 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+	function getFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
 		$formid = "targetid".$form;
 		if(!$formname)
 			$formname = "targetid";
-		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
-		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
-		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
-		print "</div>\n";
-?>
-<div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+		$content = '';
+		$content .= "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		$content .= "<div class=\"input-append\">\n";
+		$content .= "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
+		$content .= "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
+		$content .= "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
+<div class="modal hide" id="folderChooser'.$form.'" tabindex="-1" role="dialog" aria-labelledby="folderChooser'.$form.'Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser'.$form.'Label">'.getMLText("choose_target_folder").'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
+		<p>'.getMLText('tree_loading').'</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
   </div>
 </div>
-<?php
+';
+		return $content;
+	} /* }}} */
+
+	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		echo self::getFolderChooserHtml($form, $accessMode, $exclude, $default, $formname);
 	} /* }}} */
 
 	function printFolderChooserJs($form) { /* {{{ */
