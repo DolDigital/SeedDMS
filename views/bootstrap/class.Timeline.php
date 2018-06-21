@@ -236,6 +236,7 @@ div.timeline-event-selected {
 ?>
 <form action="../out/out.Timeline.php" class="form form-inline" name="form1" id="form1">
 <?php
+		/*
 		$html = '
        <span class="input-append date" style="display: inline;" id="fromdate" data-date="'.date('Y-m-d', $from).'" data-date-format="yyyy-mm-dd" data-date-language="'.str_replace('_', '-', $this->params['session']->getLanguage()).'">
 			 <input type="text" class="input-small" name="fromdate" value="'.date('Y-m-d', $from).'"/>
@@ -248,6 +249,15 @@ div.timeline-event-selected {
 		$this->formField(
 			getMLText("date"),
 			$html
+		);
+*/
+		$this->formField(
+			getMLText("from"),
+			$this->getDateChooser(date('Y-m-d', $from), 'fromdate', $this->params['session']->getLanguage())
+		);
+		$this->formField(
+			getMLText("to"),
+			$this->getDateChooser(date('Y-m-d', $to), 'todate', $this->params['session']->getLanguage())
 		);
 		$html = '
 			<input type="checkbox" name="skip[]" value="add_file" '.(($skip &&  in_array('add_file', $skip)) ? 'checked' : '').'> '.getMLText('timeline_skip_add_file').'<br />
