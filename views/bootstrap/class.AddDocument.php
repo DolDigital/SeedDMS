@@ -181,274 +181,247 @@ $(document).ready(function() {
 		// privileges.
 		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 ?>
-		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" id="form1" name="form1">
+		<form class="form-horizontal" action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" id="form1" name="form1">
 		<?php echo createHiddenFieldWithKey('adddocument'); ?>
 		<input type="hidden" name="folderid" value="<?php print $folderid; ?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
-		<table class="table-condensed">
-		<tr>
-			<td>
-		<?php $this->contentSubHeading(getMLText("document_infos")); ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("name");?>:</td>
-			<td><input type="text" name="name" size="60"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="3" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("keywords");?>:</td>
-			<td><?php $this->printKeywordChooserHtml("form1");?></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("categories")?>:</td>
-			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
 <?php
-			$categories = $dms->getDocumentCategories();
-			foreach($categories as $category) {
-				echo "<option value=\"".$category->getID()."\"";
-				echo ">".$category->getName()."</option>";	
-			}
-?>
-				</select>
-      </td>
-		</tr>
-		<tr>
-			<td><?php printMLText("sequence");?>:</td>
-			<td><?php $this->printSequenceChooser($folder->getDocuments('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off'); ?></td>
-		</tr>
-<?php
+		$this->contentSubHeading(getMLText("document_infos"));
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'required'=>$strictformcheck
+			)
+		);
+		$this->formField(
+			getMLText("keywords"),
+				$this->getKeywordChooserHtml('form1')
+		);
+		$options = array();
+		$categories = $dms->getDocumentCategories();
+		foreach($categories as $category) {
+			$options[] = array($category->getID(), $category->getName());
+		}
+		$this->formField(
+			getMLText("categories"),
+			array(
+				'element'=>'select',
+				'class'=>'chzn-select',
+				'name'=>'categories[]',
+				'multiple'=>true,
+				'attributes'=>array(array('data-placeholder', getMLText('select_category'), array('data-no_results_text', getMLText('unknown_document_category')))),
+				'options'=>$options
+			)
+		);
+		$this->formField(getMLText("sequence"), $this->getSequenceChooser($folder->getDocuments('s')).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
 			if($presetexpiration) {
 				if(!($expts = strtotime($presetexpiration)))
 					$expts = false;
 			} else {
 				$expts = false;
 			}
-?>
-		<tr>
-			<td><?php printMLText("preset_expires");?>:</td>
-			<td>
-				<select class="span3" name="presetexpdate" id="presetexpdate">
-					<option value="never"><?php printMLText('does_not_expire');?></option>
-					<option value="date"<?php echo ($expts != '' ? " selected" : ""); ?>><?php printMLText('expire_by_date');?></option>
-					<option value="1w"><?php printMLText('expire_in_1w');?></option>
-					<option value="1m"><?php printMLText('expire_in_1m');?></option>
-					<option value="1y"><?php printMLText('expire_in_1y');?></option>
-					<option value="2y"><?php printMLText('expire_in_2y');?></option>
-				</select>
-			</td>
-		</tr>
-		<tr id="control_expdate" <?php echo ($expts == false ? 'style="display: none;"' : ''); ?>>
-			<td><?php printMLText("expires");?>:</td>
-			<td>
-        <span class="input-append date span6" id="expirationdate" data-date="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>" data-checkbox="#expires">
-          <input class="span3" size="16" name="expdate" type="text" value="<?php echo ($expts ? date('Y-m-d', $expts) : ''); ?>">
-          <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>
-			</td>
-		</tr>
-
-<?php if($user->isAdmin()) { ?>
-		<tr>
-			<td><?php printMLText("owner");?>:</td>
-			<td>
-				<select class="chzn-select" name="ownerid">
-<?php
-	$allUsers = $dms->getAllUsers($sortusersinlist);
-	foreach ($allUsers as $currUser) {
-		if ($currUser->isGuest())
-			continue;
-		print "<option value=\"".$currUser->getID()."\" ".($currUser->getID()==$user->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\"";
-		print ">" . htmlspecialchars($currUser->getLogin()) . "</option>\n";
-	}
-?>
-				</select>
-			</td>
-		</tr>
-<?php } ?>
-<?php
-			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
-			if($attrdefs) {
-				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('addDocumentAttribute', null, $attrdef);
-					if(is_array($arr)) {
-						if($arr) {
-							echo "<tr>";
-							echo "<td>".$arr[0].":</td>";
-							echo "<td>".$arr[1]."</td>";
-							echo "</tr>";
-						}
-					} else {
-?>
-		<tr>
-			<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-			<td><?php $this->printAttributeEditField($attrdef, '') ?></td>
-		</tr>
-<?php
+		$options = array();
+		$options[] = array('never', getMLText('does_not_expire'));
+		$options[] = array('date', getMLText('expire_by_date'), $expts);
+		$options[] = array('1w', getMLText('expire_in_1w'));
+		$options[] = array('1m', getMLText('expire_in_1m'));
+		$options[] = array('1y', getMLText('expire_in_1y'));
+		$options[] = array('2y', getMLText('expire_in_2y'));
+		$this->formField(
+			getMLText("preset_expires"),
+			array(
+				'element'=>'select',
+				'id'=>'presetexpdate',
+				'name'=>'presetexpdate',
+				'options'=>$options
+			)
+		);
+		$this->formField(
+			getMLText("expires"),
+			$this->getDateChooser(($expts ? date('Y-m-d', $expts) : ''), "expdate", $this->params['session']->getLanguage())
+		);
+		if($user->isAdmin()) {
+		$options = array();
+		$allUsers = $dms->getAllUsers($sortusersinlist);
+		foreach ($allUsers as $currUser) {
+			if (!$currUser->isGuest())
+				$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()), ($currUser->getID()==$user->getID()), array(array('data-subtitle', htmlspecialchars($currUser->getFullName()))));
+		}
+		$this->formField(
+			getMLText("owner"),
+			array(
+				'element'=>'select',
+				'id'=>'ownerid',
+				'name'=>'ownerid',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
+		}
+		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$arr = $this->callHook('addDocumentAttribute', null, $attrdef);
+				if(is_array($arr)) {
+					if($arr) {
+						$this->formField($arr[0], $arr[1]);
 					}
+				} else {
+					$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, ''));
 				}
-			}
-			$arrs = $this->callHook('addDocumentAttributes', $folder);
-			if(is_array($arrs)) {
-				foreach($arrs as $arr) {
-					echo "<tr>";
-					echo "<td>".$arr[0].":</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
-				}
-			}
-?>
-		<tr>
-			<td>
-		<?php $this->contentSubHeading(getMLText("version_info")); ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("version");?>:</td>
-			<td><input type="text" name="reqversion" value="1"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("local_file");?>:</td>
-			<td>
-<?php
-		if($enablelargefileupload)
-			$this->printFineUploaderHtml();
-		else {
-			$this->printFileChooser('userfile[]', false);
-			if($enablemultiupload) {
-?>
-			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
-<?php
 			}
 		}
-?>
-			</td>
-		</tr>
-<?php if($dropfolderdir) { ?>
-		<tr>
-			<td><?php printMLText("dropfolder_file");?>:</td>
-			<td><?php $this->printDropFolderChooserHtml("form1", $dropfolderfile);?></td>
-		</tr>
-<?php } ?>
-		<tr>
-			<td><?php printMLText("comment_for_current_version");?>:</td>
-			<td><textarea name="version_comment" rows="3" cols="80"></textarea><br />
-			<label class="checkbox inline"><input type="checkbox" name="use_comment" value="1" /> <?php printMLText("use_comment_of_document"); ?></label></td>
-		</tr>
-<?php
-			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
-			if($attrdefs) {
-				foreach($attrdefs as $attrdef) {
-					$arr = $this->callHook('addDocumentContentAttribute', null, $attrdef);
-					if(is_array($arr)) {
-						echo "<tr>";
-						echo "<td>".$arr[0].":</td>";
-						echo "<td>".$arr[1]."</td>";
-						echo "</tr>";
-					} else {
-?>
-		<tr>
-			<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-			<td><?php $this->printAttributeEditField($attrdef, '', 'attributes_version') ?></td>
-		</tr>
-<?php
-					}
-				}
+		$arrs = $this->callHook('addDocumentAttributes', $folder);
+		if(is_array($arrs)) {
+			foreach($arrs as $arr) {
+				$this->formField($arr[0], $arr[1]);
 			}
+		}
 
-			$arrs = $this->callHook('addDocumentContentAttributes', $folder);
-			if(is_array($arrs)) {
-				foreach($arrs as $arr) {
-					echo "<tr>";
-					echo "<td>".$arr[0].":</td>";
-					echo "<td>".$arr[1]."</td>";
-					echo "</tr>";
+		$this->contentSubHeading(getMLText("version_info"));
+		$this->formField(
+			getMLText("version"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'reqversion',
+				'name'=>'reqversion',
+				'value'=>1
+			)
+		);
+		$this->formField(
+			getMLText("local_file"),
+			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->printFileChooser('userfile[]', false).($enablemultiupload ? '<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>' : '')
+		);
+		if($dropfolderdir) {
+			$this->formField(
+				getMLText("dropfolder_file"),
+				$this->getDropFolderChooserHtml("form1", $dropfolderfile)
+			);
+		}
+		$this->formField(
+			getMLText("comment_for_current_version"),
+			array(
+				'element'=>'textarea',
+				'name'=>'version_comment',
+				'rows'=>4,
+				'cols'=>80
+			)
+		);
+		$this->formField(
+			getMLText("use_comment_of_document"),
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'use_comment',
+				'value'=>1
+			)
+		);
+		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$arr = $this->callHook('addDocumentContentAttribute', null, $attrdef);
+				if(is_array($arr)) {
+					$this->formField($arr[0], $arr[1]);
+				} else {
+					$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, '', 'attributes_version'));
 				}
 			}
+		}
+
+		$arrs = $this->callHook('addDocumentContentAttributes', $folder);
+		if(is_array($arrs)) {
+			foreach($arrs as $arr) {
+				$this->formField($arr[0], $arr[1]);
+			}
+		}
 
 		if($workflowmode == 'advanced') {
 ?>
-		<tr>	
-      <td>
 			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
-      </td>
-      <td>
 <?php
 				$mandatoryworkflows = $user->getMandatoryWorkflows();
 				if($mandatoryworkflows) {
 					if(count($mandatoryworkflows) == 1) {
-?>
-				<?php echo htmlspecialchars($mandatoryworkflows[0]->getName()); ?>
-				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflows[0]->getID(); ?>">
-<?php
+						$this->formField(
+							getMLText("workflow"),
+							htmlspecialchars($mandatoryworkflows[0]->getName()).'<input type="hidden" name="workflow" value="'.$mandatoryworkflows[0]->getID().'">'
+						);
 					} else {
-?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
-<?php
-					foreach ($mandatoryworkflows as $workflow) {
-						print "<option value=\"".$workflow->getID()."\"";
-						print ">". htmlspecialchars($workflow->getName())."</option>";
-					}
-?>
-        </select>
-<?php
+						$options = array();
+						foreach ($mandatoryworkflows as $workflow) {
+							$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()));
+						}
+						$this->formField(
+							getMLText("owner"),
+							array(
+								'element'=>'select',
+								'id'=>'workflow',
+								'name'=>'workflow',
+								'class'=>'chzn-select-deselect',
+								'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
+								'options'=>$options
+							)
+						);
 					}
 				} else {
-?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
-<?php
+					$options = array();
 					$workflows=$dms->getAllWorkflows();
-					print "<option value=\"\">"."</option>";
 					foreach ($workflows as $workflow) {
-						print "<option value=\"".$workflow->getID()."\"";
-						print ">". htmlspecialchars($workflow->getName())."</option>";
+						$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()));
 					}
-?>
-        </select>
-<?php
+					$this->formField(
+						getMLText("owner"),
+						array(
+							'element'=>'select',
+							'id'=>'workflow',
+							'name'=>'workflow',
+							'class'=>'chzn-select-deselect',
+							'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
+							'options'=>$options
+						)
+					);
 				}
-?>
-      </td>
-    </tr>
-		<tr>	
-      <td colspan="2">
-			<?php $this->warningMsg(getMLText("add_doc_workflow_warning")); ?>
-      </td>
-		</tr>	
-<?php
+				$this->warningMsg(getMLText("add_doc_workflow_warning"));
 		} else {
 			if($workflowmode == 'traditional') {
-?>
-		<tr>
-      <td>
-		<?php $this->contentSubHeading(getMLText("assign_reviewers")); ?>
-      </td>
-		</tr>	
-		<tr>	
-      <td>
-			<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
-      </td>
-      <td>
-<?php
-				$res=$user->getMandatoryReviewers();
-?>
-        <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
-<?php
+				$this->contentSubHeading(getMLText("assign_reviewers"));
+				$options = array();
 				foreach ($docAccess["users"] as $usr) {
 					if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 					$mandatory=false;
 					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
-					if ($mandatory) print "<option disabled=\"disabled\" value=\"".$usr->getID()."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
-					else print "<option value=\"".$usr->getID()."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
+					$option = array($usr->getID(), htmlspecialchars($usr->getLogin()." - ".$usr->getFullName()), null);
+					if ($mandatory) $option[] = array(array('disabled', 'disabled'));
+					$options[] = $option;
 				}
-?>
-        </select>
-<?php
+				$this->formField(
+					getMLText("individuals"),
+					array(
+						'element'=>'select',
+						'name'=>'indReviewers[]',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-placeholder', getMLText('select_ind_reviewers'))),
+						'multiple'=>true,
+						'options'=>$options
+					)
+				);
+
 				/* List all mandatory reviewers */
 				if($res) {
 					$tmp = array();
@@ -479,27 +452,27 @@ $(document).ready(function() {
 						}
 					}
 				}
-?>
-      </td>
-      </tr>
-      <tr>
-        <td>
-			<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
-        </td>
-        <td>
-        <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_reviewers'); ?>">
-<?php
-			foreach ($docAccess["groups"] as $grp) {
-			
-				$mandatory=false;
-				foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $mandatory=true;	
+				$options = array();
+				foreach ($docAccess["groups"] as $grp) {
+				
+					$mandatory=false;
+					foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $mandatory=true;	
 
-				if ($mandatory || !$grp->getUsers()) print "<option value=\"".$grp->getID()."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
-				else print "<option value=\"".$grp->getID()."\">".htmlspecialchars($grp->getName())."</option>";
-			}
-?>
-			</select>
-<?php
+					$option = array($grp->getID(), htmlspecialchars($grp->getName()), null);
+					if ($mandatory || !$grp->getUsers()) $option[] = array(array('disabled', 'disabled'));
+					$options[] = $option;
+				}
+				$this->formField(
+					getMLText("groups"),
+					array(
+						'element'=>'select',
+						'name'=>'grpReviewers[]',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-placeholder', getMLText('select_grp_reviewers'))),
+						'multiple'=>true,
+						'options'=>$options
+					)
+				);
 				/* List all mandatory groups of reviewers */
 				if($res) {
 					$tmp = array();
@@ -529,23 +502,10 @@ $(document).ready(function() {
 						}
 					}
 				}
-?>
-			</td>
-			</tr>
-<?php } ?>
-		  <tr>	
-        <td>
-		<?php $this->contentSubHeading(getMLText("assign_approvers")); ?>
-        </td>
-		  </tr>	
-		
-		  <tr>	
-        <td>
-			<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
-        </td>
-				<td>
-      <select class="chzn-select span9" name="indApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_approvers'); ?>">
-<?php
+			}
+
+			$this->contentSubHeading(getMLText("assign_approvers"));
+			$options = array();
 			$res=$user->getMandatoryApprovers();
 			foreach ($docAccess["users"] as $usr) {
 				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
@@ -553,12 +513,22 @@ $(document).ready(function() {
 				$mandatory=false;
 				foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
 				
-				if ($mandatory) print "<option value=\"". $usr->getID() ."\" disabled='disabled'>". htmlspecialchars($usr->getFullName())."</option>";
-				else print "<option value=\"". $usr->getID() ."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
+				$option = array($usr->getID(), htmlspecialchars($usr->getLogin()." - ".$usr->getFullName()), null);
+				if ($mandatory) $option[] = array(array('disabled', 'disabled'));
+				$options[] = $option;
 			}
-?>
-			</select>
-<?php
+			$this->formField(
+				getMLText("individuals"),
+				array(
+					'element'=>'select',
+					'name'=>'indApprovers[]',
+					'class'=>'chzn-select',
+					'attributes'=>array(array('data-placeholder', getMLText('select_ind_approvers'))),
+					'multiple'=>true,
+					'options'=>$options
+				)
+			);
+
 				/* List all mandatory approvers */
 				if($res) {
 					$tmp = array();
@@ -589,28 +559,28 @@ $(document).ready(function() {
 						}
 					}
 				}
-?>
-				</td>
-		  </tr>	
-		  <tr>	
-        <td>
-			<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
-        </td>
-        <td>
-      <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>">
-<?php
+			$options = array();
 			foreach ($docAccess["groups"] as $grp) {
 			
 				$mandatory=false;
 				foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $mandatory=true;	
 
-				if ($mandatory || !$grp->getUsers()) print "<option value=\"". $grp->getID() ."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
-				else print "<option value=\"". $grp->getID() ."\">".htmlspecialchars($grp->getName())."</option>";
+				$option = array($grp->getID(), htmlspecialchars($grp->getName()), null);
+				if ($mandatory || !$grp->getUsers()) $option[] = array(array('disabled', 'disabled'));
 
+				$options[] = $option;
 			}
-?>
-			</select>
-<?php
+			$this->formField(
+				getMLText("groups"),
+				array(
+					'element'=>'select',
+					'name'=>'grpApprovers[]',
+					'class'=>'chzn-select',
+					'attributes'=>array(array('data-placeholder', getMLText('select_grp_approvers'))),
+					'multiple'=>true,
+					'options'=>$options
+				)
+			);
 				/* List all mandatory groups of approvers */
 				if($res) {
 					$tmp = array();
@@ -642,57 +612,47 @@ $(document).ready(function() {
 					}
 				}
 ?>
-				</td>
-		  </tr>	
-		  <tr>	
-        <td colspan="2">
 			<div class="alert"><?php printMLText("add_doc_reviewer_approver_warning")?></div>
-        </td>
-			</tr>	
 <?php
 		}
-?>
-		  <tr>	
-        <td>
-		<?php $this->contentSubHeading(getMLText("add_document_notify")); ?>
-        </td>
-			</tr>	
+		$this->contentSubHeading(getMLText("add_document_notify"));
 
-		  <tr>	
-        <td>
-			<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
-        </td>
-        <td>
-				<select class="chzn-select span9" name="notification_users[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_notification'); ?>">
-<?php
-						$allUsers = $dms->getAllUsers($sortusersinlist);
-						foreach ($allUsers as $userObj) {
-							if (!$userObj->isGuest() && $folder->getAccessMode($userObj) >= M_READ)
-								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
-						}
+		$options = array();
+		$allUsers = $dms->getAllUsers($sortusersinlist);
+		foreach ($allUsers as $userObj) {
+			if (!$userObj->isGuest() && $folder->getAccessMode($userObj) >= M_READ)
+				$options[] = array($userObj->getID(), htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()));
+		}
+		$this->formField(
+			getMLText("individuals"),
+			array(
+				'element'=>'select',
+				'name'=>'notification_users[]',
+				'class'=>'chzn-select',
+				'attributes'=>array(array('data-placeholder', getMLText('select_ind_notification'))),
+				'multiple'=>true,
+				'options'=>$options
+			)
+		);
+		$options = array();
+		$allGroups = $dms->getAllGroups();
+		foreach ($allGroups as $groupObj) {
+			if ($folder->getGroupAccessMode($groupObj) >= M_READ)
+				$options[] = array($groupObj->getID(), htmlspecialchars($groupObj->getName()));
+		}
+		$this->formField(
+			getMLText("groups"),
+			array(
+				'element'=>'select',
+				'name'=>'notification_groups[]',
+				'class'=>'chzn-select',
+				'attributes'=>array(array('data-placeholder', getMLText('select_grp_notification'))),
+				'multiple'=>true,
+				'options'=>$options
+			)
+		);
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('add_document'));
 ?>
-				</select>
-				</td>
-			</tr>
-		  <tr>	
-        <td>
-			<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
-        </td>
-        <td>
-				<select class="chzn-select span9" name="notification_groups[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_notification'); ?>">
-<?php
-						$allGroups = $dms->getAllGroups();
-						foreach ($allGroups as $groupObj) {
-							if ($folder->getGroupAccessMode($groupObj) >= M_READ)
-								print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
-						}
-?>
-				</select>
-				</td>
-			</tr>
-		</table>
-
-			<p><input type="submit" class="btn" value="<?php printMLText("add_document");?>"></p>
 		</form>
 <?php
 		$this->contentContainerEnd();
