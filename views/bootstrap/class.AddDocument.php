@@ -448,7 +448,7 @@ $(document).ready(function() {
 						}
 						if(!$hasAccess) {
 							$noAccessUser = $dms->getUser($r['reviewerUserID']);
-							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_reviewer_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")")))."</div>";
+							$this->warningMsg(getMLText("mandatory_reviewer_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")"))));
 						}
 					}
 				}
@@ -498,7 +498,7 @@ $(document).ready(function() {
 						}
 						if(!$hasAccess) {
 							$noAccessGroup = $dms->getGroup($r['reviewerGroupID']);
-							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_reviewergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName())))."</div>";
+							$this->warningMsg(getMLText("mandatory_reviewergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName()))));
 						}
 					}
 				}
@@ -555,7 +555,7 @@ $(document).ready(function() {
 						}
 						if(!$hasAccess) {
 							$noAccessUser = $dms->getUser($r['approverUserID']);
-							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_approver_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")")))."</div>";
+							$this->warningMsg(getMLText("mandatory_approver_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")"))));
 						}
 					}
 				}
@@ -607,13 +607,11 @@ $(document).ready(function() {
 						}
 						if(!$hasAccess) {
 							$noAccessGroup = $dms->getGroup($r['approverGroupID']);
-							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_approvergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName())))."</div>";
+							$this->warningMsg(getMLText("mandatory_approvergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName()))));
 						}
 					}
 				}
-?>
-			<div class="alert"><?php printMLText("add_doc_reviewer_approver_warning")?></div>
-<?php
+			$this->warningMsg(getMLText("add_doc_reviewer_approver_warning"));
 		}
 		$this->contentSubHeading(getMLText("add_document_notify"));
 
