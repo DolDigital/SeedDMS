@@ -372,8 +372,8 @@ $(document).ready(function() {
 								'element'=>'select',
 								'id'=>'workflow',
 								'name'=>'workflow',
-								'class'=>'chzn-select-deselect',
-								'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
+								'class'=>'chzn-select',
+								'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_workflow'))),
 								'options'=>$options
 							)
 						);
@@ -390,8 +390,8 @@ $(document).ready(function() {
 							'element'=>'select',
 							'id'=>'workflow',
 							'name'=>'workflow',
-							'class'=>'chzn-select-deselect',
-							'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
+							'class'=>'chzn-select',
+							'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_workflow'))),
 							'options'=>$options
 						)
 					);

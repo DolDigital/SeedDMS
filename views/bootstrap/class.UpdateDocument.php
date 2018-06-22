@@ -642,7 +642,7 @@ console.log(element);
 <?php
 					} else {
 ?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+				<select class="_chzn-select span9" _data-allow-clear="true" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 					$curworkflow = $latestContent->getWorkflow();
 					foreach ($mandatoryworkflows as $workflow) {
@@ -657,7 +657,7 @@ console.log(element);
 					}
 				} else {
 ?>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+				<select class="_chzn-select span9" _data-allow-clear="true" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 					$workflows=$dms->getAllWorkflows();
 					print "<option value=\"\">"."</option>";

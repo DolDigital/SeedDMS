@@ -200,7 +200,9 @@ $(document).ready(function() {
 			array(
 				'element'=>'select',
 				'name'=>'userid',
+				'id'=>'userid',
 				'class'=>'chzn-select',
+				'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder',getMLText('select_user'))),
 				'options'=>$options
 			)
 		);
@@ -215,7 +217,7 @@ $(document).ready(function() {
 				'element'=>'select',
 				'name'=>'groupid',
 				'class'=>'chzn-select',
-				'attributes'=>array(array('data-placeholder', getMLText('select_group'))),
+				'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_group'))),
 				'options'=>$options
 			)
 		);

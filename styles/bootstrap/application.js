@@ -35,15 +35,7 @@ $(document).ready( function() {
 			$(ev.currentTarget).datepicker('hide');
 		});
 
-//	$(".chzn-select").chosen({width: "95%"});
-//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
 	$(".chzn-select").select2({
-		width: '100%',
-		templateResult: chzn_template_func
-	});
-	$(".chzn-select-deselect").select2({
-		allowClear:true,
 		width: '100%',
 		templateResult: chzn_template_func
 	});
@@ -376,7 +368,6 @@ $(document).ready( function() {
 			element.prepend('<div style="position: _absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: 200px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-//			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
 				templateResult: chzn_template_func
@@ -424,7 +415,6 @@ $(document).ready( function() {
 		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-//			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
 				templateResult: chzn_template_func

@@ -481,7 +481,7 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 									case "categories":
 										$categories = $dms->getDocumentCategories();
 										if($categories) {
-											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_category")."\">";
+											echo "<select class=\"chzn-select".($allowempty ? " data-allow-clear=\"true\"" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_category")."\">";
 											if($allowempty)
 												echo "<option value=\"\"></option>";
 											foreach($categories as $category) {
@@ -496,7 +496,7 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 									case "users":
 										$users = $dms->getAllUsers();
 										if($users) {
-											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_user")."\">";
+											echo "<select class=\"chzn-select".($allowempty ? " data-allow-clear=\"true\"" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_user")."\">";
 											if($allowempty)
 												echo "<option value=\"\"></option>";
 											foreach($users as $curuser) {
@@ -511,7 +511,7 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 									case "groups":
 										$recs = $dms->getAllGroups();
 										if($recs) {
-											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_group")."\">";
+											echo "<select class=\"chzn-select".($allowempty ? " data-allow-clear=\"true\"" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_group")."\">";
 											if($allowempty)
 												echo "<option value=\"\"></option>";
 											foreach($recs as $rec) {
@@ -526,7 +526,7 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 									case "attributedefinitions":
 										$recs = $dms->getAllAttributeDefinitions();
 										if($recs) {
-											echo "<select class=\"chzn-select".($allowempty ? "-deselect" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_attribute_value")."\">";
+											echo "<select class=\"chzn-select".($allowempty ? " data-allow-clear=\"true\"" : "")."\" name=\"extensions[".$extname."][".$confkey."][]\"".(!empty($conf['multiple']) ? "  multiple" : "").(!empty($conf['size']) ? "  size=\"".$conf['size']."\"" : "")." data-placeholder=\"".getMLText("select_attribute_value")."\">";
 											if($allowempty)
 												echo "<option value=\"\"></option>";
 											foreach($recs as $rec) {
