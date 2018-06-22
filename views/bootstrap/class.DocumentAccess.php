@@ -100,7 +100,7 @@ $(document).ready( function() {
 		if ($user->isAdmin()) {
 
 ?>
-	<form class="form-inline" action="../op/op.DocumentAccess.php">
+	<form action="../op/op.DocumentAccess.php">
   <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 	<input type="Hidden" name="action" value="setowner">
 	<input type="Hidden" name="documentid" value="<?php print $document->getId();?>">
@@ -132,14 +132,14 @@ $(document).ready( function() {
 			printMLText("inherits_access_msg");
 ?>
   <p>
-	<form class="form-inline" action="../op/op.DocumentAccess.php" style="display: inline-block;">
+	<form action="../op/op.DocumentAccess.php" style="display: inline-block;">
   <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getId();?>">
 	<input type="hidden" name="action" value="notinherit">
 	<input type="hidden" name="mode" value="copy">
 	<input type="submit" class="btn" value="<?php printMLText("inherits_access_copy_msg")?>">
 	</form>
-	<form class="form-inline" action="../op/op.DocumentAccess.php" style="display: inline-block;">
+	<form action="../op/op.DocumentAccess.php" style="display: inline-block;">
   <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 	<input type="hidden" name="documentid" value="<?php print $document->getId();?>">
 	<input type="hidden" name="action" value="notinherit">

@@ -97,7 +97,7 @@ $(document).ready(function() {
 		if ($user->isAdmin()) {
 
 ?>
-	<form class="form-inline" action="../op/op.FolderAccess.php">
+	<form action="../op/op.FolderAccess.php">
 	<?php echo createHiddenFieldWithKey('folderaccess'); ?>
 	<input type="hidden" name="action" value="setowner">
 	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
@@ -131,14 +131,14 @@ $(document).ready(function() {
 				printMLText("inherits_access_msg");
 ?>
   <p>
-	<form class="form-inline" action="../op/op.FolderAccess.php" style="display: inline-block;">
+	<form action="../op/op.FolderAccess.php" style="display: inline-block;">
   <?php echo createHiddenFieldWithKey('folderaccess'); ?>
 	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="hidden" name="action" value="notinherit">
 	<input type="hidden" name="mode" value="copy">
 	<input type="submit" class="btn" value="<?php printMLText("inherits_access_copy_msg")?>">
 	</form>
-	<form class="form-inline" action="../op/op.FolderAccess.php" style="display: inline-block;">
+	<form action="../op/op.FolderAccess.php" style="display: inline-block;">
   <?php echo createHiddenFieldWithKey('folderaccess'); ?>
 	<input type="hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="hidden" name="action" value="notinherit">
