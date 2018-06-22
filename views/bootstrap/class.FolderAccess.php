@@ -31,12 +31,17 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_FolderAccess extends SeedDMS_Bootstrap_Style {
 	function printAccessModeSelection($defMode) { /* {{{ */
-		print "<select name=\"mode\">\n";
-		print "\t<option value=\"".M_NONE."\"" . (($defMode == M_NONE) ? " selected" : "") . ">" . getMLText("access_mode_none") . "\n";
-		print "\t<option value=\"".M_READ."\"" . (($defMode == M_READ) ? " selected" : "") . ">" . getMLText("access_mode_read") . "\n";
-		print "\t<option value=\"".M_READWRITE."\"" . (($defMode == M_READWRITE) ? " selected" : "") . ">" . getMLText("access_mode_readwrite") . "\n";
-		print "\t<option value=\"".M_ALL."\"" . (($defMode == M_ALL) ? " selected" : "") . ">" . getMLText("access_mode_all") . "\n";
-		print "</select>\n";
+		echo self::getAccessModeSelection($defMode);
+	} /* }}} */
+
+	function getAccessModeSelection($defMode) { /* {{{ */
+		$content = "<select name=\"mode\">\n";
+		$content .= "\t<option value=\"".M_NONE."\"" . (($defMode == M_NONE) ? " selected" : "") . ">" . getMLText("access_mode_none") . "\n";
+		$content .= "\t<option value=\"".M_READ."\"" . (($defMode == M_READ) ? " selected" : "") . ">" . getMLText("access_mode_read") . "\n";
+		$content .= "\t<option value=\"".M_READWRITE."\"" . (($defMode == M_READWRITE) ? " selected" : "") . ">" . getMLText("access_mode_readwrite") . "\n";
+		$content .= "\t<option value=\"".M_ALL."\"" . (($defMode == M_ALL) ? " selected" : "") . ">" . getMLText("access_mode_all") . "\n";
+		$content .= "</select>\n";
+		return $content;
 	} /* }}} */
 
 	function js() { /* {{{ */
@@ -234,53 +239,47 @@ $(document).ready(function() {
 			print "</table><br>";
 		}
 ?>
-<form action="../op/op.FolderAccess.php" id="form1" name="form1">
+<form class="form-horizontal" action="../op/op.FolderAccess.php" id="form1" name="form1">
 <?php echo createHiddenFieldWithKey('folderaccess'); ?>
 <input type="hidden" name="folderid" value="<?php print $folder->getID()?>">
 <input type="hidden" name="action" value="addaccess">
-<table class="table-condensed">
-<tr>
-<td><?php printMLText("user");?>:</td>
-<td>
-<select name="userid">
-<option value="-1"><?php printMLText("select_one");?>
 <?php
-		foreach ($allUsers as $userObj) {
-			if ($userObj->isGuest()) {
-				continue;
-			}
-			print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
+		$options = array();
+		$options[] = array(-1, getMLText('select_one'));
+		foreach ($allUsers as $currUser) {
+			if (!$currUser->isGuest())
+				$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()), ($currUser->getID()==$user->getID()), array(array('data-subtitle', htmlspecialchars($currUser->getFullName()))));
 		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td class="inputDescription"><?php printMLText("group");?>:</td>
-<td>
-<select name="groupid">
-<option value="-1"><?php printMLText("select_one");?>
-<?php
+		$this->formField(
+			getMLText("user"),
+			array(
+				'element'=>'select',
+				'name'=>'userid',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
+		$options = array();
+		$options[] = array(-1, getMLText('select_one'));
 		foreach ($allGroups as $groupObj) {
-			print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
+			$options[] = array($groupObj->getID(), htmlspecialchars($groupObj->getName()));
 		}
+		$this->formField(
+			getMLText("group"),
+			array(
+				'element'=>'select',
+				'name'=>'groupid',
+				'class'=>'chzn-select',
+				'attributes'=>array(array('data-placeholder', getMLText('select_group'))),
+				'options'=>$options
+			)
+		);
+		$this->formField(
+			getMLText("access_mode"),
+			$this->getAccessModeSelection(M_READ)
+		);
+		$this->formSubmit("<i class=\"icon-plus\"></i> ".getMLText('add'));
 ?>
-</select>
-</td>
-</tr>
-<tr>
-<td class="inputDescription"><?php printMLText("access_mode");?>:</td>
-<td>
-<?php
-		$this->printAccessModeSelection(M_READ);
-?>
-</td>
-</tr>
-<tr>
-<td></td>
-<td><input type="submit" class="btn" value="<?php printMLText("add");?>"></td>
-</tr>
-</table>
 </form>
 
 <?php
