@@ -228,12 +228,12 @@ $(document).ready(function() {
 			)
 		);
 		$this->formField(getMLText("sequence"), $this->getSequenceChooser($folder->getDocuments('s')).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
-			if($presetexpiration) {
-				if(!($expts = strtotime($presetexpiration)))
-					$expts = false;
-			} else {
+		if($presetexpiration) {
+			if(!($expts = strtotime($presetexpiration)))
 				$expts = false;
-			}
+		} else {
+			$expts = false;
+		}
 		$options = array();
 		$options[] = array('never', getMLText('does_not_expire'));
 		$options[] = array('date', getMLText('expire_by_date'), $expts);
@@ -351,52 +351,50 @@ $(document).ready(function() {
 		}
 
 		if($workflowmode == 'advanced') {
-?>
-			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
-<?php
-				$mandatoryworkflows = $user->getMandatoryWorkflows();
-				if($mandatoryworkflows) {
-					if(count($mandatoryworkflows) == 1) {
-						$this->formField(
-							getMLText("workflow"),
-							htmlspecialchars($mandatoryworkflows[0]->getName()).'<input type="hidden" name="workflow" value="'.$mandatoryworkflows[0]->getID().'">'
-						);
-					} else {
-						$options = array();
-						foreach ($mandatoryworkflows as $workflow) {
-							$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()));
-						}
-						$this->formField(
-							getMLText("owner"),
-							array(
-								'element'=>'select',
-								'id'=>'workflow',
-								'name'=>'workflow',
-								'class'=>'chzn-select',
-								'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_workflow'))),
-								'options'=>$options
-							)
-						);
-					}
+			$mandatoryworkflows = $user->getMandatoryWorkflows();
+			if($mandatoryworkflows) {
+				if(count($mandatoryworkflows) == 1) {
+					$this->formField(
+						getMLText("workflow"),
+						htmlspecialchars($mandatoryworkflows[0]->getName()).'<input type="hidden" name="workflow" value="'.$mandatoryworkflows[0]->getID().'">'
+					);
 				} else {
 					$options = array();
-					$workflows=$dms->getAllWorkflows();
-					foreach ($workflows as $workflow) {
+					foreach ($mandatoryworkflows as $workflow) {
 						$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()));
 					}
 					$this->formField(
-						getMLText("owner"),
+						getMLText("workflow"),
 						array(
 							'element'=>'select',
 							'id'=>'workflow',
 							'name'=>'workflow',
 							'class'=>'chzn-select',
-							'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_workflow'))),
+							'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
 							'options'=>$options
 						)
 					);
 				}
-				$this->warningMsg(getMLText("add_doc_workflow_warning"));
+			} else {
+				$options = array();
+				$options[] = array('', '');
+				$workflows=$dms->getAllWorkflows();
+				foreach ($workflows as $workflow) {
+					$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()));
+				}
+				$this->formField(
+					getMLText("workflow"),
+					array(
+						'element'=>'select',
+						'id'=>'workflow',
+						'name'=>'workflow',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-allow-clear', 'true'), array('data-placeholder', getMLText('select_workflow'))),
+						'options'=>$options
+					)
+				);
+			}
+			$this->warningMsg(getMLText("add_doc_workflow_warning"));
 		} else {
 			if($workflowmode == 'traditional') {
 				$this->contentSubHeading(getMLText("assign_reviewers"));
