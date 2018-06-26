@@ -221,7 +221,7 @@ console.log(element);
 <?php
 		$this->formField(
 			getMLText("local_file"),
-			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->printFileChooser('userfile', false)
+			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile', false)
 		);
 		if($dropfolderdir) {
 			$this->formField(
