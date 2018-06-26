@@ -838,12 +838,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
-	function formField($title, $value) { /* {{{ */
+	function formField($title, $value, $params=array()) { /* {{{ */
 		if($title !== null) {
 			echo "<div class=\"control-group\">";
 			echo "	<label class=\"control-label\">".$title.":</label>";
 			echo "	<div class=\"controls\">";
 		}
+		if(isset($params['field_wrap'][0]))
+			echo $params['field_wrap'][0];
 		if(is_string($value)) {
 			echo $value;
 		} elseif(is_array($value)) {
@@ -895,6 +897,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				break;
 			}
 		}
+		if(isset($params['field_wrap'][1]))
+			echo $params['field_wrap'][1];
 		if($title !== null) {
 			echo "</div>";
 			echo "</div>";
@@ -1865,10 +1869,22 @@ $(function() {
 	 * @param string $name id of select box
 	 * @param array $ids list of option values
 	 */
+	function getSelectPresetButtonHtml($name, $ids) { /* {{{ */
+		return '<span id="'.$name.'_btn" class="selectpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOver".$name).'" data-ref="'.$name.'" data-ids="'.implode(",", $ids).'"><i class="icon-arrow-left"></i></span>';
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a number of ids into
+	 * a select box.
+	 *
+	 * Clicking in the button will preset the comma seperated list of ids
+	 * in data-ref as options in the select box with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param array $ids list of option values
+	 */
 	function printSelectPresetButtonHtml($name, $ids) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="selectpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>" data-ref="<?php echo $name; ?>" data-ids="<?php echo implode(",", $ids);?>"><i class="icon-arrow-left"></i></span>
-<?php
+		echo self::getSelectPresetButtonHtml($name, $ids);
 	} /* }}} */
 
 	/**
@@ -1896,6 +1912,20 @@ $(document).ready( function() {
 	} /* }}} */
 
 	/**
+	 * Get HTML for left-arrow with link which takes over a string into
+	 * a input field.
+	 *
+	 * Clicking on the button will preset the string
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function getInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
+		return '<span id="'.$name.'_btn" class="inputpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOverAttributeValue").'" data-ref="'.$name.'" data-text="'.(is_array($text) ? implode($sep, $text) : htmlspecialchars($text)).'"'.($sep ? " data-sep=\"".$sep."\"" : "").'><i class="icon-arrow-left"></i></span>';
+	} /* }}} */
+
+	/**
 	 * Output left-arrow with link which takes over a string into
 	 * a input field.
 	 *
@@ -1906,9 +1936,7 @@ $(document).ready( function() {
 	 * @param string $text text
 	 */
 	function printInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="inputpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
-<?php
+		echo self::getInputPresetButtonHtml($name, $text, $sep);
 	} /* }}} */
 
 	/**
@@ -1940,6 +1968,22 @@ $(document).ready( function() {
 	} /* }}} */
 
 	/**
+	 * Get HTML for left-arrow with link which takes over a boolean value
+	 * into a checkbox field.
+	 *
+	 * Clicking on the button will preset the checkbox
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function getCheckboxPresetButtonHtml($name, $text) { /* {{{ */
+?>
+		return '<span id="'.$name.'_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOverAttributeValue").'" data-ref="'.$name.'" data-text="'.(is_array($text) ? implode($sep, $text) : htmlspecialchars($text)).'"'.($sep ? " data-sep=\"".$sep."\"" : "").'><i class="icon-arrow-left"></i></span>';
+<?php
+	} /* }}} */
+
+	/**
 	 * Output left-arrow with link which takes over a boolean value
 	 * into a checkbox field.
 	 *
@@ -1950,9 +1994,7 @@ $(document).ready( function() {
 	 * @param string $text text
 	 */
 	function printCheckboxPresetButtonHtml($name, $text) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
-<?php
+		self::getCheckboxPresetButtonHtml($name, $text);
 	} /* }}} */
 
 	/**
