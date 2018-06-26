@@ -127,39 +127,37 @@ $(document).ready(function() {
 			print "</tr></tbody></table><br>\n";
 		}
 ?>
-	<form method="post" action="../op/op.ReviewDocument.php" id="form<?= $reviewtype ?>" name="form<?= $reviewtype ?>" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" action="../op/op.ReviewDocument.php" id="form<?= $reviewtype ?>" name="form<?= $reviewtype ?>" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("comment")?>:</td>
-			<td><textarea name="comment" cols="80" rows="4"></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_file")?>:</td>
-			<td>
 <?php
-	$this->printFileChooser('reviewfile', false);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
+		);
+		$this->formField(
+			getMLText("review_file"),
+			$this->getFileChooser('review_file', false)
+		);
+		$options = array();
+		if($reviewStatus['status'] != 1)
+			$options[] = array('1', getMLText('status_reviewed'));
+		if($reviewStatus['status'] != -1)
+			$options[] = array('-1', getMLText('rejected'));
+		$this->formField(
+			getMLText("review_status"),
+			array(
+				'element'=>'select',
+				'name'=>'reviewStatus',
+				'options'=>$options
+			)
+		);
+		$this->formSubmit(getMLText('submit_review'), $reviewtype.'Review');
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_status")?>:</td>
-			<td>
-				<select name="reviewStatus">
-<?php if($reviewStatus['status'] != 1) { ?>
-					<option value='1'><?php printMLText("status_reviewed")?></option>
-<?php } ?>
-<?php if($reviewStatus['status'] != -1) { ?>
-					<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type='submit' class="btn" name='<?= $reviewtype ?>Review' value='<?php printMLText("submit_review")?>'/></td>
-		</tr>
-	</table>
 	<input type='hidden' name='reviewType' value='<?= $reviewtype ?>'/>
 	<?php if($reviewtype == 'grp'): ?>
 	<input type='hidden' name='reviewGroup' value='<?php echo $reviewStatus['required']; ?>'/>
