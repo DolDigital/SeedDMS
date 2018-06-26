@@ -305,7 +305,7 @@ $(document).ready(function() {
 		);
 		$this->formField(
 			getMLText("local_file"),
-			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->printFileChooser('userfile[]', false).($enablemultiupload ? '<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>' : '')
+			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile[]', false).($enablemultiupload ? '<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>' : '')
 		);
 		if($dropfolderdir) {
 			$this->formField(
