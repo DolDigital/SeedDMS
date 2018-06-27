@@ -79,59 +79,17 @@ $(document).ready( function() {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 
 		$this->contentHeading(getMLText("edit_existing_notify"));
-		$this->contentContainerStart();
 
 		$userNotifyIDs = array();
 		$groupNotifyIDs = array();
 
-		print "<table class=\"table-condensed\">\n";
-		if ((count($notifyList["users"]) == 0) && (count($notifyList["groups"]) == 0)) {
-			print "<tr><td>".getMLText("empty_notify_list")."</td></tr>";
-		}
-		else {
-			foreach ($notifyList["users"] as $userNotify) {
-				print "<tr>";
-				print "<td><i class=\"icon-user\"></i></td>";
-				print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
-				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
-					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
-					echo createHiddenFieldWithKey('documentnotify')."\n";
-					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
-					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
-					print "<input type=\"hidden\" name=\"userid\" value=\"".$userNotify->getID()."\">\n";
-					print "<td>";
-					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
-					print "</td>";
-					print "</form>\n";
-				}else print "<td></td>";
-				print "</tr>";
-				$userNotifyIDs[] = $userNotify->getID();
-			}
-			foreach ($notifyList["groups"] as $groupNotify) {
-				print "<tr>";
-				print "<td><i class=\"icon-group\"></i></td>";
-				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
-				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
-					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
-					echo createHiddenFieldWithKey('documentnotify')."\n";
-					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
-					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
-					print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupNotify->getID()."\">\n";
-					print "<td>";
-					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
-					print "</form>\n";
-					print "</td>";
-				}else print "<td></td>";
-				print "</tr>";
-				$groupNotifyIDs[] = $groupNotify->getID();
-			}
-		}
-		print "</table>\n";
+		echo "<div class=\"row-fluid\">\n";
+		echo "<div class=\"span6\">\n";
+		$this->contentContainerStart();
 
 ?>
-<br>
 
-<form class=form-horizontal" action="../op/op.DocumentNotify.php" method="post" name="form1" id="form1">
+<form class="form-horizontal" action="../op/op.DocumentNotify.php" method="post" name="form1" id="form1">
 <?php	echo createHiddenFieldWithKey('documentnotify'); ?>
 <input type="hidden" name="documentid" value="<?php print $document->getID()?>">
 <input type="hidden" name="action" value="addnotify">
@@ -176,11 +134,57 @@ $(document).ready( function() {
 		);
 		$this->formSubmit(getMLText('add'));
 ?>
-
 </form>
-
 <?php
 		$this->contentContainerEnd();
+		echo "</div>\n";
+		echo "<div class=\"span6\">\n";
+		print "<table class=\"table-condensed\">\n";
+		if ((count($notifyList["users"]) == 0) && (count($notifyList["groups"]) == 0)) {
+			print "<tr><td>".getMLText("empty_notify_list")."</td></tr>";
+		}
+		else {
+			foreach ($notifyList["users"] as $userNotify) {
+				print "<tr>";
+				print "<td><i class=\"icon-user\"></i></td>";
+				print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
+				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
+					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
+					echo createHiddenFieldWithKey('documentnotify')."\n";
+					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
+					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
+					print "<input type=\"hidden\" name=\"userid\" value=\"".$userNotify->getID()."\">\n";
+					print "<td>";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+					print "</td>";
+					print "</form>\n";
+				}else print "<td></td>";
+				print "</tr>";
+				$userNotifyIDs[] = $userNotify->getID();
+			}
+			foreach ($notifyList["groups"] as $groupNotify) {
+				print "<tr>";
+				print "<td><i class=\"icon-group\"></i></td>";
+				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
+				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
+					print "<form action=\"../op/op.DocumentNotify.php\" method=\"post\">\n";
+					echo createHiddenFieldWithKey('documentnotify')."\n";
+					print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getID()."\">\n";
+					print "<input type=\"hidden\" name=\"action\" value=\"delnotify\">\n";
+					print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupNotify->getID()."\">\n";
+					print "<td>";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+					print "</form>\n";
+					print "</td>";
+				}else print "<td></td>";
+				print "</tr>";
+				$groupNotifyIDs[] = $groupNotify->getID();
+			}
+		}
+		print "</table>\n";
+
+		echo "</div>\n";
+		echo "</div>\n";
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
