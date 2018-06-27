@@ -47,7 +47,7 @@ class SeedDMS_View_Common {
 			if(method_exists($this, $get['action'])) {
 				$this->{$get['action']}();
 			} else {
-				echo "Missing action '".$get['action']."'";
+				echo "Missing action '".htmlspecialchars($get['action'])."'";
 			}
 		} else
 			$this->show();
