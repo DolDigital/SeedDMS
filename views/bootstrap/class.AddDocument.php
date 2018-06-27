@@ -398,6 +398,19 @@ $(document).ready(function() {
 		} else {
 			if($workflowmode == 'traditional') {
 				$this->contentSubHeading(getMLText("assign_reviewers"));
+
+				/* List all mandatory reviewers */
+				$res=$user->getMandatoryReviewers();
+				if($res) {
+					$tmp = array();
+					foreach ($res as $r) {
+						if($r['reviewerUserID'] > 0) {
+							$u = $dms->getUser($r['reviewerUserID']);
+							$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
+						}
+					}
+				}
+
 				$options = array();
 				foreach ($docAccess["users"] as $usr) {
 					if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
@@ -417,24 +430,9 @@ $(document).ready(function() {
 						'attributes'=>array(array('data-placeholder', getMLText('select_ind_reviewers'))),
 						'multiple'=>true,
 						'options'=>$options
-					)
+					),
+					array('field_wrap'=>array('', ($tmp ? '<div class="mandatories"><span>'.getMLText('mandatory_reviewers').':</span> '.implode(', ', $tmp).'</div>' : '')))
 				);
-
-				/* List all mandatory reviewers */
-				if($res) {
-					$tmp = array();
-					foreach ($res as $r) {
-						if($r['reviewerUserID'] > 0) {
-							$u = $dms->getUser($r['reviewerUserID']);
-							$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
-						}
-					}
-					if($tmp) {
-						echo '<div class="mandatories"><span>'.getMLText('mandatory_reviewers').':</span> ';
-						echo implode(', ', $tmp);
-						echo "</div>\n";
-					}
-				}
 
 				/* Check for mandatory reviewer without access */
 				foreach($res as $r) {
@@ -447,6 +445,17 @@ $(document).ready(function() {
 						if(!$hasAccess) {
 							$noAccessUser = $dms->getUser($r['reviewerUserID']);
 							$this->warningMsg(getMLText("mandatory_reviewer_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")"))));
+						}
+					}
+				}
+
+				/* List all mandatory groups of reviewers */
+				if($res) {
+					$tmp = array();
+					foreach ($res as $r) {
+						if($r['reviewerGroupID'] > 0) {
+							$u = $dms->getGroup($r['reviewerGroupID']);
+							$tmp[] =  htmlspecialchars($u->getName());
 						}
 					}
 				}
@@ -469,23 +478,9 @@ $(document).ready(function() {
 						'attributes'=>array(array('data-placeholder', getMLText('select_grp_reviewers'))),
 						'multiple'=>true,
 						'options'=>$options
-					)
+					),
+					array('field_wrap'=>array('', ($tmp ? '<div class="mandatories"><span>'.getMLText('mandatory_reviewergroups').':</span> '.implode(', ', $tmp).'</div>' : '')))
 				);
-				/* List all mandatory groups of reviewers */
-				if($res) {
-					$tmp = array();
-					foreach ($res as $r) {
-						if($r['reviewerGroupID'] > 0) {
-							$u = $dms->getGroup($r['reviewerGroupID']);
-							$tmp[] =  htmlspecialchars($u->getName());
-						}
-					}
-					if($tmp) {
-						echo '<div class="mandatories"><span>'.getMLText('mandatory_reviewergroups').':</span> ';
-						echo implode(', ', $tmp);
-						echo "</div>\n";
-					}
-				}
 				/* Check for mandatory reviewer group without access */
 				foreach($res as $r) {
 					if ($r['reviewerGroupID']) {
@@ -503,8 +498,19 @@ $(document).ready(function() {
 			}
 
 			$this->contentSubHeading(getMLText("assign_approvers"));
-			$options = array();
 			$res=$user->getMandatoryApprovers();
+			/* List all mandatory approvers */
+			if($res) {
+				$tmp = array();
+				foreach ($res as $r) {
+					if($r['approverUserID'] > 0) {
+						$u = $dms->getUser($r['approverUserID']);
+						$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
+					}
+				}
+			}
+
+			$options = array();
 			foreach ($docAccess["users"] as $usr) {
 				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 
@@ -524,39 +530,35 @@ $(document).ready(function() {
 					'attributes'=>array(array('data-placeholder', getMLText('select_ind_approvers'))),
 					'multiple'=>true,
 					'options'=>$options
-				)
+				),
+				array('field_wrap'=>array('', ($tmp ? '<div class="mandatories"><span>'.getMLText('mandatory_approvers').':</span> '.implode(', ', $tmp).'</div>' : '')))
 			);
 
-				/* List all mandatory approvers */
-				if($res) {
-					$tmp = array();
-					foreach ($res as $r) {
-						if($r['approverUserID'] > 0) {
-							$u = $dms->getUser($r['approverUserID']);
-							$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
-						}
+			/* Check for mandatory approvers without access */
+			foreach($res as $r) {
+				if($r['approverUserID']) {
+					$hasAccess = false;
+					foreach ($docAccess["users"] as $usr) {
+						if ($r['approverUserID']==$usr->getID())
+							$hasAccess = true;
 					}
-					if($tmp) {
-						echo '<div class="mandatories"><span>'.getMLText('mandatory_approvers').':</span> ';
-						echo implode(', ', $tmp);
-						echo "</div>\n";
+					if(!$hasAccess) {
+						$noAccessUser = $dms->getUser($r['approverUserID']);
+						$this->warningMsg(getMLText("mandatory_approver_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")"))));
 					}
 				}
+			}
 
-				/* Check for mandatory approvers without access */
-				foreach($res as $r) {
-					if($r['approverUserID']) {
-						$hasAccess = false;
-						foreach ($docAccess["users"] as $usr) {
-							if ($r['approverUserID']==$usr->getID())
-								$hasAccess = true;
-						}
-						if(!$hasAccess) {
-							$noAccessUser = $dms->getUser($r['approverUserID']);
-							$this->warningMsg(getMLText("mandatory_approver_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")"))));
-						}
+			/* List all mandatory groups of approvers */
+			if($res) {
+				$tmp = array();
+				foreach ($res as $r) {
+					if($r['approverGroupID'] > 0) {
+						$u = $dms->getGroup($r['approverGroupID']);
+						$tmp[] =  htmlspecialchars($u->getName());
 					}
 				}
+			}
 			$options = array();
 			foreach ($docAccess["groups"] as $grp) {
 			
@@ -577,23 +579,9 @@ $(document).ready(function() {
 					'attributes'=>array(array('data-placeholder', getMLText('select_grp_approvers'))),
 					'multiple'=>true,
 					'options'=>$options
-				)
+				),
+				array('field_wrap'=>array('', ($tmp ? '<div class="mandatories"><span>'.getMLText('mandatory_approvergroups').':</span> '.implode(', ', $tmp).'</div>' : '')))
 			);
-				/* List all mandatory groups of approvers */
-				if($res) {
-					$tmp = array();
-					foreach ($res as $r) {
-						if($r['approverGroupID'] > 0) {
-							$u = $dms->getGroup($r['approverGroupID']);
-							$tmp[] =  htmlspecialchars($u->getName());
-						}
-					}
-					if($tmp) {
-						echo '<div class="mandatories"><span>'.getMLText('mandatory_approvergroups').':</span> ';
-						echo implode(', ', $tmp);
-						echo "</div>\n";
-					}
-				}
 
 				/* Check for mandatory approver groups without access */
 				foreach($res as $r) {
