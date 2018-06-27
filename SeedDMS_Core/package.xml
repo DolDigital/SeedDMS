@@ -27,6 +27,7 @@
 SeedDMS_Core_DMS::search() returns false in case of an error
 do not use views in DBAccessPDO by default anymore, use temp. tables
 SeedDMS_Core_Document::getNotifyList() has new parameter to include disabled user in list
+fix possible sql injection in SeedDMS_Core_User
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
