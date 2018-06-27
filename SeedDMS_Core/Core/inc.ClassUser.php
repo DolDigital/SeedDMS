@@ -442,11 +442,12 @@ class SeedDMS_Core_User { /* {{{ */
 	function getRole() { return $this->_role; }
 
 	/**
-	 * @param $newrole
+	 * @param integer $newrole
 	 * @return bool
 	 */
 	function setRole($newrole) { /* {{{ */
 		$db = $this->_dms->getDB();
+		$newrole = intval($newrole);
 
 		$queryStr = "UPDATE `tblUsers` SET `role` = " . $newrole . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
@@ -589,7 +590,7 @@ class SeedDMS_Core_User { /* {{{ */
 	function getQuota() { return $this->_quota; }
 
 	/**
-	 * @param $quota
+	 * @param integer $quota
 	 * @return bool
 	 */
 	function setQuota($quota) { /* {{{ */
@@ -610,13 +611,14 @@ class SeedDMS_Core_User { /* {{{ */
 	function getHomeFolder() { return $this->_homeFolder; }
 
 	/**
-	 * @param $homefolder
+	 * @param integer $homefolder
 	 * @return bool
 	 */
 	function setHomeFolder($homefolder) { /* {{{ */
 		$db = $this->_dms->getDB();
+		$homefolder = intval($homefolder);
 
-		$queryStr = "UPDATE `tblUsers` SET `homefolder` = " . ($homefolder ? (int) $homefolder : NULL) . " WHERE `id` = " . $this->_id;
+		$queryStr = "UPDATE `tblUsers` SET `homefolder` = " . ($homefolder ? $homefolder : NULL) . " WHERE `id` = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1552,6 +1554,7 @@ class SeedDMS_Core_User { /* {{{ */
 	 */
 	function setMandatoryReviewer($id, $isgroup=false) { /* {{{ */
 		$db = $this->_dms->getDB();
+		$id = (int) $id;
 
 		if ($isgroup){
 
@@ -1587,10 +1590,11 @@ class SeedDMS_Core_User { /* {{{ */
 	 */
 	function setMandatoryApprover($id, $isgroup=false) { /* {{{ */
 		$db = $this->_dms->getDB();
+		$id = (int) $id;
 
 		if ($isgroup){
 
-			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverGroupID` = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverGroupID` = " . $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return true;
 
@@ -1600,7 +1604,7 @@ class SeedDMS_Core_User { /* {{{ */
 
 		}else{
 
-			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverUserID` = " . (int) $id;
+			$queryStr = "SELECT * FROM `tblMandatoryApprovers` WHERE `userID` = " . $this->_id . " AND `approverUserID` = " . $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return true;
 
