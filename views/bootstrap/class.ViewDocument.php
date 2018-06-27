@@ -738,11 +738,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if (/*$workflowmode != 'traditional_only_approval' &&*/ is_array($reviewStatus) && count($reviewStatus)>0) {
 
 			print "<tr>\n";
-			print "<th width='20%'>".getMLText("name")."</th>\n";
-			print "<th width='20%'>".getMLText("last_update").", ".getMLText("comment")."</th>\n";
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("last_update").", ".getMLText("comment")."</th>\n";
 //			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
-			print "<th width='15%'>".getMLText("status")."</th>\n";
-			print "<th width='20%'></th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th></th>\n";
 			print "</tr>\n";
 
 			foreach ($reviewStatus as $r) {
@@ -826,11 +826,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if (is_array($approvalStatus) && count($approvalStatus)>0) {
 
 			print "<tr>\n";
-			print "<th width='20%'>".getMLText("name")."</th>\n";
-			print "<th width='20%'>".getMLText("last_update").", ".getMLText("comment")."</th>\n";	
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("last_update").", ".getMLText("comment")."</th>\n";	
 //			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
-			print "<th width='15%'>".getMLText("status")."</th>\n";
-			print "<th width='20%'></th>\n";
+			print "<th>".getMLText("status")."</th>\n";
+			print "<th></th>\n";
 			print "</tr>\n";
 
 			foreach ($approvalStatus as $a) {
