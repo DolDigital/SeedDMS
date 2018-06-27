@@ -725,8 +725,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		  <div class="tab-pane <?php if($currenttab == 'revapp') echo 'active'; ?>" id="revapp">
 <?php
-		$this->contentContainerstart();
-		print "<table class=\"table-condensed\">\n";
+		print "<div class=\"row-fluid\">";
+		print "<div class=\"span6\">";
+//		$this->contentContainerStart();
+		print "<legend>".getMLText('reviewers')."</legend>";
+		print "<table class=\"table table-condensed\">\n";
 
 		/* Just check fo an exting reviewStatus, even workflow mode is set
 		 * to traditional_only_approval. There may be old documents which
@@ -734,16 +737,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		 */
 		if (/*$workflowmode != 'traditional_only_approval' &&*/ is_array($reviewStatus) && count($reviewStatus)>0) {
 
-			print "<tr><td colspan=5>\n";
-			$this->contentSubHeading(getMLText("reviewers"));
-			print "</tr>";
-
 			print "<tr>\n";
-			print "<td width='20%'><b>".getMLText("name")."</b></td>\n";
-			print "<td width='20%'><b>".getMLText("last_update")."</b></td>\n";
-			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
-			print "<td width='15%'><b>".getMLText("status")."</b></td>\n";
-			print "<td width='20%'></td>\n";
+			print "<th width='20%'>".getMLText("name")."</th>\n";
+			print "<th width='20%'>".getMLText("last_update").", ".getMLText("comment")."</th>\n";
+//			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
+			print "<th width='15%'>".getMLText("status")."</th>\n";
+			print "<th width='20%'></th>\n";
 			print "</tr>\n";
 
 			foreach ($reviewStatus as $r) {
@@ -785,13 +784,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						break;
 				}
-				print "<tr>\n";
+				print "<tr".($r['status'] == 1 ? ' class="success"' : ($r['status'] == -1 ? ' class="error"' : '')).">\n";
 				print "<td>".$reqName."</td>\n";
-				print "<td><ul class=\"unstyled\"><li>".$r["date"]."</li>";
+				print "<td><i style=\"font-size: 80%;\">".$r["date"]." - ";
 				/* $updateUser is the user who has done the review */
 				$updateUser = $dms->getUser($r["userID"]);
-				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
-				print "<td>".htmlspecialchars($r["comment"]);
+				print (is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$r["userID"]."'")."</i><br />";
+				print htmlspecialchars($r["comment"]);
 				if($r['file']) {
 					echo "<br />";
 					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&reviewlogid=".$r['reviewLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
@@ -805,9 +804,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($accessop->mayReview()) {
 					if ($is_reviewer) {
 						if ($r["status"]==0) {
-							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("add_review")."</a></li>";
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-primary btn-mini\">".getMLText("add_review")."</a></li>";
 						} elseif ($accessop->mayUpdateReview($updateUser) && (($r["status"]==1)||($r["status"]==-1))) {
-							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
+							print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-primary btn-mini\">".getMLText("edit")."</a></li>";
 						}
 					}
 				}
@@ -816,19 +815,22 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "</tr>\n";
 			}
 		}
+		print "</table>";
+//		$this->contentContainerEnd();
 
+		print "</div>";
+		print "<div class=\"span6\">";
+//		$this->contentContainerStart();
+		print "<legend>".getMLText('approvers')."</legend>";
+		print "<table class=\"table table-condensed\">\n";
 		if (is_array($approvalStatus) && count($approvalStatus)>0) {
 
-			print "<tr><td colspan=5>\n";
-			$this->contentSubHeading(getMLText("approvers"));
-			print "</tr>";
-
 			print "<tr>\n";
-			print "<td width='20%'><b>".getMLText("name")."</b></td>\n";
-			print "<td width='20%'><b>".getMLText("last_update")."</b></td>\n";	
-			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
-			print "<td width='15%'><b>".getMLText("status")."</b></td>\n";
-			print "<td width='20%'></td>\n";
+			print "<th width='20%'>".getMLText("name")."</th>\n";
+			print "<th width='20%'>".getMLText("last_update").", ".getMLText("comment")."</th>\n";	
+//			print "<td width='25%'><b>".getMLText("comment")."</b></td>";
+			print "<th width='15%'>".getMLText("status")."</th>\n";
+			print "<th width='20%'></th>\n";
 			print "</tr>\n";
 
 			foreach ($approvalStatus as $a) {
@@ -870,13 +872,13 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						break;
 				}
-				print "<tr>\n";
+				print "<tr".($a['status'] == 1 ? ' class="success"' : ($a['status'] == -1 ? ' class="error"' : ($a['status'] == -2 ? ' class=""' : ''))).">\n";
 				print "<td>".$reqName."</td>\n";
-				print "<td><ul class=\"unstyled\"><li>".$a["date"]."</li>";
+				print "<td><i style=\"font-size: 80%;\">".$a["date"]." - ";
 				/* $updateUser is the user who has done the approval */
 				$updateUser = $dms->getUser($a["userID"]);
-				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
-				print "<td>".htmlspecialchars($a["comment"]);
+				print (is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$a["userID"]."'")."</i><br />";	
+				print htmlspecialchars($a["comment"]);
 				if($a['file']) {
 					echo "<br />";
 					echo "<a href=\"../op/op.Download.php?documentid=".$documentid."&approvelogid=".$a['approveLogID']."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText('download')."</a>";
@@ -890,9 +892,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($accessop->mayApprove()) {
 					if ($is_approver) {
 						if ($a['status'] == 0) {
-							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
+							print "<li><a class=\"btn btn-primary btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("add_approval")."</a></li>";
 						} elseif ($accessop->mayUpdateApproval($updateUser) && (($a["status"]==1)||($a["status"]==-1))) {
-							print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+							print "<li><a class=\"btn btn-primary btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
 						}
 					}
 				}
@@ -903,7 +905,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		print "</table>\n";
-		$this->contentContainerEnd();
+//		$this->contentContainerEnd();
+		print "</div>";
+		print "</div>";
 
 		if($user->isAdmin()) {
 ?>
