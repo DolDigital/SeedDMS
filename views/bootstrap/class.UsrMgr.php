@@ -214,7 +214,7 @@ $(document).ready( function() {
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
 ?>
-	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
+	<form class="form-horizontal" action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
 <?php
 		if($currUser) {
 			echo createHiddenFieldWithKey('edituser');
