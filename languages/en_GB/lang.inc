@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1744), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1745), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -649,6 +649,7 @@ URL: [url]',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
 'indexing_tasks_in_queue' => 'Indexing tasks in queue',
+'index_converters' => '',
 'index_done' => 'Done',
 'index_error' => 'Error',
 'index_folder' => 'Index folder',
@@ -751,6 +752,7 @@ URL: [url]',
 'login_ok' => 'Sign in successful',
 'logout' => 'Logout',
 'log_management' => 'Log files management',
+'lo_LA' => 'Laotian',
 'manager' => 'Manager',
 'manager_of_group' => 'You are the manager of this group',
 'mandatory_approvergroups' => 'Mandatory Groups of approvers',
@@ -1280,6 +1282,8 @@ Name: [username]
 'settings_editOnlineFileTypes_desc' => 'Files with one of the following endings can be edited online (USE ONLY LOWER CASE CHARACTERS)',
 'settings_enable2FactorAuthentication' => 'Enable 2-factor authentication',
 'settings_enable2FactorAuthentication_desc' => 'Enable/disable 2 factor authentication. The users will need the Google Authenticator on its mobile phone.',
+'settings_enableAcknowledgeWorkflow' => '',
+'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminReceipt' => 'Allow reception of documents for admins',
 'settings_enableAdminReceipt_desc' => 'Enable this if you want administrators to be listed as recipients of documents.',
 'settings_enableAdminRevApp' => 'Allow review/approval for admins',
