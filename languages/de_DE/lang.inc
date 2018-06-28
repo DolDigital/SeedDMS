@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2628), dgrutsch (22)
+//    Translators: Admin (2629), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -648,6 +648,7 @@ URL: [url]',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
 'indexing_tasks_in_queue' => 'Indiziervorgänge in der Warteschleife',
+'index_converters' => '',
 'index_done' => 'Fertig',
 'index_error' => 'Fehler',
 'index_folder' => 'Indiziere Ordner',
@@ -750,6 +751,7 @@ URL: [url]',
 'login_ok' => 'Anmeldung erfolgreich',
 'logout' => 'Abmelden',
 'log_management' => 'Management der Log-Dateien',
+'lo_LA' => 'Laotisch',
 'manager' => 'Manager',
 'manager_of_group' => 'Sie sind der Manager dieser Gruppe',
 'mandatory_approvergroups' => 'Zwingende Gruppen von Freigebern',
@@ -1285,6 +1287,8 @@ Name: [username]
 'settings_editOnlineFileTypes_desc' => 'Dateien mit den angegebenen Endungen können Online editiert werden (benutzen Sie ausschließlich Kleinbuchstaben).',
 'settings_enable2FactorAuthentication' => '2-Faktor Authentifizierung einschalten',
 'settings_enable2FactorAuthentication_desc' => 'Schaltet die 2-Faktor Authentifizierung ein, welche den Google Authenticator auf dem Mobiltelefon erfordert.',
+'settings_enableAcknowledgeWorkflow' => '',
+'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminReceipt' => 'Admin darf Empfang bestätigen',
 'settings_enableAdminReceipt_desc' => 'Anwählen, um Administratoren in der Liste der Personen für eine Empfangsbestätigung auszugeben',
 'settings_enableAdminRevApp' => 'Admin darf freigeben/prüfen',

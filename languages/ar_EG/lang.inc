@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1287)
+//    Translators: Admin (1288)
 
 $text = array(
 '2_factor_auth' => '',
@@ -611,6 +611,7 @@ URL: [url]',
 'include_documents' => 'اشمل مستندات',
 'include_subdirectories' => 'اشمل مجلدات فرعية',
 'indexing_tasks_in_queue' => '',
+'index_converters' => '',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'ﻒﻫﺮﺳﺓ ﺎﻠﻤﺠﻟﺩ',
@@ -713,6 +714,7 @@ URL: [url]',
 'login_ok' => 'دخول صحيح',
 'logout' => 'خروج',
 'log_management' => 'ادارة ملفات السجلات',
+'lo_LA' => '',
 'manager' => 'مدير',
 'manager_of_group' => '',
 'mandatory_approvergroups' => '',
@@ -1105,7 +1107,7 @@ URL: [url]',
 'select_one' => 'اختر واحد',
 'select_user' => '',
 'select_users' => 'اضغط لاختيار المستخدم',
-'select_value' => '',
+'select_value' => 'ﺎﺨﺗﺭ ﺎﻠﻘﻴﻣﺓ ﺮﺟﺍﺀً',
 'select_workflow' => 'اختر مسار العمل',
 'send_email' => '',
 'send_login_data' => '',
@@ -1196,6 +1198,8 @@ URL: [url]',
 'settings_editOnlineFileTypes_desc' => '',
 'settings_enable2FactorAuthentication' => '',
 'settings_enable2FactorAuthentication_desc' => '',
+'settings_enableAcknowledgeWorkflow' => '',
+'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminReceipt' => '',
 'settings_enableAdminReceipt_desc' => '',
 'settings_enableAdminRevApp' => '',

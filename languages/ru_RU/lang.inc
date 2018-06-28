@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1662)
+//    Translators: Admin (1663)
 
 $text = array(
 '2_factor_auth' => 'Двухфакторная аутентификация',
@@ -623,6 +623,7 @@ URL: [url]',
 'include_documents' => 'Включая документы',
 'include_subdirectories' => 'Включая подкаталоги',
 'indexing_tasks_in_queue' => 'Задача индексирования поставлена в очередь',
+'index_converters' => '',
 'index_done' => '',
 'index_error' => '',
 'index_folder' => 'Полнотекстовый индекс',
@@ -725,6 +726,7 @@ URL: [url]',
 'login_ok' => 'Вход успешен',
 'logout' => 'Выход',
 'log_management' => 'Управление журналами',
+'lo_LA' => '',
 'manager' => 'Менеджер',
 'manager_of_group' => 'Вы являетесь менеджером данной группы',
 'mandatory_approvergroups' => 'Обязательные группы утверждающих',
@@ -1149,7 +1151,7 @@ URL: [url]',
 'select_one' => 'Выберите',
 'select_user' => '',
 'select_users' => 'Выберите пользователей',
-'select_value' => '',
+'select_value' => 'Выберите значение',
 'select_workflow' => 'Выберите процесс',
 'send_email' => '',
 'send_login_data' => '',
@@ -1240,6 +1242,8 @@ URL: [url]',
 'settings_editOnlineFileTypes_desc' => 'Типы файлов перечисленные через точку-запятую, например, ".txt;.html" (ИСПОЛЬЗОВАТЬ ТОЛЬКО нижний РЕГИСТР)',
 'settings_enable2FactorAuthentication' => '',
 'settings_enable2FactorAuthentication_desc' => '',
+'settings_enableAcknowledgeWorkflow' => '',
+'settings_enableAcknowledgeWorkflow_desc' => '',
 'settings_enableAdminReceipt' => '',
 'settings_enableAdminReceipt_desc' => '',
 'settings_enableAdminRevApp' => 'Администратор как<br/>рецензирующий и утверждающий',
