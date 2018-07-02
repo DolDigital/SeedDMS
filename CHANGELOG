@@ -7,15 +7,16 @@
 - do not leak information in calendar about documents the logged in user has
   no read access on
 - fix vulnerability when uploading a new file with the fine uploader, make
-  sure the chunk identifier contains only allowed chars '[0-9a-f-]' (CVE )
+  sure the chunk identifier contains only allowed chars '[0-9a-f-]' (CVE-2018-12939
+  and CVE-2018-12940)
 - fix vulnerability when clearing the cache, make sure the cache directory
-  to clean actually exists. (CVE )
+  to clean actually exists. (CVE-2018-12941)
 - prevent cross side scripting when loading the dashboard, removed dashboard
-  as it was never finished anyway (CVE )
+  as it was never finished anyway (CVE-2018-12944)
 - prevent cross side scripting when url parameter 'action' is manipulated,
-  url parameter is run through htmlspecialchars() before output (CVS )
-- fix possible sql-injection, do not use integers in sql statement without
-  casting them to int before (CVE )
+  url parameter is run through htmlspecialchars() before output (CVE-2018-12943)
+- fix possible sql-injection, do not use integers in sql statement before
+  casting them to int (CVE-2018-12942)
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.7
