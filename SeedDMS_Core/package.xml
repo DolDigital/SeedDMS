@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2018-04-05</date>
+ <date>2018-07-03</date>
  <time>09:19:24</time>
  <version>
-  <release>5.1.8</release>
-  <api>5.1.8</api>
+  <release>5.1.9</release>
+  <api>5.1.9</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,6 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-SeedDMS_Core_DMS::search() returns false in case of an error
-do not use views in DBAccessPDO by default anymore, use temp. tables
-SeedDMS_Core_Document::getNotifyList() has new parameter to include disabled user in list
-fix possible sql injection in SeedDMS_Core_User
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -1597,6 +1593,25 @@ add SeedDMS_Core_AttributeDefinition::removeValue()
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 just bump version
+   </notes>
+  </release>
+  <release>
+   <date>2018-07-02</date>
+   <time>09:19:24</time>
+   <version>
+    <release>5.1.8</release>
+    <api>5.1.8</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+SeedDMS_Core_DMS::search() returns false in case of an error
+do not use views in DBAccessPDO by default anymore, use temp. tables
+SeedDMS_Core_Document::getNotifyList() has new parameter to include disabled user in list
+fix possible sql injection in SeedDMS_Core_User
    </notes>
   </release>
  </changelog>
