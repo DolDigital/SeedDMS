@@ -214,7 +214,7 @@ $(document).ready( function() {
 		$workflowmode = $this->params['workflowmode'];
 		$quota = $this->params['quota'];
 ?>
-	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
+	<form class="form-horizontal" action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form" id="form">
 <?php
 		if($currUser) {
 			echo createHiddenFieldWithKey('edituser');
@@ -229,262 +229,285 @@ $(document).ready( function() {
 	<input type="hidden" name="action" value="adduser">
 <?php
 		}
-?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("user_login");?>:</td>
-			<td><input type="text" name="login" id="login" value="<?php print $currUser ? htmlspecialchars($currUser->getLogin()) : "";?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("password");?>:</td>
-			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" name="pwd" id="pwd"><?php if($currUser && $currUser->isGuest()) echo ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password'); ?></td>
-		</tr>
-<?php
+		$this->formField(
+			getMLText("user_login"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'login',
+				'name'=>'login',
+				'value'=>($currUser ? htmlspecialchars($currUser->getLogin()) : '')
+			)
+		);
+		$this->formField(
+			getMLText("password"),
+			'<input type="password" class="pwd form-control" rel="strengthbar'.($currUser ? $currUser->getID() : "0").'" name="pwd" id="pwd">'.(($currUser && $currUser->isGuest()) ? ' <input type="checkbox" name="clearpwd" value="1" /> '.getMLText('clear_password') : '')
+		);
 		if($passwordstrength > 0) {
-?>
-		<tr>
-			<td><?php printMLText("password_strength");?>:</td>
-			<td>
-				<div id="strengthbar<?php echo $currUser ? $currUser->getID() : "0"; ?>" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
-			</td>
-		</tr>
-<?php
+			$this->formField(
+				getMLText("password_strength"),
+				'<div id="strengthbar'.($currUser ? $currUser->getID() : "0").'" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>'
+			);
 		}
-?>
-		<tr>
-			<td><?php printMLText("confirm_pwd");?>:</td>
-			<td><input type="Password" name="pwdconf" id="pwdconf"></td>
-		</tr>
-<?php
-	if($passwordexpiration > 0) {
-?>
-		<tr>
-			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><?php if($currUser) { ?><option value=""><?php printMLText("keep");?></option><?php } ?><option value="now"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="never"><?php printMLText("never");?></option></select> <?php echo $currUser ? $currUser->getPwdExpiration() : ""; ?></td>
-		</tr>
-<?php
-	}
-?>
-		<tr>
-			<td><?php printMLText("user_name");?>:</td>
-			<td><input type="text" name="name" id="name" value="<?php print $currUser ? htmlspecialchars($currUser->getFullName()) : "";?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("email");?>:</td>
-			<td><input type="text" name="email" id="email" value="<?php print $currUser ? htmlspecialchars($currUser->getEmail()) : "";?>"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" id="comment" rows="4" cols="50"><?php print $currUser ? htmlspecialchars($currUser->getComment()) : "";?></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("role");?>:</td>
-			<td><select name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>" <?php if($currUser && $currUser->getRole() == SeedDMS_Core_User::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("groups");?>:</td>
-			<td><select class="chzn-select" multiple="multiple" name="groups[]" data-placeholder="<?php printMLText('select_groups'); ?>">
-<?php
+		$this->formField(
+			getMLText("confirm_pwd"),
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'pwdconf',
+				'name'=>'pwdconf',
+			)
+		);
+		if($passwordexpiration > 0) {
+			$options = array();
+			if($currUser)
+				$options[] = array('', getMLText("keep"));
+			$options[] = array('now', getMLText('now'));
+			$options[] = array(date('Y-m-d H:i:s', time()+$passwordexpiration*86400), getMLText("according_settings"));
+			$options[] = array('never', getMLText("never"));
+			$this->formField(
+				getMLText("password_expiration"),
+				array(
+					'element'=>'select',
+					'name'=>'pwdexpiration',
+					'options'=>$options
+				)
+			);
+		}
+		$this->formField(
+			getMLText("user_name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($currUser ? htmlspecialchars($currUser->getFullName()) : '')
+			)
+		);
+		$this->formField(
+			getMLText("email"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'email',
+				'name'=>'email',
+				'value'=>($currUser ? htmlspecialchars($currUser->getEmail()) : '')
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'id'=>'comment',
+				'rows'=>4,
+				'cols'=>50,
+				'value'=>($currUser ? htmlspecialchars($currUser->getComment()) : '')
+			)
+		);
+		$options = array();
+		$options[] = array(SeedDMS_Core_User::role_user, getMLText('role_user'));
+		$options[] = array(SeedDMS_Core_User::role_admin, getMLText('role_admin'), $currUser && $currUser->getRole() == SeedDMS_Core_User::role_admin);
+		$options[] = array(SeedDMS_Core_User::role_guest, getMLText('role_guest'), $currUser && $currUser->getRole() == SeedDMS_Core_User::role_guest);
+		$this->formField(
+			getMLText("role"),
+			array(
+				'element'=>'select',
+				'name'=>'role',
+				'options'=>$options
+			)
+		);
+		$options = array();
 		foreach($groups as $group) {
-			echo '<option value="'.$group->getID().'"'.($currUser && $group->isMember($currUser) ? ' selected' : '').'>'.$group->getName().'</option>';
+			$options[] = array($group->getID(), $group->getName(), ($currUser && $group->isMember($currUser)));
 		}
-?>
-			</select></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("home_folder")?>:</td>
-			<td><?php $this->printFolderChooser("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder');?></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("quota");?>:</td>
-			<td><input type="text" name="quota" value="<?php echo $currUser ? $currUser->getQuota() : ""; ?>">
-<?php
-	if($quota > 0)
-		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
-	else
-		echo $this->warningMsg(getMLText('quota_is_disabled'));
-?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("is_hidden");?>:</td>
-			<td><input type="checkbox" name="ishidden" value="1"<?php print ($currUser && $currUser->isHidden() ? " checked='checked'" : "");?>></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("is_disabled");?>:</td>
-			<td><input type="checkbox" name="isdisabled" value="1"<?php print ($currUser && $currUser->isDisabled() ? " checked='checked'" : "");?>></td>
-		</tr>
+		$this->formField(
+			getMLText("groups"),
+			array(
+				'element'=>'select',
+				'name'=>'groups[]',
+				'class'=>'chzn-select',
+				'multiple'=>true,
+				'attributes'=>array(array('data-placeholder', getMLText('select_groups'))),
+				'options'=>$options
+			)
+		);
+		$this->formField(getMLText("home_folder"), $this->getFolderChooserHtml("form".($currUser ? $currUser->getId() : '0'), M_READ, -1, $currUser ? $dms->getFolder($currUser->getHomeFolder()) : 0, 'homefolder'));
+		echo '<script language="JavaScript">';
+		$this->printFolderChooserJs("form".($currUser ? $currUser->getId() : '0'));
+		echo '</script>';
 
-<?php if ($enableuserimage){ ?>
-
-<?php if ($currUser) { ?>
-		<tr>
-			<td><?php printMLText("user_image");?>:</td>
-			<td>
-<?php
-					if ($currUser->hasImage())
-						print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
-					else
-						printMLText("no_user_image");
-?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("new_user_image");?>:</td>
-			<td>
-<?php
-	$this->printFileChooser('userfile', false, "image/jpeg");
-?>
-			</td>
-		</tr>
-<?php } else { ?>
-		<tr>
-			<td><?php printMLText("user_image");?>:</td>
-			<td>
-<?php
-	$this->printFileChooser('userfile', false, 'image/jpeg');
-?>
-			</td>
-		</tr>
-<?php } ?>
-
-<?php
+		$this->formField(
+			getMLText("quota"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'quota',
+				'name'=>'quota',
+				'value'=>($currUser ? $currUser->getQuota() : '')
+			)
+		);
+		if($quota > 0)
+			$this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
+		else
+			$this->warningMsg(getMLText('quota_is_disabled'));
+		$this->formField(
+			getMLText("is_hidden"),
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'ishidden',
+				'value'=>1,
+				'checked'=>$currUser && $currUser->isHidden()
+			)
+		);
+		$this->formField(
+			getMLText("is_disabled"),
+			array(
+				'element'=>'input',
+				'type'=>'checkbox',
+				'name'=>'isdisabled',
+				'value'=>1,
+				'checked'=>$currUser && $currUser->isDisabled()
+			)
+		);
+		if ($enableuserimage) {
+			if ($currUser) {
+				$this->formField(
+					getMLText("user_image"),
+					($currUser->hasImage() ? "<img src=\"".$httproot."out/out.UserImage.php?userid=".$currUser->getId()."\">" : getMLText('no_user_image'))
+				);
+				$this->formField(
+					getMLText("new_user_image"),
+					$this->getFileChooser('userfile', false, "image/jpeg")
+				);
+			} else {
+				$this->formField(
+					getMLText("user_image"),
+					$this->getFileChooser('userfile', false, "image/jpeg")
+				);
+			}
 		}
 		if($workflowmode == "traditional" || $workflowmode == 'traditional_only_approval') {
-		if($workflowmode == "traditional") {
-?>
-
-		<tr>
-			<td colspan="2"><?php printMLText("reviewers");?>:</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
-			</td>
-			<td>
-        <select class="chzn-select" name="usrReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
-<?php
-
+			if($workflowmode == "traditional") {
+				$this->contentSubHeading(getMLText("mandatory_reviewers"));
+				$options = array();
 				if($currUser)
 					$res=$currUser->getMandatoryReviewers();
 				else
 					$res = array();
-
 				foreach ($users as $usr) {
-
 					if ($usr->isGuest() || ($currUser && $usr->getID() == $currUser->getID()))
 						continue;
 
 					$checked=false;
 					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $checked=true;
 
-					print "<option value=\"".$usr->getID()."\" ".($checked?"selected='selected' ":"").">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
+					$options[] = array($usr->getID(), htmlspecialchars($usr->getLogin()." - ".$usr->getFullName()), $checked);
 				}
-?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
-			</td>
-			<td>
-        <select class="chzn-select" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
-<?php
+				$this->formField(
+					getMLText("individuals"),
+					array(
+						'element'=>'select',
+						'name'=>'usrReviewers[]',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-placeholder', getMLText('select_users'))),
+						'multiple'=>true,
+						'options'=>$options
+					)
+				);
+				$options = array();
 				foreach ($groups as $grp) {
 
 					$checked=false;
 					foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $checked=true;
 
-					print "<option value=\"".$grp->getID()."\" ".($checked?"selected='selected' ":"").">". htmlspecialchars($grp->getName())."</option>";
+					$options[] = array($grp->getID(), htmlspecialchars($grp->getName()), $checked);
 				}
-?>
-				</select>
-			</td>
-		</tr>
-<?php
-				}
-?>
-		<tr>
-			<td colspan="2"><?php printMLText("approvers");?>:</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
-			</td>
-			<td>
-        <select class="chzn-select" name="usrApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
-<?php
-				if($currUser)
-					$res=$currUser->getMandatoryApprovers();
-				else
-					$res = array();
-				foreach ($users as $usr) {
-					if ($usr->isGuest() || ($currUser && $usr->getID() == $currUser->getID()))
-						continue;
+				$this->formField(
+					getMLText("groups"),
+					array(
+						'element'=>'select',
+						'name'=>'grpReviewers[]',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-placeholder', getMLText('select_groups'))),
+						'multiple'=>true,
+						'options'=>$options
+					)
+				);
+			}
 
-					$checked=false;
-					foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $checked=true;
+			$this->contentSubHeading(getMLText("mandatory_approvers"));
+			$options = array();
+			if($currUser)
+				$res=$currUser->getMandatoryApprovers();
+			else
+				$res = array();
+			foreach ($users as $usr) {
+				if ($usr->isGuest() || ($currUser && $usr->getID() == $currUser->getID()))
+					continue;
 
-					print "<option value=\"".$usr->getID()."\" ".($checked?"selected='selected' ":"").">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
-				}
-?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
-			</td>
-			<td>
-        <select class="chzn-select" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
-<?php
-				foreach ($groups as $grp) {
+				$checked=false;
+				foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $checked=true;
 
-					$checked=false;
-					foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $checked=true;
+				$options[] = array($usr->getID(), htmlspecialchars($usr->getLogin()." - ".$usr->getFullName()), $checked);
+			}
+			$this->formField(
+				getMLText("individuals"),
+				array(
+					'element'=>'select',
+					'name'=>'usrApprovers[]',
+					'class'=>'chzn-select',
+					'attributes'=>array(array('data-placeholder', getMLText('select_users'))),
+					'multiple'=>true,
+					'options'=>$options
+				)
+			);
+			$options = array();
+			foreach ($groups as $grp) {
 
-					print "<option value=\"".$grp->getID()."\" ".($checked?"selected='selected' ":"").">". htmlspecialchars($grp->getName())."</option>";
-				}
-?>
-				</select>
-			</td>
-		</tr>
-<?php
+				$checked=false;
+				foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $checked=true;
+
+				$options[] = array($grp->getID(), htmlspecialchars($grp->getName()), $checked);
+			}
+			$this->formField(
+				getMLText("groups"),
+				array(
+					'element'=>'select',
+					'name'=>'grpApprovers[]',
+					'class'=>'chzn-select',
+					'attributes'=>array(array('data-placeholder', getMLText('select_groups'))),
+					'multiple'=>true,
+					'options'=>$options
+				)
+			);
 		} else {
 			$workflows = $dms->getAllWorkflows();
 			if($workflows) {
-?>
-		<tr>
-			<td>
-				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
-			</td>
-			<td>
-        <select class="chzn-select" name="workflows[]" multiple="multiple" data-placeholder="<?php printMLText('select_workflow'); ?>">
-<?php
-				print "<option value=\"\">"."</option>";
+				$this->contentSubHeading(getMLText("workflow"));
+				$options = array();
 				$mandatoryworkflows = $currUser ? $currUser->getMandatoryWorkflows() : array();
 				foreach ($workflows as $workflow) {
-					print "<option value=\"".$workflow->getID()."\"";
 					$checked = false;
 					if($mandatoryworkflows) foreach($mandatoryworkflows as $mw) if($mw->getID() == $workflow->getID()) $checked = true;
-					if($checked)
-						echo " selected=\"selected\"";
-					print ">". htmlspecialchars($workflow->getName())."</option>";
+					$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()), $checked);
 				}
-?>
-				</select>
-			</td>
-		</tr>
-<?php
+				$this->formField(
+					getMLText("workflow"),
+					array(
+						'element'=>'select',
+						'name'=>'workflows[]',
+						'class'=>'chzn-select',
+						'attributes'=>array(array('data-placeholder', getMLText('select_workflow'))),
+						'multiple'=>true,
+						'options'=>$options
+					)
+				);
 			}
 		}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText($currUser ? "save" : "add_user"));
 ?>
-		<tr>
-			<td></td>
-			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText($currUser ? "save" : "add_user")?></button></td>
-		</tr>
-	</table>
 	</form>
 <?php
 	} /* }}} */
@@ -513,25 +536,33 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <form class="form-horizontal">
-<select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_user")?></option>
-<option value="0"><?php echo getMLText("add_user")?></option>
 <?php
+		$options = array();
+		$options[] = array("-1", getMLText("choose_user"));
+		$options[] = array("0", getMLText("add_user"));
 		foreach ($users as $currUser) {
-			print "<option value=\"".$currUser->getID()."\" ".($seluser && $currUser->getID()==$seluser->getID() ? 'selected' : '')." data-subtitle=\"".htmlspecialchars($currUser->getFullName())."\">" . htmlspecialchars($currUser->getLogin()) . "</option>";
+			$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()), $seluser && $currUser->getID()==$seluser->getID(), array(array('data-subtitle', htmlspecialchars($currUser->getFullName()))));
 		}
+		$this->formField(
+			null, //getMLText("selection"),
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
 ?>
-</select>
 </form>
 	<div class="ajax" style="margin-bottom: 15px;" data-view="UsrMgr" data-action="actionmenu" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="UsrMgr" data-action="info" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 </div>
 
 <div class="span8">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="UsrMgr" data-action="form" <?php echo ($seluser ? "data-query=\"userid=".$seluser->getID()."\"" : "") ?>></div>
 	</div>
-</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 <?php

@@ -24,22 +24,47 @@
  * @version    Release: @package_version@
  */
 class SeedDMS_Core_UserAccess { /* {{{ */
+
+    /**
+     * @var SeedDMS_Core_User
+     */
 	var $_user;
+
+    /**
+     * @var
+     */
 	var $_mode;
 
+    /**
+     * SeedDMS_Core_UserAccess constructor.
+     * @param $user
+     * @param $mode
+     */
 	function __construct($user, $mode) {
 		$this->_user = $user;
 		$this->_mode = $mode;
 	}
 
+    /**
+     * @return int
+     */
 	function getUserID() { return $this->_user->getID(); }
 
+    /**
+     * @return mixed
+     */
 	function getMode() { return $this->_mode; }
 
+    /**
+     * @return bool
+     */
 	function isAdmin() {
 		return ($this->_mode == SeedDMS_Core_User::role_admin);
 	}
 
+    /**
+     * @return SeedDMS_Core_User
+     */
 	function getUser() {
 		return $this->_user;
 	}
@@ -57,20 +82,41 @@ class SeedDMS_Core_UserAccess { /* {{{ */
  * @version    Release: @package_version@
  */
 class SeedDMS_Core_GroupAccess { /* {{{ */
+
+    /**
+     * @var SeedDMS_Core_Group
+     */
 	var $_group;
+
+    /**
+     * @var
+     */
 	var $_mode;
 
+    /**
+     * SeedDMS_Core_GroupAccess constructor.
+     * @param $group
+     * @param $mode
+     */
 	function __construct($group, $mode) {
 		$this->_group = $group;
 		$this->_mode = $mode;
 	}
 
+    /**
+     * @return int
+     */
 	function getGroupID() { return $this->_group->getID(); }
 
+    /**
+     * @return mixed
+     */
 	function getMode() { return $this->_mode; }
 
+    /**
+     * @return SeedDMS_Core_Group
+     */
 	function getGroup() {
 		return $this->_group;
 	}
 } /* }}} */
-?>

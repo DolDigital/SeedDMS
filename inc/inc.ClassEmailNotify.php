@@ -118,9 +118,13 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 			}
 			if($this->smtp_user) {
 				$mail_params['auth'] = true;
+				// $mail_params['debug'] = true;
 				$mail_params['username'] = $this->smtp_user;
 				$mail_params['password'] = $this->smtp_password;
 			}
+			/* See ticket #384 */
+			$mail_params['socket_options'] = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false));
+
 			$mail = Mail::factory('smtp', $mail_params);
 		} else {
 			$mail = Mail::factory('mail', $mail_params);
@@ -137,7 +141,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
 				(!is_object($groupRecipient) || strcasecmp(get_class($groupRecipient), $this->_dms->getClassname('group')))) {
-			return -1;
+			return false;
 		}
 
 		foreach ($groupRecipient->getUsers() as $recipient) {
@@ -150,7 +154,7 @@ class SeedDMS_EmailNotify extends SeedDMS_Notify {
 	function toList($sender, $recipients, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), $this->_dms->getClassname('user'))) ||
 				(!is_array($recipients) && count($recipients)==0)) {
-			return -1;
+			return false;
 		}
 
 		foreach ($recipients as $recipient) {

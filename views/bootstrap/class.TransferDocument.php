@@ -44,37 +44,27 @@ class SeedDMS_View_TransferDocument extends SeedDMS_Bootstrap_Style {
 <form class="form-horizontal" action="../op/op.TransferDocument.php" name="form1" method="post">
 <input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 <?php echo createHiddenFieldWithKey('transferdocument'); ?>
-
-<div class="control-group">
-	<label class="control-label" for="assignTo">
-<?php printMLText("transfer_to_user"); ?>:
-	</label>
-	<div class="controls">
-<select name="userid" class="chzn-select">
 <?php
+		$html = '<select name="userid" class="chzn-select">';
 		$owner = $document->getOwner();
 		foreach ($allusers as $currUser) {
 			if ($currUser->isGuest() || ($currUser->getID() == $owner->getID()))
 				continue;
 
-			print "<option value=\"".$currUser->getID()."\"";
+			$html .= "<option value=\"".$currUser->getID()."\"";
 			if($folder->getAccessMode($currUser) < M_READ)
-				print " disabled data-warning=\"".getMLText('transfer_no_read_access')."\"";
+				$html .= " disabled data-warning=\"".getMLText('transfer_no_read_access')."\"";
 			elseif($folder->getAccessMode($currUser) < M_READWRITE)
-				print " data-warning=\"".getMLText('transfer_no_write_access')."\"";
-			print ">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName());
+				$html .= " data-warning=\"".getMLText('transfer_no_write_access')."\"";
+			$html .= ">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName());
 		}
+		$html .= '</select>';
+		$this->formField(
+			getMLText("transfer_to_user"),
+			$html
+		);
+		$this->formSubmit("<i class=\"icon-exchange\"></i> ".getMLText('transfer_document'));
 ?>
-</select>
-	</div>
-</div>
-
-<div class="control-group">
-	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-exchange"></i> <?php printMLText("transfer_document");?></button>
-	</div>
-</div>
-
 </form>
 <?php
 		$this->contentContainerEnd();

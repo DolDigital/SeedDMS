@@ -1,4 +1,69 @@
 --------------------------------------------------------------------------------
+                     Changes in version 5.1.9
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.1.8
+--------------------------------------------------------------------------------
+- fix javascript errors when an error page was shown
+- add new extraTabs in ViewDocument for adding more tabs
+- fix validation of maxuplodsize in fine uploader
+- do not leak information in calendar about documents the logged in user has
+  no read access on
+- fix vulnerability when uploading a new file with the fine uploader, make
+  sure the chunk identifier contains only allowed chars '[0-9a-f-]' (CVE-2018-12939
+  and CVE-2018-12940)
+- fix vulnerability when clearing the cache, make sure the cache directory
+  to clean actually exists. (CVE-2018-12941)
+- prevent cross side scripting when loading the dashboard, removed dashboard
+  as it was never finished anyway (CVE-2018-12944)
+- prevent cross side scripting when url parameter 'action' is manipulated,
+  url parameter is run through htmlspecialchars() before output (CVE-2018-12943)
+- fix possible sql-injection, do not use integers in sql statement before
+  casting them to int (CVE-2018-12942)
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.1.7
+--------------------------------------------------------------------------------
+- PLEASE READ doc/README.Dist-Layout WHEN UPGRADING!!!!
+- support for upload/import/download of extensions
+- extension can have a changelog file
+- remove ancient code to upgrade from old config file
+- place all log files in contentDir/log
+- add readme for new dist layout
+- do not list empty groups as reviewer/approver
+- fix sending notification when document attributes change
+- sending notification when folder attributes change
+- check if converters are set in out/out.ViewDocument.php at all (Closes #394)
+- do not remove user when transfering objects
+- do not periodically count tasks if task list in menu is turned off
+- use utf8_basename() in op.ImportFS.php
+- update font-awesome from 3.1.0 to 3.2.1
+- merged changes up to 5.0.14
+
+--------------------------------------------------------------------------------
+                     Changes in version 5.1.6
+--------------------------------------------------------------------------------
+- fix wrong check in restapi (part of #373)
+- mayApprove() and mayReview() require the status of the document to be
+  S_DRAFT_APP resp. S_DRAFT_REV
+- add preview for webm videos (Closes #374)
+- add support for apache mod_xsendfile, minor optimization of file download (see #382)
+- animate button to download more objects in folder list when loading is active
+- use converters for creating preview images as configured in settings (Closes #389)
+- propperly check if user is already in database when doing ldap auth (Closes #388)
+- list linked documents on the ViewDocument page in the same way as in other document lists
+- fix 2-factor authentification
+- configuration variables in extension of type 'select' may have an empty option
+- default position of documents/folders can be set in configuration (Closes #381)
+- attribute values can be deleted from all folders, documents
+- new settings to disallow upload of documents with just a reviewer in traditional
+  workflow mode
+- webdav and various script use the controller framework instead of calling
+  SeedDMS_Core methods
+- do not verify peer name and certificate when connecting to smtp server
+
+--------------------------------------------------------------------------------
                      Changes in version 5.1.5
 --------------------------------------------------------------------------------
 - add controller for AttributeMgr
@@ -73,6 +138,7 @@
 --------------------------------------------------------------------------------
 - use cmd timeout when indexing documents (Closes #344)
 - add change password function to rest api (merge from sebbuku)
+- merged changes from 4.3.37
 
 --------------------------------------------------------------------------------
                      Changes in version 5.0.13
@@ -178,6 +244,10 @@
 --------------------------------------------------------------------------------
 - fix label in password forgotten form (Closes #346)
 - translation updates
+- search result contains documents without a status log
+- fix setting categories in utils/adddoc.php
+- fetch all records from tblVersion in install/update.php. If not, the database
+  will be locked and e.g. a drop table in the update script will not work 
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.36

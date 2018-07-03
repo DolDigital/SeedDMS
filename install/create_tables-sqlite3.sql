@@ -1,6 +1,6 @@
--- 
+--
 -- Table structure for table `tblACLs`
--- 
+--
 
 CREATE TABLE `tblACLs` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,9 +13,9 @@ CREATE TABLE `tblACLs` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblCategory`
--- 
+--
 
 CREATE TABLE `tblCategory` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,9 +24,9 @@ CREATE TABLE `tblCategory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblAttributeDefinitions`
--- 
+--
 
 CREATE TABLE `tblAttributeDefinitions` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,9 +43,9 @@ CREATE TABLE `tblAttributeDefinitions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUsers`
--- 
+--
 
 CREATE TABLE `tblUsers` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -68,9 +68,9 @@ CREATE TABLE `tblUsers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserPasswordRequest`
--- 
+--
 
 CREATE TABLE `tblUserPasswordRequest` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,9 +81,9 @@ CREATE TABLE `tblUserPasswordRequest` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserPasswordHistory`
--- 
+--
 
 CREATE TABLE `tblUserPasswordHistory` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,9 +94,9 @@ CREATE TABLE `tblUserPasswordHistory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblUserImages`
--- 
+--
 
 CREATE TABLE `tblUserImages` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,9 +107,9 @@ CREATE TABLE `tblUserImages` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblFolders`
--- 
+--
 
 CREATE TABLE `tblFolders` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,9 +126,9 @@ CREATE TABLE `tblFolders` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblFolderAttributes`
--- 
+--
 
 CREATE TABLE `tblFolderAttributes` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -140,9 +140,9 @@ CREATE TABLE `tblFolderAttributes` (
  
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocuments`
--- 
+--
 
 CREATE TABLE `tblDocuments` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -162,9 +162,9 @@ CREATE TABLE `tblDocuments` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentAttributes`
--- 
+--
 
 CREATE TABLE `tblDocumentAttributes` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -176,9 +176,9 @@ CREATE TABLE `tblDocumentAttributes` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentApprovers`
--- 
+--
 
 CREATE TABLE `tblDocumentApprovers` (
   `approveID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -191,9 +191,9 @@ CREATE TABLE `tblDocumentApprovers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentApproveLog`
--- 
+--
 
 CREATE TABLE `tblDocumentApproveLog` (
   `approveLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -206,9 +206,9 @@ CREATE TABLE `tblDocumentApproveLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentContent`
--- 
+--
 
 CREATE TABLE `tblDocumentContent` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -228,9 +228,9 @@ CREATE TABLE `tblDocumentContent` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentContentAttributes`
--- 
+--
 
 CREATE TABLE `tblDocumentContentAttributes` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -242,9 +242,9 @@ CREATE TABLE `tblDocumentContentAttributes` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentLinks`
--- 
+--
 
 CREATE TABLE `tblDocumentLinks` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -256,9 +256,9 @@ CREATE TABLE `tblDocumentLinks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentFiles`
--- 
+--
 
 CREATE TABLE `tblDocumentFiles` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -277,9 +277,9 @@ CREATE TABLE `tblDocumentFiles` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentLocks`
--- 
+--
 
 CREATE TABLE `tblDocumentLocks` (
   `document` INTEGER REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
@@ -288,9 +288,9 @@ CREATE TABLE `tblDocumentLocks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentReviewers`
--- 
+--
 
 CREATE TABLE `tblDocumentReviewers` (
   `reviewID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -303,9 +303,9 @@ CREATE TABLE `tblDocumentReviewers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentReviewLog`
--- 
+--
 
 CREATE TABLE `tblDocumentReviewLog` (
   `reviewLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -318,9 +318,9 @@ CREATE TABLE `tblDocumentReviewLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentStatus`
--- 
+--
 
 CREATE TABLE `tblDocumentStatus` (
   `statusID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -331,9 +331,9 @@ CREATE TABLE `tblDocumentStatus` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentStatusLog`
--- 
+--
 
 CREATE TABLE `tblDocumentStatusLog` (
   `statusLogID` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -346,9 +346,9 @@ CREATE TABLE `tblDocumentStatusLog` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblGroups`
--- 
+--
 
 CREATE TABLE `tblGroups` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -358,9 +358,9 @@ CREATE TABLE `tblGroups` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblGroupMembers`
--- 
+--
 
 CREATE TABLE `tblGroupMembers` (
   `groupID` INTEGER NOT NULL default '0' REFERENCES `tblGroups` (`id`) ON DELETE CASCADE,
@@ -371,9 +371,9 @@ CREATE TABLE `tblGroupMembers` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblKeywordCategories`
--- 
+--
 
 CREATE TABLE `tblKeywordCategories` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -383,9 +383,9 @@ CREATE TABLE `tblKeywordCategories` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblKeywords`
--- 
+--
 
 CREATE TABLE `tblKeywords` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -395,9 +395,9 @@ CREATE TABLE `tblKeywords` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblDocumentCategory`
--- 
+--
 
 CREATE TABLE `tblDocumentCategory` (
   `categoryID` INTEGER NOT NULL default '0' REFERENCES `tblCategory` (`id`) ON DELETE CASCADE,
@@ -406,9 +406,9 @@ CREATE TABLE `tblDocumentCategory` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblNotify`
--- 
+--
 
 CREATE TABLE `tblNotify` (
   `target` INTEGER NOT NULL default '0',
@@ -420,9 +420,9 @@ CREATE TABLE `tblNotify` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `tblSessions`
--- 
+--
 
 CREATE TABLE `tblSessions` (
   `id` varchar(50) PRIMARY KEY,
@@ -437,9 +437,9 @@ CREATE TABLE `tblSessions` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for mandatory reviewers
--- 
+--
+-- Table structure for table `tblMandatoryReviewers`
+--
 
 CREATE TABLE `tblMandatoryReviewers` (
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
@@ -450,9 +450,9 @@ CREATE TABLE `tblMandatoryReviewers` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for mandatory approvers
--- 
+--
+-- Table structure for table `tblMandatoryApprovers`
+--
 
 CREATE TABLE `tblMandatoryApprovers` (
   `userID` INTEGER NOT NULL default '0' REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
@@ -463,9 +463,9 @@ CREATE TABLE `tblMandatoryApprovers` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for events (calendar)
--- 
+--
+-- Table structure for table `tblEvents`
+--
 
 CREATE TABLE `tblEvents` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -479,9 +479,9 @@ CREATE TABLE `tblEvents` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow states
--- 
+--
+-- Table structure for table `tblWorkflowStates`
+--
 
 CREATE TABLE `tblWorkflowStates` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -494,9 +494,9 @@ CREATE TABLE `tblWorkflowStates` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow actions
--- 
+--
+-- Table structure for table `tblWorkflowActions`
+--
 
 CREATE TABLE `tblWorkflowActions` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -505,9 +505,9 @@ CREATE TABLE `tblWorkflowActions` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflows
--- 
+--
+-- Table structure for table `tblWorkflows`
+--
 
 CREATE TABLE `tblWorkflows` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -517,9 +517,9 @@ CREATE TABLE `tblWorkflows` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow transitions
--- 
+--
+-- Table structure for table `tblWorkflowTransitions`
+--
 
 CREATE TABLE `tblWorkflowTransitions` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -532,9 +532,9 @@ CREATE TABLE `tblWorkflowTransitions` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow transition users
--- 
+--
+-- Table structure for table `tblWorkflowTransitionUsers`
+--
 
 CREATE TABLE `tblWorkflowTransitionUsers` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -544,9 +544,9 @@ CREATE TABLE `tblWorkflowTransitionUsers` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow transition groups
--- 
+--
+-- Table structure for table `tblWorkflowTransitionGroups`
+--
 
 CREATE TABLE `tblWorkflowTransitionGroups` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -557,9 +557,9 @@ CREATE TABLE `tblWorkflowTransitionGroups` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow log
--- 
+--
+-- Table structure for table `tblWorkflowLog`
+--
 
 CREATE TABLE `tblWorkflowLog` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -574,9 +574,9 @@ CREATE TABLE `tblWorkflowLog` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for workflow document relation
--- 
+--
+-- Table structure for table `tblWorkflowDocumentContent`
+--
 
 CREATE TABLE `tblWorkflowDocumentContent` (
   `parentworkflow` INTEGER DEFAULT 0,
@@ -589,9 +589,9 @@ CREATE TABLE `tblWorkflowDocumentContent` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for mandatory workflows
--- 
+--
+-- Table structure for table `tblWorkflowMandatoryWorkflow`
+--
 
 CREATE TABLE `tblWorkflowMandatoryWorkflow` (
   `userid` INTEGER default NULL REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
@@ -601,9 +601,9 @@ CREATE TABLE `tblWorkflowMandatoryWorkflow` (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for version
--- 
+--
+-- Table structure for table `tblVersion`
+--
 
 CREATE TABLE `tblVersion` (
   `date` TEXT NOT NULL,

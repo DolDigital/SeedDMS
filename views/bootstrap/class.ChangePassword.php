@@ -58,13 +58,10 @@ document.form1.newpassword.focus();
 		if ($hash) {
 			echo "<input type='hidden' name='hash' value='".$hash."'/>";
 		}
-?>
-
-		 <div class="control-group">
-			<label class="control-label"><?php printMLText("password");?>:</label>
-			<div class="controls"><input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password"></div>
-		 </div>
-<?php
+		$this->formField(
+			getMLText("password"),
+			'<input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password">'
+		);
 		if($passwordstrength > 0) {
 ?>
 		<div class="control-group">
@@ -75,15 +72,18 @@ document.form1.newpassword.focus();
 		</div>
 <?php
 		}
+		$this->formField(
+			getMLText("confirm_pwd"),
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'passwordrepeat',
+				'name'=>'newpasswordrepeat',
+				'autocomplete'=>'off',
+			)
+		);
+		$this->formSubmit(getMLText('submit_password'));
 ?>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("confirm_pwd");?>:</label>
-			<div class="controls"><input type="password" name="newpasswordrepeat" id="passwordrepeat"></div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls"><input class="btn" type="submit" value="<?php printMLText("submit_password") ?>"></div>
-		</div>
 
 </form>
 <?php $this->contentContainerEnd(); ?>

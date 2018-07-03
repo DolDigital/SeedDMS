@@ -1,10 +1,6 @@
 <?php
 
 require_once "HTTP/WebDAV/Server.php";
-if(!empty($settings->_coreDir))
-	require_once($settings->_coreDir.'/Core.php');
-else
-	require_once('SeedDMS/Core.php');
 
 /**
  * SeedDMS access using WebDAV
@@ -59,18 +55,6 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function ServeRequest($dms = null, $logger = null) /* {{{ */
 	{
-		// special treatment for litmus compliance test
-		// reply on its identifier header
-		// not needed for the test itself but eases debugging
-		if( function_exists('apache_request_headers') ) {
-			foreach (apache_request_headers() as $key => $value) {
-				if (stristr($key, "litmus")) {
-					error_log("Litmus test $value");
-					header("X-Litmus-reply: ".$value);
-				}
-			}
-		}
-
 		// set root directory, defaults to webserver document root if not set
 		if ($dms) {
 			$this->dms = $dms;
@@ -81,12 +65,18 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		// set logger
 		$this->logger = $logger;
 
-		// establish connection to property/locking db
-				/*
-		mysql_connect($this->db_host, $this->db_user, $this->db_passwd) or die(mysql_error());
-		mysql_select_db($this->db_name) or die(mysql_error());
-				*/
-		// TODO throw on connection problems
+		// special treatment for litmus compliance test
+		// reply on its identifier header
+		// not needed for the test itself but eases debugging
+		if( function_exists('apache_request_headers') ) {
+			foreach (apache_request_headers() as $key => $value) {
+				if (stristr($key, "litmus")) {
+					if($this->logger)
+						$this->logger->log('Litmus test '.$value, PEAR_LOG_DEBUG);
+					header("X-Litmus-reply: ".$value);
+				}
+			}
+		}
 
 		// let the base class do all the work
 		parent::ServeRequest();
@@ -101,7 +91,14 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function log_options($methode, $options) { /* {{{ */
 		if($this->logger) {
-			$this->logger->log($methode.': '.$options['path'], PEAR_LOG_INFO);
+			switch($methode) {
+			case 'MOVE':
+				$msg = $methode.': '.$options['path'].' -> '.$options['dest'];
+				break;
+			default:
+				$msg = $methode.': '.$options['path'];
+			}
+			$this->logger->log($msg, PEAR_LOG_INFO);
 			foreach($options as $key=>$option) {
 				if(is_array($option)) {
 					$this->logger->log($methode.': '.$key.'='.var_export($option, true), PEAR_LOG_DEBUG);
@@ -144,11 +141,17 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$userobj = $authobj->authenticate($user, $pass);
 		} /* }}} */
 
-		if(!$userobj)
+		if(!$userobj) {
+			if($this->logger)
+				$this->logger->log('check_auth: No such user', PEAR_LOG_NOTICE);
 			return false;
+		}
 
-		if(($userobj->getID() == $settings->_guestID) && (!$settings->_enableGuestLogin))
+		if(($userobj->getID() == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
+			if($this->logger)
+				$this->logger->log('check_auth: Login as guest is not allowed', PEAR_LOG_NOTICE);
 			return false;
+		}
 
 		if($userobj->isDisabled())
 			return false;
@@ -270,7 +273,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		$files["files"][] = $this->fileinfo($obj);
 
 		// information for contained resources requested?
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 
 			$subfolders = $obj->getSubFolders();
 			$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
@@ -320,7 +323,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		$info["props"] = array();
 
 		// type and size (caller already made sure that path exists)
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			// modification time
 			/* folders do not have a modification time */
 			$info["props"][] = $this->mkprop("getlastmodified", time());
@@ -421,7 +424,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (!$obj) return false;
 
 		// is this a collection?
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			return $this->GetDir($obj, $options);
 		}
 
@@ -502,7 +505,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		foreach ($objs as $obj) {
 			$filename = $obj->getName();
 			$fullpath = $_fullpath.$filename;
-			if(get_class($obj) == 'SeedDMS_Core_Folder') {
+			if(get_class($obj) == $this->dms->getClassname('folder')) {
 				$fullpath .= '/';
 				$filename .= '/';
 				$filesize = 0;
@@ -542,6 +545,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function PUT(&$options) /* {{{ */
 	{
+		global $settings, $indexconf;
+
 		$this->log_options('PUT', $options);
 
 		$path   = $options["path"];
@@ -553,12 +558,14 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$parent = '';
 		$folder = $this->reverseLookup($parent.'/');
 
-		if (!$folder || get_class($folder) != "SeedDMS_Core_Folder") {
+		if (!$folder || get_class($folder) != $this->dms->getClassname('folder')) {
 			return "409 Conflict";
 		}
 
 		/* Check if user is logged in */
 		if(!$this->user) {
+			if($this->logger)
+				$this->logger->log('PUT: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
@@ -584,47 +591,113 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 				if($lastDotIndex === false) $fileType = ".";
 				else $fileType = substr($name, $lastDotIndex);
 		}
+		if($this->logger)
+			$this->logger->log('PUT: file is of type '.$mimetype, PEAR_LOG_INFO);
+
 		/* First check whether there is already a file with the same name */
 		if($this->useorgfilename)
 			$document = $this->dms->getDocumentByOriginalFilename($name, $folder);
 		else
 			$document = $this->dms->getDocumentByName($name, $folder);
 		if($document) {
+			if($this->logger)
+				$this->logger->log('PUT: replacing document id='.$document->getID(), PEAR_LOG_INFO);
 			if ($document->getAccessMode($this->user) < M_READWRITE) {
+				if($this->logger)
+					$this->logger->log('PUT: no access on document', PEAR_LOG_ERR);
 				unlink($tmpFile);
 				return "403 Forbidden";
-			} else{
+			} else {
 				/* Check if the new version iѕ identical to the current version.
 				 * In that case just update the modification date
 				 */
 				$lc = $document->getLatestContent();
 				if($lc->getChecksum() == SeedDMS_Core_File::checksum($tmpFile)) {
+					if($this->logger)
+						$this->logger->log('PUT: identical to latest version', PEAR_LOG_INFO);
 					$lc->setDate();
 				} else {
 					if($this->user->getID() == $lc->getUser()->getID() &&
 						 $name == $lc->getOriginalFileName() &&
 						 $fileType == $lc->getFileType() &&
-						 $mimetype == $lc->getMimeType()) {
+						 $mimetype == $lc->getMimeType() &&
+						 $settings->_enableWebdavReplaceDoc) {
+						if($this->logger)
+							$this->logger->log('PUT: replacing latest version', PEAR_LOG_INFO);
 						if(!$document->replaceContent($lc->getVersion(), $this->user, $tmpFile, $name, $fileType, $mimetype)) {
+							if($this->logger)
+								$this->logger->log('PUT: error replacing latest version', PEAR_LOG_ERR);
 							unlink($tmpFile);
 							return "403 Forbidden";
 						}
 					} else {
+						if($this->logger)
+							$this->logger->log('PUT: adding new version', PEAR_LOG_INFO);
 						if(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
+							if($this->logger)
+								$this->logger->log('PUT: error adding new version', PEAR_LOG_ERR);
 							unlink($tmpFile);
 							return "409 Conflict";
 						}
 					}
 				}
 			}
-
 		} else {
+			if($this->logger)
+				$this->logger->log('PUT: adding new document', PEAR_LOG_INFO);
 			if ($folder->getAccessMode($this->user) < M_READWRITE) {
+				if($this->logger)
+					$this->logger->log('PUT: no access on folder', PEAR_LOG_ERR);
 				unlink($tmpFile);
 				return "403 Forbidden";
-			} elseif(!$res = $folder->addDocument($name, '', 0, $this->user, '', array(), $tmpFile, $name, $fileType, $mimetype, 0, array(), array(), 0, "")) {
+			} 
+			if($settings->_enableFullSearch) {
+				$index = $indexconf['Indexer']::open($settings->_luceneDir);
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+			} else {
+				$index = null;
+				$indexconf = null;
+			}
+
+			$controller = Controller::factory('AddDocument');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
+			$controller->setParam('documentsource', 'webdav');
+			$controller->setParam('folder', $folder);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			$controller->setParam('name', $name);
+			$controller->setParam('comment', '');
+			$controller->setParam('expires', 0);
+			$controller->setParam('keywords', '');
+			$controller->setParam('categories', array());
+			$controller->setParam('owner', $this->user);
+			$controller->setParam('userfiletmp', $tmpFile);
+			$controller->setParam('userfilename', $name);
+			$controller->setParam('filetype', $fileType);
+			$controller->setParam('userfiletype', $mimetype);
+			$minmax = $folder->getDocumentsMinMax();
+			if($settings->_defaultDocPosition == 'start')
+				$controller->setParam('sequence', $minmax['min'] - 1);
+			else
+				$controller->setParam('sequence', $minmax['max'] + 1);
+			$controller->setParam('reviewers', array());
+			$controller->setParam('approvers', array());
+			$controller->setParam('reqversion', 0);
+			$controller->setParam('versioncomment', '');
+			$controller->setParam('attributes', array());
+			$controller->setParam('attributesversion', array());
+			$controller->setParam('workflow', null);
+			$controller->setParam('notificationgroups', array());
+			$controller->setParam('notificationusers', array());
+			$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+			$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
+			if(!$document = $controller->run()) {
+//			if(!$res = $folder->addDocument($name, '', 0, $this->user, '', array(), $tmpFile, $name, $fileType, $mimetype, 0, array(), array(), 0, "")) {
 				unlink($tmpFile);
-				return "409 Conflict";
+				if($this->logger)
+					$this->logger->log('PUT: error adding object: '.$controller->getErrorMsg(), PEAR_LOG_ERR);
+				return "409 Conflict ".$controller->getErrorMsg();
 			}
 		}
 
@@ -658,7 +731,9 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 
 		/* Check if parent of new folder is a folder */
-		if (get_class($folder) != 'SeedDMS_Core_Folder') {
+		if (get_class($folder) != $this->dms->getClassname('folder')) {
+			if($this->logger)
+				$this->logger->log('MKCOL: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";
 		}
 
@@ -673,15 +748,30 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 
 		/* Check if user is logged in */
 		if(!$this->user) {
+			if($this->logger)
+				$this->logger->log('MKCOL: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
 		if ($folder->getAccessMode($this->user) < M_READWRITE) {
+			if($this->logger)
+				$this->logger->log('MKCOL: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
-		if (!$folder->addSubFolder($name, '', $this->user, 0)) {
-			return "403 Forbidden";				 
+		$controller = Controller::factory('AddSubFolder');
+		$controller->setParam('dms', $this->dms);
+		$controller->setParam('user', $this->user);
+		$controller->setParam('folder', $folder);
+		$controller->setParam('name', $name);
+		$controller->setParam('comment', '');
+		$controller->setParam('sequence', 0);
+		$controller->setParam('attributes', array());
+		$controller->setParam('notificationgroups', array());
+		$controller->setParam('notificationusers', array());
+		if(!$subFolder = $controller->run()) {
+//		if (!$folder->addSubFolder($name, '', $this->user, 0)) {
+			return "409 Conflict ".$controller->getErrorMsg();				 
 		}
 
 		return ("201 Created");
@@ -696,6 +786,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function DELETE($options) /* {{{ */
 	{
+		global $settings, $indexconf;
+
 		$this->log_options('DELETE', $options);
 
 		// get folder or document from path
@@ -709,27 +801,45 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 
 		// check for access rights
 		if($obj->getAccessMode($this->user) < M_ALL) {
+			if($this->logger)
+				$this->logger->log('DELETE: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
-		if (get_class($obj) == 'SeedDMS_Core_Folder') {
+		if($settings->_enableFullSearch) {
+			$index = $indexconf['Indexer']::open($settings->_luceneDir);
+			$indexconf['Indexer']::init($settings->_stopWordsFile);
+		} else {
+			$index = null;
+			$indexconf = null;
+		}
+
+		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			if($obj->hasDocuments() || $obj->hasSubFolders()) {
+				if($this->logger)
+					$this->logger->log('DELETE: cannot delete, folder has children', PEAR_LOG_ERR);
 				return "409 Conflict";
 			}
-			if(!$obj->remove()) {
-				return "409 Conflict";
+			$controller = Controller::factory('RemoveFolder');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
+			$controller->setParam('folder', $obj);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			if(!$controller->run()) {
+//			if(!$obj->remove()) {
+				return "409 Conflict ".$controller->getErrorMsg();
 			}
 		} else {
-			// check if user is admin
-			// only admins may delete documents
-			/* There is not reason to allow only admins to remove a document
-			if(!$this->user->isAdmin()) {
-				return "403 Forbidden";				 
-			}
-			 */
-
-			if(!$obj->remove()) {
-				return "409 Conflict";
+			$controller = Controller::factory('RemoveDocument');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
+			$controller->setParam('document', $obj);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			if(!$controller->run()) {
+//			if(!$obj->remove()) {
+				return "409 Conflict ".$controller->getErrorMsg();
 			}
 		}
 
@@ -779,15 +889,17 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		 * destination object
 		 */
 		if (($objsource->getAccessMode($this->user) < M_READWRITE) || ($objdest->getAccessMode($this->user) < M_READWRITE)) {
+			if($this->logger)
+				$this->logger->log('MOVE: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
-		if(get_class($objdest) == 'SeedDMS_Core_Document') {
+		if(get_class($objdest) == $this->dms->getClassname('document')) {
 			/* If destination object is a document it must be overwritten */
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				return "400 Bad request";
 			}
 
@@ -808,11 +920,11 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$objsource->remove();
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
+		} elseif(get_class($objdest) == $this->dms->getClassname('folder')) {
 			/* Set the new Folder of the source object */
-			if(get_class($objsource) == 'SeedDMS_Core_Document')
+			if(get_class($objsource) == $this->dms->getClassname('document'))
 				$objsource->setFolder($objdest);
-			elseif(get_class($objsource) == 'SeedDMS_Core_Folder')
+			elseif(get_class($objsource) == $this->dms->getClassname('folder'))
 				$objsource->setParent($objdest);
 			else
 				return "500 Internal server error";
@@ -830,6 +942,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 	 */
 	function COPY($options, $del=false) /* {{{ */
 	{
+		global $settings, $indexconf;
+
 		if(!$del)
 			$this->log_options('COPY', $options);
 
@@ -852,7 +966,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (!$objsource)
 			return "404 Not found";
 
-		if (get_class($objsource) == 'SeedDMS_Core_Folder' && ($options["depth"] != "infinity")) {
+		if (get_class($objsource) == $this->dms->getClassname('folder') && ($options["depth"] != "infinity")) {
 			// RFC 2518 Section 9.2, last paragraph
 			return "400 Bad request";
 		}
@@ -876,16 +990,18 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		 * access on the destination object
 		 */
 		if (($objsource->getAccessMode($this->user) < M_READ) || ($objdest->getAccessMode($this->user) < M_READWRITE)) {
+			if($this->logger)
+				$this->logger->log('COPY: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
 		/* If destination object is a document it must be overwritten */
-		if(get_class($objdest) == 'SeedDMS_Core_Document') {
+		if(get_class($objdest) == $this->dms->getClassname('document')) {
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
 			/* Copying a folder into a document makes no sense */
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				return "400 Bad request";
 			}
 
@@ -902,12 +1018,12 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$objdest->setName($objsource->getName());
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
+		} elseif(get_class($objdest) == $this->dms->getClassname('folder')) {
 			if($this->logger)
 				$this->logger->log('COPY: copy \''.$objdest->getName().'\' to folder '.$objdest->getName().'', PEAR_LOG_INFO);
 
 			/* Currently no support for copying folders */
-			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
+			if(get_class($objsource) == $this->dms->getClassname('folder')) {
 				if($this->logger)
 					$this->logger->log('COPY: source is a folder '.$objsource->getName().'', PEAR_LOG_INFO);
 
@@ -921,9 +1037,51 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			$content = $objsource->getLatestContent();
 			$fspath = $this->dms->contentDir.'/'.$content->getPath();
 
-			if(!$newdoc = $objdest->addDocument($newdocname, '', 0, $this->user, '', array(), $fspath, $content->getOriginalFileName(), $content->getFileType(), $content->getMimeType(), 0, array(), array(), 0, "")) {
+			if($settings->_enableFullSearch) {
+				$index = $indexconf['Indexer']::open($settings->_luceneDir);
+				$indexconf['Indexer']::init($settings->_stopWordsFile);
+			} else {
+				$index = null;
+				$indexconf = null;
+			}
+
+			$controller = Controller::factory('AddDocument');
+			$controller->setParam('dms', $this->dms);
+			$controller->setParam('user', $this->user);
+			$controller->setParam('documentsource', 'webdav');
+			$controller->setParam('folder', $objdest);
+			$controller->setParam('index', $index);
+			$controller->setParam('indexconf', $indexconf);
+			$controller->setParam('name', $newdocname);
+			$controller->setParam('comment', '');
+			$controller->setParam('expires', 0);
+			$controller->setParam('keywords', '');
+			$controller->setParam('categories', array());
+			$controller->setParam('owner', $this->user);
+			$controller->setParam('userfiletmp', $fspath);
+			$controller->setParam('userfilename', $content->getOriginalFileName());
+			$controller->setParam('filetype', $content->getFileType());
+			$controller->setParam('userfiletype', $content->getMimeType());
+			$minmax = $objdest->getDocumentsMinMax();
+			if($settings->_defaultDocPosition == 'start')
+				$controller->setParam('sequence', $minmax['min'] - 1);
+			else
+				$controller->setParam('sequence', $minmax['max'] + 1);
+			$controller->setParam('reviewers', array());
+			$controller->setParam('approvers', array());
+			$controller->setParam('reqversion', 0);
+			$controller->setParam('versioncomment', '');
+			$controller->setParam('attributes', array());
+			$controller->setParam('attributesversion', array());
+			$controller->setParam('workflow', null);
+			$controller->setParam('notificationgroups', array());
+			$controller->setParam('notificationusers', array());
+			$controller->setParam('maxsizeforfulltext', $settings->_maxSizeForFullText);
+			$controller->setParam('defaultaccessdocs', $settings->_defaultAccessDocs);
+			if(!$document = $controller->run()) {
+//			if(!$newdoc = $objdest->addDocument($newdocname, '', 0, $this->user, '', array(), $fspath, $content->getOriginalFileName(), $content->getFileType(), $content->getMimeType(), 0, array(), array(), 0, "")) {
 				if($this->logger)
-					$this->logger->log('COPY: error copying object', PEAR_LOG_INFO);
+					$this->logger->log('COPY: error copying object', PEAR_LOG_ERR);
 				return "409 Conflict";
 			}
 			return "201 Created";
@@ -1016,11 +1174,13 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "200 OK";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
 		if ($obj->getAccessMode($this->user) < M_READWRITE) {
+			if($this->logger)
+				$this->logger->log('LOCK: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
@@ -1054,11 +1214,13 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "204 No Content";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == $this->dms->getClassname('folder') && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
 		if ($obj->getAccessMode($this->user) < M_READWRITE) {
+			if($this->logger)
+				$this->logger->log('UNLOCK: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
 		}
 
@@ -1091,7 +1253,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		}
 
 		// Folders cannot be locked
-		if(get_class($obj) == 'SeedDMS_Core_Folder') {
+		if(get_class($obj) == $this->dms->getClassname('folder')) {
 			if($this->logger)
 				$this->logger->log('checkLock: object is a folder', PEAR_LOG_INFO);
 			return false;

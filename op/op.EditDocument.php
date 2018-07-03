@@ -30,7 +30,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -109,7 +109,14 @@ $oldcomment = $document->getComment();
 $oldcategories = $document->getCategories();
 $oldkeywords = $document->getKeywords();
 $oldexpires = $document->getExpires();
-$oldattributes = $document->getAttributes();
+/* Make a real copy of each attribute because setting a new attribute value
+ * will just update the old attribute object in array attributes[] and hence
+ * also update the old value
+ */
+$oldattributes = array();
+foreach($document->getAttributes() as $ai=>$aa)
+	$oldattributes[$ai] = clone $aa;
+//$oldattributes = $document->getAttributes();
 
 $controller->setParam('document', $document);
 $controller->setParam('name', $name);
@@ -210,6 +217,61 @@ if ($expires != $oldexpires) {
 }
 
 if ($oldkeywords != $keywords) {
+}
+
+$newattributes = $document->getAttributes();
+if($oldattributes) {
+	foreach($oldattributes as $attrdefid=>$attribute) {
+		if(!isset($newattributes[$attrdefid]) || $newattributes[$attrdefid]->getValueAsArray() !== $oldattributes[$attrdefid]->getValueAsArray()) {
+			if($notifier) {
+				$notifyList = $document->getNotifyList();
+				$subject = "document_attribute_changed_email_subject";
+				$message = "document_attribute_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['attribute_name'] = $attribute->getAttributeDefinition()->getName();
+				$params['attribute_old_value'] = $oldattributes[$attrdefid]->getValue();
+				$params['attribute_new_value'] = isset($newattributes[$attrdefid]) ? $newattributes[$attrdefid]->getValue() : '';
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+				foreach ($notifyList["groups"] as $grp) {
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
+				}
+			}
+		}
+	}
+}
+/* Check for new attributes which didn't have a value before */
+if($newattributes) {
+	foreach($newattributes as $attrdefid=>$attribute) {
+		if(!isset($oldattributes[$attrdefid]) && $attribute) {
+			if($notifier) {
+				$notifyList = $document->getNotifyList();
+				$subject = "document_attribute_changed_email_subject";
+				$message = "document_attribute_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['attribute_name'] = $dms->getAttributeDefinition($attrdefid)->getName();
+				$params['attribute_old_value'] = '';
+				$params['attribute_new_value'] = $attribute->getValue();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+				foreach ($notifyList["groups"] as $grp) {
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
+				}
+			}
+		}
+	}
 }
 
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_document_edited')));

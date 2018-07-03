@@ -37,8 +37,8 @@ class SeedDMS_View_ApproveDocument extends SeedDMS_Bootstrap_Style {
 function checkIndForm()
 {
 	msg = new Array();
-	if (document.form1.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.formind.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
+	if (document.formind.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "") {
   	noty({
   		text: msg.join('<br />'),
@@ -56,9 +56,9 @@ function checkIndForm()
 function checkGrpForm()
 {
 	msg = new Array();
-//	if (document.form2.approvalGroup.value == "") msg.push("<?php printMLText("js_no_approval_group");?>");
-	if (document.form2.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
-	if (document.form2.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+//	if (document.formgrp.approvalGroup.value == "") msg.push("<?php printMLText("js_no_approval_group");?>");
+	if (document.formgrp.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
+	if (document.formgrp.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "")
 	{
   	noty({
@@ -75,11 +75,11 @@ function checkGrpForm()
 		return true;
 }
 $(document).ready(function() {
-	$('body').on('submit', '#form1', function(ev){
+	$('body').on('submit', '#formind', function(ev){
 		if(checkIndForm()) return;
 		ev.preventDefault();
 	});
-	$('body').on('submit', '#form2', function(ev){
+	$('body').on('submit', '#formgrp', function(ev){
 		if(checkGrpForm()) return;
 		ev.preventDefault();
 	});
@@ -112,110 +112,62 @@ $(document).ready(function() {
 		$this->contentContainerStart();
 
 		// Display the Approval form.
-		if ($approvalStatus['type'] == 0) {
-			if($approvalStatus["status"]!=0) {
+		$approvaltype = ($approvalStatus['type'] == 0) ? 'ind' : 'grp';
+		if($approvalStatus["status"]!=0) {
 
-				print "<table class=\"folderView\"><thead><tr>";
-				print "<th>".getMLText("status")."</th>";
-				print "<th>".getMLText("comment")."</th>";
-				print "<th>".getMLText("last_update")."</th>";
-				print "</tr></thead><tbody><tr>";
-				print "<td>";
-				printApprovalStatusText($approvalStatus["status"]);
-				print "</td>";
-				print "<td>".htmlspecialchars($approvalStatus["comment"])."</td>";
-				$indUser = $dms->getUser($approvalStatus["userID"]);
-				print "<td>".$approvalStatus["date"]." - ". $indUser->getFullname() ."</td>";
-				print "</tr></tbody></table><br>\n";
-			}
-?>
-	<form method="post" action="../op/op.ApproveDocument.php" id="form1" name="form1" enctype="multipart/form-data">
-	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
-	<table>
-		<tr>
-			<td><?php printMLText("comment")?>:</td>
-			<td><textarea name="comment" cols="80" rows="4"></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("approval_file")?>:</td>
-			<td>
-<?php
-	$this->printFileChooser('approvalfile', false);
-?>
-			</td>
-		</tr>
-	<tr><td><?php printMLText("approval_status")?>:</td>
-	<td><select name="approvalStatus">
-<?php if($approvalStatus['status'] != 1) { ?>
-	<option value='1'><?php printMLText("status_approved")?></option>
-<?php } ?>
-<?php if($approvalStatus['status'] != -1) { ?>
-	<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-	</select>
-	</td></tr><tr><td></td><td>
-	<input type='hidden' name='approvalType' value='ind'/>
-	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
-	<input type='submit' class="btn" name='indApproval' value='<?php printMLText("submit_approval")?>'/>
-	</td></tr></table>
-	</form>
-<?php
+			print "<table class=\"folderView\"><thead><tr>";
+			print "<th>".getMLText("status")."</th>";
+			print "<th>".getMLText("comment")."</th>";
+			print "<th>".getMLText("last_update")."</th>";
+			print "</tr></thead><tbody><tr>";
+			print "<td>";
+			printApprovalStatusText($approvalStatus["status"]);
+			print "</td>";
+			print "<td>".htmlspecialchars($approvalStatus["comment"])."</td>";
+			$indUser = $dms->getUser($approvalStatus["userID"]);
+			print "<td>".$approvalStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
+			print "</tr></tbody></table><br>\n";
 		}
-		else if ($approvalStatus['type'] == 1) {
-
-			if($approvalStatus["status"]!=0) {
-
-				print "<table class=\"folderView\"><thead><tr>";
-				print "<th>".getMLText("status")."</th>";
-				print "<th>".getMLText("comment")."</th>";
-				print "<th>".getMLText("last_update")."</th>";
-				print "</tr></thead><tbody><tr>";
-				print "<td>";
-				printApprovalStatusText($approvalStatus["status"]);
-				print "</td>";
-				print "<td>".htmlspecialchars($approvalStatus["comment"])."</td>";
-				$indUser = $dms->getUser($approvalStatus["userID"]);
-				print "<td>".$approvalStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-				print "</tr></tbody></table><br>\n";
-			}
-
 ?>
-	<form method="POST" action="../op/op.ApproveDocument.php" id="form2" name="form2" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" action="../op/op.ApproveDocument.php" id="form<?= $approvaltype ?>" name="form<?= $approvaltype ?>" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
-	<table>
-	<tr><td><?php printMLText("comment")?>:</td>
-	<td><textarea name="comment" cols="80" rows="4"></textarea>
-	</td></tr>
-		<tr>
-			<td><?php printMLText("approval_file")?>:</td>
-			<td>
 <?php
-	$this->printFileChooser('approvalfile', false);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
+		);
+		$this->formField(
+			getMLText("approval_file"),
+			$this->getFileChooser('approvalfile', false)
+		);
+		$options = array();
+		if($approvalStatus['status'] != 1)
+			$options[] = array('1', getMLText("status_approved"));
+		if($approvalStatus['status'] != -1)
+			$options[] = array('-1', getMLText("rejected"));
+		$this->formField(
+			getMLText("approval_status"),
+			array(
+				'element'=>'select',
+				'name'=>'approvalStatus',
+				'options'=>$options,
+			)
+		);
+		$this->formSubmit(getMLText('submit_approval'), $approvaltype.'Approval');
 ?>
-			</td>
-		</tr>
-	<tr><td><?php printMLText("approval_status")?>:</td>
-	<td>
-	<select name="approvalStatus">
-<?php if($approvalStatus['status'] != 1) { ?>
-	<option value='1'><?php printMLText("status_approved")?></option>
-<?php } ?>
-<?php if($approvalStatus['status'] != -1) { ?>
-	<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-	</select>
-	</td></tr>
-	<tr><td></td><td>
+	<input type='hidden' name='approvalType' value='<?= $approvaltype ?>'/>
+	<?php if($approvaltype == 'grp'): ?>
 	<input type='hidden' name='approvalGroup' value="<?php echo $approvalStatus['required']; ?>" />
-	<input type='hidden' name='approvalType' value='grp'/>
+	<?php endif; ?>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
-	<input type='submit' class="btn" name='groupApproval' value='<?php printMLText("submit_approval")?>'/></td></tr>
-	</table>
 	</form>
 <?php
-		}
 
 		$this->contentContainerEnd();
 		$this->contentEnd();

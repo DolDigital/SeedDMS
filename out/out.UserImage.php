@@ -34,8 +34,12 @@ $myUser = $dms->getUser($userid);
 if (!$myUser->hasImage())
 	UI::exitError(getMLText("user_image"),getMLText("no_user_image"));
 
+/* Make sure any data previous send (probably by accident, because of straying
+ * spaces) is removed
+ */
+ob_get_clean();
 if($resArr = $myUser->getImage()) {
-	header("ContentType: " . $resArr["mimeType"]);
+	header("Content-Type: " . $resArr["mimeType"]);
 	print base64_decode($resArr["image"]);
 }
 exit;

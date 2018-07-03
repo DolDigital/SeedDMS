@@ -83,49 +83,44 @@ $(document).ready( function() {
 	<?php echo createHiddenFieldWithKey('addsubfolder'); ?>
 	<input type="hidden" name="folderid" value="<?php print $folder->getId();?>">
 	<input type="hidden" name="showtree" value="<?php echo showtree();?>">
-	
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls"><input type="text" name="name" size="60" required></div>
-		</div>
+<?php	
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80,
+				'required'=>$strictformcheck
+			)
+		);
+		$this->formField(getMLText("sequence"), $this->getSequenceChooser($folder->getSubFolders('s')).($orderby != 's' ? "<br />".getMLText('order_by_sequence_off') : ''));
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls"><textarea name="comment" rows="4" cols="80"<?php echo $strictformcheck ? ' required' : ''; ?>></textarea></div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("sequence");?>:</label>
-			<div class="controls"><?php $this->printSequenceChooser($folder->getSubFolders('s')); if($orderby != 's') echo "<br />".getMLText('order_by_sequence_off');?></div>
-		</div>
-<?php
-	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
-	if($attrdefs) {
-		foreach($attrdefs as $attrdef) {
-			$arr = $this->callHook('addFolderAttribute', null, $attrdef);
-			if(is_array($arr)) {
-				if($arr) {
-					echo "<div class=\"control-group\">";
-					echo "	<label class=\"control-label\">".$arr[0].":</label>";
-					echo "	<div class=\"controls\">".$arr[1]."</div>";
-					echo "</div>";
+		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$arr = $this->callHook('addFolderAttribute', null, $attrdef);
+				if(is_array($arr)) {
+					if($arr) {
+						$this->formField($arr[0], $arr[1]);
+					}
+				} else {
+					$this->formField(htmlspecialchars($attrdef->getName()), $this->getAttributeEditField($attrdef, ''));
 				}
-			} else {
-?>
-<div class="control-group">
-	<label class="control-label"><?php echo htmlspecialchars($attrdef->getName()); ?>:</label>
-	<div class="controls"><?php $this->printAttributeEditField($attrdef, '') ?></div>
-</div>
-<?php
 			}
 		}
-	}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('add_subfolder'));
 ?>
-
-<div class="controls">
-	<input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>">
-</div>
-
 </form>
 <?php
 		$this->contentContainerEnd();

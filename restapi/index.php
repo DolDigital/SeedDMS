@@ -427,7 +427,7 @@ function createFolder($id) { /* {{{ */
                 if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
                     $rec = __getFolderData($folder);
-										$app->response()->status(201);
+                    $app->response()->status(201);
                     $app->response()->header('Content-Type', 'application/json');
                     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
                 } else {
@@ -699,7 +699,7 @@ function uploadDocumentFile($documentId) { /* {{{ */
         return;
     }
 
-    if(!ctype_digit($document) || $documentId == 0) {
+    if(!ctype_digit($documentId) || $documentId == 0) {
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
         return;
@@ -747,10 +747,10 @@ function uploadDocumentFile($documentId) { /* {{{ */
             $app->response()->header('Content-Type', 'application/json');
             echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
         }
-		} else {
-			  if($document === null)
+    } else {
+        if($document === null)
             $app->response()->status(400);
-				else
+        else
             $app->response()->status(500);
         $app->response()->header('Content-Type', 'application/json');
         echo json_encode(array('success'=>false, 'message'=>'No such document', 'data'=>''));
@@ -878,7 +878,7 @@ function getDocumentContent($id) { /* {{{ */
               $app->response()->header("Cache-Control", "no-cache, must-revalidate");
               $app->response()->header("Pragma", "no-cache");
 
-              readfile($dms->contentDir . $lc->getPath());
+              sendFile($dms->contentDir . $lc->getPath());
             } else {
               $app->response()->status(403);
               $app->response()->header('Content-Type', 'application/json');
@@ -953,7 +953,7 @@ function getDocumentVersion($id, $version) { /* {{{ */
               $app->response()->header("Cache-Control", "no-cache, must-revalidate");
               $app->response()->header("Pragma", "no-cache");
 
-              readfile($dms->contentDir . $lc->getPath());
+              sendFile($dms->contentDir . $lc->getPath());
             } else {
               $app->response()->status(403);
               $app->response()->header('Content-Type', 'application/json');
@@ -1022,7 +1022,7 @@ function getDocumentFile($id, $fileid) { /* {{{ */
             $app->response()->header("Cache-Control", "no-cache, must-revalidate");
             $app->response()->header("Pragma", "no-cache");
 
-            readfile($dms->contentDir . $file->getPath());
+            sendFile($dms->contentDir . $file->getPath());
         } else {
             $app->response()->status(403);
             $app->response()->header('Content-Type', 'application/json');
@@ -1226,6 +1226,10 @@ function doSearch() { /* {{{ */
     if(!$limit = $app->request()->get('limit'))
         $limit = 5;
     $resArr = $dms->search($querystr);
+    if($resArr === false) {
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array());
+    }
     $entries = array();
     $count = 0;
     if($resArr['folders']) {
@@ -1377,7 +1381,7 @@ function getUsers() { /* {{{ */
     $users = $dms->getAllUsers();
     $data = [];
     foreach($users as $u)
-	    $data[] = __getUserData($u);
+    $data[] = __getUserData($u);
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
@@ -1803,12 +1807,12 @@ function changeFolderAccess($id, $operationType, $userOrGroup) { /* {{{ */
 function getCategories() { /* {{{ */
     global $app, $dms, $userobj;
 
-		if(false === ($categories = $dms->getDocumentCategories())) {
+    if(false === ($categories = $dms->getDocumentCategories())) {
         $app->response()->status(500);
-	  		$app->response()->header('Content-Type', 'application/json');
-		  	echo json_encode(array('success'=>false, 'message'=>'Could not get categories', 'data'=>null));
+        $app->response()->header('Content-Type', 'application/json');
+        echo json_encode(array('success'=>false, 'message'=>'Could not get categories', 'data'=>null));
         return;
-		}
+    }
     $data = [];
     foreach($categories as $category)
         $data[] = ['id' => (int)$category->getId(), 'name' => $category->getName()];

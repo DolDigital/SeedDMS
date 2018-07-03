@@ -101,6 +101,10 @@ if ($action == "saveSettings")
   $settings->_stopWordsFile = $_POST["stopWordsFile"];
   $settings->_sortUsersInList = $_POST["sortUsersInList"];
   $settings->_sortFoldersDefault = $_POST["sortFoldersDefault"];
+  $settings->_defaultDocPosition = $_POST["defaultDocPosition"];
+
+  // SETTINGS - SITE - WEBDAV
+	$settings->_enableWebdavReplaceDoc = getBoolValue("enableWebdavReplaceDoc");
 
   // SETTINGS - SITE - CALENDAR
   $settings->_enableCalendar = getBoolValue("enableCalendar");
@@ -117,6 +121,7 @@ if ($action == "saveSettings")
   $settings->_extraPath = addDirSep($_POST["extraPath"]);
   $settings->_dropFolderDir = addDirSep($_POST["dropFolderDir"]);
   $settings->_backupDir = addDirSep($_POST["backupDir"]);
+  $settings->_repositoryUrl = addDirSep($_POST["repositoryUrl"]);
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
@@ -172,6 +177,7 @@ if ($action == "saveSettings")
   $settings->_versioningFileName = $_POST["versioningFileName"];
   $settings->_presetExpirationDate = $_POST["presetExpirationDate"];
   $settings->_workflowMode = $_POST["workflowMode"];
+  $settings->_allowReviewerOnly = getBoolValue("allowReviewerOnly");
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
   $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");

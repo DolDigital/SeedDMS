@@ -71,6 +71,9 @@
       calendarDefaultView = "y"
       firstDayOfWeek = "0"
     />
+    <webdav
+      enableWebdavReplaceDoc="true"
+    />
   </site>
   <system>
     <!--
@@ -89,6 +92,7 @@
        - partitionSize: size of chunk uploaded by jumploader
        - dropFolderDir: where files for document upload are located
        - cacheDir: where the preview images are saved
+       - backupDir: where the backups are saved
     -->
     <server
       rootDir = ""
@@ -102,6 +106,7 @@
       partitionSize = "2000000"
       dropFolderDir = ""
       cacheDir = ""
+      backupDir = ""
     />
     <!--
        - enableGuestLogin: If you want anybody to login as guest, set the following line to true

@@ -29,7 +29,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('removedocument')) {
@@ -62,6 +62,7 @@ if($settings->_enableFullSearch) {
 	$indexconf['Indexer']::init($settings->_stopWordsFile);
 } else {
 	$index = null;
+	$indexconf = null;
 }
 
 $folder = $document->getFolder();

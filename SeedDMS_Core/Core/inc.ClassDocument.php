@@ -176,7 +176,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	protected $_keywords;
 
 	/**
-	 * @var array list of categories
+	 * @var SeedDMS_Core_DocumentCategory[] list of categories
 	 */
 	protected $_categories;
 
@@ -186,7 +186,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	protected $_sequence;
 
 	/**
-	 * @var object temp. storage for latestcontent
+	 * @var SeedDMS_Core_DocumentContent temp. storage for latestcontent
 	 */
 	protected $_latestContent;
 
@@ -194,6 +194,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @var array temp. storage for content
 	 */
 	protected $_content;
+
+	/**
+	 * @var SeedDMS_Core_Folder
+	 */
+	protected $_folder;
+
+	/** @var array of SeedDMS_Core_UserAccess and SeedDMS_Core_GroupAccess */
+	protected $_accessList;
 
 	function __construct($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
 		parent::__construct($id);
@@ -218,6 +226,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Return an array of database fields which used for searching
 	 * a term entered in the database search form
 	 *
+	 * @param SeedDMS_Core_DMS $dms
 	 * @param array $searchin integer list of search scopes (2=name, 3=comment,
 	 * 4=attributes)
 	 * @return array list of database fields
@@ -251,7 +260,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Return an document by its id
 	 *
 	 * @param integer $id id of document
-	 * @return object/boolean instance of SeedDMS_Core_Document if document exists, null
+	 * @param SeedDMS_Core_DMS $dms
+	 * @return bool|SeedDMS_Core_Document instance of SeedDMS_Core_Document if document exists, null
 	 * if document does not exist, false in case of error
 	 */
 	public static function getInstance($id, $dms) { /* {{{ */
@@ -278,12 +288,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 
 		$classname = $dms->getClassname('document');
+		/** @var SeedDMS_Core_Document $document */
 		$document = new $classname($resArr["id"], $resArr["name"], $resArr["comment"], $resArr["date"], $resArr["expires"], $resArr["owner"], $resArr["folder"], $resArr["inheritAccess"], $resArr["defaultAccess"], $lock, $resArr["keywords"], $resArr["sequence"]);
 		$document->setDMS($dms);
 		return $document;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the directory of the document in the file system relativ
 	 * to the contentDir
 	 *
@@ -298,17 +309,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the name of the document
 	 *
 	 * @return string name of document
 	 */
 	function getName() { return $this->_name; }
 
-	/*
+	/**
 	 * Set the name of the document
 	 *
 	 * @param $newName string new name of document
+	 * @return bool
 	 */
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -321,17 +333,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the comment of the document
 	 *
 	 * @return string comment of document
 	 */
 	function getComment() { return $this->_comment; }
 
-	/*
+	/**
 	 * Set the comment of the document
 	 *
 	 * @param $newComment string new comment of document
+	 * @return bool
 	 */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -344,8 +357,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getKeywords() { return $this->_keywords; }
 
+	/**
+	 * @param string $newKeywords
+	 * @return bool
+	 */
 	function setKeywords($newKeywords) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -360,7 +380,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Retrieve a list of all categories this document belongs to
 	 *
-	 * @return array list of category objects
+	 * @return bool|SeedDMS_Core_DocumentCategory[]
 	 */
 	function getCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -385,7 +405,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * This function will delete currently assigned categories and sets new
 	 * categories.
 	 *
-	 * @param array $newCategories list of category objects
+	 * @param SeedDMS_Core_DocumentCategory[] $newCategories list of category objects
+	 * @return bool
 	 */
 	function setCategories($newCategories) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -501,7 +522,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return the parent folder of the document
 	 *
-	 * @return object parent folder
+	 * @return SeedDMS_Core_Folder parent folder
 	 */
 	function getParent() { /* {{{ */
 		return self::getFolder();
@@ -519,7 +540,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * This function basically moves a document from a folder to another
 	 * folder.
 	 *
-	 * @param object $newFolder
+	 * @param SeedDMS_Core_Folder $newFolder
 	 * @return boolean false in case of an error, otherwise true
 	 */
 	function setFolder($newFolder) { /* {{{ */
@@ -529,11 +550,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_folderID = $newFolder->getID();
+		/** @noinspection PhpUndefinedFieldInspection */
 		$this->_folder = $newFolder;
 
 		// Make sure that the folder search path is also updated.
 		$path = $newFolder->getPath();
 		$flist = "";
+		/** @var SeedDMS_Core_Folder[] $path */
 		foreach ($path as $f) {
 			$flist .= ":".$f->getID();
 		}
@@ -550,7 +573,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return owner of document
 	 *
-	 * @return object owner of document as an instance of {@link SeedDMS_Core_User}
+	 * @return SeedDMS_Core_User owner of document as an instance of {@link SeedDMS_Core_User}
 	 */
 	function getOwner() { /* {{{ */
 		if (!isset($this->_owner))
@@ -561,7 +584,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Set owner of a document
 	 *
-	 * @param object $newOwner new owner
+	 * @param SeedDMS_Core_User $newOwner new owner
 	 * @return boolean true if successful otherwise false
 	 */
 	function setOwner($newOwner) { /* {{{ */
@@ -572,10 +595,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 
 		$this->_ownerID = $newOwner->getID();
+		/** @noinspection PhpUndefinedFieldInspection */
 		$this->_owner = $newOwner;
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool|int
+	 */
 	function getDefaultAccess() { /* {{{ */
 		if ($this->inheritsAccess()) {
 			$res = $this->getFolder();
@@ -592,7 +619,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * will not have read access anymore.
 	 *
 	 * @param integer $mode access mode
-	 * @param boolean $noclean set to true if notifier list shall not be clean up
+	 * @param bool|string $noclean set to true if notifier list shall not be clean up
+	 * @return bool
 	 */
 	function setDefaultAccess($mode, $noclean="false") { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -609,6 +637,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool
+	 */
 	function inheritsAccess() { return $this->_inheritAccess; }
 
 	/**
@@ -667,7 +698,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Set expiration date as unix timestamp
 	 *
-	 * @param integer unix timestamp of expiration date
+	 * @param integer $expires unix timestamp of expiration date
+	 * @return bool
 	 */
 	function setExpires($expires) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -736,7 +768,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Lock or unlock document
 	 *
-	 * @param $falseOrUser user object for locking or false for unlocking
+	 * @param SeedDMS_Core_User|bool $falseOrUser user object for locking or false for unlocking
 	 * @return boolean true if operation was successful otherwise false
 	 */
 	function setLocked($falseOrUser) { /* {{{ */
@@ -764,7 +796,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Get the user currently locking the document
 	 *
-	 * @return object user have a lock
+	 * @return SeedDMS_Core_User|bool user have a lock
 	 */
 	function getLockingUser() { /* {{{ */
 		if (!$this->isLocked())
@@ -775,8 +807,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_lockingUser;
 	} /* }}} */
 
+	/**
+	 * @return int
+	 */
 	function getSequence() { return $this->_sequence; }
 
+	/**
+	 * @param $seq
+	 * @return bool
+	 */
 	function setSequence($seq) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -823,9 +862,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * 'users' and 'groups' which are than empty. The methode returns false
 	 * if the function fails.
 	 *
-	 * @param integer $mode access mode (defaults to M_ANY)
-	 * @param integer $op operation (defaults to O_EQ)
-	 * @return array multi dimensional array or false in case of an error
+	 * @param int $mode access mode (defaults to M_ANY)
+	 * @param int|string $op operation (defaults to O_EQ)
+	 * @return bool|array
 	 */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -871,6 +910,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param integer $userOrGroupID id of user or group
 	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
 	 *        user
+	 * @return bool
 	 */
 	function addAccess($mode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -901,6 +941,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param integer $userOrGroupID id of user or group
 	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
 	 *        user
+	 * @return bool
 	 */
 	function changeAccess($newMode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -991,6 +1032,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$accessList = $this->getAccessList();
 		if (!$accessList) return false;
 
+		/** @var SeedDMS_Core_UserAccess $userAccess */
 		foreach ($accessList["users"] as $userAccess) {
 			if ($userAccess->getUserID() == $user->getID()) {
 				$mode = $userAccess->getMode();
@@ -1004,6 +1046,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Get the highest right defined by a group */
 		if($accessList['groups']) {
 			$mode = 0;
+			/** @var SeedDMS_Core_GroupAccess $groupAccess */
 			foreach ($accessList["groups"] as $groupAccess) {
 				if ($user->isMemberOfGroup($groupAccess->getGroup())) {
 					if ($groupAccess->getMode() > $mode)
@@ -1035,7 +1078,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * The function takes inherited access rights into account.
 	 * For a list of possible access rights see @file inc.AccessUtils.php
 	 *
-	 * @param $group object instance of class SeedDMS_Core_Group
+	 * @param SeedDMS_Core_Group $group object instance of class SeedDMS_Core_Group
 	 * @return integer access mode
 	 */
 	function getGroupAccessMode($group) { /* {{{ */
@@ -1047,6 +1090,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!$accessList)
 			return false;
 
+		/** @var SeedDMS_Core_GroupAccess $groupAccess */
 		foreach ($accessList["groups"] as $groupAccess) {
 			if ($groupAccess->getGroupID() == $group->getID()) {
 				$foundInACL = true;
@@ -1072,9 +1116,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * SeedDMS_Core_Group.
 	 *
 	 * @param integer $type type of notification (not yet used)
-	 * @return array list of notifications
+	 * @param bool $incdisabled set to true if disabled user shall be included
+	 * @return array|bool
 	 */
-	function getNotifyList($type=0) { /* {{{ */
+	function getNotifyList($type=0, $incdisabled=false) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
@@ -1088,7 +1133,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			{
 				if ($row["userID"] != -1) {
 					$u = $this->_dms->getUser($row["userID"]);
-					if($u && !$u->isDisabled())
+					if($u && (!$u->isDisabled() || $incdisabled))
 						array_push($this->_notifyList["users"], $u);
 				} else { //if ($row["groupID"] != -1)
 					$g = $this->_dms->getGroup($row["groupID"]);
@@ -1113,7 +1158,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		/* Make a copy of both notifier lists because removeNotify will empty
 		 * $this->_notifyList and the second foreach will not work anymore.
 		 */
+		/** @var SeedDMS_Core_User[] $nusers */
 		$nusers = $this->_notifyList["users"];
+		/** @var SeedDMS_Core_Group[] $ngroups */
 		$ngroups = $this->_notifyList["groups"];
 		foreach ($nusers as $u) {
 			if ($this->getAccessMode($u) < M_READ) {
@@ -1193,6 +1240,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				// that the current group has not been explicitly excluded.
 				$acl = $this->getAccessList(M_NONE, O_EQ);
 				$found = false;
+				/** @var SeedDMS_Core_GroupAccess $group */
 				foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
@@ -1211,6 +1259,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 					return -4;
 				}
 				$found = false;
+				/** @var SeedDMS_Core_GroupAccess $group */
 				foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
@@ -1248,10 +1297,10 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * is allowed to remove a notification. This must be checked by the calling
 	 * application.
 	 *
-	 * @param $userOrGroupID id of user or group
-	 * @param $isUser boolean true if a user is passed in $userOrGroupID, false
+	 * @param integer $userOrGroupID id of user or group
+	 * @param boolean $isUser boolean true if a user is passed in $userOrGroupID, false
 	 *        if a group is passed in $userOrGroupID
-	 * @param $type type of notification (0 will delete all) Not used yet!
+	 * @param integer $type type of notification (0 will delete all) Not used yet!
 	 * @return integer 0 if operation was succesful
 	 *                 -1 if the userid/groupid is invalid
 	 *                 -3 if the user/group is already subscribed
@@ -1261,6 +1310,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		/* Verify that user / group exists. */
+		/** @var SeedDMS_Core_Group|SeedDMS_Core_User $obj */
 		$obj = ($isUser ? $this->_dms->getUser($userOrGroupID) : $this->_dms->getGroup($userOrGroupID));
 		if (!is_object($obj)) {
 			return -1;
@@ -1336,7 +1386,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * @param array $attributes list of version attributes. The element key
 	 *        must be the id of the attribute definition.
 	 * @param object $workflow
-	 * @return bool/array false in case of an error or a result set
+	 * @return bool|SeedDMS_Core_AddContentResultSet
 	 */
 	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1386,7 +1436,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		$this->_content = null;
 		$this->_latestContent = null;
-		$content = $this->getLatestContent($contentID);
+		$content = $this->getLatestContent($contentID); /** @todo: Parameter not defined in Funktion */
 		$docResultSet = new SeedDMS_Core_AddContentResultSet($content);
 		$docResultSet->setDMS($this->_dms);
 
@@ -1423,7 +1473,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		// and submit comments, if appropriate. Reviewers can also recommend that
 		// a document be rejected.
 		$pendingReview=false;
-		$reviewRes = array();
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$reviewRes = array(); /** @todo unused variable */
 		foreach (array("i", "g") as $i){
 			if (isset($reviewers[$i])) {
 				foreach ($reviewers[$i] as $reviewerID) {
@@ -1441,7 +1492,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		// Add approvers to the database. Approvers must also review the document
 		// and make a recommendation on its release as an approved version.
 		$pendingApproval=false;
-		$approveRes = array();
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$approveRes = array(); /** @todo unused variable */
 		foreach (array("i", "g") as $i){
 			if (isset($approvers[$i])) {
 				foreach ($approvers[$i] as $approverID) {
@@ -1479,7 +1531,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
-		$docResultSet->setStatus($status,$comment,$user);
+		/** @noinspection PhpMethodParametersCountMismatchInspection */
+		$docResultSet->setStatus($status,$comment,$user); /** @todo parameter count wrong */
 
 		$db->commitTransaction();
 		return $docResultSet;
@@ -1517,7 +1570,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if ((int) $version<1) {
 			$queryStr = "SELECT MAX(`version`) as m from `tblDocumentContent` where `document` = ".$this->_id;
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo undefined variable */
 				return false;
 
 			$version = $resArr[0]['m'];
@@ -1572,7 +1625,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * out. Access rights based on the document status are calculated for the
 	 * currently logged in user.
 	 *
-	 * @return array list of objects of class SeedDMS_Core_DocumentContent
+	 * @return bool|SeedDMS_Core_DocumentContent[]
 	 */
 	function getContent() { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1580,13 +1633,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_content)) {
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version`";
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo undefined variable */
 				return false;
 
 			$this->_content = array();
 			$classname = $this->_dms->getClassname('documentcontent');
 			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
+			    /** @var SeedDMS_Core_DocumentContent $content */
 				$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
 				if($user) {
 					if($content->getAccessMode($user) >= M_READ)
@@ -1608,7 +1662,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * currently logged in user.
 	 *
 	 * @param integer $version version number of content element
-	 * @return object/boolean object of class {@link SeedDMS_Core_DocumentContent}
+	 * @return SeedDMS_Core_DocumentContent|boolean object of class {@link SeedDMS_Core_DocumentContent}
 	 * or false
 	 */
 	function getContentByVersion($version) { /* {{{ */
@@ -1625,13 +1679,14 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." AND `version` = " . (int) $version;
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$res)
+		if (is_bool($resArr) && !$res) /** @todo undefined variable */
 			return false;
 		if (count($resArr) != 1)
 			return false;
 
 		$resArr = $resArr[0];
 		$classname = $this->_dms->getClassname('documentcontent');
+		/** @var SeedDMS_Core_DocumentContent $content */
 		if($content = new $classname($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum'])) {
 			$user = $this->_dms->getLoggedInUser();
 			/* A user with write access on the document may always see the version */
@@ -1644,6 +1699,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		}
 	} /* }}} */
 
+	/**
+	 * @return bool|null|SeedDMS_Core_DocumentContent
+	 */
 	function __getLatestContent() { /* {{{ */
 		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
@@ -1672,20 +1730,21 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Access rights based on the document status are calculated for the
 	 * currently logged in user.
 	 *
-	 * @return object object of class {@link SeedDMS_Core_DocumentContent}
+	 * @return bool|SeedDMS_Core_DocumentContent object of class {@link SeedDMS_Core_DocumentContent}
 	 */
 	function getLatestContent() { /* {{{ */
 		if (!$this->_latestContent) {
 			$db = $this->_dms->getDB();
 			$queryStr = "SELECT * FROM `tblDocumentContent` WHERE `document` = ".$this->_id." ORDER BY `version` DESC";
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$res)
+			if (is_bool($resArr) && !$res) /** @todo: $res not defined */
 				return false;
 
 			$classname = $this->_dms->getClassname('documentcontent');
 			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
 				if (!$this->_latestContent) {
+				    /** @var SeedDMS_Core_DocumentContent $content */
 					$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
 					if($user) {
 						/* If the user may even write the document, then also allow to see all content.
@@ -1707,7 +1766,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Remove version of document
 	 *
-	 * @param interger $version version number of content
+	 * @param SeedDMS_Core_DocumentContent $version version number of content
 	 * @return boolean true if successful, otherwise false
 	 */
 	private function _removeContent($version) { /* {{{ */
@@ -1837,7 +1896,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Call callback onPreRemoveDocument before deleting content
 	 *
-	 * @param integer $version version number of content
+	 * @param SeedDMS_Core_DocumentContent $version version number of content
+	 * @return bool|mixed
 	 */
 	function removeContent($version) { /* {{{ */
 		/* Check if 'onPreRemoveDocument' callback is set */
@@ -1868,7 +1928,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * Return a certain document link
 	 *
 	 * @param integer $linkID id of link
-	 * @return object instance of SeedDMS_Core_DocumentLink or false in case of
+	 * @return SeedDMS_Core_DocumentLink|bool of SeedDMS_Core_DocumentLink or false in case of
 	 *         an error.
 	 */
 	function getDocumentLink($linkID) { /* {{{ */
@@ -2130,7 +2190,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
 			foreach($this->_dms->callbacks['onPreRemoveDocument'] as $callback) {
 				$ret = call_user_func($callback[0], $callback[1], $this);
-				if($ret === false)
+				if(is_bool($ret))
 					return $ret;
 			}
 		}
@@ -3505,7 +3565,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
-  	  `comment`, `date`, `userID`) ".
+			`comment`, `date`, `userID`) ".
 			"VALUES ('". $indstatus["reviewID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
@@ -3557,7 +3617,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
-  	  `comment`, `date`, `userID`) ".
+			`comment`, `date`, `userID`) ".
 			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
@@ -3727,7 +3787,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
-  	  `comment`, `date`, `userID`) ".
+			`comment`, `date`, `userID`) ".
 			"VALUES ('". $indstatus["approveID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
@@ -3771,7 +3831,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
-  	  `comment`, `date`, `userID`) ".
+			`comment`, `date`, `userID`) ".
 			"VALUES ('". $approvalStatus[0]["approveID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", ".$db->getCurrentDatetime().", '".
 			$requestUser->getID() ."')";
@@ -4664,7 +4724,7 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	protected $_id;
 
 	/**
-	 * @var object reference to document this link belongs to
+	 * @var SeedDMS_Core_Document reference to document this link belongs to
 	 */
 	protected $_document;
 
@@ -4683,6 +4743,14 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	 */
 	protected $_public;
 
+	/**
+	 * SeedDMS_Core_DocumentLink constructor.
+	 * @param $id
+	 * @param $document
+	 * @param $target
+	 * @param $userID
+	 * @param $public
+	 */
 	function __construct($id, $document, $target, $userID, $public) {
 		$this->_id = $id;
 		$this->_document = $document;
@@ -4691,22 +4759,37 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 		$this->_public = $public;
 	}
 
+	/**
+	 * @return int
+	 */
 	function getID() { return $this->_id; }
 
+	/**
+	 * @return SeedDMS_Core_Document
+	 */
 	function getDocument() {
 		return $this->_document;
 	}
 
+	/**
+	 * @return object
+	 */
 	function getTarget() {
 		return $this->_target;
 	}
 
+	/**
+	 * @return bool|SeedDMS_Core_User
+	 */
 	function getUser() {
 		if (!isset($this->_user))
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	}
 
+	/**
+	 * @return int
+	 */
 	function isPublic() { return $this->_public; }
 
 	/**
@@ -4717,8 +4800,10 @@ class SeedDMS_Core_DocumentLink { /* {{{ */
 	 * It is only called for public document links, not accessed by the owner
 	 * or the administrator.
 	 *
-	 * @param object $u user
-	 * @return integer either M_NONE or M_READ
+	 * @param SeedDMS_Core_User $u user
+	 * @param $source
+	 * @param $target
+	 * @return int either M_NONE or M_READ
 	 */
 	function getAccessMode($u, $source, $target) { /* {{{ */
 		$dms = $this->_document->_dms;
@@ -4761,7 +4846,7 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	protected $_id;
 
 	/**
-	 * @var object reference to document this file belongs to
+	 * @var SeedDMS_Core_Document reference to document this file belongs to
 	 */
 	protected $_document;
 
@@ -4818,6 +4903,21 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 	 */
 	protected $_name;
 
+	/**
+	 * SeedDMS_Core_DocumentFile constructor.
+	 * @param $id
+	 * @param $document
+	 * @param $userID
+	 * @param $comment
+	 * @param $date
+	 * @param $dir
+	 * @param $fileType
+	 * @param $mimeType
+	 * @param $orgFileName
+	 * @param $name
+	 * @param $version
+	 * @param $public
+	 */
 	function __construct($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name,$version,$public) {
 		$this->_id = $id;
 		$this->_document = $document;
@@ -4833,15 +4933,30 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		$this->_public = $public;
 	}
 
+	/**
+	 * @return int
+	 */
 	function getID() { return $this->_id; }
+
+	/**
+	 * @return SeedDMS_Core_Document
+	 */
 	function getDocument() { return $this->_document; }
+
+	/**
+	 * @return int
+	 */
 	function getUserID() { return $this->_userID; }
+
+	/**
+	 * @return string
+	 */
 	function getComment() { return $this->_comment; }
 
 	/*
 	 * Set the comment of the document file
 	 *
-	 * @param $newComment string new comment of document
+	 * @param string $newComment string new comment of document
 	 */
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -4854,6 +4969,9 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getDate() { return $this->_date; }
 
 	/**
@@ -4880,10 +4998,29 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	function getDir() { return $this->_dir; }
+
+	/**
+	 * @return string
+	 */
 	function getFileType() { return $this->_fileType; }
+
+	/**
+	 * @return string
+	 */
 	function getMimeType() { return $this->_mimeType; }
+
+	/**
+	 * @return string
+	 */
 	function getOriginalFileName() { return $this->_orgFileName; }
+
+	/**
+	 * @return string
+	 */
 	function getName() { return $this->_name; }
 
 	/*
@@ -4902,16 +5039,25 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool|SeedDMS_Core_User
+	 */
 	function getUser() {
 		if (!isset($this->_user))
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	}
 
+	/**
+	 * @return string
+	 */
 	function getPath() {
 		return $this->_document->getDir() . "f" .$this->_id . $this->_fileType;
 	}
 
+	/**
+	 * @return int
+	 */
 	function getVersion() { return $this->_version; }
 
 	/*
@@ -4933,6 +5079,9 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return int
+	 */
 	function isPublic() { return $this->_public; }
 
 	/*
@@ -4999,18 +5148,45 @@ class SeedDMS_Core_DocumentFile { /* {{{ */
  */
 class SeedDMS_Core_AddContentResultSet { /* {{{ */
 
+	/**
+	 * @var null
+	 */
 	protected $_indReviewers;
+
+	/**
+	 * @var null
+	 */
 	protected $_grpReviewers;
+
+	/**
+	 * @var null
+	 */
 	protected $_indApprovers;
+
+	/**
+	 * @var null
+	 */
 	protected $_grpApprovers;
+
+	/**
+	 * @var
+	 */
 	protected $_content;
+
+	/**
+	 * @var null
+	 */
 	protected $_status;
 
 	/**
-	 * @var object back reference to document management system
+	 * @var SeedDMS_Core_DMS back reference to document management system
 	 */
 	protected $_dms;
 
+	/**
+	 * SeedDMS_Core_AddContentResultSet constructor.
+	 * @param $content
+	 */
 	function __construct($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
@@ -5021,7 +5197,7 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		$this->_dms = null;
 	} /* }}} */
 
-	/*
+	/**
 	 * Set dms this object belongs to.
 	 *
 	 * Each object needs a reference to the dms it belongs to. It will be
@@ -5029,12 +5205,18 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 	 * The dms has a references to the currently logged in user
 	 * and the database connection.
 	 *
-	 * @param object $dms reference to dms
+	 * @param SeedDMS_Core_DMS $dms reference to dms
 	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
+	/**
+	 * @param $reviewer
+	 * @param $type
+	 * @param $status
+	 * @return bool
+	 */
 	function addReviewer($reviewer, $type, $status) { /* {{{ */
 		$dms = $this->_dms;
 
@@ -5062,6 +5244,12 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @param $approver
+	 * @param $type
+	 * @param $status
+	 * @return bool
+	 */
 	function addApprover($approver, $type, $status) { /* {{{ */
 		$dms = $this->_dms;
 
@@ -5089,6 +5277,10 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @param $status
+	 * @return bool
+	 */
 	function setStatus($status) { /* {{{ */
 		if (!is_integer($status)) {
 			return false;
@@ -5100,14 +5292,24 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return null
+	 */
 	function getStatus() { /* {{{ */
 		return $this->_status;
 	} /* }}} */
 
+	/**
+	 * @return mixed
+	 */
 	function getContent() { /* {{{ */
 		return $this->_content;
 	} /* }}} */
 
+	/**
+	 * @param $type
+	 * @return array|bool|null
+	 */
 	function getReviewers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
@@ -5120,6 +5322,10 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		}
 	} /* }}} */
 
+	/**
+	 * @param $type
+	 * @return array|bool|null
+	 */
 	function getApprovers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
@@ -5132,4 +5338,3 @@ class SeedDMS_Core_AddContentResultSet { /* {{{ */
 		}
 	} /* }}} */
 } /* }}} */
-?>

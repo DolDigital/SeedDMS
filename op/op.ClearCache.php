@@ -31,6 +31,13 @@ if(!checkFormKey('clearcache')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
+/* Make sure the cacheDir exists and isn't manipulated for executing
+ * commands when system() is being called.
+ */
+if(!is_dir($settings->_cacheDir)) {
+	UI::exitError(getMLText("admin_tools"),getMLText("error_cleared_cache"));
+}
+
 if(!empty($_POST['preview'])) {
 	$cmd = 'rm -rf '.$settings->_cacheDir.'/[1-9]*';
 	$ret = null;

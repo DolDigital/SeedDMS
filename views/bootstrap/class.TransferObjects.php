@@ -50,32 +50,26 @@ class SeedDMS_View_TransferObjects extends SeedDMS_Bootstrap_Style {
 <input type="hidden" name="userid" value="<?php print $rmuser->getID();?>">
 <input type="hidden" name="action" value="transferobjects">
 <?php echo createHiddenFieldWithKey('transferobjects'); ?>
-
-<div class="control-group">
-	<label class="control-label" for="assignTo">
-<?php printMLText("transfer_objects_to_user"); ?>:
-	</label>
-	<div class="controls">
-<select name="assignTo" class="chzn-select">
 <?php
+		$options = array();
 		foreach ($allusers as $currUser) {
 			if ($currUser->isGuest() || ($currUser->getID() == $rmuser->getID()) )
 				continue;
 
 			if ($rmuser && $currUser->getID()==$rmuser->getID()) $selected=$count;
-			print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName());
+			$options[] = array($currUser->getID(), htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName()));
 		}
+		$this->formField(
+			getMLText("transfer_objects_to_user"),
+			array(
+				'element'=>'select',
+				'name'=>'assignTo',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
+		$this->formSubmit("<i class=\"icon-share-alt\"></i> ".getMLText('transfer_objects'));
 ?>
-</select>
-	</div>
-</div>
-
-<div class="control-group">
-	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-share-alt"></i> <?php printMLText("transfer_objects");?></button>
-	</div>
-</div>
-
 </form>
 <?php
 		$this->contentContainerEnd();

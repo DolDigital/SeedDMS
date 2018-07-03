@@ -77,51 +77,53 @@ $(document).ready(function() {
 ?>
 <div class="row-fluid">
 	<div class="span4">
-		<div class="well">
+		<?php	$this->contentContainerStart(); ?>
 			<form class="form-horizontal">
-				<div class="control-group">
-					<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
-					<div class="controls">
-						<select id="selector">
-							<option value="-1"><?php echo getMLText("choose_category")?>
-							<option value="0"><?php echo getMLText("new_default_keyword_category")?>
 <?php
-
 		$selected=0;
 		$count=2;
+		$options = array();
+		$options[] = array('-1', getMLText("choose_category"));
+		$options[] = array('0', getMLText("new_default_keyword_category"));
 		foreach ($categories as $category) {
 
 			$owner = $category->getOwner();
 			if ($owner->getID() != $user->getID()) continue;
 
 			if (isset($_GET["categoryid"]) && $category->getID()==$_GET["categoryid"]) $selected=$count;
-			print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
+			$options[] = array($category->getID(), htmlspecialchars($category->getName()));
 			$count++;
 		}
+		$this->formField(
+			getMLText("selection"),
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'options'=>$options,
+			)
+		);
 ?>
-						</select>
-					</div>
-				</div>
 			</form>
-		</div>
+		<?php	$this->contentContainerEnd(); ?>
 	</div>
 
 	<div class="span8">
-		<div class="well">
+		<?php	$this->contentContainerStart(); ?>
 
 			<div id="keywords0" style="display : none;">
 				<form class="form-horizontal" action="../op/op.UserDefaultKeywords.php" method="post" name="addcategory">
 					<input type="hidden" name="action" value="addcategory">
-
-					<div class="control-group">
-						<label class="control-label"><?php printMLText("name");?>:</label>
-						<div class="controls">
-							<input type="text" name="name">
-						</div>
-					</div>
-					<div class="controls">
-						<input type="submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>">
-					</div>
+<?php
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'name'=>'name',
+			)
+		);
+		$this->formSubmit(getMLText("new_default_keyword_category"));
+?>
 				</form>
 			</div>
 <?php
@@ -192,7 +194,7 @@ $(document).ready(function() {
 
 		</div>
 <?php } ?>
-</div>
+		<?php	$this->contentContainerEnd(); ?>
 </div>
 </div>
 

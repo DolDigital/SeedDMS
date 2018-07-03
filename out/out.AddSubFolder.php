@@ -47,6 +47,7 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 if($view) {
 	$view->setParam('folder', $folder);
 	$view->setParam('strictformcheck', $settings->_strictFormCheck);
+	$view->setParam('defaultposition', $settings->_defaultDocPosition);
 	$view->setParam('orderby', $settings->_sortFoldersDefault);
 	$view($_GET);
 	exit;

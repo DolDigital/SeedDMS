@@ -196,7 +196,7 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 
 		$target = $this->previewDir.$dir.md5($infile);
 		if($target && file_exists($target.'.pdf')) {
-			readfile($target.'.pdf');
+			$this->sendFile($target.'.pdf');
 		}
 	} /* }}} */
 
@@ -215,7 +215,7 @@ class SeedDMS_Preview_PdfPreviewer extends SeedDMS_Preview_Base {
 
 		$target = $this->getFileName($object);
 		if($target && file_exists($target.'.pdf')) {
-			readfile($target.'.pdf');
+			$this->sendFile($target.'.pdf');
 		}
 	} /* }}} */
 

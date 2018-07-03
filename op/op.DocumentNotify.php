@@ -27,39 +27,43 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
+if(!checkFormKey('documentnotify')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_request_token"));
+}
+
+if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$documentid = $_GET["documentid"];
+$documentid = $_POST["documentid"];
 $document = $dms->getDocument($documentid);
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-if (!isset($_GET["action"]) || (strcasecmp($_GET["action"], "delnotify") && strcasecmp($_GET["action"],"addnotify"))) {
+if (!isset($_POST["action"]) || (strcasecmp($_POST["action"], "delnotify") && strcasecmp($_POST["action"],"addnotify"))) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_action"));
 }
 
-$action = $_GET["action"];
+$action = $_POST["action"];
 
-if (isset($_GET["userid"]) && (!is_numeric($_GET["userid"]) || $_GET["userid"]<-1)) {
+if (isset($_POST["userid"]) && (!is_numeric($_POST["userid"]) || $_POST["userid"]<-1)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_user"));
 }
 
 $userid = 0;
-if(isset($_GET["userid"]))
-	$userid = $_GET["userid"];
+if(isset($_POST["userid"]))
+	$userid = $_POST["userid"];
 
-if (isset($_GET["groupid"]) && (!is_numeric($_GET["groupid"]) || $_GET["groupid"]<-1)) {
+if (isset($_POST["groupid"]) && (!is_numeric($_POST["groupid"]) || $_POST["groupid"]<-1)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_group"));
 }
 
-if(isset($_GET["groupid"]))
-	$groupid = $_GET["groupid"];
+if(isset($_POST["groupid"]))
+	$groupid = $_POST["groupid"];
 
-if (isset($_GET["groupid"])&&$_GET["groupid"]!=-1){
+if (isset($_POST["groupid"])&&$_POST["groupid"]!=-1){
 	$group=$dms->getGroup($groupid);
 	if (!$group->isMember($user,true) && !$user->isAdmin())
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));

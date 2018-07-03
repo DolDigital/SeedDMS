@@ -42,8 +42,9 @@ all language and country codes.
 REQUIREMENTS
 ============
 
-SeedDMS is a web-based application written in PHP. It uses the MySQL RDBMS
-or sqlite3 to manage the documents that were uploaded into the application.
+SeedDMS is a web-based application written in PHP. It uses MySQL,
+sqlite3 or postgresql to manage the documents that were uploaded into
+the application. Be aware that postgresql is not very well tested.
 
 Make sure you have PHP 5.3 and MySQL 5 or higher installed. SeedDMS
 will work with PHP running in CGI-mode as well as running as module under
@@ -67,8 +68,33 @@ Here is a detailed list of requirements:
 9. SLIM RestApi
 10. FeedWriter from https://github.com/mibe/FeedWriter
 
+It is highly recommended to use the quickstart archive (seeddms-quickstart-x.y.z.tar.gz)
+because it includes all software packages for running SeedDMS, though you still need
+a working web server with PHP.
 
-BEFORE YOU START
+QUICKSTART
+===========
+
+The fastes way to get SeedDMS running is by unpacking the archive
+`seeddms-quickstart-x.y.z.tar.gz` into your webservers document root.
+It will create a new directory `seeddms51x` containing everything you
+need to run SeedDMS with sqlite3. Make sure that the subdіrectory
+`seeddms51x/data`
+and the configuration file `seeddms51/www/conf/settings.xml` is writeable
+by your web server. All other directories must just be readable by your
+web server. In the next step you need to adjust
+the configuration file in `seeddms51/www/conf/settings.xml`. If you
+are not afraid of xml files, then open it in your favorite text editor
+and search for `/home/wwww-data`. Replace that part in any path found
+with your document root. Alternatively, you can open the installer
+with a browser at http://your-domain/seeddms51x/install/
+It will first ask to unlock the installer by creating a file
+`ENABLE_INSTALL_TOOL` in the diretory `seeddms51/www/conf/`. Change all
+paths by replacing `/home/wwww-data` with your document root. Once done,
+save it, remove the file `ENABLE_INSTALL_TOOL` and point your browser to
+http://your-domain/seeddms51x/.
+
+THE LONG STORY
 ================
 
 SeedDMS has changed its installation process with version 3.0.0. This gives

@@ -33,13 +33,12 @@ include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) { /* {{{ */
 	global $dms, $theme;
-	$view = UI::factory($theme, 'Login', array('dms'=>$dms));
-	$view->exitError($heading, $message, true);
+	UI::exitError($heading, $message, true);
 	return;
 } /* }}} */
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms));
 
 if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
 	$theme = $_REQUEST["sesstheme"];

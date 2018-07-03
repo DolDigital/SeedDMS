@@ -83,5 +83,12 @@ class SeedDMS_Controller_AttributeMgr extends SeedDMS_Controller_Common {
 
 		return true;
 	} /* }}} */
+
+	public function removeattrvalue() { /* {{{ */
+		$attrdef = $this->params['attrdef'];
+		$attrval = $this->params['attrval'];
+		//$attrdef->getObjects($attrval);
+		return $attrdef->removeValue($attrval);
+	} /* }}} */
 }
 

@@ -34,24 +34,24 @@ $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
-	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
 $document = $dms->getDocument($_GET["documentid"]);
 if (!is_object($document)) {
-	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
 $accessop = new SeedDMS_AccessOperation($dms, $document, $user, $settings);
 $folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ || !$document->getLatestContent()) {
-	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 /* Could be that the advanced access rights prohibit access on the content */
 if (!$document->getLatestContent()) {
-	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 /* Recalculate the status of a document and reload the page if the status
@@ -73,8 +73,8 @@ if($view) {
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('previewWidthList', $settings->_previewWidthList);
 	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
-	$view->setParam('previewConverters', $settings->_converters['preview']);
-	$view->setParam('pdfConverters', $settings->_converters['pdf']);
+	$view->setParam('previewConverters', isset($settings->_converters['preview']) ? $settings->_converters['preview'] : array());
+	$view->setParam('pdfConverters', isset($settings->_converters['pdf']) ? $settings->_converters['pdf'] : array());
 	$view->setParam('showFullPreview', $settings->_showFullPreview);
 	$view->setParam('convertToPdf', $settings->_convertToPdf);
 	$view->setParam('currenttab', isset($_GET['currenttab']) ? $_GET['currenttab'] : "");

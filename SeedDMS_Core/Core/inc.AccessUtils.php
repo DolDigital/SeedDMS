@@ -86,5 +86,3 @@ define("N_DELETE_VERSION", 5);
  * Notify when version of document was deleted
  */
 define("N_ADD_DOCUMENT", 6);
-
-?>

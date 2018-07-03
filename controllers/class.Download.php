@@ -25,11 +25,10 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 	public function run() {
 		$dms = $this->params['dms'];
 		$type = $this->params['type'];
-		$content = $this->params['content'];
 
 		switch($type) {
 			case "version":
-
+				$content = $this->params['content'];
 				if(null === $this->callHook('version')) {
 					if(file_exists($dms->contentDir . $content->getPath())) {
 						header("Content-Transfer-Encoding: binary");
@@ -39,7 +38,7 @@ class SeedDMS_Controller_Download extends SeedDMS_Controller_Common {
 						header("Content-Type: " . $content->getMimeType());
 						header("Cache-Control: must-revalidate");
 
-						readfile($dms->contentDir . $content->getPath());
+						sendFile($dms->contentDir.$content->getPath());
 					}
 				}
 				break;

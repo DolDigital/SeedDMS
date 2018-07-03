@@ -85,43 +85,39 @@ $(document).ready(function() {
 
 <form class="form-horizontal" action="../op/op.AddEvent.php" id="form1" name="form1" method="post">
 
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("from");?>:</label>
-			<div class="controls"><?php //$this->printDateChooser(-1, "from");?>
-    		<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
-      		<input class="span6" size="16" name="from" type="text" value="<?php echo $expdate; ?>">
-      		<span class="add-on"><i class="icon-calendar"></i></span>
-    		</span>
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("to");?>:</label>
-			<div class="controls"><?php //$this->printDateChooser(-1, "to");?>
-    		<span class="input-append date span12" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="yyyy-mm-dd">
-      		<input class="span6" size="16" name="to" type="text" value="<?php echo $expdate; ?>">
-      		<span class="add-on"><i class="icon-calendar"></i></span>
-    		</span>
-			</div>
-		</div>
-
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls"><input type="text" name="name" size="60"></div>
-		</div>
-
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls"><textarea name="comment" rows="4" cols="80"></textarea></div>
-		</div>
-		
-		<div class="controls">
-			<input class="btn" type="submit" value="<?php printMLText("add_event");?>">
-		</div>
+<?php
+		$this->formField(
+			getMLText("from"),
+			$this->getDateChooser($expdate, "from", $this->params['session']->getLanguage())
+		);
+		$this->formField(
+			getMLText("to"),
+			$this->getDateChooser($expdate, "to", $this->params['session']->getLanguage())
+		);
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
+		);
+		$this->formSubmit(getMLText('add_event'));
+?>
 
 </form>
+
 <?php
 		$this->contentContainerEnd();
 		$this->contentEnd();

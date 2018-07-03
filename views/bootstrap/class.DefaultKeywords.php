@@ -229,7 +229,7 @@ $(document).ready( function() {
 ?>
 <div class="row-fluid">
 <div class="span4">
-<div class="well">
+<?php	$this->contentContainerStart(); ?>
 <form class="form-horizontal">
 	<div class="control-group">
 		<label class="control-label" for="login"><?php printMLText("selection");?>:</label>
@@ -255,14 +255,14 @@ $(document).ready( function() {
 		</div>
 	</div>
 </form>
-</div>
+<?php	$this->contentContainerEnd(); ?>
 </div>
 
 <div class="span8">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="DefaultKeywords" data-action="form" <?php echo ($selcategoryid ? "data-query=\"categoryid=".$selcategoryid."\"" : "") ?>></div>
 		</div>
-	</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 <?php

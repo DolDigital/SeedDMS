@@ -31,7 +31,7 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassController.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 /* Check if the form data comes from a trusted request */
 if(!checkFormKey('adddocument')) {
@@ -229,6 +229,12 @@ if($settings->_workflowMode == 'traditional' || $settings->_workflowMode == 'tra
 					$approvers["g"][] = $r['approverGroupID'];
 					break;
 				}
+		}
+	}
+	if($settings->_workflowMode == 'traditional' && !$settings->_allowReviewerOnly) {
+		/* Check if reviewers are send but no approvers */
+		if(($reviewers["i"] || $reviewers["g"]) && !$approvers["i"] && !$approvers["g"]) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_uploading_reviewer_only"));
 		}
 	}
 } elseif($settings->_workflowMode == 'advanced') {

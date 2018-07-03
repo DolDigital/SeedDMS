@@ -110,17 +110,18 @@ $(document).ready( function() {
 					<input type="hidden" name="action" value="editcategory">
 					<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 				<?php } ?>
-				<div class="control-group">
-					<label class="control-label"><?php echo getMLText("name")?>:</label>
-					<div class="controls">
-							<input name="name" type="text" value="<?php echo $category ? htmlspecialchars($category->getName()) : '' ?>">&nbsp;
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
-					</div>
-				</div>
+<?php
+			$this->formField(
+				getMLText("name"),
+				array(
+					'element'=>'input',
+					'type'=>'text',
+					'name'=>'name',
+					'value'=>($category ? htmlspecialchars($category->getName()) : '')
+				)
+			);
+			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
+?>
 				</form>
 
 <?php
@@ -148,7 +149,7 @@ $(document).ready( function() {
 		$this->contentHeading(getMLText("global_document_categories"));
 ?>
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span6">
 <form class="form-horizontal">
 			<select class="chzn-select" id="selector" class="input-xlarge">
 				<option value="-1"><?php echo getMLText("choose_category")?>
@@ -164,11 +165,10 @@ $(document).ready( function() {
 		<div class="ajax" data-view="Categories" data-action="info" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
 	</div>
 
-	<div class="span8">
-		<div class="well">
+	<div class="span6">
+		<?php	$this->contentContainerStart(); ?>
 			<div class="ajax" data-view="Categories" data-action="form" <?php echo ($selcat ? "data-query=\"categoryid=".$selcat->getID()."\"" : "") ?>></div>
-
-		</div>
+		<?php	$this->contentContainerEnd(); ?>
 	</div>
 </div>
 	

@@ -70,18 +70,24 @@ class SeedDMS_Preview_Base {
 		if (!is_resource($process)) {
 			throw new Exception("proc_open failed on: " . $cmd);
 		}
+		stream_set_blocking($pipes[1], 0);
+		stream_set_blocking($pipes[2], 0);
 
-		$output = '';
+		$output = $error = '';
 		$timeleft = $timeout - time();
-		$read = array($pipes[1]);
+		$read = array($pipes[1], $pipes[2]);
 		$write = NULL;
 		$exeptions = NULL;
 		do {
-			stream_select($read, $write, $exeptions, $timeleft, 200000);
+			$num_changed_streams = stream_select($read, $write, $exeptions, $timeleft, 200000);
 
-			if (!empty($read)) {
+			if ($num_changed_streams === false) {
+				proc_terminate($process);
+				throw new Exception("stream select failed on: " . $cmd);
+			} elseif ($num_changed_streams > 0) {
 				$output .= fread($pipes[1], 8192);
-													}
+				$error .= fread($pipes[2], 8192);
+			}
 			$timeleft = $timeout - time();
 		} while (!feof($pipes[1]) && $timeleft > 0);
 
@@ -89,7 +95,7 @@ class SeedDMS_Preview_Base {
 			proc_terminate($process);
 			throw new Exception("command timeout on: " . $cmd);
 		} else {
-			return $output;
+			return array('stdout'=>$output, 'stderr'=>$error);
 		}
 	} /* }}} */
 
@@ -129,5 +135,24 @@ class SeedDMS_Preview_Base {
 		return array_key_exists($mimetype, $this->converters) && $this->converters[$mimetype];
 	} /* }}} */
 
+/**
+ * Send a file from disk to the browser
+ *
+ * This function uses either readfile() or the xѕendfile apache module if
+ * it is installed.
+ *
+ * @param string $filename
+ */
+	protected function sendFile($filename) { /* {{{ */
+		if(function_exists('apache_get_modules') && in_array('mod_xsendfile',apache_get_modules())) {
+			header("X-Sendfile: ".$filename);
+		} else {
+			/* Make sure output buffering is off */
+			if (ob_get_level()) {
+				ob_end_clean();
+			}
+			readfile($filename);
+		}
+	} /* }}} */
 }
 

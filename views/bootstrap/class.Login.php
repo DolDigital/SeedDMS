@@ -121,60 +121,55 @@ $(document).ready( function() {
 		if ($refer) {
 			echo "<input type='hidden' name='referuri' value='".sanitizeString($refer)."'/>";
 		}
-?>
-	<div class="control-group">
-		<label class="control-label" for="login"><?php printMLText("user_login");?>:</label>
-		<div class="controls">
-			<input type="text" id="login" name="login" placeholder="login" autocomplete="off" required>
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="pwd"><?php printMLText("password");?>:</label>
-		<div class="controls">
-			<input type="Password" id="pwd" name="pwd" autocomplete="off" required>
-		</div>
-	</div>
-<?php if($enableLanguageSelector) { ?>
-	<div class="control-group">
-		<label class="control-label" for="pwd"><?php printMLText("language");?>:</label>
-		<div class="controls">
-<?php
-			print "<select id=\"languageselector\" name=\"lang\">";
-			print "<option value=\"\">-";
+		$this->formField(
+			getMLText("user_login"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'login',
+				'name'=>'login',
+				'placeholder'=>'login',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("password"),
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'pwd',
+				'name'=>'pwd',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
+		);
+		if($enableLanguageSelector) {
+			$html = "<select id=\"languageselector\" name=\"lang\">";
+			$html .= "<option value=\"\">-";
 			foreach ($languages as $currLang) {
-				print "<option value=\"".$currLang."\">".getMLText($currLang)."</option>";
+				$html .= "<option value=\"".$currLang."\">".getMLText($currLang)."</option>";
 			}
-			print "</select>";
-?>
-		</div>
-	</div>
-<?php
-	}
-	if($enableThemeSelector) {
-?>
-	<div class="control-group">
-		<label class="control-label" for="pwd"><?php printMLText("theme");?>:</label>
-		<div class="controls">
-			
-<?php
-			print "<select id=\"themeselector\" name=\"sesstheme\">";
-			print "<option value=\"\">-";
+			$html .= "</select>";
+			$this->formField(
+				getMLText("language"),
+				$html
+			);
+		}
+		if($enableThemeSelector) {
+			$html = "<select id=\"themeselector\" name=\"sesstheme\">";
+			$html .= "<option value=\"\">-";
 			foreach ($themes as $currTheme) {
-				print "<option value=\"".$currTheme."\">".$currTheme;
+				$html .= "<option value=\"".$currTheme."\">".$currTheme;
 			}
-			print "</select>";
+			$html .= "</select>";
+			$this->formField(
+				getMLText("theme"),
+				$html
+			);
+		}
+		$this->formSubmit(getMLText('submit_login'));
 ?>
-		</div>
-	</div>
-<?php
-	}
-?>
-	<div class="control-group">
-		<div class="controls">
-		<button type="submit" class="btn"><?php printMLText("submit_login") ?></button>
-		</div>
-	</div>
-		
 </form>
 <?php
 		$this->contentContainerEnd();

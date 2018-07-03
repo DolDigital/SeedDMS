@@ -91,6 +91,8 @@ class Settings { /* {{{ */
 	var $_dropFolderDir = null;
 	// Where the backup directory is located
 	var $_backupDir = null;
+	// Where the repository for extensions is located
+	var $_repositoryUrl = null;
 	// enable removal of file from dropfolder after success import
 	var $_removeFromDropFolder = false;
 	// Where the stop word file is located
@@ -160,6 +162,8 @@ class Settings { /* {{{ */
 	var $_versioningFileName = "versioning_info.txt";
 	// the mode of workflow
 	var $_workflowMode = "traditional";
+	// Allow to set just a reviewer in tradional workflow
+	var $_allowReviewerOnly = true;
 	// enable/disable log system
 	var $_logFileEnable = true;
 	// the log file rotation
@@ -172,6 +176,8 @@ class Settings { /* {{{ */
 	var $_maxUploadSize = 0;
 	// enable/disable users images
 	var $_enableUserImage = false;
+	// enable/disable replacing documents by webdav
+	var $_enableWebdavReplaceDoc = true;
 	// enable/disable calendar
 	var $_enableCalendar = true;
 	// calendar default view ("w" for week,"m" for month,"y" for year)
@@ -210,6 +216,8 @@ class Settings { /* {{{ */
 	var $_sortUsersInList = '';
 	// Sort method for forders and documents ('n' (name) or '')
 	var $_sortFoldersDefault = '';
+	// Where to insert new documents ('start' or 'end')
+	var $_defaultDocPosition = 'end';
 	// Set valid IP for admin logins
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
@@ -346,6 +354,26 @@ class Settings { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Return ';' seperated string from array
+	 *
+	 * @param array $value
+	 *
+	 */
+	function arrayToString($value) { /* {{{ */
+    return implode(";", $value);
+  } /* }}} */
+
+	/**
+	 * Return array from ';' seperated string
+	 *
+	 * @param string $value
+	 *
+	 */
+	function stringToArray($value) { /* {{{ */
+    return explode(";", $Value);
+  } /* }}} */
+
+	/**
 	 * set $_viewOnlineFileTypes
 	 *
 	 * @param string $stringValue string value
@@ -457,53 +485,68 @@ class Settings { /* {{{ */
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
+		$this->_defaultDocPosition = strval($tab["defaultDocPosition"]);
+
+		// XML Path: /configuration/site/calendar
+		$node = $xml->xpath('/configuration/site/webdav');
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableWebdavReplaceDoc = Settings::boolVal($tab["enableWebdavReplaceDoc"]);
+		}
 
 		// XML Path: /configuration/site/calendar
 		$node = $xml->xpath('/configuration/site/calendar');
-		$tab = $node[0]->attributes();
-		$this->_enableCalendar = Settings::boolVal($tab["enableCalendar"]);
-		$this->_calendarDefaultView = strval($tab["calendarDefaultView"]);
-		$this->_firstDayOfWeek = intval($tab["firstDayOfWeek"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableCalendar = Settings::boolVal($tab["enableCalendar"]);
+			$this->_calendarDefaultView = strval($tab["calendarDefaultView"]);
+			$this->_firstDayOfWeek = intval($tab["firstDayOfWeek"]);
+		}
 
 		// XML Path: /configuration/system/server
 		$node = $xml->xpath('/configuration/system/server');
-		$tab = $node[0]->attributes();
-		$this->_rootDir = strval($tab["rootDir"]);
-		$this->_httpRoot = strval($tab["httpRoot"]);
-		$this->_contentDir = strval($tab["contentDir"]);
-		if($this->_contentDir && substr($this->_contentDir, -1, 1) != DIRECTORY_SEPARATOR)
-			$this->_contentDir .= DIRECTORY_SEPARATOR;
-		$this->_cacheDir = strval($tab["cacheDir"]);
-		$this->_stagingDir = strval($tab["stagingDir"]);
-		$this->_luceneDir = strval($tab["luceneDir"]);
-		$this->_dropFolderDir = strval($tab["dropFolderDir"]);
-		$this->_backupDir = strval($tab["backupDir"]);
-		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
-		$this->_logFileRotation = strval($tab["logFileRotation"]);
-		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
-		$this->_partitionSize = strval($tab["partitionSize"]);
-		$this->_maxUploadSize = strval($tab["maxUploadSize"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_rootDir = strval($tab["rootDir"]);
+			$this->_httpRoot = strval($tab["httpRoot"]);
+			$this->_contentDir = strval($tab["contentDir"]);
+			if($this->_contentDir && substr($this->_contentDir, -1, 1) != DIRECTORY_SEPARATOR)
+				$this->_contentDir .= DIRECTORY_SEPARATOR;
+			$this->_cacheDir = strval($tab["cacheDir"]);
+			$this->_stagingDir = strval($tab["stagingDir"]);
+			$this->_luceneDir = strval($tab["luceneDir"]);
+			$this->_dropFolderDir = strval($tab["dropFolderDir"]);
+			$this->_backupDir = strval($tab["backupDir"]);
+			$this->_repositoryUrl = strval($tab["repositoryUrl"]);
+			$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
+			$this->_logFileRotation = strval($tab["logFileRotation"]);
+			$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
+			$this->_partitionSize = strval($tab["partitionSize"]);
+			$this->_maxUploadSize = strval($tab["maxUploadSize"]);
+		}
 
 		// XML Path: /configuration/system/authentication
 		$node = $xml->xpath('/configuration/system/authentication');
-		$tab = $node[0]->attributes();
-		$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
-		$this->_enableGuestAutoLogin = Settings::boolVal($tab["enableGuestAutoLogin"]);
-		$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
-		$this->_passwordStrength = intval($tab["passwordStrength"]);
-		$this->_passwordStrengthAlgorithm = strval($tab["passwordStrengthAlgorithm"]);
-		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
-		$this->_passwordHistory = intval($tab["passwordHistory"]);
-		$this->_loginFailure = intval($tab["loginFailure"]);
-		$this->_autoLoginUser = intval($tab["autoLoginUser"]);
-		$this->_quota = intval($tab["quota"]);
-		$this->_undelUserIds = strval($tab["undelUserIds"]);
-		$this->_encryptionKey = strval($tab["encryptionKey"]);
-		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
-		$this->_defaultAccessDocs = intval($tab["defaultAccessDocs"]);
-		$this->_restricted = Settings::boolVal($tab["restricted"]);
-		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
-		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
+			$this->_enableGuestAutoLogin = Settings::boolVal($tab["enableGuestAutoLogin"]);
+			$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
+			$this->_passwordStrength = intval($tab["passwordStrength"]);
+			$this->_passwordStrengthAlgorithm = strval($tab["passwordStrengthAlgorithm"]);
+			$this->_passwordExpiration = intval($tab["passwordExpiration"]);
+			$this->_passwordHistory = intval($tab["passwordHistory"]);
+			$this->_loginFailure = intval($tab["loginFailure"]);
+			$this->_autoLoginUser = intval($tab["autoLoginUser"]);
+			$this->_quota = intval($tab["quota"]);
+			$this->_undelUserIds = strval($tab["undelUserIds"]);
+			$this->_encryptionKey = strval($tab["encryptionKey"]);
+			$this->_cookieLifetime = intval($tab["cookieLifetime"]);
+			$this->_defaultAccessDocs = intval($tab["defaultAccessDocs"]);
+			$this->_restricted = Settings::boolVal($tab["restricted"]);
+			$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
+			$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
+		}
 
 		// XML Path: /configuration/system/authentication/connectors/connector
 		// attributs mandatories : type enable
@@ -549,13 +592,15 @@ class Settings { /* {{{ */
 
 		// XML Path: /configuration/system/database
 		$node = $xml->xpath('/configuration/system/database');
-		$tab = $node[0]->attributes();
-		$this->_dbDriver = strval($tab["dbDriver"]);
-		$this->_dbHostname = strval($tab["dbHostname"]);
-		$this->_dbDatabase = strval($tab["dbDatabase"]);
-		$this->_dbUser = strval($tab["dbUser"]);
-		$this->_dbPass = strval($tab["dbPass"]);
-		$this->_doNotCheckDBVersion = Settings::boolVal($tab["doNotCheckDBVersion"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_dbDriver = strval($tab["dbDriver"]);
+			$this->_dbHostname = strval($tab["dbHostname"]);
+			$this->_dbDatabase = strval($tab["dbDatabase"]);
+			$this->_dbUser = strval($tab["dbUser"]);
+			$this->_dbPass = strval($tab["dbPass"]);
+			$this->_doNotCheckDBVersion = Settings::boolVal($tab["doNotCheckDBVersion"]);
+		}
 
 		// XML Path: /configuration/system/smtp
 		$node = $xml->xpath('/configuration/system/smtp');
@@ -584,33 +629,40 @@ class Settings { /* {{{ */
 
 		// XML Path: /configuration/advanced/display
 		$node = $xml->xpath('/configuration/advanced/display');
-		$tab = $node[0]->attributes();
-		$this->_siteDefaultPage = strval($tab["siteDefaultPage"]);
-		$this->_rootFolderID = intval($tab["rootFolderID"]);
-		$this->_titleDisplayHack = Settings::boolval($tab["titleDisplayHack"]);
-		$this->_showMissingTranslations = Settings::boolval($tab["showMissingTranslations"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_siteDefaultPage = strval($tab["siteDefaultPage"]);
+			$this->_rootFolderID = intval($tab["rootFolderID"]);
+			$this->_titleDisplayHack = Settings::boolval($tab["titleDisplayHack"]);
+			$this->_showMissingTranslations = Settings::boolval($tab["showMissingTranslations"]);
+		}
 
 		// XML Path: /configuration/advanced/authentication
 		$node = $xml->xpath('/configuration/advanced/authentication');
-		$tab = $node[0]->attributes();
-		$this->_guestID = intval($tab["guestID"]);
-		$this->_adminIP = strval($tab["adminIP"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_guestID = intval($tab["guestID"]);
+			$this->_adminIP = strval($tab["adminIP"]);
+		}
 
 		// XML Path: /configuration/advanced/edition
 		$node = $xml->xpath('/configuration/advanced/edition');
-		$tab = $node[0]->attributes();
-		$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
-		$this->_enableOwnerRevApp = Settings::boolval($tab["enableOwnerRevApp"]);
-		$this->_enableSelfRevApp = Settings::boolval($tab["enableSelfRevApp"]);
-		$this->_enableUpdateRevApp = Settings::boolval($tab["enableUpdateRevApp"]);
-		$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
-		$this->_versioningFileName = strval($tab["versioningFileName"]);
-		$this->_workflowMode = strval($tab["workflowMode"]);
-		$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
-		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
-		$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
-		$this->_overrideMimeType = Settings::boolval($tab["overrideMimeType"]);
-		$this->_removeFromDropFolder = Settings::boolval($tab["removeFromDropFolder"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
+			$this->_enableOwnerRevApp = Settings::boolval($tab["enableOwnerRevApp"]);
+			$this->_enableSelfRevApp = Settings::boolval($tab["enableSelfRevApp"]);
+			$this->_enableUpdateRevApp = Settings::boolval($tab["enableUpdateRevApp"]);
+			$this->_presetExpirationDate = strval($tab["presetExpirationDate"]);
+			$this->_versioningFileName = strval($tab["versioningFileName"]);
+			$this->_workflowMode = strval($tab["workflowMode"]);
+			$this->_allowReviewerOnly = Settings::boolval($tab["allowReviewerOnly"]);
+			$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
+			$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
+			$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
+			$this->_overrideMimeType = Settings::boolval($tab["overrideMimeType"]);
+			$this->_removeFromDropFolder = Settings::boolval($tab["removeFromDropFolder"]);
+		}
 
 		// XML Path: /configuration/advanced/notification
 		$node = $xml->xpath('/configuration/advanced/notification');
@@ -623,18 +675,20 @@ class Settings { /* {{{ */
 
 		// XML Path: /configuration/advanced/server
 		$node = $xml->xpath('/configuration/advanced/server');
-		$tab = $node[0]->attributes();
-		$this->_coreDir = strval($tab["coreDir"]);
-		$this->_luceneClassDir = strval($tab["luceneClassDir"]);
-		$this->_extraPath = strval($tab["extraPath"]);
-		$this->_contentOffsetDir = strval($tab["contentOffsetDir"]);
-		$this->_maxDirID = intval($tab["maxDirID"]);
-		$this->_updateNotifyTime = intval($tab["updateNotifyTime"]);
-		$this->_cmdTimeout = intval($tab["cmdTimeout"]);
-		if (isset($tab["maxExecutionTime"]))
-			$this->_maxExecutionTime = intval($tab["maxExecutionTime"]);
-		else
-			$this->_maxExecutionTime = ini_get("max_execution_time");
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_coreDir = strval($tab["coreDir"]);
+			$this->_luceneClassDir = strval($tab["luceneClassDir"]);
+			$this->_extraPath = strval($tab["extraPath"]);
+			$this->_contentOffsetDir = strval($tab["contentOffsetDir"]);
+			$this->_maxDirID = intval($tab["maxDirID"]);
+			$this->_updateNotifyTime = intval($tab["updateNotifyTime"]);
+			$this->_cmdTimeout = intval($tab["cmdTimeout"]);
+			if (isset($tab["maxExecutionTime"]))
+				$this->_maxExecutionTime = intval($tab["maxExecutionTime"]);
+			else
+				$this->_maxExecutionTime = ini_get("max_execution_time");
+		}
 
 		// XML Path: /configuration/system/advanced/converters
 		$convertergroups = $xml->xpath('/configuration/advanced/converters');
@@ -775,6 +829,11 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
     $this->setXMLAttributValue($node, "sortFoldersDefault", $this->_sortFoldersDefault);
+    $this->setXMLAttributValue($node, "defaultDocPosition", $this->_defaultDocPosition);
+
+    // XML Path: /configuration/site/calendar
+    $node = $this->getXMLNode($xml, '/configuration/site', 'webdav');
+		$this->setXMLAttributValue($node, "enableWebdavReplaceDoc", $this->_enableWebdavReplaceDoc);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');
@@ -793,6 +852,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
     $this->setXMLAttributValue($node, "dropFolderDir", $this->_dropFolderDir);
     $this->setXMLAttributValue($node, "backupDir", $this->_backupDir);
+    $this->setXMLAttributValue($node, "repositoryUrl", $this->_repositoryUrl);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
     $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);
@@ -908,6 +968,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
     $this->setXMLAttributValue($node, "presetExpirationDate", $this->_presetExpirationDate);
     $this->setXMLAttributValue($node, "workflowMode", $this->_workflowMode);
+    $this->setXMLAttributValue($node, "allowReviewerOnly", $this->_allowReviewerOnly);
     $this->setXMLAttributValue($node, "enableVersionDeletion", $this->_enableVersionDeletion);
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
     $this->setXMLAttributValue($node, "enableDuplicateDocNames", $this->_enableDuplicateDocNames);

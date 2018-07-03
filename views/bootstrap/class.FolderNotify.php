@@ -69,7 +69,7 @@ $(document).ready(function() {
 		$folder = $this->params['folder'];
 		$allUsers = $this->params['allusers'];
 		$allGroups = $this->params['allgroups'];
-		$strictformcheck = $this->params['strictformcheck'];
+		$sortusersinlist = $this->params['sortusersinlist'];
 
 		$notifyList = $folder->getNotifyList();
 
@@ -131,50 +131,50 @@ $(document).ready(function() {
 
 ?>
 <br>
-<form action="../op/op.FolderNotify.php" method="post" id="form1" name="form1">
+<form class="form-horizontal" action="../op/op.FolderNotify.php" method="post" id="form1" name="form1">
 <?php	echo createHiddenFieldWithKey('foldernotify'); ?>
-<input type="Hidden" name="folderid" value="<?php print $folder->getID()?>">
-<input type="Hidden" name="action" value="addnotify">
-<table class="table-condensed">
-	<tr>
-		<td><?php printMLText("user");?>:</td>
-		<td>
-			<select name="userid">
-				<option value="-1"><?php printMLText("select_one");?>
-				<?php
-					if ($user->isAdmin()) {
-						foreach ($allUsers as $userObj) {
-							if (!$userObj->isGuest() && ($folder->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
-								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
-						}
-					}
-					elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
-						print "<option value=\"".$user->getID()."\">" . htmlspecialchars($user->getFullName()) . "\n";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td><?php printMLText("group");?>:</td>
-		<td>
-			<select name="groupid">
-				<option value="-1"><?php printMLText("select_one");?>
-				<?php
-					foreach ($allGroups as $groupObj) {
-						if (($user->isAdmin() || $groupObj->isMember($user,true)) && $folder->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
-							print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
-						}
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><input type="submit" class="btn" value="<?php printMLText("add") ?>"></td>
-	</tr>
-</table>
+<input type="hidden" name="folderid" value="<?php print $folder->getID()?>">
+<input type="hidden" name="action" value="addnotify">
+<?php
+		$options = array();
+		$options[] = array('-1', getMLText("select_one"));
+		if ($user->isAdmin()) {
+			$allUsers = $dms->getAllUsers($sortusersinlist);
+			foreach ($allUsers as $userObj) {
+				if (!$userObj->isGuest() && !$userObj->isDisabled() && ($folder->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
+					$options[] = array($userObj->getID(), htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()));
+			}
+		} elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
+			$options[] = array($user->getID(), htmlspecialchars($user->getLogin() . " - " .$user->getFullName()));
+		}
+		$this->formField(
+			getMLText("user"),
+			array(
+				'element'=>'select',
+				'id'=>'userid',
+				'name'=>'userid',
+				'options'=>$options
+			)
+		);
+		$options = array();
+		$options[] = array('-1', getMLText("select_one"));
+		$allGroups = $dms->getAllGroups();
+		foreach ($allGroups as $groupObj) {
+			if (($user->isAdmin() || $groupObj->isMember($user,true)) && $folder->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
+				$options[] =  array($groupObj->getID(), htmlspecialchars($groupObj->getName()));
+			}
+		}
+		$this->formField(
+			getMLText("group"),
+			array(
+				'element'=>'select',
+				'id'=>'groupid',
+				'name'=>'groupid',
+				'options'=>$options
+			)
+		);
+		$this->formSubmit(getMLText('add'));
+?>
 </form>
 
 <?php

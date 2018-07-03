@@ -46,22 +46,16 @@ class SeedDMS_View_SendLoginData extends SeedDMS_Bootstrap_Style {
 <input type="hidden" name="userid" value="<?php print $newuser->getID();?>">
 <input type="hidden" name="action" value="sendlogindata">
 <?php echo createHiddenFieldWithKey('sendlogindata'); ?>
-
-<div class="control-group">
-	<label class="control-label" for="assignTo">
-<?php printMLText("comment"); ?>:
-	</label>
-	<div class="controls">
-		<textarea name="comment"></textarea>
-	</div>
-</div>
-
-<div class="control-group">
-	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-envelope-alt"></i> <?php printMLText("send_email");?></button>
-	</div>
-</div>
-
+<?php
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+			)
+		);
+		$this->formSubmit("<i class=\"icon-envelope-alt\"></i> ".getMLText('send_email'));
+?>
 </form>
 <?php
 		$this->contentContainerEnd();

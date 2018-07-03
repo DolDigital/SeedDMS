@@ -35,15 +35,7 @@ $(document).ready( function() {
 			$(ev.currentTarget).datepicker('hide');
 		});
 
-//	$(".chzn-select").chosen({width: "95%"});
-//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
 	$(".chzn-select").select2({
-		width: '100%',
-		templateResult: chzn_template_func
-	});
-	$(".chzn-select-deselect").select2({
-		allowClear:true,
 		width: '100%',
 		templateResult: chzn_template_func
 	});
@@ -376,11 +368,24 @@ $(document).ready( function() {
 			element.prepend('<div style="position: _absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: 200px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-//			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
 				templateResult: chzn_template_func
 			});
+			$(".pwd").passStrength({ /* {{{ */
+				url: "../op/op.Ajax.php",
+				onChange: function(data, target) {
+					pwsp = 100*data.score;
+					$('#'+target+' div.bar').width(pwsp+'%');
+					if(data.ok) {
+						$('#'+target+' div.bar').removeClass('bar-danger');
+						$('#'+target+' div.bar').addClass('bar-success');
+					} else {
+						$('#'+target+' div.bar').removeClass('bar-success');
+						$('#'+target+' div.bar').addClass('bar-danger');
+					}
+				}
+			}); /* }}} */
 		});
 	}); /* }}} */
 
@@ -410,7 +415,6 @@ $(document).ready( function() {
 		element.prepend('<div style="position: absolute; overflow: hidden; background: #f7f7f7; z-index: 1000; height: '+element.height()+'px; width: '+element.width()+'px; opacity: 0.7; display: table;"><div style="display: table-cell;text-align: center; vertical-align: middle; "><img src="../views/bootstrap/images/ajax-loader.gif"></div>');
 		$.get(url, function(data) {
 			element.html(data);
-//			$(".chzn-select").chosen();
 			$(".chzn-select").select2({
 				width: '100%',
 				templateResult: chzn_template_func
@@ -1003,7 +1007,7 @@ $(document).ready(function() { /* {{{ */
 	});
 }); /* }}} */
 
-	var approval_count, review_count, receipt_count, revision_count;
+	var approval_count, review_count, workflow_count;
 	var checkTasks = function() {
 		$.ajax({url: '../out/out.Tasks.php',
 			type: 'GET',
@@ -1011,11 +1015,13 @@ $(document).ready(function() { /* {{{ */
 			data: {action: 'mytasks'},
 			success: function(data) {
 				if(data) {
-					if(approval_count != data.data.approval.length ||
-						 review_count != data.data.review.length) {
+					if((typeof data.data.approval != 'undefined' && approval_count != data.data.approval.length) ||
+						 (typeof data.data.review != 'undefined' && review_count != data.data.review.length) ||
+						 (typeof data.data.workflow != 'undefined' && workflow_count != data.data.workflow.length)) {
 						$("#menu-tasks > ul > li").html('Loading').hide().load('../out/out.Tasks.php?action=menutasks').fadeIn('500')
-						approval_count = data.data.approval.length;
-						review_count = data.data.review.length;
+						approval_count = typeof data.data.approval != 'undefined' ? data.data.approval.length : 0;
+						review_count = typeof data.data.review != 'undefined' ? data.data.review.length : 0;
+						workflow_count = typeof data.data.workflow != 'undefined' ? data.data.workflow.length : 0;
 					}
 				}
 			},

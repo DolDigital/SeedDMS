@@ -150,7 +150,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("owner");?>:</td>
 <td>
-<select class="chzn-select-deselect" name="ownerid" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<select class="chzn-select" name="ownerid" data-allow-clear="true" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <option value="-1"></option>
 <?php
 		foreach ($allUsers as $userObj) {
@@ -393,7 +393,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("owner");?>:</td>
 <td>
-<select class="chzn-select-deselect" name="ownerid" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
+<select class="chzn-select" name="ownerid" data-allow-clear="true" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <option value="-1"></option>
 <?php
 			foreach ($allUsers as $userObj) {

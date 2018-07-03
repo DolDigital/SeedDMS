@@ -123,7 +123,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "5.1.5");
+define("SEEDDMS_VERSION", "5.1.9");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -175,6 +175,7 @@ if(!$settings->_contentDir) {
 	$settings->_luceneDir = $settings->_contentDir . 'lucene/';
 	$settings->_stagingDir = $settings->_contentDir . 'staging/';
 	$settings->_cacheDir = $settings->_contentDir . 'cache/';
+	$settings->_backupDir = $settings->_contentDir . 'backup/';
 } else {
 	if(!$settings->_cacheDir) {
 		$settings->_cacheDir = $settings->_contentDir . 'cache/';

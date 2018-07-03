@@ -82,29 +82,25 @@ $(document).ready( function() {
 		<input type="hidden" name="version" value="<?php print $latestContent->getVersion(); ?>">
 		<input type="hidden" name="showtree" value="<?php echo showtree();?>">
 
-		<div class="control-group">
-			<label class="control-label">
-				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
-      		</label>
-      		<div class="controls">
 <?php
-					echo "<select id=\"selector\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
 					$workflows=$dms->getAllWorkflows();
+					$options = array();
 					foreach ($workflows as $workflow) {
-						print "<option value=\"".$workflow->getID()."\"";
-						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-							echo " selected=\"selected\"";
-						print ">". htmlspecialchars($workflow->getName())."</option>";
+						$options[] = array($workflow->getID(), htmlspecialchars($workflow->getName()), $mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID());
 					}
-					echo "</select>";
+					$this->formField(
+						getMLText("workflow"),
+						array(
+							'element'=>'select',
+							'id'=>'selector',
+							'name'=>'workflow',
+							'data-placeholder'=>getMLText('select_workflow'),
+							'options'=>$options
+						)
+					);
+					$this->formSubmit(getMLText('set_workflow'));
 ?>
-			</div>
-		</div>
-
-		<div class="controls">
-			<input type="submit" class="btn" value="<?php printMLText("set_workflow");?>">
-		</div>
 
 		</form>
 <?php

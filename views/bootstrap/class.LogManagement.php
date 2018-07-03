@@ -52,8 +52,8 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			print "<td><input type=\"checkbox\" name=\"logname[]\" value=\"".$entry."\"/></td>\n";
 			print "<td><a href=\"out.LogManagement.php?logname=".$entry."\">".$entry."</a></td>\n";
 			print "\n";
-			print "<td>".getLongReadableDate(filectime($this->contentdir.$entry))."</td>\n";
-			print "<td>".SeedDMS_Core_File::format_filesize(filesize($this->contentdir.$entry))."</td>\n";
+			print "<td>".getLongReadableDate(filectime($this->logdir.$entry))."</td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize(filesize($this->logdir.$entry))."</td>\n";
 			print "<td>";
 			
 			print "<a href=\"out.RemoveLog.php?mode=".$mode."&logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
@@ -65,7 +65,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			print "</tr>\n";
 		}
 
-		if ($print_header) printMLText("empty_notify_list");
+		if ($print_header) printMLText("empty_list");
 		else print "<tr><td><i class=\"icon-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form>\n";
 	} /* }}} */
 
@@ -86,7 +86,7 @@ $(document).ready( function() {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$this->contentdir = $this->params['contentdir'];
+		$this->logdir = $this->params['logdir'];
 		$logname = $this->params['logname'];
 		$mode = $this->params['mode'];
 
@@ -100,10 +100,10 @@ $(document).ready( function() {
 
 		$entries = array();
 		$wentries = array();
-		$handle = opendir($this->contentdir);
+		$handle = opendir($this->logdir);
 		if($handle) {
 			while ($e = readdir($handle)){
-				if (is_dir($this->contentdir.$e)) continue;
+				if (is_dir($this->logdir.$e)) continue;
 				if (strpos($e,".log")==FALSE) continue;
 				if (strcmp($e,"current.log")==0) continue;
 				if(substr($e, 0, 6) ==  'webdav') {
@@ -151,9 +151,9 @@ $(document).ready( function() {
 <?php
 		$this->contentEnd();
 		$this->htmlEndPage();
-		} elseif(file_exists($this->contentdir.$logname)){
+		} elseif(file_exists($this->logdir.$logname)){
 			echo $logname."<pre>\n";
-			readfile($this->contentdir.$logname);
+			readfile($this->logdir.$logname);
 			echo "</pre>\n";
 		} else {
 			UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));

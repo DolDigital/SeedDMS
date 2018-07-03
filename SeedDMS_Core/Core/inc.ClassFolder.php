@@ -73,6 +73,48 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 */
 	protected $_sequence;
 
+	/**
+	 * @var
+	 */
+	protected $_date;
+
+	/**
+	 * @var SeedDMS_Core_Folder
+	 */
+	protected $_parent;
+
+	/**
+	 * @var SeedDMS_Core_User
+	 */
+	protected $_owner;
+
+	/**
+	 * @var SeedDMS_Core_Folder[]
+	 */
+	protected $_subFolders;
+
+	/**
+	 * @var SeedDMS_Core_Document[]
+	 */
+	protected $_documents;
+
+	/**
+	 * @var SeedDMS_Core_UserAccess[]|SeedDMS_Core_GroupAccess[]
+	 */
+	protected $_accessList;
+
+	/**
+	 * SeedDMS_Core_Folder constructor.
+	 * @param $id
+	 * @param $name
+	 * @param $parentID
+	 * @param $comment
+	 * @param $date
+	 * @param $ownerID
+	 * @param $inheritAccess
+	 * @param $defaultAccess
+	 * @param $sequence
+	 */
 	function __construct($id, $name, $parentID, $comment, $date, $ownerID, $inheritAccess, $defaultAccess, $sequence) { /* {{{ */
 		parent::__construct($id);
 		$this->_id = $id;
@@ -91,6 +133,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Return an array of database fields which used for searching
 	 * a term entered in the database search form
 	 *
+	 * @param SeedDMS_Core_DMS $dms
 	 * @param array $searchin integer list of search scopes (2=name, 3=comment,
 	 * 4=attributes)
 	 * @return array list of database fields
@@ -129,7 +172,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Return a folder by its id
 	 *
 	 * @param integer $id id of folder
-	 * @return object/boolean instance of SeedDMS_Core_Folder if document exists, null
+	 * @param SeedDMS_Core_DMS $dms
+	 * @return SeedDMS_Core_Folder|bool instance of SeedDMS_Core_Folder if document exists, null
 	 * if document does not exist, false in case of error
 	 */
 	public static function getInstance($id, $dms) { /* {{{ */
@@ -144,22 +188,24 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$resArr = $resArr[0];
 		$classname = $dms->getClassname('folder');
+		/** @var SeedDMS_Core_Folder $folder */
 		$folder = new $classname($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
 		$folder->setDMS($dms);
 		return $folder;
 	} /* }}} */
 
-	/*
+	/**
 	 * Get the name of the folder.
 	 *
 	 * @return string name of folder
 	 */
 	public function getName() { return $this->_name; }
 
-	/*
+	/**
 	 * Set the name of the folder.
 	 *
 	 * @param string $newName set a new name of the folder
+	 * @return bool
 	 */
 	public function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -173,8 +219,15 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return string
+	 */
 	public function getComment() { return $this->_comment; }
 
+	/**
+	 * @param $newComment
+	 * @return bool
+	 */
 	public function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -222,7 +275,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	/**
 	 * Returns the parent
 	 *
-	 * @return object parent folder or false if there is no parent folder
+	 * @return bool|SeedDMS_Core_Folder
 	 */
 	public function getParent() { /* {{{ */
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
@@ -239,10 +292,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Check if the folder is subfolder
 	 *
 	 * This function checks if the passed folder is a subfolder of the current
-	 * folder. 
+	 * folder.
 	 *
-	 * @param object $subFolder potential sub folder
-	 * @return boolean true if passes folder is a subfolder
+	 * @param SeedDMS_Core_Folder $subfolder
+	 * @return bool true if passes folder is a subfolder
 	 */
 	function isSubFolder($subfolder) { /* {{{ */
 		$target_path = $subfolder->getPath();
@@ -259,7 +312,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * This function moves a folder from one parent folder into another parent
 	 * folder. It will fail if the root folder is moved.
 	 *
-	 * @param object $newParent new parent folder
+	 * @param SeedDMS_Core_Folder $newParent new parent folder
 	 * @return boolean true if operation was successful otherwise false
 	 */
 	public function setParent($newParent) { /* {{{ */
@@ -313,6 +366,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		foreach ($resArr as $row) {
 			$newPath = preg_replace("/^.*:".$this->_id.":(.*$)/", $pathPrefix."\\1", $row["folderList"]);
 			$queryStr="UPDATE `tblDocuments` SET `folderList` = '".$newPath."' WHERE `tblDocuments`.`id` = '".$row["id"]."'";
+			/** @noinspection PhpUnusedLocalVariableInspection */
 			$res = $db->getResult($queryStr);
 		}
 
@@ -325,6 +379,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		foreach ($resArr as $row) {
 			$newPath = preg_replace("/^.*:".$this->_id.":(.*$)/", $pathPrefix."\\1", $row["folderList"]);
 			$queryStr="UPDATE `tblFolders` SET `folderList` = '".$newPath."' WHERE `tblFolders`.`id` = '".$row["id"]."'";
+			/** @noinspection PhpUnusedLocalVariableInspection */
 			$res = $db->getResult($queryStr);
 		}
 
@@ -345,7 +400,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	/**
 	 * Set the owner
 	 *
-	 * @param object new owner of the folder
+	 * @param SeedDMS_Core_User $newOwner of the folder
 	 * @return boolean true if successful otherwise false
 	 */
 	function setOwner($newOwner) { /* {{{ */
@@ -360,6 +415,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
+	/**
+	 * @return bool|int
+	 */
 	function getDefaultAccess() { /* {{{ */
 		if ($this->inheritsAccess()) {
 			$res = $this->getParent();
@@ -378,6 +436,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @param integer $mode access mode
 	 * @param boolean $noclean set to true if notifier list shall not be clean up
+	 * @return bool
 	 */
 	function setDefaultAccess($mode, $noclean=false) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -450,7 +509,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function hasSubFolders() { /* {{{ */
 		$db = $this->_dms->getDB();
 		if (isset($this->_subFolders)) {
-			return count($this->subFolders);
+			/** @noinspection PhpUndefinedFieldInspection */
+			return count($this->subFolders); /** @todo not $this->_subFolders? */
 		}
 		$queryStr = "SELECT count(*) as c FROM `tblFolders` WHERE `parent` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
@@ -471,7 +531,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param string $dir direction of sorting (asc or desc)
 	 * @param integer $limit limit number of subfolders
 	 * @param integer $offset offset in retrieved list of subfolders
-	 * @return array list of folder objects or false in case of an error
+	 * @return SeedDMS_Core_Folder[]|bool list of folder objects or false in case of an error
 	 */
 	function getSubFolders($orderby="", $dir="asc", $limit=0, $offset=0) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -511,7 +571,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param integer $sequence position of folder in list of sub folders.
 	 * @param array $attributes list of document attributes. The element key
 	 *        must be the id of the attribute definition.
-	 * @return object object of type SeedDMS_Core_Folder or false in case of
+	 * @return bool|SeedDMS_Core_Folder
 	 *         an error.
 	 */
 	function addSubFolder($name, $comment, $owner, $sequence, $attributes=array()) { /* {{{ */
@@ -554,7 +614,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Check if 'onPostAddSubFolder' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddSubFolder'])) {
 			foreach($this->_dms->callbacks['onPostAddSubFolder'] as $callback) {
-				if(!call_user_func($callback[0], $callback[1], $newFolder)) {
+					/** @noinspection PhpStatementHasEmptyBodyInspection */
+					if(!call_user_func($callback[0], $callback[1], $newFolder)) {
 				}
 			}
 		}
@@ -566,7 +627,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Returns an array of all parents, grand parent, etc. up to root folder.
 	 * The folder itself is the last element of the array.
 	 *
-	 * @return array Array of parents
+	 * @return array|bool
 	 */
 	function getPath() { /* {{{ */
 		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0) || ($this->_id == $this->_dms->rootFolderID)) {
@@ -632,7 +693,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	function hasDocuments() { /* {{{ */
 		$db = $this->_dms->getDB();
 		if (isset($this->_documents)) {
-			return count($this->documents);
+			/** @noinspection PhpUndefinedFieldInspection */
+			return count($this->documents); /** @todo not $this->_documents? */
 		}
 		$queryStr = "SELECT count(*) as c FROM `tblDocuments` WHERE `folder` = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
@@ -645,12 +707,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	/**
 	 * Check if folder has document with given name
 	 *
-	 * @return boolean true if document exists, false if not or in case
+	 * @param string $name
+	 * @return bool true if document exists, false if not or in case
 	 * of an error
 	 */
 	function hasDocumentByName($name) { /* {{{ */
 		$db = $this->_dms->getDB();
 		if (isset($this->_documents)) {
+			/** @noinspection PhpUndefinedFieldInspection */ /** @todo not $this->_documents? */
 			return count($this->documents);
 		}
 		$queryStr = "SELECT count(*) as c FROM `tblDocuments` WHERE `folder` = " . $this->_id . " AND `name` = ".$db->qstr($name);
@@ -672,7 +736,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param string $dir direction of sorting (asc or desc)
 	 * @param integer $limit limit number of documents
 	 * @param integer $offset offset in retrieved list of documents
-	 * @return array list of documents or false in case of an error
+	 * @return SeedDMS_Core_Document[]|bool list of documents or false in case of an error
 	 */
 	function getDocuments($orderby="", $dir="asc", $limit=0, $offset=0) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -718,13 +782,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * Setting the parameter $limit to 0 will turn off access right checking
 	 * which is reasonable if the $user is an administrator.
 	 *
-	 * @param string $orderby if set to 'n' the list is ordered by name, otherwise
-	 *        it will be ordered by sequence
+	 * @param SeedDMS_Core_User $user
 	 * @param integer $limit maximum number of folders and documents that will
 	 *        be precisly counted by taken the access rights into account
-	 * @return array array with four elements 'document_count', 'folder_count'
+	 * @return array|bool with four elements 'document_count', 'folder_count'
 	 *        'document_precise', 'folder_precise' holding
-	 *        the counted number and a flag if the number is precise.
+	 * the counted number and a flag if the number is precise.
+	 * @internal param string $orderby if set to 'n' the list is ordered by name, otherwise
+	 *        it will be ordered by sequence
 	 */
 	function countChildren($user, $limit=10000) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -794,7 +859,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	// $comment will be used for both document and version leaving empty the version_comment 
 	/**
 	 * Add a new document to the folder
-	 * This function will add a new document and its content from a given file. 
+	 * This function will add a new document and its content from a given file.
 	 * It does not check for access rights on the folder. The new documents
 	 * default access right is read only and the access right is inherited.
 	 *
@@ -803,8 +868,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param integer $expires expiration date as a unix timestamp or 0 for no
 	 *        expiration date
 	 * @param object $owner owner of the new document
-	 * @param string $keywords keywords of new document
-	 * @param array $categories list of category ids
+	 * @param SeedDMS_Core_User $keywords keywords of new document
+	 * @param SeedDMS_Core_DocumentCategory[] $categories list of category objects
 	 * @param string $tmpFile the path of the file containing the content
 	 * @param string $orgFileName the original file name
 	 * @param string $fileType usually the extension of the filename
@@ -812,17 +877,17 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param float $sequence position of new document within the folder
 	 * @param array $reviewers list of users who must review this document
 	 * @param array $approvers list of users who must approve this document
-	 * @param string $reqversion version number of the content
+	 * @param int|string $reqversion version number of the content
 	 * @param string $version_comment comment of the content. If left empty
 	 *        the $comment will be used.
 	 * @param array $attributes list of document attributes. The element key
 	 *        must be the id of the attribute definition.
 	 * @param array $version_attributes list of document version attributes.
 	 *        The element key must be the id of the attribute definition.
-	 * @param object $workflow
-	 * @return array/boolean false in case of error, otherwise an array
+	 * @param SeedDMS_Core_Workflow $workflow
+	 * @return array|bool false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
-	 *        second one is the result set returned when inserting the content.
+	 * second one is the result set returned when inserting the content.
 	 */
 	function addDocument($name, $comment, $expires, $owner, $keywords, $categories, $tmpFile, $orgFileName, $fileType, $mimeType, $sequence, $reviewers=array(), $approvers=array(),$reqversion=0,$version_comment="", $attributes=array(), $version_attributes=array(), $workflow=null) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -880,7 +945,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Check if 'onPostAddDocument' callback is set */
 		if(isset($this->_dms->callbacks['onPostAddDocument'])) {
 			foreach($this->_dms->callbacks['onPostAddDocument'] as $callback) {
-				if(!call_user_func($callback[0], $callback[1], $document)) {
+					/** @noinspection PhpStatementHasEmptyBodyInspection */
+					if(!call_user_func($callback[0], $callback[1], $document)) {
 				}
 			}
 		}
@@ -901,8 +967,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		/* Check if 'onPreRemoveFolder' callback is set */
-		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
-			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
+		if(isset($this->_dms->callbacks['onPreRemoveFromDatabaseFolder'])) {
+			foreach($this->_dms->callbacks['onPreRemoveFromDatabaseFolder'] as $callback) {
 				$ret = call_user_func($callback[0], $callback[1], $this);
 				if(is_bool($ret))
 					return $ret;
@@ -942,8 +1008,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db->commitTransaction();
 
 		/* Check if 'onPostRemoveFolder' callback is set */
-		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
-			foreach($this->_dms->callbacks['onPostRemoveFolder'] as $callback) {
+		if(isset($this->_dms->callbacks['onPostRemoveFromDatabaseFolder'])) {
+			foreach($this->_dms->callbacks['onPostRemoveFromDatabaseFolder'] as $callback) {
+				/** @noinspection PhpStatementHasEmptyBodyInspection */
 				if(!call_user_func($callback[0], $callback[1], $this->_id)) {
 				}
 			}
@@ -960,11 +1027,21 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @return boolean true on success, false in case of an error
 	 */
 	function remove() { /* {{{ */
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$db = $this->_dms->getDB();
 
 		// Do not delete the root folder.
 		if ($this->_id == $this->_dms->rootFolderID || !isset($this->_parentID) || ($this->_parentID == null) || ($this->_parentID == "") || ($this->_parentID == 0)) {
 			return false;
+		}
+
+		/* Check if 'onPreRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveFolder'])) {
+			foreach($this->_dms->callbacks['onPreRemoveFolder'] as $callback) {
+				$ret = call_user_func($callback[0], $callback[1], $this);
+				if(is_bool($ret))
+					return $ret;
+			}
 		}
 
 		//Entfernen der Unterordner und Dateien
@@ -987,7 +1064,18 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			}
 		}
 
-		return $this->removeFromDatabase();
+		$ret = $this->removeFromDatabase();
+		if(!$ret)
+			return $ret;
+
+		/* Check if 'onPostRemoveFolder' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveFolder'])) {
+			foreach($this->_dms->callbacks['onPostRemoveFolder'] as $callback) {
+				call_user_func($callback[0], $callback[1], $this);
+			}
+		}
+
+		return $ret;
 	} /* }}} */
 
 	/**
@@ -1003,10 +1091,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * has no access list the returned array contains the two elements
 	 * 'users' and 'groups' which are than empty. The methode returns false
 	 * if the function fails.
-	 * 
-	 * @param integer $mode access mode (defaults to M_ANY)
-	 * @param integer $op operation (defaults to O_EQ)
-	 * @return array multi dimensional array
+	 *
+	 * @param int $mode access mode (defaults to M_ANY)
+	 * @param int|string $op operation (defaults to O_EQ)
+	 * @return bool|SeedDMS_Core_GroupAccess|SeedDMS_Core_UserAccess
 	 */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1073,6 +1161,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param integer $userOrGroupID id of user or group
 	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
 	 *        user
+	 * @return bool
 	 */
 	function addAccess($mode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1103,6 +1192,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @param integer $userOrGroupID id of user or group
 	 * @param integer $isUser set to 1 if $userOrGroupID is the id of a
 	 *        user
+	 * @return bool
 	 */
 	function changeAccess($newMode, $userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1123,6 +1213,11 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return true;
 	} /* }}} */
 
+	/**
+	 * @param $userOrGroupID
+	 * @param $isUser
+	 * @return bool
+	 */
 	function removeAccess($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -1179,6 +1274,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$accessList = $this->getAccessList();
 		if (!$accessList) return false;
 
+		/** @var SeedDMS_Core_UserAccess $userAccess */
 		foreach ($accessList["users"] as $userAccess) {
 			if ($userAccess->getUserID() == $user->getID()) {
 				$mode = $userAccess->getMode();
@@ -1192,6 +1288,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Get the highest right defined by a group */
 		if($accessList['groups']) {
 			$mode = 0;
+			/** @var SeedDMS_Core_GroupAccess $groupAccess */
 			foreach ($accessList["groups"] as $groupAccess) {
 				if ($user->isMemberOfGroup($groupAccess->getGroup())) {
 					if ($groupAccess->getMode() > $mode)
@@ -1219,7 +1316,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * applied to get the access mode is the same as describe at
 	 * {@link getAccessMode}
 	 *
-	 * @param object $group group for which access shall be checked
+	 * @param SeedDMS_Core_Group $group group for which access shall be checked
 	 * @return integer access mode
 	 */
 	function getGroupAccessMode($group) { /* {{{ */
@@ -1229,6 +1326,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		if (!$accessList)
 			return false;
 
+		/** @var SeedDMS_Core_GroupAccess $groupAccess */
 		foreach ($accessList["groups"] as $groupAccess) {
 			if ($groupAccess->getGroupID() == $group->getID()) {
 				$foundInACL = true;
@@ -1245,13 +1343,14 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return $this->getDefaultAccess();
 	} /* }}} */
 
+	/** @noinspection PhpUnusedParameterInspection */
 	/**
 	 * Get a list of all notification
 	 * This function returns all users and groups that have registerd a
 	 * notification for the folder
 	 *
 	 * @param integer $type type of notification (not yet used)
-	 * @return array array with a the elements 'users' and 'groups' which
+	 * @return SeedDMS_Core_User[]|SeedDMS_Core_Group[]|bool array with a the elements 'users' and 'groups' which
 	 *        contain a list of users and groups.
 	 */
 	function getNotifyList($type=0) { /* {{{ */
@@ -1293,6 +1392,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		/* Make a copy of both notifier lists because removeNotify will empty
 		 * $this->_notifyList and the second foreach will not work anymore.
 		 */
+		/** @var SeedDMS_Core_User[] $nusers */
 		$nusers = $this->_notifyList["users"];
 		$ngroups = $this->_notifyList["groups"];
 		foreach ($nusers as $u) {
@@ -1300,6 +1400,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 				$this->removeNotify($u->getID(), true);
 			}
 		}
+
+		/** @var SeedDMS_Core_Group[] $ngroups */
 		foreach ($ngroups as $g) {
 			if ($this->getGroupAccessMode($g) < M_READ) {
 				$this->removeNotify($g->getID(), false);
@@ -1307,7 +1409,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		}
 	} /* }}} */
 
-	/*
+	/**
 	 * Add a user/group to the notification list
 	 * This function does not check if the currently logged in user
 	 * is allowed to add a notification. This must be checked by the calling
@@ -1328,6 +1430,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$userOrGroup = ($isUser) ? "`userID`" : "`groupID`";
 
 		/* Verify that user / group exists */
+		/** @var SeedDMS_Core_User|SeedDMS_Core_Group $obj */
 		$obj = ($isUser ? $this->_dms->getUser($userOrGroupID) : $this->_dms->getGroup($userOrGroupID));
 		if (!is_object($obj)) {
 			return -1;
@@ -1377,6 +1480,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 				// that the current group has not been explicitly excluded.
 				$acl = $this->getAccessList(M_NONE, O_EQ);
 				$found = false;
+				/** @var SeedDMS_Core_GroupAccess $group */
 				foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
@@ -1395,6 +1499,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 					return -4;
 				}
 				$found = false;
+				/** @var SeedDMS_Core_GroupAccess $group */
 				foreach ($acl["groups"] as $group) {
 					if ($group->getGroupID() == $userOrGroupID) {
 						$found = true;
@@ -1428,7 +1533,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return 0;
 	} /* }}} */
 
-	/*
+	/**
 	 * Removes notify for a user or group to folder
 	 * This function does not check if the currently logged in user
 	 * is allowed to remove a notification. This must be checked by the calling
@@ -1436,12 +1541,12 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 *
 	 * @param integer $userOrGroupID
 	 * @param boolean $isUser true if $userOrGroupID is a user id otherwise false
-	 * @param $type type of notification (0 will delete all) Not used yet!
-	 * @return integer error code
+	 * @param int $type type of notification (0 will delete all) Not used yet!
+	 * @return int error code
 	 *    -1: Invalid User/Group ID.
-	 *    -3: User is not subscribed.
-	 *    -4: Database / internal error.
-	 *     0: Update successful.
+	 * -3: User is not subscribed.
+	 * -4: Database / internal error.
+	 * 0: Update successful.
 	 */
 	function removeNotify($userOrGroupID, $isUser, $type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
@@ -1521,9 +1626,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * administrators and the owner of the folder unless $listadmin resp.
 	 * $listowner is set to true.
 	 *
-	 * @param boolean $listadmin if set to true any admin will be listed too
-	 * @param boolean $listowner if set to true the owner will be listed too
-	 *
+	 * @param bool|int $listadmin if set to true any admin will be listed too
+	 * @param bool|int $listowner if set to true the owner will be listed too
 	 * @return array list of users and groups
 	 */
 	function getReadAccessList($listadmin=0, $listowner=0) { /* {{{ */
@@ -1551,9 +1655,12 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 				// to the folder.
 				$tmpList = $this->getAccessList(M_NONE, O_LTEQ);
 			}
+			/** @var SeedDMS_Core_GroupAccess $groupAccess */
 			foreach ($tmpList["groups"] as $groupAccess) {
 				$groupIDs .= (strlen($groupIDs)==0 ? "" : ", ") . $groupAccess->getGroupID();
 			}
+
+			/** @var SeedDMS_Core_UserAccess $userAccess */
 			foreach ($tmpList["users"] as $userAccess) {
 				$user = $userAccess->getUser();
 				if (!$listadmin && $user->isAdmin()) continue;
@@ -1690,6 +1797,22 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 				return false;
 		}
 		return true;
+	} /* }}} */
+
+	/**
+	 * Get the min and max sequence value for documents
+	 *
+	 * @return bool|array array with keys 'min' and 'max', false in case of an error
+	 */
+	function getDocumentsMinMax() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT min(`sequence`) AS `min`, max(`sequence`) AS `max` FROM `tblDocuments` WHERE `folder` = " . (int) $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		return $resArr[0];
 	} /* }}} */
 
 }

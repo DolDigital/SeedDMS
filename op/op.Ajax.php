@@ -22,7 +22,6 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Init.php");
 include("../inc/inc.Extension.php");
-include("../inc/inc.Init.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassNotificationService.php");
 include("../inc/inc.ClassEmailNotify.php");
@@ -63,7 +62,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
 			if(method_exists($notificationObj, 'preAddService')) {
-				$notificationObj->preAddService($notifier);
+				$notificationObj->preAddService($dms, $notifier);
 			}
 		}
 	}
@@ -75,7 +74,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	if(isset($GLOBALS['SEEDDMS_HOOKS']['notification'])) {
 		foreach($GLOBALS['SEEDDMS_HOOKS']['notification'] as $notificationObj) {
 			if(method_exists($notificationObj, 'postAddService')) {
-				$notificationObj->postAddService($notifier);
+				$notificationObj->postAddService($dms, $notifier);
 			}
 		}
 	}
@@ -493,7 +492,7 @@ switch($command) {
 	case 'submittranslation': /* {{{ */
 		if($settings->_showMissingTranslations) {
 			if($user && !empty($_POST['phrase'])) {
-				if($fp = fopen('/tmp/newtranslations.txt', 'a+')) {
+				if($fp = fopen($settings->_cacheDir.'/newtranslations.txt', 'a+')) {
 					fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
 					fclose($fp);
 				}
@@ -639,7 +638,7 @@ switch($command) {
 					$indexconf = null;
 				}
 
-				$controller = Controller::factory('AddDocument');
+				$controller = Controller::factory('AddDocument', array('dms'=>$dms, 'user'=>$user));
 				$controller->setParam('documentsource', 'upload');
 				$controller->setParam('folder', $folder);
 				$controller->setParam('index', $index);
@@ -654,7 +653,11 @@ switch($command) {
 				$controller->setParam('userfilename', $userfilename);
 				$controller->setParam('filetype', $fileType);
 				$controller->setParam('userfiletype', $userfiletype);
-				$controller->setParam('sequence', 0);
+				$minmax = $folder->getDocumentsMinMax();
+				if($settings->_defaultDocPosition == 'start')
+					$controller->setParam('sequence', $minmax['min'] - 1);
+				else
+					$controller->setParam('sequence', $minmax['max'] + 1);
 				$controller->setParam('reviewers', $reviewers);
 				$controller->setParam('approvers', $approvers);
 				$controller->setParam('reqversion', 1);
@@ -788,16 +791,25 @@ switch($command) {
 						if($index) {
 							$indexconf['Indexer']::init($settings->_stopWordsFile);
 							$idoc = new $indexconf['IndexedDocument']($dms, $document, isset($settings->_converters['fulltext']) ? $settings->_converters['fulltext'] : null, false, $settings->_cmdTimeout);
-							if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
-								foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
-									if (method_exists($hookObj, 'preIndexDocument')) {
-										$hookObj->preIndexDocument(null, $document, $idoc);
+							$error = $idoc->getErrorMsg();
+							if(!$error) {
+								if(isset($GLOBALS['SEEDDMS_HOOKS']['indexDocument'])) {
+									foreach($GLOBALS['SEEDDMS_HOOKS']['indexDocument'] as $hookObj) {
+										if (method_exists($hookObj, 'preIndexDocument')) {
+											$hookObj->preIndexDocument(null, $document, $idoc);
+										}
 									}
 								}
+								header('Content-Type: application/json');
+								if(false === $index->addDocument($idoc)) {
+									echo json_encode(array('success'=>false, 'message'=>getMLText('error_document_indexed'), 'data'=>$document->getID()));
+								} else {
+									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID(), 'cmd'=>$idoc->getCmd()));
+								}
+							} else {
+								header('Content-Type: application/json');
+								echo json_encode(array('success'=>false, 'message'=>$error, 'data'=>$document->getID(), 'mimetype'=>$idoc->getMimeType(), 'cmd'=>$idoc->getCmd()));
 							}
-							$index->addDocument($idoc);
-							header('Content-Type: application/json');
-							echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_indexed'), 'data'=>$document->getID()));
 						} else {
 							header('Content-Type: application/json');
 							echo json_encode(array('success'=>false, 'message'=>getMLText('error_occured'), 'data'=>$document->getID()));

@@ -99,6 +99,8 @@ function folderSelected(id, name) {
 function loadMoreObjects(element, limit) {
 	if(!$(element).is(":visible"))
 		return;
+	element.text('<?= getMLText('more_objects_loading') ?>');
+	element.prop("disabled",true);
 	var folder = element.data('folder')
 	var offset = element.data('offset')
 //	var limit = element.data('limit')
@@ -115,6 +117,7 @@ function loadMoreObjects(element, limit) {
 				var str = '<?= getMLText('x_more_objects') ?>';
 				element.text(str.replace('[number]', data.count));
 				element.data('offset', offset+limit);
+				element.prop("disabled",false);
 			}
 		}
 	});

@@ -34,16 +34,20 @@ class SeedDMS_Core_Object { /* {{{ */
 	protected $_attributes;
 
 	/**
-	 * @var object back reference to document management system
+	 * @var SeedDMS_Core_DMS back reference to document management system
 	 */
 	public $_dms;
 
+    /**
+     * SeedDMS_Core_Object constructor.
+     * @param $id
+     */
 	function __construct($id) { /* {{{ */
 		$this->_id = $id;
 		$this->_dms = null;
 	} /* }}} */
 
-	/*
+	/**
 	 * Set dms this object belongs to.
 	 *
 	 * Each object needs a reference to the dms it belongs to. It will be
@@ -51,13 +55,13 @@ class SeedDMS_Core_Object { /* {{{ */
 	 * The dms has a references to the currently logged in user
 	 * and the database connection.
 	 *
-	 * @param object $dms reference to dms
+	 * @param SeedDMS_Core_DMS $dms reference to dms
 	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
 
-	/*
+	/**
 	 * Return the internal id of the document
 	 *
 	 * @return integer id of document
@@ -67,8 +71,8 @@ class SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Returns all attributes set for the object
 	 *
-	 * @return array list of objects of class SeedDMS_Core_Attribute
-	 */
+	 * @return array|bool
+     */
 	function getAttributes() { /* {{{ */
 		if (!$this->_attributes) {
 			$db = $this->_dms->getDB();
@@ -102,12 +106,13 @@ class SeedDMS_Core_Object { /* {{{ */
 
 	} /* }}} */
 
-	/**
-	 * Returns an attribute of the object for the given attribute definition
-	 *
-	 * @return array|string value of attritbute or false. The value is an array
-	 * if the attribute is defined as multi value
-	 */
+    /**
+     * Returns an attribute of the object for the given attribute definition
+     *
+     * @param SeedDMS_Core_AttributeDefinition $attrdef
+     * @return array|string value of attritbute or false. The value is an array
+     * if the attribute is defined as multi value
+     */
 	function getAttribute($attrdef) { /* {{{ */
 		if (!$this->_attributes) {
 			$this->getAttributes();
@@ -124,6 +129,7 @@ class SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Returns an attribute value of the object for the given attribute definition
 	 *
+	 * @param SeedDMS_Core_AttributeDefinition $attrdef
 	 * @return array|string value of attritbute or false. The value is an array
 	 * if the attribute is defined as multi value
 	 */
@@ -154,16 +160,17 @@ class SeedDMS_Core_Object { /* {{{ */
 
 	} /* }}} */
 
-	/**
-	 * Returns an attribute value of the object for the given attribute definition
-	 *
-	 * This is a short cut for getAttribute($attrdef)->getValueAsArray() but
-	 * first checks if the object has an attribute for the given attribute
-	 * definition.
-	 *
-	 * @return array value of attritbute or false. The value is always an array
-	 * even if the attribute is not defined as multi value
-	 */
+    /**
+     * Returns an attribute value of the object for the given attribute definition
+     *
+     * This is a short cut for getAttribute($attrdef)->getValueAsArray() but
+     * first checks if the object has an attribute for the given attribute
+     * definition.
+     *
+     * @param SeedDMS_Core_AttributeDefinition $attrdef
+     * @return array|bool
+     * even if the attribute is not defined as multi value
+     */
 	function getAttributeValueAsArray($attrdef) { /* {{{ */
 		if (!$this->_attributes) {
 			$this->getAttributes();
@@ -183,6 +190,7 @@ class SeedDMS_Core_Object { /* {{{ */
 	 * first checks if the object has an attribute for the given attribute
 	 * definition.
 	 *
+     * @param SeedDMS_Core_AttributeDefinition $attrdef
 	 * @return string value of attritbute or false. The value is always a string
 	 * even if the attribute is defined as multi value
 	 */
@@ -201,8 +209,8 @@ class SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Set an attribute of the object for the given attribute definition
 	 *
-	 * @param object $attrdef definition of attribute
-	 * @param array|sting $value value of attribute, for multiple values this
+	 * @param SeedDMS_Core_AttributeDefinition $attrdef definition of attribute
+	 * @param array|string $value value of attribute, for multiple values this
 	 * must be an array
 	 * @return boolean true if operation was successful, otherwise false
 	 */
@@ -254,7 +262,7 @@ class SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Remove an attribute of the object for the given attribute definition
-	 *
+	 * @param SeedDMS_Core_AttributeDefinition $attrdef
 	 * @return boolean true if operation was successful, otherwise false
 	 */
 	function removeAttribute($attrdef) { /* {{{ */
@@ -285,4 +293,3 @@ class SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 } /* }}} */
-?>

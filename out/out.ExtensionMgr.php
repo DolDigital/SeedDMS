@@ -32,11 +32,27 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
+$reposurl = $settings->_repositoryUrl;
+
 $v = new SeedDMS_Version;
+$extmgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir, $reposurl);
+if(isset($_GET['currenttab']))
+	$currenttab = $_GET['currenttab'];
+else
+	$currenttab = 'installed';
+if(isset($_GET['extensionname']))
+	$extname = $_GET['extensionname'];
+else
+	$extname = '';
 
 if($view) {
 	$view->setParam('httproot', $settings->_httpRoot);
+	$view->setParam('extdir', $settings->_rootDir."/ext");
 	$view->setParam('version', $v);
+	$view->setParam('extmgr', $extmgr);
+	$view->setParam('currenttab', $currenttab);
+	$view->setParam('extname', $extname);
+	$view->setParam('reposurl', $reposurl);
 	$view($_GET);
 	exit;
 }

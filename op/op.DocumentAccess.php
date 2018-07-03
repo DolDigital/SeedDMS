@@ -30,7 +30,7 @@ include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$controller = Controller::factory($tmp[1]);
+$controller = Controller::factory($tmp[1], array('dms'=>$dms, 'user'=>$user));
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
@@ -166,6 +166,7 @@ if ($action == "setowner") {
 			}
 //			$notifier->toIndividual($user, $oldowner, $subject, $message, $params);
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_setowner')));
 	}
 }
 
@@ -190,6 +191,7 @@ else if ($action == "notinherit") {
 			}
 
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_notinherit_access')));
 }
 
 // Change to inherit-----------------------------------------------------
@@ -211,6 +213,7 @@ else if ($action == "inherit") {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_inherit_access')));
 }
 
 // Set default permissions ----------------------------------------------
@@ -232,6 +235,13 @@ else if ($action == "setdefault") {
 				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
+		$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_set_default_access')));
+} elseif($action == "delaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_delete_access')));
+} elseif($action == "addaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_access')));
+} elseif($action == "editaccess") {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_access')));
 }
 
 add_log_line("");

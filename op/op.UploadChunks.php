@@ -35,7 +35,7 @@ include("../inc/inc.Authentication.php");
 $file_param_name = 'qqfile';
 $file_name = $_FILES[ $file_param_name ][ 'name' ];
 $source_file_path = $_FILES[ $file_param_name ][ 'tmp_name' ];
-$fileId = $_POST['qquuid'];
+$fileId = preg_replace('/[^0-9a-f-]+/', '', $_POST['qquuid']);
 $partitionIndex = (int) $_POST['qqpartindex'];
 $totalparts = (int) $_POST['qqtotalparts'];
 $target_file_path =$settings->_stagingDir.$fileId."-".$partitionIndex;

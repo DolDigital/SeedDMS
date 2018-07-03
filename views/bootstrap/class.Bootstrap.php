@@ -21,8 +21,6 @@
 
 
 class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
-	var $imgpath;
-
 	/**
 	 * @var string $extraheader extra html code inserted in the html header
 	 * of the page
@@ -32,9 +30,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	protected $extraheader;
 
 	function __construct($params, $theme='bootstrap') {
-		$this->theme = $theme;
-		$this->params = $params;
-		$this->imgpath = '../views/'.$theme.'/images/';
+		parent::__construct($params, $theme);
 		$this->extraheader = array('js'=>'', 'css'=>'');
 		$this->footerjs = array();
 	}
@@ -80,11 +76,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
 		if($base)
-			echo '<base href="../../">'."\n";
+			echo '<base href="'.$base.'">'."\n";
+		elseif($this->baseurl)
+			echo '<base href="'.$this->baseurl.'">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
+//		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/datepicker/css/bootstrap-datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/select2/css/select2.min.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/select2/css/select2-bootstrap.css" rel="stylesheet">'."\n";
@@ -123,7 +122,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
-			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\">".$flashmsg['msg']."</div>\n";
+			echo "<div class=\"splash\" data-type=\"".$flashmsg['type']."\"".(!empty($flashmsg['timeout']) ? ' data-timeout="'.$flashmsg['timeout'].'"': '').">".$flashmsg['msg']."</div>\n";
 		}
 		foreach($hookObjs as $hookObj) {
 			if (method_exists($hookObj, 'startBody')) {
@@ -145,15 +144,15 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
-		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
-			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
+		foreach(array('de', 'es', 'ar', 'el', 'bg', 'ru', 'hr', 'hu', 'ko', 'pl', 'ro', 'sk', 'tr', 'uk', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
+			echo '<script src="../styles/'.$this->theme.'/datepicker/locales/bootstrap-datepicker.'.$lang.'.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/select2/js/select2.min.js"></script>'."\n";
 		parse_str($_SERVER['QUERY_STRING'], $tmp);
 		$tmp['action'] = 'webrootjs';
 		echo '<script src="'.$this->params['absbaseprefix'].'out/out.'.$this->params['class'].'.php?'.http_build_query($tmp).'"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
-		if(isset($this->params['user']) && $this->params['user']) {
+		if($this->params['enablemenutasks'] && isset($this->params['user']) && $this->params['user']) {
 			$this->addFooterJS('checkTasks();');
 		}
 		if($this->footerjs) {
@@ -449,6 +448,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
+	private function showNavigationBar($menuitems) { /* {{{ */
+		foreach($menuitems as $menuitem) {
+			if(!empty($menuitem['children'])) {
+				echo "    <li class=\"dropdown\">\n";
+				echo "     <a href=\"".$menuitem['link']."\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText($menuitem['label'])." <i class=\"icon-caret-down\"></i></a>\n";
+				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+				foreach($menuitem['children'] as $submenuitem) {
+					echo "      <li><a href=\"".$submenuitem['link']."\">".getMLText($submenuitem['label'])."</a></li>\n";
+				}
+				echo "     </ul>\n";
+			} else {
+				echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
+			}
+		}
+	} /* }}} */
+
 	private function folderNavigationBar($folder) { /* {{{ */
 		$dms = $this->params['dms'];
 		if (!is_object($folder) || strcasecmp(get_class($folder), $dms->getClassname('folder'))) {
@@ -492,9 +507,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		if($this->hasHook('folderNavigationBar'))
 			$menuitems = $this->callHook('folderNavigationBar', $folder, $menuitems);
 
-		foreach($menuitems as $menuitem) {
-			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
-		}
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -555,9 +569,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		*/
 
-		foreach($menuitems as $menuitem) {
-			echo "<li><a href=\"".$menuitem['link']."\">".getMLText($menuitem['label'])."</a></li>";
-		}
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -568,18 +581,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
+		$menuitems = array();
 		if ($this->params['user']->isAdmin() || !$this->params['disableselfedit'])
-			echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+			$menuitems['edit_user_details'] = array('link'=>"../out/out.EditUserData.php", 'label'=>'edit_user_details');
 		
 		if (!$this->params['user']->isAdmin()) 
-			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
+			$menuitems['edit_default_keywords'] = array('link'=>"../out/out.UserDefaultKeywords.php", 'label'=>'edit_default_keywords');
 
-		echo "<li><a href=\"../out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
+		$menuitems['edit_notify'] = array('link'=>"../out/out.ManageNotify.php", 'label'=>'edit_existing_notify');
 
 		if ($this->params['enableusersview']){
-			echo "<li><a href=\"../out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
-			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
+			$menuitems['users'] = array('link'=>"../out/out.UsrView.php", 'label'=>'users');
+			$menuitems['users'] = array('link'=>"../out/out.GroupView.php", 'label'=>'groups');
 		}		
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('accountNavigationBar'))
+			$menuitems = $this->callHook('accountNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -591,15 +612,22 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
-		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
+		$menuitems = array();
+		$menuitems['inprocess'] = array('link'=>"../out/out.MyDocuments.php?inProcess=1", 'label'=>'documents_in_process');
+		$menuitems['all_documents'] = array('link'=>"../out/out.MyDocuments.php", 'label'=>'all_documents');
 		if($this->params['workflowmode'] == 'traditional' || $this->params['workflowmode'] == 'traditional_only_approval') {
-			if($this->params['workflowmode'] == 'traditional')
-				echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
-			echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
+			$menuitems['review_summary'] = array('link'=>"../out/out.ReviewSummary.php", 'label'=>'review_summary');
+			$menuitems['approval_summary'] = array('link'=>"../out/out.ApprovalSummary.php", 'label'=>'approval_summary');
 		} else {
-			echo "<li><a href=\"../out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
+			$menuitems['workflow_summary'] = array('link'=>"../out/out.WorkflowSummary.php", 'label'=>'workflow_summary');
 		}
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('mydocumentsNavigationBar'))
+			$menuitems = $this->callHook('mydocumentsNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -610,73 +638,52 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
 
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
-
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
-		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
+		$menuitems = array();
+		$menuitems['user_group_management'] = array('link'=>"#", 'label'=>'user_group_management');
+		$menuitems['user_group_management']['children']['user_management'] = array('link'=>"../out/out.UsrMgr.php", 'label'=>'user_management');
+		$menuitems['user_group_management']['children']['group_management'] = array('link'=>"../out/out.GroupMgr.php", 'label'=>'group_management');
+		$menuitems['user_group_management']['children']['user_list'] = array('link'=>"../out/out.UserList.php", 'label'=>'user_list');
+		
+		$menuitems['definitions'] = array('link'=>"#", 'label'=>'definitions');
+		$menuitems['definitions']['children']['default_keywords'] = array('link'=>"../out/out.DefaultKeywords.php", 'label'=>'global_default_keywords');
+		$menuitems['definitions']['children']['document_categories'] = array('link'=>"../out/out.Categories.php", 'label'=>'global_document_categories');
+		$menuitems['definitions']['children']['attribute_definitions'] = array('link'=>"../out/out.AttributeMgr.php", 'label'=>'global_attributedefinitions');
 		if($this->params['workflowmode'] == 'advanced') {
-			echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
-			echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
+			$menuitems['definitions']['children']['workflows'] = array('link'=>"../out/out.WorkflowMgr.php", 'label'=>'global_workflows');
+			$menuitems['definitions']['children']['workflow_states'] = array('link'=>"../out/out.WorkflowStatesMgr.php", 'label'=>'global_workflow_states');
+			$menuitems['definitions']['children']['workflow_actions'] = array('link'=>"../out/out.WorkflowActionsMgr.php", 'label'=>'global_workflow_actions');
 		}
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
 
 		if($this->params['enablefullsearch']) {
-			echo "   <ul class=\"nav\">\n";
-			echo "    <li class=\"dropdown\">\n";
-			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
-			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
-			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
-			echo "     </ul>\n";
-			echo "    </li>\n";
-			echo "   </ul>\n";
+			$menuitems['fulltext'] = array('link'=>"#", 'label'=>'fullsearch');
+			$menuitems['fulltext']['children']['update_fulltext_index'] = array('link'=>"../out/out.Indexer.php", 'label'=>'update_fulltext_index');
+			$menuitems['fulltext']['children']['create_fulltext_index'] = array('link'=>"../out/out.CreateIndex.php", 'label'=>'create_fulltext_index');
+			$menuitems['fulltext']['children']['fulltext_info'] = array('link'=>"../out/out.IndexInfo.php", 'label'=>'fulltext_info');
 		}
 
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
+		$menuitems['backup_log_management'] = array('link'=>"#", 'label'=>'backup_log_management');
+		$menuitems['backup_log_management']['children'][] = array('link'=>"../out/out.BackupTools.php", 'label'=>'backup_tools');
 		if ($this->params['logfileenable'])
-			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
+			$menuitems['backup_log_management']['children'][] = array('link'=>"../out/out.LogManagement.php", 'label'=>'log_management');
 
-		echo "   <ul class=\"nav\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		echo "      <li><a href=\"../out/out.ImportFS.php\">".getMLText("import_fs")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Timeline.php\">".getMLText("timeline")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ExpiredDocuments.php\">".getMLText("documents_expired")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.ClearCache.php\">".getMLText("clear_cache")."</a></li>\n";
-		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
+		$menuitems['misc'] = array('link'=>"#", 'label'=>'misc');
+		$menuitems['misc']['children']['import_fs'] = array('link'=>"../out/out.ImportFS.php", 'label'=>'import_fs');
+		$menuitems['misc']['children']['folders_and_documents_statistic'] = array('link'=>"../out/out.Statistic.php", 'label'=>'folders_and_documents_statistic');
+		$menuitems['misc']['children']['charts'] = array('link'=>"../out/out.Charts.php", 'label'=>'charts');
+		$menuitems['misc']['children']['timeline'] = array('link'=>"../out/out.Timeline.php", 'label'=>'timeline');
+		$menuitems['misc']['children']['objectcheck'] = array('link'=>"../out/out.ObjectCheck.php", 'label'=>'objectcheck');
+		$menuitems['misc']['children']['documents_expired'] = array('link'=>"../out/out.ExpiredDocuments.php", 'label'=>'documents_expired');
+		$menuitems['misc']['children']['extension_manager'] = array('link'=>"../out/out.ExtensionMgr.php", 'label'=>'extension_manager');
+		$menuitems['misc']['children']['clear_cache'] = array('link'=>"../out/out.ClearCache.php", 'label'=>'clear_cache');
+		$menuitems['misc']['children']['version_info'] = array('link'=>"../out/out.Info.php", 'label'=>'version_info');
 
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('admintoolsNavigationBar'))
+			$menuitems = $this->callHook('admintoolsNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
+		echo "   </ul>\n";
 		echo "<ul class=\"nav\">\n";
 		echo "</ul>\n";
 		echo "</div>\n";
@@ -704,7 +711,16 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		$menuitems = array();
+		if (!$this->params['user']->isGuest())
+			$menuitems['addevent'] = array('link'=>"../out/out.AddEvent.php", 'label'=>'add_event');
+
+		/* Check if hook exists because otherwise callHook() will override $menuitems */
+		if($this->hasHook('calendarNavigationBar'))
+			$menuitems = $this->callHook('calendarNavigationBar', $menuitems);
+
+		self::showNavigationBar($menuitems);
+
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -795,8 +811,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		return;
 	} /* }}} */
 
-	function contentContainerStart($class='') { /* {{{ */
-		echo "<div class=\"well".($class ? " ".$class : "")."\">\n";
+	function contentContainerStart($class='', $id='') { /* {{{ */
+		echo "<div class=\"well".($class ? " ".$class : "")."\"".($id ? " id=\"".$id."\"" : "").">\n";
 		return;
 	} /* }}} */
 
@@ -820,6 +836,80 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 //		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".htmlspecialchars($heading)."</div>\n";
 		echo "<h5>".$heading."</h5>";
 		return;
+	} /* }}} */
+
+	function formField($title, $value, $params=array()) { /* {{{ */
+		if($title !== null) {
+			echo "<div class=\"control-group\">";
+			echo "	<label class=\"control-label\">".$title.":</label>";
+			echo "	<div class=\"controls\">";
+		}
+		if(isset($params['field_wrap'][0]))
+			echo $params['field_wrap'][0];
+		if(is_string($value)) {
+			echo $value;
+		} elseif(is_array($value)) {
+			switch($value['element']) {
+			case 'select':
+				echo '<select'.
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['class']) ? ' class="'.$value['class'].'"' : '').
+					(!empty($value['multiple']) ? ' multiple' : '');
+				if(!empty($value['attributes']) && is_array($value['attributes']))
+					foreach($value['attributes'] as $a)
+						echo ' '.$a[0].'="'.$a[1].'"';
+				echo ">";
+				if(isset($value['options']) && is_array($value['options'])) {
+					foreach($value['options'] as $val) {
+						echo '<option value="'.$val[0].'"'.(!empty($val[2]) ? ' selected' : '');
+						if(!empty($val[3]) && is_array($val[3]))
+							foreach($val[3] as $a)
+								echo ' '.$a[0].'="'.$a[1].'"';
+						echo '>'.$val[1].'</option>';
+					}
+				}
+				echo '</select>';
+				break;
+			case 'textarea':
+				echo '<textarea'.
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['rows']) ? ' rows="'.$value['rows'].'"' : '').
+					(!empty($value['cols']) ? ' rows="'.$value['cols'].'"' : '').
+					(!empty($value['required']) ? ' required' : '').">".(!empty($value['value']) ? $value['value'] : '')."</textarea>";
+				break;
+			case 'input':
+			default:
+				echo '<input'.
+					(!empty($value['type']) ? ' type="'.$value['type'].'"' : '').
+					(!empty($value['id']) ? ' id="'.$value['id'].'"' : '').
+					(!empty($value['name']) ? ' name="'.$value['name'].'"' : '').
+					(!empty($value['value']) ? ' value="'.$value['value'].'"' : '').
+					(!empty($value['placeholder']) ? ' placeholder="'.$value['placeholder'].'"' : '').
+					(!empty($value['autocomplete']) ? ' autocomplete="'.$value['autocomplete'].'"' : '').
+					(!empty($value['checked']) ? ' checked' : '').
+					(!empty($value['required']) ? ' required' : '');
+				if(!empty($value['attributes']) && is_array($value['attributes']))
+					foreach($value['attributes'] as $a)
+						echo ' '.$a[0].'="'.$a[1].'"';
+				echo ">";
+				break;
+			}
+		}
+		if(isset($params['field_wrap'][1]))
+			echo $params['field_wrap'][1];
+		if($title !== null) {
+			echo "</div>";
+			echo "</div>";
+		}
+		return;
+	} /* }}} */
+
+	function formSubmit($value, $name='') { /* {{{ */
+		echo "<div class=\"controls\">\n";
+		echo "<button type=\"submit\" class=\"btn\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').">".$value."</button>\n";
+		echo "</div>\n";
 	} /* }}} */
 
 	function getMimeIcon($fileType) { /* {{{ */
@@ -922,24 +1012,23 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
-		echo $this->getFileChooser($varname, $multiple, $accept);
-		return;
-		$id = preg_replace('/[^A-Za-z]/', '', $varname);
-?>
-	<div id="<?php echo $id; ?>-upload-files">
-		<div id="<?php echo $id; ?>-upload-file" class="upload-file">
-			<div class="input-append">
-				<input type="text" class="form-control" readonly>
-				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input id="<?php echo $id; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
-				</span>
-			</div>
-		</div>
-	</div>
-<?php
+		echo self::getFileChooser($varname, $multiple, $accept);
 	} /* }}} */
 
-	function printDateChooser($defDate = -1, $varName) { /* {{{ */
+	function printDateChooser($defDate = '', $varName) { /* {{{ */
+		echo self::getDateChooser($defDate, $varName);
+	} /* }}} */
+
+	function getDateChooser($defDate = '', $varName, $lang='') { /* {{{ */
+		$content = '
+			<span class="input-append date span12 datepicker" id="'.$varName.'date" data-date="'.$defDate.'" data-date-format="yyyy-mm-dd"'.($lang ? 'data-date-language="'.str_replace('_', '-', $lang).'"' : '').'>
+				<input class="span6" size="16" name="'.$varName.'" type="text" value="'.$defDate.'">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+			</span>';
+		return $content;
+	} /* }}} */
+
+	function __printDateChooser($defDate = -1, $varName) { /* {{{ */
 	
 		if ($defDate == -1)
 			$defDate = mktime();
@@ -977,6 +1066,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printSequenceChooser($objArr, $keepID = -1) { /* {{{ */
+		echo $this->getSequenceChooser($objArr, $keepID);
+	} /* }}} */
+
+	function getSequenceChooser($objArr, $keepID = -1) { /* {{{ */
 		if (count($objArr) > 0) {
 			$max = $objArr[count($objArr)-1]->getSequence() + 1;
 			$min = $objArr[0]->getSequence() - 1;
@@ -984,44 +1077,54 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else {
 			$max = 1.0;
 		}
-		print "<select name=\"sequence\">\n";
+		$content = "<select name=\"sequence\">\n";
 		if ($keepID != -1) {
-			print "  <option value=\"keep\">" . getMLText("seq_keep");
+			$content .= "  <option value=\"keep\">" . getMLText("seq_keep");
 		}
-		print "  <option value=\"".$max."\">" . getMLText("seq_end");
+		if($this->params['defaultposition'] != 'start')
+			$content .= "  <option value=\"".$max."\">" . getMLText("seq_end");
 		if (count($objArr) > 0) {
-			print "  <option value=\"".$min."\">" . getMLText("seq_start");
+			$content .= "  <option value=\"".$min."\">" . getMLText("seq_start");
 		}
+		if($this->params['defaultposition'] == 'start')
+			$content .= "  <option value=\"".$max."\">" . getMLText("seq_end");
 		for ($i = 0; $i < count($objArr) - 1; $i++) {
 			if (($objArr[$i]->getID() == $keepID) || (($i + 1 < count($objArr)) && ($objArr[$i+1]->getID() == $keepID))) {
 				continue;
 			}
 			$index = ($objArr[$i]->getSequence() + $objArr[$i+1]->getSequence()) / 2;
-			print "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => htmlspecialchars($objArr[$i]->getName())));
+			$content .= "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => htmlspecialchars($objArr[$i]->getName())));
 		}
-		print "</select>";
+		$content .= "</select>";
+		return $content;
+	} /* }}} */
+
+	function getDocumentChooserHtml($formName) { /* {{{ */
+		$content = '';
+		$content .= "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
+		$content .= "<div class=\"input-append\">\n";
+		$content .= "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		$content .= "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
+<div class="modal hide" id="docChooser'.$formName.'" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="docChooserLabel">'.getMLText("choose_target_document").'</h3>
+  </div>
+  <div class="modal-body">
+		<p>'.getMLText('tree_loading').'</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
+  </div>
+</div>
+';
+		return $content;
 	} /* }}} */
 
 	function printDocumentChooserHtml($formName) { /* {{{ */
-		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\" value=\"\">";
-		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosedocsearch".$formName."\" data-target=\"docid".$formName."\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#docChooser".$formName."\" href=\"../out/out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
-		print "</div>\n";
-?>
-<div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
-  </div>
-  <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-  </div>
-</div>
-<?php 
+		echo self::getDocumentChooserHtml($formName);
 	} /* }}} */
 
 	function printDocumentChooserJs($formName) { /* {{{ */
@@ -1047,30 +1150,36 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+	function getFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
 		$formid = "targetid".$form;
 		if(!$formname)
 			$formname = "targetid";
-		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
-		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
-		print "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
-		print "</div>\n";
-?>
-<div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
+		$content = '';
+		$content .= "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		$content .= "<div class=\"input-append\">\n";
+		$content .= "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-target=\"".$formid."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" target=\"".$formid."\"/>";
+		$content .= "<button type=\"button\" class=\"btn\" id=\"clearfolder".$form."\"><i class=\"icon-remove\"></i></button>";
+		$content .= "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
+<div class="modal hide" id="folderChooser'.$form.'" tabindex="-1" role="dialog" aria-labelledby="folderChooser'.$form.'Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser'.$form.'Label">'.getMLText("choose_target_folder").'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('tree_loading') ?></p>
+		<p>'.getMLText('tree_loading').'</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
   </div>
 </div>
-<?php
+';
+		return $content;
+	} /* }}} */
+
+	function printFolderChooserHtml($form, $accessMode, $exclude = -1, $default = false, $formname = '') { /* {{{ */
+		echo self::getFolderChooserHtml($form, $accessMode, $exclude, $default, $formname);
 	} /* }}} */
 
 	function printFolderChooserJs($form) { /* {{{ */
@@ -1156,26 +1265,31 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
+		echo self::getKeywordChooserHtml($formName, $keywords, $fieldname); 
+	} /* }}} */
+
+	function getKeywordChooserHtml($formName, $keywords='', $fieldname='keywords') { /* {{{ */
 		$strictformcheck = $this->params['strictformcheck'];
-?>
+		$content = '';
+		$content .= '
 		    <div class="input-append">
-				<input type="text" name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>"<?php echo $strictformcheck ? ' required' : ''; ?> />
-				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="../out/out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
+				<input type="text" name="'.$fieldname.'" id="'.$fieldname.'" value="'.htmlspecialchars($keywords).'"'.($strictformcheck ? ' required' : '').' />
+				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="../out/out.KeywordChooser.php?target='.$formName.'">'.getMLText("keywords").'…</a>
 		    </div>
 <div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="keywordChooserLabel"><?php printMLText("use_default_keywords") ?></h3>
+    <h3 id="keywordChooserLabel">'.getMLText("use_default_keywords").'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('keywords_loading') ?></p>
+		<p>'.getMLText('keywords_loading').'</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'. getMLText("close").'</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" id="acceptkeywords"><i class="icon-save"></i> '.getMLText("save").'</button>
   </div>
-</div>
-<?php
+</div>';
+		return $content;
 	} /* }}} */
 
 	function printKeywordChooserJs($formName) { /* {{{ */
@@ -1200,81 +1314,90 @@ $(document).ready(function() {
 	} /* }}} */
 
 	function printAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
+		echo self::getAttributeEditField($attrdef, $attribute, $fieldname, $norequire);
+	} /* }}} */
+
+	function getAttributeEditField($attrdef, $attribute, $fieldname='attributes', $norequire=false) { /* {{{ */
+		$content = '';
 		switch($attrdef->getType()) {
 		case SeedDMS_Core_AttributeDefinition::type_boolean:
-			echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"0\" />";
-			echo "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
+			$content .= "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
+			$content .= "<input type=\"checkbox\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"1\" ".(($attribute && $attribute->getValue()) ? 'checked' : '')." />";
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_date:
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
-?>
-        <span class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
-					<input id="<?php echo $fieldname."_".$attrdef->getId();?>" class="span9" size="16" name="<?php echo $fieldname ?>[<?php echo $attrdef->getId() ?>]" type="text" value="<?php if($objvalue) echo $objvalue; else echo "" /*date('Y-m-d')*/; ?>">
+        $content .= '<span class="input-append date datepicker" data-date="'.date('Y-m-d').'" data-date-format="yyyy-mm-dd" data-date-language="'.str_replace('_', '-', $this->params['session']->getLanguage()).'">
+					<input id="'.$fieldname.'_'.$attrdef->getId().'" class="span9" size="16" name="'.$fieldname.'['.$attrdef->getId().']" type="text" value="'.($objvalue ? $objvalue : '').'">
           <span class="add-on"><i class="icon-calendar"></i></span>
-				</span>
-<?php
+				</span>';
 			break;
 		case SeedDMS_Core_AttributeDefinition::type_email:
 			$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
-			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
+			$content .= "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').' data-rule-email="true"'." />";
 			break;
 		default:
 			if($valueset = $attrdef->getValueSetAsArray()) {
-				echo "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\" />";
-				echo "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
+				$content .= "<input type=\"hidden\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"\"/>";
+				$content .= "<select id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]";
 				if($attrdef->getMultipleValues()) {
-					echo "[]\" multiple";
+					$content .= "[]\" multiple";
 				} else {
-					echo "\"";
+					$content .= "\"";
 				}
-				echo "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">";
+				$content .= "".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '')." class=\"chzn-select-deselect\" data-placeholder=\"".getMLText("select_value")."\">";
 				if(!$attrdef->getMultipleValues()) {
-					echo "<option value=\"\"></option>";
+					$content .= "<option value=\"\"></option>";
 				}
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValueAsArray() : $attribute) : array();
 				foreach($valueset as $value) {
 					if($value) {
-						echo "<option value=\"".htmlspecialchars($value)."\"";
+						$content .= "<option value=\"".htmlspecialchars($value)."\"";
 						if(is_array($objvalue) && in_array($value, $objvalue))
-							echo " selected";
+							$content .= " selected";
 						elseif($value == $objvalue)
-							echo " selected";
-						echo ">".htmlspecialchars($value)."</option>";
+							$content .= " selected";
+						$content .= ">".htmlspecialchars($value)."</option>";
 					}
 				}
-				echo "</select>";
+				$content .= "</select>";
 			} else {
 				$objvalue = $attribute ? (is_object($attribute) ? $attribute->getValue() : $attribute) : '';
 				if(strlen($objvalue) > 80) {
-					echo "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
+					$content .= "<textarea id=\"".$fieldname."_".$attrdef->getId()."\" class=\"input-xxlarge\" name=\"".$fieldname."[".$attrdef->getId()."]\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').">".htmlspecialchars($objvalue)."</textarea>";
 				} else {
-					echo "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
+					$content .= "<input type=\"text\" id=\"".$fieldname."_".$attrdef->getId()."\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\"".((!$norequire && $attrdef->getMinValues() > 0) ? ' required' : '').($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int ? ' data-rule-digits="true"' : '')." />";
 				}
 			}
 			break;
 		}
+		return $content;
 	} /* }}} */
 
 	function printDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
-		print "<div class=\"input-append\">\n";
-		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
-		print "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
-		print "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".urlencode($dropfolderfile)."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
-		print "</div>\n";
-?>
+		echo self::getDropFolderChooserHtml($formName, $dropfolderfile, $showfolders);
+	} /* }}} */
+
+	function getDropFolderChooserHtml($formName, $dropfolderfile="", $showfolders=0) { /* {{{ */
+		$content =  "<div class=\"input-append\">\n";
+		$content .= "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
+		$content .= "<button type=\"button\" class=\"btn\" id=\"clearfilename".$formName."\"><i class=\"icon-remove\"></i></button>";
+		$content .= "<a data-target=\"#dropfolderChooser\" href=\"../out/out.DropFolderChooser.php?form=form1&dropfolderfile=".urlencode($dropfolderfile)."&showfolders=".$showfolders."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file"))."…</a>\n";
+		$content .= "</div>\n";
+		$content .= '
 <div class="modal hide" id="dropfolderChooser" tabindex="-1" role="dialog" aria-labelledby="dropfolderChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="dropfolderChooserLabel"><?php echo ($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file")) ?></h3>
+    <h3 id="dropfolderChooserLabel">'.($showfolders ? getMLText("choose_target_folder"): getMLText("choose_target_file")).'</h3>
   </div>
   <div class="modal-body">
-		<p><?php printMLText('files_loading') ?></p>
-  </div>
+		<p>'.getMLText('files_loading').'</p>
+		</div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">'.getMLText("close").'</button>
   </div>
 </div>
-<?php
+';
+		return $content;
 	} /* }}} */
 
 	function printDropFolderChooserJs($formName, $showfolders=0) { /* {{{ */
@@ -1350,10 +1473,30 @@ $(document).ready(function() {
 		echo "</div>\n";
 	} /* }}} */
 
-	function exitError($pagetitle, $error, $noexit=false) { /* {{{ */
-		$this->htmlStartPage($pagetitle);
-		$this->globalNavigation();
-		$this->contentStart();
+	function ___exitError($pagetitle, $error, $noexit=false, $plain=false) { /* {{{ */
+
+		/* This is just a hack to prevent creation of js files in an error
+		 * case, because they will contain this error page again. It would be much
+		 * better, if there was extra error() function similar to show() and calling
+		 * $view() after setting the action to 'error'. This would also allow to
+		 * set separate error pages for each view.
+		 */
+		if(!$noexit && isset($_REQUEST['action'])) {
+			if(in_array($_REQUEST['action'], array('js', 'footerjs'))) {
+				exit;
+			}
+
+			if($_REQUEST['action'] == 'webrootjs') {
+				$this->webrootjs();
+				exit;
+			}
+		}
+
+		if(!$plain) {	
+			$this->htmlStartPage($pagetitle);
+			$this->globalNavigation();
+			$this->contentStart();
+		}
 
 		print "<div class=\"alert alert-error\">";
 		print "<h4>".getMLText('error')."!</h4>";
@@ -1726,10 +1869,22 @@ $(function() {
 	 * @param string $name id of select box
 	 * @param array $ids list of option values
 	 */
+	function getSelectPresetButtonHtml($name, $ids) { /* {{{ */
+		return '<span id="'.$name.'_btn" class="selectpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOver".$name).'" data-ref="'.$name.'" data-ids="'.implode(",", $ids).'"><i class="icon-arrow-left"></i></span>';
+	} /* }}} */
+
+	/**
+	 * Output left-arrow with link which takes over a number of ids into
+	 * a select box.
+	 *
+	 * Clicking in the button will preset the comma seperated list of ids
+	 * in data-ref as options in the select box with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param array $ids list of option values
+	 */
 	function printSelectPresetButtonHtml($name, $ids) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="selectpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOver".$name); ?>" data-ref="<?php echo $name; ?>" data-ids="<?php echo implode(",", $ids);?>"><i class="icon-arrow-left"></i></span>
-<?php
+		echo self::getSelectPresetButtonHtml($name, $ids);
 	} /* }}} */
 
 	/**
@@ -1757,6 +1912,20 @@ $(document).ready( function() {
 	} /* }}} */
 
 	/**
+	 * Get HTML for left-arrow with link which takes over a string into
+	 * a input field.
+	 *
+	 * Clicking on the button will preset the string
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function getInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
+		return '<span id="'.$name.'_btn" class="inputpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOverAttributeValue").'" data-ref="'.$name.'" data-text="'.(is_array($text) ? implode($sep, $text) : htmlspecialchars($text)).'"'.($sep ? " data-sep=\"".$sep."\"" : "").'><i class="icon-arrow-left"></i></span>';
+	} /* }}} */
+
+	/**
 	 * Output left-arrow with link which takes over a string into
 	 * a input field.
 	 *
@@ -1767,9 +1936,7 @@ $(document).ready( function() {
 	 * @param string $text text
 	 */
 	function printInputPresetButtonHtml($name, $text, $sep='') { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="inputpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
-<?php
+		echo self::getInputPresetButtonHtml($name, $text, $sep);
 	} /* }}} */
 
 	/**
@@ -1801,6 +1968,22 @@ $(document).ready( function() {
 	} /* }}} */
 
 	/**
+	 * Get HTML for left-arrow with link which takes over a boolean value
+	 * into a checkbox field.
+	 *
+	 * Clicking on the button will preset the checkbox
+	 * in data-ref the value of the input field with name $name
+	 *
+	 * @param string $name id of select box
+	 * @param string $text text
+	 */
+	function getCheckboxPresetButtonHtml($name, $text) { /* {{{ */
+?>
+		return '<span id="'.$name.'_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="'.getMLText("takeOverAttributeValue").'" data-ref="'.$name.'" data-text="'.(is_array($text) ? implode($sep, $text) : htmlspecialchars($text)).'"'.($sep ? " data-sep=\"".$sep."\"" : "").'><i class="icon-arrow-left"></i></span>';
+<?php
+	} /* }}} */
+
+	/**
 	 * Output left-arrow with link which takes over a boolean value
 	 * into a checkbox field.
 	 *
@@ -1811,9 +1994,7 @@ $(document).ready( function() {
 	 * @param string $text text
 	 */
 	function printCheckboxPresetButtonHtml($name, $text) { /* {{{ */
-?>
-	<span id="<?php echo $name; ?>_btn" class="checkboxpreset_btn" style="cursor: pointer;" title="<?php printMLText("takeOverAttributeValue"); ?>" data-ref="<?php echo $name; ?>" data-text="<?php echo is_array($text) ? implode($sep, $text) : htmlspecialchars($text);?>"<?php if($sep) echo "data-sep=\"".$sep."\""; ?>><i class="icon-arrow-left"></i></span>
-<?php
+		self::getCheckboxPresetButtonHtml($name, $text);
 	} /* }}} */
 
 	/**
@@ -1837,6 +2018,86 @@ $(document).ready( function() {
 	});
 });
 <?php
+	} /* }}} */
+
+	/**
+	 * Print button with link for deleting an attribute value
+	 *
+	 * This button is used in document listings (e.g. on the ViewFolder page)
+	 * for deleting a document. In seeddms version < 4.3.9 this was just a
+	 * link to the out/out.RemoveDocument.php page which asks for confirmation
+	 * an than calls op/op.RemoveDocument.php. Starting with version 4.3.9
+	 * the button just opens a small popup asking for confirmation and than
+	 * calls the ajax command 'deletedocument'. The ajax call is called
+	 * in the click function of 'button.removedocument'. That button needs
+	 * to have two attributes: 'rel' for the id of the document, and 'msg'
+	 * for the message shown by notify if the document could be deleted.
+	 *
+	 * @param object $document document to be deleted
+	 * @param string $msg message shown in case of successful deletion
+	 * @param boolean $return return html instead of printing it
+	 * @return string html content if $return is true, otherwise an empty string
+	 */
+	function printDeleteAttributeValueButton($attrdef, $value, $msg, $return=false){ /* {{{ */
+		$content = '';
+    $content .= '<a class="delete-attribute-value-btn" rel="'.$attrdef->getID().'" msg="'.getMLText($msg).'" attrvalue="'.htmlspecialchars($value, ENT_QUOTES).'" confirmmsg="'.htmlspecialchars(getMLText("confirm_rm_attr_value", array ("attrdefname" => $attrdef->getName())), ENT_QUOTES).'"><i class="icon-remove"></i></a>';
+		if($return)
+			return $content;
+		else
+			echo $content;
+		return '';
+	} /* }}} */
+
+	function printDeleteAttributeValueButtonJs(){ /* {{{ */
+		echo "
+		$(document).ready(function () {
+//			$('.delete-attribute-value-btn').click(function(ev) {
+			$('body').on('click', 'a.delete-attribute-value-btn', function(ev){
+				id = $(ev.currentTarget).attr('rel');
+				confirmmsg = $(ev.currentTarget).attr('confirmmsg');
+				attrvalue = $(ev.currentTarget).attr('attrvalue');
+				msg = $(ev.currentTarget).attr('msg');
+				formtoken = '".createFormKey('removeattrvalue')."';
+				bootbox.dialog(confirmmsg, [{
+					\"label\" : \"<i class='icon-remove'></i> ".getMLText("rm_attr_value")."\",
+					\"class\" : \"btn-danger\",
+					\"callback\": function() {
+						$.post('../op/op.AttributeMgr.php',
+							{ action: 'removeattrvalue', attrdefid: id, attrvalue: attrvalue, formtoken: formtoken },
+							function(data) {
+								if(data.success) {
+									$('#table-row-attrvalue-'+id).hide('slow');
+									noty({
+										text: msg,
+										type: 'success',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 1500,
+									});
+								} else {
+									noty({
+										text: data.message,
+										type: 'error',
+										dismissQueue: true,
+										layout: 'topRight',
+										theme: 'defaultTheme',
+										timeout: 3500,
+									});
+								}
+							},
+							'json'
+						);
+					}
+				}, {
+					\"label\" : \"".getMLText("cancel")."\",
+					\"class\" : \"btn-cancel\",
+					\"callback\": function() {
+					}
+				}]);
+			});
+		});
+		";
 	} /* }}} */
 
 	/**
@@ -2344,6 +2605,38 @@ mayscript>
 		parent::show();
 	} /* }}} */
 
+	function error(){ /* {{{ */
+		parent::error();
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$pagetitle = $this->params['pagetitle'];
+		$errormsg = $this->params['errormsg'];
+		$plain = $this->params['plain'];
+		$noexit = $this->params['noexit'];
+
+		if(!$plain) {	
+			$this->htmlStartPage($pagetitle);
+			$this->globalNavigation();
+			$this->contentStart();
+		}
+
+		print "<div class=\"alert alert-error\">";
+		print "<h4>".getMLText('error')."!</h4>";
+		print htmlspecialchars($errormsg);
+		print "</div>";
+		print "<div><button class=\"btn history-back\">".getMLText('back')."</button></div>";
+		
+		$this->contentEnd();
+		$this->htmlEndPage();
+		
+		add_log_line(" UI::exitError error=".$errormsg." pagetitle=".$pagetitle, PEAR_LOG_ERR);
+
+		if($noexit)
+			return;
+
+		exit;	
+	} /* }}} */
+
 	/**
 	 * Return HTML Template for jumploader
 	 *
@@ -2410,7 +2703,7 @@ mayscript>
 	} /* }}} */
 
 	/**
-	 * Output HTML Code for jumploader
+	 * Output HTML Code for Fine Uploader
 	 *
 	 * @param string $uploadurl URL where post data is send
 	 * @param integer $folderid id of folder where document is saved
@@ -2418,11 +2711,22 @@ mayscript>
 	 * @param array $fields list of post fields
 	 */
 	function printFineUploaderHtml($prefix='userfile') { /* {{{ */
-?>
-		<div id="<?php echo $prefix; ?>-fine-uploader"></div>
-		<input type="hidden" <?php echo ($prefix=='userfile' ? 'class="do_validate"' : ''); ?> id="<?php echo $prefix; ?>-fine-uploader-uuids" name="<?php echo $prefix; ?>-fine-uploader-uuids" value="" />
-		<input type="hidden" id="<?php echo $prefix; ?>-fine-uploader-names" name="<?php echo $prefix; ?>-fine-uploader-names" value="" />
-<?php
+		echo self::getFineUploaderHtml($prefix);
+	} /* }}} */
+
+	/**
+	 * Get HTML Code for Fine Uploader
+	 *
+	 * @param string $uploadurl URL where post data is send
+	 * @param integer $folderid id of folder where document is saved
+	 * @param integer $maxfiles maximum number of files allowed to upload
+	 * @param array $fields list of post fields
+	 */
+	function getFineUploaderHtml($prefix='userfile') { /* {{{ */
+		$html = '<div id="'.$prefix.'-fine-uploader"></div>
+		<input type="hidden" '.($prefix=='userfile' ? 'class="do_validate" ' : '').'id="'.$prefix.'-fine-uploader-uuids" name="'.$prefix.'-fine-uploader-uuids" value="" />
+		<input type="hidden" id="'.$prefix.'-fine-uploader-names" name="'.$prefix.'-fine-uploader-names" value="" />';
+		return $html;
 	} /* }}} */
 
 	/**

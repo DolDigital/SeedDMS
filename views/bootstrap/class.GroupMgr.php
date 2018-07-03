@@ -189,24 +189,28 @@ $(document).ready( function() {
 	<input type="hidden" name="action" value="addgroup">
 <?php
 		}
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'name',
+				'name'=>'name',
+				'value'=>($group ? htmlspecialchars($group->getName()) : '')
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'id'=>'comment',
+				'name'=>'comment',
+				'rows'=>4,
+				'value'=>($group ? htmlspecialchars($group->getComment()) : '')
+			)
+		);
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("name");?>:</label>
-			<div class="controls">
-				<input type="text" name="name" id="name" value="<?php print $group ? htmlspecialchars($group->getName()) : '';?>">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"><?php printMLText("comment");?>:</label>
-			<div class="controls">
-				<textarea name="comment" id="comment" rows="4" cols="50"><?php print $group ? htmlspecialchars($group->getComment()) : '';?></textarea>
-			</div>
-		</div>
-		<div class="controls">
-			<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
-		</div>
-
 	</form>
 <?php
 		if($group) {
@@ -293,24 +297,32 @@ $(document).ready( function() {
 <div class="row-fluid">
 <div class="span4">
 <form class="form-horizontal">
-<select class="chzn-select" id="selector">
-<option value="-1"><?php echo getMLText("choose_group")?></option>
-<option value="0"><?php echo getMLText("add_group")?></option>
 <?php
+		$options = array();
+		$options[] = array("-1", getMLText("choose_group"));
+		$options[] = array("0", getMLText("add_group"));
 		foreach ($allGroups as $group) {
-			print "<option value=\"".$group->getID()."\" ".($selgroup && $group->getID()==$selgroup->getID() ? 'selected' : '').">" . htmlspecialchars($group->getName()) . "</option>";
+			$options[] = array($group->getID(), htmlspecialchars($group->getName()), $selgroup && $group->getID()==$selgroup->getID());
 		}
+		$this->formField(
+			null, //getMLText("selection"),
+			array(
+				'element'=>'select',
+				'id'=>'selector',
+				'class'=>'chzn-select',
+				'options'=>$options
+			)
+		);
 ?>
-</select>
 </form>
 	<div class="ajax" style="margin-bottom: 15px;" data-view="GroupMgr" data-action="actionmenu" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 	<div class="ajax" data-view="GroupMgr" data-action="info" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
 </div>
 
 <div class="span8">
-	<div class="well">
+	<?php	$this->contentContainerStart(); ?>
 		<div class="ajax" data-view="GroupMgr" data-action="form" <?php echo ($selgroup ? "data-query=\"groupid=".$selgroup->getID()."\"" : "") ?>></div>
-	</div>
+	<?php	$this->contentContainerEnd(); ?>
 </div>
 
 </div>

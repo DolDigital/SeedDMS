@@ -228,6 +228,13 @@ ul.qq-upload-list li span {
 	display: none;
 }
 
+@media (min-width: 1200px) {
+	.modal-wide {
+		width: 800px;
+		margin-left: -400px;
+	}
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

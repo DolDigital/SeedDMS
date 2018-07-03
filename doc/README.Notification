@@ -3,7 +3,17 @@ Notifications
 
 Most changes made to documents or folders in SeedDMS can be monitored
 by the users. Notifications are send by email if a user or group
-has subscribed it.
+has subscribed to it. Setting up email is often troublesome, if you
+are not running SeedDMS on a Linux server with a running mail server.
+In that case you do not have to fill out any of the email settings
+except for the From address ('Send from' on the 'System' tab of the
+configuration). Mail is send by PHP's mail() function. If the SMTP
+host in the configuration is filled out, SeedDMS will use the PEAR
+Mail package for delivering mail to the configured server. If you
+also fill out the SMTP user, authentication with the SMTP server
+will also be done. Some servers like smtp.gmail.com may still complain
+about an invalid authentification. You should then check in your
+google account if less secure apps are allowed.
 
 The following notifications are send to all users and groups having
 registered a notification for the event:

@@ -101,116 +101,110 @@ $(document).ready( function() {
 		$this->contentContainerStart();
 ?>
 <form class="form-horizontal" action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" id="form">
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("current_password");?>:</label>
-		<div class="controls">
-			<input id="currentpwd" type="password" name="currentpwd" size="30">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("new_password");?>:</label>
-		<div class="controls">
-			<input class="pwd" type="password" rel="strengthbar" id="pwd" name="pwd" size="30">
-		</div>
-	</div>
 <?php
-	if($passwordstrength) {
-?>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("password_strength");?>:</label>
-		<div class="controls">
-			<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
-		</div>
-	</div>
-<?php
-	}
-?>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("confirm_pwd");?>:</label>
-		<div class="controls">
-			<input id="pwdconf" type="Password" id="pwdconf" name="pwdconf" size="30">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("name");?>:</label>
-		<div class="controls">
-			<input type="text" id="fullname" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("email");?>:</label>
-		<div class="controls">
-			<input type="text" id="email" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("comment");?>:</label>
-		<div class="controls">
-			<textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($user->getComment());?></textarea>
-		</div>
-	</div>
+		$this->formField(
+			getMLText("current_password"),
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'currentpwd',
+				'name'=>'currentpwd',
+				'autocomplete'=>'off',
+				'required'=>true
+			)
+		);
+		$this->formField(
+			getMLText("new_password"),
+			'<input class="pwd" type="password" rel="strengthbar" id="pwd" name="pwd" size="30">'
+		);
+		if($passwordstrength) {
+			$this->formField(
+				getMLText("password_strength"),
+				'<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>'
+			);
+		}
+		$this->formField(
+			getMLText("confirm_pwd"),
+			array(
+				'element'=>'input',
+				'type'=>'password',
+				'id'=>'pwdconf',
+				'name'=>'pwdconf',
+				'autocomplete'=>'off',
+			)
+		);
+		$this->formField(
+			getMLText("name"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'fullname',
+				'name'=>'fullname',
+				'value'=>htmlspecialchars($user->getFullName()),
+			)
+		);
+		$this->formField(
+			getMLText("email"),
+			array(
+				'element'=>'input',
+				'type'=>'text',
+				'id'=>'email',
+				'name'=>'email',
+				'value'=>htmlspecialchars($user->getEmail()),
+			)
+		);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'value'=>htmlspecialchars($user->getComment()),
+			)
+		);
 
-<?php	
 		if ($enableuserimage){	
-?>	
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("user_image");?>:</label>
-		<div class="controls">
-<?php
-			if ($user->hasImage())
-				print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$user->getId()."\">";
-			else printMLText("no_user_image");
-?>
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("new_user_image");?>:</label>
-		<div class="controls">
-<?php
-	$this->printFileChooser('userfile', false, "image/jpeg");
-?>
-		</div>
-	</div>
-<?php
+			$this->formField(
+				getMLText("user_image"),
+				($user->hasImage() ? "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$user->getId()."\">" : getMLText("no_user_image"))
+			);
+			$this->formField(
+				getMLText("new_user_image"),
+				$this->getFileChooser('userfile', false, "image/jpeg")
+			);
 		}
 		if ($enablelanguageselector){	
-?>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("language");?>:</label>
-		<div class="controls">
-			<select name="language">
-<?php
+			$options = array();
 			$languages = getLanguages();
 			foreach ($languages as $currLang) {
-				print "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".getMLText($currLang)."</option>";
+				$options[] = array($currLang, getMLText($currLang), ($user->getLanguage()==$currLang));
 			}
-?>
-			</select>
-		</div>
-	</div>
-<?php
+			$this->formField(
+				getMLText("language"),
+				array(
+					'element'=>'select',
+					'name'=>'language',
+					'options'=>$options
+				)
+			);
 		}
 		if ($enablethemeselector){	
-?>
-	<div class="control-group">
-		<label class="control-label"><?php printMLText("theme");?>:</label>
-		<div class="controls">
-			<select name="theme">
-<?php
+			$options = array();
 			$themes = UI::getStyles();
 			foreach ($themes as $currTheme) {
-				print "<option value=\"".$currTheme."\" ".(($user->getTheme()==$currTheme) ? "selected" : "").">".$currTheme."</option>";
+				$options[] = array($currTheme, $currTheme,($user->getTheme()==$currTheme));
 			}
-?>
-			</select>
-		</div>
-	</div>
-<?php
+			$this->formField(
+				getMLText("theme"),
+				array(
+					'element'=>'select',
+					'name'=>'theme',
+					'options'=>$options
+				)
+			);
 		}
+		$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('save'));
 ?>
-	<div class="controls">
-		<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button>
-	</div>
 </form>
 
 <?php

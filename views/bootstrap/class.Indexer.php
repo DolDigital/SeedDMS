@@ -71,22 +71,25 @@ function check_queue() {
 					dismissQueue: true,
 					layout: 'topRight',
 					theme: 'defaultTheme',
-					timeout: 1500,
+					timeout: 5000,
 				});
 			},
 			success: function(data) {
 				// console.log('success ' + data.data);
 				if(data.success) {
-					$('#status_'+data.data).html('<?php printMLText('index_done'); ?>');
+					if(data.cmd)
+						$('#status_'+data.data).html('<?php printMLText('index_done'); ?>');
+					else
+						$('#status_'+data.data).html('<?= getMLText('index_done').' ('.getMLText('index_no_content').')'; ?>');
 				} else {
 					$('#status_'+data.data).html('<?php printMLText('index_error'); ?>');
 					noty({
-						text: data.message,
-						type: (data.success) ? 'success' : 'error',
+						text: '<p><strong>Docid: ' + data.data + ' (' + data.mimetype + ')</strong></p>' + '<p>Cmd: ' + data.cmd + '</p>' + data.message,
+						type: 'error',
 						dismissQueue: true,
 						layout: 'topRight',
 						theme: 'defaultTheme',
-						timeout: 1500,
+						timeout: 25000,
 					});
 				}
 			},

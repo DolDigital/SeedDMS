@@ -79,39 +79,6 @@ function getReadableDurationArray($secs) { /* {{{ */
 	return $units;
 } /* }}} */
 
-/**
- * Compare two version
- *
- * This functions compares two version in the format x.x.x
- *
- * @param string $ver1
- * @param string $ver2
- * @return int -1 if $ver1 < $ver2, 0 if $ver1 == $ver2, 1 if $ver1 > $ver2
- */
-function cmpVersion($ver1, $ver2) {
-	$tmp1 = explode('.', $ver1);
-	$tmp2 = explode('.', $ver2);
-	if(intval($tmp1[0]) < intval($tmp2[0])) {
-		return -1;
-	} elseif(intval($tmp1[0]) > intval($tmp2[0])) {
-		return 1;
-	} else {
-		if(intval($tmp1[1]) < intval($tmp2[1])) {
-			return -1;
-		} elseif(intval($tmp1[1]) > intval($tmp2[1])) {
-			return 1;
-		} else {
-			if(intval($tmp1[2]) < intval($tmp2[2])) {
-				return -1;
-			} elseif(intval($tmp1[2]) > intval($tmp2[2])) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-	}
-}
-
 //
 // The original string sanitizer, kept for reference.
 //function sanitizeString($string) {
@@ -585,5 +552,25 @@ function addDirSep($str) { /* {{{ */
 		return trim($str).DIRECTORY_SEPARATOR;
 	else
 		return trim($str);
+} /* }}} */
+
+/**
+ * Send a file from disk to the browser
+ *
+ * This function uses either readfile() or the xѕendfile apache module if
+ * it is installed.
+ *
+ * @param string $filename
+ */
+function sendFile($filename) { /* {{{ */
+	if(function_exists('apache_get_modules') && in_array('mod_xsendfile',apache_get_modules())) {
+		header("X-Sendfile: ".$filename);
+	} else {
+		/* Make sure output buffering is off */
+		if (ob_get_level()) {
+			ob_end_clean();
+		}
+		readfile($filename);
+	}
 } /* }}} */
 ?>

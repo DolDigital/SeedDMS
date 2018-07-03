@@ -37,8 +37,8 @@ class SeedDMS_View_ReviewDocument extends SeedDMS_Bootstrap_Style {
 function checkIndForm()
 {
 	msg = new Array();
-	if (document.form1.reviewStatus.value == "") msg.push("<?php printMLText("js_no_review_status");?>");
-	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.formind.reviewStatus.value == "") msg.push("<?php printMLText("js_no_review_status");?>");
+	if (document.formind.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "") {
   	noty({
   		text: msg.join('<br />'),
@@ -55,10 +55,10 @@ function checkIndForm()
 }
 function checkGrpForm()
 {
-	msg = "";
-	if (document.form2.reviewGroup.value == "") msg += "<?php printMLText("js_no_review_group");?>\n";
-	if (document.form2.reviewStatus.value == "") msg += "<?php printMLText("js_no_review_status");?>\n";
-	if (document.form2.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	msg = new Array();
+//	if (document.formgrp.reviewGroup.value == "") msg.push("<?php printMLText("js_no_review_group");?>");
+	if (document.formgrp.reviewStatus.value == "") msg.push("<?php printMLText("js_no_review_status");?>");
+	if (document.formgrp.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "")
 	{
   	noty({
@@ -75,11 +75,11 @@ function checkGrpForm()
 		return true;
 }
 $(document).ready(function() {
-	$('body').on('submit', '#form1', function(ev){
+	$('body').on('submit', '#formind', function(ev){
 		if(checkIndForm()) return;
 		ev.preventDefault();
 	});
-	$('body').on('submit', '#form2', function(ev){
+	$('body').on('submit', '#formgrp', function(ev){
 		if(checkGrpForm()) return;
 		ev.preventDefault();
 	});
@@ -110,121 +110,63 @@ $(document).ready(function() {
 		$this->contentContainerStart();
 
 		// Display the Review form.
-		if ($reviewStatus['type'] == 0) {
-			if($reviewStatus["status"]!=0) {
+		$reviewtype = ($reviewStatus['type'] == 0) ? 'ind' : 'grp';
+		if($reviewStatus["status"]!=0) {
 
-				print "<table class=\"folderView\"><thead><tr>";
-				print "<th>".getMLText("status")."</th>";
-				print "<th>".getMLText("comment")."</th>";
-				print "<th>".getMLText("last_update")."</th>";
-				print "</tr></thead><tbody><tr>";
-				print "<td>";
-				printReviewStatusText($reviewStatus["status"]);
-				print "</td>";
-				print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
-				$indUser = $dms->getUser($reviewStatus["userID"]);
-				print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-				print "</tr></tbody></table><br>";
-			}
-?>
-	<form method="post" action="../op/op.ReviewDocument.php" id="form1" name="form1" enctype="multipart/form-data">
-	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("comment")?>:</td>
-			<td><textarea name="comment" cols="80" rows="4"></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_file")?>:</td>
-			<td>
-<?php
-	$this->printFileChooser('reviewfile', false);
-?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_status")?></td>
-			<td>
-				<select name="reviewStatus">
-<?php if($reviewStatus['status'] != 1) { ?>
-					<option value='1'><?php printMLText("status_reviewed")?></option>
-<?php } ?>
-<?php if($reviewStatus['status'] != -1) { ?>
-					<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type='submit' class="btn" name='indReview' value='<?php printMLText("submit_review")?>'/></td>
-		</tr>
-	</table>
-	<input type='hidden' name='reviewType' value='ind'/>
-	<input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
-	</form>
-<?php
+			print "<table class=\"folderView\"><thead><tr>";
+			print "<th>".getMLText("status")."</th>";
+			print "<th>".getMLText("comment")."</th>";
+			print "<th>".getMLText("last_update")."</th>";
+			print "</tr></thead><tbody><tr>";
+			print "<td>";
+			printReviewStatusText($reviewStatus["status"]);
+			print "</td>";
+			print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
+			$indUser = $dms->getUser($reviewStatus["userID"]);
+			print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
+			print "</tr></tbody></table><br>\n";
 		}
-		else if ($reviewStatus['type'] == 1) {
-
-			if($reviewStatus["status"]!=0) {
-
-				print "<table class=\"folderView\"><thead><tr>";
-				print "<th>".getMLText("status")."</th>";
-				print "<th>".getMLText("comment")."</th>";
-				print "<th>".getMLText("last_update")."</th>";
-				print "</tr></thead><tbody><tr>";
-				print "<td>";
-				printReviewStatusText($reviewStatus["status"]);
-				print "</td>";
-				print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
-				$indUser = $dms->getUser($reviewStatus["userID"]);
-				print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-				print "</tr></tbody></table><br>\n";
-			}
-
 ?>
-	<form method="post" action="../op/op.ReviewDocument.php" id="form2" name="form2" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" action="../op/op.ReviewDocument.php" id="form<?= $reviewtype ?>" name="form<?= $reviewtype ?>" enctype="multipart/form-data">
 	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("comment")?>:</td>
-			<td><textarea name="comment" cols="80" rows="4"></textarea></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_file")?>:</td>
-			<td>
 <?php
-	$this->printFileChooser('reviewfile', false);
+		$this->formField(
+			getMLText("comment"),
+			array(
+				'element'=>'textarea',
+				'name'=>'comment',
+				'rows'=>4,
+				'cols'=>80
+			)
+		);
+		$this->formField(
+			getMLText("review_file"),
+			$this->getFileChooser('review_file', false)
+		);
+		$options = array();
+		if($reviewStatus['status'] != 1)
+			$options[] = array('1', getMLText('status_reviewed'));
+		if($reviewStatus['status'] != -1)
+			$options[] = array('-1', getMLText('rejected'));
+		$this->formField(
+			getMLText("review_status"),
+			array(
+				'element'=>'select',
+				'name'=>'reviewStatus',
+				'options'=>$options
+			)
+		);
+		$this->formSubmit(getMLText('submit_review'), $reviewtype.'Review');
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("review_status")?>:</td>
-			<td>
-				<select name="reviewStatus">
-<?php if($reviewStatus['status'] != 1) { ?>
-					<option value='1'><?php printMLText("status_reviewed")?></option>
-<?php } ?>
-<?php if($reviewStatus['status'] != -1) { ?>
-					<option value='-1'><?php printMLText("rejected")?></option>
-<?php } ?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input type='submit' class="btn" name='groupReview' value='<?php printMLText("submit_review")?>'/></td>
-		</tr>
-	</table>
-	<input type='hidden' name='reviewType' value='grp'/>
+	<input type='hidden' name='reviewType' value='<?= $reviewtype ?>'/>
+	<?php if($reviewtype == 'grp'): ?>
 	<input type='hidden' name='reviewGroup' value='<?php echo $reviewStatus['required']; ?>'/>
+	<?php endif; ?>
 	<input type='hidden' name='documentid' value='<?php echo $document->getID() ?>'/>
 	<input type='hidden' name='version' value='<?php echo $content->getVersion() ?>'/>
 	</form>
 <?php
-		}
+
 		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
