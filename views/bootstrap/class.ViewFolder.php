@@ -89,6 +89,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$orderby = $this->params['orderby'];
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$enableDropUpload = $this->params['enableDropUpload'];
+		$maxItemsPerPage = $this->params['maxItemsPerPage'];
 
 		header('Content-Type: application/javascript; charset=UTF-8');
 		parent::jsTranslations(array('cancel', 'splash_move_document', 'confirm_move_document', 'move_document', 'splash_move_folder', 'confirm_move_folder', 'move_folder'));
@@ -96,6 +97,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 function folderSelected(id, name) {
 	window.location = '../out/out.ViewFolder.php?folderid=' + id;
 }
+<?php if($maxItemsPerPage) { ?>
 function loadMoreObjects(element, limit) {
 	if(!$(element).is(":visible"))
 		return;
@@ -130,6 +132,7 @@ $(window).scroll(function() {
 $('#loadmore').click(function(e) {
 	loadMoreObjects($(this), $(this).data('all'));
 });
+<?php } ?>
 <?php
 		$this->printNewTreeNavigationJs($folder->getID(), M_READ, 0, '', $expandFolderTree == 2, $orderby);
 
