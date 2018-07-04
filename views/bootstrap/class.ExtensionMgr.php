@@ -239,6 +239,8 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		print "</tr></thead><tbody>\n";
 		$list = $extmgr->getExtensionList();
 		foreach($list as $re) {
+			if(!$re)
+				continue;
 			$extmgr->checkExtension($re);
 			$checkmsgs = $extmgr->getErrorMsgs();
 			$needsupdate = !isset($GLOBALS['EXT_CONF'][$re['name']]) || SeedDMS_Extension_Mgr::cmpVersion($re['version'], $GLOBALS['EXT_CONF'][$re['name']]['version']) > 0;
