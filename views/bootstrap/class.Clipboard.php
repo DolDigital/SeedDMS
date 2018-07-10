@@ -68,7 +68,22 @@ class SeedDMS_View_Clipboard extends SeedDMS_Bootstrap_Style {
 			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
 		}
 //		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">kkk</a> </li>\n";
-		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
+//		$content .= "    <li><a class=\"ajax-click\" data-href=\"../op/op.Ajax.php\" data-param1=\"command=clearclipboard\">".getMLText("clear_clipboard")."</a></li>\n";
+		$menuitems = array();
+		$menuitems['clear_clipboard'] = array('label'=>'clear_clipboard', 'attributes'=>array(array('class', 'ajax-click'), array('data-href', '../op/op.Ajax.php'), array('data-param1', 'command=clearclipboard')));
+		if($this->hasHook('clipboardMenuItems'))
+			$menuitems = $this->callHook('clipboardMenuItems', $clipboard, $menuitems);
+		foreach($menuitems as $menuitem) {
+			$content .= "<li>";
+			$content .= "<a";
+			if($menuitem['link'])
+				$content .= ' href="'.$menuitem['link'].'"';
+			foreach($menuitem['attributes'] as $attr)
+				$content .= ' '.$attr[0].'="'.$attr[1].'"';
+			$content .= ">";
+			$content .= getMLText($menuitem['label']);
+			$content .= "</a></li>";
+		}
 		$content .= "     </ul>\n";
 		$content .= "    </li>\n";
 		$content .= "   </ul>\n";
