@@ -24,6 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+context can be passed to getAccessMode()
+call hook in SeedDMS_Core_Folder::getAccessMode()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
