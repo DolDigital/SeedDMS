@@ -59,7 +59,7 @@ if (!is_object($file)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_file_id"));
 }
 
-if (($document->getAccessMode($user) < M_ALL)&&($user->getID()!=$file->getUserID())) {
+if (($document->getAccessMode($user, 'editDocumentFile') < M_ALL)&&($user->getID()!=$file->getUserID())) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 

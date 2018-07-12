@@ -267,9 +267,9 @@ switch($command) {
 			} else {
 				$mfolder = $dms->getFolder($_REQUEST['folderid']);
 				if($mfolder) {
-					if ($mfolder->getAccessMode($user) >= M_READWRITE) {
+					if ($mfolder->getAccessMode($user, 'moveFolder') >= M_READWRITE) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-							if($folder->getAccessMode($user) >= M_READWRITE) {
+							if($folder->getAccessMode($user, 'moveFolder') >= M_READWRITE) {
 								if($mfolder->setParent($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_folder'), 'data'=>''));
@@ -306,9 +306,9 @@ switch($command) {
 			} else {
 				$mdocument = $dms->getDocument($_REQUEST['docid']);
 				if($mdocument) {
-					if ($mdocument->getAccessMode($user) >= M_READWRITE) {
+					if ($mdocument->getAccessMode($user, 'moveDocument') >= M_READWRITE) {
 						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-							if($folder->getAccessMode($user) >= M_READWRITE) {
+							if($folder->getAccessMode($user, 'moveDocument') >= M_READWRITE) {
 								if($mdocument->setFolder($folder)) {
 									header('Content-Type: application/json');
 									echo json_encode(array('success'=>true, 'message'=>getMLText('splash_move_document'), 'data'=>''));
@@ -345,7 +345,7 @@ switch($command) {
 			} else {
 				$folder = $dms->getFolder($_REQUEST['id']);
 				if($folder) {
-					if ($folder->getAccessMode($user) >= M_READWRITE) {
+					if ($folder->getAccessMode($user, 'removeFolder') >= M_READWRITE) {
 						$parent=$folder->getParent();
 						$nl =	$folder->getNotifyList();
 						$foldername = $folder->getName();
@@ -392,7 +392,7 @@ switch($command) {
 			} else {
 				$document = $dms->getDocument($_REQUEST['id']);
 				if($document) {
-					if ($document->getAccessMode($user) >= M_READWRITE) {
+					if ($document->getAccessMode($user, 'removeDocument') >= M_READWRITE) {
 						$folder = $document->getFolder();
 						/* Get the notify list before removing the document */
 						$dnl =	$document->getNotifyList();
@@ -523,7 +523,7 @@ switch($command) {
 					exit;
 				}
 
-				if ($folder->getAccessMode($user) < M_READWRITE) {
+				if ($folder->getAccessMode($user, 'addDocument') < M_READWRITE) {
 					header('Content-Type: application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("access_denied")));
 					exit;

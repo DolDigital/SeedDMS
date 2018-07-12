@@ -602,7 +602,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if($document) {
 			if($this->logger)
 				$this->logger->log('PUT: replacing document id='.$document->getID(), PEAR_LOG_INFO);
-			if ($document->getAccessMode($this->user) < M_READWRITE) {
+			if ($document->getAccessMode($this->user, 'updateDocument') < M_READWRITE) {
 				if($this->logger)
 					$this->logger->log('PUT: no access on document', PEAR_LOG_ERR);
 				unlink($tmpFile);
@@ -645,7 +645,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		} else {
 			if($this->logger)
 				$this->logger->log('PUT: adding new document', PEAR_LOG_INFO);
-			if ($folder->getAccessMode($this->user) < M_READWRITE) {
+			if ($folder->getAccessMode($this->user, 'addDocument') < M_READWRITE) {
 				if($this->logger)
 					$this->logger->log('PUT: no access on folder', PEAR_LOG_ERR);
 				unlink($tmpFile);
@@ -753,7 +753,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if ($folder->getAccessMode($this->user) < M_READWRITE) {
+		if ($folder->getAccessMode($this->user, 'addFolder') < M_READWRITE) {
 			if($this->logger)
 				$this->logger->log('MKCOL: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 
@@ -800,7 +800,7 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (!$obj) return "404 Not found";
 
 		// check for access rights
-		if($obj->getAccessMode($this->user) < M_ALL) {
+		if($obj->getAccessMode($this->user, get_class($obj) == $this->dms->getClassname('folder') ? 'removeFolder' : 'removeDocument') < M_ALL) {
 			if($this->logger)
 				$this->logger->log('DELETE: access forbidden', PEAR_LOG_ERR);
 			return "403 Forbidden";				 

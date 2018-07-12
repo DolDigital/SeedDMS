@@ -46,13 +46,13 @@ if (!is_object($document)) {
 $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
 
-if ($document->getAccessMode($user) < M_READWRITE) {
+if ($document->getAccessMode($user, 'editDocument') < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
 if($document->isLocked()) {
 	$lockingUser = $document->getLockingUser();
-	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user, 'editDocument') != M_ALL)) {
 		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
 	}
 }

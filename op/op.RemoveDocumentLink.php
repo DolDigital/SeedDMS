@@ -54,7 +54,7 @@ if (!is_object($link)) {
 }
 
 $responsibleUser = $link->getUser();
-$accessMode = $document->getAccessMode($user);
+$accessMode = $document->getAccessMode($user, 'removeDocumentLink');
 
 if (
 	($accessMode < M_READ)

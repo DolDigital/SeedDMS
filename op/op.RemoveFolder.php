@@ -50,7 +50,7 @@ if ($folderid == $settings->_rootFolderID || !$folder->getParent()) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("cannot_rm_root"));
 }
 
-if ($folder->getAccessMode($user) < M_ALL) {
+if ($folder->getAccessMode($user, 'removeFolder') < M_ALL) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 

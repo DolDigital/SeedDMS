@@ -40,7 +40,7 @@ if (!is_object($document)) {
 
 $folder = $document->getFolder();
 
-if ($document->getAccessMode($user) < M_READWRITE) {
+if ($document->getAccessMode($user, 'addDocumentFile') < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 

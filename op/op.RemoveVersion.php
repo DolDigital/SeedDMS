@@ -46,7 +46,7 @@ if (!$settings->_enableVersionDeletion && !$user->isAdmin()) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-if ($document->getAccessMode($user) < M_ALL) {
+if ($document->getAccessMode($user, 'removeVersion') < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 

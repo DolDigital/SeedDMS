@@ -411,7 +411,7 @@ function createFolder($id) { /* {{{ */
     }
     $parent = $dms->getFolder($id);
     if($parent) {
-        if($parent->getAccessMode($userobj) >= M_READWRITE) {
+        if($parent->getAccessMode($userobj, 'addFolder') >= M_READWRITE) {
             if($name = $app->request()->post('name')) {
                 $comment = $app->request()->post('comment');
                 $attributes = $app->request()->post('attributes');
@@ -478,9 +478,9 @@ function moveFolder($id, $folderid) { /* {{{ */
 
     $mfolder = $dms->getFolder($id);
     if($mfolder) {
-        if ($mfolder->getAccessMode($userobj) >= M_READ) {
+        if ($mfolder->getAccessMode($userobj, 'moveFolder') >= M_READ) {
             if($folder = $dms->getFolder($folderid)) {
-                if($folder->getAccessMode($userobj) >= M_READWRITE) {
+                if($folder->getAccessMode($userobj, 'moveFolder') >= M_READWRITE) {
                     if($mfolder->setParent($folder)) {
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
@@ -535,7 +535,7 @@ function deleteFolder($id) { /* {{{ */
     }
     $mfolder = $dms->getFolder($id);
     if($mfolder) {
-        if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
+        if ($mfolder->getAccessMode($userobj, 'removeFolder') >= M_READWRITE) {
             if($mfolder->remove()) {
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
@@ -577,7 +577,7 @@ function uploadDocument($id) { /* {{{ */
     }
     $mfolder = $dms->getFolder($id);
     if($mfolder) {
-        if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
+        if ($mfolder->getAccessMode($userobj, 'addDocument') >= M_READWRITE) {
             $docname = $app->request()->params('name');
             $keywords = $app->request()->params('keywords');
 //            $categories = $app->request()->params('categories') ? $app->request()->params('categories') : [];
@@ -650,7 +650,7 @@ function uploadDocumentPut($id) { /* {{{ */
     }
     $mfolder = $dms->getFolder($id);
     if($mfolder) {
-        if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
+        if ($mfolder->getAccessMode($userobj, 'addDocument') >= M_READWRITE) {
             $docname = $app->request()->get('name');
             $origfilename = $app->request()->get('origfilename');
             $content = $app->getInstance()->request()->getBody();
@@ -706,7 +706,7 @@ function uploadDocumentFile($documentId) { /* {{{ */
     }
     $document = $dms->getDocument($documentId);
     if($document) {
-        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+        if ($document->getAccessMode($userobj, 'addDocumentFile') >= M_READWRITE) {
             $docname = $app->request()->params('name');
             $keywords = $app->request()->params('keywords');
             $origfilename = $app->request()->params('origfilename');
@@ -791,7 +791,7 @@ function deleteDocument($id) { /* {{{ */
     global $app, $dms, $userobj;
     $document = $dms->getDocument($id);
     if($document) {
-        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+        if ($document->getAccessMode($userobj, 'deleteDocument') >= M_READWRITE) {
             if($document->remove()) {
                 $app->response()->header('Content-Type', 'application/json');
                 echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
@@ -819,9 +819,9 @@ function moveDocument($id, $folderid) { /* {{{ */
     global $app, $dms, $userobj;
     $document = $dms->getDocument($id);
     if($document) {
-        if ($document->getAccessMode($userobj) >= M_READ) {
+        if ($document->getAccessMode($userobj, 'moveDocument') >= M_READ) {
             if($folder = $dms->getFolder($folderid)) {
-                if($folder->getAccessMode($userobj) >= M_READWRITE) {
+                if($folder->getAccessMode($userobj, 'moveDocument') >= M_READWRITE) {
                     if($document->setFolder($folder)) {
                         $app->response()->header('Content-Type', 'application/json');
                         echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
@@ -1151,7 +1151,7 @@ function removeDocumentCategory($id, $categoryId) { /* {{{ */
     $category = $dms->getDocumentCategory($categoryId);
 
     if($document && $category) {
-        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+        if ($document->getAccessMode($userobj, 'removeDocumentCategory') >= M_READWRITE) {
             $ret = $document->removeCategories(array($category));
 
             $app->response()->header('Content-Type', 'application/json');
@@ -1179,7 +1179,7 @@ function removeDocumentCategories($id) { /* {{{ */
     $document = $dms->getDocument($id);
 
     if($document) {
-        if ($document->getAccessMode($userobj) >= M_READWRITE) {
+        if ($document->getAccessMode($userobj, 'removeDocumentCategory') >= M_READWRITE) {
             $app->response()->header('Content-Type', 'application/json');
             if($document->setCategories(array()))
                 echo json_encode(array('success'=>true, 'message'=>'Deleted categories successfully.', 'data'=>''));

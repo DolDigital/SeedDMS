@@ -54,7 +54,7 @@ if (!is_object($file)) {
 }
 
 
-if (($document->getAccessMode($user) < M_ALL)&&($user->getID()!=$file->getUserID())) {
+if (($document->getAccessMode($user, 'removeDocumentFile') < M_ALL)&&($user->getID()!=$file->getUserID())) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 

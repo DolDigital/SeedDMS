@@ -48,7 +48,7 @@ if (!is_object($document)) {
 $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
 
-if ($document->getAccessMode($user) < M_READWRITE) {
+if ($document->getAccessMode($user, 'editDocumentContentAttributes') < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
