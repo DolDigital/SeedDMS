@@ -1022,6 +1022,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if(!$user)
 			return M_NONE;
 
+		/* Check if 'onCheckAccessDocument' callback is set */
+		if(isset($this->_dms->callbacks['onCheckAccessDocument'])) {
+			foreach($this->_dms->callbacks['onCheckAccessDocument'] as $callback) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $user)) > 0) {
+					return $ret;
+				}
+			}
+		}
+
 		/* Administrators have unrestricted access */
 		if ($user->isAdmin()) return M_ALL;
 
@@ -1640,7 +1649,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			$classname = $this->_dms->getClassname('documentcontent');
 			$user = $this->_dms->getLoggedInUser();
 			foreach ($resArr as $row) {
-			    /** @var SeedDMS_Core_DocumentContent $content */
+				/** @var SeedDMS_Core_DocumentContent $content */
 				$content = new $classname($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']);
 				if($user) {
 					if($content->getAccessMode($user) >= M_READ)
@@ -2651,6 +2660,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if (!$ignorecurrentstatus && ($st["status"]==S_OBSOLETE || $st["status"]==S_REJECTED || $st["status"]==S_EXPIRED )) return;
 
+		unset($this->_workflow); // force to be reloaded from DB
+		$hasworkflow =  $this->getWorkflow() ? true : false;
+
 		$pendingReview=false;
 		unset($this->_reviewStatus);  // force to be reloaded from DB
 		$reviewStatus=$this->getReviewStatus();
@@ -2969,7 +2981,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$this->getStatus();
 		}
 		if ($this->_status["status"]==$status) {
-			return false;
+			return true;
 		}
 		if($date)
 			$ddate = $db->qstr($date);
