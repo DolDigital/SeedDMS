@@ -1257,12 +1257,30 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * recursive check for access rights of parent folders if access rights
 	 * are inherited.
 	 *
+	 * Before checking the access in the method itself a callback 'onCheckAccessFolder'
+	 * is called. If it returns a value > 0, then this will be returned by this
+	 * method without any further checks. The optional paramater $context
+	 * will be passed as a third parameter to the callback. It contains
+	 * the operation for which the access mode is retrieved. It is for example
+	 * set to 'removeDocument' if the access mode is used to check for sufficient
+	 * permission on deleting a document.
+	 *
 	 * @param object $user user for which access shall be checked
+	 * @param string $context context in which the access mode is requested
 	 * @return integer access mode
 	 */
-	function getAccessMode($user) { /* {{{ */
+	function getAccessMode($user, $context='') { /* {{{ */
 		if(!$user)
 			return M_NONE;
+
+		/* Check if 'onCheckAccessFolder' callback is set */
+		if(isset($this->_dms->callbacks['onCheckAccessFolder'])) {
+			foreach($this->_dms->callbacks['onCheckAccessFolder'] as $callback) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $user, $context)) > 0) {
+					return $ret;
+				}
+			}
+		}
 
 		/* Administrators have unrestricted access */
 		if ($user->isAdmin()) return M_ALL;
