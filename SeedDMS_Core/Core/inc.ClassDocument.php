@@ -1015,17 +1015,26 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * a callback function defined by the application. If the callback
 	 * function is not set, access on the content is always granted.
 	 *
+	 * Before checking the access in the method itself a callback 'onCheckAccessDocument'
+	 * is called. If it returns a value > 0, then this will be returned by this
+	 * method without any further checks. The optional paramater $context
+	 * will be passed as a third parameter to the callback. It contains
+	 * the operation for which the access mode is retrieved. It is for example
+	 * set to 'removeDocument' if the access mode is used to check for sufficient
+	 * permission on deleting a document.
+	 *
 	 * @param $user object instance of class SeedDMS_Core_User
+	 * @param string $context context in which the access mode is requested
 	 * @return integer access mode
 	 */
-	function getAccessMode($user) { /* {{{ */
+	function getAccessMode($user, $context='') { /* {{{ */
 		if(!$user)
 			return M_NONE;
 
 		/* Check if 'onCheckAccessDocument' callback is set */
 		if(isset($this->_dms->callbacks['onCheckAccessDocument'])) {
 			foreach($this->_dms->callbacks['onCheckAccessDocument'] as $callback) {
-				if(($ret = call_user_func($callback[0], $callback[1], $this, $user)) > 0) {
+				if(($ret = call_user_func($callback[0], $callback[1], $this, $user, $context)) > 0) {
 					return $ret;
 				}
 			}
