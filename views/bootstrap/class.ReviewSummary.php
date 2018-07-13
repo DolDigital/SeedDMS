@@ -50,8 +50,10 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("my_documents"), "my_documents");
 
+		echo "<div class=\"row-fluid\">\n";
+		echo "<div class=\"span6\">\n";
 		$this->contentHeading(getMLText("review_summary"));
-		$this->contentContainerStart();
+//		$this->contentContainerStart();
 
 		// TODO: verificare scadenza
 
@@ -67,40 +69,26 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 		foreach ($reviewStatus["indstatus"] as $st) {
 			$document = $dms->getDocument($st['documentID']);
 			$version = $document->getContentByVersion($st['version']);
-			$owner = $document->getOwner();
 			$moduser = $dms->getUser($st['required']);
 
 			if ($document && $version) {
-			
+
 				if ($printheader){
-					print "<table class=\"table-condensed\">";
+					print "<table class=\"table table-condensed\">";
 					print "<thead>\n<tr>\n";
 					print "<th></th>\n";
 					print "<th>".getMLText("name")."</th>\n";
-					print "<th>".getMLText("owner")."</th>\n";
 					print "<th>".getMLText("status")."</th>\n";
-					print "<th>".getMLText("version")."</th>\n";
+					print "<th>".getMLText("action")."</th>\n";
 					print "<th>".getMLText("last_update")."</th>\n";
-					print "<th>".getMLText("expires")."</th>\n";
 					print "</tr>\n</thead>\n<tbody>\n";
 					$printheader=false;
 				}
-			
-				print "<tr>\n";
-				$previewer->createPreview($version);
-				print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
-				if($previewer->hasPreview($version)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
-				} else {
-					print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
-				}
-				print "</a></td>";
-				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($document->getName())."</a></td>";
-				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>".getReviewStatusText($st["status"])."</td>";
-				print "<td>".$st["version"]."</td>";
-				print "<td>".$st["date"]." ". htmlspecialchars($moduser->getFullName()) ."</td>";
-				print "<td>".(!$document->expires() ? "-":getReadableDate($document->getExpires()))."</td>";				
+
+				$class = $st['status'] == 1 ? ' success' : ($st['status'] == -1 ? ' error' : ( $st['status'] == -2 ? ' info' : ''));
+				print "<tr id=\"table-row-document-".$st['documentID']."\" class=\"table-row-document".$class."\" rel=\"document_".$st['documentID']."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
+				echo $this->documentListRow($document, $previewer, true, $st['version']);
+				print "<td><small>".getReviewStatusText($st['status'])."<br />".$st["date"]."<br />". htmlspecialchars($moduser->getFullName()) ."</small></td>";
 				print "</tr>\n";
 			}
 			if ($st["status"]!=-2) {
@@ -113,9 +101,11 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 			printMLText("no_docs_to_review");
 		}
 
-		$this->contentContainerEnd();
+//		$this->contentContainerEnd();
+		echo "</div>\n";
+		echo "<div class=\"span6\">\n";
 		$this->contentHeading(getMLText("group_review_summary"));
-		$this->contentContainerStart();
+//		$this->contentContainerStart();
 
 		$printheader=true;
 		foreach ($reviewStatus["grpstatus"] as $st) {
@@ -125,36 +115,23 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 			$modgroup = $dms->getGroup($st['required']);
 
 			if (!in_array($st["documentID"], $iRev) && $document && $version) {
-			
+
 				if ($printheader){
-					print "<table class=\"folderView\">";
+					print "<table class=\"table table-condensed\">";
 					print "<thead>\n<tr>\n";
 					print "<th></th>\n";
 					print "<th>".getMLText("name")."</th>\n";
-					print "<th>".getMLText("owner")."</th>\n";
 					print "<th>".getMLText("status")."</th>\n";
-					print "<th>".getMLText("version")."</th>\n";
+					print "<th>".getMLText("action")."</th>\n";
 					print "<th>".getMLText("last_update")."</th>\n";
-					print "<th>".getMLText("expires")."</th>\n";
 					print "</tr>\n</thead>\n<tbody>\n";
 					$printheader=false;
-				}		
-			
-				print "<tr>\n";
-				$previewer->createPreview($version);
-				print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
-				if($previewer->hasPreview($version)) {
-					print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
-				} else {
-					print "<img class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				}
-				print "</a></td>";
-				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($document->getName())."</a></td>";
-				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>".getReviewStatusText($st["status"])."</td>";
-				print "<td>".$st["version"]."</td>";
-				print "<td>".$st["date"]." ". htmlspecialchars($modgroup->getName()) ."</td>";
-				print "<td>".(!$document->expires() ? "-":getReadableDate($document->getExpires()))."</td>";				
+
+				$class = $st['status'] == 1 ? ' success' : ($st['status'] == -1 ? ' error' : ( $st['status'] == -2 ? ' info' : ''));
+				print "<tr id=\"table-row-document-".$st['documentID']."\" class=\"table-row-document".$class."\" rel=\"document_".$st['documentID']."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
+				echo $this->documentListRow($document, $previewer, true, $st['version']);
+				print "<td><small>".getReviewStatusText($st['status'])."<br />".$st["date"]."<br />". htmlspecialchars($moduser->getFullName()) ."</small></td>";
 				print "</tr>\n";
 			}
 		}
@@ -164,8 +141,9 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 			printMLText("no_docs_to_review");
 		}
 
-
-		$this->contentContainerEnd();
+//		$this->contentContainerEnd();
+		echo "</div>\n";
+		echo "</div>\n";
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
