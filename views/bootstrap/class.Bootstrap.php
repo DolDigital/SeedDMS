@@ -79,6 +79,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo '<base href="'.$base.'">'."\n";
 		elseif($this->baseurl)
 			echo '<base href="'.$this->baseurl.'">'."\n";
+		if($this->params['session'])
+			echo '<link rel="search" type="application/opensearchdescription+xml" href="../out/out.OpensearchDesc.php" title="'.(strlen($sitename)>0 ? $sitename : "SeedDMS").'"/>'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
@@ -365,7 +367,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 			}
 			echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
-			echo "      <input name=\"query\" class=\"search-query\" ".($this->params['defaultsearchmethod'] == 'fulltext' ? "" : "id=\"searchfield\"")." data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
+			echo "      <input name=\"query\" class=\"search-query\" ".($this->params['defaultsearchmethod'] == 'fulltext' ? "" : "id=\"searchfield\"")." data-provide=\"typeahead\" type=\"search\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
 			if($this->params['defaultsearchmethod'] == 'fulltext')
 				echo "      <input type=\"hidden\" name=\"fullsearch\" value=\"1\" />";
 //			if($this->params['enablefullsearch']) {
