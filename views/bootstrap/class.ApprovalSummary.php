@@ -95,7 +95,7 @@ class SeedDMS_View_ApprovalSummary extends SeedDMS_Bootstrap_Style {
 				print "</a></td>";
 				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($document->getName())."</a></td>";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>".getOverallStatusText($st["status"])."</td>";
+				print "<td>".getApprovalStatusText($st["status"])."</td>";
 				print "<td>".$st["version"]."</td>";
 				print "<td>".$st["date"]." ". htmlspecialchars($moduser->getFullName()) ."</td>";
 				print "<td>".(!$document->expires() ? "-":getReadableDate($document->getExpires()))."</td>";				
@@ -149,7 +149,7 @@ class SeedDMS_View_ApprovalSummary extends SeedDMS_Bootstrap_Style {
 				print "</a></td>";
 				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($document->getName())."</a></td>";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>".getOverallStatusText($st["status"])."</td>";
+				print "<td>".getApprovalStatusText($st["status"])."</td>";
 				print "<td>".$st["version"]."</td>";
 				print "<td>".$st["date"]." ". htmlspecialchars($modgroup->getName()) ."</td>";
 				print "<td>".(!$document->expires() ? "-":getReadableDate($document->getExpires()))."</td>";				
