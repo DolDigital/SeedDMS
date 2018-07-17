@@ -1,7 +1,3 @@
-Show workflow steps after document has been released (keep workflow tab)
-
-Show documents in calendar when they where uploaded.
-
 Update comment and date of a review/approval, if the same status is set
 again. Currently setting the same status is turned of, because it didn't
 have any effect, which is quite confusing if the user can do an operation
@@ -25,9 +21,6 @@ to set the userid to 0 on logout, but keep the cookie and consequently
 the session data. See op.Login.php and op.Logout.php
 
 Allow to specify fine grained notification (e.g. deleting a document, folder)
-
-Have access rights depending on document status. This will allow to
-restrict access when a document is in a workflow or has been rejected.
 
 Settings::searchConfigFilePath() and Settings::getConfigDir() use different
 approaches to get the configuration directory.
