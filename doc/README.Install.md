@@ -1,44 +1,6 @@
 SeedDMS Installation Instructions
 ==================================
 
-NOTE FOR VERSION 4.0.0
-======================
-
-Since version 4.0.0 of SeedDMS installation has been simplified. 
-ADOdb is no longer needed because the database access is done by
-PDO.
-
-IMPORTANT NOTE ABOUT TRANSLATIONS
-=================================
-
-As you can see SeedDMS provides a lot of languages but we are not professional 
-translators and therefore rely on user contributions.
-
-If your language is not present in the login panel:
-- copy the language/English/ folder and rename it appropriately for your
-  language
-- open the file `languages/your_lang/lang.inc` and translate it
-- open the help file `languages/your_lang/help.htm` and translate it too
-
-If you see some wrong or not translated messages:
-- open the file `languages/your_lang/lang.inc`
-- search the wrong messages and translate them
-
-if you have some "error getting text":
-- search the string in the english file `languages/english/lang.inc`
-- copy to your language file `languages/your_lang/lang.inc`
-- translate it
-
-If there is no help in your language:
-- Copy the English help `english/help.htm` file to your language folder
-- translate it
-
-If you apply any changes to the language files please send them to the
-SeedDMS developers <info@seeddms.org>.
-
-http://www.iana.org/assignments/language-subtag-registry has a list of
-all language and country codes.
-
 REQUIREMENTS
 ============
 
@@ -46,15 +8,13 @@ SeedDMS is a web-based application written in PHP. It uses MySQL,
 sqlite3 or postgresql to manage the documents that were uploaded into
 the application. Be aware that postgresql is not very well tested.
 
-Make sure you have PHP 5.3 and MySQL 5 or higher installed. SeedDMS
-will work with PHP running in CGI-mode as well as running as module under
-apache. If you want to give your users the opportunity of uploading passport
-photos you have to enable the gd-library (but the rest of SeedDMS will
-work without gd, too).
+Make sure you have PHP 5.4 and MySQL 5 or higher installed. SeedDMS
+will work with PHP running in CGI-mode as well as running as a module under
+apache.
 
 Here is a detailed list of requirements:
 
-1. A web server with at least php 5.3
+1. A web server with at least php 5.4
 2. A mysql database, unless you use sqlite
 3. The php installation must have support for `pdo_mysql` or `pdo_sqlite`,
    `php_gd2`, `php_mbstring`
@@ -63,14 +23,14 @@ Here is a detailed list of requirements:
    for fulltext search)
 5. ImageMagic (the convert program) is needed for creating preview images 
 6. The Zend Framework (version 1) (optional, only needed for fulltext search)
-7. The pear Log package
+7. The pear Log and Mail package
 8. The pear HTTP_WebDAV_Server package (optional, only need for webdav)
 9. SLIM RestApi
 10. FeedWriter from https://github.com/mibe/FeedWriter
 
 It is highly recommended to use the quickstart archive (seeddms-quickstart-x.y.z.tar.gz)
 because it includes all software packages for running SeedDMS, though you still need
-a working web server with PHP.
+a working web server with PHP and a mysql database unless you intend to use sqlite.
 
 QUICKSTART
 ===========
@@ -94,8 +54,82 @@ paths by replacing `/home/wwww-data` with your document root. Once done,
 save it, remove the file `ENABLE_INSTALL_TOOL` and point your browser to
 http://your-domain/seeddms51x/.
 
+
+UPDATING FROM A PREVIOUS VERSION OR SEEDDMS
+=============================================
+
+As SeedDMS is a smooth continuation of LetoDMS there is no difference
+in updating from LetoDMS or SeedDMS
+
+You have basically two choices to update SeedDMS
+
+- you install a fresh version of SeedDMS and copy over your data and configuration
+- you replace the software in your current installation with a new version
+
+The first option is less interuptive but requires to be able to set up a second
+temporary SeedDMS installation.
+
+In both cases make sure to have a backup of your data directory, configuration
+and database.
+
+Fresh installation and take over of data
+-----------------------------------------
+
+- just do a fresh installation somewhere on your web server and make sure it
+  works. It is fine to use
+  sqlite for it, even if your final installation uses mysql.
+- replace the data directory in your new installation with the data directory
+  from your current installation. Depending on the size of that directory you
+  may either copy, move or place a symbolic link. The content of the data directory
+  will not be changed unless you modify your documents. Its perfectly save to
+  browse through your documents and download them.
+- copy over the configuration settings.xml into your new installation
+- if you use mysql you could as well make a copy of the database to make sure
+  your current database remains unchanged. As long as you do not do any modification,
+  you could even use your current database.
+- modify the settings.xml to fit the fresh install. This will mostly be the
+  httpRoot, the paths to the installation directory and possibly the database
+  connection.
+- create a file `ENABLE_INSTALL_TOOL` in the conf directory and point
+  your browser at http://hostname/seeddms/install
+  The install tool will detect the version of your current SeedDMS installation
+  and run the required database updates.
+  If you update just within the last version number (e.g. from 5.1.6 to 5.1.9),
+  this step
+  will not be required because such a subminor version update will never
+  contain database updates.
+- test your new installation. 
+
+Updating your current installation
+-----------------------------------
+
+- make a backup of your data folder and the configuration file settings.xml
+- in case you use mysql then dump your current database
+- get the SeedDMS archive seeddms-x.y.z.tar.gz and all pear packages
+  SeedDMS_Core, SeedDMS_Lucene, SeedDMS_Preview and extract them over your
+  current instalation. As they do not contain a data directory nor a settings.xml
+  file, you will not overwrite your existing data and configuration.
+- you may compare your conf/settings.xml file with the shipped version
+  conf/settings.xml.template for new parameters. If you don't do it, the next
+  time you save the configuration the default values will be used.
+- create a file `ENABLE_INSTALL_TOOL` in the conf directory and point
+  your browser at http://hostname/seeddms/install
+  The install tool will detect the version of your current SeedDMS installation
+  and run the required database updates.
+  If you update just within the last version number (e.g. from 5.1.6 to 5.1.9),
+  this step
+  will not be required because such a subminor version update will never
+  contain database updates.
+
+
 THE LONG STORY
 ================
+
+If you intend to run a single instance of SeedDMS, you are most likely
+better off by using the quickstart archive as described above. This
+section is mostly for users who wants to know more about the internals
+of SeedDMS or do packaging for a software distribution, which already
+ships some of the additional software SeedDMS requires.
 
 SeedDMS has changed its installation process with version 3.0.0. This gives
 you many more options in how to install SeedDMS. First of all, SeedDMS was
@@ -130,7 +164,7 @@ on your web server.
 -------------------
 
 A common source of problems in the past have been the additional software
-packages needed by SeedDMS. Those are the PEAR packages `Log` and
+packages needed by SeedDMS. Those are the PEAR packages `Log`, `Mail` and
 `HTTP_WebDAV_Server` as well as the `Zend_Framework`.
 If you have full access to the server running a Linux distribution it is
 recommended to install those with your package manager if they are provided
@@ -230,13 +264,16 @@ full text search engine support, you will also need to unpack
 	> pear install SeedDMS_Lucene-<version>.tgz
 	> pear install SeedDMS_Preview-<version>.tgz
 
-* The PEAR package Log is also needed. It can be downloaded from
-  http://pear.php.net/package/Log. Either install it as a pear package
+* The PEAR packages Log and Mail are also needed. They can be downloaded from
+  http://pear.php.net/package/Log and http://pear.php.net/package/Mail.
+	Either install it as a pear package
 	or place it under your new directory 'pear'
 
   > pear
 	>   Log
 	>   Log.php
+	>   Mail
+	>   Mail.php
 
 * The package HTTP_WebDAV_Server is also needed. It can be downloaded from
   http://pear.php.net/package/HTTP_WebDAV_Server. Either install it as a
@@ -284,25 +321,6 @@ If you install SeedDMS for the first time continue with the database setup.
   This step can also be done by the install tool.
 * create a file `ENABLE_INSTALL_TOOL` in the conf directory and point
   your browser at http://hostname/seeddms/install
-
-
-NOTE: UPDATING FROM A PREVIOUS VERSION OR SEEDDMS
-
-As SeedDMS is a smooth continuation of LetoDMS there is no difference
-in updating from LetoDMS or SeedDMS
-
-- make a backup archive of your installation folder
-- make a backup archive of your data folder
-- dump your current database
-- extract the SeedDMS archive to your web server
-- edit the conf/settings.xml file to match your previuos settings 
-  (you can even replace the file with your own one eventualy adding by hand
-  the missing new parameters)
-- create a file `ENABLE_INSTALL_TOOL` in the conf directory and point
-  your browser at http://hostname/seeddms/install
-
-The install tool will detect the version of your current SeedDMS installation
-and run the required database updates.
 
 
 3. Email Notification
@@ -401,6 +419,44 @@ Create a database and data store for each instance and adjust the database
 settings in conf/settings.xml or run the installation tool.
 
 Point your web browser towards the index.php file in your new instance.
+
+NOTE FOR VERSION 4.0.0
+======================
+
+Since version 4.0.0 of SeedDMS installation has been simplified. 
+ADOdb is no longer needed because the database access is done by
+PDO.
+
+IMPORTANT NOTE ABOUT TRANSLATIONS
+=================================
+
+As you can see SeedDMS provides a lot of languages but we are not professional 
+translators and therefore rely on user contributions.
+
+If your language is not present in the login panel:
+- copy the language/English/ folder and rename it appropriately for your
+  language
+- open the file `languages/your_lang/lang.inc` and translate it
+- open the help file `languages/your_lang/help.htm` and translate it too
+
+If you see some wrong or not translated messages:
+- open the file `languages/your_lang/lang.inc`
+- search the wrong messages and translate them
+
+if you have some "error getting text":
+- search the string in the english file `languages/english/lang.inc`
+- copy to your language file `languages/your_lang/lang.inc`
+- translate it
+
+If there is no help in your language:
+- Copy the English help `english/help.htm` file to your language folder
+- translate it
+
+If you apply any changes to the language files please send them to the
+SeedDMS developers <info@seeddms.org>.
+
+http://www.iana.org/assignments/language-subtag-registry has a list of
+all language and country codes.
 
 LICENSING
 =========
