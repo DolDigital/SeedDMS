@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1745), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1746), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -625,7 +625,7 @@ URL: [url]',
 'group_info' => 'Group information',
 'group_management' => 'Groups management',
 'group_members' => 'Group members',
-'group_receipt_summary' => 'Group receipt confirmations overview.',
+'group_receipt_summary' => 'Group receipt summary',
 'group_review_summary' => 'Group review summary',
 'guest_login' => 'Login as guest',
 'guest_login_disabled' => 'Guest login is disabled.',
