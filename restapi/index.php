@@ -124,7 +124,7 @@ function setEmail($id) { /* {{{ */
 		$app->response()->header('Content-Type', 'application/json');
 		echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
 	}
-	$userobj->setEmail($app->request()->put('fullname'));
+	$userobj->setEmail($app->request()->put('email'));
 	echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$userid));
 } /* }}} */
 
