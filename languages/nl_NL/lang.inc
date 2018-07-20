@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (756), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (757), gijsbertush (610), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 '2_factor_auth' => '2-factor-authenticatie',
@@ -726,7 +726,7 @@ URL: [url]',
 'login_ok' => 'Login geslaagd',
 'logout' => 'Log uit',
 'log_management' => 'Logbestanden beheer',
-'lo_LA' => '',
+'lo_LA' => 'Laotiaans',
 'manager' => 'Beheerder',
 'manager_of_group' => 'U bent beheerder van deze groep',
 'mandatory_approvergroups' => 'Verplichte groep \'[group]\'',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (272)
+//    Translators: Admin (274)
 
 $text = array(
 '2_factor_auth' => '',
@@ -34,7 +34,7 @@ $text = array(
 'access_mode_all' => 'Πλήρης πρόσβαση',
 'access_mode_none' => '',
 'access_mode_read' => 'Δικαιώματα ανάγνωσης',
-'access_mode_readwrite' => '',
+'access_mode_readwrite' => 'Δικαιώματα ανάγνωσης-εγγραφής',
 'access_permission_changed_email' => '',
 'access_permission_changed_email_body' => '',
 'access_permission_changed_email_subject' => '',
@@ -413,7 +413,7 @@ $text = array(
 'email_header' => '',
 'email_not_given' => '',
 'empty_attribute_group_list' => '',
-'empty_folder_list' => '',
+'empty_folder_list' => 'Δεν υπάρχουν αρχεία ή φάκελοι',
 'empty_list' => '',
 'empty_notify_list' => '',
 'en_GB' => 'English (GB)/Αγγλικά',
