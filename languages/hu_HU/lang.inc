@@ -24,7 +24,7 @@
 $text = array(
 '2_factor_auth' => 'Kétfaktoros azonosítás',
 '2_factor_auth_info' => '',
-'2_fact_auth_secret' => '',
+'2_fact_auth_secret' => 'Titkos',
 'accept' => 'Elfogad',
 'access_control' => '',
 'access_control_is_off' => '',

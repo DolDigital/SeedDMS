@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2629), dgrutsch (22)
+//    Translators: Admin (2630), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1663,7 +1663,7 @@ Name: [username]
 'submit_password' => 'Setze neues Passwort',
 'submit_password_forgotten' => 'Neues Passwort setzen und per E-Mail schicken',
 'submit_receipt' => 'Empfang bestätigen',
-'submit_review' => 'Wiederholungsprüfung hinzufügen',
+'submit_review' => 'Prüfung hinzufügen',
 'submit_revision' => 'Wiederholungsprüfung hinzufügen',
 'submit_userinfo' => 'Daten setzen',
 'subsribe_timelinefeed' => 'Verauf als RSS-Feed abonnieren',
