@@ -26,6 +26,7 @@
  <notes>
 context can be passed to getAccessMode()
 call hook in SeedDMS_Core_Folder::getAccessMode()
+new optional parameter $listguest for SeedDMS_Core_Document::getReadAccessList()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
