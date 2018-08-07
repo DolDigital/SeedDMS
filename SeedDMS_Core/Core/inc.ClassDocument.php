@@ -2313,7 +2313,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * {@see SeedDMS_Core_Document::getReadAccessList()} instead.
 	 */
 	function getApproversList() { /* {{{ */
-		return $this->getReadAccessList(0, 0);
+		return $this->getReadAccessList(0, 0, 0);
 	} /* }}} */
 
 	/**
@@ -2321,10 +2321,11 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 *
 	 * @param boolean $listadmin if set to true any admin will be listed too
 	 * @param boolean $listowner if set to true the owner will be listed too
+	 * @param boolean $listguest if set to true any guest will be listed too
 	 *
 	 * @return array list of users and groups
 	 */
-	function getReadAccessList($listadmin=0, $listowner=0) { /* {{{ */
+	function getReadAccessList($listadmin=0, $listowner=0, $listguest=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_readAccessList)) {
@@ -2350,7 +2351,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 				$user = $userAccess->getUser();
 				if (!$listadmin && $user->isAdmin()) continue;
 				if (!$listowner && $user->getID() == $this->_ownerID) continue;
-				if ($user->isGuest()) continue;
+				if (!$listguest && $user->isGuest()) continue;
 				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
 			}
 
