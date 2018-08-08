@@ -200,7 +200,7 @@ $('#loadmore').click(function(e) {
 			foreach($documents as $document) {
 				if($i >= $offset && $j < $limit) {
 					$document->verifyLastestContentExpriry();
-					$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+					$txt = $this->callHook('documentListItem', $document, $previewer, false, 'viewfolder');
 					if(is_string($txt))
 						$content .= $txt;
 					else {
@@ -440,7 +440,7 @@ $('#loadmore').click(function(e) {
 			foreach($documents as $document) {
 				if(!$maxItemsPerPage || $i < $maxItemsPerPage) {
 					$document->verifyLastestContentExpriry();
-					$txt = $this->callHook('documentListItem', $document, $previewer, 'viewfolder');
+					$txt = $this->callHook('documentListItem', $document, $previewer, false, 'viewfolder');
 					if(is_string($txt))
 						echo $txt;
 					else {

@@ -130,7 +130,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($document) {
 			if ($document->getAccessMode($user) >= M_READ) {
 				$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
-				$txt = $this->callHook('documentListItem', $document, $previewer, 'viewitem');
+				$txt = $this->callHook('documentListItem', $document, $previewer, false, 'viewitem');
 				if(is_string($txt))
 					$content = $txt;
 				else 
@@ -1361,7 +1361,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				echo "<tr id=\"table-row-document-".$targetDoc->getId()."\" class=\"table-row-document\" rel=\"document_".$targetDoc->getId()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 				$targetDoc->verifyLastestContentExpriry();
-				$txt = $this->callHook('documentListItem', $targetDoc, $previewer, 'reverselinks');
+				$txt = $this->callHook('documentListItem', $targetDoc, $previewer, false, 'reverselinks');
 				if(is_string($txt))
 					echo $txt;
 				else {
@@ -1426,7 +1426,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 				echo "<tr id=\"table-row-document-".$sourceDoc->getId()."\" class=\"table-row-document\" rel=\"document_".$sourceDoc->getId()."\" formtoken=\"".createFormKey('movedocument')."\" draggable=\"true\">";
 				$sourceDoc->verifyLastestContentExpriry();
-				$txt = $this->callHook('documentListItem', $sourceDoc, $previewer, 'reverselinks');
+				$txt = $this->callHook('documentListItem', $sourceDoc, $previewer, false, 'reverselinks');
 				if(is_string($txt))
 					echo $txt;
 				else {
