@@ -3,6 +3,10 @@
 --------------------------------------------------------------------------------
 - fix output of status on approval/review summary page
 - pass context to getAccessMode()
+- add opensearch description
+- make buttons on admin page smaller
+- pass optional parameter to hook documentListItem() which turns of the
+  surrounding tr tag
 
 --------------------------------------------------------------------------------
                      Changes in version 5.1.8
