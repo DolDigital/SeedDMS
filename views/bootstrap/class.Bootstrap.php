@@ -79,6 +79,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo '<base href="'.$base.'">'."\n";
 		elseif($this->baseurl)
 			echo '<base href="'.$this->baseurl.'">'."\n";
+		$sitename = trim(strip_tags($this->params['sitename']));
 		if($this->params['session'])
 			echo '<link rel="search" type="application/opensearchdescription+xml" href="../out/out.OpensearchDesc.php" title="'.(strlen($sitename)>0 ? $sitename : "SeedDMS").'"/>'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
@@ -118,7 +119,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 </style>
 <?php
 		}
-		$sitename = trim(strip_tags($this->params['sitename']));
 		echo "<title>".(strlen($sitename)>0 ? $sitename : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
