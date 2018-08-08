@@ -76,10 +76,11 @@ class SeedDMS_View_Clipboard extends SeedDMS_Bootstrap_Style {
 		foreach($menuitems as $menuitem) {
 			$content .= "<li>";
 			$content .= "<a";
-			if($menuitem['link'])
+			if(!empty($menuitem['link']))
 				$content .= ' href="'.$menuitem['link'].'"';
-			foreach($menuitem['attributes'] as $attr)
-				$content .= ' '.$attr[0].'="'.$attr[1].'"';
+			if(!empty($menuitem['attributes']))
+				foreach($menuitem['attributes'] as $attr)
+					$content .= ' '.$attr[0].'="'.$attr[1].'"';
 			$content .= ">";
 			$content .= getMLText($menuitem['label']);
 			$content .= "</a></li>";
