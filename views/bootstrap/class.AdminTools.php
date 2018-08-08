@@ -44,7 +44,7 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 	} /* }}} */
 
 	static function rowButton($link, $icon, $label) { /* {{{ */
-		return '<a href="'.$link.'" class="span3 btn btn-medium"><i class="icon-'.$icon.'"></i><br />'.getMLText($label).'</a>';
+		return '<a href="'.$link.'" class="span2 btn btn-medium"><i class="icon-'.$icon.'"></i><br />'.getMLText($label).'</a>';
 	} /* }}} */
 
 	function show() { /* {{{ */
