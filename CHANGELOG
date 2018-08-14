@@ -5,7 +5,7 @@
 - pass context to getAccessMode()
 - add opensearch description
 - make buttons on admin page smaller
-- pass optional parameter to hook documentListItem() which turns of the
+- pass optional parameter to hook documentListItem() which turns off the
   surrounding tr tag
 
 --------------------------------------------------------------------------------
