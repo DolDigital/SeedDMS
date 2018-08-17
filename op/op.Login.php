@@ -213,11 +213,11 @@ else if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
 	$referuri = trim(urldecode($_GET["referuri"]));
 }
 
+add_log_line();
+
 $controller->setParam('user', $user);
 $controller->setParam('session', $session);
 $controller->run();
-
-add_log_line();
 
 if (isset($referuri) && strlen($referuri)>0) {
 //	header("Location: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'] . $referuri);
