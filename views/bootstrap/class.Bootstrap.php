@@ -49,7 +49,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		if(1 || method_exists($this, 'js')) {
 			/* We still need unsafe-eval, because printDocumentChooserHtml and
 			 * printFolderChooserHtml will include a javascript file with ajax
-			 * which is evaled by jquery
+			 * which is evaluated by jquery
 			 * X-WebKit-CSP is deprecated, Chrome understands Content-Security-Policy
 			 * since version 25+
 			 * X-Content-Security-Policy is deprecated, Firefox understands
