@@ -401,8 +401,8 @@ $(document).ready(function() {
 
 				/* List all mandatory reviewers */
 				$res=$user->getMandatoryReviewers();
+				$tmp = array();
 				if($res) {
-					$tmp = array();
 					foreach ($res as $r) {
 						if($r['reviewerUserID'] > 0) {
 							$u = $dms->getUser($r['reviewerUserID']);
@@ -450,8 +450,8 @@ $(document).ready(function() {
 				}
 
 				/* List all mandatory groups of reviewers */
+				$tmp = array();
 				if($res) {
-					$tmp = array();
 					foreach ($res as $r) {
 						if($r['reviewerGroupID'] > 0) {
 							$u = $dms->getGroup($r['reviewerGroupID']);
@@ -500,8 +500,8 @@ $(document).ready(function() {
 			$this->contentSubHeading(getMLText("assign_approvers"));
 			$res=$user->getMandatoryApprovers();
 			/* List all mandatory approvers */
+			$tmp = array();
 			if($res) {
-				$tmp = array();
 				foreach ($res as $r) {
 					if($r['approverUserID'] > 0) {
 						$u = $dms->getUser($r['approverUserID']);
@@ -550,8 +550,8 @@ $(document).ready(function() {
 			}
 
 			/* List all mandatory groups of approvers */
+			$tmp = array();
 			if($res) {
-				$tmp = array();
 				foreach ($res as $r) {
 					if($r['approverGroupID'] > 0) {
 						$u = $dms->getGroup($r['approverGroupID']);
