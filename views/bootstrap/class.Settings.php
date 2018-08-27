@@ -205,6 +205,23 @@ class SeedDMS_View_Settings extends SeedDMS_Bootstrap_Style {
 			});
 		});
 <?php
+		foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
+			if($extconf['config']) {
+				foreach($extconf['config'] as $confkey=>$conf) {
+					switch($conf['type']) {
+					case 'select':
+						if(!empty($conf['internal'])) {
+							switch($conf['internal']) {
+							case "folders":
+								$this->printFolderChooserJs("form".$extname.$confkey);
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -537,6 +554,9 @@ $this->showStartPaneContent('site', (!$currenttab || $currenttab == 'site'));
 											}
 											echo "</select>";
 										}
+										break;
+									case "folders":
+										$this->formField(null, $this->getFolderChooserHtml("form".$extname.$confkey, M_READ, -1, $selections ? $dms->getFolder($selections[0]) : 0, 'extensions['.$extname."][".$confkey."]"));
 										break;
 									}
 								}
