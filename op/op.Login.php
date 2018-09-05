@@ -32,7 +32,11 @@ include("../inc/inc.ClassController.php");
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) { /* {{{ */
-	global $dms, $theme;
+	global $session, $dms, $theme;
+
+	header("Location:../out/out.Login.php?msg=".urlencode($message));
+	exit;
+
 	UI::exitError($heading, $message, true);
 	return;
 } /* }}} */
@@ -152,7 +156,7 @@ else {
 	$sesstheme = $user->getTheme();
 	if (strlen($sesstheme)==0) {
 		$sesstheme = $settings->_theme;
-		$user->setTheme($sesstheme);
+//		$user->setTheme($sesstheme);
 	}
 }
 
