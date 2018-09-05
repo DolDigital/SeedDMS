@@ -37,6 +37,10 @@ else if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
 } else {
 	$refer = '';
 }
+$msg = '';
+if (isset($_GET["msg"]) && strlen($_GET["msg"])>0) {
+	$msg=$_GET["msg"];
+}
 
 $themes = UI::getStyles();
 
@@ -47,6 +51,7 @@ if($view) {
 	$view->setParam('enablepasswordforgotten', $settings->_enablePasswordForgotten);
 	$view->setParam('referrer', $refer);
 	$view->setParam('themes', $themes);
+	$view->setParam('msg', $msg);
 	$view->setParam('languages', getLanguages());
 	$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 	$view->setParam('enablethemeselector', $settings->_enableThemeSelector);
