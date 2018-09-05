@@ -104,6 +104,7 @@ $(document).ready( function() {
 		$enablepasswordforgotten = $this->params['enablepasswordforgotten'];
 		$refer = $this->params['referrer'];
 		$themes = $this->params['themes'];
+		$msg = $this->params['msg'];
 		$languages = $this->params['languages'];
 		$enableLanguageSelector = $this->params['enablelanguageselector'];
 		$enableThemeSelector = $this->params['enablethemeselector'];
@@ -114,6 +115,8 @@ $(document).ready( function() {
 		$this->globalBanner();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("sign_in"));
+		if($msg)
+			$this->errorMsg(htmlspecialchars($msg));
 ?>
 <?php $this->contentContainerStart(); ?>
 <form class="form-horizontal" action="../op/op.Login.php" method="post" name="form1" id="form">
