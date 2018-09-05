@@ -137,10 +137,11 @@ $(document).ready(function() {
 	});
 });
 <?php
-			$this->printKeywordChooserJs("form1");
-			if($dropfolderdir) {
-				$this->printDropFolderChooserJs("form1");
-			}
+		$this->printKeywordChooserJs("form1");
+		if($dropfolderdir) {
+			$this->printDropFolderChooserJs("form1");
+		}
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -305,7 +306,7 @@ $(document).ready(function() {
 		);
 		$this->formField(
 			getMLText("local_file"),
-			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile[]', false).($enablemultiupload ? '<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>' : '')
+			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooserHtml('userfile[]', false).($enablemultiupload ? '<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>' : '')
 		);
 		if($dropfolderdir) {
 			$this->formField(

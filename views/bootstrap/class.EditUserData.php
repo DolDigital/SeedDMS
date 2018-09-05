@@ -79,6 +79,8 @@ $(document).ready( function() {
 	});
 });
 <?php
+
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -170,7 +172,7 @@ $(document).ready( function() {
 			);
 			$this->formField(
 				getMLText("new_user_image"),
-				$this->getFileChooser('userfile', false, "image/jpeg")
+				$this->getFileChooserHtml('userfile', false, "image/jpeg")
 			);
 		}
 		if ($enablelanguageselector){	

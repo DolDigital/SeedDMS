@@ -78,6 +78,8 @@ $(document).ready( function() {
 	});
 });
 <?php
+
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
@@ -379,12 +381,12 @@ $(document).ready( function() {
 				);
 				$this->formField(
 					getMLText("new_user_image"),
-					$this->getFileChooser('userfile', false, "image/jpeg")
+					$this->getFileChooserHtml('userfile', false, "image/jpeg")
 				);
 			} else {
 				$this->formField(
 					getMLText("user_image"),
-					$this->getFileChooser('userfile', false, "image/jpeg")
+					$this->getFileChooserHtml('userfile', false, "image/jpeg")
 				);
 			}
 		}

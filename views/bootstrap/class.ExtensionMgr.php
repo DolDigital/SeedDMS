@@ -61,6 +61,8 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			});
 		});
 <?php
+
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function info() { /* {{{ */
@@ -150,7 +152,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 <?php
 			$this->formField(
 				getMLText("extension_archive"),
-				$this->getFileChooser('userfile', false)
+				$this->getFileChooserHtml('userfile', false)
 			);
 			$this->formSubmit("<i class=\"icon-upload\"></i> ".getMLText('import_extension'));
 ?>

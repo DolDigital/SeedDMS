@@ -85,6 +85,8 @@ $(document).ready(function() {
 	});
 });
 <?php
+
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -143,7 +145,7 @@ $(document).ready(function() {
 		);
 		$this->formField(
 			getMLText("approval_file"),
-			$this->getFileChooser('approvalfile', false)
+			$this->getFileChooserHtml('approvalfile', false)
 		);
 		$options = array();
 		if($approvalStatus['status'] != 1)

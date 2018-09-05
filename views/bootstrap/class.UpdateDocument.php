@@ -44,6 +44,7 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 		$this->printCheckboxPresetButtonJs();
 		if($enablelargefileupload)
 			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize, false);
+		$this->printFileChooserJs();
 ?>
 $(document).ready( function() {
 	jQuery.validator.addMethod("alternatives", function(value, element, params) {
@@ -221,7 +222,7 @@ console.log(element);
 <?php
 		$this->formField(
 			getMLText("local_file"),
-			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile', false)
+			$enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooserHtml('userfile', false)
 		);
 		if($dropfolderdir) {
 			$this->formField(

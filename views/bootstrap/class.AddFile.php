@@ -38,6 +38,8 @@ class SeedDMS_View_AddFile extends SeedDMS_Bootstrap_Style {
 		header('Content-Type: application/javascript');
 		if($enablelargefileupload)
 			$this->printFineUploaderJs('../op/op.UploadChunks.php', $partitionsize, $maxuploadsize);
+
+		$this->printFileChooserJs();
 ?>
 
 $(document).ready( function() {
@@ -155,7 +157,7 @@ $(document).ready( function() {
 <?php
 		$this->formField(
 			getMLText("local_file"),
-			($enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooser('userfile[]', false))
+			($enablelargefileupload ? $this->getFineUploaderHtml() : $this->getFileChooserHtml('userfile[]', false))
 		);
 		$options = array();
 		$options[] = array("", getMLText('document'));

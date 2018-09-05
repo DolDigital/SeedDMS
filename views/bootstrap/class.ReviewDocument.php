@@ -85,6 +85,8 @@ $(document).ready(function() {
 	});
 });
 <?php
+
+		$this->printFileChooserJs();
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -141,7 +143,7 @@ $(document).ready(function() {
 		);
 		$this->formField(
 			getMLText("review_file"),
-			$this->getFileChooser('review_file', false)
+			$this->getFileChooserHtml('review_file', false)
 		);
 		$options = array();
 		if($reviewStatus['status'] != 1)
