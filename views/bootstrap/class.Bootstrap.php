@@ -996,7 +996,31 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
-	function getFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+	function printFileChooserJs() { /* {{{ */
+?>
+$(document).ready(function() {
+	$(document).on('change', '.btn-file :file', function() {
+		var input = $(this),
+		numFiles = input.get(0).files ? input.get(0).files.length : 1,
+		label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		input.trigger('fileselect', [numFiles, label]);
+	});
+
+	$(document).on('fileselect', '.upload-file .btn-file :file', function(event, numFiles, label) {
+		var input = $(this).parents('.input-append').find(':text'),
+		log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+		if( input.length ) {
+			input.val(log);
+		} else {
+//			if( log ) alert(log);
+		}
+	});
+});
+<?php
+	} /* }}} */
+
+	function getFileChooserHtml($varname='userfile', $multiple=false, $accept='') { /* {{{ */
 		$id = preg_replace('/[^A-Za-z]/', '', $varname);
 		$html = '
 	<div id="'.$id.'-upload-files">
@@ -1014,7 +1038,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 
 	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
-		echo self::getFileChooser($varname, $multiple, $accept);
+		echo self::getFileChooserHtml($varname, $multiple, $accept);
 	} /* }}} */
 
 	function printDateChooser($defDate = '', $varName) { /* {{{ */
