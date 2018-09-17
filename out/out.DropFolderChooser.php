@@ -42,6 +42,13 @@ if(isset($_GET['showfolders']) && $_GET['showfolders'])
 else
 	$showfolders = false;
 
+if (isset($_GET["folderid"]) && is_numeric($_GET["folderid"])) {
+	$folderid = intval($_GET["folderid"]);
+	$folder = $dms->getFolder($folderid);
+} else {
+	$folder = null;
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
 if($view) {
@@ -53,6 +60,7 @@ if($view) {
 	$view->setParam('previewWidthList', $settings->_previewWidthDropFolderList);
 	$view->setParam('timeout', $settings->_cmdTimeout);
 	$view->setParam('showfolders', $showfolders);
+	$view->setParam('folder', $folder);
 	$view($_GET);
 	exit;
 }
