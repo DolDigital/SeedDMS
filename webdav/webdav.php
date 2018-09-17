@@ -326,8 +326,8 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 		if (get_class($obj) == $this->dms->getClassname('folder')) {
 			// modification time
 			/* folders do not have a modification time */
-			$info["props"][] = $this->mkprop("getlastmodified", time());
-			$info["props"][] = $this->mkprop("creationdate",	time());
+			$info["props"][] = $this->mkprop("getlastmodified", $obj->getDate());
+			$info["props"][] = $this->mkprop("creationdate", $obj->getDate());
 
 			// directory (WebDAV collection)
 			$patharr = $obj->getPath();

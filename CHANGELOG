@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 5.1.9
 --------------------------------------------------------------------------------
+- set date of folder in webdav view
 - fix output of status on approval/review summary page
 - pass context to getAccessMode()
 - add opensearch description
