@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (747)
+//    Translators: Admin (749)
 
 $text = array(
 '2_factor_auth' => '',
@@ -554,6 +554,7 @@ URL: [url]',
 'index_waiting' => '',
 'individuals' => 'Individuals',
 'individuals_in_groups' => '',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
 'inherited' => 'Heredat',
 'inherits_access_copy_msg' => 'Copiar llista d\'accés heretat',
@@ -648,7 +649,7 @@ URL: [url]',
 'login_ok' => 'Accés amb èxit',
 'logout' => 'Desconnectar',
 'log_management' => 'Gestió de fitxers de registre',
-'lo_LA' => '',
+'lo_LA' => 'Laosià',
 'manager' => 'Manager',
 'manager_of_group' => '',
 'mandatory_approvergroups' => '',
@@ -989,6 +990,7 @@ URL: [url]',
 'seq_keep' => 'Mantenir posició',
 'seq_start' => 'Primera posició',
 'sessions' => '',
+'setDateFromFile' => '',
 'settings' => 'Settings',
 'settings_activate_module' => 'Activate module',
 'settings_activate_php_extension' => 'Activate PHP extension',
@@ -1612,7 +1614,7 @@ URL: [url]',
 'workflow_summary' => '',
 'workflow_transition_without_user_group' => '',
 'workflow_user_summary' => '',
-'x_more_objects' => '',
+'x_more_objects' => '[number] objectes més',
 'year_view' => 'Vista d\'any',
 'yes' => 'Sí',
 'zh_CN' => 'Xinès (Xina)',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1072), aydin (83)
+//    Translators: Admin (1073), aydin (83)
 
 $text = array(
 '2_factor_auth' => '',
@@ -626,6 +626,7 @@ URL: [url]',
 'index_waiting' => 'Bekliyor',
 'individuals' => 'Bireysel',
 'individuals_in_groups' => '',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
 'inherited' => 'devralındı',
 'inherits_access_copy_msg' => 'Devralınan erişim listesini kopyala',
@@ -720,7 +721,7 @@ URL: [url]',
 'login_ok' => 'Giriş başarılı',
 'logout' => 'Çıkış',
 'log_management' => 'Log yönetimi',
-'lo_LA' => '',
+'lo_LA' => 'Laotian',
 'manager' => 'Yönetici',
 'manager_of_group' => 'Bu grubun yöneticisi sizsiniz',
 'mandatory_approvergroups' => 'Onaylayıcılar için zorunlu grup',
@@ -1137,6 +1138,7 @@ URL: [url]',
 'seq_keep' => 'Sırayı Koru',
 'seq_start' => 'İlk sıra',
 'sessions' => '',
+'setDateFromFile' => '',
 'settings' => 'Ayarlar',
 'settings_activate_module' => 'Modülü etkinleştir',
 'settings_activate_php_extension' => 'PHP uzantısını etkinleştir',

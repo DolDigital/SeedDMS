@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2630), dgrutsch (22)
+//    Translators: Admin (2631), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -657,6 +657,7 @@ URL: [url]',
 'index_waiting' => 'Warte',
 'individuals' => 'Einzelpersonen',
 'individuals_in_groups' => 'Mitglieder einer Gruppe',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => 'Die Bestätigung des Empfangs für diese Dokumentenversion ist nicht möglich, weil die Version nicht freigegeben ist.',
 'inherited' => 'geerbt',
 'inherits_access_copy_msg' => 'Berechtigungen kopieren',
@@ -1210,6 +1211,7 @@ Name: [username]
 'seq_keep' => 'Beibehalten',
 'seq_start' => 'An den Anfang',
 'sessions' => 'Benutzer Online',
+'setDateFromFile' => 'Datum von importierter Datei übernehmen',
 'settings' => 'Einstellungen',
 'settings_activate_module' => 'Modul aktivieren',
 'settings_activate_php_extension' => 'PHP-Erweiterung aktivieren',
