@@ -986,6 +986,7 @@ $text = array(
 'seq_start' => 'Първа позиция',
 'sessions' => '',
 'setDateFromFile' => '',
+'setDateFromFolder' => '',
 'settings' => 'Настройки',
 'settings_activate_module' => 'Активирай модул',
 'settings_activate_php_extension' => 'Активирай разширение на PHP',

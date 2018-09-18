@@ -1191,6 +1191,7 @@ Nom : [username]
 'seq_start' => 'Première position',
 'sessions' => 'Utilisateurs en ligne',
 'setDateFromFile' => '',
+'setDateFromFolder' => '',
 'settings' => 'Configuration',
 'settings_activate_module' => 'Activez le module',
 'settings_activate_php_extension' => 'Activez l\'extension PHP',
