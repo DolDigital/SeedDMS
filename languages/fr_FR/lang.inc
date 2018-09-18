@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1087), jeromerobert (50), lonnnew (9), Oudiceval (694)
+//    Translators: Admin (1087), jeromerobert (50), lonnnew (9), Oudiceval (695)
 
 $text = array(
 '2_factor_auth' => 'Authentification forte',
@@ -500,7 +500,7 @@ Le lien est valide jusqu’au [valid].
 'error_add_aro' => '',
 'error_add_permission' => 'Erreur lors de l’ajout de permission',
 'error_cleared_cache' => 'Erreur lors du vidage du cache',
-'error_extension_getlist' => '',
+'error_extension_getlist' => 'Erreur lors de l’obtention de la liste des extensions depuis le dépôt',
 'error_importfs' => 'Erreur lors de l’import depuis le système de fichiers',
 'error_no_document_selected' => 'Aucun document sélectionné',
 'error_no_folder_selected' => 'Aucun dossier sélectionné',
@@ -658,6 +658,7 @@ URL: [url]',
 'index_waiting' => 'Chargement…',
 'individuals' => 'Individuels',
 'individuals_in_groups' => 'Membres d’un groupe',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => 'L’accusé de réception pour cette version du document n’est pas possible car la version n’est pas en état « publié ».',
 'inherited' => 'hérité',
 'inherits_access_copy_msg' => 'Recopier la liste des accès hérités',
@@ -1189,6 +1190,7 @@ Nom : [username]
 'seq_keep' => 'Conserver la position',
 'seq_start' => 'Première position',
 'sessions' => 'Utilisateurs en ligne',
+'setDateFromFile' => '',
 'settings' => 'Configuration',
 'settings_activate_module' => 'Activez le module',
 'settings_activate_php_extension' => 'Activez l\'extension PHP',

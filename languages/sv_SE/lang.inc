@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1156), MagnusI (649), tmichelfelder (106)
+//    Translators: Admin (1157), MagnusI (649), tmichelfelder (106)
 
 $text = array(
 '2_factor_auth' => '2-faktors autentisering',
@@ -645,6 +645,7 @@ URL: [url]',
 'index_waiting' => 'Väntar',
 'individuals' => 'Personer',
 'individuals_in_groups' => 'Medlemmar i en grupp',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
 'inherited' => 'ärvd',
 'inherits_access_copy_msg' => 'Kopiera lista för behörighetsarv',
@@ -739,7 +740,7 @@ URL: [url]',
 'login_ok' => 'Inloggningen lyckades',
 'logout' => 'Logga ut',
 'log_management' => 'Loggfilshantering',
-'lo_LA' => '',
+'lo_LA' => 'Laotisk',
 'manager' => 'Manager',
 'manager_of_group' => 'Du är förvaltaren av denna grupp',
 'mandatory_approvergroups' => 'Obligatoriska grupper för godkännande',
@@ -1178,6 +1179,7 @@ Kommentar: [comment]',
 'seq_keep' => 'Behåll positionen',
 'seq_start' => 'Första positionen',
 'sessions' => 'Användare online',
+'setDateFromFile' => '',
 'settings' => 'Inställningar',
 'settings_activate_module' => 'Aktivera modul',
 'settings_activate_php_extension' => 'Aktivera PHP-extension',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1209), marbanas (16)
+//    Translators: Admin (1210), marbanas (16)
 
 $text = array(
 '2_factor_auth' => '',
@@ -632,6 +632,7 @@ Internet poveznica: [url]',
 'index_waiting' => '',
 'individuals' => 'Pojedinci',
 'individuals_in_groups' => '',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
 'inherited' => 'naslijeđeno',
 'inherits_access_copy_msg' => 'Kopiraj listu naslijeđenih prava pristupa',
@@ -703,7 +704,7 @@ Internet poveznica: [url]',
 'librarydoc' => 'Dokument iz biblioteke',
 'linked_documents' => 'Vezani dokumenti',
 'linked_files' => 'Prilozi',
-'linked_to_current_version' => '',
+'linked_to_current_version' => 'Povezano sa trenutnom verzijom',
 'linked_to_document' => '',
 'linked_to_this_version' => '',
 'link_alt_updatedocument' => 'Ako želite prenijeti datoteke veće od trenutne maksimalne veličine prijenosa, molimo koristite alternativu <a href="%s">upload page</a>.',
@@ -1157,6 +1158,7 @@ Internet poveznica: [url]',
 'seq_keep' => 'Zadrži poziciju',
 'seq_start' => 'Na početak',
 'sessions' => '',
+'setDateFromFile' => '',
 'settings' => 'Postavke',
 'settings_activate_module' => 'Aktiviraj modul',
 'settings_activate_php_extension' => 'Aktiviraj PHP ekstenziju',
