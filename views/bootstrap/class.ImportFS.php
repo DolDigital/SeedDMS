@@ -68,6 +68,24 @@ class SeedDMS_View_ImportFS extends SeedDMS_Bootstrap_Style {
 					'value'=>'1'
 				)
 			);
+			$this->formField(
+				getMLText("setDateFromFile"),
+				array(
+					'element'=>'input',
+					'type'=>'checkbox',
+					'name'=>'setfiledate',
+					'value'=>'1'
+				)
+			);
+			$this->formField(
+				getMLText("setDateFromFolder"),
+				array(
+					'element'=>'input',
+					'type'=>'checkbox',
+					'name'=>'setfolderdate',
+					'value'=>'1'
+				)
+			);
 			$this->formSubmit("<i class=\"icon-save\"></i> ".getMLText('import'));
 			print "</form>\n";
 			$this->contentContainerEnd();

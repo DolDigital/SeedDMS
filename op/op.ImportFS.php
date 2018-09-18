@@ -48,7 +48,17 @@ if(strpos($dirname, realpath($settings->_dropFolderDir.'/'.$user->getLogin().'/'
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_dropfolder_folder"));
 }
 
-function import_folder($dirname, $folder) { /* {{{ */
+$setfiledate = false;
+if(isset($_GET['setfiledate']) && $_GET["setfiledate"]) {
+	$setfiledate = true;
+}
+
+$setfolderdate = false;
+if(isset($_GET['setfolderdate']) && $_GET["setfolderdate"]) {
+	$setfolderdate = true;
+}
+
+function import_folder($dirname, $folder, $setfiledate, $setfolderdate) { /* {{{ */
 	global $user, $doccount, $foldercount;
 
 	$d = dir($dirname);
@@ -81,6 +91,10 @@ function import_folder($dirname, $folder) { /* {{{ */
 																		$filetype, $mimetype, $sequence, $reviewers,
 																		$approvers, $reqversion, $version_comment)) {
 					$doccount++;
+					if($setfiledate) {
+						$newdoc = $res[0];
+						$newdoc->setDate(filemtime($path));
+					}
 				} else {
 					return false;
 				}
@@ -89,7 +103,10 @@ function import_folder($dirname, $folder) { /* {{{ */
 				$name = utf8_basename($path);
 				if($newfolder = $folder->addSubFolder($name, '', $user, $sequence)) {
 					$foldercount++;
-					if(!import_folder($path, $newfolder))
+					if($setfolderdate) {
+						$newfolder->setDate(filemtime($path));
+					}
+					if(!import_folder($path, $newfolder, $setfiledate, $setfolderdate))
 						return false;
 				} else {
 					return false;
@@ -103,7 +120,10 @@ function import_folder($dirname, $folder) { /* {{{ */
 
 $foldercount = $doccount = 0;
 if($newfolder = $folder->addSubFolder($_GET["dropfolderfileform1"], '', $user, 1)) {
-	if(!import_folder($dirname, $newfolder))
+	if($setfolderdate) {
+		$newfolder->setDate(filemtime($dirname));
+	}
+	if(!import_folder($dirname, $newfolder, $setfiledate, $setfolderdate))
 		$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('error_importfs')));
 	else {
 		if(isset($_GET['remove']) && $_GET["remove"]) {
