@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (2631), dgrutsch (22)
+//    Translators: Admin (2632), dgrutsch (22)
 
 $text = array(
 '2_factor_auth' => '2-Faktor Authentifizierung',
@@ -1212,6 +1212,7 @@ Name: [username]
 'seq_start' => 'An den Anfang',
 'sessions' => 'Benutzer Online',
 'setDateFromFile' => 'Datum von importierter Datei übernehmen',
+'setDateFromFolder' => 'Datum von importierten Verzeichnis übernehmen',
 'settings' => 'Einstellungen',
 'settings_activate_module' => 'Modul aktivieren',
 'settings_activate_php_extension' => 'PHP-Erweiterung aktivieren',

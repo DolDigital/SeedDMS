@@ -1201,6 +1201,7 @@ Jméno: [username]
 'seq_start' => 'První pozice',
 'sessions' => 'seance',
 'setDateFromFile' => '',
+'setDateFromFolder' => '',
 'settings' => 'Nastavení',
 'settings_activate_module' => 'Aktivovat modul',
 'settings_activate_php_extension' => 'Aktivovat PHP extension',
