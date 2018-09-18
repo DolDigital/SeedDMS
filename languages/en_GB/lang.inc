@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1746), archonwang (3), dgrutsch (9), netixw (14)
+//    Translators: Admin (1747), archonwang (3), dgrutsch (9), netixw (14)
 
 $text = array(
 '2_factor_auth' => '2-factor authentication',
@@ -658,6 +658,7 @@ URL: [url]',
 'index_waiting' => 'Waiting',
 'individuals' => 'Individuals',
 'individuals_in_groups' => 'Members of a group',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => 'Acknowledgement of reception for this document version is not possible, because the version is not released.',
 'inherited' => 'inherited',
 'inherits_access_copy_msg' => 'Copy inherited access list',
@@ -1205,6 +1206,7 @@ Name: [username]
 'seq_keep' => 'Keep Position',
 'seq_start' => 'First position',
 'sessions' => 'Users online',
+'setDateFromFile' => 'Take over date from imported file',
 'settings' => 'Settings',
 'settings_activate_module' => 'Activate module',
 'settings_activate_php_extension' => 'Activate PHP extension',

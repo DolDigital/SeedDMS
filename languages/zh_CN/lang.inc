@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (746), archonwang (469), fengjohn (5), yang86 (1)
+//    Translators: Admin (747), archonwang (469), fengjohn (5), yang86 (1)
 
 $text = array(
 '2_factor_auth' => '双重认证',
@@ -628,6 +628,7 @@ URL: [url]',
 'index_waiting' => '',
 'individuals' => '个人',
 'individuals_in_groups' => '组成员',
+'indivіduals_in_groups' => '',
 'info_recipients_tab_not_released' => '',
 'inherited' => '继承',
 'inherits_access_copy_msg' => '复制继承访问权限列表',
@@ -722,7 +723,7 @@ URL: [url]',
 'login_ok' => '登录成功',
 'logout' => '登出',
 'log_management' => '日志管理',
-'lo_LA' => '',
+'lo_LA' => '老挝',
 'manager' => '管理员',
 'manager_of_group' => '您是当前组的管理员',
 'mandatory_approvergroups' => '',
@@ -1139,6 +1140,7 @@ URL: [url]',
 'seq_keep' => '当前',
 'seq_start' => '首位',
 'sessions' => '在线用户',
+'setDateFromFile' => '',
 'settings' => '设置',
 'settings_activate_module' => '启用模块',
 'settings_activate_php_extension' => '启用 PHP 扩展',
