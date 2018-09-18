@@ -1207,6 +1207,7 @@ Name: [username]
 'seq_start' => 'First position',
 'sessions' => 'Users online',
 'setDateFromFile' => 'Take over date from imported file',
+'setDateFromFolder' => '',
 'settings' => 'Settings',
 'settings_activate_module' => 'Activate module',
 'settings_activate_php_extension' => 'Activate PHP extension',

@@ -1179,6 +1179,7 @@ Name: [username]
 'seq_start' => 'Eerste positie',
 'sessions' => 'sessies',
 'setDateFromFile' => '',
+'setDateFromFolder' => '',
 'settings' => 'Instellingen',
 'settings_activate_module' => 'Activeer module',
 'settings_activate_php_extension' => 'Activeer PHP uitbreiding',
